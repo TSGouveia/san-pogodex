@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PokéDex & Collection Tracker for Pokémon GO - Plan your journey and monitor your collection in SanDex style.">
+    <title>SanDex Pro - Pokémon GO Tracker</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Premium Loader Overlay -->
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="loader-content">
+            <svg viewBox="0 0 100 100" class="loader-pokeball">
+                <circle cx="50" cy="50" r="44" fill="#ef4444" stroke="#ffffff" stroke-width="8"/>
+                <path d="M6 50 H94" stroke="#ffffff" stroke-width="8"/>
+                <circle cx="50" cy="50" r="18" fill="#ffffff" stroke="#ffffff" stroke-width="8"/>
+                <circle cx="50" cy="50" r="8" fill="#f5a623"/>
+            </svg>
+            <p>Loading PokéDex from Pokémon GO Database...</p>
+        </div>
+    </div>
+
+    <!-- API Connection Error Overlay -->
+    <div class="loader-overlay hidden" id="error-overlay">
+        <div class="error-content">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 3rem; color: #ef4444; margin-bottom: 1rem; filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.4));"></i>
+            <h2>Database Connection Failed</h2>
+            <p style="color: var(--text-secondary); max-width: 400px; margin: 0.5rem auto 1.5rem auto; line-height: 1.5; font-size: 0.9rem;">
+                SanDex was unable to connect to the Pokémon GO Pokedex database. Please check your internet connection and try again.
+            </p>
+            <button class="catch-action-btn uncaught" id="retry-api-btn" style="padding: 0.75rem 2rem; display: inline-flex; justify-content: center; width: auto; font-size: 0.95rem;">
+                <i class="fa-solid fa-rotate"></i> Retry Connection
+            </button>
+        </div>
+    </div>
+
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" class="pokeball-svg">
+                        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="6"/>
+                        <path d="M4 50 H96" stroke="currentColor" stroke-width="6"/>
+                        <circle cx="50" cy="50" r="18" fill="#111b2e" stroke="currentColor" stroke-width="6"/>
+                        <circle cx="50" cy="50" r="8" fill="#f5a623"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1>San<span>Dex</span></h1>
+                    <p class="subtitle">Pokémon GO Collection Tracker</p>
+                </div>
+            </div>
+            
+            <!-- Statistics Card -->
+            <div class="stats-panel" id="stats-panel">
+                <div class="stats-info">
+                    <div class="stat-box">
+                        <span class="stat-val" id="caught-count">0</span>
+                        <span class="stat-lbl">Caught</span>
+                    </div>
+                    <div class="stat-divider">/</div>
+                    <div class="stat-box">
+                        <span class="stat-val" id="total-count">0</span>
+                        <span class="stat-lbl">Active Total</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="progress-bar" style="width: 0%"></div>
+                </div>
+                <div class="progress-pct" id="progress-pct">0% Completed</div>
+            </div>
+        </div>
+    </header>
+
+    <main class="app-main">
+        <!-- View Switcher Segmented Control -->
+        <div class="view-switch-container">
+            <div class="view-switcher">
+                <button class="view-btn active" data-view="grid-pane" id="btn-view-grid">
+                    <i class="fa-solid fa-border-all"></i> PokéDex Grid
+                </button>
+                <button class="view-btn" data-view="hunt-pane" id="btn-view-hunt">
+                    <i class="fa-solid fa-list-check"></i> Hunt List
+                </button>
+                <button class="view-btn" data-view="rotations-pane" id="btn-view-rotations">
+                    <i class="fa-solid fa-circle-info"></i> Active Rotations
+                </button>
+            </div>
+        </div>
+
+        <!-- Control Center (Filters, Search, Region Tabs) -->
+        <section class="control-center">
+            <!-- Generation Selector Tabs (Populated Dynamically) -->
+            <div class="tabs-scroll" id="gen-tabs-scroll">
+                <nav class="gen-tabs" id="gen-tabs" aria-label="Generation Selector">
+                    <button class="tab-btn active" data-gen="all">All Regions</button>
+                    <!-- Filled by JavaScript -->
+                </nav>
+            </div>
+
+            <!-- Obtaining Method Selector Tabs (For Hunt List View, Hidden by Default) -->
+            <div class="tabs-scroll hidden" id="hunt-tabs-scroll">
+                <nav class="hunt-tabs" id="hunt-tabs" aria-label="Obtaining Method Selector">
+                    <button class="tab-btn active" data-method="all">All Methods</button>
+                    <button class="tab-btn" data-method="evolve">Evolutions</button>
+                    <button class="tab-btn" data-method="wild">Wild Spawns</button>
+                    <button class="tab-btn" data-method="egg">Egg Hatches</button>
+                    <button class="tab-btn" data-method="raid">Raids</button>
+                    <button class="tab-btn" data-method="special">Special</button>
+                    <button class="tab-btn" data-method="unavailable">Unavailable</button>
+                </nav>
+            </div>
+
+            <!-- Search, Filter & Bulk Action Bar -->
+            <div class="filter-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="search-input" placeholder="Search by name, number, or type..." aria-label="Search Pokémon">
+                </div>
+                
+                <!-- Region Specific Stats Badge -->
+                <div class="region-stats-badge" id="region-stats-badge">
+                    <span class="region-name-lbl" id="active-region-name">All Regions</span>
+                    <span class="region-ratio-val" id="active-region-ratio">0 / 0</span>
+                </div>
+                
+                <div class="filter-actions" id="filter-actions-bar">
+                    <div class="radio-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="missing">
+                            <i class="fa-solid fa-circle-question"></i> Missing
+                        </button>
+                        <button class="filter-btn" data-filter="caught">
+                            <i class="fa-solid fa-circle-check"></i> Caught
+                        </button>
+                    </div>
+                    
+                    <div class="sort-wrapper">
+                        <label for="sort-select"><i class="fa-solid fa-arrow-down-up-wide"></i></label>
+                        <select id="sort-select" aria-label="Sort by">
+                            <option value="num-asc">Pokédex # (Ascending)</option>
+                            <option value="num-desc">Pokédex # (Descending)</option>
+                            <option value="name-asc">Name (A - Z)</option>
+                        </select>
+                    </div>
+
+                    <!-- Bulk Actions -->
+                    <div class="bulk-actions">
+                        <button class="bulk-btn catch-all" id="catch-all-btn" title="Mark all filtered Pokémon as caught">
+                            <i class="fa-solid fa-circle-check"></i> Catch All
+                        </button>
+                        <button class="bulk-btn reset-all" id="reset-all-btn" title="Reset caught status for filtered Pokémon">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PANE 1: Pokédex Cards Grid View -->
+        <section class="view-pane" id="grid-pane">
+            <div class="grid-container" id="pokedex-grid" aria-live="polite">
+                <!-- Dynamically filled with JS -->
+            </div>
+            
+            <div class="empty-state hidden" id="empty-state">
+                <i class="fa-solid fa-ghost"></i>
+                <h3>No Pokémon found</h3>
+                <p>Try adjusting your search query or filter selection.</p>
+            </div>
+        </section>
+
+        <!-- PANE 2: Checklist categorized by tabs (Hunt List) -->
+        <section class="view-pane hidden" id="hunt-pane">
+            <div class="grid-container" id="hunt-grid" aria-live="polite">
+                <!-- Injected missing cards -->
+            </div>
+            
+            <div class="empty-state hidden" id="empty-hunt-state">
+                <i class="fa-solid fa-trophy" style="color: var(--accent-green); filter: drop-shadow(0 0 10px var(--accent-green-glow));"></i>
+                <h3>No missing Pokémon!</h3>
+                <p>Congratulations, Trainer! You have completed your collection for this category.</p>
+            </div>
+        </section>
+
+        <!-- PANE 3: Active Rotations Info Panel -->
+        <section class="view-pane hidden" id="rotations-pane">
+            <!-- Rotations Sub-Navigation tabs -->
+            <div class="rotations-subnav-container">
+                <nav class="rotations-subnav" id="rotations-subnav" aria-label="Rotations Category Selector">
+                    <button class="subnav-btn active" data-target="rotations-raids-section">
+                        <i class="fa-solid fa-shield-halved"></i> Raid Bosses
+                    </button>
+                    <button class="subnav-btn" data-target="rotations-eggs-section">
+                        <i class="fa-solid fa-egg"></i> Egg Hatch Pools
+                    </button>
+                    <button class="subnav-btn" data-target="rotations-quests-section">
+                        <i class="fa-solid fa-scroll"></i> Quest Encounters
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Active Raids -->
+            <div class="rotation-section" id="rotations-raids-section">
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h2>Active Raid Bosses</h2>
+                </div>
+                <div id="raids-tiers-container">
+                    <!-- Dynamic Tier Sub-sections with grids inside -->
+                </div>
+            </div>
+            
+            <!-- Egg Hatching Pool -->
+            <div class="rotation-section hidden" id="rotations-eggs-section">
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-egg"></i>
+                    <h2>Egg Hatch Pools</h2>
+                </div>
+                <div id="eggs-types-container">
+                    <!-- Dynamic Egg Sub-sections with grids inside -->
+                </div>
+            </div>
+
+            <!-- Active Quests -->
+            <div class="rotation-section hidden" id="rotations-quests-section">
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-scroll"></i>
+                    <h2>Active Quest Encounters</h2>
+                </div>
+                <div class="rotation-grid-layout" id="active-research-grid">
+                    <!-- Dynamic quest reward cards -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pokemon Info Modal -->
+    <div class="modal-overlay hidden" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-pokemon-name">
+        <div class="modal-card">
+            <button class="modal-close" id="modal-close-btn" aria-label="Close Details">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="modal-header-bg" id="modal-header-bg">
+                <div class="modal-pokemon-summary">
+                    <span class="modal-poke-num" id="modal-pokemon-num">#000</span>
+                    <h2 class="modal-poke-name" id="modal-pokemon-name">Pokémon Name</h2>
+                    <div class="modal-types-row" id="modal-pokemon-types">
+                        <!-- Types badges -->
+                    </div>
+                </div>
+                <div class="modal-pokemon-img-container">
+                    <img src="" alt="" class="modal-pokemon-img" id="modal-pokemon-img">
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- Navigation within Modal -->
+                <div class="modal-nav">
+                    <button class="modal-tab-btn active" data-target="obtaining-tab">
+                        <i class="fa-solid fa-map-location-dot"></i> How to Get
+                    </button>
+                    <button class="modal-tab-btn" data-target="evolution-tab">
+                        <i class="fa-solid fa-dna"></i> Evolutions
+                    </button>
+                    <button class="modal-tab-btn" data-target="stats-tab">
+                        <i class="fa-solid fa-chart-simple"></i> Base Stats
+                    </button>
+                </div>
+
+                <!-- Tab Contents -->
+                <div class="modal-tab-content">
+                    <!-- Obtaining Guide Tab -->
+                    <div class="tab-pane active" id="obtaining-tab">
+                        <h3 class="pane-title">Capture & Obtaining Guide</h3>
+                        <div class="obtaining-grid" id="obtaining-methods">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Evolution Chain Tab -->
+                    <div class="tab-pane" id="evolution-tab">
+                        <h3 class="pane-title">Evolution Chain</h3>
+                        <div class="evolution-flow" id="evolution-flow">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Stats Tab -->
+                    <div class="tab-pane" id="stats-tab">
+                        <h3 class="pane-title">Pokémon GO Base Stats</h3>
+                        <div class="stats-bars" id="stats-bars">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="catch-action-btn" id="modal-catch-toggle">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Mark as Caught</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p>&copy; 2026 SanDex Pro. Built for Pokémon GO Trainers.</p>
+        <p class="disclaimer">This application is an unofficial fan project and is not affiliated with Niantic, Nintendo, or The Pokémon Company.</p>
+    </footer>
+
+    <!-- Custom JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

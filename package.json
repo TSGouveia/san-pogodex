@@ -1,0 +1,24 @@
+{
+  "name": "pogo-silphroad-collection-dex",
+  "version": "1.0.0",
+  "description": "Rastreador de Coleção do Pokémon GO inspirado no Silph Road",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "pokemon",
+    "pokedex",
+    "pokemon-go",
+    "silphroad",
+    "collection-tracker",
+    "vanilla-js"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
