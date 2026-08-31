@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T23:14:38.385Z",
-=======
-    "updatedAt": "2026-08-31T23:13:31.916Z",
->>>>>>> d824077 (Fix missing renderPartyRewardsByQuest function and topAttackers JSON parse error)
+    "updatedAt": "2026-08-31T23:22:26.536Z",
     "overall": [
         {
             "rank": 1,
