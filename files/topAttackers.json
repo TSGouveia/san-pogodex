@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T22:24:38.720601+00:00",
-=======
-    "updatedAt": "2026-08-31T22:27:36.913503+00:00",
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
+    "updatedAt": "2026-08-31T22:28:06.227604+00:00",
     "overall": [
         {
             "rank": 1,
@@ -797,9 +793,6 @@
         }
     ],
     "byType": {
-<<<<<<< HEAD
-        "Bug": [],
-=======
         "Bug": [
             {
                 "rank": 1,
@@ -1120,7 +1113,6 @@
                 "pct": "55.0%"
             }
         ],
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
         "Dark": [
             {
                 "rank": 1,
@@ -1196,20 +1188,6 @@
                     "Rock",
                     "Dark"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Fly",
-                "dps": 19.06,
-                "pct": "115.7%",
-                "er": 61.2
-            },
-            {
-                "rank": 20,
-                "name": "Salamence",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Brutal Swing",
                 "dps": 279.23,
@@ -1302,24 +1280,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Dragon",
                     "Flying"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Fly",
-                "dps": 19.05,
-                "pct": "115.6%",
-                "er": 61.1
-            },
-            {
-                "rank": 21,
-                "name": "Reshiram",
-                "form": "",
-                "isMega": false,
-=======
                 "fastMove": "Fire Fang",
                 "chargedMove": "Brutal Swing",
                 "dps": 240.59,
@@ -1745,7 +1709,6 @@
                 "rank": 18,
                 "name": "Salamence",
                 "form": "",
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "isShadow": true,
                 "isMega": false,
                 "types": [
@@ -1864,99 +1827,6 @@
                     "Electric",
                     "Dragon"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Breaking Swipe*",
-                "dps": 17.3,
-                "pct": "105.0%",
-                "er": 56.3
-            },
-            {
-                "rank": 39,
-                "name": "Dragonite",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Dragon",
-                    "Flying"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Outrage+",
-                "dps": 17.27,
-                "pct": "104.8%",
-                "er": 56.1
-            },
-            {
-                "rank": 40,
-                "name": "Dialga",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-                "types": [
-                    "Steel",
-                    "Dragon"
-                ],
-                "fastMove": "Metal Claw",
-                "chargedMove": "Draco Meteor",
-                "dps": 17.15,
-                "pct": "104.1%",
-                "er": 55.9
-            },
-            {
-                "rank": 41,
-                "name": "Dialga",
-                "form": "Origin",
-                "isMega": false,
-                "isShadow": false,
-                "types": [
-                    "Steel",
-                    "Dragon"
-                ],
-                "fastMove": "Metal Claw",
-                "chargedMove": "Roar of Time*",
-                "dps": 17.04,
-                "pct": "103.4%",
-                "er": 55.7
-            },
-            {
-                "rank": 43,
-                "name": "Palkia",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-                "types": [
-                    "Water",
-                    "Dragon"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Draco Meteor",
-                "dps": 16.82,
-                "pct": "102.1%",
-                "er": 55.2
-            },
-            {
-                "rank": 50,
-                "name": "Hydreigon",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-                "types": [
-                    "Dark",
-                    "Dragon"
-                ],
-                "fastMove": "Bite",
-                "chargedMove": "Brutal Swing*",
-                "dps": 16.5,
-                "pct": "100.1%",
-                "er": 54.2
-            }
-        ],
-        "Electric": [],
-        "Fairy": [
-            {
-                "rank": 6,
-=======
                 "fastMove": "Charge Beam",
                 "chargedMove": "Zap Cannon",
                 "dps": 333.09,
@@ -2227,7 +2097,6 @@
             },
             {
                 "rank": 3,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "name": "Zacian",
                 "form": "",
                 "isShadow": false,
@@ -2276,33 +2145,13 @@
             {
                 "rank": 6,
                 "name": "Gardevoir",
-<<<<<<< HEAD
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Psychic",
                     "Fairy"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Charm",
-                "chargedMove": "Dazzling Gleam",
-                "dps": 17.53,
-                "pct": "106.4%",
-                "er": 57.1
-            },
-            {
-                "rank": 49,
-                "name": "Diancie",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
                 "dps": 288.95,
@@ -2504,18 +2353,10 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Rock",
                     "Fairy"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Rock Throw",
-                "chargedMove": "Rock Slide",
-                "dps": 16.52,
-                "pct": "100.3%",
-                "er": 54.3
-=======
                 "fastMove": "Tackle",
                 "chargedMove": "Moonblast",
                 "dps": 251.41,
@@ -2537,74 +2378,19 @@
                 "dps": 250.59,
                 "er": 534.36,
                 "pct": "66.0%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Fighting": [
             {
-<<<<<<< HEAD
-                "rank": 4,
-                "name": "Mewtwo",
-                "form": "Mega X",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "rank": 1,
                 "name": "Mega Mewtwo X",
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Psychic",
                     "Fighting"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Counter*",
-                "chargedMove": "Psystrike*",
-                "dps": 21.36,
-                "pct": "129.7%",
-                "er": 67.5
-            },
-            {
-                "rank": 9,
-                "name": "Zamazenta",
-                "form": "Crowned Shield",
-                "isMega": false,
-                "isShadow": false,
-                "types": [
-                    "Fighting",
-                    "Steel"
-                ],
-                "fastMove": "Metal Claw",
-                "chargedMove": "Behemoth Bash*",
-                "dps": 20.05,
-                "pct": "121.7%",
-                "er": 64.3
-            },
-            {
-                "rank": 12,
-                "name": "Lucario",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Fighting",
-                    "Steel"
-                ],
-                "fastMove": "Force Palm*",
-                "chargedMove": "Aura Sphere",
-                "dps": 19.68,
-                "pct": "119.5%",
-                "er": 63.2
-            },
-            {
-                "rank": 13,
-                "name": "Blaziken",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Dynamic Punch+",
                 "dps": 546.28,
@@ -2632,25 +2418,10 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Fire",
                     "Fighting"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Spin",
-                "chargedMove": "Aura Sphere",
-                "dps": 19.55,
-                "pct": "118.7%",
-                "er": 62.8
-            },
-            {
-                "rank": 28,
-                "name": "Gallade",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "fastMove": "Ember",
                 "chargedMove": "Aura Sphere",
                 "dps": 377.09,
@@ -2853,34 +2624,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Fire",
                     "Fighting"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Sacred Sword",
-                "dps": 17.65,
-                "pct": "107.1%",
-                "er": 57.4
-            },
-            {
-                "rank": 35,
-                "name": "Keldeo",
-                "form": "Resolute",
-                "isMega": false,
-                "isShadow": false,
-                "types": [
-                    "Water",
-                    "Fighting"
-                ],
-                "fastMove": "Low Kick",
-                "chargedMove": "Secret Sword*",
-                "dps": 17.41,
-                "pct": "105.6%",
-                "er": 56.6
-=======
                 "fastMove": "Ember",
                 "chargedMove": "Aura Sphere",
                 "dps": 307.32,
@@ -2946,15 +2693,10 @@
                 "dps": 303.21,
                 "er": 619.52,
                 "pct": "55.5%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Fire": [
             {
-<<<<<<< HEAD
-                "rank": 11,
-                "name": "Delphox",
-=======
                 "rank": 1,
                 "name": "Primal Groudon",
                 "form": "Mega",
@@ -3052,7 +2794,6 @@
             {
                 "rank": 7,
                 "name": "Mega Garchomp",
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
@@ -3060,20 +2801,6 @@
                     "Dragon",
                     "Ground"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Spin",
-                "chargedMove": "Aura Sphere",
-                "dps": 19.55,
-                "pct": "118.7%",
-                "er": 62.8
-            },
-            {
-                "rank": 17,
-                "name": "Charizard",
-                "form": "Mega Y",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "fastMove": "Mud Shot",
                 "chargedMove": "Fire Blast",
                 "dps": 338.86,
@@ -3102,25 +2829,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Fire",
                     "Flying"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Spin",
-                "chargedMove": "Blast Burn*",
-                "dps": 19.14,
-                "pct": "116.2%",
-                "er": 61.5
-            },
-            {
-                "rank": 21,
-                "name": "Reshiram",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-=======
                 "fastMove": "Wing Attack",
                 "chargedMove": "Overheat",
                 "dps": 294.61,
@@ -3197,34 +2909,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Dragon",
                     "Fire"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Fang",
-                "chargedMove": "Fusion Flare*",
-                "dps": 18.98,
-                "pct": "115.2%",
-                "er": 60.9
-            },
-            {
-                "rank": 24,
-                "name": "Blacephalon",
-                "form": "",
-                "isMega": false,
-                "isShadow": false,
-                "types": [
-                    "Fire",
-                    "Ghost"
-                ],
-                "fastMove": "Astonish",
-                "chargedMove": "Mind Blown*",
-                "dps": 18.16,
-                "pct": "110.2%",
-                "er": 58.8
-=======
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Overheat",
                 "dps": 287.13,
@@ -3277,7 +2965,6 @@
                 "dps": 280.58,
                 "er": 569.78,
                 "pct": "63.1%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             },
             {
                 "rank": 18,
@@ -3288,13 +2975,6 @@
                 "types": [
                     "Fire"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Spin",
-                "chargedMove": "Shadow Ball",
-                "dps": 17.29,
-                "pct": "104.9%",
-                "er": 56.2
-=======
                 "fastMove": "Tackle",
                 "chargedMove": "Overheat",
                 "dps": 277.62,
@@ -3330,17 +3010,12 @@
                 "dps": 273.57,
                 "er": 558.96,
                 "pct": "61.5%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Flying": [
             {
                 "rank": 1,
-<<<<<<< HEAD
-                "name": "Rayquaza",
-=======
                 "name": "Mega Salamence",
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
@@ -3391,8 +3066,6 @@
                 "name": "Articuno",
                 "form": "Galarian",
                 "isShadow": false,
-<<<<<<< HEAD
-=======
                 "isMega": false,
                 "types": [
                     "Psychic",
@@ -3410,18 +3083,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Fire",
                     "Flying"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Fire Spin",
-                "chargedMove": "Blast Burn*",
-                "dps": 19.14,
-                "pct": "116.2%",
-                "er": 61.5
-=======
                 "fastMove": "Extrasensory",
                 "chargedMove": "Brave Bird",
                 "dps": 352.52,
@@ -3475,7 +3140,6 @@
                 "dps": 338.45,
                 "er": 676.59,
                 "pct": "85.1%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             },
             {
                 "rank": 9,
@@ -3498,85 +3162,11 @@
                 "name": "Salamence",
                 "form": "",
                 "isShadow": true,
-<<<<<<< HEAD
-=======
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Dragon",
                     "Flying"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Fly",
-                "dps": 19.06,
-                "pct": "115.7%",
-                "er": 61.2
-            },
-            {
-                "rank": 20,
-                "name": "Salamence",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Dragon",
-                    "Flying"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Fly",
-                "dps": 19.05,
-                "pct": "115.6%",
-                "er": 61.1
-            },
-            {
-                "rank": 22,
-                "name": "Rayquaza",
-                "form": "",
-                "isMega": false,
-                "isShadow": false,
-                "types": [
-                    "Dragon",
-                    "Flying"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Dragon Ascent*",
-                "dps": 18.39,
-                "pct": "111.6%",
-                "er": 59.5
-            },
-            {
-                "rank": 26,
-                "name": "Moltres",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-                "types": [
-                    "Fire",
-                    "Flying"
-                ],
-                "fastMove": "Fire Spin",
-                "chargedMove": "Fly",
-                "dps": 18.02,
-                "pct": "109.4%",
-                "er": 58.5
-            },
-            {
-                "rank": 39,
-                "name": "Dragonite",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Dragon",
-                    "Flying"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Outrage+",
-                "dps": 17.27,
-                "pct": "104.8%",
-                "er": 56.1
-=======
                 "fastMove": "Fire Fang",
                 "chargedMove": "Fly",
                 "dps": 335.62,
@@ -3742,16 +3332,10 @@
                 "dps": 263.88,
                 "er": 504.4,
                 "pct": "66.4%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Ghost": [
             {
-<<<<<<< HEAD
-                "rank": 2,
-                "name": "Necrozma",
-                "form": "Dawn Wings",
-=======
                 "rank": 1,
                 "name": "Mega Gengar",
                 "form": "Mega",
@@ -3788,42 +3372,11 @@
                 "name": "Lunala",
                 "form": "",
                 "isShadow": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "isMega": false,
                 "types": [
                     "Psychic",
                     "Ghost"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Moongeist Beam*",
-                "dps": 21.64,
-                "pct": "131.3%",
-                "er": 68.2
-            },
-            {
-                "rank": 16,
-                "name": "Gengar",
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Ghost",
-                    "Poison"
-                ],
-                "fastMove": "Lick*",
-                "chargedMove": "Shadow Ball",
-                "dps": 19.31,
-                "pct": "117.2%",
-                "er": 61.9
-            },
-            {
-                "rank": 24,
-                "name": "Blacephalon",
-                "form": "",
-                "isMega": false,
-                "isShadow": false,
-=======
                 "fastMove": "Confusion",
                 "chargedMove": "Shadow Ball",
                 "dps": 317.86,
@@ -3929,52 +3482,10 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Ghost",
                     "Fire"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Astonish",
-                "chargedMove": "Mind Blown*",
-                "dps": 18.16,
-                "pct": "110.2%",
-                "er": 58.8
-            },
-            {
-                "rank": 38,
-                "name": "Chandelure",
-                "form": "",
-                "isMega": false,
-                "isShadow": true,
-                "types": [
-                    "Ghost",
-                    "Fire"
-                ],
-                "fastMove": "Fire Spin",
-                "chargedMove": "Shadow Ball",
-                "dps": 17.29,
-                "pct": "104.9%",
-                "er": 56.2
-            }
-        ],
-        "Grass": [],
-        "Ground": [
-            {
-                "rank": 8,
-                "name": "Groudon",
-                "form": "Primal",
-                "isMega": true,
-                "isShadow": false,
-                "types": [
-                    "Ground"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Precipice Blades*",
-                "dps": 20.1,
-                "pct": "122.0%",
-                "er": 64.5
-=======
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
                 "dps": 280.4,
@@ -4090,7 +3601,6 @@
                 "dps": 266.66,
                 "er": 578.79,
                 "pct": "77.3%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             },
             {
                 "rank": 18,
@@ -4102,13 +3612,6 @@
                     "Fire",
                     "Ghost"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Breaking Swipe",
-                "dps": 19.09,
-                "pct": "115.9%",
-                "er": 61.3
-=======
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
                 "dps": 266.03,
@@ -4543,7 +4046,6 @@
                 "dps": 325.42,
                 "er": 651.47,
                 "pct": "75.3%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             },
             {
                 "rank": 6,
@@ -4660,9 +4162,6 @@
                 "isShadow": true,
                 "isMega": false,
                 "types": [
-<<<<<<< HEAD
-                    "Ground"
-=======
                     "Steel",
                     "Psychic"
                 ],
@@ -4729,7 +4228,6 @@
                 "types": [
                     "Ground",
                     "Flying"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earth Power",
@@ -4780,24 +4278,14 @@
                     "Steel"
                 ],
                 "fastMove": "Mud Shot",
-<<<<<<< HEAD
-                "chargedMove": "Hydro Cannon*",
-                "dps": 16.64,
-                "pct": "101.0%",
-                "er": 54.6
-=======
                 "chargedMove": "Earthquake",
                 "dps": 259.38,
                 "er": 504.98,
                 "pct": "60.0%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Ice": [
             {
-<<<<<<< HEAD
-                "rank": 7,
-=======
                 "rank": 1,
                 "name": "Mega Mewtwo Y",
                 "form": "MegaY",
@@ -4845,30 +4333,14 @@
             },
             {
                 "rank": 4,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "name": "Kyurem",
                 "form": "White",
                 "isShadow": false,
-<<<<<<< HEAD
-=======
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Dragon",
                     "Ice"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Freeze Shock*",
-                "dps": 20.16,
-                "pct": "122.4%",
-                "er": 64.8
-            },
-            {
-                "rank": 15,
-                "name": "Kyurem",
-                "form": "White Kyurem",
-=======
                 "fastMove": "Ice Fang",
                 "chargedMove": "Blizzard",
                 "dps": 360.55,
@@ -4959,7 +4431,6 @@
                 "name": "Mewtwo",
                 "form": "",
                 "isShadow": true,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "isMega": false,
                 "types": [
                     "Psychic"
@@ -4996,12 +4467,6 @@
                     "Ice"
                 ],
                 "fastMove": "Ice Fang",
-<<<<<<< HEAD
-                "chargedMove": "Ice Burn*",
-                "dps": 19.34,
-                "pct": "117.4%",
-                "er": 62.0
-=======
                 "chargedMove": "Avalanche",
                 "dps": 293.11,
                 "er": 625.38,
@@ -5131,15 +4596,10 @@
                 "dps": 266.28,
                 "er": 572.48,
                 "pct": "62.9%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Normal": [
             {
-<<<<<<< HEAD
-                "rank": 14,
-                "name": "Regigigas",
-=======
                 "rank": 1,
                 "name": "Ditto",
                 "form": "",
@@ -5218,36 +4678,12 @@
             {
                 "rank": 6,
                 "name": "Slaking",
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "form": "",
                 "isShadow": true,
-<<<<<<< HEAD
-                "types": [
-                    "Normal"
-                ],
-                "fastMove": "Hidden Power Ice",
-                "chargedMove": "Crush Grip*",
-                "dps": 19.36,
-                "pct": "117.5%",
-                "er": 62.1
-            },
-            {
-                "rank": 44,
-                "name": "Regigigas",
-                "form": "",
-=======
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "isMega": false,
                 "types": [
                     "Normal"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Hidden Power Ice",
-                "chargedMove": "Crush Grip*",
-                "dps": 16.77,
-                "pct": "101.8%",
-                "er": 55.0
-=======
                 "fastMove": "Yawn",
                 "chargedMove": "Hyper Beam",
                 "dps": 364.33,
@@ -5469,14 +4905,10 @@
                 "dps": 250.46,
                 "er": 489.34,
                 "pct": "22.5%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Poison": [
             {
-<<<<<<< HEAD
-                "rank": 5,
-=======
                 "rank": 1,
                 "name": "Mega Gengar",
                 "form": "Mega",
@@ -5510,7 +4942,6 @@
             },
             {
                 "rank": 3,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "name": "Eternatus",
                 "form": "",
                 "isShadow": false,
@@ -5560,26 +4991,13 @@
             {
                 "rank": 6,
                 "name": "Gengar",
-<<<<<<< HEAD
-                "form": "Mega",
-                "isMega": true,
-                "isShadow": false,
-=======
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Ghost",
                     "Poison"
                 ],
-<<<<<<< HEAD
-                "fastMove": "Lick*",
-                "chargedMove": "Shadow Ball",
-                "dps": 19.31,
-                "pct": "117.2%",
-                "er": 61.9
-=======
                 "fastMove": "Hex",
                 "chargedMove": "Sludge Bomb",
                 "dps": 259.89,
@@ -5807,18 +5225,10 @@
                 "dps": 217.53,
                 "er": 433.73,
                 "pct": "64.6%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ],
         "Psychic": [
             {
-<<<<<<< HEAD
-                "rank": 2,
-                "name": "Necrozma",
-                "form": "Dawn Wings",
-                "isMega": false,
-                "isShadow": false,
-=======
                 "rank": 1,
                 "name": "Mega Mewtwo Y",
                 "form": "MegaY",
@@ -6013,7 +5423,6 @@
                 "form": "Dawn_wings",
                 "isShadow": false,
                 "isMega": false,
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
                 "types": [
                     "Psychic",
                     "Ghost"
@@ -6813,12 +6222,6 @@
                     "Ground"
                 ],
                 "fastMove": "Mud Shot",
-<<<<<<< HEAD
-                "chargedMove": "Hydro Cannon*",
-                "dps": 16.64,
-                "pct": "101.0%",
-                "er": 54.6
-=======
                 "chargedMove": "Surf",
                 "dps": 317.48,
                 "er": 716.71,
@@ -7089,7 +6492,6 @@
                 "dps": 255.12,
                 "er": 535.85,
                 "pct": "64.8%"
->>>>>>> bd56ffb (Implement per-type attacker rankings for all 18 types matching DialgaDex)
             }
         ]
     }
