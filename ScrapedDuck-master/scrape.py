@@ -461,51 +461,81 @@ def scrape_top_attackers():
             return max(0.5, (m.get('duration', 1000) / 1000.0))
 
         CPM40 = 0.7903001
+        est_y_num = 1340
+        est_cm_power = 11670
+        enemy_def = 180
 
-        def calculate_attacker_score(pkm, fm_name, cm_name, target_type):
+        def process_power(m): return m.get('power', 0)
+        def process_duration(d): return max(0.5, (d if d else 1000) / 1000.0)
+        def calc_damage(atk, def_stat, power, mult):
+            return int(0.5 * atk / float(def_stat) * power * mult) + 1
+
+        def get_dps(types_list, atk, def_stat, hp, fm_obj, cm_obj, fm_mult=1.0, cm_mult=1.0):
+            if not fm_obj or not cm_obj: return 0.0
+            y = est_y_num / float(def_stat)
+            in_cm_dmg = est_cm_power / float(def_stat)
+            tof = hp / float(y)
+
+            fm_delta = fm_obj.get('energy_delta', 6)
+            cm_delta = abs(cm_obj.get('energy_delta', 50))
+            x = 0.5 * cm_delta + 0.5 * fm_delta + 0.5 * in_cm_dmg
+
+            fm_type = fm_obj.get('type', '')
+            cm_type = cm_obj.get('type', '')
+
+            fm_stab = 1.2 if (fm_type in types_list and fm_obj.get('name') != "Hidden Power") else 1.0
+            cm_stab = 1.2 if (cm_type in types_list) else 1.0
+
+            fm_dmg = calc_damage(atk, enemy_def, process_power(fm_obj), fm_mult * fm_stab)
+            cm_dmg = calc_damage(atk, enemy_def, process_power(cm_obj), cm_mult * cm_stab)
+
+            fm_dur = process_duration(fm_obj.get('duration'))
+            cm_dur = process_duration(cm_obj.get('duration'))
+
+            fm_dps = fm_dmg / float(fm_dur)
+            fm_eps = fm_delta / float(fm_dur)
+
+            cm_dps = cm_dmg / float(cm_dur)
+            cm_eps = cm_delta / float(cm_dur)
+
+            if cm_delta == 100:
+                dws = (cm_obj.get('damage_window_start', 0) or 0) / 1000.0
+                cm_eps = (cm_delta + 0.5 * fm_delta + 0.5 * y * dws) / float(cm_dur)
+
+            if fm_dps > cm_dps: return fm_dps
+
+            num = (cm_dps - fm_dps) * (x + tof * fm_eps)
+            den = cm_eps + fm_eps + (cm_dps - fm_dps) / float(y)
+            return fm_dps + (num / float(den)) if den != 0 else fm_dps
+
+        def get_attacker(pkm, fm_name, cm_name, target_type):
             fm = fm_by_name.get(fm_name.lower())
             cm = cm_by_name.get(cm_name.lower())
-            if not fm or not cm:
-                return None
+            if not fm or not cm: return None
 
             stats = pkm.get('stats', {})
             base_atk = stats.get('baseAttack', 0)
             base_def = stats.get('baseDefense', 0)
             base_hp = stats.get('baseStamina', 0)
 
-            shadow_mult = 1.2 if pkm.get('shadow') else 1.0
-            atk = (base_atk + 15) * CPM40 * shadow_mult
-            def_stat = (base_def + 15) * CPM40
+            shadow = bool(pkm.get('shadow'))
+            shadow_atk_mult = 1.2 if shadow else 1.0
+            shadow_def_mult = 0.8333333 if shadow else 1.0
+
+            atk = (base_atk + 15) * CPM40 * shadow_atk_mult
+            def_stat = (base_def + 15) * CPM40 * shadow_def_mult
             hp = int((base_hp + 15) * CPM40)
 
-            pkm_types = [t.lower() for t in pkm.get('types', [])]
-            fm_match = 1.2 if fm.get('type', '').lower() in pkm_types else 1.0
-            cm_match = 1.2 if cm.get('type', '').lower() in pkm_types else 1.0
-
-            cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
             fm_se = 1.6 if target_type and fm.get('type', '').lower() == target_type.lower() else 1.0
+            cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
 
-            fm_power = calc_move_power(fm)
-            cm_power = calc_move_power(cm)
+            dps = get_dps(pkm.get('types', []), atk, def_stat, hp, fm, cm, fm_se, cm_se)
+            if dps <= 0: return None
 
-            fm_dmg = int(0.5 * atk / 180.0 * fm_power * fm_match * fm_se) + 1
-            cm_dmg = int(0.5 * atk / 180.0 * cm_power * cm_match * cm_se) + 1
-
-            fm_dur = calc_move_duration(fm)
-            cm_dur = calc_move_duration(cm)
-
-            fm_energy = fm.get('energy_delta', 6)
-            cm_energy = abs(cm.get('energy_delta', 50))
-            if fm_energy <= 0:
-                fm_energy = 6
-
-            cycle_time = fm_dur * (cm_energy / float(fm_energy)) + cm_dur
-            cycle_dmg = fm_dmg * (cm_energy / float(fm_energy)) + cm_dmg
-
-            dps = cycle_dmg / cycle_time if cycle_time > 0 else 0
-            tdo = dps * (hp * def_stat / 1340.0)
-
+            y = est_y_num / float(def_stat)
+            tdo = dps * (hp / float(y))
             er = ((dps ** 3) * tdo) ** 0.25 if (dps > 0 and tdo > 0) else 0
+
             return {
                 'dps': round(dps, 2),
                 'er': round(er, 2),
@@ -529,7 +559,7 @@ def scrape_top_attackers():
                     continue
                 for fm in pkm.get('fm', []):
                     for cm in pkm.get('cm', []):
-                        score = calculate_attacker_score(pkm, fm, cm, t)
+                        score = get_attacker(pkm, fm, cm, t)
                         if score and score['er'] > 0 and score['cmType'].lower() == t.lower():
                             form_val = pkm.get('form', '')
                             type_list.append({
@@ -559,7 +589,7 @@ def scrape_top_attackers():
                 continue
             for fm in pkm.get('fm', []):
                 for cm in pkm.get('cm', []):
-                    score = calculate_attacker_score(pkm, fm, cm, None)
+                    score = get_attacker(pkm, fm, cm, None)
                     if score and score['er'] > 0:
                         form_val = pkm.get('form', '')
                         overall_list.append({
