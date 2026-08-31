@@ -14,6 +14,7 @@ from scrapers.scrape_eggs import scrape_eggs
 from scrapers.scrape_rocket import scrape_rocket
 from scrapers.scrape_promos import scrape_promo_codes
 from scrapers.scrape_top_attackers import scrape_top_attackers
+from scrapers.scrape_party import scrape_party
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -43,7 +44,7 @@ def save_json(filename, data):
         with open(min_filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, separators=(",", ":"), ensure_ascii=False)
 
-def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes):
+def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes, party_challenges):
     print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
@@ -66,7 +67,8 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
             "eggs": eggs,
             "rocketLineups": rocket,
             "topAttackers": top_attackers,
-            "promoCodes": promo_codes
+            "promoCodes": promo_codes,
+            "partyChallenges": party_challenges
         }
 
         success_count = 0
@@ -89,9 +91,6 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
 
         print(f"Successfully uploaded {success_count}/{len(modules)} scraped_data documents to Firestore!")
         return True
-    except Exception as e:
-        print(f"Exception during Firestore upload: {e}")
-        return False
     except Exception as e:
         print(f"Exception during Firestore upload: {e}")
         return False
@@ -127,8 +126,12 @@ def main():
     promo_codes = scrape_promo_codes()
     save_json("promoCodes.json", promo_codes)
 
-    # 8. Upload All Aggregated Data to Firestore
-    upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes)
+    # 8. Scrape Party Challenges
+    party_challenges = scrape_party()
+    save_json("partyChallenges.json", party_challenges)
+
+    # 9. Upload All Aggregated Data to Firestore
+    upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes, party_challenges)
     print("=== ALL SCRAPING AND FIRESTORE UPLOAD COMPLETE! ===")
 
 if __name__ == "__main__":

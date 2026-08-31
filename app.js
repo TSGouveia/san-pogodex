@@ -654,7 +654,7 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'topAttackers', 'promoCodes'];
+        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'topAttackers', 'promoCodes', 'partyChallenges'];
         const fetchPromises = modules.map(m => 
             fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
                 .then(r => r.ok ? r.json() : null)
@@ -741,6 +741,7 @@ async function loadPokedex() {
             if (isNonEmpty(dbScrapedData.topAttackers)) topAttackersData = dbScrapedData.topAttackers;
             if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
             if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
+            if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
@@ -3028,18 +3029,27 @@ function renderActiveRotations() {
     // 3. Render Quests Grid
     const researchEncounters = [];
     liveResearch.forEach(task => {
-        if (task.rewards) {
+        const rawTaskText = task.text || task.task || task.title || "Field Research Task";
+        const cleanTaskText = rawTaskText.replace(/<[^>]*>/g, '').trim();
+        if (task.rewards && Array.isArray(task.rewards)) {
             task.rewards.forEach(reward => {
-                if (reward.type === 'encounter') {
-                    researchEncounters.push({
-                        taskText: task.text,
-                        pokeName: reward.name,
-                        dex: reward.dex,
-                        image: reward.image,
-                        shiny: reward.shiny,
-                        cp: reward.cp
-                    });
+                const pokeName = reward.name || reward.pokemon || "Reward";
+                const isShiny = reward.canBeShiny || reward.shiny || false;
+                let cpStr = '';
+                if (reward.combatPower) {
+                    if (reward.combatPower.min && reward.combatPower.max) cpStr = `${reward.combatPower.min}-${reward.combatPower.max}`;
+                    else if (reward.combatPower.max) cpStr = `${reward.combatPower.max}`;
+                } else if (reward.cp) {
+                    cpStr = typeof reward.cp === 'object' ? (reward.cp.max || '') : String(reward.cp);
                 }
+                researchEncounters.push({
+                    taskText: cleanTaskText,
+                    pokeName: pokeName,
+                    dex: reward.dex || null,
+                    image: reward.image || reward.img || null,
+                    shiny: isShiny,
+                    cp: cpStr
+                });
             });
         }
     });
