@@ -600,7 +600,9 @@ function normalizeRocketLineups(rawRocket) {
         let name = lineup.name || '';
         const title = lineup.title || '';
         name = name.replace(/^Team GO Rocket (Leader|Boss)\s+/i, '').trim();
+        
         const isBoss = name.toLowerCase().includes('giovanni') || title.toLowerCase().includes('boss');
+        const isLeader = !isBoss && (title.toLowerCase().includes('leader') || ['cliff', 'arlo', 'sierra'].includes(name.toLowerCase()));
 
         let first = lineup.firstPokemon || [];
         let second = lineup.secondPokemon || [];
@@ -614,14 +616,35 @@ function normalizeRocketLineups(rawRocket) {
             });
         }
 
-        const slot1Explicit = first.some(p => p && (p.isEncounter || p.is_encounter));
-        const slot2Explicit = second.some(p => p && (p.isEncounter || p.is_encounter));
-        const slot3Explicit = third.some(p => p && (p.isEncounter || p.is_encounter));
+        const slot1Explicit = first.some(p => p && p.isEncounter === true);
+        const slot2Explicit = second.some(p => p && p.isEncounter === true);
+        const slot3Explicit = third.some(p => p && p.isEncounter === true);
         const hasExplicit = slot1Explicit || slot2Explicit || slot3Explicit;
 
-        const isSlot1Encounter = hasExplicit ? slot1Explicit : (!isBoss);
-        const isSlot2Encounter = hasExplicit ? slot2Explicit : false;
-        const isSlot3Encounter = hasExplicit ? slot3Explicit : isBoss;
+        let isSlot1Encounter = false;
+        let isSlot2Encounter = false;
+        let isSlot3Encounter = false;
+
+        if (hasExplicit) {
+            isSlot1Encounter = slot1Explicit;
+            isSlot2Encounter = slot2Explicit;
+            isSlot3Encounter = slot3Explicit;
+        } else if (isBoss) {
+            // Giovanni / Boss: Slot 3 is catchable
+            isSlot3Encounter = true;
+        } else if (isLeader) {
+            // Leaders (Cliff, Arlo, Sierra): Slot 1 is catchable
+            isSlot1Encounter = true;
+        } else {
+            // Grunts: Slot 1 AND Slot 2 are catchable in Pokemon GO!
+            isSlot1Encounter = true;
+            isSlot2Encounter = second.length > 0;
+            
+            // Snorlax Grunt special case: Snorlax in slot 3 can also be catchable
+            if (third.some(p => p && (typeof p === 'object' ? p.name : p) && String(typeof p === 'object' ? p.name : p).toLowerCase().includes('snorlax'))) {
+                isSlot3Encounter = true;
+            }
+        }
 
         const slots = [
             {
@@ -629,7 +652,7 @@ function normalizeRocketLineups(rawRocket) {
                 is_encounter: isSlot1Encounter,
                 pokemons: first.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot1Encounter;
+                    obj.isEncounter = hasExplicit ? !!obj.isEncounter : isSlot1Encounter;
                     return obj;
                 })
             },
@@ -638,7 +661,7 @@ function normalizeRocketLineups(rawRocket) {
                 is_encounter: isSlot2Encounter,
                 pokemons: second.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot2Encounter;
+                    obj.isEncounter = hasExplicit ? !!obj.isEncounter : isSlot2Encounter;
                     return obj;
                 })
             },
@@ -647,7 +670,8 @@ function normalizeRocketLineups(rawRocket) {
                 is_encounter: isSlot3Encounter,
                 pokemons: third.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot3Encounter;
+                    const isSnorlax = obj.name && String(obj.name).toLowerCase().includes('snorlax');
+                    obj.isEncounter = hasExplicit ? !!obj.isEncounter : (isBoss || isSnorlax);
                     return obj;
                 })
             }
