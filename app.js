@@ -726,48 +726,56 @@ async function loadPokedex() {
         // Fetch scraped data from Firebase Firestore database
         const dbScrapedData = await loadScrapedDataFromFirestore();
 
+        const isNonEmpty = (val) => {
+            if (!val) return false;
+            if (Array.isArray(val)) return val.length > 0;
+            if (typeof val === 'object') return Object.keys(val).length > 0;
+            return true;
+        };
+
         if (dbScrapedData) {
-            if (dbScrapedData.eggs) rawEggs = dbScrapedData.eggs;
-            if (dbScrapedData.raids) rawRaids = dbScrapedData.raids;
-            if (dbScrapedData.research) rawResearch = dbScrapedData.research;
-            if (dbScrapedData.rocketLineups) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
-            if (dbScrapedData.topAttackers) topAttackersData = dbScrapedData.topAttackers;
-            if (dbScrapedData.promoCodes) rawPromoCodes = dbScrapedData.promoCodes;
-            if (dbScrapedData.events) rawEvents = dbScrapedData.events;
+            if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
+            if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
+            if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
+            if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
+            if (isNonEmpty(dbScrapedData.topAttackers)) topAttackersData = dbScrapedData.topAttackers;
+            if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
+            if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
-        const [pokedexRes, eggsRes, raidsRes, researchRes, typesRes, buddyRes, rocketRes, eventsRes] = await Promise.all([
+        const [pokedexRes, eggsRes, raidsRes, researchRes, typesRes, buddyRes, rocketRes, eventsRes, localTopAttackersRes, localRaidsRes] = await Promise.all([
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-            dbScrapedData?.eggs ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json').catch(() => null),
-            fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json'),
-            dbScrapedData?.research ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json').catch(() => null),
+            isNonEmpty(rawEggs) ? Promise.resolve(null) : fetch('files/eggs.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json')).catch(() => null),
+            isNonEmpty(rawRaids) ? Promise.resolve(null) : fetch('files/raids.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/raids.json')).catch(() => null),
+            isNonEmpty(rawResearch) ? Promise.resolve(null) : fetch('files/research.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json')).catch(() => null),
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
             fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json'),
-            dbScrapedData?.rocketLineups ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/zhenga8533/leak-duck/data/rocket_lineups.json').catch(() => null),
-            dbScrapedData?.events ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json').catch(() => null)
+            isNonEmpty(liveRocket) ? Promise.resolve(null) : fetch('files/rocketLineups.min.json').catch(() => fetch('https://raw.githubusercontent.com/zhenga8533/leak-duck/data/rocket_lineups.json')).catch(() => null),
+            isNonEmpty(rawEvents) ? Promise.resolve(null) : fetch('files/events.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json')).catch(() => null),
+            isNonEmpty(topAttackersData) ? Promise.resolve(null) : fetch('files/topAttackers.min.json').catch(() => null),
+            isNonEmpty(rawRaids) ? Promise.resolve(null) : fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json').catch(() => null)
         ]);
         
         if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
         const data = await pokedexRes.json();
         rawPokedexData = data;
         
-        if (!dbScrapedData?.eggs && eggsRes && eggsRes.ok) {
-            try {
-                rawEggs = await eggsRes.json();
-            } catch (err) {
-                console.warn("Eggs API parsing failed:", err);
-            }
+        if (!isNonEmpty(rawEggs) && eggsRes && eggsRes.ok) {
+            try { rawEggs = await eggsRes.json(); } catch (err) {}
         }
-        if (raidsRes && raidsRes.ok && (!dbScrapedData || !dbScrapedData.raids)) {
-            try {
-                rawRaids = await raidsRes.json();
-            } catch (err) {
-                console.warn("Raids API parsing failed:", err);
-            }
+        if (!isNonEmpty(rawRaids) && raidsRes && raidsRes.ok) {
+            try { rawRaids = await raidsRes.json(); } catch (err) {}
         }
-        if (!dbScrapedData?.research && researchRes && researchRes.ok) {
-            try {
+        if (!isNonEmpty(rawRaids) && localRaidsRes && localRaidsRes.ok) {
+            try { rawRaids = await localRaidsRes.json(); } catch (err) {}
+        }
+        if (!isNonEmpty(rawResearch) && researchRes && researchRes.ok) {
+            try { rawResearch = await researchRes.json(); } catch (err) {}
+        }
+        if (!isNonEmpty(topAttackersData) && localTopAttackersRes && localTopAttackersRes.ok) {
+            try { topAttackersData = await localTopAttackersRes.json(); } catch (err) {}
+        }
                 rawResearch = await researchRes.json();
             } catch (err) {
                 console.warn("Research API parsing failed:", err);

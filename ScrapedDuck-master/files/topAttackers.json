@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "updatedAt": "2026-08-31T23:07:24.740Z",
+=======
+    "updatedAt": "2026-08-31T23:03:25.885Z",
+>>>>>>> 76e6653 (Fix data fallbacks for active rotations, raids, eggs, research, and top attackers)
     "overall": [
         {
             "rank": 1,
