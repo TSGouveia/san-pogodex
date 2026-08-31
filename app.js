@@ -998,10 +998,15 @@ async function loadPokedex() {
             });
         }
 
-        // 4. Parse Events from ScrapedDuck (flat array format)
+        // 4. Parse Events from ScrapedDuck (flat array format with deduplication)
         liveEvents = [];
+        const seenEventKeys = new Set();
         if (Array.isArray(rawEvents)) {
             rawEvents.forEach(ev => {
+                const eventKey = ev.eventID || ev.link || ev.url || ev.title || ev.name;
+                if (!eventKey || seenEventKeys.has(eventKey)) return;
+                seenEventKeys.add(eventKey);
+
                 const rawImg = ev.image || ev.banner || '';
                 const hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
                 liveEvents.push({

@@ -24,6 +24,7 @@ def scrape_events():
         res = requests.get("https://leekduck.com/events/", headers=HEADERS)
         soup = BeautifulSoup(res.text, "html.parser")
         all_events = []
+        seen_event_ids = set()
         categories = ["current", "upcoming"]
 
         for cat in categories:
@@ -33,6 +34,10 @@ def scrape_events():
             for ev in events:
                 href = ev.get("href", "")
                 event_id = href.strip("/").split("/")[-1] if href else ""
+
+                if not event_id or event_id in seen_event_ids:
+                    continue
+                seen_event_ids.add(event_id)
 
                 title_el = ev.select_one("h2")
                 title = title_el.text.strip() if title_el else ""
@@ -64,7 +69,7 @@ def scrape_events():
                 }
                 all_events.append(event_data)
 
-        print(f"  -> Saved {len(all_events)} events.")
+        print(f"  -> Saved {len(all_events)} unique events.")
         return all_events
     except Exception as e:
         print(f"Error scraping events: {e}")
