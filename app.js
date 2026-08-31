@@ -659,6 +659,7 @@ async function loadScrapedDataFromFirestore() {
             research: fields.research?.stringValue ? JSON.parse(fields.research.stringValue) : null,
             eggs: fields.eggs?.stringValue ? JSON.parse(fields.eggs.stringValue) : null,
             rocketLineups: fields.rocketLineups?.stringValue ? JSON.parse(fields.rocketLineups.stringValue) : null,
+            topAttackers: fields.topAttackers?.stringValue ? JSON.parse(fields.topAttackers.stringValue) : null,
             updatedAt: fields.updatedAt?.stringValue || null
         };
     } catch (err) {
@@ -714,6 +715,7 @@ async function loadPokedex() {
             if (dbScrapedData.raids) rawRaids = dbScrapedData.raids;
             if (dbScrapedData.research) rawResearch = dbScrapedData.research;
             if (dbScrapedData.rocketLineups) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
+            if (dbScrapedData.topAttackers) topAttackersData = dbScrapedData.topAttackers;
             if (dbScrapedData.events) rawEvents = dbScrapedData.events;
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }

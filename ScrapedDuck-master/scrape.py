@@ -438,7 +438,153 @@ def scrape_rocket():
         print(f"Error scraping rocket lineups: {e}")
         return []
 
-def upload_to_firestore(events, raids, research, eggs, rocket):
+def scrape_top_attackers():
+    print("Scraping Top Attackers (DialgaDex metrics)...")
+    try:
+        pkm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json", headers=HEADERS)
+        fm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json", headers=HEADERS)
+        cm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_cm.json", headers=HEADERS)
+
+        pkm_data = pkm_res.json()
+        raw_fm_data = fm_res.json()
+        raw_cm_data = cm_res.json()
+
+        fm_by_name = {m['name'].lower(): m for m in raw_fm_data.values() if m and 'name' in m}
+        cm_by_name = {m['name'].lower(): m for m in raw_cm_data.values() if m and 'name' in m}
+
+        types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+
+        def calc_move_power(m):
+            return m.get('power', 0)
+
+        def calc_move_duration(m):
+            return max(0.5, (m.get('duration', 1000) / 1000.0))
+
+        def calculate_attacker_score(pkm, fm_name, cm_name, target_type):
+            fm = fm_by_name.get(fm_name.lower())
+            cm = cm_by_name.get(cm_name.lower())
+            if not fm or not cm:
+                return None
+
+            stats = pkm.get('stats', {})
+            atk = stats.get('baseAttack', 0)
+            def_stat = stats.get('baseDefense', 0)
+            hp = stats.get('baseStamina', 0)
+
+            pkm_types = [t.lower() for t in pkm.get('types', [])]
+            fm_match = 1.2 if fm.get('type', '').lower() in pkm_types else 1.0
+            cm_match = 1.2 if cm.get('type', '').lower() in pkm_types else 1.0
+
+            cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
+            fm_se = 1.6 if target_type and fm.get('type', '').lower() == target_type.lower() else 1.0
+
+            shadow_mult = 1.2 if pkm.get('shadow') else 1.0
+            eff_atk = atk * shadow_mult
+
+            fm_dmg = (0.5 * eff_atk / 180.0 * calc_move_power(fm) * fm_match * fm_se) + 1.0
+            cm_dmg = (0.5 * eff_atk / 180.0 * calc_move_power(cm) * cm_match * cm_se) + 1.0
+
+            fm_dur = calc_move_duration(fm)
+            cm_dur = calc_move_duration(cm)
+
+            fm_energy = fm.get('energy_delta', 6)
+            cm_energy = abs(cm.get('energy_delta', 50))
+            if fm_energy <= 0:
+                fm_energy = 6
+
+            cycle_time = fm_dur * (cm_energy / float(fm_energy)) + cm_dur
+            cycle_dmg = fm_dmg * (cm_energy / float(fm_energy)) + cm_dmg
+
+            dps = cycle_dmg / cycle_time if cycle_time > 0 else 0
+            tdo = dps * (hp * def_stat / 1340.0)
+
+            er = ((dps ** 3) * tdo) ** 0.25 if (dps > 0 and tdo > 0) else 0
+            return {
+                'dps': round(dps, 2),
+                'er': round(er, 2),
+                'fmName': fm.get('name'),
+                'cmName': cm.get('name'),
+                'cmType': cm.get('type'),
+                'fmType': fm.get('type')
+            }
+
+        import datetime
+        result = {
+            "updatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "overall": [],
+            "byType": {}
+        }
+
+        for t in types:
+            type_list = []
+            for pkm in pkm_data:
+                if not pkm.get('released'):
+                    continue
+                for fm in pkm.get('fm', []):
+                    for cm in pkm.get('cm', []):
+                        score = calculate_attacker_score(pkm, fm, cm, t)
+                        if score and score['er'] > 0 and score['cmType'].lower() == t.lower():
+                            form_val = pkm.get('form', '')
+                            type_list.append({
+                                "name": pkm.get('name'),
+                                "form": form_val if form_val != 'Normal' else '',
+                                "isShadow": bool(pkm.get('shadow')),
+                                "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
+                                "types": pkm.get('types', []),
+                                "fastMove": score['fmName'],
+                                "chargedMove": score['cmName'],
+                                "er": score['er'],
+                                "dps": score['dps']
+                            })
+            type_list.sort(key=lambda x: x['er'], reverse=True)
+            seen = set()
+            unique_list = []
+            for item in type_list:
+                key = (item['name'], item['form'], item['isShadow'])
+                if key not in seen:
+                    seen.add(key)
+                    unique_list.append(item)
+            result['byType'][t] = unique_list[:20]
+
+        overall_list = []
+        for pkm in pkm_data:
+            if not pkm.get('released'):
+                continue
+            for fm in pkm.get('fm', []):
+                for cm in pkm.get('cm', []):
+                    score = calculate_attacker_score(pkm, fm, cm, None)
+                    if score and score['er'] > 0:
+                        form_val = pkm.get('form', '')
+                        overall_list.append({
+                            "name": pkm.get('name'),
+                            "form": form_val if form_val != 'Normal' else '',
+                            "isShadow": bool(pkm.get('shadow')),
+                            "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
+                            "types": pkm.get('types', []),
+                            "fastMove": score['fmName'],
+                            "chargedMove": score['cmName'],
+                            "moveType": score['cmType'],
+                            "er": score['er'],
+                            "dps": score['dps']
+                        })
+        overall_list.sort(key=lambda x: x['er'], reverse=True)
+        seen_overall = set()
+        unique_overall = []
+        for item in overall_list:
+            key = (item['name'], item['form'], item['isShadow'])
+            if key not in seen_overall:
+                seen_overall.add(key)
+                unique_overall.append(item)
+        result['overall'] = unique_overall[:30]
+
+        save_json("topAttackers.json", result)
+        print(f"  -> Saved Top Attackers dataset ({len(result['overall'])} overall, {len(result['byType'])} types).")
+        return result
+    except Exception as e:
+        print(f"Error scraping top attackers: {e}")
+        return {"overall": [], "byType": {}}
+
+def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers):
     print("Uploading scraped data to Firebase Firestore...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = os.environ.get("FIREBASE_PROJECT_ID", "pogo-website-14a46")
@@ -468,6 +614,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket):
                 "research": {"stringValue": json.dumps(research, ensure_ascii=False)},
                 "eggs": {"stringValue": json.dumps(eggs, ensure_ascii=False)},
                 "rocketLineups": {"stringValue": json.dumps(rocket, ensure_ascii=False)},
+                "topAttackers": {"stringValue": json.dumps(top_attackers, ensure_ascii=False)},
                 "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
             }
         }
@@ -493,7 +640,8 @@ def main():
     research = scrape_research()
     eggs = scrape_eggs()
     rocket = scrape_rocket()
-    upload_to_firestore(events, raids, research, eggs, rocket)
+    top_attackers = scrape_top_attackers()
+    upload_to_firestore(events, raids, research, eggs, rocket, top_attackers)
     print("=== All scraping and database upload complete! ===")
 
 if __name__ == "__main__":
