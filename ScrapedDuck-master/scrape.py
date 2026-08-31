@@ -439,7 +439,7 @@ def scrape_rocket():
         return []
 
 def scrape_top_attackers():
-    print("Loading Official DialgaDex Top Attackers dataset...")
+    print("Loading Official DialgaDex Top Attackers dataset & calculating per-type rankings...")
     import datetime
     try:
         official_top_attackers = [
@@ -495,10 +495,141 @@ def scrape_top_attackers():
             {"rank": 50, "name": "Hydreigon", "form": "", "isMega": False, "isShadow": True, "types": ["Dark", "Dragon"], "fastMove": "Bite", "chargedMove": "Brutal Swing*", "dps": 16.50, "pct": "100.1%", "er": 54.20}
         ]
 
+        pkm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json", headers=HEADERS)
+        fm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json", headers=HEADERS)
+        cm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_cm.json", headers=HEADERS)
+
+        pkm_data = pkm_res.json()
+        raw_fm_data = fm_res.json()
+        raw_cm_data = cm_res.json()
+
+        fm_by_name = {m['name'].lower(): m for m in (raw_fm_data if isinstance(raw_fm_data, list) else raw_fm_data.values()) if m and isinstance(m, dict) and 'name' in m}
+        cm_by_name = {m['name'].lower(): m for m in (raw_cm_data if isinstance(raw_cm_data, list) else raw_cm_data.values()) if m and isinstance(m, dict) and 'name' in m}
+
+        CPM40 = 0.7903001
+        est_y_num = 1340
+        est_cm_power = 11670
+        enemy_def = 180
+
+        def process_power(m): return m.get('power', 0)
+        def process_duration(d): return max(0.5, (d if d else 1000) / 1000.0)
+        def calc_damage(atk, def_stat, power, mult):
+            return int(0.5 * atk / float(def_stat) * power * mult) + 1
+
+        def get_dps(types_list, atk, def_stat, hp, fm_obj, cm_obj, fm_mult=1.0, cm_mult=1.0):
+            if not fm_obj or not cm_obj: return 0.0
+            y = est_y_num / float(def_stat)
+            in_cm_dmg = est_cm_power / float(def_stat)
+            tof = hp / float(y)
+
+            fm_delta = fm_obj.get('energy_delta', 6)
+            cm_delta = abs(cm_obj.get('energy_delta', 50))
+            x = 0.5 * cm_delta + 0.5 * fm_delta + 0.5 * in_cm_dmg
+
+            fm_type = fm_obj.get('type', '')
+            cm_type = cm_obj.get('type', '')
+
+            fm_stab = 1.2 if (fm_type in types_list and fm_obj.get('name') != "Hidden Power") else 1.0
+            cm_stab = 1.2 if (cm_type in types_list) else 1.0
+
+            fm_dmg = calc_damage(atk, enemy_def, process_power(fm_obj), fm_mult * fm_stab)
+            cm_dmg = calc_damage(atk, enemy_def, process_power(cm_obj), cm_mult * cm_stab)
+
+            fm_dur = process_duration(fm_obj.get('duration'))
+            cm_dur = process_duration(cm_obj.get('duration'))
+
+            fm_dps = fm_dmg / float(fm_dur)
+            fm_eps = fm_delta / float(fm_dur)
+
+            cm_dps = cm_dmg / float(cm_dur)
+            cm_eps = cm_delta / float(cm_dur)
+
+            if cm_delta == 100:
+                dws = (cm_obj.get('damage_window_start', 0) or 0) / 1000.0
+                cm_eps = (cm_delta + 0.5 * fm_delta + 0.5 * y * dws) / float(cm_dur)
+
+            if fm_dps > cm_dps: return fm_dps
+
+            num = (cm_dps - fm_dps) * (x + tof * fm_eps)
+            den = cm_eps + fm_eps + (cm_dps - fm_dps) / float(y)
+            return fm_dps + (num / float(den)) if den != 0 else fm_dps
+
+        def get_attacker(pkm, fm_name, cm_name, target_type):
+            fm = fm_by_name.get(fm_name.lower())
+            cm = cm_by_name.get(cm_name.lower())
+            if not fm or not cm: return None
+
+            stats = pkm.get('stats', {})
+            base_atk = stats.get('baseAttack', 0)
+            base_def = stats.get('baseDefense', 0)
+            base_hp = stats.get('baseStamina', 0)
+
+            shadow = bool(pkm.get('shadow'))
+            shadow_atk_mult = 1.2 if shadow else 1.0
+            shadow_def_mult = 0.8333333 if shadow else 1.0
+
+            atk = (base_atk + 15) * CPM40 * shadow_atk_mult
+            def_stat = (base_def + 15) * CPM40 * shadow_def_mult
+            hp = int((base_hp + 15) * CPM40)
+
+            fm_se = 1.6 if target_type and fm.get('type', '').lower() == target_type.lower() else 1.0
+            cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
+
+            dps = get_dps(pkm.get('types', []), atk, def_stat, hp, fm, cm, fm_se, cm_se)
+            if dps <= 0: return None
+
+            y = est_y_num / float(def_stat)
+            tdo = dps * (hp / float(y))
+            er = ((dps ** 3) * tdo) ** 0.25 if (dps > 0 and tdo > 0) else 0
+
+            return {
+                'dps': round(dps, 2),
+                'er': round(er, 2),
+                'fmName': fm.get('name'),
+                'cmName': cm.get('name'),
+                'cmType': cm.get('type'),
+                'fmType': fm.get('type')
+            }
+
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
         by_type = {}
         for t in types:
-            by_type[t] = [item for item in official_top_attackers if t in item["types"]][:20]
+            type_list = []
+            for pkm in pkm_data:
+                if not pkm.get('released'): continue
+                for fm in pkm.get('fm', []):
+                    for cm in pkm.get('cm', []):
+                        res = get_attacker(pkm, fm, cm, t)
+                        if res and res['er'] > 0 and res['cmType'].lower() == t.lower():
+                            form_val = pkm.get('form', '')
+                            type_list.append({
+                                "name": pkm.get('name'),
+                                "form": form_val if form_val != 'Normal' else '',
+                                "isShadow": bool(pkm.get('shadow')),
+                                "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
+                                "types": pkm.get('types', []),
+                                "fastMove": res['fmName'],
+                                "chargedMove": res['cmName'],
+                                "dps": res['dps'],
+                                "er": res['er']
+                            })
+            type_list.sort(key=lambda x: x['dps'], reverse=True)
+            seen = set()
+            unique = []
+            for item in type_list:
+                key = (item['name'], item['form'], item['isShadow'])
+                if key not in seen:
+                    seen.add(key)
+                    unique.append(item)
+            top_dps = unique[0]['dps'] if unique else 1.0
+            by_type[t] = [
+                {
+                    "rank": idx + 1,
+                    **item,
+                    "pct": f"{round((item['dps'] / top_dps) * 100, 1)}%"
+                }
+                for idx, item in enumerate(unique[:20])
+            ]
 
         result = {
             "updatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
@@ -507,7 +638,7 @@ def scrape_top_attackers():
         }
 
         save_json("topAttackers.json", result)
-        print(f"  -> Saved {len(official_top_attackers)} official DialgaDex top attackers.")
+        print(f"  -> Saved {len(official_top_attackers)} official DialgaDex top attackers across 18 types.")
         return result
     except Exception as e:
         print(f"Error loading top attackers: {e}")
