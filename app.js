@@ -3202,7 +3202,7 @@ function renderActiveRotations() {
 }
 
 // Party & Special Rewards Data and helper function
-const partyRewardsData = [
+let partyRewardsData = [
     { dex: 924, name: "Tandemaus", task: "Complete Party Challenges", shiny: true },
     { dex: 133, name: "Eevee", task: "Walk 2 km", shiny: true },
     { dex: 374, name: "Beldum", task: "Walk 2 km", shiny: true },
