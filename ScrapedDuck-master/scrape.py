@@ -14,6 +14,7 @@ from scrapers.scrape_eggs import scrape_eggs
 from scrapers.scrape_rocket import scrape_rocket
 from scrapers.scrape_promos import scrape_promo_codes
 from scrapers.scrape_party import scrape_party
+from scrapers.scrape_pokedex import scrape_pokedex
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -43,7 +44,7 @@ def save_json(filename, data):
         with open(min_filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, separators=(",", ":"), ensure_ascii=False)
 
-def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges):
+def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, pokedex):
     print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
@@ -66,7 +67,8 @@ def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, part
             "eggs": eggs,
             "rocketLineups": rocket,
             "promoCodes": promo_codes,
-            "partyChallenges": party_challenges
+            "partyChallenges": party_challenges,
+            "pokedex": pokedex
         }
 
         success_count = 0
@@ -124,8 +126,12 @@ def main():
     party_challenges = scrape_party()
     save_json("partyChallenges.json", party_challenges)
 
-    # 8. Upload All Aggregated Data to Firestore
-    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges)
+    # 8. Scrape Pokedex
+    pokedex = scrape_pokedex()
+    save_json("pokedex.json", pokedex)
+
+    # 9. Upload All Aggregated Data to Firestore
+    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, pokedex)
     print("=== ALL SCRAPING AND FIRESTORE UPLOAD COMPLETE! ===")
 
 if __name__ == "__main__":
