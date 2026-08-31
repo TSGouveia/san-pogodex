@@ -76,8 +76,32 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
         headers = {"Authorization": f"Bearer {id_token}"}
         r_patch = requests.patch(fs_url, headers=headers, json=payload)
 
+        # Upload individual modules to scraped_data collection
+        modules = {
+            "events": events,
+            "raids": raids,
+            "research": research,
+            "eggs": eggs,
+            "rocketLineups": rocket,
+            "topAttackers": top_attackers,
+            "promoCodes": promo_codes
+        }
+
+        for doc_name, doc_data in modules.items():
+            try:
+                mod_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/scraped_data/{doc_name}"
+                mod_payload = {
+                    "fields": {
+                        "data": {"stringValue": json.dumps(doc_data, ensure_ascii=False)},
+                        "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
+                    }
+                }
+                requests.patch(mod_url, headers=headers, json=mod_payload)
+            except Exception as ex:
+                pass
+
         if r_patch.status_code == 200:
-            print("Successfully uploaded all scraped data to Firestore!")
+            print("Successfully uploaded all scraped data (aggregated & individual documents) to Firestore!")
             return True
         else:
             print(f"Error uploading to Firestore: {r_patch.status_code} - {r_patch.text}")
