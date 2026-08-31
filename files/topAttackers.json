@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T22:38:03.324606+00:00",
-=======
-    "updatedAt": "2026-08-31T22:39:56.906407+00:00",
->>>>>>> b953699 (Fix movesets and ER sorting across all 18 types to match DialgaDex 100%)
+    "updatedAt": "2026-08-31T22:40:24.816644+00:00",
     "overall": [
         {
             "rank": 1,
