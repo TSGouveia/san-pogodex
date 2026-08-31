@@ -599,21 +599,41 @@ function normalizeRocketLineups(rawRocket) {
     rawRocket.forEach(lineup => {
         let name = lineup.name || '';
         name = name.replace(/^Team GO Rocket (Leader|Boss)\s+/i, '').trim();
+        const isGiovanni = name.toLowerCase().includes('giovanni');
+
+        const slot1Explicit = (lineup.firstPokemon || []).some(p => p.isEncounter || p.is_encounter);
+        const slot2Explicit = (lineup.secondPokemon || []).some(p => p.isEncounter || p.is_encounter);
+        const slot3Explicit = (lineup.thirdPokemon || []).some(p => p.isEncounter || p.is_encounter);
+        const hasExplicit = slot1Explicit || slot2Explicit || slot3Explicit;
+
+        const isSlot1Encounter = isGiovanni ? false : (slot1Explicit || !hasExplicit);
+        const isSlot2Encounter = isGiovanni ? false : slot2Explicit;
+        const isSlot3Encounter = isGiovanni ? true : slot3Explicit;
+
         const slots = [
             {
                 slot: 1,
-                is_encounter: (lineup.firstPokemon || []).some(p => p.isEncounter),
-                pokemons: lineup.firstPokemon || []
+                is_encounter: isSlot1Encounter,
+                pokemons: (lineup.firstPokemon || []).map(p => ({
+                    ...(typeof p === 'object' ? p : { name: p }),
+                    isEncounter: isSlot1Encounter
+                }))
             },
             {
                 slot: 2,
-                is_encounter: (lineup.secondPokemon || []).some(p => p.isEncounter),
-                pokemons: lineup.secondPokemon || []
+                is_encounter: isSlot2Encounter,
+                pokemons: (lineup.secondPokemon || []).map(p => ({
+                    ...(typeof p === 'object' ? p : { name: p }),
+                    isEncounter: isSlot2Encounter
+                }))
             },
             {
                 slot: 3,
-                is_encounter: (lineup.thirdPokemon || []).some(p => p.isEncounter),
-                pokemons: lineup.thirdPokemon || []
+                is_encounter: isSlot3Encounter,
+                pokemons: (lineup.thirdPokemon || []).map(p => ({
+                    ...(typeof p === 'object' ? p : { name: p }),
+                    isEncounter: isSlot3Encounter
+                }))
             }
         ];
         map[name] = slots;
@@ -3347,8 +3367,9 @@ function renderRocketLineups() {
         const buildSlots = () => {
             const slotsContainer = charEl.querySelector('.rocket-slots-container');
             if (!slotsContainer) return;
+            const isGiovanni = name.toLowerCase().includes('giovanni');
             slotsData.forEach((slot, slotIndex) => {
-                const isSlotEncounter = slot.slot === 1 || slot.is_encounter;
+                const isSlotEncounter = slot.is_encounter || (isGiovanni ? slot.slot === 3 : (slot.slot === 1 && !slotsData.some(s => s.slot !== 1 && s.is_encounter)));
                 const slotEl = document.createElement('div');
                 slotEl.className = 'rocket-slot';
                 slotEl.style.cssText = 'display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); flex: 1;';
@@ -3368,7 +3389,7 @@ function renderRocketLineups() {
                     const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                     const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
                     const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
-                    const isEncounterPoke = isSlotEncounter || (poke && (poke.isEncounter || poke.is_encounter));
+                    const isEncounterPoke = (poke && (poke.isEncounter || poke.is_encounter)) || isSlotEncounter;
 
                     // Format raw API name for display (e.g. "MEGA BLAZIKEN" -> "Mega Blaziken")
                     const rawName = poke && typeof poke === 'object' ? poke.name : poke;
