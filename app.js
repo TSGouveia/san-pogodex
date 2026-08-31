@@ -1462,6 +1462,9 @@ function updateDashboardStats() {
     if (typeof renderCandiesPane === 'function') {
         renderCandiesPane();
     }
+    if (typeof renderAttackersPane === 'function') {
+        renderAttackersPane();
+    }
 }
 
 // ==========================================================================
@@ -1545,6 +1548,15 @@ function setupEventListeners() {
                 genTabsScroll.classList.add('hidden');
                 if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
                 renderFriendsPane();
+            } else if (targetPaneId === 'attackers-pane') {
+                document.querySelector('.search-wrapper').classList.remove('hidden');
+                document.querySelector('.radio-filters').classList.add('hidden');
+                document.querySelector('.bulk-actions').classList.add('hidden');
+                document.querySelector('.sort-wrapper').classList.add('hidden');
+                document.getElementById('region-stats-badge').classList.add('hidden');
+                genTabsScroll.classList.add('hidden');
+                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                renderAttackersPane();
             } else {
                 document.querySelector('.search-wrapper').classList.remove('hidden');
                 document.querySelector('.radio-filters').classList.remove('hidden');
@@ -5876,4 +5888,276 @@ function renderToDoPane() {
             candiesList.appendChild(buildItemHtml(item));
         });
     }
+}
+
+// ==========================================================================
+// TOP ATTACKERS (DIALGADEX) PANE
+// ==========================================================================
+let topAttackersData = null;
+let selectedAttackerType = 'all';
+let selectedAttackerFilter = 'all';
+
+// Load Top Attackers Data
+fetch('files/topAttackers.min.json')
+    .then(r => r.json())
+    .then(data => {
+        topAttackersData = data;
+        const pane = document.getElementById('attackers-pane');
+        if (pane && !pane.classList.contains('hidden')) {
+            renderAttackersPane();
+        }
+    })
+    .catch(err => console.warn('Could not load topAttackers data:', err));
+
+function renderAttackersPane() {
+    const pane = document.getElementById('attackers-pane');
+    if (!pane || pane.classList.contains('hidden')) return;
+
+    const filtersContainer = document.getElementById('attacker-type-filters');
+    const gridContainer = document.getElementById('attackers-grid');
+    const categoryTitle = document.getElementById('attacker-category-title');
+    const typeCountSpan = document.getElementById('attacker-type-count');
+    const searchInput = document.getElementById('search-input');
+    const searchQuery = safeLower(searchInput ? searchInput.value : '');
+
+    if (!filtersContainer || !gridContainer || !topAttackersData) return;
+
+    const typeIcons = {
+        all: 'fa-trophy',
+        Bug: 'fa-bug',
+        Dark: 'fa-moon',
+        Dragon: 'fa-dragon',
+        Electric: 'fa-bolt',
+        Fairy: 'fa-wand-magic-sparkles',
+        Fighting: 'fa-hand-fist',
+        Fire: 'fa-fire',
+        Flying: 'fa-feather-pointed',
+        Ghost: 'fa-ghost',
+        Grass: 'fa-leaf',
+        Ground: 'fa-mountain',
+        Ice: 'fa-snowflake',
+        Normal: 'fa-circle',
+        Poison: 'fa-skull-crossbones',
+        Psychic: 'fa-eye',
+        Rock: 'fa-gem',
+        Steel: 'fa-shield-halved',
+        Water: 'fa-droplet'
+    };
+
+    const typeColors = {
+        all: '#fbbf24',
+        Bug: '#a8b820',
+        Dark: '#705848',
+        Dragon: '#7038f8',
+        Electric: '#f8d030',
+        Fairy: '#ee99ac',
+        Fighting: '#c03028',
+        Fire: '#f08030',
+        Flying: '#a890f0',
+        Ghost: '#705598',
+        Grass: '#78c850',
+        Ground: '#e0c068',
+        Ice: '#98d8d8',
+        Normal: '#a8a878',
+        Poison: '#a040a0',
+        Psychic: '#f85888',
+        Rock: '#b8a038',
+        Steel: '#b8b8d0',
+        Water: '#6890f0'
+    };
+
+    const allTypesList = ["all", "Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"];
+
+    // Render Type Buttons
+    filtersContainer.innerHTML = '';
+    allTypesList.forEach(t => {
+        const btn = document.createElement('button');
+        btn.className = `attacker-type-btn ${selectedAttackerType === t ? 'active' : ''}`;
+        const icon = typeIcons[t] || 'fa-tag';
+        const color = typeColors[t] || 'var(--text-secondary)';
+        const label = t === 'all' ? 'Overall Top 30' : t;
+
+        btn.style.cssText = `
+            background: ${selectedAttackerType === t ? color : 'var(--bg-tertiary)'};
+            color: ${selectedAttackerType === t ? (['Electric', 'Fairy', 'Ice', 'Normal', 'Steel'].includes(t) ? '#1e1b4b' : '#ffffff') : 'var(--text-secondary)'};
+            border: 1px solid ${selectedAttackerType === t ? color : 'var(--border-color)'};
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        `;
+
+        btn.innerHTML = `<i class="fa-solid ${icon}" style="color: ${selectedAttackerType === t ? 'inherit' : color};"></i> ${label}`;
+        btn.addEventListener('click', () => {
+            selectedAttackerType = t;
+            renderAttackersPane();
+        });
+        filtersContainer.appendChild(btn);
+    });
+
+    // Render Category Title
+    if (categoryTitle) {
+        const currentIcon = typeIcons[selectedAttackerType] || 'fa-bolt';
+        const currentColor = typeColors[selectedAttackerType] || '#fbbf24';
+        const label = selectedAttackerType === 'all' ? 'Overall Top Attackers' : `Top ${selectedAttackerType}-Type Attackers`;
+        categoryTitle.innerHTML = `<i class="fa-solid ${currentIcon}" style="color: ${currentColor};"></i> ${label}`;
+    }
+
+    if (typeCountSpan) {
+        typeCountSpan.textContent = selectedAttackerType === 'all' ? 'Overall Top 30' : `${selectedAttackerType} Category`;
+    }
+
+    // Attach form filter event listeners
+    const formChips = document.querySelectorAll('#attacker-form-filters .attacker-filter-chip');
+    formChips.forEach(chip => {
+        chip.classList.toggle('active', chip.dataset.filter === selectedAttackerFilter);
+        chip.onclick = () => {
+            selectedAttackerFilter = chip.dataset.filter;
+            formChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            renderAttackersPane();
+        };
+    });
+
+    // Get Raw List
+    let rawList = selectedAttackerType === 'all' 
+        ? (topAttackersData.overall || []) 
+        : ((topAttackersData.byType && topAttackersData.byType[selectedAttackerType]) || []);
+
+    // Filter by Form (Mega, Shadow, Regular)
+    let filteredList = rawList.filter(item => {
+        if (selectedAttackerFilter === 'mega') return item.isMega;
+        if (selectedAttackerFilter === 'shadow') return item.isShadow;
+        if (selectedAttackerFilter === 'regular') return !item.isMega && !item.isShadow;
+        return true;
+    });
+
+    // Filter by Search Query
+    if (searchQuery) {
+        filteredList = filteredList.filter(item => 
+            safeLower(item.name).includes(searchQuery) ||
+            safeLower(item.fastMove || '').includes(searchQuery) ||
+            safeLower(item.chargedMove || '').includes(searchQuery)
+        );
+    }
+
+    gridContainer.innerHTML = '';
+
+    if (filteredList.length === 0) {
+        gridContainer.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
+                <i class="fa-solid fa-ghost" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+                <p style="font-size: 0.95rem; font-weight: 600; margin: 0;">No attackers found matching your current filters.</p>
+            </div>
+        `;
+        return;
+    }
+
+    filteredList.forEach((item, index) => {
+        const rank = index + 1;
+        const rankColor = rank === 1 ? '#fbbf24' : (rank === 2 ? '#cbd5e1' : (rank === 3 ? '#d97706' : 'var(--text-secondary)'));
+        const rankBg = rank <= 3 ? 'rgba(251, 191, 36, 0.12)' : 'rgba(255, 255, 255, 0.04)';
+
+        // Match in pokemonDatabase
+        const pokeNameLower = safeLower(item.name);
+        const matchedPoke = pokemonDatabase.find(p => safeLower(p.name) === pokeNameLower) ||
+            pokemonDatabase.find(p => pokeNameLower.includes(safeLower(p.name)));
+
+        const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
+        const isMissing = matchedPoke ? (isPokemonMissing(matchedPoke) || isTransferred) : false;
+        const isCandyNeeded = matchedPoke ? needsCandies(matchedPoke) : false;
+        const isCaught = matchedPoke && !isMissing;
+
+        let statusBadgeHtml = '';
+        if (isCaught) {
+            statusBadgeHtml = `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-check"></i> CAUGHT</span>`;
+        } else if (isCandyNeeded) {
+            statusBadgeHtml = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-candy-cane"></i> CANDY NEEDED</span>`;
+        } else if (isMissing) {
+            statusBadgeHtml = `<span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-xmark"></i> MISSING</span>`;
+        }
+
+        const imgUrl = matchedPoke ? getPokemonImageUrl(matchedPoke.name, matchedPoke) : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png`;
+
+        let formBadge = '';
+        if (item.isMega) {
+            formBadge = `<span style="background: linear-gradient(135deg, #a855f7, #ec4899); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">MEGA</span>`;
+        } else if (item.isShadow) {
+            formBadge = `<span style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">SHADOW</span>`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'attacker-card';
+        card.style.cssText = `
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            cursor: ${matchedPoke ? 'pointer' : 'default'};
+            position: relative;
+            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+        `;
+
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="background: ${rankBg}; color: ${rankColor}; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900; border: 1px solid ${rankColor}33;">#${rank}</span>
+                    ${formBadge}
+                </div>
+                ${statusBadgeHtml}
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; margin-top: 2px;">
+                <img src="${imgUrl}" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
+                <div style="flex: 1; min-width: 0;">
+                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name} ${item.form ? `<span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">(${item.form})</span>` : ''}</h4>
+                    <div style="display: flex; gap: 4px; margin-top: 4px;">
+                        ${(item.types || []).map(t => `<span style="background: ${typeColors[t] || '#64748b'}; color: white; padding: 0 6px; border-radius: 3px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;">${t}</span>`).join('')}
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 8px 10px; font-size: 0.76rem; display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span><i class="fa-solid fa-person-running" style="color: #60a5fa; margin-right: 4px;"></i> Fast</span>
+                    <strong style="color: var(--text-primary);">${item.fastMove || '—'}</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
+                    <span><i class="fa-solid fa-burst" style="color: #f43f5e; margin-right: 4px;"></i> Charged</span>
+                    <strong style="color: var(--text-primary);">${item.chargedMove || '—'}</strong>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; font-weight: 700; background: var(--bg-tertiary); padding: 6px 10px; border-radius: 6px; margin-top: 2px;">
+                <span style="color: var(--text-secondary);">Score <span style="color: #fbbf24; font-size: 0.85rem; font-weight: 900; margin-left: 4px;">ER ${item.er}</span></span>
+                <span style="color: var(--text-secondary);">DPS <span style="color: #38bdf8; font-size: 0.85rem; font-weight: 900; margin-left: 4px;">${item.dps}</span></span>
+            </div>
+        `;
+
+        if (matchedPoke) {
+            card.addEventListener('click', () => {
+                openModal(matchedPoke);
+            });
+            card.addEventListener('mouseenter', () => {
+                card.style.borderColor = 'var(--accent-color)';
+                card.style.transform = 'translateY(-2px)';
+                card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.3)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderColor = 'var(--border-color)';
+                card.style.transform = 'none';
+                card.style.boxShadow = 'none';
+            });
+        }
+
+        gridContainer.appendChild(card);
+    });
 }
