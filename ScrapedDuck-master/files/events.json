@@ -177,11 +177,11 @@
     },
     {
         "eventID": "september-communitydayclassic2026",
-        "name": "September Community Day Classic",
+        "name": "Gible Community Day Classic",
         "eventType": "community-day",
         "heading": "Community Day",
         "link": "https://leekduck.com/events/september-communitydayclassic2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
         "start": "2026-09-12T14:00:00.000",
         "end": "2026-09-12T17:00:00.000",
         "extraData": null
@@ -198,12 +198,12 @@
         "extraData": null
     },
     {
-        "eventID": "mega-squads-2026",
+        "eventID": "mega-squads",
         "name": "Mega Squads",
         "eventType": "event",
         "heading": "Event",
-        "link": "https://leekduck.com/events/mega-squads-2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
+        "link": "https://leekduck.com/events/mega-squads/",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-mega-squads/mega-squads.jpg",
         "start": "2026-09-08T10:00:00.000",
         "end": "2026-09-14T20:00:00.000",
         "extraData": null
@@ -561,17 +561,6 @@
         "extraData": null
     },
     {
-        "eventID": "mega-ascension",
-        "name": "Mega Ascension",
-        "eventType": "event",
-        "heading": "Event",
-        "link": "https://leekduck.com/events/mega-ascension/",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-08-31-mega-ascension/mega-ascension.jpg",
-        "start": "2026-08-31T10:00:00.000",
-        "end": "2026-09-04T23:59:00.000",
-        "extraData": null
-    },
-    {
         "eventID": "gbl-forever-forward_great-league_ultra-league_master-league-mega-edition",
         "name": "Great League, Ultra League, and Master League: Mega Edition | Forever Forward",
         "eventType": "go-battle-league",
@@ -649,17 +638,6 @@
         "extraData": null
     },
     {
-        "eventID": "mega-squads-2026",
-        "name": "Mega Squads",
-        "eventType": "event",
-        "heading": "Event",
-        "link": "https://leekduck.com/events/mega-squads-2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
-        "start": "2026-09-08T10:00:00.000",
-        "end": "2026-09-14T20:00:00.000",
-        "extraData": null
-    },
-    {
         "eventID": "go-pass-september-2026",
         "name": "GO Pass: September",
         "eventType": "go-pass",
@@ -668,6 +646,17 @@
         "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-go-pass-september-2026/go-pass-september-2026.jpg",
         "start": "2026-09-08T10:00:00.000",
         "end": "2026-10-06T10:00:00.000",
+        "extraData": null
+    },
+    {
+        "eventID": "mega-squads",
+        "name": "Mega Squads",
+        "eventType": "event",
+        "heading": "Event",
+        "link": "https://leekduck.com/events/mega-squads/",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-mega-squads/mega-squads.jpg",
+        "start": "2026-09-08T10:00:00.000",
+        "end": "2026-09-14T20:00:00.000",
         "extraData": null
     },
     {
@@ -727,11 +716,11 @@
     },
     {
         "eventID": "september-communitydayclassic2026",
-        "name": "September Community Day Classic",
+        "name": "Gible Community Day Classic",
         "eventType": "community-day",
         "heading": "Community Day",
         "link": "https://leekduck.com/events/september-communitydayclassic2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
         "start": "2026-09-12T14:00:00.000",
         "end": "2026-09-12T17:00:00.000",
         "extraData": null
