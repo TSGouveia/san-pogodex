@@ -3124,12 +3124,8 @@ function renderActiveRotations() {
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
 
                 let cpMeta = '';
-                if (encounter.maxCp || encounter.minCp) {
-                    const cpText = [
-                        encounter.maxCp ? `Max CP: <strong>${encounter.maxCp}</strong>` : '',
-                        encounter.minCp ? `Min CP: <strong>${encounter.minCp}</strong>` : ''
-                    ].filter(Boolean).join(' &bull; ');
-                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>${cpText}</span></div></div>`;
+                if (encounter.maxCp) {
+                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${encounter.maxCp}</strong></span></div></div>`;
                 }
 
                 card.innerHTML = `
