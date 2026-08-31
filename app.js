@@ -3137,6 +3137,58 @@ function renderActiveRotations() {
     // 5. Render Team GO Rocket Lineups
     renderRocketLineups();
 
+function renderPartyRewardsByQuest(container, partyData, cardTheme = 'theme-blue') {
+    if (!container) return;
+    container.innerHTML = '';
+    if (!partyData || !Array.isArray(partyData) || partyData.length === 0) {
+        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active Party Play challenges found.</p>';
+        return;
+    }
+
+    const byCategory = {};
+    partyData.forEach(item => {
+        const cat = item.category || "General";
+        if (!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(item);
+    });
+
+    Object.entries(byCategory).forEach(([catName, items]) => {
+        const sub = document.createElement('div');
+        sub.className = 'rotation-subchapter';
+        sub.innerHTML = `
+            <h4 class="rotation-subchapter-title">
+                <i class="fa-solid fa-users"></i> ${catName}
+            </h4>
+            <div class="rotation-grid-layout"></div>
+        `;
+        container.appendChild(sub);
+
+        const grid = sub.querySelector('.rotation-grid-layout');
+        items.forEach(challenge => {
+            const card = document.createElement('div');
+            card.className = `rotation-card-item ${cardTheme} spawn-animation`;
+
+            let rewardsHtml = '';
+            if (challenge.rewards && Array.isArray(challenge.rewards)) {
+                rewardsHtml = challenge.rewards.map(r => `
+                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 0.75rem;">
+                        ${r.image ? `<img src="${r.image}" style="width: 20px; height: 20px; object-fit: contain;">` : ''}
+                        <span>${r.name}</span>
+                    </div>
+                `).join('');
+            }
+
+            card.innerHTML = `
+                <div class="rotation-card-details-wrapper" style="width: 100%;">
+                    <span class="rotation-card-name" style="font-weight: 700;">${challenge.task}</span>
+                    <div style="margin-top: 6px;">${rewardsHtml}</div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    });
+}
+
     // 6. Render Party Rewards
     const partyGrid = document.getElementById('party-rewards-grid');
     if (partyGrid) {
@@ -5896,16 +5948,23 @@ let selectedAttackerType = 'all';
 let selectedAttackerFilter = 'all';
 
 // Load Top Attackers Data
-fetch('files/topAttackers.min.json')
-    .then(r => r.json())
-    .then(data => {
-        topAttackersData = data;
-        const pane = document.getElementById('attackers-pane');
-        if (pane && !pane.classList.contains('hidden')) {
-            renderAttackersPane();
-        }
-    })
-    .catch(err => console.warn('Could not load topAttackers data:', err));
+if (!topAttackersData) {
+    fetch('files/topAttackers.min.json')
+        .then(r => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return r.json();
+        })
+        .then(data => {
+            if (data && (data.overall || data.byType)) {
+                topAttackersData = data;
+                const pane = document.getElementById('attackers-pane');
+                if (pane && !pane.classList.contains('hidden')) {
+                    renderAttackersPane();
+                }
+            }
+        })
+        .catch(err => console.warn('Could not load topAttackers data:', err));
+}
 
 function renderAttackersPane() {
     const pane = document.getElementById('attackers-pane');
