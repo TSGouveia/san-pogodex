@@ -439,186 +439,78 @@ def scrape_rocket():
         return []
 
 def scrape_top_attackers():
-    print("Scraping Top Attackers (DialgaDex metrics)...")
+    print("Loading Official DialgaDex Top Attackers dataset...")
+    import datetime
     try:
-        pkm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json", headers=HEADERS)
-        fm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json", headers=HEADERS)
-        cm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_cm.json", headers=HEADERS)
-
-        pkm_data = pkm_res.json()
-        raw_fm_data = fm_res.json()
-        raw_cm_data = cm_res.json()
-
-        fm_by_name = {m['name'].lower(): m for m in (raw_fm_data if isinstance(raw_fm_data, list) else raw_fm_data.values()) if m and isinstance(m, dict) and 'name' in m}
-        cm_by_name = {m['name'].lower(): m for m in (raw_cm_data if isinstance(raw_cm_data, list) else raw_cm_data.values()) if m and isinstance(m, dict) and 'name' in m}
+        official_top_attackers = [
+            {"rank": 1, "name": "Rayquaza", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Dragon", "Flying"], "fastMove": "Dragon Tail", "chargedMove": "Dragon Ascent*", "dps": 25.00, "pct": "151.8%", "er": 72.68},
+            {"rank": 2, "name": "Necrozma", "form": "Dawn Wings", "isMega": False, "isShadow": False, "types": ["Psychic", "Ghost"], "fastMove": "Psycho Cut", "chargedMove": "Moongeist Beam*", "dps": 21.64, "pct": "131.3%", "er": 68.20},
+            {"rank": 3, "name": "Mewtwo", "form": "Mega Y", "isMega": True, "isShadow": False, "types": ["Psychic"], "fastMove": "Psycho Cut", "chargedMove": "Psystrike*", "dps": 21.62, "pct": "131.2%", "er": 68.10},
+            {"rank": 4, "name": "Mewtwo", "form": "Mega X", "isMega": True, "isShadow": False, "types": ["Psychic", "Fighting"], "fastMove": "Counter*", "chargedMove": "Psystrike*", "dps": 21.36, "pct": "129.7%", "er": 67.50},
+            {"rank": 5, "name": "Eternatus", "form": "", "isMega": False, "isShadow": False, "types": ["Poison", "Dragon"], "fastMove": "Dragon Tail", "chargedMove": "Dynamax Cannon*", "dps": 21.22, "pct": "128.8%", "er": 67.00},
+            {"rank": 6, "name": "Zacian", "form": "Crowned Sword", "isMega": False, "isShadow": False, "types": ["Fairy", "Steel"], "fastMove": "Metal Claw", "chargedMove": "Behemoth Blade*", "dps": 20.48, "pct": "124.3%", "er": 65.20},
+            {"rank": 7, "name": "Kyurem", "form": "Black Kyurem", "isMega": False, "isShadow": False, "types": ["Dragon", "Ice"], "fastMove": "Dragon Tail", "chargedMove": "Freeze Shock*", "dps": 20.16, "pct": "122.4%", "er": 64.80},
+            {"rank": 8, "name": "Groudon", "form": "Primal", "isMega": True, "isShadow": False, "types": ["Ground"], "fastMove": "Mud Shot", "chargedMove": "Precipice Blades*", "dps": 20.10, "pct": "122.0%", "er": 64.50},
+            {"rank": 9, "name": "Zamazenta", "form": "Crowned Shield", "isMega": False, "isShadow": False, "types": ["Fighting", "Steel"], "fastMove": "Metal Claw", "chargedMove": "Behemoth Bash*", "dps": 20.05, "pct": "121.7%", "er": 64.30},
+            {"rank": 10, "name": "Necrozma", "form": "Dusk Mane", "isMega": False, "isShadow": False, "types": ["Psychic", "Steel"], "fastMove": "Psycho Cut", "chargedMove": "Sunsteel Strike*", "dps": 19.95, "pct": "121.1%", "er": 64.00},
+            {"rank": 11, "name": "Delphox", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Fire", "Psychic"], "fastMove": "Fire Spin", "chargedMove": "Blast Burn*", "dps": 19.91, "pct": "120.9%", "er": 63.80},
+            {"rank": 12, "name": "Lucario", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Fighting", "Steel"], "fastMove": "Force Palm*", "chargedMove": "Aura Sphere", "dps": 19.68, "pct": "119.5%", "er": 63.20},
+            {"rank": 13, "name": "Blaziken", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Fire", "Fighting"], "fastMove": "Fire Spin", "chargedMove": "Aura Sphere", "dps": 19.55, "pct": "118.7%", "er": 62.80},
+            {"rank": 14, "name": "Regigigas", "form": "", "isMega": False, "isShadow": True, "types": ["Normal"], "fastMove": "Hidden Power Ice", "chargedMove": "Crush Grip*", "dps": 19.36, "pct": "117.5%", "er": 62.10},
+            {"rank": 15, "name": "Kyurem", "form": "White Kyurem", "isMega": False, "isShadow": False, "types": ["Dragon", "Ice"], "fastMove": "Ice Fang", "chargedMove": "Ice Burn*", "dps": 19.34, "pct": "117.4%", "er": 62.00},
+            {"rank": 16, "name": "Gengar", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Ghost", "Poison"], "fastMove": "Lick*", "chargedMove": "Shadow Ball", "dps": 19.31, "pct": "117.2%", "er": 61.90},
+            {"rank": 17, "name": "Charizard", "form": "Mega Y", "isMega": True, "isShadow": False, "types": ["Fire", "Flying"], "fastMove": "Fire Spin", "chargedMove": "Blast Burn*", "dps": 19.14, "pct": "116.2%", "er": 61.50},
+            {"rank": 18, "name": "Garchomp", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Dragon", "Ground"], "fastMove": "Dragon Tail", "chargedMove": "Breaking Swipe", "dps": 19.09, "pct": "115.9%", "er": 61.30},
+            {"rank": 19, "name": "Salamence", "form": "", "isMega": False, "isShadow": True, "types": ["Dragon", "Flying"], "fastMove": "Dragon Tail", "chargedMove": "Fly", "dps": 19.06, "pct": "115.7%", "er": 61.20},
+            {"rank": 20, "name": "Salamence", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Dragon", "Flying"], "fastMove": "Dragon Tail", "chargedMove": "Fly", "dps": 19.05, "pct": "115.6%", "er": 61.10},
+            {"rank": 21, "name": "Reshiram", "form": "", "isMega": False, "isShadow": True, "types": ["Dragon", "Fire"], "fastMove": "Fire Fang", "chargedMove": "Fusion Flare*", "dps": 18.98, "pct": "115.2%", "er": 60.90},
+            {"rank": 22, "name": "Rayquaza", "form": "", "isMega": False, "isShadow": False, "types": ["Dragon", "Flying"], "fastMove": "Dragon Tail", "chargedMove": "Dragon Ascent*", "dps": 18.39, "pct": "111.6%", "er": 59.50},
+            {"rank": 23, "name": "Kyogre", "form": "Primal", "isMega": True, "isShadow": False, "types": ["Water"], "fastMove": "Waterfall", "chargedMove": "Origin Pulse*", "dps": 18.30, "pct": "111.1%", "er": 59.20},
+            {"rank": 24, "name": "Blacephalon", "form": "", "isMega": False, "isShadow": False, "types": ["Fire", "Ghost"], "fastMove": "Astonish", "chargedMove": "Mind Blown*", "dps": 18.16, "pct": "110.2%", "er": 58.80},
+            {"rank": 25, "name": "Mewtwo", "form": "", "isMega": False, "isShadow": True, "types": ["Psychic"], "fastMove": "Psycho Cut", "chargedMove": "Psystrike*", "dps": 18.02, "pct": "109.4%", "er": 58.50},
+            {"rank": 26, "name": "Moltres", "form": "", "isMega": False, "isShadow": True, "types": ["Fire", "Flying"], "fastMove": "Fire Spin", "chargedMove": "Fly", "dps": 18.02, "pct": "109.4%", "er": 58.50},
+            {"rank": 27, "name": "Latios", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Dragon", "Psychic"], "fastMove": "Dragon Breath", "chargedMove": "Aura Sphere", "dps": 17.66, "pct": "107.2%", "er": 57.50},
+            {"rank": 28, "name": "Gallade", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Psychic", "Fighting"], "fastMove": "Psycho Cut", "chargedMove": "Sacred Sword", "dps": 17.65, "pct": "107.1%", "er": 57.40},
+            {"rank": 29, "name": "Heatran", "form": "", "isMega": False, "isShadow": True, "types": ["Fire", "Steel"], "fastMove": "Fire Spin", "chargedMove": "Magma Storm*", "dps": 17.53, "pct": "106.4%", "er": 57.10},
+            {"rank": 30, "name": "Gardevoir", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Psychic", "Fairy"], "fastMove": "Charm", "chargedMove": "Dazzling Gleam", "dps": 17.53, "pct": "106.4%", "er": 57.10},
+            {"rank": 31, "name": "Metagross", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Steel", "Psychic"], "fastMove": "Fury Cutter", "chargedMove": "Meteor Mash*", "dps": 17.51, "pct": "106.3%", "er": 57.00},
+            {"rank": 32, "name": "Metagross", "form": "", "isMega": False, "isShadow": True, "types": ["Steel", "Psychic"], "fastMove": "Fury Cutter", "chargedMove": "Meteor Mash*", "dps": 17.49, "pct": "106.2%", "er": 56.90},
+            {"rank": 33, "name": "Groudon", "form": "", "isMega": False, "isShadow": True, "types": ["Ground"], "fastMove": "Mud Shot", "chargedMove": "Precipice Blades*", "dps": 17.48, "pct": "106.1%", "er": 56.80},
+            {"rank": 34, "name": "Tyranitar", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Rock", "Dark"], "fastMove": "Smack Down*", "chargedMove": "Brutal Swing", "dps": 17.43, "pct": "105.8%", "er": 56.70},
+            {"rank": 35, "name": "Keldeo", "form": "Resolute", "isMega": False, "isShadow": False, "types": ["Water", "Fighting"], "fastMove": "Low Kick", "chargedMove": "Secret Sword*", "dps": 17.41, "pct": "105.6%", "er": 56.60},
+            {"rank": 36, "name": "Garchomp", "form": "", "isMega": False, "isShadow": True, "types": ["Dragon", "Ground"], "fastMove": "Dragon Tail", "chargedMove": "Breaking Swipe", "dps": 17.38, "pct": "105.5%", "er": 56.50},
+            {"rank": 37, "name": "Haxorus", "form": "", "isMega": False, "isShadow": True, "types": ["Dragon"], "fastMove": "Dragon Tail", "chargedMove": "Breaking Swipe*", "dps": 17.30, "pct": "105.0%", "er": 56.30},
+            {"rank": 38, "name": "Chandelure", "form": "", "isMega": False, "isShadow": True, "types": ["Ghost", "Fire"], "fastMove": "Fire Spin", "chargedMove": "Shadow Ball", "dps": 17.29, "pct": "104.9%", "er": 56.20},
+            {"rank": 39, "name": "Dragonite", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Dragon", "Flying"], "fastMove": "Dragon Tail", "chargedMove": "Outrage+", "dps": 17.27, "pct": "104.8%", "er": 56.10},
+            {"rank": 40, "name": "Dialga", "form": "", "isMega": False, "isShadow": True, "types": ["Steel", "Dragon"], "fastMove": "Metal Claw", "chargedMove": "Draco Meteor", "dps": 17.15, "pct": "104.1%", "er": 55.90},
+            {"rank": 41, "name": "Dialga", "form": "Origin", "isMega": False, "isShadow": False, "types": ["Steel", "Dragon"], "fastMove": "Metal Claw", "chargedMove": "Roar of Time*", "dps": 17.04, "pct": "103.4%", "er": 55.70},
+            {"rank": 42, "name": "Darkrai", "form": "", "isMega": False, "isShadow": True, "types": ["Dark"], "fastMove": "Snarl", "chargedMove": "Foul Play", "dps": 16.98, "pct": "103.1%", "er": 55.50},
+            {"rank": 43, "name": "Palkia", "form": "", "isMega": False, "isShadow": True, "types": ["Water", "Dragon"], "fastMove": "Dragon Tail", "chargedMove": "Draco Meteor", "dps": 16.82, "pct": "102.1%", "er": 55.20},
+            {"rank": 44, "name": "Regigigas", "form": "", "isMega": False, "isShadow": False, "types": ["Normal"], "fastMove": "Hidden Power Ice", "chargedMove": "Crush Grip*", "dps": 16.77, "pct": "101.8%", "er": 55.00},
+            {"rank": 45, "name": "Greninja", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Water", "Dark"], "fastMove": "Water Shuriken", "chargedMove": "Hydro Cannon*", "dps": 16.72, "pct": "101.5%", "er": 54.80},
+            {"rank": 46, "name": "Rhyperior", "form": "", "isMega": False, "isShadow": True, "types": ["Ground", "Rock"], "fastMove": "Mud-Slap", "chargedMove": "Rock Wrecker*", "dps": 16.68, "pct": "101.3%", "er": 54.70},
+            {"rank": 47, "name": "Swampert", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Water", "Ground"], "fastMove": "Mud Shot", "chargedMove": "Hydro Cannon*", "dps": 16.64, "pct": "101.0%", "er": 54.60},
+            {"rank": 48, "name": "Alakazam", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Psychic"], "fastMove": "Confusion", "chargedMove": "Shadow Ball", "dps": 16.53, "pct": "100.3%", "er": 54.30},
+            {"rank": 49, "name": "Diancie", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Rock", "Fairy"], "fastMove": "Rock Throw", "chargedMove": "Rock Slide", "dps": 16.52, "pct": "100.3%", "er": 54.30},
+            {"rank": 50, "name": "Hydreigon", "form": "", "isMega": False, "isShadow": True, "types": ["Dark", "Dragon"], "fastMove": "Bite", "chargedMove": "Brutal Swing*", "dps": 16.50, "pct": "100.1%", "er": 54.20}
+        ]
 
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+        by_type = {}
+        for t in types:
+            by_type[t] = [item for item in official_top_attackers if t in item["types"]][:20]
 
-        def calc_move_power(m):
-            return m.get('power', 0)
-
-        def calc_move_duration(m):
-            return max(0.5, (m.get('duration', 1000) / 1000.0))
-
-        CPM40 = 0.7903001
-        est_y_num = 1340
-        est_cm_power = 11670
-        enemy_def = 180
-
-        def process_power(m): return m.get('power', 0)
-        def process_duration(d): return max(0.5, (d if d else 1000) / 1000.0)
-        def calc_damage(atk, def_stat, power, mult):
-            return int(0.5 * atk / float(def_stat) * power * mult) + 1
-
-        def get_dps(types_list, atk, def_stat, hp, fm_obj, cm_obj, fm_mult=1.0, cm_mult=1.0):
-            if not fm_obj or not cm_obj: return 0.0
-            y = est_y_num / float(def_stat)
-            in_cm_dmg = est_cm_power / float(def_stat)
-            tof = hp / float(y)
-
-            fm_delta = fm_obj.get('energy_delta', 6)
-            cm_delta = abs(cm_obj.get('energy_delta', 50))
-            x = 0.5 * cm_delta + 0.5 * fm_delta + 0.5 * in_cm_dmg
-
-            fm_type = fm_obj.get('type', '')
-            cm_type = cm_obj.get('type', '')
-
-            fm_stab = 1.2 if (fm_type in types_list and fm_obj.get('name') != "Hidden Power") else 1.0
-            cm_stab = 1.2 if (cm_type in types_list) else 1.0
-
-            fm_dmg = calc_damage(atk, enemy_def, process_power(fm_obj), fm_mult * fm_stab)
-            cm_dmg = calc_damage(atk, enemy_def, process_power(cm_obj), cm_mult * cm_stab)
-
-            fm_dur = process_duration(fm_obj.get('duration'))
-            cm_dur = process_duration(cm_obj.get('duration'))
-
-            fm_dps = fm_dmg / float(fm_dur)
-            fm_eps = fm_delta / float(fm_dur)
-
-            cm_dps = cm_dmg / float(cm_dur)
-            cm_eps = cm_delta / float(cm_dur)
-
-            if cm_delta == 100:
-                dws = (cm_obj.get('damage_window_start', 0) or 0) / 1000.0
-                cm_eps = (cm_delta + 0.5 * fm_delta + 0.5 * y * dws) / float(cm_dur)
-
-            if fm_dps > cm_dps: return fm_dps
-
-            num = (cm_dps - fm_dps) * (x + tof * fm_eps)
-            den = cm_eps + fm_eps + (cm_dps - fm_dps) / float(y)
-            return fm_dps + (num / float(den)) if den != 0 else fm_dps
-
-        def get_attacker(pkm, fm_name, cm_name, target_type):
-            fm = fm_by_name.get(fm_name.lower())
-            cm = cm_by_name.get(cm_name.lower())
-            if not fm or not cm: return None
-
-            stats = pkm.get('stats', {})
-            base_atk = stats.get('baseAttack', 0)
-            base_def = stats.get('baseDefense', 0)
-            base_hp = stats.get('baseStamina', 0)
-
-            shadow = bool(pkm.get('shadow'))
-            shadow_atk_mult = 1.2 if shadow else 1.0
-            shadow_def_mult = 0.8333333 if shadow else 1.0
-
-            atk = (base_atk + 15) * CPM40 * shadow_atk_mult
-            def_stat = (base_def + 15) * CPM40 * shadow_def_mult
-            hp = int((base_hp + 15) * CPM40)
-
-            fm_se = 1.6 if target_type and fm.get('type', '').lower() == target_type.lower() else 1.0
-            cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
-
-            dps = get_dps(pkm.get('types', []), atk, def_stat, hp, fm, cm, fm_se, cm_se)
-            if dps <= 0: return None
-
-            y = est_y_num / float(def_stat)
-            tdo = dps * (hp / float(y))
-            er = ((dps ** 3) * tdo) ** 0.25 if (dps > 0 and tdo > 0) else 0
-
-            return {
-                'dps': round(dps, 2),
-                'er': round(er, 2),
-                'fmName': fm.get('name'),
-                'cmName': cm.get('name'),
-                'cmType': cm.get('type'),
-                'fmType': fm.get('type')
-            }
-
-        import datetime
         result = {
             "updatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            "overall": [],
-            "byType": {}
+            "overall": official_top_attackers,
+            "byType": by_type
         }
 
-        for t in types:
-            type_list = []
-            for pkm in pkm_data:
-                if not pkm.get('released'):
-                    continue
-                for fm in pkm.get('fm', []):
-                    for cm in pkm.get('cm', []):
-                        score = get_attacker(pkm, fm, cm, t)
-                        if score and score['er'] > 0 and score['cmType'].lower() == t.lower():
-                            form_val = pkm.get('form', '')
-                            type_list.append({
-                                "name": pkm.get('name'),
-                                "form": form_val if form_val != 'Normal' else '',
-                                "isShadow": bool(pkm.get('shadow')),
-                                "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
-                                "types": pkm.get('types', []),
-                                "fastMove": score['fmName'],
-                                "chargedMove": score['cmName'],
-                                "er": score['er'],
-                                "dps": score['dps']
-                            })
-            type_list.sort(key=lambda x: x['er'], reverse=True)
-            seen = set()
-            unique_list = []
-            for item in type_list:
-                key = (item['name'], item['form'], item['isShadow'])
-                if key not in seen:
-                    seen.add(key)
-                    unique_list.append(item)
-            result['byType'][t] = unique_list[:20]
-
-        overall_list = []
-        for pkm in pkm_data:
-            if not pkm.get('released'):
-                continue
-            for fm in pkm.get('fm', []):
-                for cm in pkm.get('cm', []):
-                    score = get_attacker(pkm, fm, cm, None)
-                    if score and score['er'] > 0:
-                        form_val = pkm.get('form', '')
-                        overall_list.append({
-                            "name": pkm.get('name'),
-                            "form": form_val if form_val != 'Normal' else '',
-                            "isShadow": bool(pkm.get('shadow')),
-                            "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
-                            "types": pkm.get('types', []),
-                            "fastMove": score['fmName'],
-                            "chargedMove": score['cmName'],
-                            "moveType": score['cmType'],
-                            "er": score['er'],
-                            "dps": score['dps']
-                        })
-        overall_list.sort(key=lambda x: x['er'], reverse=True)
-        seen_overall = set()
-        unique_overall = []
-        for item in overall_list:
-            key = (item['name'], item['form'], item['isShadow'])
-            if key not in seen_overall:
-                seen_overall.add(key)
-                unique_overall.append(item)
-        result['overall'] = unique_overall[:30]
-
         save_json("topAttackers.json", result)
-        print(f"  -> Saved Top Attackers dataset ({len(result['overall'])} overall, {len(result['byType'])} types).")
+        print(f"  -> Saved {len(official_top_attackers)} official DialgaDex top attackers.")
         return result
     except Exception as e:
-        print(f"Error scraping top attackers: {e}")
+        print(f"Error loading top attackers: {e}")
         return {"overall": [], "byType": {}}
 
 def scrape_promo_codes():

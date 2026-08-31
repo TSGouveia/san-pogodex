@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "updatedAt": "2026-08-31T22:22:41.308876+00:00",
     "overall": [
         {
@@ -48,10 +49,53 @@
             "form": "MegaY",
             "isShadow": false,
             "isMega": true,
+=======
+    "updatedAt": "2026-08-31T22:24:11.974883+00:00",
+    "overall": [
+        {
+            "rank": 1,
+            "name": "Rayquaza",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Flying"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Dragon Ascent*",
+            "dps": 25.0,
+            "pct": "151.8%",
+            "er": 72.68
+        },
+        {
+            "rank": 2,
+            "name": "Necrozma",
+            "form": "Dawn Wings",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Psychic",
+                "Ghost"
+            ],
+            "fastMove": "Psycho Cut",
+            "chargedMove": "Moongeist Beam*",
+            "dps": 21.64,
+            "pct": "131.3%",
+            "er": 68.2
+        },
+        {
+            "rank": 3,
+            "name": "Mewtwo",
+            "form": "Mega Y",
+            "isMega": true,
+            "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             "types": [
                 "Psychic"
             ],
             "fastMove": "Psycho Cut",
+<<<<<<< HEAD
             "chargedMove": "Future Sight+",
             "moveType": "Psychic",
             "er": 889.65,
@@ -60,69 +104,623 @@
         {
             "name": "Mega Mewtwo X",
             "form": "Mega",
-            "isShadow": false,
+=======
+            "chargedMove": "Psystrike*",
+            "dps": 21.62,
+            "pct": "131.2%",
+            "er": 68.1
+        },
+        {
+            "rank": 4,
+            "name": "Mewtwo",
+            "form": "Mega X",
             "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Psychic",
+                "Fighting"
+            ],
+            "fastMove": "Counter*",
+            "chargedMove": "Psystrike*",
+            "dps": 21.36,
+            "pct": "129.7%",
+            "er": 67.5
+        },
+        {
+            "rank": 5,
+            "name": "Eternatus",
+            "form": "",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Poison",
+                "Dragon"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Dynamax Cannon*",
+            "dps": 21.22,
+            "pct": "128.8%",
+            "er": 67.0
+        },
+        {
+            "rank": 6,
+            "name": "Zacian",
+            "form": "Crowned Sword",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Fairy",
+                "Steel"
+            ],
+            "fastMove": "Metal Claw",
+            "chargedMove": "Behemoth Blade*",
+            "dps": 20.48,
+            "pct": "124.3%",
+            "er": 65.2
+        },
+        {
+            "rank": 7,
+            "name": "Kyurem",
+            "form": "Black Kyurem",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Ice"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Freeze Shock*",
+            "dps": 20.16,
+            "pct": "122.4%",
+            "er": 64.8
+        },
+        {
+            "rank": 8,
+            "name": "Groudon",
+            "form": "Primal",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Ground"
+            ],
+            "fastMove": "Mud Shot",
+            "chargedMove": "Precipice Blades*",
+            "dps": 20.1,
+            "pct": "122.0%",
+            "er": 64.5
+        },
+        {
+            "rank": 9,
+            "name": "Zamazenta",
+            "form": "Crowned Shield",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Fighting",
+                "Steel"
+            ],
+            "fastMove": "Metal Claw",
+            "chargedMove": "Behemoth Bash*",
+            "dps": 20.05,
+            "pct": "121.7%",
+            "er": 64.3
+        },
+        {
+            "rank": 10,
+            "name": "Necrozma",
+            "form": "Dusk Mane",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Psychic",
+                "Steel"
+            ],
+            "fastMove": "Psycho Cut",
+            "chargedMove": "Sunsteel Strike*",
+            "dps": 19.95,
+            "pct": "121.1%",
+            "er": 64.0
+        },
+        {
+            "rank": 11,
+            "name": "Delphox",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Fire",
+                "Psychic"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Blast Burn*",
+            "dps": 19.91,
+            "pct": "120.9%",
+            "er": 63.8
+        },
+        {
+            "rank": 12,
+            "name": "Lucario",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Fighting",
+                "Steel"
+            ],
+            "fastMove": "Force Palm*",
+            "chargedMove": "Aura Sphere",
+            "dps": 19.68,
+            "pct": "119.5%",
+            "er": 63.2
+        },
+        {
+            "rank": 13,
+            "name": "Blaziken",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Fire",
+                "Fighting"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Aura Sphere",
+            "dps": 19.55,
+            "pct": "118.7%",
+            "er": 62.8
+        },
+        {
+            "rank": 14,
+            "name": "Regigigas",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Normal"
+            ],
+            "fastMove": "Hidden Power Ice",
+            "chargedMove": "Crush Grip*",
+            "dps": 19.36,
+            "pct": "117.5%",
+            "er": 62.1
+        },
+        {
+            "rank": 15,
+            "name": "Kyurem",
+            "form": "White Kyurem",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Ice"
+            ],
+            "fastMove": "Ice Fang",
+            "chargedMove": "Ice Burn*",
+            "dps": 19.34,
+            "pct": "117.4%",
+            "er": 62.0
+        },
+        {
+            "rank": 16,
+            "name": "Gengar",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Ghost",
+                "Poison"
+            ],
+            "fastMove": "Lick*",
+            "chargedMove": "Shadow Ball",
+            "dps": 19.31,
+            "pct": "117.2%",
+            "er": 61.9
+        },
+        {
+            "rank": 17,
+            "name": "Charizard",
+            "form": "Mega Y",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Fire",
+                "Flying"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Blast Burn*",
+            "dps": 19.14,
+            "pct": "116.2%",
+            "er": 61.5
+        },
+        {
+            "rank": 18,
+            "name": "Garchomp",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Ground"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Breaking Swipe",
+            "dps": 19.09,
+            "pct": "115.9%",
+            "er": 61.3
+        },
+        {
+            "rank": 19,
+            "name": "Salamence",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Dragon",
+                "Flying"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Fly",
+            "dps": 19.06,
+            "pct": "115.7%",
+            "er": 61.2
+        },
+        {
+            "rank": 20,
+            "name": "Salamence",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Flying"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Fly",
+            "dps": 19.05,
+            "pct": "115.6%",
+            "er": 61.1
+        },
+        {
+            "rank": 21,
+            "name": "Reshiram",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Dragon",
+                "Fire"
+            ],
+            "fastMove": "Fire Fang",
+            "chargedMove": "Fusion Flare*",
+            "dps": 18.98,
+            "pct": "115.2%",
+            "er": 60.9
+        },
+        {
+            "rank": 22,
+            "name": "Rayquaza",
+            "form": "",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Flying"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Dragon Ascent*",
+            "dps": 18.39,
+            "pct": "111.6%",
+            "er": 59.5
+        },
+        {
+            "rank": 23,
+            "name": "Kyogre",
+            "form": "Primal",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Water"
+            ],
+            "fastMove": "Waterfall",
+            "chargedMove": "Origin Pulse*",
+            "dps": 18.3,
+            "pct": "111.1%",
+            "er": 59.2
+        },
+        {
+            "rank": 24,
+            "name": "Blacephalon",
+            "form": "",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Fire",
+                "Ghost"
+            ],
+            "fastMove": "Astonish",
+            "chargedMove": "Mind Blown*",
+            "dps": 18.16,
+            "pct": "110.2%",
+            "er": 58.8
+        },
+        {
+            "rank": 25,
+            "name": "Mewtwo",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Psychic"
+            ],
+            "fastMove": "Psycho Cut",
+            "chargedMove": "Psystrike*",
+            "dps": 18.02,
+            "pct": "109.4%",
+            "er": 58.5
+        },
+        {
+            "rank": 26,
+            "name": "Moltres",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Fire",
+                "Flying"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Fly",
+            "dps": 18.02,
+            "pct": "109.4%",
+            "er": 58.5
+        },
+        {
+            "rank": 27,
+            "name": "Latios",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Psychic"
+            ],
+            "fastMove": "Dragon Breath",
+            "chargedMove": "Aura Sphere",
+            "dps": 17.66,
+            "pct": "107.2%",
+            "er": 57.5
+        },
+        {
+            "rank": 28,
+            "name": "Gallade",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
             "types": [
                 "Psychic",
                 "Fighting"
             ],
             "fastMove": "Psycho Cut",
-            "chargedMove": "Dynamic Punch+",
-            "moveType": "Fighting",
-            "er": 775.48,
-            "dps": 343.27
+            "chargedMove": "Sacred Sword",
+            "dps": 17.65,
+            "pct": "107.1%",
+            "er": 57.4
         },
         {
-            "name": "Mega Metagross",
+            "rank": 29,
+            "name": "Heatran",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Fire",
+                "Steel"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Magma Storm*",
+            "dps": 17.53,
+            "pct": "106.4%",
+            "er": 57.1
+        },
+        {
+            "rank": 30,
+            "name": "Gardevoir",
             "form": "Mega",
-            "isShadow": false,
             "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Psychic",
+                "Fairy"
+            ],
+            "fastMove": "Charm",
+            "chargedMove": "Dazzling Gleam",
+            "dps": 17.53,
+            "pct": "106.4%",
+            "er": 57.1
+        },
+        {
+            "rank": 31,
+            "name": "Metagross",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
             "types": [
                 "Steel",
                 "Psychic"
             ],
             "fastMove": "Fury Cutter",
-            "chargedMove": "Psychic",
-            "moveType": "Psychic",
-            "er": 687.31,
-            "dps": 296.06
+            "chargedMove": "Meteor Mash*",
+            "dps": 17.51,
+            "pct": "106.3%",
+            "er": 57.0
         },
         {
-            "name": "Primal Groudon",
-            "form": "Mega",
-            "isShadow": false,
-            "isMega": true,
+            "rank": 32,
+            "name": "Metagross",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
             "types": [
-                "Ground",
-                "Fire"
+                "Steel",
+                "Psychic"
+            ],
+            "fastMove": "Fury Cutter",
+            "chargedMove": "Meteor Mash*",
+            "dps": 17.49,
+            "pct": "106.2%",
+            "er": 56.9
+        },
+        {
+            "rank": 33,
+            "name": "Groudon",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Ground"
             ],
             "fastMove": "Mud Shot",
-            "chargedMove": "Earthquake",
-            "moveType": "Ground",
-            "er": 685.07,
-            "dps": 291.01
+            "chargedMove": "Precipice Blades*",
+            "dps": 17.48,
+            "pct": "106.1%",
+            "er": 56.8
         },
         {
-            "name": "Mega Garchomp",
+            "rank": 34,
+            "name": "Tyranitar",
             "form": "Mega",
-            "isShadow": false,
             "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Rock",
+                "Dark"
+            ],
+            "fastMove": "Smack Down*",
+            "chargedMove": "Brutal Swing",
+            "dps": 17.43,
+            "pct": "105.8%",
+            "er": 56.7
+        },
+        {
+            "rank": 35,
+            "name": "Keldeo",
+            "form": "Resolute",
+            "isMega": false,
+            "isShadow": false,
+            "types": [
+                "Water",
+                "Fighting"
+            ],
+            "fastMove": "Low Kick",
+            "chargedMove": "Secret Sword*",
+            "dps": 17.41,
+            "pct": "105.6%",
+            "er": 56.6
+        },
+        {
+            "rank": 36,
+            "name": "Garchomp",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
             "types": [
                 "Dragon",
                 "Ground"
             ],
-            "fastMove": "Mud Shot",
+            "fastMove": "Dragon Tail",
             "chargedMove": "Breaking Swipe",
-            "moveType": "Dragon",
-            "er": 625.13,
-            "dps": 271.87
+            "dps": 17.38,
+            "pct": "105.5%",
+            "er": 56.5
         },
         {
-            "name": "Regigigas",
+            "rank": 37,
+            "name": "Haxorus",
             "form": "",
-            "isShadow": true,
             "isMega": false,
+            "isShadow": true,
             "types": [
+                "Dragon"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Breaking Swipe*",
+            "dps": 17.3,
+            "pct": "105.0%",
+            "er": 56.3
+        },
+        {
+            "rank": 38,
+            "name": "Chandelure",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Ghost",
+                "Fire"
+            ],
+            "fastMove": "Fire Spin",
+            "chargedMove": "Shadow Ball",
+            "dps": 17.29,
+            "pct": "104.9%",
+            "er": 56.2
+        },
+        {
+            "rank": 39,
+            "name": "Dragonite",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Dragon",
+                "Flying"
+            ],
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Outrage+",
+            "dps": 17.27,
+            "pct": "104.8%",
+            "er": 56.1
+        },
+        {
+            "rank": 40,
+            "name": "Dialga",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Steel",
+                "Dragon"
+            ],
+            "fastMove": "Metal Claw",
+            "chargedMove": "Draco Meteor",
+            "dps": 17.15,
+            "pct": "104.1%",
+            "er": 55.9
+        },
+        {
+            "rank": 41,
+            "name": "Dialga",
+            "form": "Origin",
+            "isMega": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
+            "isShadow": false,
+            "types": [
+                "Steel",
+                "Dragon"
+            ],
+            "fastMove": "Metal Claw",
+            "chargedMove": "Roar of Time*",
+            "dps": 17.04,
+            "pct": "103.4%",
+            "er": 55.7
+        },
+        {
+            "rank": 42,
+            "name": "Darkrai",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+<<<<<<< HEAD
                 "Normal"
             ],
             "fastMove": "Hidden Power",
@@ -315,10 +913,27 @@
             "form": "Mega",
             "isShadow": false,
             "isMega": true,
+=======
+                "Dark"
+            ],
+            "fastMove": "Snarl",
+            "chargedMove": "Foul Play",
+            "dps": 16.98,
+            "pct": "103.1%",
+            "er": 55.5
+        },
+        {
+            "rank": 43,
+            "name": "Palkia",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             "types": [
                 "Water",
-                "Psychic"
+                "Dragon"
             ],
+<<<<<<< HEAD
             "fastMove": "Psywave",
             "chargedMove": "Liquidation+",
             "moveType": "Water",
@@ -327,10 +942,22 @@
         },
         {
             "name": "Zekrom",
+=======
+            "fastMove": "Dragon Tail",
+            "chargedMove": "Draco Meteor",
+            "dps": 16.82,
+            "pct": "102.1%",
+            "er": 55.2
+        },
+        {
+            "rank": 44,
+            "name": "Regigigas",
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             "form": "",
-            "isShadow": false,
             "isMega": false,
+            "isShadow": false,
             "types": [
+<<<<<<< HEAD
                 "Dragon",
                 "Electric"
             ],
@@ -346,20 +973,28 @@
             "isShadow": true,
             "isMega": false,
             "types": [
+=======
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "Normal"
             ],
-            "fastMove": "Yawn",
-            "chargedMove": "Hyper Beam",
-            "moveType": "Normal",
-            "er": 506.1,
-            "dps": 236.44
+            "fastMove": "Hidden Power Ice",
+            "chargedMove": "Crush Grip*",
+            "dps": 16.77,
+            "pct": "101.8%",
+            "er": 55.0
         },
         {
+<<<<<<< HEAD
             "name": "Mega Aggron",
+=======
+            "rank": 45,
+            "name": "Greninja",
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             "form": "Mega",
-            "isShadow": false,
             "isMega": true,
+            "isShadow": false,
             "types": [
+<<<<<<< HEAD
                 "Steel"
             ],
             "fastMove": "Metal Sound",
@@ -375,52 +1010,91 @@
             "isMega": true,
             "types": [
                 "Dragon",
-                "Psychic"
-            ],
-            "fastMove": "Zen Headbutt",
-            "chargedMove": "Aura Sphere",
-            "moveType": "Fighting",
-            "er": 498.91,
-            "dps": 213.52
-        },
-        {
-            "name": "Articuno",
-            "form": "Galarian",
-            "isShadow": false,
-            "isMega": false,
-            "types": [
-                "Psychic",
-                "Flying"
-            ],
-            "fastMove": "Psycho Cut",
-            "chargedMove": "Fly",
-            "moveType": "Flying",
-            "er": 496.22,
-            "dps": 229.43
-        },
-        {
-            "name": "Mega Tyranitar",
-            "form": "Mega",
-            "isShadow": false,
-            "isMega": true,
-            "types": [
-                "Rock",
+=======
+                "Water",
                 "Dark"
             ],
-            "fastMove": "Dragon Breath",
-            "chargedMove": "Brutal Swing",
-            "moveType": "Dark",
-            "er": 496.22,
-            "dps": 207.93
+            "fastMove": "Water Shuriken",
+            "chargedMove": "Hydro Cannon*",
+            "dps": 16.72,
+            "pct": "101.5%",
+            "er": 54.8
         },
         {
-            "name": "Zeraora",
+            "rank": 46,
+            "name": "Rhyperior",
             "form": "",
-            "isShadow": false,
             "isMega": false,
+            "isShadow": true,
             "types": [
-                "Electric"
+                "Ground",
+                "Rock"
             ],
+            "fastMove": "Mud-Slap",
+            "chargedMove": "Rock Wrecker*",
+            "dps": 16.68,
+            "pct": "101.3%",
+            "er": 54.7
+        },
+        {
+            "rank": 47,
+            "name": "Swampert",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Water",
+                "Ground"
+            ],
+            "fastMove": "Mud Shot",
+            "chargedMove": "Hydro Cannon*",
+            "dps": 16.64,
+            "pct": "101.0%",
+            "er": 54.6
+        },
+        {
+            "rank": 48,
+            "name": "Alakazam",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
+                "Psychic"
+            ],
+            "fastMove": "Confusion",
+            "chargedMove": "Shadow Ball",
+            "dps": 16.53,
+            "pct": "100.3%",
+            "er": 54.3
+        },
+        {
+            "rank": 49,
+            "name": "Diancie",
+            "form": "Mega",
+            "isMega": true,
+            "isShadow": false,
+            "types": [
+                "Rock",
+                "Fairy"
+            ],
+            "fastMove": "Rock Throw",
+            "chargedMove": "Rock Slide",
+            "dps": 16.52,
+            "pct": "100.3%",
+            "er": 54.3
+        },
+        {
+            "rank": 50,
+            "name": "Hydreigon",
+            "form": "",
+            "isMega": false,
+            "isShadow": true,
+            "types": [
+                "Dark",
+                "Dragon"
+            ],
+<<<<<<< HEAD
             "fastMove": "Volt Switch",
             "chargedMove": "Plasma Fists",
             "moveType": "Electric",
@@ -458,311 +1132,190 @@
                 "chargedMove": "Megahorn",
                 "er": 830.06,
                 "dps": 380.12
-            },
-            {
-                "name": "Mega Scizor",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 610.74,
-                "dps": 278.96
-            },
-            {
-                "name": "Mega Pinsir",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Bug",
-                    "Flying"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 567.52,
-                "dps": 267.33
-            },
-            {
-                "name": "Heracross",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Fighting"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Megahorn",
-                "er": 500.46,
-                "dps": 241.19
-            },
-            {
-                "name": "Golisopod",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Water"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 481.7,
-                "dps": 222.7
-            },
-            {
-                "name": "Volcarona",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Fire"
-                ],
-                "fastMove": "Bug Bite",
-                "chargedMove": "Bug Buzz",
-                "er": 478.82,
-                "dps": 225.82
-            },
-            {
-                "name": "Xerneas",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy"
-                ],
-                "fastMove": "Tackle",
-                "chargedMove": "Megahorn",
-                "er": 469.92,
-                "dps": 211.66
-            },
-            {
-                "name": "Genesect",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 454.34,
-                "dps": 218.18
-            },
-            {
-                "name": "Genesect",
-                "form": "Burn",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 454.34,
-                "dps": 218.18
-            },
-            {
-                "name": "Genesect",
-                "form": "Chill",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 454.34,
-                "dps": 218.18
-            },
-            {
-                "name": "Genesect",
-                "form": "Douse",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 454.34,
-                "dps": 218.18
-            },
-            {
-                "name": "Genesect",
-                "form": "Shock",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "er": 454.34,
-                "dps": 218.18
-            },
-            {
-                "name": "Frosmoth",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Ice",
-                    "Bug"
-                ],
-                "fastMove": "Powder Snow",
-                "chargedMove": "Bug Buzz",
-                "er": 453.38,
-                "dps": 231.39
-            },
-            {
-                "name": "Kingambit",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Dark",
-                    "Steel"
-                ],
-                "fastMove": "Metal Sound",
-                "chargedMove": "X-Scissor",
-                "er": 445.13,
-                "dps": 200.49
-            },
-            {
-                "name": "Tapu Bulu",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Fairy"
-                ],
-                "fastMove": "Bullet Seed",
-                "chargedMove": "Megahorn",
-                "er": 441.87,
-                "dps": 209.1
-            },
-            {
-                "name": "Centiskorch",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fire",
-                    "Bug"
-                ],
-                "fastMove": "Ember",
-                "chargedMove": "Bug Buzz",
-                "er": 440.15,
-                "dps": 210.04
-            },
-            {
-                "name": "Yanmega",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Flying"
-                ],
-                "fastMove": "Wing Attack",
-                "chargedMove": "Bug Buzz",
-                "er": 425.96,
-                "dps": 209.64
-            },
-            {
-                "name": "Kleavor",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Rock"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "X-Scissor",
-                "er": 418.58,
-                "dps": 208.05
-            },
-            {
-                "name": "Vikavolt",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Electric"
-                ],
-                "fastMove": "Spark",
-                "chargedMove": "X-Scissor",
-                "er": 414.7,
-                "dps": 216.96
-            },
-            {
-                "name": "Vikavolt",
-                "form": "Winter_2025",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Electric"
-                ],
-                "fastMove": "Spark",
-                "chargedMove": "X-Scissor",
-                "er": 414.7,
-                "dps": 216.96
-            }
-        ],
+=======
+            "fastMove": "Bite",
+            "chargedMove": "Brutal Swing*",
+            "dps": 16.5,
+            "pct": "100.1%",
+            "er": 54.2
+        }
+    ],
+    "byType": {
+        "Bug": [],
         "Dark": [
             {
-                "name": "Mega Tyranitar",
+                "rank": 34,
+                "name": "Tyranitar",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Rock",
                     "Dark"
                 ],
-                "fastMove": "Dragon Breath",
+                "fastMove": "Smack Down*",
                 "chargedMove": "Brutal Swing",
-                "er": 844.93,
-                "dps": 354.05
+                "dps": 17.43,
+                "pct": "105.8%",
+                "er": 56.7
             },
             {
-                "name": "Mega Ampharos",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
+                "rank": 42,
+                "name": "Darkrai",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Electric",
+                    "Dark"
+                ],
+                "fastMove": "Snarl",
+                "chargedMove": "Foul Play",
+                "dps": 16.98,
+                "pct": "103.1%",
+                "er": 55.5
+            },
+            {
+                "rank": 45,
+                "name": "Greninja",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Water",
+                    "Dark"
+                ],
+                "fastMove": "Water Shuriken",
+                "chargedMove": "Hydro Cannon*",
+                "dps": 16.72,
+                "pct": "101.5%",
+                "er": 54.8
+            },
+            {
+                "rank": 50,
+                "name": "Hydreigon",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Dark",
                     "Dragon"
                 ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Brutal Swing",
-                "er": 710.71,
-                "dps": 326.32
-            },
+                "fastMove": "Bite",
+                "chargedMove": "Brutal Swing*",
+                "dps": 16.5,
+                "pct": "100.1%",
+                "er": 54.2
+            }
+        ],
+        "Dragon": [
             {
-                "name": "Mega Salamence",
+                "rank": 1,
+                "name": "Rayquaza",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Dragon",
                     "Flying"
                 ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Dragon Ascent*",
+                "dps": 25.0,
+                "pct": "151.8%",
+                "er": 72.68
+            },
+            {
+                "rank": 5,
+                "name": "Eternatus",
+                "form": "",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Poison",
+                    "Dragon"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Dynamax Cannon*",
+                "dps": 21.22,
+                "pct": "128.8%",
+                "er": 67.0
+            },
+            {
+                "rank": 7,
+                "name": "Kyurem",
+                "form": "Black Kyurem",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Ice"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Freeze Shock*",
+                "dps": 20.16,
+                "pct": "122.4%",
+                "er": 64.8
+            },
+            {
+                "rank": 15,
+                "name": "Kyurem",
+                "form": "White Kyurem",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Ice"
+                ],
+                "fastMove": "Ice Fang",
+                "chargedMove": "Ice Burn*",
+                "dps": 19.34,
+                "pct": "117.4%",
+                "er": 62.0
+            },
+            {
+                "rank": 18,
+                "name": "Garchomp",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Ground"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Breaking Swipe",
+                "dps": 19.09,
+                "pct": "115.9%",
+                "er": 61.3
+            },
+            {
+                "rank": 19,
+                "name": "Salamence",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Fly",
+                "dps": 19.06,
+                "pct": "115.7%",
+                "er": 61.2
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
+            },
+            {
+                "rank": 20,
+                "name": "Salamence",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+<<<<<<< HEAD
                 "fastMove": "Fire Fang",
                 "chargedMove": "Brutal Swing",
                 "er": 674.97,
@@ -1257,260 +1810,104 @@
                 "chargedMove": "Draco Meteor",
                 "er": 618.22,
                 "dps": 272.42
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Fly",
+                "dps": 19.05,
+                "pct": "115.6%",
+                "er": 61.1
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             },
             {
+                "rank": 21,
                 "name": "Reshiram",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Dragon",
                     "Fire"
                 ],
                 "fastMove": "Fire Fang",
-                "chargedMove": "Draco Meteor",
-                "er": 616.66,
-                "dps": 294.53
+                "chargedMove": "Fusion Flare*",
+                "dps": 18.98,
+                "pct": "115.2%",
+                "er": 60.9
             },
             {
-                "name": "Zygarde",
+                "rank": 22,
+                "name": "Rayquaza",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Dragon Ascent*",
+                "dps": 18.39,
+                "pct": "111.6%",
+                "er": 59.5
+            },
+            {
+                "rank": 27,
+                "name": "Latios",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Psychic"
+                ],
+                "fastMove": "Dragon Breath",
+                "chargedMove": "Aura Sphere",
+                "dps": 17.66,
+                "pct": "107.2%",
+                "er": 57.5
+            },
+            {
+                "rank": 36,
+                "name": "Garchomp",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Dragon",
                     "Ground"
                 ],
-                "fastMove": "Zen Headbutt",
-                "chargedMove": "Outrage",
-                "er": 612.53,
-                "dps": 263.65
-            }
-        ],
-        "Electric": [
-            {
-                "name": "Mega Mewtwo Y",
-                "form": "MegaY",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Psychic"
-                ],
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Thunderbolt",
-                "er": 993.06,
-                "dps": 435.85
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Breaking Swipe",
+                "dps": 17.38,
+                "pct": "105.5%",
+                "er": 56.5
             },
             {
-                "name": "Mega Mewtwo X",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Psychic",
-                    "Fighting"
-                ],
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Thunderbolt",
-                "er": 929.2,
-                "dps": 411.32
-            },
-            {
-                "name": "Zekrom",
+                "rank": 37,
+                "name": "Haxorus",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Dragon",
-                    "Electric"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Wild Charge",
-                "er": 796.08,
-                "dps": 363.29
-            },
-            {
-                "name": "Zeraora",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Volt Switch",
-                "chargedMove": "Plasma Fists",
-                "er": 770.47,
-                "dps": 366.22
-            },
-            {
-                "name": "Mega Ampharos",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Electric",
                     "Dragon"
                 ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Zap Cannon",
-                "er": 725.45,
-                "dps": 333.09
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Breaking Swipe*",
+                "dps": 17.3,
+                "pct": "105.0%",
+                "er": 56.3
             },
             {
-                "name": "Regirock",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Zap Cannon",
-                "er": 690.35,
-                "dps": 306.32
-            },
-            {
-                "name": "Mega Raichu X",
+                "rank": 39,
+                "name": "Dragonite",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Thunder Shock",
-                "chargedMove": "Volt Tackle+",
-                "er": 659.93,
-                "dps": 323.92
-            },
-            {
-                "name": "Raikou",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Volt Switch",
-                "chargedMove": "Wild Charge",
-                "er": 651.9,
-                "dps": 316.22
-            },
-            {
-                "name": "Raikou",
-                "form": "S",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Volt Switch",
-                "chargedMove": "Wild Charge",
-                "er": 651.9,
-                "dps": 316.22
-            },
-            {
-                "name": "Zacian",
-                "form": "",
                 "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy",
-                    "Steel"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Wild Charge",
-                "er": 647.07,
-                "dps": 291.95
-            },
-            {
-                "name": "Zacian",
-                "form": "Hero",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Wild Charge",
-                "er": 647.07,
-                "dps": 291.95
-            },
-            {
-                "name": "Kyurem",
-                "form": "Black",
-                "isShadow": false,
-                "isMega": false,
                 "types": [
                     "Dragon",
-                    "Ice"
-                ],
-                "fastMove": "Shadow Claw",
-                "chargedMove": "Fusion Bolt",
-                "er": 644.57,
-                "dps": 291.4
-            },
-            {
-                "name": "Mewtwo",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Psychic"
-                ],
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Thunderbolt",
-                "er": 620.39,
-                "dps": 303.64
-            },
-            {
-                "name": "Mega Manectric",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Wild Charge",
-                "er": 617.0,
-                "dps": 304.67
-            },
-            {
-                "name": "Meloetta",
-                "form": "Aria",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Normal",
-                    "Psychic"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Thunderbolt",
-                "er": 607.51,
-                "dps": 267.13
-            },
-            {
-                "name": "Mega Raichu Y",
-                "form": "MegaY",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Electric"
-                ],
-                "fastMove": "Thunder Shock",
-                "chargedMove": "Zap Cannon+",
-                "er": 605.27,
-                "dps": 315.22
-            },
-            {
-                "name": "Zapdos",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Electric",
                     "Flying"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Charge Beam",
                 "chargedMove": "Zap Cannon",
                 "er": 602.62,
@@ -1586,193 +1983,114 @@
                 "dps": 347.93
             },
             {
-                "name": "Zacian",
-                "form": "Crowned_sword",
-                "isShadow": false,
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Outrage+",
+                "dps": 17.27,
+                "pct": "104.8%",
+                "er": 56.1
+            },
+            {
+                "rank": 40,
+                "name": "Dialga",
+                "form": "",
                 "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Steel",
+                    "Dragon"
+                ],
+                "fastMove": "Metal Claw",
+                "chargedMove": "Draco Meteor",
+                "dps": 17.15,
+                "pct": "104.1%",
+                "er": 55.9
+            },
+            {
+                "rank": 41,
+                "name": "Dialga",
+                "form": "Origin",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Steel",
+                    "Dragon"
+                ],
+                "fastMove": "Metal Claw",
+                "chargedMove": "Roar of Time*",
+                "dps": 17.04,
+                "pct": "103.4%",
+                "er": 55.7
+            },
+            {
+                "rank": 43,
+                "name": "Palkia",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Water",
+                    "Dragon"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Draco Meteor",
+                "dps": 16.82,
+                "pct": "102.1%",
+                "er": 55.2
+            },
+            {
+                "rank": 50,
+                "name": "Hydreigon",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Dark",
+                    "Dragon"
+                ],
+                "fastMove": "Bite",
+                "chargedMove": "Brutal Swing*",
+                "dps": 16.5,
+                "pct": "100.1%",
+                "er": 54.2
+            }
+        ],
+        "Electric": [],
+        "Fairy": [
+            {
+                "rank": 6,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
+                "name": "Zacian",
+                "form": "Crowned Sword",
+                "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Fairy",
                     "Steel"
                 ],
                 "fastMove": "Metal Claw",
-                "chargedMove": "Play Rough",
-                "er": 708.89,
-                "dps": 318.58
+                "chargedMove": "Behemoth Blade*",
+                "dps": 20.48,
+                "pct": "124.3%",
+                "er": 65.2
             },
             {
-                "name": "Zacian",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy",
-                    "Steel"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Play Rough",
-                "er": 708.01,
-                "dps": 319.45
-            },
-            {
-                "name": "Zacian",
-                "form": "Hero",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Play Rough",
-                "er": 708.01,
-                "dps": 319.45
-            },
-            {
-                "name": "Meloetta",
-                "form": "Aria",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Normal",
-                    "Psychic"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Dazzling Gleam",
-                "er": 631.2,
-                "dps": 277.54
-            },
-            {
-                "name": "Zamazenta",
-                "form": "Crowned_shield",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fighting",
-                    "Steel"
-                ],
-                "fastMove": "Ice Fang",
-                "chargedMove": "Moonblast",
-                "er": 621.4,
-                "dps": 266.6
-            },
-            {
-                "name": "Tapu Bulu",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Fairy"
-                ],
-                "fastMove": "Bullet Seed",
-                "chargedMove": "Dazzling Gleam",
-                "er": 605.72,
-                "dps": 286.64
-            },
-            {
-                "name": "Sylveon",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Dazzling Gleam",
-                "er": 592.02,
-                "dps": 268.56
-            },
-            {
-                "name": "Mew",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Dazzling Gleam",
-                "er": 579.06,
-                "dps": 258.75
-            },
-            {
-                "name": "Celebi",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic",
-                    "Grass"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Dazzling Gleam",
-                "er": 579.06,
-                "dps": 258.75
-            },
-            {
-                "name": "Jirachi",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Steel",
-                    "Psychic"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Dazzling Gleam",
-                "er": 579.06,
-                "dps": 258.75
-            },
-            {
-                "name": "Enamorus",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy",
-                    "Flying"
-                ],
-                "fastMove": "Astonish",
-                "chargedMove": "Dazzling Gleam",
-                "er": 575.53,
-                "dps": 287.89
-            },
-            {
-                "name": "Enamorus",
-                "form": "Incarnate",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy",
-                    "Flying"
-                ],
-                "fastMove": "Astonish",
-                "chargedMove": "Dazzling Gleam",
-                "er": 575.53,
-                "dps": 287.89
-            },
-            {
-                "name": "Togekiss",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Fairy",
-                    "Flying"
-                ],
-                "fastMove": "Hidden Power",
-                "chargedMove": "Dazzling Gleam",
-                "er": 568.53,
-                "dps": 259.65
-            },
-            {
+                "rank": 30,
                 "name": "Gardevoir",
+<<<<<<< HEAD
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
+=======
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Psychic",
                     "Fairy"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
                 "er": 568.33,
@@ -1831,18 +2149,46 @@
                 "chargedMove": "Play Rough",
                 "er": 523.28,
                 "dps": 241.19
+=======
+                "fastMove": "Charm",
+                "chargedMove": "Dazzling Gleam",
+                "dps": 17.53,
+                "pct": "106.4%",
+                "er": 57.1
+            },
+            {
+                "rank": 49,
+                "name": "Diancie",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Rock",
+                    "Fairy"
+                ],
+                "fastMove": "Rock Throw",
+                "chargedMove": "Rock Slide",
+                "dps": 16.52,
+                "pct": "100.3%",
+                "er": 54.3
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Fighting": [
             {
-                "name": "Mega Mewtwo X",
-                "form": "Mega",
-                "isShadow": false,
+                "rank": 4,
+                "name": "Mewtwo",
+                "form": "Mega X",
                 "isMega": true,
+<<<<<<< HEAD
+=======
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Psychic",
                     "Fighting"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Dynamic Punch+",
                 "er": 1234.07,
@@ -1936,10 +2282,57 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
+=======
+                "fastMove": "Counter*",
+                "chargedMove": "Psystrike*",
+                "dps": 21.36,
+                "pct": "129.7%",
+                "er": 67.5
+            },
+            {
+                "rank": 9,
+                "name": "Zamazenta",
+                "form": "Crowned Shield",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Fighting",
+                    "Steel"
+                ],
+                "fastMove": "Metal Claw",
+                "chargedMove": "Behemoth Bash*",
+                "dps": 20.05,
+                "pct": "121.7%",
+                "er": 64.3
+            },
+            {
+                "rank": 12,
+                "name": "Lucario",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Fighting",
+                    "Steel"
+                ],
+                "fastMove": "Force Palm*",
+                "chargedMove": "Aura Sphere",
+                "dps": 19.68,
+                "pct": "119.5%",
+                "er": 63.2
+            },
+            {
+                "rank": 13,
+                "name": "Blaziken",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Fire",
                     "Fighting"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Ember",
                 "chargedMove": "Aura Sphere",
                 "er": 771.1,
@@ -2058,11 +2451,26 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
+=======
+                "fastMove": "Fire Spin",
+                "chargedMove": "Aura Sphere",
+                "dps": 19.55,
+                "pct": "118.7%",
+                "er": 62.8
+            },
+            {
+                "rank": 28,
+                "name": "Gallade",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Psychic",
                     "Fighting"
                 ],
                 "fastMove": "Psycho Cut",
+<<<<<<< HEAD
                 "chargedMove": "Close Combat",
                 "er": 670.97,
                 "dps": 313.62
@@ -2106,10 +2514,33 @@
                 "chargedMove": "Dynamic Punch",
                 "er": 629.08,
                 "dps": 277.01
+=======
+                "chargedMove": "Sacred Sword",
+                "dps": 17.65,
+                "pct": "107.1%",
+                "er": 57.4
+            },
+            {
+                "rank": 35,
+                "name": "Keldeo",
+                "form": "Resolute",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Water",
+                    "Fighting"
+                ],
+                "fastMove": "Low Kick",
+                "chargedMove": "Secret Sword*",
+                "dps": 17.41,
+                "pct": "105.6%",
+                "er": 56.6
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Fire": [
             {
+<<<<<<< HEAD
                 "name": "Primal Groudon",
                 "form": "Mega",
                 "isShadow": false,
@@ -2211,10 +2642,50 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
+=======
+                "rank": 11,
+                "name": "Delphox",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Fire",
+                    "Psychic"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Blast Burn*",
+                "dps": 19.91,
+                "pct": "120.9%",
+                "er": 63.8
+            },
+            {
+                "rank": 13,
+                "name": "Blaziken",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Fire",
+                    "Fighting"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Aura Sphere",
+                "dps": 19.55,
+                "pct": "118.7%",
+                "er": 62.8
+            },
+            {
+                "rank": 17,
+                "name": "Charizard",
+                "form": "Mega Y",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Fire",
                     "Flying"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Extrasensory",
                 "chargedMove": "Fire Blast",
                 "er": 633.2,
@@ -2295,10 +2766,25 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
+=======
+                "fastMove": "Fire Spin",
+                "chargedMove": "Blast Burn*",
+                "dps": 19.14,
+                "pct": "116.2%",
+                "er": 61.5
+            },
+            {
+                "rank": 21,
+                "name": "Reshiram",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Dragon",
                     "Fire"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Overheat",
                 "er": 601.16,
@@ -2350,10 +2836,25 @@
                 "form": "",
                 "isShadow": false,
                 "isMega": false,
+=======
+                "fastMove": "Fire Fang",
+                "chargedMove": "Fusion Flare*",
+                "dps": 18.98,
+                "pct": "115.2%",
+                "er": 60.9
+            },
+            {
+                "rank": 24,
+                "name": "Blacephalon",
+                "form": "",
+                "isMega": false,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Fire",
                     "Ghost"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Hex",
                 "chargedMove": "Torch Song",
                 "er": 581.79,
@@ -2385,55 +2886,91 @@
                 "chargedMove": "Pyro Ball",
                 "er": 569.78,
                 "dps": 280.58
+=======
+                "fastMove": "Astonish",
+                "chargedMove": "Mind Blown*",
+                "dps": 18.16,
+                "pct": "110.2%",
+                "er": 58.8
+            },
+            {
+                "rank": 26,
+                "name": "Moltres",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Fire",
+                    "Flying"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Fly",
+                "dps": 18.02,
+                "pct": "109.4%",
+                "er": 58.5
+            },
+            {
+                "rank": 29,
+                "name": "Heatran",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Fire",
+                    "Steel"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Magma Storm*",
+                "dps": 17.53,
+                "pct": "106.4%",
+                "er": 57.1
+            },
+            {
+                "rank": 38,
+                "name": "Chandelure",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Ghost",
+                    "Fire"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Shadow Ball",
+                "dps": 17.29,
+                "pct": "104.9%",
+                "er": 56.2
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Flying": [
             {
+<<<<<<< HEAD
                 "name": "Mega Salamence",
+=======
+                "rank": 1,
+                "name": "Rayquaza",
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Dragon",
                     "Flying"
                 ],
-                "fastMove": "Fire Fang",
-                "chargedMove": "Fly",
-                "er": 919.06,
-                "dps": 397.59
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Dragon Ascent*",
+                "dps": 25.0,
+                "pct": "151.8%",
+                "er": 72.68
             },
             {
-                "name": "Lugia",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Psychic",
-                    "Flying"
-                ],
-                "fastMove": "Extrasensory",
-                "chargedMove": "Fly",
-                "er": 912.04,
-                "dps": 385.08
-            },
-            {
-                "name": "Lugia",
-                "form": "S",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Psychic",
-                    "Flying"
-                ],
-                "fastMove": "Extrasensory",
-                "chargedMove": "Fly",
-                "er": 912.04,
-                "dps": 385.08
-            },
-            {
-                "name": "Articuno",
-                "form": "Galarian",
+                "rank": 17,
+                "name": "Charizard",
+                "form": "Mega Y",
+                "isMega": true,
                 "isShadow": false,
+<<<<<<< HEAD
                 "isMega": false,
                 "types": [
                     "Psychic",
@@ -2449,10 +2986,13 @@
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
+=======
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Fire",
                     "Flying"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Extrasensory",
                 "chargedMove": "Brave Bird",
                 "er": 771.27,
@@ -2527,16 +3067,29 @@
                 "chargedMove": "Fly",
                 "er": 676.59,
                 "dps": 338.45
+=======
+                "fastMove": "Fire Spin",
+                "chargedMove": "Blast Burn*",
+                "dps": 19.14,
+                "pct": "116.2%",
+                "er": 61.5
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             },
             {
+                "rank": 19,
                 "name": "Salamence",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
+<<<<<<< HEAD
+                "isMega": false,
+=======
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Dragon",
                     "Flying"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Fire Fang",
                 "chargedMove": "Fly",
                 "er": 675.09,
@@ -2628,9 +3181,20 @@
             },
             {
                 "name": "Mega Dragonite",
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Fly",
+                "dps": 19.06,
+                "pct": "115.7%",
+                "er": 61.2
+            },
+            {
+                "rank": 20,
+                "name": "Salamence",
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+<<<<<<< HEAD
                 "types": [
                     "Dragon",
                     "Flying"
@@ -2645,10 +3209,14 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
+=======
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
-                    "Fire",
-                    "Fighting"
+                    "Dragon",
+                    "Flying"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Ember",
                 "chargedMove": "Brave Bird",
                 "er": 548.0,
@@ -2667,10 +3235,66 @@
                 "chargedMove": "Sky Attack",
                 "er": 547.05,
                 "dps": 262.29
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Fly",
+                "dps": 19.05,
+                "pct": "115.6%",
+                "er": 61.1
+            },
+            {
+                "rank": 22,
+                "name": "Rayquaza",
+                "form": "",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Dragon Ascent*",
+                "dps": 18.39,
+                "pct": "111.6%",
+                "er": 59.5
+            },
+            {
+                "rank": 26,
+                "name": "Moltres",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Fire",
+                    "Flying"
+                ],
+                "fastMove": "Fire Spin",
+                "chargedMove": "Fly",
+                "dps": 18.02,
+                "pct": "109.4%",
+                "er": 58.5
+            },
+            {
+                "rank": 39,
+                "name": "Dragonite",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Outrage+",
+                "dps": 17.27,
+                "pct": "104.8%",
+                "er": 56.1
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Ghost": [
             {
+<<<<<<< HEAD
                 "name": "Mega Gardevoir",
                 "form": "Mega",
                 "isShadow": false,
@@ -2688,11 +3312,18 @@
                 "name": "Lunala",
                 "form": "",
                 "isShadow": false,
+=======
+                "rank": 2,
+                "name": "Necrozma",
+                "form": "Dawn Wings",
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Psychic",
                     "Ghost"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Confusion",
                 "chargedMove": "Shadow Ball",
                 "er": 722.73,
@@ -2703,10 +3334,25 @@
                 "form": "Mega",
                 "isShadow": false,
                 "isMega": true,
+=======
+                "fastMove": "Psycho Cut",
+                "chargedMove": "Moongeist Beam*",
+                "dps": 21.64,
+                "pct": "131.3%",
+                "er": 68.2
+            },
+            {
+                "rank": 16,
+                "name": "Gengar",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Ghost",
                     "Poison"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Sucker Punch",
                 "chargedMove": "Shadow Ball",
                 "er": 699.58,
@@ -2812,10 +3458,25 @@
                 "form": "",
                 "isShadow": false,
                 "isMega": false,
+=======
+                "fastMove": "Lick*",
+                "chargedMove": "Shadow Ball",
+                "dps": 19.31,
+                "pct": "117.2%",
+                "er": 61.9
+            },
+            {
+                "rank": 24,
+                "name": "Blacephalon",
+                "form": "",
+                "isMega": false,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Fire",
                     "Ghost"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
                 "er": 578.79,
@@ -2928,431 +3589,59 @@
                 "chargedMove": "Shadow Ball",
                 "er": 533.14,
                 "dps": 260.72
+=======
+                "fastMove": "Astonish",
+                "chargedMove": "Mind Blown*",
+                "dps": 18.16,
+                "pct": "110.2%",
+                "er": 58.8
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             },
             {
+                "rank": 38,
                 "name": "Chandelure",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Ghost",
                     "Fire"
                 ],
-                "fastMove": "Hex",
+                "fastMove": "Fire Spin",
                 "chargedMove": "Shadow Ball",
-                "er": 532.16,
-                "dps": 280.4
+                "dps": 17.29,
+                "pct": "104.9%",
+                "er": 56.2
             }
         ],
-        "Grass": [
-            {
-                "name": "Primal Groudon",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Ground",
-                    "Fire"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Solar Beam",
-                "er": 1017.7,
-                "dps": 432.31
-            },
-            {
-                "name": "Mega Chesnaught",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Grass",
-                    "Fighting"
-                ],
-                "fastMove": "Low Kick",
-                "chargedMove": "Seed Bomb+",
-                "er": 885.39,
-                "dps": 377.36
-            },
-            {
-                "name": "Mega Sceptile",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Grass",
-                    "Dragon"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Leaf Blade",
-                "er": 707.49,
-                "dps": 346.27
-            },
-            {
-                "name": "Celebi",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic",
-                    "Grass"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Leaf Storm",
-                "er": 706.47,
-                "dps": 315.69
-            },
-            {
-                "name": "Groudon",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Ground"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Solar Beam",
-                "er": 667.12,
-                "dps": 312.91
-            },
-            {
-                "name": "Gigalith",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Solar Beam",
-                "er": 652.17,
-                "dps": 317.36
-            },
-            {
-                "name": "Tangrowth",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Grass"
-                ],
-                "fastMove": "Infestation",
-                "chargedMove": "Power Whip",
-                "er": 639.46,
-                "dps": 308.39
-            },
-            {
-                "name": "Mega Latios",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Dragon",
-                    "Psychic"
-                ],
-                "fastMove": "Zen Headbutt",
-                "chargedMove": "Solar Beam",
-                "er": 637.04,
-                "dps": 286.46
-            },
-            {
-                "name": "Mew",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Grass Knot",
-                "er": 627.98,
-                "dps": 280.62
-            },
-            {
-                "name": "Mega Gallade",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Psychic",
-                    "Fighting"
-                ],
-                "fastMove": "Psycho Cut",
-                "chargedMove": "Leaf Blade",
-                "er": 625.92,
-                "dps": 292.56
-            },
-            {
-                "name": "Shaymin",
-                "form": "Sky",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Flying"
-                ],
-                "fastMove": "Hidden Power",
-                "chargedMove": "Grass Knot",
-                "er": 624.01,
-                "dps": 294.43
-            },
-            {
-                "name": "Shaymin",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass"
-                ],
-                "fastMove": "Hidden Power",
-                "chargedMove": "Grass Knot",
-                "er": 619.27,
-                "dps": 276.72
-            },
-            {
-                "name": "Shaymin",
-                "form": "Land",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass"
-                ],
-                "fastMove": "Hidden Power",
-                "chargedMove": "Grass Knot",
-                "er": 619.27,
-                "dps": 276.72
-            },
-            {
-                "name": "Ho-Oh",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Fire",
-                    "Flying"
-                ],
-                "fastMove": "Extrasensory",
-                "chargedMove": "Solar Beam",
-                "er": 616.53,
-                "dps": 281.79
-            },
-            {
-                "name": "Ho-Oh",
-                "form": "S",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Fire",
-                    "Flying"
-                ],
-                "fastMove": "Extrasensory",
-                "chargedMove": "Solar Beam",
-                "er": 616.53,
-                "dps": 281.79
-            },
-            {
-                "name": "Tapu Bulu",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Fairy"
-                ],
-                "fastMove": "Bullet Seed",
-                "chargedMove": "Grass Knot",
-                "er": 607.97,
-                "dps": 287.7
-            },
-            {
-                "name": "Virizion",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Fighting"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Leaf Blade",
-                "er": 599.82,
-                "dps": 267.0
-            },
-            {
-                "name": "Porygon-Z",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Normal"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Solar Beam",
-                "er": 598.87,
-                "dps": 311.72
-            },
-            {
-                "name": "Zarude",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Dark",
-                    "Grass"
-                ],
-                "fastMove": "Vine Whip",
-                "chargedMove": "Power Whip",
-                "er": 586.03,
-                "dps": 258.41
-            },
-            {
-                "name": "Mega Ampharos",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Electric",
-                    "Dragon"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Trailblaze",
-                "er": 584.9,
-                "dps": 268.56
-            }
-        ],
+        "Grass": [],
         "Ground": [
             {
-                "name": "Primal Groudon",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Ground",
-                    "Fire"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Earthquake",
-                "er": 1016.85,
-                "dps": 431.95
-            },
-            {
-                "name": "Mega Garchomp",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Dragon",
-                    "Ground"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Earthquake",
-                "er": 934.66,
-                "dps": 406.48
-            },
-            {
-                "name": "Mega Metagross",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Steel",
-                    "Psychic"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Earthquake",
-                "er": 897.06,
-                "dps": 386.41
-            },
-            {
-                "name": "Mega Heracross",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Bug",
-                    "Fighting"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Earthquake",
-                "er": 762.39,
-                "dps": 349.13
-            },
-            {
-                "name": "Zygarde",
-                "form": "Complete",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Dragon",
-                    "Ground"
-                ],
-                "fastMove": "Zen Headbutt",
-                "chargedMove": "Earthquake",
-                "er": 757.33,
-                "dps": 297.91
-            },
-            {
-                "name": "Mega Steelix",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Steel",
-                    "Ground"
-                ],
-                "fastMove": "Thunder Fang",
-                "chargedMove": "Earthquake",
-                "er": 740.26,
-                "dps": 313.56
-            },
-            {
-                "name": "Mega Swampert",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Water",
-                    "Ground"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Earthquake",
-                "er": 720.65,
-                "dps": 319.22
-            },
-            {
-                "name": "Regice",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Ice"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Earthquake",
-                "er": 692.5,
-                "dps": 307.27
-            },
-            {
+                "rank": 8,
                 "name": "Groudon",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
+                "form": "Primal",
+                "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Ground"
                 ],
                 "fastMove": "Mud Shot",
-                "chargedMove": "Earthquake",
-                "er": 683.28,
-                "dps": 320.49
+                "chargedMove": "Precipice Blades*",
+                "dps": 20.1,
+                "pct": "122.0%",
+                "er": 64.5
             },
             {
+                "rank": 18,
                 "name": "Garchomp",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Dragon",
                     "Ground"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
                 "er": 669.17,
@@ -3397,13 +3686,22 @@
                 "chargedMove": "High Horsepower",
                 "er": 651.47,
                 "dps": 325.42
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Breaking Swipe",
+                "dps": 19.09,
+                "pct": "115.9%",
+                "er": 61.3
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             },
             {
-                "name": "Metagross",
+                "rank": 33,
+                "name": "Groudon",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
+<<<<<<< HEAD
                     "Steel",
                     "Psychic"
                 ],
@@ -3448,57 +3746,75 @@
                 "types": [
                     "Ground",
                     "Flying"
+=======
+                    "Ground"
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 ],
                 "fastMove": "Mud Shot",
-                "chargedMove": "Earth Power",
-                "er": 559.49,
-                "dps": 276.56
+                "chargedMove": "Precipice Blades*",
+                "dps": 17.48,
+                "pct": "106.1%",
+                "er": 56.8
             },
             {
-                "name": "Heatran",
+                "rank": 36,
+                "name": "Garchomp",
                 "form": "",
+                "isMega": false,
                 "isShadow": true,
-                "isMega": false,
                 "types": [
-                    "Fire",
-                    "Steel"
+                    "Dragon",
+                    "Ground"
                 ],
-                "fastMove": "Bug Bite",
-                "chargedMove": "Earth Power",
-                "er": 555.54,
-                "dps": 263.25
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Breaking Swipe",
+                "dps": 17.38,
+                "pct": "105.5%",
+                "er": 56.5
             },
             {
-                "name": "Zygarde",
+                "rank": 46,
+                "name": "Rhyperior",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Dragon",
-                    "Ground"
+                    "Ground",
+                    "Rock"
                 ],
-                "fastMove": "Zen Headbutt",
-                "chargedMove": "Earthquake",
-                "er": 555.27,
-                "dps": 239.0
+                "fastMove": "Mud-Slap",
+                "chargedMove": "Rock Wrecker*",
+                "dps": 16.68,
+                "pct": "101.3%",
+                "er": 54.7
             },
             {
-                "name": "Zygarde",
-                "form": "Complete_fifty_percent",
+                "rank": 47,
+                "name": "Swampert",
+                "form": "Mega",
+                "isMega": true,
                 "isShadow": false,
-                "isMega": false,
                 "types": [
-                    "Dragon",
+                    "Water",
                     "Ground"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Earthquake",
                 "er": 555.27,
                 "dps": 239.0
+=======
+                "fastMove": "Mud Shot",
+                "chargedMove": "Hydro Cannon*",
+                "dps": 16.64,
+                "pct": "101.0%",
+                "er": 54.6
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Ice": [
             {
+<<<<<<< HEAD
                 "name": "Mega Mewtwo Y",
                 "form": "MegaY",
                 "isShadow": false,
@@ -3539,14 +3855,22 @@
                 "dps": 373.41
             },
             {
+=======
+                "rank": 7,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "name": "Kyurem",
-                "form": "White",
-                "isShadow": false,
+                "form": "Black Kyurem",
                 "isMega": false,
+                "isShadow": false,
+<<<<<<< HEAD
+                "isMega": false,
+=======
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Dragon",
                     "Ice"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Ice Fang",
                 "chargedMove": "Blizzard",
                 "er": 797.52,
@@ -3633,44 +3957,26 @@
                 "chargedMove": "Avalanche",
                 "er": 642.03,
                 "dps": 272.73
+=======
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Freeze Shock*",
+                "dps": 20.16,
+                "pct": "122.4%",
+                "er": 64.8
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             },
             {
+                "rank": 15,
                 "name": "Kyurem",
-                "form": "Black",
-                "isShadow": false,
+                "form": "White Kyurem",
                 "isMega": false,
-                "types": [
-                    "Dragon",
-                    "Ice"
-                ],
-                "fastMove": "Shadow Claw",
-                "chargedMove": "Blizzard",
-                "er": 641.6,
-                "dps": 290.06
-            },
-            {
-                "name": "Avalugg",
-                "form": "",
                 "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Ice"
-                ],
-                "fastMove": "Ice Fang",
-                "chargedMove": "Avalanche",
-                "er": 631.66,
-                "dps": 276.16
-            },
-            {
-                "name": "Baxcalibur",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
                 "types": [
                     "Dragon",
                     "Ice"
                 ],
                 "fastMove": "Ice Fang",
+<<<<<<< HEAD
                 "chargedMove": "Avalanche",
                 "er": 625.38,
                 "dps": 293.11
@@ -3769,10 +4075,17 @@
                 "chargedMove": "Blizzard",
                 "er": 565.63,
                 "dps": 294.41
+=======
+                "chargedMove": "Ice Burn*",
+                "dps": 19.34,
+                "pct": "117.4%",
+                "er": 62.0
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Normal": [
             {
+<<<<<<< HEAD
                 "name": "Ditto",
                 "form": "",
                 "isShadow": false,
@@ -3824,15 +4137,32 @@
                 "chargedMove": "Giga Impact",
                 "er": 924.39,
                 "dps": 396.6
-            },
-            {
+=======
+                "rank": 14,
                 "name": "Regigigas",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Normal"
                 ],
+                "fastMove": "Hidden Power Ice",
+                "chargedMove": "Crush Grip*",
+                "dps": 19.36,
+                "pct": "117.5%",
+                "er": 62.1
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
+            },
+            {
+                "rank": 44,
+                "name": "Regigigas",
+                "form": "",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Normal"
+                ],
+<<<<<<< HEAD
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Giga Impact",
                 "er": 905.5,
@@ -4039,10 +4369,18 @@
                 "chargedMove": "Hyper Beam",
                 "er": 559.22,
                 "dps": 242.7
+=======
+                "fastMove": "Hidden Power Ice",
+                "chargedMove": "Crush Grip*",
+                "dps": 16.77,
+                "pct": "101.8%",
+                "er": 55.0
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Poison": [
             {
+<<<<<<< HEAD
                 "name": "Mega Gengar",
                 "form": "Mega",
                 "isShadow": false,
@@ -4071,152 +4409,40 @@
                 "dps": 296.73
             },
             {
+=======
+                "rank": 5,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "name": "Eternatus",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Poison",
                     "Dragon"
                 ],
                 "fastMove": "Dragon Tail",
-                "chargedMove": "Sludge Bomb",
-                "er": 654.42,
-                "dps": 286.49
+                "chargedMove": "Dynamax Cannon*",
+                "dps": 21.22,
+                "pct": "128.8%",
+                "er": 67.0
             },
             {
-                "name": "Mega Victreebel",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Grass",
-                    "Poison"
-                ],
-                "fastMove": "Acid",
-                "chargedMove": "Acid Spray+",
-                "er": 568.17,
-                "dps": 273.13
-            },
-            {
-                "name": "Mega Venusaur",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Grass",
-                    "Poison"
-                ],
-                "fastMove": "Vine Whip",
-                "chargedMove": "Sludge Bomb",
-                "er": 557.89,
-                "dps": 249.65
-            },
-            {
-                "name": "Muk",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Poison"
-                ],
-                "fastMove": "Infestation",
-                "chargedMove": "Gunk Shot",
-                "er": 513.65,
-                "dps": 249.65
-            },
-            {
-                "name": "Mega Beedrill",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Bug",
-                    "Poison"
-                ],
-                "fastMove": "Infestation",
-                "chargedMove": "Sludge Bomb",
-                "er": 510.51,
-                "dps": 266.53
-            },
-            {
-                "name": "Mega Swampert",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Water",
-                    "Ground"
-                ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Sludge Wave",
-                "er": 507.04,
-                "dps": 224.6
-            },
-            {
-                "name": "Genesect",
-                "form": "Douse",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Gunk Shot",
-                "er": 504.33,
-                "dps": 242.18
-            },
-            {
-                "name": "Guzzlord",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Dark",
-                    "Dragon"
-                ],
-                "fastMove": "Snarl",
-                "chargedMove": "Sludge Bomb",
-                "er": 501.76,
-                "dps": 226.37
-            },
-            {
-                "name": "Tangrowth",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Grass"
-                ],
-                "fastMove": "Infestation",
-                "chargedMove": "Sludge Bomb",
-                "er": 492.24,
-                "dps": 237.4
-            },
-            {
-                "name": "Muk",
-                "form": "Alola",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Poison",
-                    "Dark"
-                ],
-                "fastMove": "Snarl",
-                "chargedMove": "Gunk Shot",
-                "er": 484.41,
-                "dps": 235.44
-            },
-            {
+                "rank": 16,
                 "name": "Gengar",
+<<<<<<< HEAD
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
+=======
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Ghost",
                     "Poison"
                 ],
+<<<<<<< HEAD
                 "fastMove": "Hex",
                 "chargedMove": "Sludge Bomb",
                 "er": 471.14,
@@ -4319,10 +4545,18 @@
                 "chargedMove": "Sludge Bomb",
                 "er": 433.73,
                 "dps": 217.53
+=======
+                "fastMove": "Lick*",
+                "chargedMove": "Shadow Ball",
+                "dps": 19.31,
+                "pct": "117.2%",
+                "er": 61.9
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ],
         "Psychic": [
             {
+<<<<<<< HEAD
                 "name": "Mega Mewtwo Y",
                 "form": "MegaY",
                 "isShadow": false,
@@ -4506,692 +4740,469 @@
                 "form": "Dawn_wings",
                 "isShadow": false,
                 "isMega": false,
+=======
+                "rank": 2,
+                "name": "Necrozma",
+                "form": "Dawn Wings",
+                "isMega": false,
+                "isShadow": false,
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
                 "types": [
                     "Psychic",
                     "Ghost"
                 ],
                 "fastMove": "Psycho Cut",
-                "chargedMove": "Future Sight",
-                "er": 690.12,
-                "dps": 313.7
+                "chargedMove": "Moongeist Beam*",
+                "dps": 21.64,
+                "pct": "131.3%",
+                "er": 68.2
             },
             {
-                "name": "Necrozma",
-                "form": "Dusk_mane",
+                "rank": 3,
+                "name": "Mewtwo",
+                "form": "Mega Y",
+                "isMega": true,
                 "isShadow": false,
+                "types": [
+                    "Psychic"
+                ],
+                "fastMove": "Psycho Cut",
+                "chargedMove": "Psystrike*",
+                "dps": 21.62,
+                "pct": "131.2%",
+                "er": 68.1
+            },
+            {
+                "rank": 4,
+                "name": "Mewtwo",
+                "form": "Mega X",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Psychic",
+                    "Fighting"
+                ],
+                "fastMove": "Counter*",
+                "chargedMove": "Psystrike*",
+                "dps": 21.36,
+                "pct": "129.7%",
+                "er": 67.5
+            },
+            {
+                "rank": 10,
+                "name": "Necrozma",
+                "form": "Dusk Mane",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Psychic",
                     "Steel"
                 ],
                 "fastMove": "Psycho Cut",
-                "chargedMove": "Future Sight",
-                "er": 690.12,
-                "dps": 313.7
+                "chargedMove": "Sunsteel Strike*",
+                "dps": 19.95,
+                "pct": "121.1%",
+                "er": 64.0
             },
             {
-                "name": "Victini",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic",
-                    "Fire"
-                ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Psychic",
-                "er": 681.23,
-                "dps": 304.41
-            },
-            {
-                "name": "Mega Latios",
+                "rank": 11,
+                "name": "Delphox",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
-                "types": [
-                    "Dragon",
-                    "Psychic"
-                ],
-                "fastMove": "Dragon Breath",
-                "chargedMove": "Psychic",
-                "er": 680.31,
-                "dps": 305.91
-            },
-            {
-                "name": "Mega Delphox",
-                "form": "Mega",
                 "isShadow": false,
-                "isMega": true,
                 "types": [
                     "Fire",
                     "Psychic"
                 ],
                 "fastMove": "Fire Spin",
-                "chargedMove": "Psychic",
-                "er": 668.6,
-                "dps": 306.29
+                "chargedMove": "Blast Burn*",
+                "dps": 19.91,
+                "pct": "120.9%",
+                "er": 63.8
             },
             {
-                "name": "Lunala",
+                "rank": 25,
+                "name": "Mewtwo",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Psychic",
-                    "Ghost"
-                ],
-                "fastMove": "Air Slash",
-                "chargedMove": "Psychic",
-                "er": 656.88,
-                "dps": 288.89
-            },
-            {
-                "name": "Mega Slowbro",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Water",
                     "Psychic"
                 ],
-                "fastMove": "Water Gun",
-                "chargedMove": "Psychic",
-                "er": 656.41,
-                "dps": 281.87
+                "fastMove": "Psycho Cut",
+                "chargedMove": "Psystrike*",
+                "dps": 18.02,
+                "pct": "109.4%",
+                "er": 58.5
+            },
+            {
+                "rank": 27,
+                "name": "Latios",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Dragon",
+                    "Psychic"
+                ],
+                "fastMove": "Dragon Breath",
+                "chargedMove": "Aura Sphere",
+                "dps": 17.66,
+                "pct": "107.2%",
+                "er": 57.5
+            },
+            {
+                "rank": 28,
+                "name": "Gallade",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Psychic",
+                    "Fighting"
+                ],
+                "fastMove": "Psycho Cut",
+                "chargedMove": "Sacred Sword",
+                "dps": 17.65,
+                "pct": "107.1%",
+                "er": 57.4
+            },
+            {
+                "rank": 30,
+                "name": "Gardevoir",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Psychic",
+                    "Fairy"
+                ],
+                "fastMove": "Charm",
+                "chargedMove": "Dazzling Gleam",
+                "dps": 17.53,
+                "pct": "106.4%",
+                "er": 57.1
+            },
+            {
+                "rank": 31,
+                "name": "Metagross",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Steel",
+                    "Psychic"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Meteor Mash*",
+                "dps": 17.51,
+                "pct": "106.3%",
+                "er": 57.0
+            },
+            {
+                "rank": 32,
+                "name": "Metagross",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Steel",
+                    "Psychic"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Meteor Mash*",
+                "dps": 17.49,
+                "pct": "106.2%",
+                "er": 56.9
+            },
+            {
+                "rank": 48,
+                "name": "Alakazam",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Psychic"
+                ],
+                "fastMove": "Confusion",
+                "chargedMove": "Shadow Ball",
+                "dps": 16.53,
+                "pct": "100.3%",
+                "er": 54.3
             }
         ],
         "Rock": [
             {
-                "name": "Mega Aggron",
+                "rank": 34,
+                "name": "Tyranitar",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Metal Sound",
-                "chargedMove": "Meteor Beam",
-                "er": 788.4,
-                "dps": 336.88
-            },
-            {
-                "name": "Regirock",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Stone Edge",
-                "er": 742.51,
-                "dps": 329.46
-            },
-            {
-                "name": "Aurorus",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock",
-                    "Ice"
-                ],
-                "fastMove": "Powder Snow",
-                "chargedMove": "Meteor Beam",
-                "er": 731.18,
-                "dps": 348.69
-            },
-            {
-                "name": "Avalugg",
-                "form": "Hisuian",
                 "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Ice",
-                    "Rock"
-                ],
-                "fastMove": "Powder Snow",
-                "chargedMove": "Rock Slide",
-                "er": 705.26,
-                "dps": 308.94
-            },
-            {
-                "name": "Mega Tyranitar",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
                 "types": [
                     "Rock",
                     "Dark"
                 ],
-                "fastMove": "Dragon Breath",
-                "chargedMove": "Stone Edge",
-                "er": 683.44,
-                "dps": 286.38
+                "fastMove": "Smack Down*",
+                "chargedMove": "Brutal Swing",
+                "dps": 17.43,
+                "pct": "105.8%",
+                "er": 56.7
             },
             {
-                "name": "Gigalith",
+                "rank": 46,
+                "name": "Rhyperior",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
+                    "Ground",
                     "Rock"
                 ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Rock Slide",
-                "er": 671.25,
-                "dps": 326.64
+                "fastMove": "Mud-Slap",
+                "chargedMove": "Rock Wrecker*",
+                "dps": 16.68,
+                "pct": "101.3%",
+                "er": 54.7
             },
             {
-                "name": "Aggron",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Steel",
-                    "Rock"
-                ],
-                "fastMove": "Metal Sound",
-                "chargedMove": "Meteor Beam",
-                "er": 640.96,
-                "dps": 304.43
-            },
-            {
-                "name": "Mega Heracross",
+                "rank": 49,
+                "name": "Diancie",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
-                "types": [
-                    "Bug",
-                    "Fighting"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Rock Blast",
-                "er": 601.35,
-                "dps": 275.38
-            },
-            {
-                "name": "Nihilego",
-                "form": "",
                 "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Rock",
-                    "Poison"
-                ],
-                "fastMove": "Acid",
-                "chargedMove": "Rock Slide",
-                "er": 592.24,
-                "dps": 260.6
-            },
-            {
-                "name": "Mega Ampharos",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Electric",
-                    "Dragon"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Power Gem",
-                "er": 580.48,
-                "dps": 266.53
-            },
-            {
-                "name": "Terrakion",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Rock",
-                    "Fighting"
-                ],
-                "fastMove": "Double Kick",
-                "chargedMove": "Rock Slide",
-                "er": 571.75,
-                "dps": 265.19
-            },
-            {
-                "name": "Hippowdon",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Ground"
-                ],
-                "fastMove": "Ice Fang",
-                "chargedMove": "Weather Ball Rock",
-                "er": 561.42,
-                "dps": 264.66
-            },
-            {
-                "name": "Kyurem",
-                "form": "White",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Dragon",
-                    "Ice"
-                ],
-                "fastMove": "Ice Fang",
-                "chargedMove": "Ancient Power",
-                "er": 551.35,
-                "dps": 249.26
-            },
-            {
-                "name": "Melmetal",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Thunder Shock",
-                "chargedMove": "Rock Slide",
-                "er": 548.33,
-                "dps": 241.45
-            },
-            {
-                "name": "Mega Diancie",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
                 "types": [
                     "Rock",
                     "Fairy"
                 ],
-                "fastMove": "Tackle",
+                "fastMove": "Rock Throw",
                 "chargedMove": "Rock Slide",
-                "er": 519.45,
-                "dps": 253.27
-            },
-            {
-                "name": "Tyrantrum",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock",
-                    "Dragon"
-                ],
-                "fastMove": "Dragon Tail",
-                "chargedMove": "Meteor Beam",
-                "er": 517.12,
-                "dps": 256.18
-            },
-            {
-                "name": "Mew",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Psychic"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Rock Slide",
-                "er": 516.84,
-                "dps": 230.95
-            },
-            {
-                "name": "Crustle",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Rock"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Rock Wrecker",
-                "er": 514.98,
-                "dps": 259.4
-            },
-            {
-                "name": "Arcanine",
-                "form": "Hisuian",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Fire",
-                    "Rock"
-                ],
-                "fastMove": "Snarl",
-                "chargedMove": "Rock Slide",
-                "er": 498.83,
-                "dps": 249.03
-            },
-            {
-                "name": "Kleavor",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Rock"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Rock Slide",
-                "er": 487.61,
-                "dps": 242.36
+                "dps": 16.52,
+                "pct": "100.3%",
+                "er": 54.3
             }
         ],
         "Steel": [
             {
-                "name": "Mega Metagross",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Steel",
-                    "Psychic"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Flash Cannon",
-                "er": 893.8,
-                "dps": 385.01
-            },
-            {
-                "name": "Jirachi",
-                "form": "",
-                "isShadow": false,
+                "rank": 6,
+                "name": "Zacian",
+                "form": "Crowned Sword",
                 "isMega": false,
-                "types": [
-                    "Steel",
-                    "Psychic"
-                ],
-                "fastMove": "Charge Beam",
-                "chargedMove": "Doom Desire",
-                "er": 840.13,
-                "dps": 375.42
-            },
-            {
-                "name": "Mega Steelix",
-                "form": "Mega",
                 "isShadow": false,
-                "isMega": true,
                 "types": [
-                    "Steel",
-                    "Ground"
-                ],
-                "fastMove": "Thunder Fang",
-                "chargedMove": "Heavy Slam",
-                "er": 714.49,
-                "dps": 302.65
-            },
-            {
-                "name": "Mega Aggron",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
+                    "Fairy",
                     "Steel"
                 ],
-                "fastMove": "Metal Sound",
-                "chargedMove": "Heavy Slam",
-                "er": 670.66,
-                "dps": 286.57
+                "fastMove": "Metal Claw",
+                "chargedMove": "Behemoth Blade*",
+                "dps": 20.48,
+                "pct": "124.3%",
+                "er": 65.2
             },
             {
-                "name": "Metagross",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Steel",
-                    "Psychic"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Flash Cannon",
-                "er": 639.7,
-                "dps": 305.01
-            },
-            {
-                "name": "Mega Scizor",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Iron Head",
-                "er": 618.55,
-                "dps": 282.53
-            },
-            {
-                "name": "Mega Lucario",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Fighting",
-                    "Steel"
-                ],
-                "fastMove": "Bullet Punch",
-                "chargedMove": "Meteor Mash",
-                "er": 607.16,
-                "dps": 301.38
-            },
-            {
-                "name": "Melmetal",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Thunder Shock",
-                "chargedMove": "Flash Cannon",
-                "er": 603.13,
-                "dps": 265.58
-            },
-            {
+                "rank": 9,
                 "name": "Zamazenta",
-                "form": "",
-                "isShadow": false,
+                "form": "Crowned Shield",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Fighting",
                     "Steel"
                 ],
-                "fastMove": "Ice Fang",
-                "chargedMove": "Iron Head",
-                "er": 597.07,
-                "dps": 269.39
+                "fastMove": "Metal Claw",
+                "chargedMove": "Behemoth Bash*",
+                "dps": 20.05,
+                "pct": "121.7%",
+                "er": 64.3
             },
             {
+                "rank": 10,
                 "name": "Necrozma",
-                "form": "Dusk_mane",
-                "isShadow": false,
+                "form": "Dusk Mane",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Psychic",
                     "Steel"
                 ],
                 "fastMove": "Psycho Cut",
-                "chargedMove": "Iron Head",
-                "er": 592.77,
-                "dps": 269.45
+                "chargedMove": "Sunsteel Strike*",
+                "dps": 19.95,
+                "pct": "121.1%",
+                "er": 64.0
             },
             {
-                "name": "Gigalith",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Rock"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Heavy Slam",
-                "er": 589.39,
-                "dps": 286.8
-            },
-            {
-                "name": "Zacian",
-                "form": "",
+                "rank": 12,
+                "name": "Lucario",
+                "form": "Mega",
+                "isMega": true,
                 "isShadow": false,
-                "isMega": false,
                 "types": [
-                    "Fairy",
+                    "Fighting",
                     "Steel"
                 ],
-                "fastMove": "Quick Attack",
-                "chargedMove": "Iron Head",
-                "er": 573.75,
-                "dps": 258.87
+                "fastMove": "Force Palm*",
+                "chargedMove": "Aura Sphere",
+                "dps": 19.68,
+                "pct": "119.5%",
+                "er": 63.2
             },
             {
-                "name": "Genesect",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Magnet Bomb",
-                "er": 567.57,
-                "dps": 272.55
-            },
-            {
-                "name": "Genesect",
-                "form": "Burn",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Magnet Bomb",
-                "er": 567.57,
-                "dps": 272.55
-            },
-            {
-                "name": "Genesect",
-                "form": "Chill",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Magnet Bomb",
-                "er": 567.57,
-                "dps": 272.55
-            },
-            {
-                "name": "Genesect",
-                "form": "Douse",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Magnet Bomb",
-                "er": 567.57,
-                "dps": 272.55
-            },
-            {
-                "name": "Genesect",
-                "form": "Shock",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Steel"
-                ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Magnet Bomb",
-                "er": 567.57,
-                "dps": 272.55
-            },
-            {
-                "name": "Registeel",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Flash Cannon",
-                "er": 550.21,
-                "dps": 248.88
-            },
-            {
-                "name": "Cetitan",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Ice"
-                ],
-                "fastMove": "Powder Snow",
-                "chargedMove": "Heavy Slam",
-                "er": 544.71,
-                "dps": 247.99
-            },
-            {
+                "rank": 29,
                 "name": "Heatran",
                 "form": "",
-                "isShadow": true,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Fire",
                     "Steel"
                 ],
-                "fastMove": "Bug Bite",
-                "chargedMove": "Iron Head",
-                "er": 531.37,
-                "dps": 251.79
+                "fastMove": "Fire Spin",
+                "chargedMove": "Magma Storm*",
+                "dps": 17.53,
+                "pct": "106.4%",
+                "er": 57.1
+            },
+            {
+                "rank": 31,
+                "name": "Metagross",
+                "form": "Mega",
+                "isMega": true,
+                "isShadow": false,
+                "types": [
+                    "Steel",
+                    "Psychic"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Meteor Mash*",
+                "dps": 17.51,
+                "pct": "106.3%",
+                "er": 57.0
+            },
+            {
+                "rank": 32,
+                "name": "Metagross",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Steel",
+                    "Psychic"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Meteor Mash*",
+                "dps": 17.49,
+                "pct": "106.2%",
+                "er": 56.9
+            },
+            {
+                "rank": 40,
+                "name": "Dialga",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Steel",
+                    "Dragon"
+                ],
+                "fastMove": "Metal Claw",
+                "chargedMove": "Draco Meteor",
+                "dps": 17.15,
+                "pct": "104.1%",
+                "er": 55.9
+            },
+            {
+                "rank": 41,
+                "name": "Dialga",
+                "form": "Origin",
+                "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Steel",
+                    "Dragon"
+                ],
+                "fastMove": "Metal Claw",
+                "chargedMove": "Roar of Time*",
+                "dps": 17.04,
+                "pct": "103.4%",
+                "er": 55.7
             }
         ],
         "Water": [
             {
-                "name": "Mega Starmie",
-                "form": "Mega",
-                "isShadow": false,
+                "rank": 23,
+                "name": "Kyogre",
+                "form": "Primal",
                 "isMega": true,
+                "isShadow": false,
                 "types": [
-                    "Water",
-                    "Psychic"
+                    "Water"
                 ],
-                "fastMove": "Psywave",
-                "chargedMove": "Liquidation+",
-                "er": 824.43,
-                "dps": 393.42
+                "fastMove": "Waterfall",
+                "chargedMove": "Origin Pulse*",
+                "dps": 18.3,
+                "pct": "111.1%",
+                "er": 59.2
             },
             {
-                "name": "Mega Greninja",
-                "form": "Mega",
+                "rank": 35,
+                "name": "Keldeo",
+                "form": "Resolute",
+                "isMega": false,
                 "isShadow": false,
+                "types": [
+                    "Water",
+                    "Fighting"
+                ],
+                "fastMove": "Low Kick",
+                "chargedMove": "Secret Sword*",
+                "dps": 17.41,
+                "pct": "105.6%",
+                "er": 56.6
+            },
+            {
+                "rank": 43,
+                "name": "Palkia",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Water",
+                    "Dragon"
+                ],
+                "fastMove": "Dragon Tail",
+                "chargedMove": "Draco Meteor",
+                "dps": 16.82,
+                "pct": "102.1%",
+                "er": 55.2
+            },
+            {
+                "rank": 45,
+                "name": "Greninja",
+                "form": "Mega",
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Water",
                     "Dark"
                 ],
                 "fastMove": "Water Shuriken",
-                "chargedMove": "Surf+",
-                "er": 727.95,
-                "dps": 357.19
+                "chargedMove": "Hydro Cannon*",
+                "dps": 16.72,
+                "pct": "101.5%",
+                "er": 54.8
             },
             {
-                "name": "Mega Swampert",
+                "rank": 47,
+                "name": "Swampert",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Water",
                     "Ground"
                 ],
                 "fastMove": "Mud Shot",
+<<<<<<< HEAD
                 "chargedMove": "Surf",
                 "er": 716.71,
                 "dps": 317.48
@@ -5428,6 +5439,12 @@
                 "chargedMove": "Razor Shell",
                 "er": 535.85,
                 "dps": 255.12
+=======
+                "chargedMove": "Hydro Cannon*",
+                "dps": 16.64,
+                "pct": "101.0%",
+                "er": 54.6
+>>>>>>> 6527b72 (Upload official DialgaDex eDPS dataset to Firestore and fix Python scraper)
             }
         ]
     }
