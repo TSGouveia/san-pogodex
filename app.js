@@ -723,7 +723,7 @@ async function loadPokedex() {
         let rawResearch = {};
         let rawEvents = {};
 
-        // Fetch scraped data from Firebase Firestore database
+        // Fetch scraped data directly from Firebase Firestore (scraped_data collection)
         const dbScrapedData = await loadScrapedDataFromFirestore();
 
         const isNonEmpty = (val) => {
@@ -744,62 +744,21 @@ async function loadPokedex() {
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
-        const [pokedexRes, eggsRes, raidsRes, researchRes, typesRes, buddyRes, rocketRes, eventsRes, localTopAttackersRes, localRaidsRes] = await Promise.all([
+        const [pokedexRes, typesRes, buddyRes] = await Promise.all([
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-            isNonEmpty(rawEggs) ? Promise.resolve(null) : fetch('files/eggs.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json')).catch(() => null),
-            isNonEmpty(rawRaids) ? Promise.resolve(null) : fetch('files/raids.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/raids.json')).catch(() => null),
-            isNonEmpty(rawResearch) ? Promise.resolve(null) : fetch('files/research.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json')).catch(() => null),
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
-            fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json'),
-            isNonEmpty(liveRocket) ? Promise.resolve(null) : fetch('files/rocketLineups.min.json').catch(() => fetch('https://raw.githubusercontent.com/zhenga8533/leak-duck/data/rocket_lineups.json')).catch(() => null),
-            isNonEmpty(rawEvents) ? Promise.resolve(null) : fetch('files/events.min.json').catch(() => fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json')).catch(() => null),
-            isNonEmpty(topAttackersData) ? Promise.resolve(null) : fetch('files/topAttackers.min.json').catch(() => null),
-            isNonEmpty(rawRaids) ? Promise.resolve(null) : fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json').catch(() => null)
+            fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
         ]);
         
         if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
         const data = await pokedexRes.json();
         rawPokedexData = data;
-        
-        if (!isNonEmpty(rawEggs) && eggsRes && eggsRes.ok) {
-            try { rawEggs = await eggsRes.json(); } catch (err) {}
-        }
-        if (!isNonEmpty(rawRaids) && raidsRes && raidsRes.ok) {
-            try { rawRaids = await raidsRes.json(); } catch (err) {}
-        }
-        if (!isNonEmpty(rawRaids) && localRaidsRes && localRaidsRes.ok) {
-            try { rawRaids = await localRaidsRes.json(); } catch (err) {}
-        }
-        if (!isNonEmpty(rawResearch) && researchRes && researchRes.ok) {
-            try { rawResearch = await researchRes.json(); } catch (err) {}
-        }
-        if (!isNonEmpty(topAttackersData) && localTopAttackersRes && localTopAttackersRes.ok) {
-            try { topAttackersData = await localTopAttackersRes.json(); } catch (err) {}
-        }
-                rawResearch = await researchRes.json();
-            } catch (err) {
-                console.warn("Research API parsing failed:", err);
-            }
-        }
-        if (!dbScrapedData?.rocketLineups && rocketRes && rocketRes.ok) {
-            try {
-                liveRocket = normalizeRocketLineups(await rocketRes.json());
-            } catch (err) {
-                console.warn("Rocket lineups API parsing failed:", err);
-            }
-        }
+
         if (typesRes.ok) {
             try {
                 typesDatabase = await typesRes.json();
             } catch (err) {
                 console.warn("Types API parsing failed:", err);
-            }
-        }
-        if (!dbScrapedData?.events && eventsRes && eventsRes.ok) {
-            try {
-                rawEvents = await eventsRes.json();
-            } catch (err) {
-                console.warn("Events API parsing failed:", err);
             }
         }
 
