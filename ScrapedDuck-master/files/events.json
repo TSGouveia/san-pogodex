@@ -10,16 +10,6 @@
         "end": "2026-08-31T21:00:00.000"
     },
     {
-        "eventID": "gbl-forever-forward_great-league_ultra-league_master-league-split-3",
-        "title": "Great League, Ultra League, and Master League | Forever Forward",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-27-forever-forward.jpg",
-        "link": "https://leekduck.com/events/gbl-forever-forward_great-league_ultra-league_master-league-split-3/",
-        "start": "2026-08-25T13:00:00.000-0700",
-        "end": "2026-09-01T13:00:00.000-0700"
-    },
-    {
         "eventID": "raidhour20260902",
         "title": "Regirock, Regice, and Registeel Raid Hour",
         "type": "",
@@ -98,16 +88,6 @@
         "link": "https://leekduck.com/events/go-pass-august-2026/",
         "start": "2026-08-04T10:00:00.000",
         "end": "2026-09-08T10:00:00.000"
-    },
-    {
-        "eventID": "gbl-forever-forward_great-league_ultra-league_master-league-mega-edition",
-        "title": "Great League, Ultra League, and Master League: Mega Edition | Forever Forward",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-27-forever-forward.jpg",
-        "link": "https://leekduck.com/events/gbl-forever-forward_great-league_ultra-league_master-league-mega-edition/",
-        "start": "2026-09-01T13:00:00.000-0700",
-        "end": "2026-09-08T13:00:00.000-0700"
     },
     {
         "eventID": "shadow-giratina-altered-in-shadow-raids-august-2026",
@@ -200,6 +180,16 @@
         "end": "2026-09-14T21:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-1",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-1/",
+        "start": "2026-09-08T13:00:00.000-0700",
+        "end": "2026-09-15T13:00:00.000-0700"
+    },
+    {
         "eventID": "mega-beedrill-in-mega-raids-september-2026",
         "title": "Mega Beedrill in Mega Raids",
         "type": "",
@@ -268,6 +258,16 @@
         "link": "https://leekduck.com/events/max-mondays-2026-09-21/",
         "start": "2026-09-21T06:00:00.000",
         "end": "2026-09-21T21:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_willpower-cup-great-league-edition",
+        "title": "Great League, Ultra League: Mega Edition, and Willpower Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_willpower-cup-great-league-edition/",
+        "start": "2026-09-15T13:00:00.000-0700",
+        "end": "2026-09-22T13:00:00.000-0700"
     },
     {
         "eventID": "unannounced-september-event-season-24",
@@ -340,6 +340,16 @@
         "end": "2026-09-28T21:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition",
+        "title": "Ultra League, Master League: Mega Edition, and Retro Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition/",
+        "start": "2026-09-22T13:00:00.000-0700",
+        "end": "2026-09-29T13:00:00.000-0700"
+    },
+    {
         "eventID": "mega-malamar-in-mega-raids-september-2026",
         "title": "Mega Malamar in Mega Raids",
         "type": "",
@@ -410,6 +420,16 @@
         "end": "2026-10-06T10:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_master-league_mega-color-cup-great-league-edition",
+        "title": "Master League and Mega Color Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-color-cup-great-league-edition/",
+        "start": "2026-09-29T13:00:00.000-0700",
+        "end": "2026-10-06T13:00:00.000-0700"
+    },
+    {
         "eventID": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026",
         "title": "Shadow Thundurus (Incarnate Forme) in Shadow Raids",
         "type": "",
@@ -450,6 +470,16 @@
         "end": "2026-10-10T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2/",
+        "start": "2026-10-06T13:00:00.000-0700",
+        "end": "2026-10-13T13:00:00.000-0700"
+    },
+    {
         "eventID": "hatch-day-october-2026",
         "title": "Hatch Day",
         "type": "",
@@ -458,6 +488,16 @@
         "link": "https://leekduck.com/events/hatch-day-october-2026/",
         "start": "2026-10-17T11:00:00.000",
         "end": "2026-10-17T17:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup",
+        "title": "Great League, Ultra League: Mega Edition, and Little Cup | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup/",
+        "start": "2026-10-13T13:00:00.000-0700",
+        "end": "2026-10-20T13:00:00.000-0700"
     },
     {
         "eventID": "max-battle-day-october-24-2026",
@@ -470,6 +510,16 @@
         "end": "2026-10-24T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition",
+        "title": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition/",
+        "start": "2026-10-20T13:00:00.000-0700",
+        "end": "2026-10-27T13:00:00.000-0700"
+    },
+    {
         "eventID": "super-mega-raid-day-october-2026",
         "title": "Super Mega Raid Day",
         "type": "",
@@ -480,6 +530,36 @@
         "end": "2026-10-31T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition",
+        "title": "Master League and Mega Halloween Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition/",
+        "start": "2026-10-27T13:00:00.000-0800",
+        "end": "2026-11-03T13:00:00.000-0800"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/",
+        "start": "2026-11-03T13:00:00.000-0800",
+        "end": "2026-11-10T13:00:00.000-0800"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup",
+        "title": "Great League, Ultra League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup/",
+        "start": "2026-11-10T13:00:00.000-0800",
+        "end": "2026-11-17T13:00:00.000-0800"
+    },
+    {
         "eventID": "november-communityday2026",
         "title": "November Community Day",
         "type": "",
@@ -488,6 +568,16 @@
         "link": "https://leekduck.com/events/november-communityday2026/",
         "start": "2026-11-21T14:00:00.000",
         "end": "2026-11-21T17:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_2026-go-laic-cup",
+        "title": "Ultra League, Master League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_2026-go-laic-cup/",
+        "start": "2026-11-18T13:00:00.000-0800",
+        "end": "2026-11-25T13:00:00.000-0800"
     },
     {
         "eventID": "super-mega-raid-day-november-2026",
@@ -510,14 +600,14 @@
         "end": "2026-12-01T10:00:00.000"
     },
     {
-        "eventID": "gbl-forever-forward_great-league_ultra-league_master-league-mega-edition",
-        "title": "Great League, Ultra League, and Master League: Mega Edition | Forever Forward",
+        "eventID": "gbl-twilight-trails_master-league_mega-catch-cup-great-league-edition",
+        "title": "Master League and Mega Catch Cup: Great League Edition | Twilight Trails",
         "type": "",
-        "category": "upcoming",
-        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-27-forever-forward.jpg",
-        "link": "https://leekduck.com/events/gbl-forever-forward_great-league_ultra-league_master-league-mega-edition/",
-        "start": "2026-09-01T13:00:00.000-0700",
-        "end": "2026-09-08T13:00:00.000-0700"
+        "category": "current",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-catch-cup-great-league-edition/",
+        "start": "2026-11-24T13:00:00.000-0800",
+        "end": "2026-12-01T13:00:00.000-0800"
     },
     {
         "eventID": "raidhour20260902",
@@ -600,6 +690,16 @@
         "end": "2026-09-14T20:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-1",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-1/",
+        "start": "2026-09-08T13:00:00.000-0700",
+        "end": "2026-09-15T13:00:00.000-0700"
+    },
+    {
         "eventID": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026",
         "title": "Shadow Thundurus (Incarnate Forme) in Shadow Raids",
         "type": "",
@@ -680,6 +780,16 @@
         "end": "2026-09-14T21:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_willpower-cup-great-league-edition",
+        "title": "Great League, Ultra League: Mega Edition, and Willpower Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_willpower-cup-great-league-edition/",
+        "start": "2026-09-15T13:00:00.000-0700",
+        "end": "2026-09-22T13:00:00.000-0700"
+    },
+    {
         "eventID": "mega-venusaur-in-mega-raids-september-2026",
         "title": "Mega Venusaur in Mega Raids",
         "type": "",
@@ -748,6 +858,16 @@
         "link": "https://leekduck.com/events/max-mondays-2026-09-21/",
         "start": "2026-09-21T06:00:00.000",
         "end": "2026-09-21T21:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition",
+        "title": "Ultra League, Master League: Mega Edition, and Retro Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_retro-cup-great-league-edition/",
+        "start": "2026-09-22T13:00:00.000-0700",
+        "end": "2026-09-29T13:00:00.000-0700"
     },
     {
         "eventID": "mega-malamar-in-mega-raids-september-2026",
@@ -820,6 +940,16 @@
         "end": "2026-10-05T20:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_master-league_mega-color-cup-great-league-edition",
+        "title": "Master League and Mega Color Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-color-cup-great-league-edition/",
+        "start": "2026-09-29T13:00:00.000-0700",
+        "end": "2026-10-06T13:00:00.000-0700"
+    },
+    {
         "eventID": "mega-victreebel-in-mega-raids-september-2026",
         "title": "Mega Victreebel in Mega Raids",
         "type": "",
@@ -860,6 +990,16 @@
         "end": "2026-10-03T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2/",
+        "start": "2026-10-06T13:00:00.000-0700",
+        "end": "2026-10-13T13:00:00.000-0700"
+    },
+    {
         "eventID": "october-communityday2026",
         "title": "October Community Day",
         "type": "",
@@ -868,6 +1008,16 @@
         "link": "https://leekduck.com/events/october-communityday2026/",
         "start": "2026-10-10T14:00:00.000",
         "end": "2026-10-10T17:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup",
+        "title": "Great League, Ultra League: Mega Edition, and Little Cup | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup/",
+        "start": "2026-10-13T13:00:00.000-0700",
+        "end": "2026-10-20T13:00:00.000-0700"
     },
     {
         "eventID": "hatch-day-october-2026",
@@ -880,6 +1030,16 @@
         "end": "2026-10-17T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition",
+        "title": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition/",
+        "start": "2026-10-20T13:00:00.000-0700",
+        "end": "2026-10-27T13:00:00.000-0700"
+    },
+    {
         "eventID": "max-battle-day-october-24-2026",
         "title": "Max Battle Day",
         "type": "",
@@ -888,6 +1048,16 @@
         "link": "https://leekduck.com/events/max-battle-day-october-24-2026/",
         "start": "2026-10-24T14:00:00.000",
         "end": "2026-10-24T17:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition",
+        "title": "Master League and Mega Halloween Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition/",
+        "start": "2026-10-27T13:00:00.000-0800",
+        "end": "2026-11-03T13:00:00.000-0800"
     },
     {
         "eventID": "super-mega-raid-day-october-2026",
@@ -900,6 +1070,36 @@
         "end": "2026-10-31T17:00:00.000"
     },
     {
+        "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3",
+        "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-season-28-twilight-trails.png",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/",
+        "start": "2026-11-03T13:00:00.000-0800",
+        "end": "2026-11-10T13:00:00.000-0800"
+    },
+    {
+        "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup",
+        "title": "Great League, Ultra League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattle-greatleague-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup/",
+        "start": "2026-11-10T13:00:00.000-0800",
+        "end": "2026-11-17T13:00:00.000-0800"
+    },
+    {
+        "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_2026-go-laic-cup",
+        "title": "Ultra League, Master League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/go-battle-league-ultra-league-machamp-swampert.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_ultra-league_master-league-mega-edition_2026-go-laic-cup/",
+        "start": "2026-11-18T13:00:00.000-0800",
+        "end": "2026-11-25T13:00:00.000-0800"
+    },
+    {
         "eventID": "november-communityday2026",
         "title": "November Community Day",
         "type": "",
@@ -908,6 +1108,16 @@
         "link": "https://leekduck.com/events/november-communityday2026/",
         "start": "2026-11-21T14:00:00.000",
         "end": "2026-11-21T17:00:00.000"
+    },
+    {
+        "eventID": "gbl-twilight-trails_master-league_mega-catch-cup-great-league-edition",
+        "title": "Master League and Mega Catch Cup: Great League Edition | Twilight Trails",
+        "type": "",
+        "category": "upcoming",
+        "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/gobattleleague-master-key.jpg",
+        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-catch-cup-great-league-edition/",
+        "start": "2026-11-24T13:00:00.000-0800",
+        "end": "2026-12-01T13:00:00.000-0800"
     },
     {
         "eventID": "super-mega-raid-day-november-2026",

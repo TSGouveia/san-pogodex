@@ -3056,12 +3056,10 @@ function renderActiveRotations() {
                 // Include if matched to a Pokemon or if reward contains a valid Pokemon name
                 if (matchedPoke) {
                     const isShiny = reward.canBeShiny || reward.shiny || false;
-                    let cpStr = '';
-                    if (reward.combatPower) {
-                        if (reward.combatPower.min && reward.combatPower.max) cpStr = `${reward.combatPower.min}-${reward.combatPower.max}`;
-                        else if (reward.combatPower.max) cpStr = `${reward.combatPower.max}`;
-                    } else if (reward.cp) {
-                        cpStr = typeof reward.cp === 'object' ? (reward.cp.max || '') : String(reward.cp);
+                    let maxCp = reward.max_cp || (reward.combatPower ? reward.combatPower.max : null);
+                    let minCp = reward.min_cp || (reward.combatPower ? reward.combatPower.min : null);
+                    if (!maxCp && reward.cp) {
+                        maxCp = typeof reward.cp === 'object' ? reward.cp.max : String(reward.cp);
                     }
                     researchEncounters.push({
                         taskText: cleanTaskText,
@@ -3070,7 +3068,8 @@ function renderActiveRotations() {
                         dex: matchedPoke.id,
                         image: reward.image || reward.img || null,
                         shiny: isShiny,
-                        cp: cpStr
+                        minCp: minCp,
+                        maxCp: maxCp
                     });
                 }
             });
@@ -3123,8 +3122,12 @@ function renderActiveRotations() {
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
 
                 let cpMeta = '';
-                if (encounter.cp && encounter.cp.max) {
-                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${encounter.cp.max}</strong></span></div></div>`;
+                if (encounter.maxCp || encounter.minCp) {
+                    const cpText = [
+                        encounter.maxCp ? `Max CP: <strong>${encounter.maxCp}</strong>` : '',
+                        encounter.minCp ? `Min CP: <strong>${encounter.minCp}</strong>` : ''
+                    ].filter(Boolean).join(' &bull; ');
+                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>${cpText}</span></div></div>`;
                 }
 
                 card.innerHTML = `
