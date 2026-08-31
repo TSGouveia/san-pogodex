@@ -494,6 +494,28 @@ def scrape_top_attackers():
             {"rank": 49, "name": "Diancie", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Rock", "Fairy"], "fastMove": "Rock Throw", "chargedMove": "Rock Slide", "dps": 16.52, "pct": "100.3%", "er": 54.30},
             {"rank": 50, "name": "Hydreigon", "form": "", "isMega": False, "isShadow": True, "types": ["Dark", "Dragon"], "fastMove": "Bite", "chargedMove": "Brutal Swing*", "dps": 16.50, "pct": "100.1%", "er": 54.20}
         ]
+        official_bug_top = [
+            {"rank": 1, "name": "Heracross", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Bug", "Fighting"], "fastMove": "Fury Cutter", "chargedMove": "Megahorn", "dps": 27.59, "pct": "124.2%", "er": 68.90},
+            {"rank": 2, "name": "Regigigas", "form": "", "isMega": False, "isShadow": True, "types": ["Normal", "Bug"], "fastMove": "Hidden Power Bug", "chargedMove": "Crush Grip*", "dps": 25.14, "pct": "113.2%", "er": 62.80},
+            {"rank": 3, "name": "Pinsir", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Bug", "Flying"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 24.45, "pct": "110.0%", "er": 61.10},
+            {"rank": 4, "name": "Vikavolt", "form": "", "isMega": False, "isShadow": True, "types": ["Bug", "Electric"], "fastMove": "Bug Bite", "chargedMove": "X-Scissor", "dps": 23.36, "pct": "105.1%", "er": 58.40},
+            {"rank": 5, "name": "Scizor", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 23.29, "pct": "104.8%", "er": 58.20},
+            {"rank": 6, "name": "Scizor", "form": "", "isMega": False, "isShadow": True, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 22.71, "pct": "102.2%", "er": 56.80},
+            {"rank": 7, "name": "Volcarona", "form": "", "isMega": False, "isShadow": False, "types": ["Bug", "Fire"], "fastMove": "Bug Bite", "chargedMove": "Bug Buzz", "dps": 22.22, "pct": "100.0%", "er": 55.60},
+            {"rank": 8, "name": "Beedrill", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Bug", "Poison"], "fastMove": "Bug Bite*", "chargedMove": "X-Scissor", "dps": 22.17, "pct": "99.8%", "er": 55.40},
+            {"rank": 9, "name": "Pinsir", "form": "", "isMega": False, "isShadow": True, "types": ["Bug"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 21.88, "pct": "98.5%", "er": 54.70},
+            {"rank": 10, "name": "Regigigas", "form": "", "isMega": False, "isShadow": False, "types": ["Normal", "Bug"], "fastMove": "Hidden Power Bug", "chargedMove": "Crush Grip*", "dps": 21.63, "pct": "97.4%", "er": 54.10},
+            {"rank": 11, "name": "Escavalier", "form": "", "isMega": False, "isShadow": True, "types": ["Bug", "Steel"], "fastMove": "Bug Bite", "chargedMove": "Megahorn", "dps": 21.43, "pct": "96.5%", "er": 53.60},
+            {"rank": 12, "name": "Metagross", "form": "", "isMega": False, "isShadow": True, "types": ["Steel", "Psychic"], "fastMove": "Fury Cutter", "chargedMove": "Meteor Mash*", "dps": 21.14, "pct": "95.2%", "er": 52.80},
+            {"rank": 13, "name": "Metagross", "form": "Mega", "isMega": True, "isShadow": False, "types": ["Steel", "Psychic"], "fastMove": "Fury Cutter", "chargedMove": "Meteor Mash*", "dps": 21.07, "pct": "94.8%", "er": 52.70},
+            {"rank": 14, "name": "Kartana", "form": "", "isMega": False, "isShadow": False, "types": ["Grass", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.89, "pct": "94.0%", "er": 52.20},
+            {"rank": 15, "name": "Genesect", "form": "Douse Drive", "isMega": False, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.88, "pct": "94.0%", "er": 52.20},
+            {"rank": 16, "name": "Genesect", "form": "Chill Drive", "isMega": False, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.88, "pct": "94.0%", "er": 52.20},
+            {"rank": 17, "name": "Genesect", "form": "Burn Drive", "isMega": False, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.88, "pct": "94.0%", "er": 52.20},
+            {"rank": 18, "name": "Genesect", "form": "Shock Drive", "isMega": False, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.88, "pct": "94.0%", "er": 52.20},
+            {"rank": 19, "name": "Genesect", "form": "No Drive", "isMega": False, "isShadow": False, "types": ["Bug", "Steel"], "fastMove": "Fury Cutter", "chargedMove": "X-Scissor", "dps": 20.88, "pct": "94.0%", "er": 52.20},
+            {"rank": 20, "name": "Scyther", "form": "", "isMega": False, "isShadow": True, "types": ["Bug", "Flying"], "fastMove": "Fury Cutter", "chargedMove": "Bug Buzz*", "dps": 20.40, "pct": "91.8%", "er": 51.00}
+        ]
 
         pkm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json", headers=HEADERS)
         fm_res = requests.get("https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json", headers=HEADERS)
@@ -594,42 +616,45 @@ def scrape_top_attackers():
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
         by_type = {}
         for t in types:
-            type_list = []
-            for pkm in pkm_data:
-                if not pkm.get('released'): continue
-                for fm in pkm.get('fm', []):
-                    for cm in pkm.get('cm', []):
-                        res = get_attacker(pkm, fm, cm, t)
-                        if res and res['er'] > 0 and res['cmType'].lower() == t.lower():
-                            form_val = pkm.get('form', '')
-                            type_list.append({
-                                "name": pkm.get('name'),
-                                "form": form_val if form_val != 'Normal' else '',
-                                "isShadow": bool(pkm.get('shadow')),
-                                "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
-                                "types": pkm.get('types', []),
-                                "fastMove": res['fmName'],
-                                "chargedMove": res['cmName'],
-                                "dps": res['dps'],
-                                "er": res['er']
-                            })
-            type_list.sort(key=lambda x: x['dps'], reverse=True)
-            seen = set()
-            unique = []
-            for item in type_list:
-                key = (item['name'], item['form'], item['isShadow'])
-                if key not in seen:
-                    seen.add(key)
-                    unique.append(item)
-            top_dps = unique[0]['dps'] if unique else 1.0
-            by_type[t] = [
-                {
-                    "rank": idx + 1,
-                    **item,
-                    "pct": f"{round((item['dps'] / top_dps) * 100, 1)}%"
-                }
-                for idx, item in enumerate(unique[:20])
-            ]
+            if t == "Bug":
+                by_type[t] = official_bug_top
+            else:
+                type_list = []
+                for pkm in pkm_data:
+                    if not pkm.get('released'): continue
+                    for fm in pkm.get('fm', []):
+                        for cm in pkm.get('cm', []):
+                            res = get_attacker(pkm, fm, cm, t)
+                            if res and res['er'] > 0 and res['cmType'].lower() == t.lower():
+                                form_val = pkm.get('form', '')
+                                type_list.append({
+                                    "name": pkm.get('name'),
+                                    "form": form_val if form_val != 'Normal' else '',
+                                    "isShadow": bool(pkm.get('shadow')),
+                                    "isMega": bool(form_val and ('Mega' in form_val or 'Primal' in form_val)),
+                                    "types": pkm.get('types', []),
+                                    "fastMove": res['fmName'],
+                                    "chargedMove": res['cmName'],
+                                    "dps": res['dps'],
+                                    "er": res['er']
+                                })
+                type_list.sort(key=lambda x: x['dps'], reverse=True)
+                seen = set()
+                unique = []
+                for item in type_list:
+                    key = (item['name'], item['form'], item['isShadow'])
+                    if key not in seen:
+                        seen.add(key)
+                        unique.append(item)
+                top_dps = unique[0]['dps'] if unique else 1.0
+                by_type[t] = [
+                    {
+                        "rank": idx + 1,
+                        **item,
+                        "pct": f"{round((item['dps'] / top_dps) * 100, 1)}%"
+                    }
+                    for idx, item in enumerate(unique[:20])
+                ]
 
         result = {
             "updatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(),
