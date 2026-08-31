@@ -119,8 +119,18 @@ async function scrapeDialgadexDirectly() {
   const filesDir = path.join(__dirname, '..', 'files');
   if (!fs.existsSync(filesDir)) fs.mkdirSync(filesDir, { recursive: true });
 
-  fs.writeFileSync(path.join(filesDir, 'topAttackers.json'), JSON.stringify(resultData, null, 4), 'utf-8');
-  fs.writeFileSync(path.join(filesDir, 'topAttackers.min.json'), JSON.stringify(resultData), 'utf-8');
+  const scrapedDuckFilesDir = path.join(__dirname, '..', 'ScrapedDuck-master', 'files');
+  if (!fs.existsSync(scrapedDuckFilesDir)) fs.mkdirSync(scrapedDuckFilesDir, { recursive: true });
+
+  const jsonStr = JSON.stringify(resultData, null, 4);
+  const minJsonStr = JSON.stringify(resultData);
+
+  fs.writeFileSync(path.join(filesDir, 'topAttackers.json'), jsonStr, 'utf-8');
+  fs.writeFileSync(path.join(filesDir, 'topAttackers.min.json'), minJsonStr, 'utf-8');
+
+  fs.writeFileSync(path.join(scrapedDuckFilesDir, 'topAttackers.json'), jsonStr, 'utf-8');
+  fs.writeFileSync(path.join(scrapedDuckFilesDir, 'topAttackers.min.json'), minJsonStr, 'utf-8');
+
   console.log("=== SUCCESSFULLY SCRAPED AND SAVED ALL DIALGADEX TABLES DIRECTLY ===");
 }
 
