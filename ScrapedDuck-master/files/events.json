@@ -161,19 +161,11 @@
     },
     {
         "eventID": "september-communitydayclassic2026",
-<<<<<<< HEAD
-        "name": "Gible Community Day Classic",
-        "eventType": "community-day",
-        "heading": "Community Day",
-        "link": "https://leekduck.com/events/september-communitydayclassic2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
-=======
         "title": "Gible Community Day Classic",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
         "link": "https://leekduck.com/events/september-communitydayclassic2026/",
->>>>>>> f044ea1 (Modularize scrapers and link DialgaDex Playwright scraper in scrape.py)
         "start": "2026-09-12T14:00:00.000",
         "end": "2026-09-12T17:00:00.000"
     },
@@ -189,19 +181,11 @@
     },
     {
         "eventID": "mega-squads",
-<<<<<<< HEAD
-        "name": "Mega Squads",
-        "eventType": "event",
-        "heading": "Event",
-        "link": "https://leekduck.com/events/mega-squads/",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-mega-squads/mega-squads.jpg",
-=======
         "title": "Mega Squads",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/article-images/2026/2026-09-08-mega-squads/mega-squads.jpg",
         "link": "https://leekduck.com/events/mega-squads/",
->>>>>>> f044ea1 (Modularize scrapers and link DialgaDex Playwright scraper in scrape.py)
         "start": "2026-09-08T10:00:00.000",
         "end": "2026-09-14T20:00:00.000"
     },
@@ -523,12 +507,7 @@
         "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/article-images/2026/2026-09-08-season-24-twilight-trails/season-24-twilight-trails.jpg",
         "link": "https://leekduck.com/events/season-24-twilight-trails/",
         "start": "2026-09-08T10:00:00.000",
-<<<<<<< HEAD
-        "end": "2026-12-01T10:00:00.000",
-        "extraData": null
-=======
         "end": "2026-12-01T10:00:00.000"
->>>>>>> f044ea1 (Modularize scrapers and link DialgaDex Playwright scraper in scrape.py)
     },
     {
         "eventID": "gbl-forever-forward_great-league_ultra-league_master-league-mega-edition",
@@ -598,12 +577,7 @@
         "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/article-images/2026/2026-09-08-season-24-twilight-trails/season-24-twilight-trails.jpg",
         "link": "https://leekduck.com/events/season-24-twilight-trails/",
         "start": "2026-09-08T10:00:00.000",
-<<<<<<< HEAD
-        "end": "2026-12-01T10:00:00.000",
-        "extraData": null
-=======
         "end": "2026-12-01T10:00:00.000"
->>>>>>> f044ea1 (Modularize scrapers and link DialgaDex Playwright scraper in scrape.py)
     },
     {
         "eventID": "go-pass-september-2026",
@@ -624,17 +598,6 @@
         "link": "https://leekduck.com/events/mega-squads/",
         "start": "2026-09-08T10:00:00.000",
         "end": "2026-09-14T20:00:00.000"
-    },
-    {
-        "eventID": "mega-squads",
-        "name": "Mega Squads",
-        "eventType": "event",
-        "heading": "Event",
-        "link": "https://leekduck.com/events/mega-squads/",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-mega-squads/mega-squads.jpg",
-        "start": "2026-09-08T10:00:00.000",
-        "end": "2026-09-14T20:00:00.000",
-        "extraData": null
     },
     {
         "eventID": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026",
@@ -688,19 +651,11 @@
     },
     {
         "eventID": "september-communitydayclassic2026",
-<<<<<<< HEAD
-        "name": "Gible Community Day Classic",
-        "eventType": "community-day",
-        "heading": "Community Day",
-        "link": "https://leekduck.com/events/september-communitydayclassic2026/",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
-=======
         "title": "Gible Community Day Classic",
         "type": "",
         "category": "upcoming",
         "image": "https://cdn.leekduck.com/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/assets/img/events/article-images/2026/2026-09-12-september-communitydayclassic2026/gible-community-day-classic.jpg",
         "link": "https://leekduck.com/events/september-communitydayclassic2026/",
->>>>>>> f044ea1 (Modularize scrapers and link DialgaDex Playwright scraper in scrape.py)
         "start": "2026-09-12T14:00:00.000",
         "end": "2026-09-12T17:00:00.000"
     },
