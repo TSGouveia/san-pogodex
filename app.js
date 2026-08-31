@@ -3360,11 +3360,60 @@ function renderRocketLineups() {
         const charEl = document.createElement('div');
         charEl.setAttribute('data-scroll-target', `rocket-${safeLower(name).replace(/\s+/g, '-')}`);
 
-        // Build slot data and return the charEl after appending real DOM poke cards
-        const buildSlots = () => {
-            const slotsContainer = charEl.querySelector('.rocket-slots-container');
-            if (!slotsContainer) return;
-            slotsData.forEach((slot, slotIndex) => {
+        let iconHtml = '<i class="fa-solid fa-user-ninja" style="color: #ef4444;"></i>';
+        let cardColor = '#ef4444';
+
+        const isLeader = primaryLeaders.includes(name);
+        if (isLeader) {
+            if (name === 'Giovanni') {
+                iconHtml = '<i class="fa-solid fa-crown" style="color: #fbbf24;"></i>';
+                cardColor = '#fbbf24';
+            } else {
+                iconHtml = '<i class="fa-solid fa-user-tie" style="color: #c084fc;"></i>';
+                cardColor = '#c084fc';
+            }
+        } else {
+            const cleanName = name.replace(/\u00a0/g, ' ').trim();
+            if (cleanName.includes('-type')) {
+                const extractedType = cleanName.split('-type')[0].toLowerCase().trim();
+                cardColor = `var(--type-${extractedType})`;
+            }
+        }
+
+        charEl.className = 'rocket-character-card';
+        charEl.style.background = `linear-gradient(135deg, color-mix(in srgb, ${cardColor} 6%, rgba(0,0,0,0.3)), rgba(0,0,0,0.2))`;
+        charEl.style.borderColor = `color-mix(in srgb, ${cardColor} 20%, rgba(255,255,255,0.04))`;
+
+        const cleanKey = name.replace(/\u00a0/g, ' ').trim();
+        const quote = gruntQuotes[cleanKey] || "«Active Grunt Lineup»";
+
+        let headerHtml = '';
+        if (isLeader) {
+            headerHtml = `
+                <div class="rocket-char-header" style="display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+                    <span style="font-size: 1.1rem; display: flex; align-items: center; justify-content: center;">${iconHtml}</span>
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">${name}</h3>
+                </div>
+            `;
+        } else {
+            headerHtml = `
+                <div class="rocket-char-header" style="display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
+                    <span style="font-style: italic; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">${quote}</span>
+                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
+                        <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">${name}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        charEl.innerHTML = `
+            ${headerHtml}
+            <div class="rocket-slots-container" style="display: flex; gap: 12px; margin-top: 12px; flex-wrap: wrap;"></div>
+        `;
+
+        const slotsContainer = charEl.querySelector('.rocket-slots-container');
+        if (slotsContainer && Array.isArray(slotsData)) {
+            slotsData.forEach((slot) => {
                 const isSlotEncounter = slot.is_encounter || (slot.pokemons && slot.pokemons.some(p => p && (p.isEncounter || p.is_encounter)));
                 const slotEl = document.createElement('div');
                 slotEl.className = 'rocket-slot';
@@ -3379,84 +3428,86 @@ function renderRocketLineups() {
                 pokeList.className = 'rocket-slot-pokemons-list';
                 pokeList.style.cssText = 'display: flex; flex-direction: column; gap: 6px;';
 
-                slot.pokemons.forEach(poke => {
-                    const pokeNameStr = safeLower(poke && typeof poke === 'object' ? poke.name : poke);
-                    const matchedPoke = pokemonDatabase.find(p => p.name && safeLower(p.name) === pokeNameStr);
-                    const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                    const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
-                    const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
-                    const isEncounterPoke = (poke && (poke.isEncounter || poke.is_encounter)) || isSlotEncounter;
+                if (Array.isArray(slot.pokemons)) {
+                    slot.pokemons.forEach(poke => {
+                        const pokeNameStr = safeLower(poke && typeof poke === 'object' ? poke.name : poke);
+                        const matchedPoke = pokemonDatabase.find(p => p.name && safeLower(p.name) === pokeNameStr);
+                        const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
+                        const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+                        const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                        const isEncounterPoke = (poke && (poke.isEncounter || poke.is_encounter)) || isSlotEncounter;
 
-                    // Format raw API name for display (e.g. "MEGA BLAZIKEN" -> "Mega Blaziken")
-                    const rawName = poke && typeof poke === 'object' ? poke.name : poke;
-                    const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(rawName);
+                        const rawName = poke && typeof poke === 'object' ? poke.name : poke;
+                        const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(rawName);
 
-                    let highlightClass = '';
-                    if (isEncounterPoke) {
-                        highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
-                    }
-
-                    const isShiny = (poke && (poke.canBeShiny || poke.shiny_available)) || false;
-                    const shinyHtml = isShiny ? `
-                        <svg class="shiny-icon-inline" viewBox="0 0 24 24" fill="currentColor" title="Shiny Available" style="width: 12px; height: 12px; color: #f5a623; display: inline-block; vertical-align: middle; margin-left: 4px; filter: drop-shadow(0 0 2px rgba(245, 166, 35, 0.6));">
-                            <path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/>
-                        </svg>
-                    ` : '';
-
-                    // Always use PokeAPI official artwork (never raw asset_url which may be shiny/wrong)
-                    let imgUrl = getPokemonImageUrl(rawName, matchedPoke);
-                    if (!imgUrl && matchedPoke) {
-                        imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
-                    }
-                    if (!imgUrl) imgUrl = '';
-
-                    const statusBadges = [];
-                    if (isEncounterPoke) {
-                        statusBadges.push(`<span style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Catchable</span>`);
-                        if (isTransferred) {
-                            statusBadges.push(`<span style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>`);
-                        } else if (isMissing) {
-                            statusBadges.push(`<span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Missing</span>`);
-                        } else if (isCandyNeeded) {
-                            statusBadges.push(`<span style="background: rgba(245, 166, 35, 0.15); color: var(--accent-color); border: 1px solid rgba(245, 166, 35, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-candy-cane"></i> Candy</span>`);
+                        let highlightClass = '';
+                        if (isEncounterPoke) {
+                            highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                         }
-                    }
 
-                    // Build real DOM element so click listener actually fires
-                    const pokeCard = document.createElement('div');
-                    pokeCard.className = `rocket-poke-item ${highlightClass}`;
-                    pokeCard.style.cssText = `display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); cursor: ${matchedPoke ? 'pointer' : 'default'}; transition: all 0.2s ease;`;
+                        const isShiny = (poke && (poke.canBeShiny || poke.shiny_available)) || false;
+                        const shinyHtml = isShiny ? `
+                            <svg class="shiny-icon-inline" viewBox="0 0 24 24" fill="currentColor" title="Shiny Available" style="width: 12px; height: 12px; color: #f5a623; display: inline-block; vertical-align: middle; margin-left: 4px; filter: drop-shadow(0 0 2px rgba(245, 166, 35, 0.6));">
+                                <path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/>
+                            </svg>
+                        ` : '';
 
-                    if (matchedPoke) {
-                        pokeCard.addEventListener('mouseenter', () => {
-                            pokeCard.style.background = 'rgba(255,255,255,0.06)';
-                            pokeCard.style.borderColor = 'rgba(255,255,255,0.12)';
-                            pokeCard.style.transform = 'translateX(2px)';
-                        });
-                        pokeCard.addEventListener('mouseleave', () => {
-                            pokeCard.style.background = 'rgba(255,255,255,0.03)';
-                            pokeCard.style.borderColor = 'rgba(255,255,255,0.05)';
-                            pokeCard.style.transform = 'none';
-                        });
-                        pokeCard.addEventListener('click', () => openModal(matchedPoke.id));
-                    }
+                        let imgUrl = getPokemonImageUrl(rawName, matchedPoke);
+                        if (!imgUrl && matchedPoke) {
+                            imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
+                        }
+                        if (!imgUrl) imgUrl = '';
 
-                    pokeCard.innerHTML = `
-                        <img src="${imgUrl}" alt="${displayName}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.src='${poke.asset_url || ''}'; this.onerror=null;">
-                        <div style="display: flex; flex-direction: column; gap: 2px;">
-                            <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
-                                ${displayName}${shinyHtml}
-                            </span>
-                            <div style="display: flex; gap: 4px; flex-wrap: wrap;">${statusBadges.join('')}</div>
-                        </div>
-                    `;
-                    pokeList.appendChild(pokeCard);
-                });
+                        let statusBadges = [];
+                        if (isEncounterPoke) {
+                            statusBadges.push(`<span style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Catchable</span>`);
+                            if (isTransferred) {
+                                statusBadges.push(`<span style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>`);
+                            } else if (isMissing) {
+                                statusBadges.push(`<span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Missing</span>`);
+                            } else if (isCandyNeeded) {
+                                statusBadges.push(`<span style="background: rgba(245, 166, 35, 0.15); color: var(--accent-color); border: 1px solid rgba(245, 166, 35, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-candy-cane"></i> Candy</span>`);
+                            }
+                        }
+
+                        const pokeCard = document.createElement('div');
+                        pokeCard.className = `rocket-poke-item ${highlightClass}`;
+                        pokeCard.style.cssText = `display: flex; align-items: center; gap: 8px; padding: 6px 10px; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px solid rgba(255,255,255,0.05); cursor: ${matchedPoke ? 'pointer' : 'default'}; transition: all 0.2s ease;`;
+
+                        if (matchedPoke) {
+                            pokeCard.addEventListener('mouseenter', () => {
+                                pokeCard.style.background = 'rgba(255,255,255,0.06)';
+                                pokeCard.style.borderColor = 'rgba(255,255,255,0.12)';
+                                pokeCard.style.transform = 'translateX(2px)';
+                            });
+                            pokeCard.addEventListener('mouseleave', () => {
+                                pokeCard.style.background = 'rgba(255,255,255,0.03)';
+                                pokeCard.style.borderColor = 'rgba(255,255,255,0.05)';
+                                pokeCard.style.transform = 'none';
+                            });
+                            pokeCard.addEventListener('click', () => openModal(matchedPoke.id));
+                        }
+
+                        pokeCard.innerHTML = `
+                            <img src="${imgUrl}" alt="${displayName}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.src='${poke.asset_url || ''}'; this.onerror=null;">
+                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                                    ${displayName}${shinyHtml}
+                                </span>
+                                <div style="display: flex; gap: 4px; flex-wrap: wrap;">${statusBadges.join('')}</div>
+                            </div>
+                        `;
+                        pokeList.appendChild(pokeCard);
+                    });
+                }
 
                 slotEl.appendChild(pokeList);
                 slotsContainer.appendChild(slotEl);
             });
-        };
+        }
+
+        return charEl;
+    };
 
         let iconHtml = '<i class="fa-solid fa-user-ninja" style="color: #ef4444;"></i>';
         let cardColor = '#ef4444';
