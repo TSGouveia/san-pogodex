@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "updatedAt": "2026-08-31T22:14:59.287690+00:00",
+=======
+    "updatedAt": "2026-08-31T22:15:30.584Z",
+>>>>>>> 4255548 (Enhance Top Attackers form badges (Primal, Mega, Shadow, etc.) and enforce DialgaDex ER ranking order)
     "overall": [
         {
             "name": "Mega Mewtwo Y",
@@ -265,7 +269,7 @@
             "chargedMove": "Draco Meteor",
             "moveType": "Dragon",
             "er": 54.81,
-            "dps": 23.0
+            "dps": 23
         },
         {
             "name": "Mega Tyranitar",
@@ -1119,7 +1123,7 @@
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
                 "er": 82.53,
-                "dps": 34.62
+                "dps": 34.63
             },
             {
                 "name": "Reshiram",
@@ -1133,7 +1137,7 @@
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
                 "er": 82.53,
-                "dps": 34.62
+                "dps": 34.63
             },
             {
                 "name": "Kyurem",
@@ -1286,7 +1290,7 @@
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
                 "er": 69.34,
-                "dps": 28.62
+                "dps": 28.63
             }
         ],
         "Electric": [
@@ -3013,7 +3017,7 @@
                 ],
                 "fastMove": "Razor Leaf",
                 "chargedMove": "Leaf Blade",
-                "er": 67.0,
+                "er": 67,
                 "dps": 32.14
             },
             {
@@ -3555,7 +3559,7 @@
                 "fastMove": "Waterfall",
                 "chargedMove": "Avalanche",
                 "er": 66.82,
-                "dps": 26.0
+                "dps": 26
             },
             {
                 "name": "Mamoswine",
@@ -3677,7 +3681,7 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Weather Ball Ice",
-                "er": 57.0,
+                "er": 57,
                 "dps": 24.46
             },
             {
@@ -3841,7 +3845,7 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-                "er": 66.0,
+                "er": 66,
                 "dps": 26.62
             },
             {
@@ -3855,7 +3859,7 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-                "er": 66.0,
+                "er": 66,
                 "dps": 26.62
             },
             {
@@ -4575,7 +4579,7 @@
                 ],
                 "fastMove": "Confusion",
                 "chargedMove": "Psychic",
-                "er": 67.0,
+                "er": 67,
                 "dps": 27.05
             },
             {
@@ -4771,7 +4775,7 @@
                 ],
                 "fastMove": "Rock Throw",
                 "chargedMove": "Rock Slide",
-                "er": 59.0,
+                "er": 59,
                 "dps": 25.69
             },
             {

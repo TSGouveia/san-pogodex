@@ -6052,6 +6052,9 @@ function renderAttackersPane() {
         );
     }
 
+    // Sort strictly by DialgaDex ER score descending
+    filteredList.sort((a, b) => (b.er || 0) - (a.er || 0));
+
     gridContainer.innerHTML = '';
 
     if (filteredList.length === 0) {
@@ -6091,10 +6094,17 @@ function renderAttackersPane() {
         const imgUrl = matchedPoke ? getPokemonImageUrl(matchedPoke.name, matchedPoke) : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png`;
 
         let formBadge = '';
-        if (item.isMega) {
+        const formStr = (item.form || '').trim();
+
+        if (formStr.includes('Primal')) {
+            formBadge = `<span style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">PRIMAL</span>`;
+        } else if (formStr.includes('Mega') || item.isMega) {
             formBadge = `<span style="background: linear-gradient(135deg, #a855f7, #ec4899); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">MEGA</span>`;
         } else if (item.isShadow) {
-            formBadge = `<span style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">SHADOW</span>`;
+            const label = formStr.includes('Apex') ? 'APEX SHADOW' : 'SHADOW';
+            formBadge = `<span style="background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">${label}</span>`;
+        } else if (formStr) {
+            formBadge = `<span style="background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">${formStr.toUpperCase()}</span>`;
         }
 
         const card = document.createElement('div');
