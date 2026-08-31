@@ -52,7 +52,7 @@
                     "dragon",
                     "fire"
                 ],
-                "isEncounter": true,
+                "isEncounter": false,
                 "canBeShiny": true
             }
         ]
