@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T22:31:21.046729+00:00",
-=======
-    "updatedAt": "2026-08-31T22:32:31.595504+00:00",
->>>>>>> 09e3d31 (Apply exact DialgaDex eDPS formula and baseline scaling across ALL 18 types)
+    "updatedAt": "2026-08-31T22:32:59.867574+00:00",
     "overall": [
         {
             "rank": 1,
