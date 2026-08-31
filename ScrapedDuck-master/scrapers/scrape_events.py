@@ -53,10 +53,6 @@ def scrape_events():
                     import re
                     image = re.sub(r'/cdn-cgi/image/[^/]+/', '/', image)
 
-                # Fallback to default event image if missing
-                if not image or not image.strip():
-                    image = "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg"
-
                 dates = event_dates.get(event_id, {})
                 start_date = dates.get("start", "")
                 end_date = dates.get("end", "")
