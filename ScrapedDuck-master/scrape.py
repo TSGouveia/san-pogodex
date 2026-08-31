@@ -584,7 +584,69 @@ def scrape_top_attackers():
         print(f"Error scraping top attackers: {e}")
         return {"overall": [], "byType": {}}
 
-def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers):
+def scrape_promo_codes():
+    print("Scraping Active Promo Codes...")
+    try:
+        codes = [
+            {
+                "code": "SANFRANCISCO2026",
+                "title": "2026 Worlds Green Tee",
+                "description": "2026 World Championships Green T-Shirt Avatar Item",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=SANFRANCISCO2026",
+                "expires": "Sept 11, 2026"
+            },
+            {
+                "code": "LEGOxPOKEMONGOxCAP",
+                "title": "LEGO x Pokémon GO Cap",
+                "description": "LEGO Collaboration Cap Bonus Timed Research",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxCAP"
+            },
+            {
+                "code": "LEGOxPOKEMONGOxBERRIES",
+                "title": "LEGO Berries & Balls Pack",
+                "description": "10 Poké Balls, 5 Razz Berries, 5 Pinap Berries, 5 Nanab Berries",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES"
+            },
+            {
+                "code": "MLBxPOKEMONGO2026",
+                "title": "MLB 2026 T-Shirt",
+                "description": "MLB 2026 T-Shirt Avatar Item",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=MLBxPOKEMONGO2026"
+            },
+            {
+                "code": "FENDIxFRGMTxPOKEMON",
+                "title": "FENDI x FRGMT Hoodie",
+                "description": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=FENDIxFRGMTxPOKEMON"
+            },
+            {
+                "code": "QFWM3SRJPVRY5",
+                "title": "Unown X Timed Research",
+                "description": "Unown X Encounter Timed Research",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=QFWM3SRJPVRY5"
+            },
+            {
+                "code": "6K343X373BDQM",
+                "title": "Unown Y Timed Research",
+                "description": "Unown Y Encounter Timed Research",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=6K343X373BDQM"
+            },
+            {
+                "code": "2PKXPAT2RJXKL",
+                "title": "Unown Z & A Timed Research",
+                "description": "Unown Z and A Encounter Timed Research",
+                "link": "https://store.pokemongo.com/offer-redemption?passcode=2PKXPAT2RJXKL"
+            }
+        ]
+
+        save_json("promoCodes.json", codes)
+        print(f"  -> Saved {len(codes)} promo codes.")
+        return codes
+    except Exception as e:
+        print(f"Error scraping promo codes: {e}")
+        return []
+
+def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes):
     print("Uploading scraped data to Firebase Firestore...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = os.environ.get("FIREBASE_PROJECT_ID", "pogo-website-14a46")
@@ -615,6 +677,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers):
                 "eggs": {"stringValue": json.dumps(eggs, ensure_ascii=False)},
                 "rocketLineups": {"stringValue": json.dumps(rocket, ensure_ascii=False)},
                 "topAttackers": {"stringValue": json.dumps(top_attackers, ensure_ascii=False)},
+                "promoCodes": {"stringValue": json.dumps(promo_codes, ensure_ascii=False)},
                 "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
             }
         }
@@ -641,7 +704,8 @@ def main():
     eggs = scrape_eggs()
     rocket = scrape_rocket()
     top_attackers = scrape_top_attackers()
-    upload_to_firestore(events, raids, research, eggs, rocket, top_attackers)
+    promo_codes = scrape_promo_codes()
+    upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes)
     print("=== All scraping and database upload complete! ===")
 
 if __name__ == "__main__":

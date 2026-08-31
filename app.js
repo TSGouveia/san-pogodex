@@ -660,6 +660,7 @@ async function loadScrapedDataFromFirestore() {
             eggs: fields.eggs?.stringValue ? JSON.parse(fields.eggs.stringValue) : null,
             rocketLineups: fields.rocketLineups?.stringValue ? JSON.parse(fields.rocketLineups.stringValue) : null,
             topAttackers: fields.topAttackers?.stringValue ? JSON.parse(fields.topAttackers.stringValue) : null,
+            promoCodes: fields.promoCodes?.stringValue ? JSON.parse(fields.promoCodes.stringValue) : null,
             updatedAt: fields.updatedAt?.stringValue || null
         };
     } catch (err) {
@@ -716,6 +717,7 @@ async function loadPokedex() {
             if (dbScrapedData.research) rawResearch = dbScrapedData.research;
             if (dbScrapedData.rocketLineups) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
             if (dbScrapedData.topAttackers) topAttackersData = dbScrapedData.topAttackers;
+            if (dbScrapedData.promoCodes) rawPromoCodes = dbScrapedData.promoCodes;
             if (dbScrapedData.events) rawEvents = dbScrapedData.events;
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
@@ -1615,6 +1617,8 @@ function setupEventListeners() {
 
             if (targetSectionId === 'rotations-events-section') {
                 renderEventsPane();
+            } else if (targetSectionId === 'rotations-promocodes-section') {
+                renderPromoCodes();
             } else {
                 renderActiveRotations();
             }
@@ -6161,5 +6165,114 @@ function renderAttackersPane() {
         }
 
         gridContainer.appendChild(card);
+    });
+}
+
+// ==========================================================================
+// PROMO CODES PANEL
+// ==========================================================================
+let rawPromoCodes = [];
+
+function loadPromoCodesFallback() {
+    fetch('files/promoCodes.min.json')
+        .then(r => r.json())
+        .then(data => {
+            rawPromoCodes = data;
+            const sec = document.getElementById('rotations-promocodes-section');
+            if (sec && !sec.classList.contains('hidden')) {
+                renderPromoCodes();
+            }
+        })
+        .catch(err => console.warn('Could not load promoCodes fallback:', err));
+}
+
+function renderPromoCodes() {
+    const grid = document.getElementById('promocodes-grid');
+    if (!grid) return;
+
+    if (!rawPromoCodes || rawPromoCodes.length === 0) {
+        loadPromoCodesFallback();
+    }
+
+    const list = Array.isArray(rawPromoCodes) ? rawPromoCodes : [];
+    grid.innerHTML = '';
+
+    if (list.length === 0) {
+        grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
+                <i class="fa-solid fa-gift" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
+                <p style="font-size: 0.95rem; font-weight: 600; margin: 0;">No active promo codes currently available.</p>
+            </div>
+        `;
+        return;
+    }
+
+    list.forEach(item => {
+        const code = item.code || '';
+        const title = item.title || code;
+        const description = item.description || '';
+        const link = item.link || `https://store.pokemongo.com/offer-redemption?passcode=${encodeURIComponent(code)}`;
+        const expires = item.expires || '';
+
+        const card = document.createElement('div');
+        card.className = 'promocode-card';
+        card.style.cssText = `
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            position: relative;
+            transition: transform 0.15s, border-color 0.15s;
+        `;
+
+        card.innerHTML = `
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-ticket"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; font-size: 1rem; font-weight: 800; color: var(--text-primary); line-height: 1.3;">${title}</h4>
+                        ${expires ? `<span style="font-size: 0.72rem; color: #f87171; font-weight: 700;"><i class="fa-solid fa-clock"></i> Expires: ${expires}</span>` : `<span style="font-size: 0.72rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Active Code</span>`}
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${description}</p>
+
+            <div style="background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <span style="font-family: monospace; font-size: 1rem; font-weight: 900; color: #fbbf24; letter-spacing: 1px;">${code}</span>
+                <button class="copy-code-btn" data-code="${code}" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
+                    <i class="fa-regular fa-copy"></i> Copy
+                </button>
+            </div>
+
+            <a href="${link}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin-top: 4px;">
+                <button style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #1e1b4b; border: none; border-radius: 8px; padding: 10px; font-size: 0.88rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: filter 0.15s, transform 0.1s;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Redeem Code on Web Store
+                </button>
+            </a>
+        `;
+
+        const copyBtn = card.querySelector('.copy-code-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(code).then(() => {
+                    copyBtn.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Copied!`;
+                    copyBtn.style.borderColor = '#10b981';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `<i class="fa-regular fa-copy"></i> Copy`;
+                        copyBtn.style.borderColor = 'var(--border-color)';
+                    }, 2000);
+                });
+            });
+        }
+
+        grid.appendChild(card);
     });
 }
