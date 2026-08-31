@@ -1002,14 +1002,16 @@ async function loadPokedex() {
         liveEvents = [];
         if (Array.isArray(rawEvents)) {
             rawEvents.forEach(ev => {
+                const rawImg = ev.image || ev.banner || '';
+                const hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
                 liveEvents.push({
-                    title: ev.name,
-                    category: ev.heading || ev.eventType || 'Event',
-                    banner: ev.image,
-                    url: ev.link,
+                    title: ev.name || ev.title || '',
+                    category: ev.heading || ev.eventType || ev.category || 'Event',
+                    banner: hdBanner,
+                    url: ev.link || ev.url || '',
                     start: ev.start,
                     end: ev.end,
-                    desc: ev.heading || '',
+                    desc: ev.heading || ev.description || '',
                     details: ev.extraData || null
                 });
             });

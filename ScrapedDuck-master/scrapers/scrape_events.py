@@ -41,7 +41,12 @@ def scrape_events():
                 event_type = type_el.text.strip() if type_el else ""
 
                 img_el = ev.select_one("img")
-                image = img_el.get("src", "") if img_el else ""
+                raw_image = img_el.get("src", "") if img_el else ""
+                # Strip Cloudflare 95px height downscaling to get original HD full-res banner
+                image = raw_image.replace("/cdn-cgi/image/fit=scale-down,height=95,quality=100,format=webp/", "/")
+                if "/cdn-cgi/image/" in image:
+                    import re
+                    image = re.sub(r'/cdn-cgi/image/[^/]+/', '/', image)
 
                 dates = event_dates.get(event_id, {})
                 start_date = dates.get("start", "")
