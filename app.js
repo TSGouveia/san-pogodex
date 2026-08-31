@@ -6243,6 +6243,11 @@ function renderPromoCodes() {
             </div>
 
             <p style="margin: 0; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">${description}</p>
+            ${Array.isArray(item.rewards) && item.rewards.length > 0 ? `
+                <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: -2px;">
+                    ${item.rewards.map(r => `<span style="background: rgba(59, 130, 246, 0.12); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.25); padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700;"><i class="fa-solid fa-gift"></i> ${r}</span>`).join('')}
+                </div>
+            ` : ''}
 
             <div style="background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <span style="font-family: monospace; font-size: 1rem; font-weight: 900; color: #fbbf24; letter-spacing: 1px;">${code}</span>

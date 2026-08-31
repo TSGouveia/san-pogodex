@@ -449,8 +449,8 @@ def scrape_top_attackers():
         raw_fm_data = fm_res.json()
         raw_cm_data = cm_res.json()
 
-        fm_by_name = {m['name'].lower(): m for m in raw_fm_data.values() if m and 'name' in m}
-        cm_by_name = {m['name'].lower(): m for m in raw_cm_data.values() if m and 'name' in m}
+        fm_by_name = {m['name'].lower(): m for m in (raw_fm_data if isinstance(raw_fm_data, list) else raw_fm_data.values()) if m and isinstance(m, dict) and 'name' in m}
+        cm_by_name = {m['name'].lower(): m for m in (raw_cm_data if isinstance(raw_cm_data, list) else raw_cm_data.values()) if m and isinstance(m, dict) and 'name' in m}
 
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
 
@@ -585,63 +585,60 @@ def scrape_top_attackers():
         return {"overall": [], "byType": {}}
 
 def scrape_promo_codes():
-    print("Scraping Active Promo Codes...")
+    print("Scraping Active Promo Codes dynamically from LeekDuck...")
     try:
-        codes = [
-            {
-                "code": "SANFRANCISCO2026",
-                "title": "2026 Worlds Green Tee",
-                "description": "2026 World Championships Green T-Shirt Avatar Item",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=SANFRANCISCO2026",
-                "expires": "Sept 11, 2026"
-            },
-            {
-                "code": "LEGOxPOKEMONGOxCAP",
-                "title": "LEGO x Pokémon GO Cap",
-                "description": "LEGO Collaboration Cap Bonus Timed Research",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxCAP"
-            },
-            {
-                "code": "LEGOxPOKEMONGOxBERRIES",
-                "title": "LEGO Berries & Balls Pack",
-                "description": "10 Poké Balls, 5 Razz Berries, 5 Pinap Berries, 5 Nanab Berries",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES"
-            },
-            {
-                "code": "MLBxPOKEMONGO2026",
-                "title": "MLB 2026 T-Shirt",
-                "description": "MLB 2026 T-Shirt Avatar Item",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=MLBxPOKEMONGO2026"
-            },
-            {
-                "code": "FENDIxFRGMTxPOKEMON",
-                "title": "FENDI x FRGMT Hoodie",
-                "description": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=FENDIxFRGMTxPOKEMON"
-            },
-            {
-                "code": "QFWM3SRJPVRY5",
-                "title": "Unown X Timed Research",
-                "description": "Unown X Encounter Timed Research",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=QFWM3SRJPVRY5"
-            },
-            {
-                "code": "6K343X373BDQM",
-                "title": "Unown Y Timed Research",
-                "description": "Unown Y Encounter Timed Research",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=6K343X373BDQM"
-            },
-            {
-                "code": "2PKXPAT2RJXKL",
-                "title": "Unown Z & A Timed Research",
-                "description": "Unown Z and A Encounter Timed Research",
-                "link": "https://store.pokemongo.com/offer-redemption?passcode=2PKXPAT2RJXKL"
-            }
-        ]
+        url = "https://leekduck.com/promo-codes/"
+        res = requests.get(url, headers=HEADERS)
+        if res.status_code != 200:
+            print(f"Failed to fetch promo codes page: status {res.status_code}")
+            return []
 
-        save_json("promoCodes.json", codes)
-        print(f"  -> Saved {len(codes)} promo codes.")
-        return codes
+        soup = BeautifulSoup(res.text, "html.parser")
+        cards = soup.select(".promo-card")
+        promo_codes = []
+
+        for card in cards:
+            title_el = card.select_one(".title")
+            code_el = card.select_one(".text")
+            desc_el = card.select_one(".description")
+            link_el = card.select_one(".link-button")
+            expiry_el = card.select_one(".expiry")
+
+            code = code_el.get_text(strip=True) if code_el else ""
+            if not code:
+                continue
+
+            title = title_el.get_text(strip=True) if title_el else code
+            description = desc_el.get_text(strip=True) if desc_el else ""
+            link = link_el.get("href", "") if (link_el and link_el.has_attr("href")) else f"https://store.pokemongo.com/offer-redemption?passcode={code}"
+            
+            expiry = ""
+            if expiry_el:
+                expiry = expiry_el.get_text(strip=True)
+                if "Expires:" in expiry:
+                    expiry = expiry.replace("Expires:", "").strip()
+
+            rewards = []
+            for r in card.select(".reward-list li.reward"):
+                label_el = r.select_one(".reward-label")
+                qty_el = r.select_one(".quantity")
+                if label_el:
+                    lbl = label_el.get_text(strip=True)
+                    qty = qty_el.get_text(strip=True) if qty_el else ""
+                    rewards.append(f"{qty} {lbl}".strip())
+
+            promo_codes.append({
+                "code": code,
+                "title": title,
+                "description": description,
+                "link": link,
+                "expires": expiry,
+                "rewards": rewards
+            })
+
+        save_json("promoCodes.json", promo_codes)
+        print(f"  -> Saved {len(promo_codes)} dynamic promo codes from LeekDuck.")
+        return promo_codes
     except Exception as e:
         print(f"Error scraping promo codes: {e}")
         return []
