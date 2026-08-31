@@ -6201,13 +6201,25 @@ function renderPromoCodes() {
         grid.innerHTML = `
             <div style="grid-column: 1 / -1; text-align: center; padding: 3rem 1rem; color: var(--text-secondary);">
                 <i class="fa-solid fa-gift" style="font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.4;"></i>
-                <p style="font-size: 0.95rem; font-weight: 600; margin: 0;">No active promo codes currently available.</p>
+                <p style="font-size: 0.95rem; font-weight: 600; margin: 0;">No promo codes currently available.</p>
             </div>
         `;
         return;
     }
 
+    const activeList = [];
+    const expiredList = [];
+
     list.forEach(item => {
+        const expLower = (item.expires || '').toLowerCase();
+        if (item.isExpired || expLower.includes('expired')) {
+            expiredList.push(item);
+        } else {
+            activeList.push(item);
+        }
+    });
+
+    function createCard(item, isExpiredCard = false) {
         const code = item.code || '';
         const title = item.title || code;
         const description = item.description || '';
@@ -6218,7 +6230,7 @@ function renderPromoCodes() {
         card.className = 'promocode-card';
         card.style.cssText = `
             background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
+            border: 1px solid ${isExpiredCard ? 'rgba(239, 68, 68, 0.2)' : 'var(--border-color)'};
             border-radius: 12px;
             padding: 1.25rem;
             display: flex;
@@ -6226,18 +6238,19 @@ function renderPromoCodes() {
             gap: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             position: relative;
+            opacity: ${isExpiredCard ? '0.7' : '1'};
             transition: transform 0.15s, border-color 0.15s;
         `;
 
         card.innerHTML = `
             <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <div style="width: 42px; height: 42px; border-radius: 10px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.25); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.2rem; flex-shrink: 0;">
-                        <i class="fa-solid fa-ticket"></i>
+                    <div style="width: 42px; height: 42px; border-radius: 10px; background: ${isExpiredCard ? 'rgba(239, 68, 68, 0.12)' : 'rgba(245, 158, 11, 0.12)'}; border: 1px solid ${isExpiredCard ? 'rgba(239, 68, 68, 0.25)' : 'rgba(245, 158, 11, 0.25)'}; display: flex; align-items: center; justify-content: center; color: ${isExpiredCard ? '#f87171' : '#f59e0b'}; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid ${isExpiredCard ? 'fa-hourglass-end' : 'fa-ticket'}"></i>
                     </div>
                     <div>
                         <h4 style="margin: 0; font-size: 1rem; font-weight: 800; color: var(--text-primary); line-height: 1.3;">${title}</h4>
-                        ${expires ? `<span style="font-size: 0.72rem; color: #f87171; font-weight: 700;"><i class="fa-solid fa-clock"></i> Expires: ${expires}</span>` : `<span style="font-size: 0.72rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Active Code</span>`}
+                        ${isExpiredCard ? `<span style="font-size: 0.72rem; color: #f87171; font-weight: 800;"><i class="fa-solid fa-ban"></i> EXPIRED</span>` : (expires ? `<span style="font-size: 0.72rem; color: #f87171; font-weight: 700;"><i class="fa-solid fa-clock"></i> Expires: ${expires}</span>` : `<span style="font-size: 0.72rem; color: #10b981; font-weight: 700;"><i class="fa-solid fa-circle-check"></i> Active Code</span>`)}
                     </div>
                 </div>
             </div>
@@ -6249,15 +6262,15 @@ function renderPromoCodes() {
                 </div>
             ` : ''}
 
-            <div style="background: rgba(0,0,0,0.3); border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-                <span style="font-family: monospace; font-size: 1rem; font-weight: 900; color: #fbbf24; letter-spacing: 1px;">${code}</span>
+            <div style="background: rgba(0,0,0,0.3); border: 1px dashed ${isExpiredCard ? 'rgba(239, 68, 68, 0.25)' : 'rgba(255,255,255,0.15)'}; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <span style="font-family: monospace; font-size: 1rem; font-weight: 900; color: ${isExpiredCard ? '#94a3b8' : '#fbbf24'}; letter-spacing: 1px; ${isExpiredCard ? 'text-decoration: line-through;' : ''}">${code}</span>
                 <button class="copy-code-btn" data-code="${code}" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
                     <i class="fa-regular fa-copy"></i> Copy
                 </button>
             </div>
 
             <a href="${link}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin-top: 4px;">
-                <button style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #1e1b4b; border: none; border-radius: 8px; padding: 10px; font-size: 0.88rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25); transition: filter 0.15s, transform 0.1s;">
+                <button style="width: 100%; background: ${isExpiredCard ? 'var(--bg-tertiary)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'}; color: ${isExpiredCard ? 'var(--text-secondary)' : '#1e1b4b'}; border: 1px solid ${isExpiredCard ? 'var(--border-color)' : 'transparent'}; border-radius: 8px; padding: 10px; font-size: 0.88rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: ${isExpiredCard ? '0.7' : '1'}; transition: filter 0.15s, transform 0.1s;">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i> Redeem Code on Web Store
                 </button>
             </a>
@@ -6278,6 +6291,31 @@ function renderPromoCodes() {
             });
         }
 
-        grid.appendChild(card);
-    });
+        return card;
+    }
+
+    if (activeList.length > 0) {
+        activeList.forEach(item => {
+            grid.appendChild(createCard(item, false));
+        });
+    } else {
+        const noActiveEl = document.createElement('div');
+        noActiveEl.style.cssText = "grid-column: 1 / -1; padding: 1.5rem; text-align: center; color: var(--text-secondary);";
+        noActiveEl.innerHTML = `<p style="margin: 0; font-weight: 600;">No active promo codes currently available.</p>`;
+        grid.appendChild(noActiveEl);
+    }
+
+    if (expiredList.length > 0) {
+        const expiredDivider = document.createElement('div');
+        expiredDivider.style.cssText = "grid-column: 1 / -1; margin-top: 2rem; margin-bottom: 0.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem; display: flex; align-items: center; gap: 10px;";
+        expiredDivider.innerHTML = `
+            <i class="fa-solid fa-clock-rotate-left" style="color: #f87171; font-size: 1.1rem;"></i>
+            <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-secondary);">Expired / Past Promo Codes (${expiredList.length})</h3>
+        `;
+        grid.appendChild(expiredDivider);
+
+        expiredList.forEach(item => {
+            grid.appendChild(createCard(item, true));
+        });
+    }
 }

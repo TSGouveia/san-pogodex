@@ -612,11 +612,14 @@ def scrape_promo_codes():
             description = desc_el.get_text(strip=True) if desc_el else ""
             link = link_el.get("href", "") if (link_el and link_el.has_attr("href")) else f"https://store.pokemongo.com/offer-redemption?passcode={code}"
             
+            is_expired = False
             expiry = ""
             if expiry_el:
                 expiry = expiry_el.get_text(strip=True)
                 if "Expires:" in expiry:
                     expiry = expiry.replace("Expires:", "").strip()
+                if "expired" in expiry.lower():
+                    is_expired = True
 
             rewards = []
             for r in card.select(".reward-list li.reward"):
@@ -633,6 +636,7 @@ def scrape_promo_codes():
                 "description": description,
                 "link": link,
                 "expires": expiry,
+                "isExpired": is_expired,
                 "rewards": rewards
             })
 
