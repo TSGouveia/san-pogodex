@@ -44,10 +44,9 @@ def save_json(filename, data):
             json.dump(data, f, separators=(",", ":"), ensure_ascii=False)
 
 def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, promo_codes):
-    print("Uploading scraped data to Firebase Firestore...")
+    print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
-    scraper_uid = "zrWesha0TuXpkC4cskDx9vSdSzT2"
 
     try:
         auth_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={api_key}"
@@ -57,24 +56,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
             return False
         auth_json = res.json()
         id_token = auth_json.get("idToken")
-        uid = auth_json.get("localId", scraper_uid)
-
-        payload = {
-            "fields": {
-                "events": {"stringValue": json.dumps(events, ensure_ascii=False)},
-                "raids": {"stringValue": json.dumps(raids, ensure_ascii=False)},
-                "research": {"stringValue": json.dumps(research, ensure_ascii=False)},
-                "eggs": {"stringValue": json.dumps(eggs, ensure_ascii=False)},
-                "rocketLineups": {"stringValue": json.dumps(rocket, ensure_ascii=False)},
-                "topAttackers": {"stringValue": json.dumps(top_attackers, ensure_ascii=False)},
-                "promoCodes": {"stringValue": json.dumps(promo_codes, ensure_ascii=False)},
-                "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
-            }
-        }
-
-        fs_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users_data/{scraper_uid}"
         headers = {"Authorization": f"Bearer {id_token}"}
-        r_patch = requests.patch(fs_url, headers=headers, json=payload)
 
         # Upload individual modules to scraped_data collection
         modules = {
@@ -87,6 +69,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
             "promoCodes": promo_codes
         }
 
+        success_count = 0
         for doc_name, doc_data in modules.items():
             try:
                 mod_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/scraped_data/{doc_name}"
@@ -96,16 +79,19 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
                         "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
                     }
                 }
-                requests.patch(mod_url, headers=headers, json=mod_payload)
+                r = requests.patch(mod_url, headers=headers, json=mod_payload)
+                if r.status_code == 200:
+                    success_count += 1
+                else:
+                    print(f"  [scraped_data/{doc_name}] upload warning: {r.status_code} - {r.text}")
             except Exception as ex:
-                pass
+                print(f"  [scraped_data/{doc_name}] upload exception: {ex}")
 
-        if r_patch.status_code == 200:
-            print("Successfully uploaded all scraped data (aggregated & individual documents) to Firestore!")
-            return True
-        else:
-            print(f"Error uploading to Firestore: {r_patch.status_code} - {r_patch.text}")
-            return False
+        print(f"Successfully uploaded {success_count}/{len(modules)} scraped_data documents to Firestore!")
+        return True
+    except Exception as e:
+        print(f"Exception during Firestore upload: {e}")
+        return False
     except Exception as e:
         print(f"Exception during Firestore upload: {e}")
         return False

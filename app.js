@@ -643,7 +643,6 @@ function normalizeRocketLineups(rawRocket) {
 async function loadScrapedDataFromFirestore() {
     const api_key = "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU";
     const project_id = "pogo-website-14a46";
-    const scraper_uid = "zrWesha0TuXpkC4cskDx9vSdSzT2";
 
     try {
         const authRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {
@@ -653,24 +652,32 @@ async function loadScrapedDataFromFirestore() {
         });
         if (!authRes.ok) throw new Error('Database auth failed');
         const authData = await authRes.json();
-        
-        const docRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/users_data/${scraper_uid}`, {
-            headers: { 'Authorization': `Bearer ${authData.idToken}` }
-        });
-        if (!docRes.ok) throw new Error('Firestore document fetch failed');
-        const docData = await docRes.json();
-        const fields = docData.fields || {};
+        const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        return {
-            events: fields.events?.stringValue ? JSON.parse(fields.events.stringValue) : null,
-            raids: fields.raids?.stringValue ? JSON.parse(fields.raids.stringValue) : null,
-            research: fields.research?.stringValue ? JSON.parse(fields.research.stringValue) : null,
-            eggs: fields.eggs?.stringValue ? JSON.parse(fields.eggs.stringValue) : null,
-            rocketLineups: fields.rocketLineups?.stringValue ? JSON.parse(fields.rocketLineups.stringValue) : null,
-            topAttackers: fields.topAttackers?.stringValue ? JSON.parse(fields.topAttackers.stringValue) : null,
-            promoCodes: fields.promoCodes?.stringValue ? JSON.parse(fields.promoCodes.stringValue) : null,
-            updatedAt: fields.updatedAt?.stringValue || null
-        };
+        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'topAttackers', 'promoCodes'];
+        const fetchPromises = modules.map(m => 
+            fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
+                .then(r => r.ok ? r.json() : null)
+                .catch(() => null)
+        );
+
+        const results = await Promise.all(fetchPromises);
+        const parsed = {};
+
+        modules.forEach((mod, idx) => {
+            const doc = results[idx];
+            const fields = doc ? doc.fields : null;
+            if (fields) {
+                if (fields.data?.stringValue) {
+                    try { parsed[mod] = JSON.parse(fields.data.stringValue); } catch (e) {}
+                } else if (fields[mod]?.stringValue) {
+                    try { parsed[mod] = JSON.parse(fields[mod].stringValue); } catch (e) {}
+                }
+                if (fields.updatedAt?.stringValue) parsed.updatedAt = fields.updatedAt.stringValue;
+            }
+        });
+
+        return parsed;
     } catch (err) {
         console.warn("Could not fetch scraped data from Firestore database, falling back to network endpoints:", err);
         return null;
