@@ -738,7 +738,10 @@ async function loadPokedex() {
             if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
             if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
             if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
-            if (isNonEmpty(dbScrapedData.topAttackers)) topAttackersData = dbScrapedData.topAttackers;
+            if (isNonEmpty(dbScrapedData.topAttackers)) {
+                topAttackersData = dbScrapedData.topAttackers;
+                renderAttackersPane();
+            }
             if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
             if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
             if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
@@ -5888,25 +5891,6 @@ function renderToDoPane() {
 let topAttackersData = null;
 let selectedAttackerType = 'all';
 let selectedAttackerFilter = 'all';
-
-// Load Top Attackers Data
-if (!topAttackersData) {
-    fetch('files/topAttackers.min.json')
-        .then(r => {
-            if (!r.ok) throw new Error(`HTTP ${r.status}`);
-            return r.json();
-        })
-        .then(data => {
-            if (data && (data.overall || data.byType)) {
-                topAttackersData = data;
-                const pane = document.getElementById('attackers-pane');
-                if (pane && !pane.classList.contains('hidden')) {
-                    renderAttackersPane();
-                }
-            }
-        })
-        .catch(err => console.warn('Could not load topAttackers data:', err));
-}
 
 function renderAttackersPane() {
     const pane = document.getElementById('attackers-pane');
