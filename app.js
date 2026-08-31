@@ -3509,64 +3509,6 @@ function renderRocketLineups() {
         return charEl;
     };
 
-        let iconHtml = '<i class="fa-solid fa-user-ninja" style="color: #ef4444;"></i>';
-        let cardColor = '#ef4444';
-
-        const isLeader = primaryLeaders.includes(name);
-        if (isLeader) {
-            if (name === 'Giovanni') {
-                iconHtml = '<i class="fa-solid fa-crown" style="color: #fbbf24;"></i>';
-                cardColor = '#fbbf24';
-            } else {
-                iconHtml = '<i class="fa-solid fa-user-tie" style="color: #c084fc;"></i>';
-                cardColor = '#c084fc';
-            }
-        } else {
-            const cleanName = name.replace(/\u00a0/g, ' ').trim();
-            if (cleanName.includes('-type')) {
-                const extractedType = cleanName.split('-type')[0].toLowerCase().trim();
-                cardColor = `var(--type-${extractedType})`;
-            }
-        }
-
-        charEl.className = 'rocket-character-card';
-        charEl.style.background = `linear-gradient(135deg, color-mix(in srgb, ${cardColor} 6%, rgba(0,0,0,0.3)), rgba(0,0,0,0.2))`;
-        charEl.style.borderColor = `color-mix(in srgb, ${cardColor} 20%, rgba(255,255,255,0.04))`;
-
-        const cleanKey = name.replace(/\u00a0/g, ' ').trim();
-        const quote = gruntQuotes[cleanKey] || "«Active Grunt Lineup»";
-
-        let headerHtml = '';
-        if (isLeader) {
-            headerHtml = `
-                <div class="rocket-char-header" style="display: flex; align-items: center; gap: 8px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
-                    <span style="font-size: 1.1rem; display: flex; align-items: center; justify-content: center;">${iconHtml}</span>
-                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">${name}</h3>
-                </div>
-            `;
-        } else {
-            headerHtml = `
-                <div class="rocket-char-header" style="display: flex; flex-direction: column; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 10px;">
-                    <span style="font-style: italic; font-size: 0.95rem; font-weight: 600; color: var(--text-primary); line-height: 1.3;">${quote}</span>
-                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 2px;">
-                        <span style="font-size: 0.65rem; font-weight: 600; background: color-mix(in srgb, ${cardColor} 12%, transparent); color: color-mix(in srgb, ${cardColor} 85%, #fff); padding: 2px 8px; border-radius: 20px; border: 1px solid color-mix(in srgb, ${cardColor} 25%, transparent); display: inline-flex; align-items: center; gap: 4px;">
-                            ${iconHtml} ${cleanKey}
-                        </span>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Set innerHTML first (header + empty slots container), then build real slot DOM
-        charEl.innerHTML = `
-            ${headerHtml}
-            <div class="rocket-slots-container rocket-slots-grid" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
-        `;
-        // Now build real slot DOM elements (preserves event listeners)
-        buildSlots();
-        return charEl;
-    };
-
     const leadersTitle = document.createElement('h3');
     leadersTitle.style.cssText = "font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin: 1rem 0 0.5rem 0; display: flex; align-items: center; gap: 8px;";
     leadersTitle.innerHTML = `<i class="fa-solid fa-crown" style="color: #fbbf24;"></i> Leaders & Giovanni`;
