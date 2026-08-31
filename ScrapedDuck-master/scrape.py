@@ -72,7 +72,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket, top_attackers, pr
             }
         }
 
-        fs_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/users_data/{scraper_uid}"
+        fs_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/scraped_data/{scraper_uid}"
         headers = {"Authorization": f"Bearer {id_token}"}
         r_patch = requests.patch(fs_url, headers=headers, json=payload)
 

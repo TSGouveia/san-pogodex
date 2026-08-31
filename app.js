@@ -654,7 +654,7 @@ async function loadScrapedDataFromFirestore() {
         if (!authRes.ok) throw new Error('Database auth failed');
         const authData = await authRes.json();
         
-        const docRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/users_data/${scraper_uid}`, {
+        const docRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${scraper_uid}`, {
             headers: { 'Authorization': `Bearer ${authData.idToken}` }
         });
         if (!docRes.ok) throw new Error('Firestore document fetch failed');
