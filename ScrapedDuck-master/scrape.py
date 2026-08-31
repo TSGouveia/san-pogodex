@@ -550,6 +550,8 @@ def scrape_top_attackers():
 
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
         by_type = {}
+        baseline_dps = 16.47
+
         for t in types:
             type_list = []
             for pkm in pkm_data:
@@ -557,9 +559,10 @@ def scrape_top_attackers():
                 for fm in pkm.get('fm', []):
                     for cm in pkm.get('cm', []):
                         res = get_attacker(pkm, fm, cm)
-                        if res and res['er'] > 0 and res['cmType'].lower() == t.lower():
+                        if res and res['dps'] > 0 and res['cmType'].lower() == t.lower():
                             form_val = pkm.get('form', '')
                             is_mega = bool(form_val and ('Mega' in form_val or 'Primal' in form_val)) or pkm.get('name', '').startswith('Mega') or pkm.get('name', '').startswith('Primal')
+                            dps_val = round(res['dps'] / 15.2, 2)
                             type_list.append({
                                 "name": pkm.get('name'),
                                 "form": form_val if form_val != 'Normal' else '',
@@ -568,7 +571,7 @@ def scrape_top_attackers():
                                 "types": pkm.get('types', []),
                                 "fastMove": res['fmName'],
                                 "chargedMove": res['cmName'],
-                                "dps": res['dps'],
+                                "dps": dps_val,
                                 "er": res['er']
                             })
             type_list.sort(key=lambda x: x['dps'], reverse=True)
@@ -579,9 +582,6 @@ def scrape_top_attackers():
                 if key not in seen:
                     seen.add(key)
                     unique.append(item)
-            
-            baseline_mon = next((item for item in unique if not item['isMega'] and not item['isShadow'] and 'Apex' not in item['form']), unique[0] if unique else None)
-            baseline_dps = baseline_mon['dps'] if baseline_mon else 1.0
 
             by_type[t] = [
                 {
@@ -589,7 +589,7 @@ def scrape_top_attackers():
                     **item,
                     "pct": f"{round((item['dps'] / baseline_dps) * 100, 1)}%"
                 }
-                for idx, item in enumerate(unique[:25])
+                for idx, item in enumerate(unique[:20])
             ]
 
         result = {

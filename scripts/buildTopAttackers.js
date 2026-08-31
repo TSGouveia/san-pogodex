@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-async function calculateAll18Types() {
-  console.log("Fetching DialgaDex dataset from GitHub (mgrann03/pokemon-resources)...");
+async function buildAllTypesOverallLogic() {
+  console.log("Building all 18 types using exact overall scale...");
 
   const pkmRes = await fetch('https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json');
   const fmRes = await fetch('https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json');
@@ -26,7 +26,7 @@ async function calculateAll18Types() {
     return Math.floor(0.5 * atk / def * power * mult) + 1;
   }
 
-  function GetDPS(types, atk, def, hp, fm_obj, cm_obj, fm_mult = 1.0, cm_mult = 1.0) {
+  function GetDPS(types, atk, def, hp, fm_obj, cm_obj) {
     if (!fm_obj || !cm_obj) return 0;
 
     const y = 1340 / def;
@@ -40,8 +40,8 @@ async function calculateAll18Types() {
     const fm_stab = (types.includes(fm_obj.type) && fm_obj.name !== "Hidden Power") ? 1.2 : 1.0;
     const cm_stab = types.includes(cm_obj.type) ? 1.2 : 1.0;
 
-    const fm_dmg = calcDamage(atk, 180, processPower(fm_obj), fm_mult * fm_stab);
-    const cm_dmg = calcDamage(atk, 180, processPower(cm_obj), cm_mult * cm_stab);
+    const fm_dmg = calcDamage(atk, 180, processPower(fm_obj), 1.6 * fm_stab);
+    const cm_dmg = calcDamage(atk, 180, processPower(cm_obj), 1.6 * cm_stab);
 
     const fm_dur = processDuration(fm_obj.duration);
     const cm_dur = processDuration(cm_obj.duration);
@@ -81,16 +81,15 @@ async function calculateAll18Types() {
     const def = (baseDef + 15) * CPM40 * shadowDefMult;
     const hp = Math.floor((baseHp + 15) * CPM40);
 
-    const dps = GetDPS(pkm.types, atk, def, hp, fm, cm, 1.0, 1.0);
-    const y = 1340 / def;
-    const tdo = dps * (hp / y);
-    const er = Math.pow(Math.pow(dps, 3) * tdo, 0.25);
+    const rawDps = GetDPS(pkm.types, atk, def, hp, fm, cm);
+    const dps = rawDps / 15.2;
 
-    return { dps, er, fmName: fm.name, cmName: cm.name };
+    return { dps, fmName: fm.name, cmName: cm.name, cmType: cm.type };
   }
 
   const types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"];
   const byType = {};
+  const baselineDPS = 16.47;
 
   types.forEach(t => {
     const list = [];
@@ -99,9 +98,9 @@ async function calculateAll18Types() {
       (pkm.fm || []).forEach(fm => {
         (pkm.cm || []).forEach(cm => {
           const cmObj = cmByName[cm.toLowerCase()];
-          if (cmObj && cmObj.type.toLowerCase() === t.toLowerCase()) {
+          if (cmObj && (cmObj.type.toLowerCase() === t.toLowerCase() || (pkm.types || []).includes(t))) {
             const res = getAttacker(pkm, fm, cm);
-            if (res && res.dps > 0) {
+            if (res && res.dps > 0 && res.cmType.toLowerCase() === t.toLowerCase()) {
               const formStr = pkm.form !== 'Normal' ? pkm.form : '';
               const isMegaForm = formStr.includes('Mega') || formStr.includes('Primal') || (pkm.name || '').startsWith('Mega') || (pkm.name || '').startsWith('Primal');
               list.push({
@@ -112,8 +111,7 @@ async function calculateAll18Types() {
                 types: pkm.types,
                 fastMove: res.fmName,
                 chargedMove: res.cmName,
-                dps: parseFloat(res.dps.toFixed(2)),
-                er: parseFloat(res.er.toFixed(2))
+                dps: parseFloat(res.dps.toFixed(2))
               });
             }
           }
@@ -132,11 +130,7 @@ async function calculateAll18Types() {
       }
     });
 
-    // Find baseline mon (first non-mega, non-shadow, non-apex mon)
-    const baselineMon = unique.find(item => !item.isMega && !item.isShadow && !item.form.includes('Apex')) || unique[0];
-    const baselineDPS = baselineMon ? baselineMon.dps : 1.0;
-
-    byType[t] = unique.slice(0, 25).map((item, idx) => ({
+    byType[t] = unique.slice(0, 20).map((item, idx) => ({
       rank: idx + 1,
       ...item,
       pct: `${((item.dps / baselineDPS) * 100).toFixed(1)}%`
@@ -167,7 +161,7 @@ async function calculateAll18Types() {
 
   fs.writeFileSync(path.join(filesDir, 'topAttackers.json'), JSON.stringify(result, null, 4), 'utf-8');
   fs.writeFileSync(path.join(filesDir, 'topAttackers.min.json'), JSON.stringify(result), 'utf-8');
-  console.log("Successfully generated all 18 types dataset!");
+  console.log("Updated files/topAttackers.json & files/topAttackers.min.json using overall scale!");
 }
 
-calculateAll18Types();
+buildAllTypesOverallLogic();
