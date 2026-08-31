@@ -460,6 +460,8 @@ def scrape_top_attackers():
         def calc_move_duration(m):
             return max(0.5, (m.get('duration', 1000) / 1000.0))
 
+        CPM40 = 0.7903001
+
         def calculate_attacker_score(pkm, fm_name, cm_name, target_type):
             fm = fm_by_name.get(fm_name.lower())
             cm = cm_by_name.get(cm_name.lower())
@@ -467,9 +469,14 @@ def scrape_top_attackers():
                 return None
 
             stats = pkm.get('stats', {})
-            atk = stats.get('baseAttack', 0)
-            def_stat = stats.get('baseDefense', 0)
-            hp = stats.get('baseStamina', 0)
+            base_atk = stats.get('baseAttack', 0)
+            base_def = stats.get('baseDefense', 0)
+            base_hp = stats.get('baseStamina', 0)
+
+            shadow_mult = 1.2 if pkm.get('shadow') else 1.0
+            atk = (base_atk + 15) * CPM40 * shadow_mult
+            def_stat = (base_def + 15) * CPM40
+            hp = int((base_hp + 15) * CPM40)
 
             pkm_types = [t.lower() for t in pkm.get('types', [])]
             fm_match = 1.2 if fm.get('type', '').lower() in pkm_types else 1.0
@@ -478,11 +485,11 @@ def scrape_top_attackers():
             cm_se = 1.6 if target_type and cm.get('type', '').lower() == target_type.lower() else 1.0
             fm_se = 1.6 if target_type and fm.get('type', '').lower() == target_type.lower() else 1.0
 
-            shadow_mult = 1.2 if pkm.get('shadow') else 1.0
-            eff_atk = atk * shadow_mult
+            fm_power = calc_move_power(fm)
+            cm_power = calc_move_power(cm)
 
-            fm_dmg = (0.5 * eff_atk / 180.0 * calc_move_power(fm) * fm_match * fm_se) + 1.0
-            cm_dmg = (0.5 * eff_atk / 180.0 * calc_move_power(cm) * cm_match * cm_se) + 1.0
+            fm_dmg = int(0.5 * atk / 180.0 * fm_power * fm_match * fm_se) + 1
+            cm_dmg = int(0.5 * atk / 180.0 * cm_power * cm_match * cm_se) + 1
 
             fm_dur = calc_move_duration(fm)
             cm_dur = calc_move_duration(cm)

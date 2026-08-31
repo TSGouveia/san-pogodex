@@ -19,33 +19,40 @@ async function generateTopAttackers() {
   Object.values(rawCmData).forEach(m => { if (m && m.name) cmByName[m.name.toLowerCase()] = m; });
 
   const types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"];
+  const CPM40 = 0.7903001;
 
   const calcMovePower = (m) => m.power || 0;
-  const calcMoveDuration = (m) => (m.duration || 1000) / 1000;
+  const calcMoveDuration = (m) => Math.max(0.5, (m.duration || 1000) / 1000);
 
   function calculateAttackerScore(pkm, fmName, cmName, targetType) {
     const fm = fmByName[fmName.toLowerCase()];
     const cm = cmByName[cmName.toLowerCase()];
     if (!fm || !cm) return null;
 
-    const atk = pkm.stats.baseAttack;
-    const def = pkm.stats.baseDefense;
-    const hp = pkm.stats.baseStamina;
+    const baseAtk = pkm.stats.baseAttack;
+    const baseDef = pkm.stats.baseDefense;
+    const baseHp = pkm.stats.baseStamina;
 
-    const fmMatch = pkm.types.map(t => t.toLowerCase()).includes(fm.type.toLowerCase()) ? 1.2 : 1.0;
-    const cmMatch = pkm.types.map(t => t.toLowerCase()).includes(cm.type.toLowerCase()) ? 1.2 : 1.0;
+    const shadowMult = pkm.shadow ? 1.2 : 1.0;
+    const atk = (baseAtk + 15) * CPM40 * shadowMult;
+    const def = (baseDef + 15) * CPM40;
+    const hp = Math.floor((baseHp + 15) * CPM40);
+
+    const pkmTypes = (pkm.types || []).map(t => t.toLowerCase());
+    const fmMatch = pkmTypes.includes(fm.type.toLowerCase()) ? 1.2 : 1.0;
+    const cmMatch = pkmTypes.includes(cm.type.toLowerCase()) ? 1.2 : 1.0;
 
     const cmSE = (targetType && cm.type.toLowerCase() === targetType.toLowerCase()) ? 1.6 : 1.0;
     const fmSE = (targetType && fm.type.toLowerCase() === targetType.toLowerCase()) ? 1.6 : 1.0;
 
-    const shadowMult = pkm.shadow ? 1.2 : 1.0;
-    const effAtk = atk * shadowMult;
+    const fmPower = calcMovePower(fm);
+    const cmPower = calcMovePower(cm);
 
-    const fmDmg = (0.5 * effAtk / 180 * calcMovePower(fm) * fmMatch * fmSE) + 1;
-    const cmDmg = (0.5 * effAtk / 180 * calcMovePower(cm) * cmMatch * cmSE) + 1;
+    const fmDmg = Math.floor(0.5 * atk / 180 * fmPower * fmMatch * fmSE) + 1;
+    const cmDmg = Math.floor(0.5 * atk / 180 * cmPower * cmMatch * cmSE) + 1;
 
-    const fmDur = Math.max(0.5, calcMoveDuration(fm));
-    const cmDur = Math.max(0.5, calcMoveDuration(cm));
+    const fmDur = calcMoveDuration(fm);
+    const cmDur = calcMoveDuration(cm);
 
     const fmEnergy = fm.energy_delta || 6;
     const cmEnergy = Math.abs(cm.energy_delta || 50);

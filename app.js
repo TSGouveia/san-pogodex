@@ -6091,7 +6091,16 @@ function renderAttackersPane() {
             statusBadgeHtml = `<span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-xmark"></i> MISSING</span>`;
         }
 
-        const imgUrl = matchedPoke ? getPokemonImageUrl(matchedPoke.name, matchedPoke) : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png`;
+        let searchFormName = item.name;
+        const rawForm = (item.form || '').trim();
+        if (rawForm) {
+            if (rawForm.toLowerCase().startsWith('mega') || rawForm.toLowerCase().startsWith('primal')) {
+                searchFormName = `${rawForm} ${item.name}`;
+            } else {
+                searchFormName = `${item.name} ${rawForm}`;
+            }
+        }
+        const imgUrl = getPokemonImageUrl(searchFormName, matchedPoke) || (matchedPoke ? matchedPoke.img : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/0.png`);
 
         let formBadge = '';
         const formStr = (item.form || '').trim();
