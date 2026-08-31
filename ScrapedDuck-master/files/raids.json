@@ -401,7 +401,7 @@
     },
     {
         "name": "Shadow Slowpoke",
-        "tier": "1-Star Raids",
+        "tier": "Shadow 1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -437,7 +437,7 @@
     },
     {
         "name": "Shadow Aipom",
-        "tier": "1-Star Raids",
+        "tier": "Shadow 1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -465,7 +465,7 @@
     },
     {
         "name": "Shadow Croagunk",
-        "tier": "1-Star Raids",
+        "tier": "Shadow 1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -497,7 +497,7 @@
     },
     {
         "name": "Shadow Grubbin",
-        "tier": "1-Star Raids",
+        "tier": "Shadow 1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -525,7 +525,7 @@
     },
     {
         "name": "Shadow Snorlax",
-        "tier": "3-Star Raids",
+        "tier": "Shadow 3-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -553,7 +553,7 @@
     },
     {
         "name": "Shadow Hitmontop",
-        "tier": "3-Star Raids",
+        "tier": "Shadow 3-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -581,7 +581,7 @@
     },
     {
         "name": "Shadow Lampent",
-        "tier": "3-Star Raids",
+        "tier": "Shadow 3-Star Raids",
         "canBeShiny": true,
         "types": [
             {
@@ -617,7 +617,7 @@
     },
     {
         "name": "Shadow Giratina (Altered)",
-        "tier": "5-Star Raids",
+        "tier": "Shadow 5-Star Raids",
         "canBeShiny": true,
         "types": [
             {
