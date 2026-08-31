@@ -3047,12 +3047,13 @@ function renderActiveRotations() {
         const cleanTaskText = rawTaskText.replace(/<[^>]*>/g, '').trim();
         if (task.rewards && Array.isArray(task.rewards)) {
             task.rewards.forEach(reward => {
-                const pokeName = reward.name || reward.pokemon || "Reward";
+                const rawName = reward.name || reward.pokemon || "Reward";
+                const cleanName = rawName.replace(/<[^>]*>/g, '').trim();
                 const matchedPoke = (reward.dex && reward.dex !== 'null')
                     ? pokemonDatabase.find(p => p.id == reward.dex)
-                    : findPokemonByName(pokeName);
+                    : findPokemonByName(cleanName);
 
-                // Only include if it is a valid Pokémon encounter
+                // Include if matched to a Pokemon or if reward contains a valid Pokemon name
                 if (matchedPoke) {
                     const isShiny = reward.canBeShiny || reward.shiny || false;
                     let cpStr = '';
@@ -3064,7 +3065,8 @@ function renderActiveRotations() {
                     }
                     researchEncounters.push({
                         taskText: cleanTaskText,
-                        pokeName: matchedPoke.name,
+                        fullPokeName: cleanName,
+                        basePokeName: matchedPoke.name,
                         dex: matchedPoke.id,
                         image: reward.image || reward.img || null,
                         shiny: isShiny,
@@ -3101,24 +3103,24 @@ function renderActiveRotations() {
             const grid = sub.querySelector('.rotation-grid-layout');
             encounters.forEach(encounter => {
                 const card = document.createElement('div');
-                const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.pokeName);
+                const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.fullPokeName);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item theme-blue ${highlightClass} spawn-animation`;
-                const keyName = matchedPoke ? matchedPoke.name : encounter.pokeName;
+                const keyName = matchedPoke ? matchedPoke.name : encounter.fullPokeName;
                 card.setAttribute('data-scroll-target', `quest-${safeLower(keyName).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
                 
                 // Prioritize official Pokemon artwork over LeekDuck images
-                let imgUrl = matchedPoke ? matchedPoke.img : getPokemonImageUrl(encounter.pokeName, matchedPoke);
+                let imgUrl = matchedPoke ? matchedPoke.img : getPokemonImageUrl(encounter.fullPokeName, matchedPoke);
                 if (!imgUrl) {
                     imgUrl = encounter.image || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${encounter.dex}.png`;
                 }
                 const fallbackDex = matchedPoke ? matchedPoke.id : encounter.dex;
                 const questOnerror = (fallbackDex && fallbackDex !== 'null') 
-                    ? `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${fallbackDex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.pokeName}');};"`
-                    : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.pokeName}');"`;
+                    ? `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${fallbackDex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');};"`
+                    : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
 
                 let cpMeta = '';
                 if (encounter.cp && encounter.cp.max) {
@@ -3131,15 +3133,15 @@ function renderActiveRotations() {
                         ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                         ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                     </div>
-                    <img class="rotation-card-img" src="${imgUrl}" alt="${encounter.pokeName}" ${questOnerror}>
-                    <span class="rotation-card-name">${encounter.pokeName}</span>
+                    <img class="rotation-card-img" src="${imgUrl}" alt="${encounter.fullPokeName}" ${questOnerror}>
+                    <span class="rotation-card-name">${encounter.fullPokeName}</span>
                     ${cpMeta}
                 `;
                 
                 card.addEventListener('click', () => {
                     const found = (encounter.dex && encounter.dex !== 'null') 
                         ? pokemonDatabase.find(p => p.id == encounter.dex) 
-                        : findPokemonByName(encounter.pokeName);
+                        : findPokemonByName(encounter.fullPokeName);
                     if (found) openModal(found.id);
                 });
                 
