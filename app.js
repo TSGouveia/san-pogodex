@@ -598,9 +598,7 @@ function normalizeRocketLineups(rawRocket) {
     const map = {};
     rawRocket.forEach(lineup => {
         let name = lineup.name || '';
-        const title = lineup.title || '';
         name = name.replace(/^Team GO Rocket (Leader|Boss)\s+/i, '').trim();
-        const isBoss = name.toLowerCase().includes('giovanni') || title.toLowerCase().includes('boss');
 
         let first = lineup.firstPokemon || [];
         let second = lineup.secondPokemon || [];
@@ -614,26 +612,16 @@ function normalizeRocketLineups(rawRocket) {
             });
         }
 
-        const hasExplicitEncounter = [...first, ...second, ...third].some(p => p && (p.isEncounter === true || p.is_encounter === true));
-
         const slots = [1, 2, 3].map(slotNum => {
             const pokeArray = slotNum === 1 ? first : (slotNum === 2 ? second : third);
-            let isSlotEnc = false;
-
-            if (hasExplicitEncounter) {
-                isSlotEnc = pokeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true));
-            } else if (isBoss) {
-                isSlotEnc = slotNum === 3;
-            } else {
-                isSlotEnc = slotNum === 1;
-            }
+            const isSlotEnc = pokeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true));
 
             return {
                 slot: slotNum,
                 is_encounter: isSlotEnc,
                 pokemons: pokeArray.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = hasExplicitEncounter ? (obj.isEncounter === true || obj.is_encounter === true) : isSlotEnc;
+                    obj.isEncounter = obj.isEncounter === true || obj.is_encounter === true;
                     return obj;
                 })
             };

@@ -400,6 +400,7 @@ def scrape_rocket():
             slot_keys = ["firstPokemon", "secondPokemon", "thirdPokemon"]
 
             for index, slot in enumerate(slots[:3]):
+                slot_is_encounter = "encounter" in slot.get("class", []) or slot.select_one(".encounter-icon") is not None
                 shadow_pokemons = slot.select(".shadow-pokemon")
                 pokemon_list = []
                 for shadow in shadow_pokemons:
@@ -415,7 +416,7 @@ def scrape_rocket():
                     if t2 and t2 != "None":
                         types.append(t2.lower())
 
-                    is_encounter = shadow.select_one(".encounter-icon") is not None
+                    is_encounter = slot_is_encounter or shadow.select_one(".encounter-icon") is not None
                     can_be_shiny = shadow.select_one(".shiny-icon") is not None
 
                     pokemon_list.append({
