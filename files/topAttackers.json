@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T22:32:59.867574+00:00",
-=======
-    "updatedAt": "2026-08-31T22:34:11.149164+00:00",
->>>>>>> d83ff2b (Use exact overall eDPS scale across all 18 types)
+    "updatedAt": "2026-08-31T22:34:39.599416+00:00",
     "overall": [
         {
             "rank": 1,
