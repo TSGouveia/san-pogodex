@@ -598,42 +598,58 @@ function normalizeRocketLineups(rawRocket) {
     const map = {};
     rawRocket.forEach(lineup => {
         let name = lineup.name || '';
+        const title = lineup.title || '';
         name = name.replace(/^Team GO Rocket (Leader|Boss)\s+/i, '').trim();
-        const isGiovanni = name.toLowerCase().includes('giovanni');
+        const isBoss = name.toLowerCase().includes('giovanni') || title.toLowerCase().includes('boss');
 
-        const slot1Explicit = (lineup.firstPokemon || []).some(p => p.isEncounter || p.is_encounter);
-        const slot2Explicit = (lineup.secondPokemon || []).some(p => p.isEncounter || p.is_encounter);
-        const slot3Explicit = (lineup.thirdPokemon || []).some(p => p.isEncounter || p.is_encounter);
+        let first = lineup.firstPokemon || [];
+        let second = lineup.secondPokemon || [];
+        let third = lineup.thirdPokemon || [];
+
+        if (lineup.slots && Array.isArray(lineup.slots)) {
+            lineup.slots.forEach(s => {
+                if (s.slot === 1) first = s.pokemons || [];
+                if (s.slot === 2) second = s.pokemons || [];
+                if (s.slot === 3) third = s.pokemons || [];
+            });
+        }
+
+        const slot1Explicit = first.some(p => p && (p.isEncounter || p.is_encounter));
+        const slot2Explicit = second.some(p => p && (p.isEncounter || p.is_encounter));
+        const slot3Explicit = third.some(p => p && (p.isEncounter || p.is_encounter));
         const hasExplicit = slot1Explicit || slot2Explicit || slot3Explicit;
 
-        const isSlot1Encounter = isGiovanni ? false : (slot1Explicit || !hasExplicit);
-        const isSlot2Encounter = isGiovanni ? false : slot2Explicit;
-        const isSlot3Encounter = isGiovanni ? true : slot3Explicit;
+        const isSlot1Encounter = hasExplicit ? slot1Explicit : (!isBoss);
+        const isSlot2Encounter = hasExplicit ? slot2Explicit : false;
+        const isSlot3Encounter = hasExplicit ? slot3Explicit : isBoss;
 
         const slots = [
             {
                 slot: 1,
                 is_encounter: isSlot1Encounter,
-                pokemons: (lineup.firstPokemon || []).map(p => ({
-                    ...(typeof p === 'object' ? p : { name: p }),
-                    isEncounter: isSlot1Encounter
-                }))
+                pokemons: first.map(p => {
+                    const obj = typeof p === 'object' ? { ...p } : { name: p };
+                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot1Encounter;
+                    return obj;
+                })
             },
             {
                 slot: 2,
                 is_encounter: isSlot2Encounter,
-                pokemons: (lineup.secondPokemon || []).map(p => ({
-                    ...(typeof p === 'object' ? p : { name: p }),
-                    isEncounter: isSlot2Encounter
-                }))
+                pokemons: second.map(p => {
+                    const obj = typeof p === 'object' ? { ...p } : { name: p };
+                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot2Encounter;
+                    return obj;
+                })
             },
             {
                 slot: 3,
                 is_encounter: isSlot3Encounter,
-                pokemons: (lineup.thirdPokemon || []).map(p => ({
-                    ...(typeof p === 'object' ? p : { name: p }),
-                    isEncounter: isSlot3Encounter
-                }))
+                pokemons: third.map(p => {
+                    const obj = typeof p === 'object' ? { ...p } : { name: p };
+                    obj.isEncounter = hasExplicit ? !!(p && (p.isEncounter || p.is_encounter)) : isSlot3Encounter;
+                    return obj;
+                })
             }
         ];
         map[name] = slots;
@@ -3367,9 +3383,8 @@ function renderRocketLineups() {
         const buildSlots = () => {
             const slotsContainer = charEl.querySelector('.rocket-slots-container');
             if (!slotsContainer) return;
-            const isGiovanni = name.toLowerCase().includes('giovanni');
             slotsData.forEach((slot, slotIndex) => {
-                const isSlotEncounter = slot.is_encounter || (isGiovanni ? slot.slot === 3 : (slot.slot === 1 && !slotsData.some(s => s.slot !== 1 && s.is_encounter)));
+                const isSlotEncounter = slot.is_encounter || (slot.pokemons && slot.pokemons.some(p => p && (p.isEncounter || p.is_encounter)));
                 const slotEl = document.createElement('div');
                 slotEl.className = 'rocket-slot';
                 slotEl.style.cssText = 'display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); flex: 1;';
