@@ -3221,61 +3221,55 @@ const partyRewardsData = [
 ];
 
 
-function renderPartyRewardsByQuest(container, data, cardTheme) {
+function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
     if (!container) return;
     container.innerHTML = '';
-    
-    // Group by task
-    const rewardsByQuest = {};
+    if (!data || !Array.isArray(data) || data.length === 0) {
+        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active Party Play challenges found.</p>';
+        return;
+    }
+
+    const byCategory = {};
     data.forEach(item => {
-        if (!rewardsByQuest[item.task]) {
-            rewardsByQuest[item.task] = [];
-        }
-        rewardsByQuest[item.task].push(item);
+        const cat = item.category || "General Party Challenges";
+        if (!byCategory[cat]) byCategory[cat] = [];
+        byCategory[cat].push(item);
     });
 
-    Object.entries(rewardsByQuest).forEach(([taskText, rewards]) => {
+    Object.entries(byCategory).forEach(([catName, items]) => {
         const sub = document.createElement('div');
         sub.className = 'rotation-subchapter';
         sub.innerHTML = `
             <h4 class="rotation-subchapter-title">
-                <i class="fa-solid fa-scroll"></i> ${taskText}
+                <i class="fa-solid fa-users"></i> ${catName}
             </h4>
             <div class="rotation-grid-layout"></div>
         `;
         container.appendChild(sub);
-        
+
         const grid = sub.querySelector('.rotation-grid-layout');
-        rewards.forEach(item => {
+        items.forEach(challenge => {
             const card = document.createElement('div');
-            const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
-            const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-            const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
-            const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
-            const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
-            card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
-            card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
-            
-            let imgUrl = matchedPoke ? matchedPoke.img : '';
-            if (!imgUrl) {
-                imgUrl = `https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm${item.dex}.icon.png`;
+            card.className = `rotation-card-item ${cardTheme} spawn-animation`;
+
+            let rewardsHtml = '';
+            if (challenge.rewards && Array.isArray(challenge.rewards)) {
+                rewardsHtml = challenge.rewards.map(r => `
+                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 0.75rem;">
+                        ${r.image ? `<img src="${r.image}" style="width: 20px; height: 20px; object-fit: contain;">` : ''}
+                        <span>${r.name || ''}</span>
+                    </div>
+                `).join('');
+            } else if (challenge.name) {
+                rewardsHtml = `<div style="font-size: 0.75rem; margin-top: 4px;">${challenge.name}</div>`;
             }
-            
-            const imgOnerror = `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
 
             card.innerHTML = `
-                ${item.shiny ? shinySparkleSvg : ''}
-                <div class="rotation-badges">
-                    ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
-                    ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
+                <div class="rotation-card-details-wrapper" style="width: 100%;">
+                    <span class="rotation-card-name" style="font-weight: 700;">${challenge.task || challenge.name || "Party Task"}</span>
+                    <div style="margin-top: 6px;">${rewardsHtml}</div>
                 </div>
-                <img class="rotation-card-img" src="${imgUrl}" alt="${item.name}" ${imgOnerror}>
-                <span class="rotation-card-name">${item.name}</span>
             `;
-
-            card.addEventListener('click', () => {
-                if (matchedPoke) openModal(matchedPoke.id);
-            });
             grid.appendChild(card);
         });
     });
@@ -3559,58 +3553,6 @@ function renderRocketLineups() {
             gruntsGrid.appendChild(renderCharacter(name, liveRocket[name]));
         });
     }
-}
-
-function renderPartyRewardsByQuest(container, partyData, cardTheme = 'theme-blue') {
-    if (!container) return;
-    container.innerHTML = '';
-    if (!partyData || !Array.isArray(partyData) || partyData.length === 0) {
-        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active Party Play challenges found.</p>';
-        return;
-    }
-
-    const byCategory = {};
-    partyData.forEach(item => {
-        const cat = item.category || "General";
-        if (!byCategory[cat]) byCategory[cat] = [];
-        byCategory[cat].push(item);
-    });
-
-    Object.entries(byCategory).forEach(([catName, items]) => {
-        const sub = document.createElement('div');
-        sub.className = 'rotation-subchapter';
-        sub.innerHTML = `
-            <h4 class="rotation-subchapter-title">
-                <i class="fa-solid fa-users"></i> ${catName}
-            </h4>
-            <div class="rotation-grid-layout"></div>
-        `;
-        container.appendChild(sub);
-
-        const grid = sub.querySelector('.rotation-grid-layout');
-        items.forEach(challenge => {
-            const card = document.createElement('div');
-            card.className = `rotation-card-item ${cardTheme} spawn-animation`;
-
-            let rewardsHtml = '';
-            if (challenge.rewards && Array.isArray(challenge.rewards)) {
-                rewardsHtml = challenge.rewards.map(r => `
-                    <div style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 0.75rem;">
-                        ${r.image ? `<img src="${r.image}" style="width: 20px; height: 20px; object-fit: contain;">` : ''}
-                        <span>${r.name}</span>
-                    </div>
-                `).join('');
-            }
-
-            card.innerHTML = `
-                <div class="rotation-card-details-wrapper" style="width: 100%;">
-                    <span class="rotation-card-name" style="font-weight: 700;">${challenge.task}</span>
-                    <div style="margin-top: 6px;">${rewardsHtml}</div>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    });
 }
 
 // ==========================================================================
