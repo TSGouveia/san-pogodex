@@ -2,7 +2,7 @@ import os
 import json
 import subprocess
 
-def scrape_dialgadex():
+def scrape_top_attackers():
     print("Scraping Official DialgaDex Top Attackers directly from DialgaDex DOM via Playwright...")
     try:
         base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
@@ -23,12 +23,12 @@ def scrape_dialgadex():
                 with open(path, 'r', encoding='utf-8') as f:
                     data = json.load(f)
                     if data and (data.get('overall') or data.get('byType')):
-                        print(f"  -> Successfully loaded live scraped DialgaDex dataset ({len(data.get('overall', []))} overall items).")
+                        print(f"  -> Successfully loaded live scraped DialgaDex top attackers dataset ({len(data.get('overall', []))} overall items).")
                         return data
     except Exception as e:
-        print(f"Error executing DialgaDex scraper: {e}")
+        print(f"Error executing DialgaDex top attackers scraper: {e}")
 
     return {"overall": [], "byType": {}}
 
 if __name__ == "__main__":
-    scrape_dialgadex()
+    scrape_top_attackers()

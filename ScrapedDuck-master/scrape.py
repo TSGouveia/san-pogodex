@@ -13,7 +13,7 @@ from scrapers.scrape_research import scrape_research
 from scrapers.scrape_eggs import scrape_eggs
 from scrapers.scrape_rocket import scrape_rocket
 from scrapers.scrape_promos import scrape_promo_codes
-from scrapers.scrape_dialgadex import scrape_dialgadex
+from scrapers.scrape_top_attackers import scrape_top_attackers
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -109,8 +109,8 @@ def main():
     rocket = scrape_rocket()
     save_json("rocketLineups.json", rocket)
 
-    # 6. Scrape DialgaDex Top Attackers
-    top_attackers = scrape_dialgadex()
+    # 6. Scrape Top Attackers
+    top_attackers = scrape_top_attackers()
     save_json("topAttackers.json", top_attackers)
 
     # 7. Scrape Promo Codes
