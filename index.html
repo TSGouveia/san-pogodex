@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="PokéDex & Collection Tracker for Pokémon GO - Plan your journey and monitor your collection in SanDex style.">
-    <title>SanDex Pro - Pokémon GO Tracker</title>
+    <title>SanDex - Pokémon GO Tracker</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='46' fill='%23111b2e' stroke='%23f5a623' stroke-width='8'/%3E%3Cpath d='M4 50 H96' stroke='%23f5a623' stroke-width='8'/%3E%3Ccircle cx='50' cy='50' r='18' fill='%23111b2e' stroke='%23f5a623' stroke-width='8'/%3E%3Ccircle cx='50' cy='50' r='8' fill='%23f5a623'/%3E%3C/svg%3E">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +62,13 @@
                     <p class="subtitle">Pokémon GO Collection Tracker</p>
                 </div>
             </div>
-            
+
+            <!-- Last Updated Badge (Centered Horizontally on Page) -->
+            <div class="last-updated-badge" style="display: none; align-items: center; justify-content: center; gap: 6px; font-size: 0.88rem; font-weight: 600; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 6px 18px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); margin: 0 auto; text-align: center;">
+                <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.85rem; color: #f5a623;"></i>
+                <span class="last-updated-text"></span>
+            </div>
+
             <!-- Statistics Card -->
             <div class="stats-panel" id="stats-panel">
                 <div class="stats-info">
@@ -86,15 +93,31 @@
     <main class="app-main">
         <!-- View Switcher Segmented Control -->
         <div class="view-switch-container">
-            <div class="view-switcher">
+            <div style="flex: 1; min-width: 150px;" class="desktop-only-spacer"></div>
+            
+            <div class="view-switcher" id="view-switcher">
                 <button class="view-btn active" data-view="grid-pane" id="btn-view-grid">
                     <i class="fa-solid fa-border-all"></i> PokéDex Grid
                 </button>
-                <button class="view-btn" data-view="hunt-pane" id="btn-view-hunt">
-                    <i class="fa-solid fa-list-check"></i> Hunt List
+                <button class="view-btn" data-view="candies-pane" id="btn-view-candies">
+                    <i class="fa-solid fa-candy-cane"></i> Candies
                 </button>
                 <button class="view-btn" data-view="rotations-pane" id="btn-view-rotations">
                     <i class="fa-solid fa-circle-info"></i> Active Rotations
+                </button>
+                <button class="view-btn" data-view="todo-pane" id="btn-view-todo">
+                    <i class="fa-solid fa-list-check"></i> To-Do Guide
+                </button>
+                <button class="view-btn" data-view="friends-pane" id="btn-view-friends" style="position: relative; overflow: visible !important;">
+                    <i class="fa-solid fa-users"></i> Friends
+                    <span id="friends-badge" class="hidden" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">0</span>
+                </button>
+            </div>
+
+            <!-- Login / Auth Status Container -->
+            <div id="auth-status-container" style="display: flex; align-items: center; gap: 0.5rem; justify-content: flex-end; flex: 1; min-width: 250px;">
+                <button class="bulk-btn" id="auth-trigger-btn" title="Sign In or Sign Up" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.15); color: #818cf8; padding: 8px 14px; font-size: 0.8rem; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s, transform 0.1s; height: 38px;">
+                    <i class="fa-solid fa-user"></i> Login / Register
                 </button>
             </div>
         </div>
@@ -117,8 +140,6 @@
                     <button class="tab-btn" data-method="wild">Wild Spawns</button>
                     <button class="tab-btn" data-method="egg">Egg Hatches</button>
                     <button class="tab-btn" data-method="raid">Raids</button>
-                    <button class="tab-btn" data-method="special">Special</button>
-                    <button class="tab-btn" data-method="unavailable">Unavailable</button>
                 </nav>
             </div>
 
@@ -181,25 +202,17 @@
             </div>
         </section>
 
-        <!-- PANE 2: Checklist categorized by tabs (Hunt List) -->
-        <section class="view-pane hidden" id="hunt-pane">
-            <div class="grid-container" id="hunt-grid" aria-live="polite">
-                <!-- Injected missing cards -->
-            </div>
-            
-            <div class="empty-state hidden" id="empty-hunt-state">
-                <i class="fa-solid fa-trophy" style="color: var(--accent-green); filter: drop-shadow(0 0 10px var(--accent-green-glow));"></i>
-                <h3>No missing Pokémon!</h3>
-                <p>Congratulations, Trainer! You have completed your collection for this category.</p>
-            </div>
-        </section>
+
 
         <!-- PANE 3: Active Rotations Info Panel -->
         <section class="view-pane hidden" id="rotations-pane">
             <!-- Rotations Sub-Navigation tabs -->
             <div class="rotations-subnav-container">
                 <nav class="rotations-subnav" id="rotations-subnav" aria-label="Rotations Category Selector">
-                    <button class="subnav-btn active" data-target="rotations-raids-section">
+                    <button class="subnav-btn active" data-target="rotations-events-section">
+                        <i class="fa-solid fa-calendar-days"></i> Events
+                    </button>
+                    <button class="subnav-btn" data-target="rotations-raids-section">
                         <i class="fa-solid fa-shield-halved"></i> Raid Bosses
                     </button>
                     <button class="subnav-btn" data-target="rotations-eggs-section">
@@ -208,7 +221,36 @@
                     <button class="subnav-btn" data-target="rotations-quests-section">
                         <i class="fa-solid fa-scroll"></i> Quest Encounters
                     </button>
+                    <button class="subnav-btn" data-target="rotations-rocket-section">
+                        <i class="fa-solid fa-user-ninja"></i> Team GO Rocket
+                    </button>
+                    <button class="subnav-btn" data-target="rotations-party-section">
+                        <i class="fa-solid fa-users"></i> Party Challenges
+                    </button>
                 </nav>
+            </div>
+
+            <!-- Active Events -->
+            <div class="rotation-section" id="rotations-events-section">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <i class="fa-solid fa-calendar-days" style="color: var(--accent-color);"></i>
+                    <h2>Active & Upcoming Events</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
+                </div>
+                <div class="events-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 4px; border-radius: 8px; max-width: 400px;">
+                    <button class="event-tab-btn active" data-tab="active" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <i class="fa-solid fa-play"></i> Active
+                    </button>
+                    <button class="event-tab-btn" data-tab="upcoming" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                        <i class="fa-solid fa-forward"></i> Upcoming
+                    </button>
+                </div>
+                <div id="events-list-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
+                    <!-- Dynamic events populated here -->
+                </div>
             </div>
 
             <!-- Active Raids -->
@@ -239,12 +281,300 @@
                     <i class="fa-solid fa-scroll"></i>
                     <h2>Active Quest Encounters</h2>
                 </div>
-                <div class="rotation-grid-layout" id="active-research-grid">
+                <div id="active-research-grid">
                     <!-- Dynamic quest reward cards -->
+                </div>
+            </div>
+
+            <!-- Team GO Rocket -->
+            <div class="rotation-section hidden" id="rotations-rocket-section">
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-user-ninja"></i>
+                    <h2>Team GO Rocket Lineups</h2>
+                </div>
+                <div id="rocket-lineups-container">
+                    <!-- Dynamic Team Rocket sections with slots and encounter indicators -->
+                </div>
+            </div>
+
+            <!-- Party Challenges -->
+            <div class="rotation-section hidden" id="rotations-party-section">
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-users" style="color: var(--accent-color);"></i>
+                    <h2>Party Play Challenges</h2>
+                </div>
+                <div id="party-rewards-grid">
+                    <!-- Dynamic party play rewards -->
+            </div>
+        </section>
+
+        <!-- PANE 4: Candies Calculator Panel -->
+        <section class="view-pane hidden" id="candies-pane">
+            <div class="rotation-section-header">
+                <i class="fa-solid fa-candy-cane" style="color: var(--accent-color);"></i>
+                <h2>Candies & Evolving Calculator</h2>
+            </div>
+            
+            <div class="candies-controls-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
+                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; max-width: 600px;">
+                    Set your current candy count for each evolution family to see how many kilometers you need to walk with your buddy to evolve the remaining Pokémon.
+                </p>
+                <div class="candies-sort-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                    <label for="candies-sort" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Sort by:</label>
+                    <select id="candies-sort" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
+                        <option value="num-asc">Dex Number</option>
+                        <option value="name-asc">Name</option>
+                        <option value="needed-desc">Candies Needed</option>
+                        <option value="needed-asc">Candies Needed (Least)</option>
+                        <option value="km-desc">Kilometers to Walk</option>
+                        <option value="km-asc">Kilometers to Walk (Least)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Candies Summary Cards -->
+            <div class="candies-summary-bar" style="background: rgba(245, 166, 35, 0.04); border: 1px solid rgba(245, 166, 35, 0.1); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-person-walking" style="font-size: 1.1rem; color: var(--accent-color);"></i>
+                    <span style="color: #94a3b8; font-weight: 600;">Total Buddy Distance:</span>
+                    <strong id="candies-total-km" style="color: var(--text-primary); font-size: 0.95rem;">0.0 km</strong>
+                </div>
+                <div>
+                    <span style="color: #94a3b8; font-weight: 600;">Total Candies Needed:</span>
+                    <strong id="candies-total-candies" style="color: var(--accent-color); font-size: 0.95rem;">0</strong>
+                </div>
+            </div>
+
+            <div class="candies-sections-container">
+                <div class="candies-category-section" id="cat-ready-evolve">
+                    <h3 class="candies-category-title" style="color: var(--accent-green); border-bottom: 2px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Ready to Evolve</h3>
+                    <div class="candies-grid" id="grid-ready-evolve"></div>
+                </div>
+                
+                <div class="candies-category-section" id="cat-need-candies" style="margin-top: 2rem;">
+                    <h3 class="candies-category-title" style="color: var(--accent-color); border-bottom: 2px solid rgba(245, 166, 35, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-person-walking"></i> Needs Candies</h3>
+                    <div class="candies-grid" id="grid-need-candies"></div>
+                </div>
+                
+                <div class="candies-category-section" id="cat-transferred-base" style="margin-top: 2rem;">
+                    <h3 class="candies-category-title" style="color: #60a5fa; border-bottom: 2px solid rgba(96, 165, 250, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-arrows-spin"></i> Transferred Base Pokémon</h3>
+                    <div class="candies-grid" id="grid-transferred-base"></div>
+                </div>
+
+                <div class="candies-category-section" id="cat-missing-base" style="margin-top: 2rem;">
+                    <h3 class="candies-category-title" style="color: #ef4444; border-bottom: 2px solid rgba(239, 68, 68, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-question"></i> Missing Base Pokémon</h3>
+                    <div class="candies-grid" id="grid-missing-base"></div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- PANE 4: To-Do Guide Panel -->
+        <section class="view-pane hidden" id="todo-pane">
+            <div class="rotation-section-header">
+                <i class="fa-solid fa-list-check" style="color: var(--accent-color);"></i>
+                <h2>To-Do Guide</h2>
+            </div>
+            
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                Based on your current Pokédex, these are the active encounters and tasks you should focus on to obtain missing species or earn candies.
+            </p>
+
+            <div class="todo-grid-layout" style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+                <!-- Missing Priorities Section -->
+                <div class="todo-section" id="todo-missing-section" style="background: rgba(239, 68, 68, 0.03); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: #ef4444; font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-triangle-exclamation"></i> High Priority: Get Missing Pokémon
+                    </h3>
+                    <div id="todo-missing-list" class="todo-list-grid">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+
+                <!-- Candy Needed Section -->
+                <div class="todo-section" id="todo-candies-section" style="background: rgba(245, 166, 35, 0.03); border: 1px solid rgba(245, 166, 35, 0.15); border-radius: 12px; padding: 1.5rem;">
+                    <h3 style="color: var(--accent-color); font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-candy-cane"></i> Medium Priority: Collect Candies
+                    </h3>
+                    <div id="todo-candies-list" class="todo-list-grid">
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- PANE 5: Friends Panel -->
+        <section class="view-pane hidden" id="friends-pane">
+            <div class="rotation-section-header">
+                <i class="fa-solid fa-users" style="color: var(--accent-color);"></i>
+                <h2>Trainer Friends & Trades</h2>
+            </div>
+            
+            <div id="friends-auth-warning" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 8px; padding: 1.5rem; text-align: center; margin-bottom: 2rem;">
+                <p style="color: #f87171; font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem;">
+                    You must be logged in to access the Friends & Trade system.
+                </p>
+                <button class="bulk-btn" id="friends-login-btn" style="background: var(--accent-color); color: #fff; padding: 10px 20px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.1s;">
+                    Log In
+                </button>
+            </div>
+
+            <div id="friends-main-content" class="hidden">
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <!-- Left Side: Friends List -->
+                    <div style="flex: 1; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+                        <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-user-plus"></i> Add a Friend</h3>
+                        <form id="add-friend-form" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                            <input type="text" id="friend-username-input" required placeholder="Friend's username" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem; flex-grow: 1;">
+                            <button type="submit" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 15px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Add</button>
+                        </form>
+                        <div id="add-friend-msg" style="font-size: 0.82rem; font-weight: 600; margin-top: -1rem; margin-bottom: 1rem; display: none;"></div>
+
+                        <!-- Pending Friend Requests -->
+                        <div id="pending-requests-section" class="hidden" style="margin-bottom: 1.5rem;">
+                            <h3 style="color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-bell"></i> Pending Requests (<span id="pending-requests-count">0</span>)</h3>
+                            <div id="pending-requests-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-list"></i> Your Friends</h3>
+                        <div id="friends-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Populated dynamically -->
+                            <p style="color: #64748b; font-size: 0.9rem;">No friends added yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Comparison & Trade Matches -->
+                    <div style="flex: 2; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                        <div id="comparison-empty-state" style="text-align: center; padding: 3rem 1rem; color: #64748b;">
+                            <i class="fa-solid fa-handshake-angle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                            <p style="font-size: 1rem; font-weight: 600; margin: 0;">Select a friend from the list to view potential trades.</p>
+                        </div>
+
+                        <div id="comparison-content" class="hidden">
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <div>
+                                    <h3 id="comparison-friend-name" style="color: var(--text-primary); margin: 0;">Comparing with Trainer</h3>
+                                    <p style="color: #94a3b8; font-size: 0.8rem; margin: 0; margin-top: 2px;">Find matches for trade opportunities</p>
+                                </div>
+                                <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
+                            </div>
+
+                            <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
+                                <button class="comp-tab-btn active" data-tab="stats-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                    <i class="fa-solid fa-chart-simple"></i> Compare Stats
+                                </button>
+                                <button class="comp-tab-btn" data-tab="give-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> You can give them
+                                </button>
+                                <button class="comp-tab-btn" data-tab="get-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                    <i class="fa-solid fa-arrow-down-left-from-square"></i> They can give you
+                                </button>
+                            </div>
+
+                            <div class="comp-pane" id="stats-tab-pane">
+                                <div id="friends-stats-container">
+                                    <!-- Populated dynamically via JS -->
+                                </div>
+                            </div>
+                            <div class="comp-pane hidden" id="give-tab-pane">
+                                <div class="rotation-grid-layout" id="friends-give-grid"></div>
+                            </div>
+                            <div class="comp-pane hidden" id="get-tab-pane">
+                                <div class="rotation-grid-layout" id="friends-get-grid"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay hidden" id="auth-modal" role="dialog" aria-modal="true">
+        <div class="modal-card" style="max-width: 400px; padding: 2rem;">
+            <button class="modal-close" id="auth-close-btn" aria-label="Close Login">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="modal-header" style="text-align: center; margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+                <svg viewBox="0 0 100 100" style="width: 50px; height: 50px; margin-bottom: 0.75rem;">
+                    <circle cx="50" cy="50" r="46" fill="none" stroke="#ef4444" stroke-width="8"/>
+                    <path d="M4 50 H96" stroke="#ef4444" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="18" fill="#111b2e" stroke="#ef4444" stroke-width="8"/>
+                    <circle cx="50" cy="50" r="8" fill="#f5a623"/>
+                </svg>
+                <h2 id="auth-modal-title" style="font-size: 1.5rem; font-weight: 800; color: var(--text-primary);">Trainer Sign In</h2>
+                <p id="auth-modal-subtitle" style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.25rem;">Access your Cloud PokéDex Collection</p>
+            </div>
+            <form id="auth-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left;">
+                    <label for="auth-email" style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Email Address</label>
+                    <input type="email" id="auth-email" required placeholder="trainer@sandex.com" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left;">
+                    <label for="auth-password" style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Password</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem;">
+                </div>
+                <div id="auth-confirm-password-container" class="hidden" style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left;">
+                    <label for="auth-confirm-password" style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Confirm Password</label>
+                    <input type="password" id="auth-confirm-password" placeholder="••••••••" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem;">
+                </div>
+                <div id="auth-forgot-container" style="text-align: right; margin-top: -0.5rem; margin-bottom: 0.25rem;">
+                    <a href="#" id="auth-forgot-link" style="color: var(--accent-color); font-size: 0.78rem; font-weight: 600; text-decoration: none;">Forgot Password?</a>
+                </div>
+                <div id="auth-error-msg" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; text-align: center; display: none; line-height: 1.4;"></div>
+                <button type="submit" id="auth-submit-btn" style="background: linear-gradient(135deg, var(--accent-color) 0%, #d97706 100%); color: #fff; font-size: 0.9rem; font-weight: 700; border: none; border-radius: 8px; padding: 12px; cursor: pointer; transition: transform 0.1s, filter 0.2s; margin-top: 0.5rem;">
+                    Sign In
+                </button>
+            </form>
+
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin: 1rem 0; color: #64748b; font-size: 0.8rem; font-weight: 600;">
+                <span style="border-top: 1px solid var(--border-color); flex-grow: 1;"></span>
+                <span>OR</span>
+                <span style="border-top: 1px solid var(--border-color); flex-grow: 1;"></span>
+            </div>
+            
+            <button id="google-auth-btn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 10px; font-size: 0.9rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; transition: background 0.2s;">
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px;">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                Sign In with Google
+            </button>
+
+            <div style="margin-top: 1.5rem; text-align: center; font-size: 0.85rem; color: #94a3b8;">
+                <span id="auth-switch-text">Don't have an account?</span>
+                <a href="#" id="auth-switch-link" style="color: var(--accent-color); font-weight: 600; text-decoration: none; margin-left: 0.25rem;">Create Account</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Username Setup Modal -->
+    <div class="modal-overlay hidden" id="username-setup-modal" role="dialog" aria-modal="true">
+        <div class="modal-card" style="max-width: 400px; padding: 2.5rem; text-align: center;">
+            <div class="modal-header" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; align-items: center;">
+                <i class="fa-solid fa-user-gear" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 0.75rem;"></i>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary);">Choose Trainer Username</h2>
+                <p style="color: #94a3b8; font-size: 0.85rem; margin-top: 0.25rem;">Choose a unique username to identify yourself to your friends and share trades.</p>
+            </div>
+            <form id="username-setup-form" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem; text-align: left;">
+                    <label for="setup-username" style="color: #94a3b8; font-size: 0.8rem; font-weight: 600;">Trainer Username</label>
+                    <input type="text" id="setup-username" required placeholder="TrainerName" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem;">
+                </div>
+                <div id="username-setup-error" style="color: #ef4444; font-size: 0.8rem; font-weight: 600; text-align: center; display: none; line-height: 1.4;"></div>
+                <button type="submit" id="username-setup-btn" style="background: linear-gradient(135deg, var(--accent-color) 0%, #d97706 100%); color: #fff; font-size: 0.9rem; font-weight: 700; border: none; border-radius: 8px; padding: 12px; cursor: pointer; transition: transform 0.1s, filter 0.2s; margin-top: 0.5rem;">
+                    Confirm Username
+                </button>
+            </form>
+        </div>
+    </div>
 
     <!-- Pokemon Info Modal -->
     <div class="modal-overlay hidden" id="detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-pokemon-name">
@@ -278,6 +608,9 @@
                     <button class="modal-tab-btn" data-target="stats-tab">
                         <i class="fa-solid fa-chart-simple"></i> Base Stats
                     </button>
+                    <button class="modal-tab-btn" data-target="matchups-tab">
+                        <i class="fa-solid fa-shield-halved"></i> Type Matchups
+                    </button>
                 </div>
 
                 <!-- Tab Contents -->
@@ -305,6 +638,14 @@
                             <!-- Populated dynamically -->
                         </div>
                     </div>
+
+                    <!-- Type Matchups Tab -->
+                    <div class="tab-pane" id="matchups-tab">
+                        <h3 class="pane-title">Type Effectiveness</h3>
+                        <div class="matchups-grid" id="type-matchups">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -317,13 +658,43 @@
         </div>
     </div>
 
+    <!-- Event Info Modal -->
+    <div class="modal-overlay hidden" id="event-modal" role="dialog" aria-modal="true">
+        <div class="modal-card" style="max-width: 600px;">
+            <button class="modal-close" id="event-modal-close-btn" aria-label="Close Details">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="event-modal-banner" style="width: 100%; height: 180px; background: #0b1322; background-size: cover; background-position: center; position: relative;">
+                <div id="event-modal-category" style="position: absolute; bottom: 12px; left: 12px;"></div>
+            </div>
+            <div class="modal-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <span id="event-modal-date" style="font-size: 0.8rem; color: var(--text-secondary); font-weight: 500;"></span>
+                    <div id="event-modal-countdown"></div>
+                </div>
+                <h2 id="event-modal-title" style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0;"></h2>
+                
+                <p id="event-modal-desc" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; margin: 0;"></p>
+                
+                <div id="event-modal-bonuses" style="margin-top: 0.5rem;"></div>
+                <div id="event-modal-spawns" style="margin-top: 0.5rem;"></div>
+            </div>
+            <div class="modal-footer" style="padding: 1rem 1.5rem; display: flex; justify-content: flex-end; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.15); border-radius: 0 0 16px 16px;">
+                <a id="event-modal-link" href="" target="_blank" class="tab-btn active" style="font-size: 0.85rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 8px; background: var(--accent-color); color: #000;">
+                    Read on LeekDuck <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="app-footer">
-        <p>&copy; 2026 SanDex Pro. Built for Pokémon GO Trainers.</p>
+        <p>&copy; 2026 SanDex. Built for Pokémon GO Trainers.</p>
+        <p class="disclaimer" style="margin-bottom: 0.5rem;">Event, egg, raid and research rotation data powered by <a href="https://leekduck.com" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">Leek Duck</a> (via ScrapedDuck API).</p>
         <p class="disclaimer">This application is an unofficial fan project and is not affiliated with Niantic, Nintendo, or The Pokémon Company.</p>
     </footer>
 
     <!-- Custom JavaScript -->
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>

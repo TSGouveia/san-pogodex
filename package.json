@@ -1,5 +1,5 @@
 {
-  "name": "pogo-silphroad-collection-dex",
+  "name": "san-pogodex",
   "version": "1.0.0",
   "description": "Rastreador de Coleção do Pokémon GO inspirado no Silph Road",
   "main": "index.html",
@@ -20,5 +20,8 @@
   "license": "ISC",
   "devDependencies": {
     "vite": "^5.0.0"
+  },
+  "dependencies": {
+    "firebase": "^12.17.1"
   }
 }

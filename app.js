@@ -35,6 +35,11 @@ import {
 let pokemonDatabase = [];
 let rawPokedexData = null;
 
+// Safe lowercasing helper function
+function safeLower(val) {
+    return (val && typeof val === 'string') ? val.toLowerCase() : (val != null ? String(val).toLowerCase() : '');
+}
+
 // Ntfy Notification helper for error alerts
 window.sendNtfyNotification = function(message, title = 'PoGo Website Warning', tags = 'warning') {
     try {
@@ -585,6 +590,97 @@ function findPokemonByName(name) {
     return null;
 }
 
+function normalizeRocketLineups(rawRocket) {
+    if (!rawRocket) return {};
+    if (!Array.isArray(rawRocket)) {
+        return typeof rawRocket === 'object' ? rawRocket : {};
+    }
+    const map = {};
+    rawRocket.forEach(lineup => {
+        let name = lineup.name || '';
+        name = name.replace(/^Team GO Rocket (Leader|Boss)\s+/i, '').trim();
+        const slots = [
+            {
+                slot: 1,
+                is_encounter: (lineup.firstPokemon || []).some(p => p.isEncounter),
+                pokemons: lineup.firstPokemon || []
+            },
+            {
+                slot: 2,
+                is_encounter: (lineup.secondPokemon || []).some(p => p.isEncounter),
+                pokemons: lineup.secondPokemon || []
+            },
+            {
+                slot: 3,
+                is_encounter: (lineup.thirdPokemon || []).some(p => p.isEncounter),
+                pokemons: lineup.thirdPokemon || []
+            }
+        ];
+        map[name] = slots;
+    });
+    return map;
+}
+
+async function loadScrapedDataFromFirestore() {
+    const api_key = "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU";
+    const project_id = "pogo-website-14a46";
+    const scraper_uid = "zrWesha0TuXpkC4cskDx9vSdSzT2";
+
+    try {
+        const authRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: 'scraper@pogowebsite.local', password: 'ScraperPassword123!', returnSecureToken: true })
+        });
+        if (!authRes.ok) throw new Error('Database auth failed');
+        const authData = await authRes.json();
+        
+        const docRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/users_data/${scraper_uid}`, {
+            headers: { 'Authorization': `Bearer ${authData.idToken}` }
+        });
+        if (!docRes.ok) throw new Error('Firestore document fetch failed');
+        const docData = await docRes.json();
+        const fields = docData.fields || {};
+
+        return {
+            events: fields.events?.stringValue ? JSON.parse(fields.events.stringValue) : null,
+            raids: fields.raids?.stringValue ? JSON.parse(fields.raids.stringValue) : null,
+            research: fields.research?.stringValue ? JSON.parse(fields.research.stringValue) : null,
+            eggs: fields.eggs?.stringValue ? JSON.parse(fields.eggs.stringValue) : null,
+            rocketLineups: fields.rocketLineups?.stringValue ? JSON.parse(fields.rocketLineups.stringValue) : null,
+            updatedAt: fields.updatedAt?.stringValue || null
+        };
+    } catch (err) {
+        console.warn("Could not fetch scraped data from Firestore database, falling back to network endpoints:", err);
+        return null;
+    }
+}
+
+function displayLastUpdatedTime(isoString) {
+    if (!isoString) return;
+    try {
+        const date = new Date(isoString);
+        if (isNaN(date.getTime())) return;
+
+        const options = {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        };
+        const formattedDate = date.toLocaleDateString('en-US', options);
+
+        const badgeEls = document.querySelectorAll('.last-updated-badge');
+        const textEls = document.querySelectorAll('.last-updated-text');
+
+        badgeEls.forEach(el => el.style.display = 'inline-flex');
+        textEls.forEach(el => el.textContent = `Last Updated: ${formattedDate}`);
+    } catch (e) {
+        console.warn("Could not display last updated date:", e);
+    }
+}
+
 async function loadPokedex() {
     const loaderOverlay = document.getElementById('loader-overlay');
     const errorOverlay = document.getElementById('error-overlay');
@@ -599,45 +695,57 @@ async function loadPokedex() {
         let rawResearch = {};
         let rawEvents = {};
 
+        // Fetch scraped data from Firebase Firestore database
+        const dbScrapedData = await loadScrapedDataFromFirestore();
+
+        if (dbScrapedData) {
+            if (dbScrapedData.eggs) rawEggs = dbScrapedData.eggs;
+            if (dbScrapedData.raids) rawRaids = dbScrapedData.raids;
+            if (dbScrapedData.research) rawResearch = dbScrapedData.research;
+            if (dbScrapedData.rocketLineups) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
+            if (dbScrapedData.events) rawEvents = dbScrapedData.events;
+            if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
+        }
+
         const [pokedexRes, eggsRes, raidsRes, researchRes, typesRes, buddyRes, rocketRes, eventsRes] = await Promise.all([
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-            fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json'),
+            dbScrapedData?.eggs ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/eggs.json').catch(() => null),
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/raidboss.json'),
-            fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json'),
+            dbScrapedData?.research ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/research.json').catch(() => null),
             fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
             fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json'),
-            fetch('https://raw.githubusercontent.com/zhenga8533/leak-duck/data/rocket_lineups.json').catch(() => null),
-            fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json').catch(() => null)
+            dbScrapedData?.rocketLineups ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/zhenga8533/leak-duck/data/rocket_lineups.json').catch(() => null),
+            dbScrapedData?.events ? Promise.resolve(null) : fetch('https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json').catch(() => null)
         ]);
         
         if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
         const data = await pokedexRes.json();
         rawPokedexData = data;
         
-        if (eggsRes.ok) {
+        if (!dbScrapedData?.eggs && eggsRes && eggsRes.ok) {
             try {
                 rawEggs = await eggsRes.json();
             } catch (err) {
                 console.warn("Eggs API parsing failed:", err);
             }
         }
-        if (raidsRes.ok) {
+        if (raidsRes && raidsRes.ok && (!dbScrapedData || !dbScrapedData.raids)) {
             try {
                 rawRaids = await raidsRes.json();
             } catch (err) {
                 console.warn("Raids API parsing failed:", err);
             }
         }
-        if (researchRes.ok) {
+        if (!dbScrapedData?.research && researchRes && researchRes.ok) {
             try {
                 rawResearch = await researchRes.json();
             } catch (err) {
                 console.warn("Research API parsing failed:", err);
             }
         }
-        if (rocketRes && rocketRes.ok) {
+        if (!dbScrapedData?.rocketLineups && rocketRes && rocketRes.ok) {
             try {
-                liveRocket = await rocketRes.json();
+                liveRocket = normalizeRocketLineups(await rocketRes.json());
             } catch (err) {
                 console.warn("Rocket lineups API parsing failed:", err);
             }
@@ -649,7 +757,7 @@ async function loadPokedex() {
                 console.warn("Types API parsing failed:", err);
             }
         }
-        if (eventsRes && eventsRes.ok) {
+        if (!dbScrapedData?.events && eventsRes && eventsRes.ok) {
             try {
                 rawEvents = await eventsRes.json();
             } catch (err) {
@@ -780,9 +888,30 @@ async function loadPokedex() {
             });
         }
 
-        // 2. Parse Raid Bosses from pokemon-go-api (grouped currentList format)
+        // 2. Parse Raid Bosses from ScrapedDuck array or pokemon-go-api (grouped currentList format)
         liveRaids = [];
-        if (rawRaids && rawRaids.currentList) {
+        if (Array.isArray(rawRaids)) {
+            rawRaids.forEach(boss => {
+                const matchedPoke = findPokemonByName(boss.name);
+                let tier = boss.tier || '5-Star Raids';
+                const isShadow = safeLower(boss.name).startsWith('shadow') || safeLower(tier).includes('shadow');
+                if (isShadow && !tier.startsWith('Shadow')) {
+                    tier = 'Shadow ' + tier;
+                }
+                liveRaids.push({
+                    idName: matchedPoke ? matchedPoke.idName : boss.name,
+                    name: boss.name,
+                    tier: tier,
+                    image: boss.image || '',
+                    cp: boss.combatPower || null,
+                    shiny: boss.canBeShiny || false,
+                    types: boss.types || [],
+                    weatherBoosts: boss.boostedWeather || [],
+                    counters: {},
+                    battleResult: null
+                });
+            });
+        } else if (rawRaids && rawRaids.currentList) {
             const tierMapping = {
                 'mega': 'Mega Raids',
                 'lvl5': '5-Star Raids',
@@ -1315,9 +1444,12 @@ function updateDashboardStats() {
     progressBarFill.style.width = `${pct}%`;
     progressPctEl.textContent = `${pct}% Completed`;
     
-    // Update To-Do pane targets dynamically
+    // Update To-Do and Candies pane targets dynamically
     if (typeof renderToDoPane === 'function') {
         renderToDoPane();
+    }
+    if (typeof renderCandiesPane === 'function') {
+        renderCandiesPane();
     }
 }
 
@@ -1376,13 +1508,14 @@ function setupEventListeners() {
                     renderActiveRotations();
                 }
             } else if (targetPaneId === 'candies-pane') {
-                document.querySelector('.search-wrapper').classList.add('hidden');
+                document.querySelector('.search-wrapper').classList.remove('hidden');
                 document.querySelector('.radio-filters').classList.add('hidden');
                 document.querySelector('.bulk-actions').classList.add('hidden');
                 document.querySelector('.sort-wrapper').classList.add('hidden');
                 document.getElementById('region-stats-badge').classList.add('hidden');
                 genTabsScroll.classList.add('hidden');
                 if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                renderCandiesPane();
             } else if (targetPaneId === 'todo-pane') {
                 document.querySelector('.search-wrapper').classList.add('hidden');
                 document.querySelector('.radio-filters').classList.add('hidden');
@@ -2638,10 +2771,12 @@ function renderActiveRotations() {
             const grid = sub.querySelector(`.rotation-grid-layout`);
             raidsByTier[tier].forEach(raid => {
                 const card = document.createElement('div');
-                const matchedPoke = pokemonDatabase.find(p => p.idName && raid.idName && p.idName.toLowerCase() === raid.idName.toLowerCase()) || pokemonDatabase.find(p => p.name && raid.name && p.name.toLowerCase() === raid.name.toLowerCase());
+                const raidName = safeLower(raid.name);
+                const raidIdName = safeLower(raid.idName);
+                const matchedPoke = pokemonDatabase.find(p => p.idName && raidIdName && safeLower(p.idName) === raidIdName) || pokemonDatabase.find(p => p.name && raidName && safeLower(p.name) === raidName);
                 // For Megas/forms, also try to find the base form for click/highlight purposes
                 const baseFormPoke = matchedPoke || (() => {
-                    const nameLower = raid.name.toLowerCase();
+                    const nameLower = raidName;
                     // Strip common form prefixes/suffixes to find base species
                     let baseName = nameLower
                         .replace(/^mega /, '')
@@ -2649,15 +2784,15 @@ function renderActiveRotations() {
                         .replace(/^shadow /, '')
                         .replace(/\s*\(.*\)$/, '')        // remove trailing (Altered Form) etc
                         .replace(/\s+(altered|origin|therian|incarnate|sky|land|standard|zen|ordinary|resolute|blade|shield|rapid-strike|single-strike)\s+form$/i, '')
-                        .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '')
-                                          return pokemonDatabase.find(p => p.name && p.name.toLowerCase() === baseName) || null;
+                        .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '');
+                    return pokemonDatabase.find(p => p.name && safeLower(p.name) === baseName) || null;
                 })();
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
-                card.setAttribute('data-scroll-target', `raid-${raid.name.toLowerCase().replace(/\s+/g, '-')}-${tier.toLowerCase().replace(/[^a-z0-9]/g, '')}`);
+                card.setAttribute('data-scroll-target', `raid-${raidName.replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`);
                 
                 // Try to get official artwork; only fall back to PoGo-style leekduck icon as last resort
                 let imgUrl = getPokemonImageUrl(raid.name, matchedPoke);
@@ -2719,9 +2854,10 @@ function renderActiveRotations() {
                         fog: 'fa-smog'
                     };
                     const badges = raid.weatherBoosts.map(w => {
-                        const wLower = w.toLowerCase().replace(/_/g, '').trim();
+                        const wName = typeof w === 'object' && w ? (w.name || '') : String(w || '');
+                        const wLower = safeLower(wName).replace(/_/g, '').trim();
                         const icon = wIcons[wLower] || 'fa-cloud-sun';
-                        return `<span class="weather-badge" style="font-size: 0.68rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 3px;" title="Boosted in ${w} weather"><i class="fa-solid ${icon}"></i> ${w}</span>`;
+                        return `<span class="weather-badge" style="font-size: 0.68rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 3px;" title="Boosted in ${wName} weather"><i class="fa-solid ${icon}"></i> ${wName}</span>`;
                     }).join(', ');
                     weatherHtml = `<div class="raid-weather-boosts" style="margin-top: 0.3rem; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span>Weather Boost:</span> ${badges}</div>`;
                 }
@@ -2828,7 +2964,7 @@ function renderActiveRotations() {
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
-                card.setAttribute('data-scroll-target', `egg-${egg.name.toLowerCase().replace(/\s+/g, '-')}-${eggT.toLowerCase().replace(/[^a-z0-9]/g, '')}`);
+                card.setAttribute('data-scroll-target', `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(eggT).replace(/[^a-z0-9]/g, '')}`);
                 
                 let imgUrl = getPokemonImageUrl(egg.name, matchedPoke);
                 if (!imgUrl) {
@@ -2932,7 +3068,7 @@ function renderActiveRotations() {
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item theme-blue ${highlightClass} spawn-animation`;
                 const keyName = matchedPoke ? matchedPoke.name : encounter.pokeName;
-                card.setAttribute('data-scroll-target', `quest-${keyName.toLowerCase().replace(/\s+/g, '-')}-${taskText.toLowerCase().replace(/[^a-z0-9]/g, '')}`);
+                card.setAttribute('data-scroll-target', `quest-${safeLower(keyName).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
                 
                 let imgUrl = getPokemonImageUrl(encounter.pokeName, matchedPoke);
                 if (!imgUrl) {
@@ -3097,7 +3233,7 @@ function renderPartyRewardsByQuest(container, data, cardTheme) {
             const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
             card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
-            card.setAttribute('data-scroll-target', `party-${item.name.toLowerCase().replace(/\s+/g, '-')}-${taskText.toLowerCase().replace(/[^a-z0-9]/g, '')}`);
+            card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
             
             let imgUrl = matchedPoke ? matchedPoke.img : '';
             if (!imgUrl) {
@@ -3205,14 +3341,14 @@ function renderRocketLineups() {
 
     const renderCharacter = (name, slotsData) => {
         const charEl = document.createElement('div');
-        charEl.setAttribute('data-scroll-target', `rocket-${name.toLowerCase().replace(/\s+/g, '-')}`);
+        charEl.setAttribute('data-scroll-target', `rocket-${safeLower(name).replace(/\s+/g, '-')}`);
 
         // Build slot data and return the charEl after appending real DOM poke cards
         const buildSlots = () => {
             const slotsContainer = charEl.querySelector('.rocket-slots-container');
             if (!slotsContainer) return;
             slotsData.forEach((slot, slotIndex) => {
-                const isSlotEncounter = slot.is_encounter;
+                const isSlotEncounter = slot.slot === 1 || slot.is_encounter;
                 const slotEl = document.createElement('div');
                 slotEl.className = 'rocket-slot';
                 slotEl.style.cssText = 'display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.15); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); flex: 1;';
@@ -3227,20 +3363,23 @@ function renderRocketLineups() {
                 pokeList.style.cssText = 'display: flex; flex-direction: column; gap: 6px;';
 
                 slot.pokemons.forEach(poke => {
-                    const matchedPoke = pokemonDatabase.find(p => p.name && poke.name && p.name.toLowerCase() === poke.name.toLowerCase());
+                    const pokeNameStr = safeLower(poke && typeof poke === 'object' ? poke.name : poke);
+                    const matchedPoke = pokemonDatabase.find(p => p.name && safeLower(p.name) === pokeNameStr);
                     const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                     const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
                     const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                    const isEncounterPoke = isSlotEncounter || (poke && (poke.isEncounter || poke.is_encounter));
 
                     // Format raw API name for display (e.g. "MEGA BLAZIKEN" -> "Mega Blaziken")
-                    const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(poke.name);
+                    const rawName = poke && typeof poke === 'object' ? poke.name : poke;
+                    const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(rawName);
 
                     let highlightClass = '';
-                    if (isSlotEncounter) {
+                    if (isEncounterPoke) {
                         highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                     }
 
-                    const isShiny = poke.shiny_available || false;
+                    const isShiny = (poke && (poke.canBeShiny || poke.shiny_available)) || false;
                     const shinyHtml = isShiny ? `
                         <svg class="shiny-icon-inline" viewBox="0 0 24 24" fill="currentColor" title="Shiny Available" style="width: 12px; height: 12px; color: #f5a623; display: inline-block; vertical-align: middle; margin-left: 4px; filter: drop-shadow(0 0 2px rgba(245, 166, 35, 0.6));">
                             <path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/>
@@ -3248,14 +3387,14 @@ function renderRocketLineups() {
                     ` : '';
 
                     // Always use PokeAPI official artwork (never raw asset_url which may be shiny/wrong)
-                    let imgUrl = getPokemonImageUrl(poke.name, matchedPoke);
+                    let imgUrl = getPokemonImageUrl(rawName, matchedPoke);
                     if (!imgUrl && matchedPoke) {
                         imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
                     }
                     if (!imgUrl) imgUrl = '';
 
                     const statusBadges = [];
-                    if (isSlotEncounter) {
+                    if (isEncounterPoke) {
                         statusBadges.push(`<span style="background: linear-gradient(135deg, #10b981, #059669); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Catchable</span>`);
                         if (isTransferred) {
                             statusBadges.push(`<span style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>`);
@@ -3793,7 +3932,6 @@ if (googleAuthBtn) {
         const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobileDevice) {
-            console.log("Mobile device detected. Launching Google Redirect sign-in...");
             try {
                 await signInWithRedirect(auth, provider);
             } catch (err) {
@@ -3802,7 +3940,6 @@ if (googleAuthBtn) {
                 authErrorMsg.style.display = 'block';
             }
         } else {
-            console.log("Desktop detected. Launching Google Popup sign-in...");
             try {
                 await signInWithPopup(auth, provider);
                 closeAuthModal();
@@ -3811,7 +3948,6 @@ if (googleAuthBtn) {
                 // Fallback to redirect if popup is blocked, closed, or unsupported
                 const fallbackCodes = ['auth/popup-blocked', 'auth/popup-closed-by-user', 'auth/operation-not-supported-in-this-environment'];
                 if (fallbackCodes.includes(err.code)) {
-                    console.log(`Google Popup failed (${err.code}). Falling back to Google Redirect login...`);
                     try {
                         await signInWithRedirect(auth, provider);
                     } catch (redirectErr) {
@@ -3997,9 +4133,13 @@ function isReadyToEvolve(poke) {
 
 function getBuddyDistanceForFamily(family) {
     let dist = buddyDistances[family.base.id];
+    if (dist === undefined) dist = buddyDistances[Number(family.base.id)];
+    if (dist === undefined) dist = buddyDistances[String(family.base.id)];
     if (dist !== undefined) return dist;
     for (const member of family.members) {
         dist = buddyDistances[member.id];
+        if (dist === undefined) dist = buddyDistances[Number(member.id)];
+        if (dist === undefined) dist = buddyDistances[String(member.id)];
         if (dist !== undefined) return dist;
     }
     return undefined;
@@ -4056,7 +4196,7 @@ function renderCandiesPane() {
     // Filter families that have at least one evolution and at least one missing member
     let evolutionFamilies = Object.values(families).filter(f => {
         const hasEvolution = f.members.length > 1;
-        const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)));
+        const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
         return hasEvolution && hasMissingMember;
     });
 
@@ -4074,7 +4214,7 @@ function renderCandiesPane() {
     // Compute metrics for each family
     const familyDataList = evolutionFamilies.map(family => {
         const baseId = family.base.id;
-        const currentCandies = userCandies[baseId] || 0;
+        const currentCandies = (userCandies[baseId] !== undefined) ? userCandies[baseId] : ((userCandies[Number(baseId)] !== undefined) ? userCandies[Number(baseId)] : 0);
         
         let totalNeeded = 0;
         family.members.forEach(member => {
@@ -5494,21 +5634,23 @@ function renderToDoPane() {
     // 1. Check Raids
     if (typeof liveRaids !== 'undefined' && Array.isArray(liveRaids)) {
         liveRaids.forEach(raid => {
-            const matched = pokemonDatabase.find(p => p.idName && raid.idName && p.idName.toLowerCase() === raid.idName.toLowerCase()) || 
-                            pokemonDatabase.find(p => p.name && raid.name && p.name.toLowerCase() === raid.name.toLowerCase());
+            const raidName = safeLower(raid.name);
+            const raidIdName = safeLower(raid.idName);
+            const matched = pokemonDatabase.find(p => p.idName && raidIdName && safeLower(p.idName) === raidIdName) || 
+                            pokemonDatabase.find(p => p.name && raidName && safeLower(p.name) === raidName);
             if (matched) {
-                let tierLabel = raid.tier || 'Raid';
+                let tierLabel = String(raid.tier || 'Raid');
                 if (tierLabel.startsWith('lvl')) {
                     tierLabel = 'Tier ' + tierLabel.substring(3);
-                } else if (tierLabel.toLowerCase().includes('mega')) {
+                } else if (safeLower(tierLabel).includes('mega')) {
                     tierLabel = 'Mega Raid';
-                } else if (tierLabel.toLowerCase().includes('shadow')) {
+                } else if (safeLower(tierLabel).includes('shadow')) {
                     tierLabel = 'Shadow ' + tierLabel.replace('shadow_', '').replace('lvl', 'Tier ');
                 }
                 
                 const isMiss = isPokemonMissing(matched);
                 const isCandy = needsCandies(matched);
-                const key = `raid-${matched.name.toLowerCase().replace(/\s+/g, '-')}-${(raid.tier || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isMiss) {
                     addPriority(matched, 'Missing', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
@@ -5540,7 +5682,7 @@ function renderToDoPane() {
                 const eggDist = getEggFriendlyName(egg.eggT);
                 const isMiss = isPokemonMissing(matched);
                 const isCandy = needsCandies(matched);
-                const key = `egg-${egg.name.toLowerCase().replace(/\s+/g, '-')}-${(egg.eggT || '').toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                const key = `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(egg.eggT).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isMiss) {
                     addPriority(matched, 'Missing', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
@@ -5557,11 +5699,12 @@ function renderToDoPane() {
             if (task.rewards) {
                 task.rewards.forEach(reward => {
                     if (reward.type === 'encounter' && reward.name) {
-                        const matched = pokemonDatabase.find(p => p.name.toLowerCase() === reward.name.toLowerCase()) || pokemonDatabase.find(p => p.id == reward.dex);
+                        const rName = safeLower(reward.name);
+                        const matched = pokemonDatabase.find(p => safeLower(p.name) === rName) || pokemonDatabase.find(p => p.id == reward.dex);
                         if (matched) {
                             const isMiss = isPokemonMissing(matched);
                             const isCandy = needsCandies(matched);
-                            const key = `quest-${matched.name.toLowerCase().replace(/\s+/g, '-')}-${task.text.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                            const key = `quest-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(task.text).replace(/[^a-z0-9]/g, '')}`;
 
                             if (isMiss) {
                                 addPriority(matched, 'Missing', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
@@ -5582,16 +5725,19 @@ function renderToDoPane() {
                 charData.forEach(slot => {
                     if (slot.is_encounter && slot.pokemons) {
                         slot.pokemons.forEach(p => {
-                            const matched = pokemonDatabase.find(poke => poke.name.toLowerCase() === p.name.toLowerCase());
-                            if (matched) {
-                                const isMiss = isPokemonMissing(matched);
-                                const isCandy = needsCandies(matched);
-                                const key = `rocket-${charName.toLowerCase().replace(/\s+/g, '-')}`;
+                            const pName = safeLower(p && typeof p === 'object' ? p.name : p);
+                            if (pName) {
+                                const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName);
+                                if (matched) {
+                                    const isMiss = isPokemonMissing(matched);
+                                    const isCandy = needsCandies(matched);
+                                    const key = `rocket-${safeLower(charName).replace(/\s+/g, '-')}`;
 
-                                if (isMiss) {
-                                    addPriority(matched, 'Missing', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
-                                } else if (isCandy) {
-                                    addPriority(matched, 'Candy', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                    if (isMiss) {
+                                        addPriority(matched, 'Missing', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                    } else if (isCandy) {
+                                        addPriority(matched, 'Candy', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                    }
                                 }
                             }
                         });
@@ -5604,11 +5750,12 @@ function renderToDoPane() {
     // 5. Check Party Challenges
     if (typeof partyRewardsData !== 'undefined' && Array.isArray(partyRewardsData)) {
         partyRewardsData.forEach(party => {
-            const matched = pokemonDatabase.find(p => p.id == party.dex) || pokemonDatabase.find(p => p.name.toLowerCase() === party.name.toLowerCase());
+            const pName = safeLower(party.name);
+            const matched = pokemonDatabase.find(p => p.id == party.dex) || pokemonDatabase.find(p => safeLower(p.name) === pName);
             if (matched) {
                 const isMiss = isPokemonMissing(matched);
                 const isCandy = needsCandies(matched);
-                const key = `party-${matched.name.toLowerCase().replace(/\s+/g, '-')}-${party.task.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+                const key = `party-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(party.task).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isMiss) {
                     addPriority(matched, 'Missing', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
