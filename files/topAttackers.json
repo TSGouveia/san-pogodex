@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "updatedAt": "2026-08-31T22:34:39.599416+00:00",
+=======
+    "updatedAt": "2026-08-31T22:37:33.129132+00:00",
+>>>>>>> 50c8a3f (Update all 18 types to match DialgaDex 1:1 exact scale and baselines)
     "overall": [
         {
             "rank": 1,
@@ -174,9 +178,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Megahorn",
-                "dps": 16.19,
-                "er": 537.36,
-                "pct": "98.3%"
+                "dps": 27.59,
+                "pct": "159.2%"
             },
             {
                 "rank": 2,
@@ -190,9 +193,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 11.1,
-                "er": 358.04,
-                "pct": "67.4%"
+                "dps": 18.91,
+                "pct": "109.1%"
             },
             {
                 "rank": 3,
@@ -206,9 +208,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 10.91,
-                "er": 363.18,
-                "pct": "66.2%"
+                "dps": 18.6,
+                "pct": "107.3%"
             },
             {
                 "rank": 4,
@@ -222,9 +223,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Megahorn",
-                "dps": 10.17,
-                "er": 320.77,
-                "pct": "61.7%"
+                "dps": 17.33,
+                "pct": "100.0%"
             },
             {
                 "rank": 5,
@@ -238,9 +238,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 9.38,
-                "er": 297.05,
-                "pct": "57.0%"
+                "dps": 15.99,
+                "pct": "92.3%"
             },
             {
                 "rank": 6,
@@ -254,9 +253,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 9.38,
-                "er": 297.05,
-                "pct": "57.0%"
+                "dps": 15.99,
+                "pct": "92.3%"
             },
             {
                 "rank": 7,
@@ -270,9 +268,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 9.38,
-                "er": 297.05,
-                "pct": "57.0%"
+                "dps": 15.99,
+                "pct": "92.3%"
             },
             {
                 "rank": 8,
@@ -286,9 +283,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 9.38,
-                "er": 297.05,
-                "pct": "57.0%"
+                "dps": 15.99,
+                "pct": "92.3%"
             },
             {
                 "rank": 9,
@@ -302,9 +298,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 9.38,
-                "er": 297.05,
-                "pct": "57.0%"
+                "dps": 15.99,
+                "pct": "92.3%"
             },
             {
                 "rank": 10,
@@ -318,9 +313,8 @@
                 ],
                 "fastMove": "Bug Bite",
                 "chargedMove": "Bug Buzz",
-                "dps": 9.26,
-                "er": 298.43,
-                "pct": "56.2%"
+                "dps": 15.78,
+                "pct": "91.0%"
             },
             {
                 "rank": 11,
@@ -334,9 +328,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Bug Buzz",
-                "dps": 9.0,
-                "er": 268.14,
-                "pct": "54.6%"
+                "dps": 15.34,
+                "pct": "88.5%"
             },
             {
                 "rank": 12,
@@ -350,9 +343,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 8.8,
-                "er": 289.27,
-                "pct": "53.4%"
+                "dps": 14.99,
+                "pct": "86.5%"
             },
             {
                 "rank": 13,
@@ -366,9 +358,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 8.57,
-                "er": 262.03,
-                "pct": "52.0%"
+                "dps": 14.6,
+                "pct": "84.2%"
             },
             {
                 "rank": 14,
@@ -382,9 +373,8 @@
                 ],
                 "fastMove": "Bug Bite",
                 "chargedMove": "Megahorn",
-                "dps": 8.53,
-                "er": 253.49,
-                "pct": "51.8%"
+                "dps": 14.54,
+                "pct": "83.9%"
             },
             {
                 "rank": 15,
@@ -397,9 +387,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Megahorn",
-                "dps": 8.51,
-                "er": 287.15,
-                "pct": "51.7%"
+                "dps": 14.5,
+                "pct": "83.7%"
             },
             {
                 "rank": 16,
@@ -413,9 +402,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Megahorn",
-                "dps": 8.38,
-                "er": 269.18,
-                "pct": "50.9%"
+                "dps": 14.28,
+                "pct": "82.4%"
             },
             {
                 "rank": 17,
@@ -428,9 +416,8 @@
                 ],
                 "fastMove": "Water Shuriken",
                 "chargedMove": "Bug Buzz",
-                "dps": 8.37,
-                "er": 230.4,
-                "pct": "50.8%"
+                "dps": 14.27,
+                "pct": "82.3%"
             },
             {
                 "rank": 18,
@@ -444,9 +431,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 8.31,
-                "er": 244.94,
-                "pct": "50.5%"
+                "dps": 14.16,
+                "pct": "81.7%"
             },
             {
                 "rank": 19,
@@ -459,9 +445,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Megahorn",
-                "dps": 8.3,
-                "er": 249.99,
-                "pct": "50.4%"
+                "dps": 14.15,
+                "pct": "81.6%"
             },
             {
                 "rank": 20,
@@ -474,9 +459,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Megahorn",
-                "dps": 8.25,
-                "er": 233.37,
-                "pct": "50.1%"
+                "dps": 14.07,
+                "pct": "81.2%"
             }
         ],
         "Dark": [
@@ -492,9 +476,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Brutal Swing",
-                "dps": 13.68,
-                "er": 496.22,
-                "pct": "83.1%"
+                "dps": 23.31,
+                "pct": "124.3%"
             },
             {
                 "rank": 2,
@@ -508,9 +491,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Brutal Swing",
-                "dps": 12.79,
-                "er": 423.27,
-                "pct": "77.7%"
+                "dps": 21.79,
+                "pct": "116.2%"
             },
             {
                 "rank": 3,
@@ -524,9 +506,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Dark Pulse",
-                "dps": 11.01,
-                "er": 344.52,
-                "pct": "66.8%"
+                "dps": 18.76,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -540,9 +521,8 @@
                 ],
                 "fastMove": "Metal Sound",
                 "chargedMove": "Foul Play",
-                "dps": 10.76,
-                "er": 363.23,
-                "pct": "65.3%"
+                "dps": 18.34,
+                "pct": "97.8%"
             },
             {
                 "rank": 5,
@@ -556,9 +536,8 @@
                 ],
                 "fastMove": "Double Kick",
                 "chargedMove": "Darkest Lariat",
-                "dps": 10.58,
-                "er": 341.89,
-                "pct": "64.2%"
+                "dps": 18.04,
+                "pct": "96.2%"
             },
             {
                 "rank": 6,
@@ -572,9 +551,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Foul Play",
-                "dps": 10.55,
-                "er": 334.71,
-                "pct": "64.1%"
+                "dps": 17.98,
+                "pct": "95.8%"
             },
             {
                 "rank": 7,
@@ -588,9 +566,8 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Brutal Swing",
-                "dps": 10.49,
-                "er": 368.57,
-                "pct": "63.7%"
+                "dps": 17.87,
+                "pct": "95.3%"
             },
             {
                 "rank": 8,
@@ -604,9 +581,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Brutal Swing",
-                "dps": 10.43,
-                "er": 351.4,
-                "pct": "63.3%"
+                "dps": 17.77,
+                "pct": "94.8%"
             },
             {
                 "rank": 9,
@@ -620,9 +596,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Brutal Swing",
-                "dps": 10.4,
-                "er": 336.74,
-                "pct": "63.1%"
+                "dps": 17.72,
+                "pct": "94.4%"
             },
             {
                 "rank": 10,
@@ -636,9 +611,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Foul Play",
-                "dps": 9.77,
-                "er": 327.34,
-                "pct": "59.3%"
+                "dps": 16.65,
+                "pct": "88.7%"
             },
             {
                 "rank": 11,
@@ -651,9 +625,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Payback",
-                "dps": 9.29,
-                "er": 262.69,
-                "pct": "56.4%"
+                "dps": 15.83,
+                "pct": "84.4%"
             },
             {
                 "rank": 12,
@@ -667,9 +640,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Dark Pulse",
-                "dps": 9.25,
-                "er": 312.06,
-                "pct": "56.2%"
+                "dps": 15.76,
+                "pct": "84.0%"
             },
             {
                 "rank": 13,
@@ -683,9 +655,8 @@
                 ],
                 "fastMove": "Sucker Punch",
                 "chargedMove": "Payback",
-                "dps": 9.23,
-                "er": 301.82,
-                "pct": "56.0%"
+                "dps": 15.73,
+                "pct": "83.9%"
             },
             {
                 "rank": 14,
@@ -698,9 +669,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Dark Pulse",
-                "dps": 8.99,
-                "er": 270.59,
-                "pct": "54.6%"
+                "dps": 15.32,
+                "pct": "81.7%"
             },
             {
                 "rank": 15,
@@ -714,9 +684,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Foul Play",
-                "dps": 8.98,
-                "er": 261.27,
-                "pct": "54.5%"
+                "dps": 15.3,
+                "pct": "81.6%"
             },
             {
                 "rank": 16,
@@ -730,9 +699,8 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Brutal Swing",
-                "dps": 8.62,
-                "er": 263.67,
-                "pct": "52.3%"
+                "dps": 14.7,
+                "pct": "78.4%"
             },
             {
                 "rank": 17,
@@ -745,9 +713,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Brutal Swing",
-                "dps": 8.6,
-                "er": 260.86,
-                "pct": "52.2%"
+                "dps": 14.66,
+                "pct": "78.2%"
             },
             {
                 "rank": 18,
@@ -761,9 +728,8 @@
                 ],
                 "fastMove": "Sucker Punch",
                 "chargedMove": "Payback",
-                "dps": 8.44,
-                "er": 287.94,
-                "pct": "51.2%"
+                "dps": 14.38,
+                "pct": "76.7%"
             },
             {
                 "rank": 19,
@@ -776,9 +742,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dark Pulse",
-                "dps": 8.27,
-                "er": 281.24,
-                "pct": "50.2%"
+                "dps": 14.09,
+                "pct": "75.1%"
             },
             {
                 "rank": 20,
@@ -792,9 +757,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Crunch",
-                "dps": 8.11,
-                "er": 281.25,
-                "pct": "49.2%"
+                "dps": 13.81,
+                "pct": "73.6%"
             }
         ],
         "Dragon": [
@@ -810,9 +774,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Breaking Swipe",
-                "dps": 17.89,
-                "er": 625.13,
-                "pct": "108.6%"
+                "dps": 30.48,
+                "pct": "127.6%"
             },
             {
                 "rank": 2,
@@ -826,9 +789,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Outrage+",
-                "dps": 14.92,
-                "er": 522.49,
-                "pct": "90.6%"
+                "dps": 25.42,
+                "pct": "106.4%"
             },
             {
                 "rank": 3,
@@ -842,9 +804,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Breaking Swipe",
-                "dps": 14.57,
-                "er": 452.47,
-                "pct": "88.5%"
+                "dps": 24.83,
+                "pct": "103.9%"
             },
             {
                 "rank": 4,
@@ -858,9 +819,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Outrage",
-                "dps": 14.02,
-                "er": 466.99,
-                "pct": "85.1%"
+                "dps": 23.89,
+                "pct": "100.0%"
             },
             {
                 "rank": 5,
@@ -874,9 +834,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Breaking Swipe",
-                "dps": 13.93,
-                "er": 450.4,
-                "pct": "84.6%"
+                "dps": 23.75,
+                "pct": "99.4%"
             },
             {
                 "rank": 6,
@@ -890,9 +849,8 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Draco Meteor",
-                "dps": 13.77,
-                "er": 483.84,
-                "pct": "83.6%"
+                "dps": 23.47,
+                "pct": "98.2%"
             },
             {
                 "rank": 7,
@@ -906,9 +864,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Dragon Pulse",
-                "dps": 13.6,
-                "er": 457.14,
-                "pct": "82.6%"
+                "dps": 23.17,
+                "pct": "97.0%"
             },
             {
                 "rank": 8,
@@ -922,9 +879,8 @@
                 ],
                 "fastMove": "Air Slash",
                 "chargedMove": "Outrage",
-                "dps": 12.82,
-                "er": 437.1,
-                "pct": "77.8%"
+                "dps": 21.84,
+                "pct": "91.4%"
             },
             {
                 "rank": 9,
@@ -938,9 +894,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Outrage",
-                "dps": 12.38,
-                "er": 478.51,
-                "pct": "75.2%"
+                "dps": 21.1,
+                "pct": "88.3%"
             },
             {
                 "rank": 10,
@@ -954,9 +909,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Outrage",
-                "dps": 12.3,
-                "er": 436.78,
-                "pct": "74.7%"
+                "dps": 20.96,
+                "pct": "87.7%"
             },
             {
                 "rank": 11,
@@ -970,9 +924,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Breaking Swipe",
-                "dps": 11.97,
-                "er": 379.3,
-                "pct": "72.7%"
+                "dps": 20.4,
+                "pct": "85.4%"
             },
             {
                 "rank": 12,
@@ -986,9 +939,8 @@
                 ],
                 "fastMove": "Metal Claw",
                 "chargedMove": "Draco Meteor",
-                "dps": 11.91,
-                "er": 379.03,
-                "pct": "72.3%"
+                "dps": 20.29,
+                "pct": "84.9%"
             },
             {
                 "rank": 13,
@@ -1002,9 +954,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Outrage",
-                "dps": 11.84,
-                "er": 383.94,
-                "pct": "71.9%"
+                "dps": 20.17,
+                "pct": "84.4%"
             },
             {
                 "rank": 14,
@@ -1018,28 +969,11 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Draco Meteor",
-                "dps": 11.33,
-                "er": 360.68,
-                "pct": "68.8%"
+                "dps": 19.31,
+                "pct": "80.8%"
             },
             {
                 "rank": 15,
-                "name": "Salamence",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Dragon",
-                    "Flying"
-                ],
-                "fastMove": "Fire Fang",
-                "chargedMove": "Draco Meteor",
-                "dps": 11.26,
-                "er": 344.29,
-                "pct": "68.4%"
-            },
-            {
-                "rank": 16,
                 "name": "Dialga",
                 "form": "Origin",
                 "isShadow": false,
@@ -1050,9 +984,23 @@
                 ],
                 "fastMove": "Metal Claw",
                 "chargedMove": "Draco Meteor",
-                "dps": 11.26,
-                "er": 380.82,
-                "pct": "68.4%"
+                "dps": 19.19,
+                "pct": "80.3%"
+            },
+            {
+                "rank": 16,
+                "name": "Salamence",
+                "form": "",
+                "isShadow": true,
+                "isMega": false,
+                "types": [
+                    "Dragon",
+                    "Flying"
+                ],
+                "fastMove": "Fire Fang",
+                "chargedMove": "Draco Meteor",
+                "dps": 19.19,
+                "pct": "80.3%"
             },
             {
                 "rank": 17,
@@ -1066,9 +1014,8 @@
                 ],
                 "fastMove": "Shadow Claw",
                 "chargedMove": "Outrage",
-                "dps": 11.13,
-                "er": 374.07,
-                "pct": "67.6%"
+                "dps": 18.96,
+                "pct": "79.4%"
             },
             {
                 "rank": 18,
@@ -1082,9 +1029,8 @@
                 ],
                 "fastMove": "Thunder Fang",
                 "chargedMove": "Breaking Swipe",
-                "dps": 11.03,
-                "er": 395.73,
-                "pct": "67.0%"
+                "dps": 18.79,
+                "pct": "78.7%"
             },
             {
                 "rank": 19,
@@ -1098,9 +1044,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Outrage",
-                "dps": 11.02,
-                "er": 368.12,
-                "pct": "66.9%"
+                "dps": 18.77,
+                "pct": "78.6%"
             },
             {
                 "rank": 20,
@@ -1113,9 +1058,8 @@
                 ],
                 "fastMove": "Water Gun",
                 "chargedMove": "Draco Meteor",
-                "dps": 10.78,
-                "er": 371.98,
-                "pct": "65.5%"
+                "dps": 18.38,
+                "pct": "76.9%"
             }
         ],
         "Electric": [
@@ -1130,9 +1074,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Thunderbolt",
-                "dps": 16.56,
-                "er": 573.57,
-                "pct": "100.5%"
+                "dps": 28.22,
+                "pct": "106.9%"
             },
             {
                 "rank": 2,
@@ -1145,9 +1088,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Plasma Fists",
-                "dps": 15.5,
-                "er": 495.57,
-                "pct": "94.1%"
+                "dps": 26.41,
+                "pct": "100.0%"
             },
             {
                 "rank": 3,
@@ -1161,9 +1103,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Thunderbolt",
-                "dps": 15.33,
-                "er": 526.46,
-                "pct": "93.1%"
+                "dps": 26.13,
+                "pct": "98.9%"
             },
             {
                 "rank": 4,
@@ -1177,9 +1118,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Wild Charge",
-                "dps": 15.33,
-                "er": 510.49,
-                "pct": "93.1%"
+                "dps": 26.12,
+                "pct": "98.9%"
             },
             {
                 "rank": 5,
@@ -1193,9 +1133,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Zap Cannon",
-                "dps": 14.28,
-                "er": 472.72,
-                "pct": "86.7%"
+                "dps": 24.33,
+                "pct": "92.1%"
             },
             {
                 "rank": 6,
@@ -1208,9 +1147,8 @@
                 ],
                 "fastMove": "Thunder Shock",
                 "chargedMove": "Zap Cannon+",
-                "dps": 13.41,
-                "er": 391.28,
-                "pct": "81.4%"
+                "dps": 22.85,
+                "pct": "86.5%"
             },
             {
                 "rank": 7,
@@ -1223,9 +1161,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Wild Charge",
-                "dps": 13.34,
-                "er": 417.92,
-                "pct": "81.0%"
+                "dps": 22.73,
+                "pct": "86.1%"
             },
             {
                 "rank": 8,
@@ -1238,9 +1175,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Wild Charge",
-                "dps": 13.34,
-                "er": 417.92,
-                "pct": "81.0%"
+                "dps": 22.73,
+                "pct": "86.1%"
             },
             {
                 "rank": 9,
@@ -1253,9 +1189,8 @@
                 ],
                 "fastMove": "Thunder Shock",
                 "chargedMove": "Volt Tackle+",
-                "dps": 13.33,
-                "er": 412.76,
-                "pct": "80.9%"
+                "dps": 22.71,
+                "pct": "86.0%"
             },
             {
                 "rank": 10,
@@ -1268,9 +1203,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Wild Charge",
-                "dps": 12.91,
-                "er": 397.5,
-                "pct": "78.4%"
+                "dps": 22.0,
+                "pct": "83.3%"
             },
             {
                 "rank": 11,
@@ -1284,9 +1218,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Zap Cannon",
-                "dps": 12.66,
-                "er": 391.82,
-                "pct": "76.9%"
+                "dps": 21.57,
+                "pct": "81.7%"
             },
             {
                 "rank": 12,
@@ -1300,9 +1233,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Wild Charge",
-                "dps": 12.52,
-                "er": 380.01,
-                "pct": "76.0%"
+                "dps": 21.34,
+                "pct": "80.8%"
             },
             {
                 "rank": 13,
@@ -1315,9 +1247,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Zap Cannon",
-                "dps": 12.09,
-                "er": 414.16,
-                "pct": "73.4%"
+                "dps": 20.6,
+                "pct": "78.0%"
             },
             {
                 "rank": 14,
@@ -1331,9 +1262,8 @@
                 ],
                 "fastMove": "Shadow Claw",
                 "chargedMove": "Fusion Bolt",
-                "dps": 11.8,
-                "er": 396.59,
-                "pct": "71.6%"
+                "dps": 20.1,
+                "pct": "76.1%"
             },
             {
                 "rank": 15,
@@ -1346,9 +1276,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Thunderbolt",
-                "dps": 11.49,
-                "er": 356.78,
-                "pct": "69.8%"
+                "dps": 19.58,
+                "pct": "74.1%"
             },
             {
                 "rank": 16,
@@ -1361,9 +1290,8 @@
                 ],
                 "fastMove": "Thunder Shock",
                 "chargedMove": "Wild Charge",
-                "dps": 11.46,
-                "er": 333.84,
-                "pct": "69.6%"
+                "dps": 19.53,
+                "pct": "74.0%"
             },
             {
                 "rank": 17,
@@ -1376,9 +1304,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Zap Cannon",
-                "dps": 11.45,
-                "er": 334.41,
-                "pct": "69.5%"
+                "dps": 19.51,
+                "pct": "73.9%"
             },
             {
                 "rank": 18,
@@ -1392,9 +1319,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Wild Charge",
-                "dps": 11.33,
-                "er": 349.43,
-                "pct": "68.8%"
+                "dps": 19.3,
+                "pct": "73.1%"
             },
             {
                 "rank": 19,
@@ -1408,9 +1334,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Wild Charge",
-                "dps": 11.28,
-                "er": 380.11,
-                "pct": "68.5%"
+                "dps": 19.23,
+                "pct": "72.8%"
             },
             {
                 "rank": 20,
@@ -1423,9 +1348,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Wild Charge",
-                "dps": 11.28,
-                "er": 380.11,
-                "pct": "68.5%"
+                "dps": 19.23,
+                "pct": "72.8%"
             }
         ],
         "Fairy": [
@@ -1441,9 +1365,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 15.16,
-                "er": 492.6,
-                "pct": "92.0%"
+                "dps": 25.84,
+                "pct": "124.0%"
             },
             {
                 "rank": 2,
@@ -1456,9 +1379,8 @@
                 ],
                 "fastMove": "Yawn",
                 "chargedMove": "Play Rough",
-                "dps": 14.93,
-                "er": 485.89,
-                "pct": "90.6%"
+                "dps": 25.45,
+                "pct": "122.1%"
             },
             {
                 "rank": 3,
@@ -1472,9 +1394,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Play Rough",
-                "dps": 12.23,
-                "er": 411.91,
-                "pct": "74.3%"
+                "dps": 20.84,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -1487,9 +1408,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Play Rough",
-                "dps": 12.23,
-                "er": 411.91,
-                "pct": "74.3%"
+                "dps": 20.84,
+                "pct": "100.0%"
             },
             {
                 "rank": 5,
@@ -1503,9 +1423,8 @@
                 ],
                 "fastMove": "Metal Claw",
                 "chargedMove": "Play Rough",
-                "dps": 11.5,
-                "er": 388.96,
-                "pct": "69.8%"
+                "dps": 19.6,
+                "pct": "94.1%"
             },
             {
                 "rank": 6,
@@ -1519,9 +1438,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 11.39,
-                "er": 340.57,
-                "pct": "69.2%"
+                "dps": 19.41,
+                "pct": "93.2%"
             },
             {
                 "rank": 7,
@@ -1535,9 +1453,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 11.31,
-                "er": 343.61,
-                "pct": "68.7%"
+                "dps": 19.27,
+                "pct": "92.5%"
             },
             {
                 "rank": 8,
@@ -1551,9 +1468,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 11.31,
-                "er": 343.61,
-                "pct": "68.7%"
+                "dps": 19.27,
+                "pct": "92.5%"
             },
             {
                 "rank": 9,
@@ -1567,9 +1483,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 11.19,
-                "er": 359.56,
-                "pct": "67.9%"
+                "dps": 19.08,
+                "pct": "91.6%"
             },
             {
                 "rank": 10,
@@ -1583,9 +1498,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Moonblast",
-                "dps": 10.31,
-                "er": 365.29,
-                "pct": "62.6%"
+                "dps": 17.57,
+                "pct": "84.3%"
             },
             {
                 "rank": 11,
@@ -1598,9 +1512,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 10.17,
-                "er": 340.7,
-                "pct": "61.7%"
+                "dps": 17.33,
+                "pct": "83.2%"
             },
             {
                 "rank": 12,
@@ -1614,9 +1527,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Moonblast",
-                "dps": 10.0,
-                "er": 311.63,
-                "pct": "60.7%"
+                "dps": 17.03,
+                "pct": "81.8%"
             },
             {
                 "rank": 13,
@@ -1630,9 +1542,8 @@
                 ],
                 "fastMove": "Hidden Power",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.97,
-                "er": 331.87,
-                "pct": "60.5%"
+                "dps": 16.99,
+                "pct": "81.6%"
             },
             {
                 "rank": 14,
@@ -1645,9 +1556,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.76,
-                "er": 331.85,
-                "pct": "59.3%"
+                "dps": 16.62,
+                "pct": "79.8%"
             },
             {
                 "rank": 15,
@@ -1661,9 +1571,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.76,
-                "er": 331.85,
-                "pct": "59.3%"
+                "dps": 16.62,
+                "pct": "79.8%"
             },
             {
                 "rank": 16,
@@ -1677,9 +1586,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.76,
-                "er": 331.85,
-                "pct": "59.3%"
+                "dps": 16.62,
+                "pct": "79.8%"
             },
             {
                 "rank": 17,
@@ -1693,9 +1601,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.73,
-                "er": 336.42,
-                "pct": "59.1%"
+                "dps": 16.58,
+                "pct": "79.6%"
             },
             {
                 "rank": 18,
@@ -1709,9 +1616,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Moonblast",
-                "dps": 9.71,
-                "er": 309.42,
-                "pct": "59.0%"
+                "dps": 16.54,
+                "pct": "79.4%"
             },
             {
                 "rank": 19,
@@ -1725,9 +1631,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Dazzling Gleam",
-                "dps": 9.64,
-                "er": 297.44,
-                "pct": "58.5%"
+                "dps": 16.42,
+                "pct": "78.8%"
             },
             {
                 "rank": 20,
@@ -1740,9 +1645,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Moonblast",
-                "dps": 9.54,
-                "er": 322.07,
-                "pct": "57.9%"
+                "dps": 16.26,
+                "pct": "78.1%"
             }
         ],
         "Fighting": [
@@ -1758,9 +1662,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Dynamic Punch+",
-                "dps": 22.58,
-                "er": 775.48,
-                "pct": "137.1%"
+                "dps": 38.48,
+                "pct": "161.1%"
             },
             {
                 "rank": 2,
@@ -1773,9 +1676,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Focus Blast",
-                "dps": 17.33,
-                "er": 600.09,
-                "pct": "105.2%"
+                "dps": 29.53,
+                "pct": "123.6%"
             },
             {
                 "rank": 3,
@@ -1789,9 +1691,8 @@
                 ],
                 "fastMove": "Ember",
                 "chargedMove": "Aura Sphere",
-                "dps": 15.41,
-                "er": 478.81,
-                "pct": "93.6%"
+                "dps": 26.25,
+                "pct": "109.9%"
             },
             {
                 "rank": 4,
@@ -1805,9 +1706,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Close Combat",
-                "dps": 14.82,
-                "er": 491.89,
-                "pct": "90.0%"
+                "dps": 25.25,
+                "pct": "105.7%"
             },
             {
                 "rank": 5,
@@ -1821,9 +1721,8 @@
                 ],
                 "fastMove": "Bullet Punch",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.67,
-                "er": 449.24,
-                "pct": "89.1%"
+                "dps": 25.0,
+                "pct": "104.7%"
             },
             {
                 "rank": 6,
@@ -1836,9 +1735,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.06,
-                "er": 440.64,
-                "pct": "85.4%"
+                "dps": 23.96,
+                "pct": "100.3%"
             },
             {
                 "rank": 7,
@@ -1851,9 +1749,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.06,
-                "er": 440.64,
-                "pct": "85.4%"
+                "dps": 23.96,
+                "pct": "100.3%"
             },
             {
                 "rank": 8,
@@ -1867,9 +1764,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.05,
-                "er": 498.91,
-                "pct": "85.3%"
+                "dps": 23.94,
+                "pct": "100.2%"
             },
             {
                 "rank": 9,
@@ -1883,9 +1779,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.02,
-                "er": 476.73,
-                "pct": "85.1%"
+                "dps": 23.88,
+                "pct": "100.0%"
             },
             {
                 "rank": 10,
@@ -1899,9 +1794,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Aura Sphere",
-                "dps": 14.02,
-                "er": 476.73,
-                "pct": "85.1%"
+                "dps": 23.88,
+                "pct": "100.0%"
             },
             {
                 "rank": 11,
@@ -1915,9 +1809,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Aura Sphere",
-                "dps": 13.93,
-                "er": 470.85,
-                "pct": "84.6%"
+                "dps": 23.74,
+                "pct": "99.4%"
             },
             {
                 "rank": 12,
@@ -1931,9 +1824,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Aura Sphere",
-                "dps": 13.43,
-                "er": 427.84,
-                "pct": "81.5%"
+                "dps": 22.89,
+                "pct": "95.8%"
             },
             {
                 "rank": 13,
@@ -1946,9 +1838,8 @@
                 ],
                 "fastMove": "Counter",
                 "chargedMove": "Brick Break+",
-                "dps": 13.29,
-                "er": 428.07,
-                "pct": "80.7%"
+                "dps": 22.65,
+                "pct": "94.8%"
             },
             {
                 "rank": 14,
@@ -1962,9 +1853,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Close Combat",
-                "dps": 12.71,
-                "er": 450.19,
-                "pct": "77.2%"
+                "dps": 21.65,
+                "pct": "90.7%"
             },
             {
                 "rank": 15,
@@ -1978,9 +1868,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Close Combat",
-                "dps": 12.64,
-                "er": 411.2,
-                "pct": "76.7%"
+                "dps": 21.55,
+                "pct": "90.2%"
             },
             {
                 "rank": 16,
@@ -1994,9 +1883,8 @@
                 ],
                 "fastMove": "Ember",
                 "chargedMove": "Aura Sphere",
-                "dps": 12.28,
-                "er": 350.39,
-                "pct": "74.6%"
+                "dps": 20.92,
+                "pct": "87.6%"
             },
             {
                 "rank": 17,
@@ -2009,9 +1897,8 @@
                 ],
                 "fastMove": "Force Palm",
                 "chargedMove": "Dynamic Punch",
-                "dps": 12.21,
-                "er": 374.39,
-                "pct": "74.1%"
+                "dps": 20.8,
+                "pct": "87.1%"
             },
             {
                 "rank": 18,
@@ -2024,9 +1911,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Focus Blast",
-                "dps": 12.05,
-                "er": 412.84,
-                "pct": "73.2%"
+                "dps": 20.54,
+                "pct": "86.0%"
             },
             {
                 "rank": 19,
@@ -2039,9 +1925,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Focus Blast",
-                "dps": 12.05,
-                "er": 412.84,
-                "pct": "73.2%"
+                "dps": 20.54,
+                "pct": "86.0%"
             },
             {
                 "rank": 20,
@@ -2055,9 +1940,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Aura Sphere",
-                "dps": 11.94,
-                "er": 374.27,
-                "pct": "72.5%"
+                "dps": 20.35,
+                "pct": "85.2%"
             }
         ],
         "Fire": [
@@ -2073,9 +1957,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Fire Blast",
-                "dps": 17.82,
-                "er": 637.82,
-                "pct": "108.2%"
+                "dps": 30.37,
+                "pct": "113.4%"
             },
             {
                 "rank": 2,
@@ -2089,9 +1972,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Fusion Flare",
-                "dps": 15.84,
-                "er": 532.73,
-                "pct": "96.2%"
+                "dps": 27.0,
+                "pct": "100.8%"
             },
             {
                 "rank": 3,
@@ -2105,9 +1987,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "V-create",
-                "dps": 15.72,
-                "er": 534.58,
-                "pct": "95.4%"
+                "dps": 26.78,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -2120,9 +2001,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Flamethrower",
-                "dps": 15.05,
-                "er": 521.05,
-                "pct": "91.4%"
+                "dps": 25.64,
+                "pct": "95.7%"
             },
             {
                 "rank": 5,
@@ -2136,9 +2016,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Mystical Fire+",
-                "dps": 14.83,
-                "er": 492.17,
-                "pct": "90.0%"
+                "dps": 25.28,
+                "pct": "94.4%"
             },
             {
                 "rank": 6,
@@ -2152,9 +2031,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Flamethrower",
-                "dps": 14.07,
-                "er": 483.17,
-                "pct": "85.4%"
+                "dps": 23.98,
+                "pct": "89.5%"
             },
             {
                 "rank": 7,
@@ -2168,9 +2046,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Fire Blast",
-                "dps": 12.88,
-                "er": 450.0,
-                "pct": "78.2%"
+                "dps": 21.94,
+                "pct": "81.9%"
             },
             {
                 "rank": 8,
@@ -2184,9 +2061,8 @@
                 ],
                 "fastMove": "Ember",
                 "chargedMove": "Overheat",
-                "dps": 11.74,
-                "er": 364.99,
-                "pct": "71.3%"
+                "dps": 20.01,
+                "pct": "74.7%"
             },
             {
                 "rank": 9,
@@ -2199,9 +2075,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Pyro Ball",
-                "dps": 11.63,
-                "er": 359.08,
-                "pct": "70.6%"
+                "dps": 19.82,
+                "pct": "74.0%"
             },
             {
                 "rank": 10,
@@ -2215,28 +2090,11 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Overheat",
-                "dps": 11.51,
-                "er": 331.99,
-                "pct": "69.9%"
+                "dps": 19.61,
+                "pct": "73.2%"
             },
             {
                 "rank": 11,
-                "name": "Volcarona",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Fire"
-                ],
-                "fastMove": "Bug Bite",
-                "chargedMove": "Overheat",
-                "dps": 11.43,
-                "er": 368.36,
-                "pct": "69.4%"
-            },
-            {
-                "rank": 12,
                 "name": "Reshiram",
                 "form": "",
                 "isShadow": true,
@@ -2247,9 +2105,23 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Overheat",
-                "dps": 11.43,
-                "er": 363.79,
-                "pct": "69.4%"
+                "dps": 19.48,
+                "pct": "72.7%"
+            },
+            {
+                "rank": 12,
+                "name": "Volcarona",
+                "form": "",
+                "isShadow": false,
+                "isMega": false,
+                "types": [
+                    "Bug",
+                    "Fire"
+                ],
+                "fastMove": "Bug Bite",
+                "chargedMove": "Overheat",
+                "dps": 19.48,
+                "pct": "72.7%"
             },
             {
                 "rank": 13,
@@ -2263,9 +2135,8 @@
                 ],
                 "fastMove": "Wing Attack",
                 "chargedMove": "Overheat",
-                "dps": 11.39,
-                "er": 350.93,
-                "pct": "69.2%"
+                "dps": 19.42,
+                "pct": "72.5%"
             },
             {
                 "rank": 14,
@@ -2279,9 +2150,8 @@
                 ],
                 "fastMove": "Bug Bite",
                 "chargedMove": "Fire Blast",
-                "dps": 11.28,
-                "er": 361.79,
-                "pct": "68.5%"
+                "dps": 19.22,
+                "pct": "71.8%"
             },
             {
                 "rank": 15,
@@ -2295,9 +2165,8 @@
                 ],
                 "fastMove": "Fire Spin",
                 "chargedMove": "Overheat",
-                "dps": 11.22,
-                "er": 365.87,
-                "pct": "68.1%"
+                "dps": 19.13,
+                "pct": "71.4%"
             },
             {
                 "rank": 16,
@@ -2311,9 +2180,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Fire Blast",
-                "dps": 11.16,
-                "er": 371.26,
-                "pct": "67.8%"
+                "dps": 19.02,
+                "pct": "71.0%"
             },
             {
                 "rank": 17,
@@ -2327,9 +2195,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Fire Blast",
-                "dps": 11.16,
-                "er": 371.26,
-                "pct": "67.8%"
+                "dps": 19.02,
+                "pct": "71.0%"
             },
             {
                 "rank": 18,
@@ -2342,9 +2209,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Overheat",
-                "dps": 10.86,
-                "er": 309.49,
-                "pct": "65.9%"
+                "dps": 18.5,
+                "pct": "69.1%"
             },
             {
                 "rank": 19,
@@ -2357,9 +2223,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Overheat",
-                "dps": 10.86,
-                "er": 309.49,
-                "pct": "65.9%"
+                "dps": 18.5,
+                "pct": "69.1%"
             },
             {
                 "rank": 20,
@@ -2373,9 +2238,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Overheat",
-                "dps": 10.81,
-                "er": 305.34,
-                "pct": "65.6%"
+                "dps": 18.42,
+                "pct": "68.8%"
             }
         ],
         "Flying": [
@@ -2391,9 +2255,8 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Fly",
-                "dps": 16.21,
-                "er": 569.54,
-                "pct": "98.4%"
+                "dps": 27.62,
+                "pct": "107.4%"
             },
             {
                 "rank": 2,
@@ -2407,9 +2270,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Fly",
-                "dps": 15.32,
-                "er": 551.55,
-                "pct": "93.0%"
+                "dps": 26.11,
+                "pct": "101.5%"
             },
             {
                 "rank": 3,
@@ -2423,9 +2285,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Fly",
-                "dps": 15.32,
-                "er": 551.55,
-                "pct": "93.0%"
+                "dps": 26.11,
+                "pct": "101.5%"
             },
             {
                 "rank": 4,
@@ -2439,9 +2300,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Fly",
-                "dps": 15.09,
-                "er": 496.22,
-                "pct": "91.6%"
+                "dps": 25.72,
+                "pct": "100.0%"
             },
             {
                 "rank": 5,
@@ -2455,9 +2315,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Brave Bird",
-                "dps": 14.54,
-                "er": 483.65,
-                "pct": "88.3%"
+                "dps": 24.78,
+                "pct": "96.4%"
             },
             {
                 "rank": 6,
@@ -2471,9 +2330,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Brave Bird",
-                "dps": 14.54,
-                "er": 483.65,
-                "pct": "88.3%"
+                "dps": 24.78,
+                "pct": "96.4%"
             },
             {
                 "rank": 7,
@@ -2487,9 +2345,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Fly",
-                "dps": 14.01,
-                "er": 425.79,
-                "pct": "85.1%"
+                "dps": 23.88,
+                "pct": "92.8%"
             },
             {
                 "rank": 8,
@@ -2503,9 +2360,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Fly",
-                "dps": 14.01,
-                "er": 425.79,
-                "pct": "85.1%"
+                "dps": 23.88,
+                "pct": "92.8%"
             },
             {
                 "rank": 9,
@@ -2519,9 +2375,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Fly",
-                "dps": 13.77,
-                "er": 439.88,
-                "pct": "83.6%"
+                "dps": 23.47,
+                "pct": "91.2%"
             },
             {
                 "rank": 10,
@@ -2535,9 +2390,8 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Fly",
-                "dps": 13.52,
-                "er": 413.24,
-                "pct": "82.1%"
+                "dps": 23.03,
+                "pct": "89.5%"
             },
             {
                 "rank": 11,
@@ -2551,9 +2405,8 @@
                 ],
                 "fastMove": "Wing Attack",
                 "chargedMove": "Fly",
-                "dps": 13.43,
-                "er": 413.79,
-                "pct": "81.5%"
+                "dps": 22.89,
+                "pct": "89.0%"
             },
             {
                 "rank": 12,
@@ -2567,9 +2420,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Drill Peck",
-                "dps": 13.01,
-                "er": 402.75,
-                "pct": "79.0%"
+                "dps": 22.17,
+                "pct": "86.2%"
             },
             {
                 "rank": 13,
@@ -2583,9 +2435,8 @@
                 ],
                 "fastMove": "Sand Attack",
                 "chargedMove": "Fly",
-                "dps": 12.86,
-                "er": 369.6,
-                "pct": "78.1%"
+                "dps": 21.91,
+                "pct": "85.2%"
             },
             {
                 "rank": 14,
@@ -2599,9 +2450,8 @@
                 ],
                 "fastMove": "Sucker Punch",
                 "chargedMove": "Fly",
-                "dps": 12.35,
-                "er": 421.54,
-                "pct": "75.0%"
+                "dps": 21.05,
+                "pct": "81.9%"
             },
             {
                 "rank": 15,
@@ -2615,9 +2465,8 @@
                 ],
                 "fastMove": "Air Slash",
                 "chargedMove": "Drill Peck+",
-                "dps": 12.17,
-                "er": 391.55,
-                "pct": "73.9%"
+                "dps": 20.74,
+                "pct": "80.6%"
             },
             {
                 "rank": 16,
@@ -2631,9 +2480,8 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Fly",
-                "dps": 11.96,
-                "er": 389.26,
-                "pct": "72.6%"
+                "dps": 20.37,
+                "pct": "79.2%"
             },
             {
                 "rank": 17,
@@ -2647,9 +2495,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Brave Bird",
-                "dps": 11.56,
-                "er": 319.79,
-                "pct": "70.2%"
+                "dps": 19.7,
+                "pct": "76.6%"
             },
             {
                 "rank": 18,
@@ -2663,9 +2510,8 @@
                 ],
                 "fastMove": "Ember",
                 "chargedMove": "Brave Bird",
-                "dps": 10.82,
-                "er": 336.37,
-                "pct": "65.7%"
+                "dps": 18.44,
+                "pct": "71.7%"
             },
             {
                 "rank": 19,
@@ -2679,9 +2525,8 @@
                 ],
                 "fastMove": "Sand Attack",
                 "chargedMove": "Sky Attack",
-                "dps": 10.53,
-                "er": 333.85,
-                "pct": "63.9%"
+                "dps": 17.95,
+                "pct": "69.8%"
             },
             {
                 "rank": 20,
@@ -2695,9 +2540,8 @@
                 ],
                 "fastMove": "Air Slash",
                 "chargedMove": "Brave Bird",
-                "dps": 10.38,
-                "er": 327.06,
-                "pct": "63.0%"
+                "dps": 17.68,
+                "pct": "68.7%"
             }
         ],
         "Ghost": [
@@ -2713,9 +2557,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 14.33,
-                "er": 441.75,
-                "pct": "87.0%"
+                "dps": 24.42,
+                "pct": "108.0%"
             },
             {
                 "rank": 2,
@@ -2729,9 +2572,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Shadow Ball",
-                "dps": 13.66,
-                "er": 443.68,
-                "pct": "82.9%"
+                "dps": 23.27,
+                "pct": "103.0%"
             },
             {
                 "rank": 3,
@@ -2745,9 +2587,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 13.27,
-                "er": 429.96,
-                "pct": "80.6%"
+                "dps": 22.61,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -2761,9 +2602,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 12.87,
-                "er": 407.79,
-                "pct": "78.1%"
+                "dps": 21.93,
+                "pct": "97.0%"
             },
             {
                 "rank": 5,
@@ -2776,9 +2616,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 12.25,
-                "er": 362.45,
-                "pct": "74.4%"
+                "dps": 20.88,
+                "pct": "92.4%"
             },
             {
                 "rank": 6,
@@ -2792,9 +2631,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.84,
-                "er": 341.63,
-                "pct": "71.9%"
+                "dps": 20.18,
+                "pct": "89.3%"
             },
             {
                 "rank": 7,
@@ -2808,9 +2646,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.65,
-                "er": 362.92,
-                "pct": "70.7%"
+                "dps": 19.86,
+                "pct": "87.8%"
             },
             {
                 "rank": 8,
@@ -2824,9 +2661,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.65,
-                "er": 362.92,
-                "pct": "70.7%"
+                "dps": 19.86,
+                "pct": "87.8%"
             },
             {
                 "rank": 9,
@@ -2840,9 +2676,8 @@
                 ],
                 "fastMove": "Confusion",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.63,
-                "er": 402.11,
-                "pct": "70.6%"
+                "dps": 19.83,
+                "pct": "87.7%"
             },
             {
                 "rank": 10,
@@ -2856,9 +2691,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.59,
-                "er": 362.72,
-                "pct": "70.4%"
+                "dps": 19.75,
+                "pct": "87.4%"
             },
             {
                 "rank": 11,
@@ -2872,9 +2706,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.36,
-                "er": 374.86,
-                "pct": "69.0%"
+                "dps": 19.36,
+                "pct": "85.6%"
             },
             {
                 "rank": 12,
@@ -2887,9 +2720,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.22,
-                "er": 344.4,
-                "pct": "68.1%"
+                "dps": 19.12,
+                "pct": "84.6%"
             },
             {
                 "rank": 13,
@@ -2903,9 +2735,8 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.04,
-                "er": 351.68,
-                "pct": "67.0%"
+                "dps": 18.82,
+                "pct": "83.3%"
             },
             {
                 "rank": 14,
@@ -2919,9 +2750,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.02,
-                "er": 311.11,
-                "pct": "66.9%"
+                "dps": 18.77,
+                "pct": "83.0%"
             },
             {
                 "rank": 15,
@@ -2935,9 +2765,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.01,
-                "er": 303.39,
-                "pct": "66.8%"
+                "dps": 18.76,
+                "pct": "83.0%"
             },
             {
                 "rank": 16,
@@ -2951,9 +2780,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Shadow Ball",
-                "dps": 11.01,
-                "er": 303.39,
-                "pct": "66.8%"
+                "dps": 18.76,
+                "pct": "83.0%"
             },
             {
                 "rank": 17,
@@ -2966,9 +2794,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 10.82,
-                "er": 329.61,
-                "pct": "65.7%"
+                "dps": 18.44,
+                "pct": "81.6%"
             },
             {
                 "rank": 18,
@@ -2981,9 +2808,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 10.82,
-                "er": 329.61,
-                "pct": "65.7%"
+                "dps": 18.44,
+                "pct": "81.6%"
             },
             {
                 "rank": 19,
@@ -2996,9 +2822,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "dps": 10.82,
-                "er": 329.61,
-                "pct": "65.7%"
+                "dps": 18.44,
+                "pct": "81.6%"
             },
             {
                 "rank": 20,
@@ -3011,9 +2836,8 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Shadow Ball",
-                "dps": 10.64,
-                "er": 333.41,
-                "pct": "64.6%"
+                "dps": 18.13,
+                "pct": "80.2%"
             }
         ],
         "Grass": [
@@ -3029,9 +2853,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Solar Beam",
-                "dps": 17.04,
-                "er": 609.57,
-                "pct": "103.5%"
+                "dps": 29.03,
+                "pct": "131.3%"
             },
             {
                 "rank": 2,
@@ -3045,9 +2868,8 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Seed Bomb+",
-                "dps": 15.82,
-                "er": 564.27,
-                "pct": "96.1%"
+                "dps": 26.96,
+                "pct": "121.9%"
             },
             {
                 "rank": 3,
@@ -3061,9 +2883,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Leaf Blade",
-                "dps": 13.62,
-                "er": 422.97,
-                "pct": "82.7%"
+                "dps": 23.21,
+                "pct": "105.0%"
             },
             {
                 "rank": 4,
@@ -3077,9 +2898,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Leaf Storm",
-                "dps": 12.98,
-                "er": 441.38,
-                "pct": "78.8%"
+                "dps": 22.11,
+                "pct": "100.0%"
             },
             {
                 "rank": 5,
@@ -3092,9 +2912,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Solar Beam",
-                "dps": 12.66,
-                "er": 395.4,
-                "pct": "76.9%"
+                "dps": 21.57,
+                "pct": "97.6%"
             },
             {
                 "rank": 6,
@@ -3107,9 +2926,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Solar Beam",
-                "dps": 12.51,
-                "er": 365.25,
-                "pct": "76.0%"
+                "dps": 21.31,
+                "pct": "96.4%"
             },
             {
                 "rank": 7,
@@ -3123,9 +2941,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Grass Knot",
-                "dps": 12.33,
-                "er": 396.13,
-                "pct": "74.9%"
+                "dps": 21.02,
+                "pct": "95.0%"
             },
             {
                 "rank": 8,
@@ -3138,9 +2955,8 @@
                 ],
                 "fastMove": "Infestation",
                 "chargedMove": "Power Whip",
-                "dps": 12.08,
-                "er": 380.62,
-                "pct": "73.3%"
+                "dps": 20.58,
+                "pct": "93.1%"
             },
             {
                 "rank": 9,
@@ -3153,9 +2969,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Solar Beam",
-                "dps": 11.97,
-                "er": 387.95,
-                "pct": "72.7%"
+                "dps": 20.4,
+                "pct": "92.3%"
             },
             {
                 "rank": 10,
@@ -3169,9 +2984,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Leaf Blade",
-                "dps": 11.76,
-                "er": 346.26,
-                "pct": "71.4%"
+                "dps": 20.05,
+                "pct": "90.7%"
             },
             {
                 "rank": 11,
@@ -3185,9 +2999,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Solar Beam",
-                "dps": 11.61,
-                "er": 345.39,
-                "pct": "70.5%"
+                "dps": 19.78,
+                "pct": "89.5%"
             },
             {
                 "rank": 12,
@@ -3201,9 +3014,8 @@
                 ],
                 "fastMove": "Hidden Power",
                 "chargedMove": "Grass Knot",
-                "dps": 11.56,
-                "er": 372.41,
-                "pct": "70.2%"
+                "dps": 19.7,
+                "pct": "89.1%"
             },
             {
                 "rank": 13,
@@ -3217,9 +3029,8 @@
                 ],
                 "fastMove": "Bullet Seed",
                 "chargedMove": "Solar Beam",
-                "dps": 11.55,
-                "er": 345.77,
-                "pct": "70.1%"
+                "dps": 19.69,
+                "pct": "89.0%"
             },
             {
                 "rank": 14,
@@ -3232,9 +3043,8 @@
                 ],
                 "fastMove": "Thunder Shock",
                 "chargedMove": "Power Whip",
-                "dps": 11.02,
-                "er": 332.11,
-                "pct": "66.9%"
+                "dps": 18.77,
+                "pct": "84.9%"
             },
             {
                 "rank": 15,
@@ -3247,9 +3057,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Grass Knot",
-                "dps": 10.95,
-                "er": 372.37,
-                "pct": "66.5%"
+                "dps": 18.65,
+                "pct": "84.4%"
             },
             {
                 "rank": 16,
@@ -3262,9 +3071,8 @@
                 ],
                 "fastMove": "Hidden Power",
                 "chargedMove": "Grass Knot",
-                "dps": 10.87,
-                "er": 369.77,
-                "pct": "66.0%"
+                "dps": 18.52,
+                "pct": "83.8%"
             },
             {
                 "rank": 17,
@@ -3277,9 +3085,8 @@
                 ],
                 "fastMove": "Hidden Power",
                 "chargedMove": "Grass Knot",
-                "dps": 10.87,
-                "er": 369.77,
-                "pct": "66.0%"
+                "dps": 18.52,
+                "pct": "83.8%"
             },
             {
                 "rank": 18,
@@ -3293,9 +3100,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Leaf Blade",
-                "dps": 10.77,
-                "er": 350.35,
-                "pct": "65.4%"
+                "dps": 18.36,
+                "pct": "83.0%"
             },
             {
                 "rank": 19,
@@ -3309,9 +3115,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Solar Beam",
-                "dps": 10.54,
-                "er": 350.62,
-                "pct": "64.0%"
+                "dps": 17.97,
+                "pct": "81.3%"
             },
             {
                 "rank": 20,
@@ -3325,9 +3130,8 @@
                 ],
                 "fastMove": "Extrasensory",
                 "chargedMove": "Solar Beam",
-                "dps": 10.54,
-                "er": 350.62,
-                "pct": "64.0%"
+                "dps": 17.97,
+                "pct": "81.3%"
             }
         ],
         "Ground": [
@@ -3343,9 +3147,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 19.15,
-                "er": 685.07,
-                "pct": "116.3%"
+                "dps": 32.62,
+                "pct": "165.2%"
             },
             {
                 "rank": 2,
@@ -3359,9 +3162,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 17.38,
-                "er": 607.51,
-                "pct": "105.5%"
+                "dps": 29.62,
+                "pct": "150.0%"
             },
             {
                 "rank": 3,
@@ -3375,9 +3177,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Earthquake",
-                "dps": 15.41,
-                "er": 543.6,
-                "pct": "93.6%"
+                "dps": 26.25,
+                "pct": "132.9%"
             },
             {
                 "rank": 4,
@@ -3390,9 +3191,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 13.63,
-                "er": 441.69,
-                "pct": "82.8%"
+                "dps": 23.23,
+                "pct": "117.6%"
             },
             {
                 "rank": 5,
@@ -3406,9 +3206,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Earthquake",
-                "dps": 13.62,
-                "er": 451.91,
-                "pct": "82.7%"
+                "dps": 23.2,
+                "pct": "117.5%"
             },
             {
                 "rank": 6,
@@ -3422,9 +3221,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 13.43,
-                "er": 460.77,
-                "pct": "81.5%"
+                "dps": 22.88,
+                "pct": "115.9%"
             },
             {
                 "rank": 7,
@@ -3438,9 +3236,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "High Horsepower",
-                "dps": 13.35,
-                "er": 406.26,
-                "pct": "81.1%"
+                "dps": 22.75,
+                "pct": "115.2%"
             },
             {
                 "rank": 8,
@@ -3454,9 +3251,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 13.25,
-                "er": 428.37,
-                "pct": "80.4%"
+                "dps": 22.58,
+                "pct": "114.4%"
             },
             {
                 "rank": 9,
@@ -3469,9 +3265,8 @@
                 ],
                 "fastMove": "Yawn",
                 "chargedMove": "Earthquake",
-                "dps": 13.02,
-                "er": 423.53,
-                "pct": "79.1%"
+                "dps": 22.18,
+                "pct": "112.3%"
             },
             {
                 "rank": 10,
@@ -3485,9 +3280,8 @@
                 ],
                 "fastMove": "Thunder Fang",
                 "chargedMove": "Earthquake",
-                "dps": 12.6,
-                "er": 452.02,
-                "pct": "76.5%"
+                "dps": 21.47,
+                "pct": "108.7%"
             },
             {
                 "rank": 11,
@@ -3500,9 +3294,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Earthquake",
-                "dps": 12.13,
-                "er": 415.48,
-                "pct": "73.6%"
+                "dps": 20.67,
+                "pct": "104.7%"
             },
             {
                 "rank": 12,
@@ -3515,9 +3308,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Earth Power",
-                "dps": 12.13,
-                "er": 391.07,
-                "pct": "73.6%"
+                "dps": 20.67,
+                "pct": "104.6%"
             },
             {
                 "rank": 13,
@@ -3531,9 +3323,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Earthquake",
-                "dps": 12.06,
-                "er": 384.55,
-                "pct": "73.2%"
+                "dps": 20.55,
+                "pct": "104.1%"
             },
             {
                 "rank": 14,
@@ -3547,9 +3338,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 11.59,
-                "er": 371.58,
-                "pct": "70.4%"
+                "dps": 19.75,
+                "pct": "100.0%"
             },
             {
                 "rank": 15,
@@ -3563,9 +3353,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earth Power",
-                "dps": 11.58,
-                "er": 356.19,
-                "pct": "70.3%"
+                "dps": 19.74,
+                "pct": "99.9%"
             },
             {
                 "rank": 16,
@@ -3579,9 +3368,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Earthquake",
-                "dps": 11.57,
-                "er": 447.06,
-                "pct": "70.2%"
+                "dps": 19.72,
+                "pct": "99.8%"
             },
             {
                 "rank": 17,
@@ -3595,9 +3383,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Earthquake",
-                "dps": 11.43,
-                "er": 354.92,
-                "pct": "69.4%"
+                "dps": 19.47,
+                "pct": "98.6%"
             },
             {
                 "rank": 18,
@@ -3611,9 +3398,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earth Power",
-                "dps": 11.1,
-                "er": 357.12,
-                "pct": "67.4%"
+                "dps": 18.91,
+                "pct": "95.7%"
             },
             {
                 "rank": 19,
@@ -3627,25 +3413,23 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Earthquake",
-                "dps": 10.75,
-                "er": 318.1,
-                "pct": "65.3%"
+                "dps": 18.32,
+                "pct": "92.8%"
             },
             {
                 "rank": 20,
-                "name": "Swampert",
+                "name": "Golurk",
                 "form": "",
                 "isShadow": true,
                 "isMega": false,
                 "types": [
-                    "Water",
-                    "Ground"
+                    "Ground",
+                    "Ghost"
                 ],
-                "fastMove": "Mud Shot",
-                "chargedMove": "Earthquake",
-                "dps": 10.01,
-                "er": 311.85,
-                "pct": "60.8%"
+                "fastMove": "Astonish",
+                "chargedMove": "Earth Power",
+                "dps": 17.06,
+                "pct": "86.4%"
             }
         ],
         "Ice": [
@@ -3660,9 +3444,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Ice Beam",
-                "dps": 15.47,
-                "er": 535.73,
-                "pct": "93.9%"
+                "dps": 26.36,
+                "pct": "116.4%"
             },
             {
                 "rank": 2,
@@ -3676,9 +3459,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Blizzard",
-                "dps": 15.29,
-                "er": 514.17,
-                "pct": "92.8%"
+                "dps": 26.06,
+                "pct": "115.1%"
             },
             {
                 "rank": 3,
@@ -3691,9 +3473,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Blizzard",
-                "dps": 15.11,
-                "er": 517.75,
-                "pct": "91.7%"
+                "dps": 25.76,
+                "pct": "113.7%"
             },
             {
                 "rank": 4,
@@ -3707,9 +3488,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Ice Beam",
-                "dps": 14.37,
-                "er": 493.59,
-                "pct": "87.2%"
+                "dps": 24.49,
+                "pct": "108.2%"
             },
             {
                 "rank": 5,
@@ -3723,9 +3503,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Avalanche",
-                "dps": 14.05,
-                "er": 427.57,
-                "pct": "85.3%"
+                "dps": 23.94,
+                "pct": "105.7%"
             },
             {
                 "rank": 6,
@@ -3739,9 +3518,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Blizzard",
-                "dps": 13.29,
-                "er": 461.09,
-                "pct": "80.7%"
+                "dps": 22.64,
+                "pct": "100.0%"
             },
             {
                 "rank": 7,
@@ -3754,9 +3532,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Avalanche",
-                "dps": 12.88,
-                "er": 430.07,
-                "pct": "78.2%"
+                "dps": 21.95,
+                "pct": "96.9%"
             },
             {
                 "rank": 8,
@@ -3770,9 +3547,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Weather Ball Ice",
-                "dps": 12.77,
-                "er": 416.82,
-                "pct": "77.5%"
+                "dps": 21.76,
+                "pct": "96.1%"
             },
             {
                 "rank": 9,
@@ -3786,9 +3562,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Avalanche",
-                "dps": 12.45,
-                "er": 403.66,
-                "pct": "75.6%"
+                "dps": 21.21,
+                "pct": "93.7%"
             },
             {
                 "rank": 10,
@@ -3802,9 +3577,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Blizzard",
-                "dps": 12.39,
-                "er": 405.84,
-                "pct": "75.2%"
+                "dps": 21.11,
+                "pct": "93.2%"
             },
             {
                 "rank": 11,
@@ -3818,9 +3592,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Weather Ball Ice",
-                "dps": 12.22,
-                "er": 389.55,
-                "pct": "74.2%"
+                "dps": 20.83,
+                "pct": "92.0%"
             },
             {
                 "rank": 12,
@@ -3833,9 +3606,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Blizzard",
-                "dps": 11.94,
-                "er": 348.59,
-                "pct": "72.5%"
+                "dps": 20.34,
+                "pct": "89.8%"
             },
             {
                 "rank": 13,
@@ -3848,9 +3620,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Avalanche",
-                "dps": 11.85,
-                "er": 412.09,
-                "pct": "71.9%"
+                "dps": 20.2,
+                "pct": "89.2%"
             },
             {
                 "rank": 14,
@@ -3864,9 +3635,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Triple Axel",
-                "dps": 11.82,
-                "er": 383.86,
-                "pct": "71.8%"
+                "dps": 20.13,
+                "pct": "88.9%"
             },
             {
                 "rank": 15,
@@ -3879,9 +3649,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Avalanche",
-                "dps": 11.63,
-                "er": 361.63,
-                "pct": "70.6%"
+                "dps": 19.83,
+                "pct": "87.6%"
             },
             {
                 "rank": 16,
@@ -3895,9 +3664,8 @@
                 ],
                 "fastMove": "Shadow Claw",
                 "chargedMove": "Blizzard",
-                "dps": 11.36,
-                "er": 381.88,
-                "pct": "69.0%"
+                "dps": 19.36,
+                "pct": "85.5%"
             },
             {
                 "rank": 17,
@@ -3910,9 +3678,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Avalanche",
-                "dps": 10.92,
-                "er": 325.89,
-                "pct": "66.3%"
+                "dps": 18.62,
+                "pct": "82.2%"
             },
             {
                 "rank": 18,
@@ -3925,9 +3692,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Ice Beam",
-                "dps": 10.77,
-                "er": 334.62,
-                "pct": "65.4%"
+                "dps": 18.36,
+                "pct": "81.1%"
             },
             {
                 "rank": 19,
@@ -3941,9 +3707,8 @@
                 ],
                 "fastMove": "Psywave",
                 "chargedMove": "Blizzard",
-                "dps": 10.52,
-                "er": 343.93,
-                "pct": "63.9%"
+                "dps": 17.93,
+                "pct": "79.2%"
             },
             {
                 "rank": 20,
@@ -3957,9 +3722,8 @@
                 ],
                 "fastMove": "Psywave",
                 "chargedMove": "Blizzard",
-                "dps": 10.52,
-                "er": 343.93,
-                "pct": "63.9%"
+                "dps": 17.93,
+                "pct": "79.2%"
             }
         ],
         "Normal": [
@@ -3974,9 +3738,8 @@
                 ],
                 "fastMove": "Transform",
                 "chargedMove": "Struggle",
-                "dps": 73.33,
-                "er": 1833.11,
-                "pct": "445.2%"
+                "dps": 124.96,
+                "pct": "100.0%"
             },
             {
                 "rank": 2,
@@ -3989,9 +3752,8 @@
                 ],
                 "fastMove": "Transform",
                 "chargedMove": "Struggle",
-                "dps": 73.33,
-                "er": 1833.11,
-                "pct": "445.2%"
+                "dps": 124.96,
+                "pct": "100.0%"
             },
             {
                 "rank": 3,
@@ -4004,9 +3766,8 @@
                 ],
                 "fastMove": "Transform",
                 "chargedMove": "Struggle",
-                "dps": 73.33,
-                "er": 1833.11,
-                "pct": "445.2%"
+                "dps": 124.96,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -4019,9 +3780,8 @@
                 ],
                 "fastMove": "Hidden Power",
                 "chargedMove": "Giga Impact",
-                "dps": 18.33,
-                "er": 593.48,
-                "pct": "111.3%"
+                "dps": 31.24,
+                "pct": "25.0%"
             },
             {
                 "rank": 5,
@@ -4035,9 +3795,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Giga Impact",
-                "dps": 16.22,
-                "er": 574.49,
-                "pct": "98.5%"
+                "dps": 27.63,
+                "pct": "22.1%"
             },
             {
                 "rank": 6,
@@ -4050,9 +3809,8 @@
                 ],
                 "fastMove": "Yawn",
                 "chargedMove": "Hyper Beam",
-                "dps": 15.56,
-                "er": 506.1,
-                "pct": "94.5%"
+                "dps": 26.51,
+                "pct": "21.2%"
             },
             {
                 "rank": 7,
@@ -4065,9 +3823,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Hyper Beam",
-                "dps": 13.84,
-                "er": 404.23,
-                "pct": "84.0%"
+                "dps": 23.59,
+                "pct": "18.9%"
             },
             {
                 "rank": 8,
@@ -4081,9 +3838,8 @@
                 ],
                 "fastMove": "Metal Claw",
                 "chargedMove": "Giga Impact",
-                "dps": 13.68,
-                "er": 462.6,
-                "pct": "83.1%"
+                "dps": 23.31,
+                "pct": "18.7%"
             },
             {
                 "rank": 9,
@@ -4097,9 +3853,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-                "dps": 12.59,
-                "er": 435.06,
-                "pct": "76.4%"
+                "dps": 21.45,
+                "pct": "17.2%"
             },
             {
                 "rank": 10,
@@ -4113,9 +3868,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-                "dps": 12.59,
-                "er": 435.06,
-                "pct": "76.4%"
+                "dps": 21.45,
+                "pct": "17.2%"
             },
             {
                 "rank": 11,
@@ -4128,9 +3882,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Giga Impact",
-                "dps": 12.58,
-                "er": 424.58,
-                "pct": "76.4%"
+                "dps": 21.44,
+                "pct": "17.2%"
             },
             {
                 "rank": 12,
@@ -4143,9 +3896,8 @@
                 ],
                 "fastMove": "Lick",
                 "chargedMove": "Skull Bash",
-                "dps": 11.7,
-                "er": 396.22,
-                "pct": "71.0%"
+                "dps": 19.95,
+                "pct": "16.0%"
             },
             {
                 "rank": 13,
@@ -4158,9 +3910,8 @@
                 ],
                 "fastMove": "Lick",
                 "chargedMove": "Skull Bash",
-                "dps": 11.7,
-                "er": 396.22,
-                "pct": "71.0%"
+                "dps": 19.95,
+                "pct": "16.0%"
             },
             {
                 "rank": 14,
@@ -4173,9 +3924,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Hyper Beam",
-                "dps": 11.56,
-                "er": 352.11,
-                "pct": "70.2%"
+                "dps": 19.71,
+                "pct": "15.8%"
             },
             {
                 "rank": 15,
@@ -4188,9 +3938,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Boomburst",
-                "dps": 10.98,
-                "er": 325.97,
-                "pct": "66.7%"
+                "dps": 18.71,
+                "pct": "15.0%"
             },
             {
                 "rank": 16,
@@ -4204,9 +3953,8 @@
                 ],
                 "fastMove": "Double Kick",
                 "chargedMove": "Hyper Beam",
-                "dps": 10.87,
-                "er": 344.4,
-                "pct": "66.0%"
+                "dps": 18.52,
+                "pct": "14.8%"
             },
             {
                 "rank": 17,
@@ -4220,9 +3968,8 @@
                 ],
                 "fastMove": "Metal Sound",
                 "chargedMove": "Boomburst",
-                "dps": 10.73,
-                "er": 357.79,
-                "pct": "65.1%"
+                "dps": 18.28,
+                "pct": "14.6%"
             },
             {
                 "rank": 18,
@@ -4235,9 +3982,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Hyper Beam",
-                "dps": 10.06,
-                "er": 337.94,
-                "pct": "61.1%"
+                "dps": 17.14,
+                "pct": "13.7%"
             },
             {
                 "rank": 19,
@@ -4251,9 +3997,8 @@
                 ],
                 "fastMove": "Sand Attack",
                 "chargedMove": "Boomburst",
-                "dps": 9.95,
-                "er": 295.48,
-                "pct": "60.4%"
+                "dps": 16.96,
+                "pct": "13.6%"
             },
             {
                 "rank": 20,
@@ -4266,9 +4011,8 @@
                 ],
                 "fastMove": "Rollout",
                 "chargedMove": "Skull Bash",
-                "dps": 9.93,
-                "er": 333.43,
-                "pct": "60.3%"
+                "dps": 16.93,
+                "pct": "13.5%"
             }
         ],
         "Poison": [
@@ -4284,9 +4028,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Sludge Bomb",
-                "dps": 13.44,
-                "er": 414.14,
-                "pct": "81.6%"
+                "dps": 22.89,
+                "pct": "118.6%"
             },
             {
                 "rank": 2,
@@ -4300,9 +4043,8 @@
                 ],
                 "fastMove": "Acid",
                 "chargedMove": "Acid Spray+",
-                "dps": 11.54,
-                "er": 365.0,
-                "pct": "70.1%"
+                "dps": 19.67,
+                "pct": "101.9%"
             },
             {
                 "rank": 3,
@@ -4316,9 +4058,8 @@
                 ],
                 "fastMove": "Acid",
                 "chargedMove": "Sludge Bomb",
-                "dps": 11.32,
-                "er": 391.2,
-                "pct": "68.7%"
+                "dps": 19.3,
+                "pct": "100.0%"
             },
             {
                 "rank": 4,
@@ -4332,9 +4073,8 @@
                 ],
                 "fastMove": "Poison Jab",
                 "chargedMove": "Sludge Bomb",
-                "dps": 10.9,
-                "er": 378.48,
-                "pct": "66.2%"
+                "dps": 18.58,
+                "pct": "96.3%"
             },
             {
                 "rank": 5,
@@ -4348,9 +4088,8 @@
                 ],
                 "fastMove": "Infestation",
                 "chargedMove": "Sludge Bomb",
-                "dps": 10.37,
-                "er": 301.9,
-                "pct": "63.0%"
+                "dps": 17.67,
+                "pct": "91.6%"
             },
             {
                 "rank": 6,
@@ -4364,9 +4103,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Sludge Bomb",
-                "dps": 10.27,
-                "er": 282.98,
-                "pct": "62.4%"
+                "dps": 17.5,
+                "pct": "90.7%"
             },
             {
                 "rank": 7,
@@ -4380,9 +4118,8 @@
                 ],
                 "fastMove": "Hex",
                 "chargedMove": "Sludge Bomb",
-                "dps": 10.27,
-                "er": 282.98,
-                "pct": "62.4%"
+                "dps": 17.5,
+                "pct": "90.7%"
             },
             {
                 "rank": 8,
@@ -4395,9 +4132,8 @@
                 ],
                 "fastMove": "Infestation",
                 "chargedMove": "Gunk Shot",
-                "dps": 9.99,
-                "er": 312.32,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "88.2%"
             },
             {
                 "rank": 9,
@@ -4411,9 +4147,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Gunk Shot",
-                "dps": 9.51,
-                "er": 301.07,
-                "pct": "57.7%"
+                "dps": 16.21,
+                "pct": "84.0%"
             },
             {
                 "rank": 10,
@@ -4427,9 +4162,8 @@
                 ],
                 "fastMove": "Poison Sting",
                 "chargedMove": "Sludge Bomb",
-                "dps": 9.19,
-                "er": 289.38,
-                "pct": "55.8%"
+                "dps": 15.66,
+                "pct": "81.1%"
             },
             {
                 "rank": 11,
@@ -4443,9 +4177,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Sludge Bomb",
-                "dps": 9.14,
-                "er": 276.31,
-                "pct": "55.5%"
+                "dps": 15.57,
+                "pct": "80.7%"
             },
             {
                 "rank": 12,
@@ -4459,9 +4192,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Gunk Shot",
-                "dps": 8.99,
-                "er": 281.02,
-                "pct": "54.6%"
+                "dps": 15.31,
+                "pct": "79.3%"
             },
             {
                 "rank": 13,
@@ -4475,9 +4207,8 @@
                 ],
                 "fastMove": "Lick",
                 "chargedMove": "Gunk Shot",
-                "dps": 8.97,
-                "er": 278.75,
-                "pct": "54.5%"
+                "dps": 15.28,
+                "pct": "79.2%"
             },
             {
                 "rank": 14,
@@ -4491,9 +4222,8 @@
                 ],
                 "fastMove": "Vine Whip",
                 "chargedMove": "Sludge Bomb",
-                "dps": 8.93,
-                "er": 303.36,
-                "pct": "54.2%"
+                "dps": 15.22,
+                "pct": "78.9%"
             },
             {
                 "rank": 15,
@@ -4506,9 +4236,8 @@
                 ],
                 "fastMove": "Infestation",
                 "chargedMove": "Sludge Bomb",
-                "dps": 8.87,
-                "er": 279.62,
-                "pct": "53.9%"
+                "dps": 15.12,
+                "pct": "78.3%"
             },
             {
                 "rank": 16,
@@ -4522,9 +4251,8 @@
                 ],
                 "fastMove": "Poison Sting",
                 "chargedMove": "Sludge Bomb",
-                "dps": 8.86,
-                "er": 268.55,
-                "pct": "53.8%"
+                "dps": 15.1,
+                "pct": "78.2%"
             },
             {
                 "rank": 17,
@@ -4538,9 +4266,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Sludge Bomb",
-                "dps": 8.81,
-                "er": 249.38,
-                "pct": "53.5%"
+                "dps": 15.02,
+                "pct": "77.8%"
             },
             {
                 "rank": 18,
@@ -4554,9 +4281,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Sludge Bomb",
-                "dps": 8.43,
-                "er": 255.08,
-                "pct": "51.2%"
+                "dps": 14.36,
+                "pct": "74.4%"
             },
             {
                 "rank": 19,
@@ -4570,9 +4296,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Sludge Wave",
-                "dps": 8.26,
-                "er": 283.42,
-                "pct": "50.2%"
+                "dps": 14.08,
+                "pct": "72.9%"
             },
             {
                 "rank": 20,
@@ -4585,9 +4310,8 @@
                 ],
                 "fastMove": "Infestation",
                 "chargedMove": "Gunk Shot",
-                "dps": 8.21,
-                "er": 242.58,
-                "pct": "49.8%"
+                "dps": 14.0,
+                "pct": "72.5%"
             }
         ],
         "Psychic": [
@@ -4602,9 +4326,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Future Sight+",
-                "dps": 25.69,
-                "er": 889.65,
-                "pct": "156.0%"
+                "dps": 43.77,
+                "pct": "190.4%"
             },
             {
                 "rank": 2,
@@ -4618,9 +4341,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Psychic",
-                "dps": 20.95,
-                "er": 719.24,
-                "pct": "127.2%"
+                "dps": 35.69,
+                "pct": "155.2%"
             },
             {
                 "rank": 3,
@@ -4634,9 +4356,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Psychic",
-                "dps": 19.48,
-                "er": 687.31,
-                "pct": "118.3%"
+                "dps": 33.19,
+                "pct": "144.3%"
             },
             {
                 "rank": 4,
@@ -4650,9 +4371,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Psychic",
-                "dps": 15.97,
-                "er": 518.84,
-                "pct": "97.0%"
+                "dps": 27.22,
+                "pct": "118.4%"
             },
             {
                 "rank": 5,
@@ -4665,9 +4385,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Psychic",
-                "dps": 15.52,
-                "er": 482.13,
-                "pct": "94.2%"
+                "dps": 26.45,
+                "pct": "115.0%"
             },
             {
                 "rank": 6,
@@ -4681,9 +4400,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Psychic",
-                "dps": 15.34,
-                "er": 489.07,
-                "pct": "93.1%"
+                "dps": 26.14,
+                "pct": "113.7%"
             },
             {
                 "rank": 7,
@@ -4697,9 +4415,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Psychic",
-                "dps": 14.75,
-                "er": 479.55,
-                "pct": "89.6%"
+                "dps": 25.13,
+                "pct": "109.3%"
             },
             {
                 "rank": 8,
@@ -4713,9 +4430,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Psybeam+",
-                "dps": 14.32,
-                "er": 479.92,
-                "pct": "86.9%"
+                "dps": 24.4,
+                "pct": "106.1%"
             },
             {
                 "rank": 9,
@@ -4729,9 +4445,8 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Psychic",
-                "dps": 13.49,
-                "er": 422.39,
-                "pct": "81.9%"
+                "dps": 23.0,
+                "pct": "100.0%"
             },
             {
                 "rank": 10,
@@ -4744,9 +4459,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Future Sight",
-                "dps": 13.0,
-                "er": 399.05,
-                "pct": "78.9%"
+                "dps": 22.15,
+                "pct": "96.3%"
             },
             {
                 "rank": 11,
@@ -4760,9 +4474,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Psychic",
-                "dps": 12.86,
-                "er": 456.71,
-                "pct": "78.1%"
+                "dps": 21.91,
+                "pct": "95.3%"
             },
             {
                 "rank": 12,
@@ -4775,9 +4488,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Psychic",
-                "dps": 12.83,
-                "er": 436.49,
-                "pct": "77.9%"
+                "dps": 21.87,
+                "pct": "95.1%"
             },
             {
                 "rank": 13,
@@ -4791,9 +4503,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Psychic",
-                "dps": 12.83,
-                "er": 436.49,
-                "pct": "77.9%"
+                "dps": 21.87,
+                "pct": "95.1%"
             },
             {
                 "rank": 14,
@@ -4807,9 +4518,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Psychic",
-                "dps": 12.83,
-                "er": 436.49,
-                "pct": "77.9%"
+                "dps": 21.87,
+                "pct": "95.1%"
             },
             {
                 "rank": 15,
@@ -4823,9 +4533,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Future Sight",
-                "dps": 12.82,
-                "er": 428.82,
-                "pct": "77.8%"
+                "dps": 21.85,
+                "pct": "95.0%"
             },
             {
                 "rank": 16,
@@ -4839,9 +4548,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Future Sight",
-                "dps": 12.82,
-                "er": 428.82,
-                "pct": "77.8%"
+                "dps": 21.85,
+                "pct": "95.0%"
             },
             {
                 "rank": 17,
@@ -4855,9 +4563,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Psychic",
-                "dps": 12.54,
-                "er": 423.75,
-                "pct": "76.1%"
+                "dps": 21.36,
+                "pct": "92.9%"
             },
             {
                 "rank": 18,
@@ -4870,9 +4577,8 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Future Sight",
-                "dps": 12.08,
-                "er": 401.13,
-                "pct": "73.3%"
+                "dps": 20.58,
+                "pct": "89.5%"
             },
             {
                 "rank": 19,
@@ -4886,9 +4592,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Psychic",
-                "dps": 11.91,
-                "er": 356.12,
-                "pct": "72.3%"
+                "dps": 20.3,
+                "pct": "88.3%"
             },
             {
                 "rank": 20,
@@ -4902,9 +4607,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Psychic",
-                "dps": 11.74,
-                "er": 389.44,
-                "pct": "71.3%"
+                "dps": 20.0,
+                "pct": "87.0%"
             }
         ],
         "Rock": [
@@ -4920,9 +4624,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Meteor Beam",
-                "dps": 14.3,
-                "er": 455.64,
-                "pct": "86.8%"
+                "dps": 24.36,
+                "pct": "116.9%"
             },
             {
                 "rank": 2,
@@ -4935,9 +4638,8 @@
                 ],
                 "fastMove": "Metal Sound",
                 "chargedMove": "Meteor Beam",
-                "dps": 14.11,
-                "er": 501.83,
-                "pct": "85.7%"
+                "dps": 24.04,
+                "pct": "115.4%"
             },
             {
                 "rank": 3,
@@ -4950,9 +4652,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Stone Edge",
-                "dps": 13.26,
-                "er": 454.19,
-                "pct": "80.5%"
+                "dps": 22.59,
+                "pct": "108.5%"
             },
             {
                 "rank": 4,
@@ -4965,9 +4666,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Rock Slide",
-                "dps": 13.12,
-                "er": 409.67,
-                "pct": "79.7%"
+                "dps": 22.35,
+                "pct": "107.3%"
             },
             {
                 "rank": 5,
@@ -4981,9 +4681,8 @@
                 ],
                 "fastMove": "Metal Sound",
                 "chargedMove": "Meteor Beam",
-                "dps": 12.74,
-                "er": 407.57,
-                "pct": "77.4%"
+                "dps": 21.7,
+                "pct": "104.2%"
             },
             {
                 "rank": 6,
@@ -4997,9 +4696,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Rock Slide",
-                "dps": 12.22,
-                "er": 424.18,
-                "pct": "74.2%"
+                "dps": 20.83,
+                "pct": "100.0%"
             },
             {
                 "rank": 7,
@@ -5013,9 +4711,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Stone Edge",
-                "dps": 11.27,
-                "er": 408.73,
-                "pct": "68.4%"
+                "dps": 19.2,
+                "pct": "92.2%"
             },
             {
                 "rank": 8,
@@ -5029,9 +4726,8 @@
                 ],
                 "fastMove": "Rock Throw",
                 "chargedMove": "Meteor Beam",
-                "dps": 10.56,
-                "er": 324.1,
-                "pct": "64.1%"
+                "dps": 18.0,
+                "pct": "86.4%"
             },
             {
                 "rank": 9,
@@ -5044,9 +4740,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Weather Ball Rock",
-                "dps": 10.36,
-                "er": 334.12,
-                "pct": "62.9%"
+                "dps": 17.66,
+                "pct": "84.8%"
             },
             {
                 "rank": 10,
@@ -5060,9 +4755,8 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Rock Slide",
-                "dps": 10.04,
-                "er": 312.97,
-                "pct": "61.0%"
+                "dps": 17.11,
+                "pct": "82.1%"
             },
             {
                 "rank": 11,
@@ -5076,9 +4770,8 @@
                 ],
                 "fastMove": "Rock Throw",
                 "chargedMove": "Meteor Beam",
-                "dps": 9.99,
-                "er": 315.68,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "81.7%"
             },
             {
                 "rank": 12,
@@ -5092,9 +4785,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Power Gem",
-                "dps": 9.98,
-                "er": 330.27,
-                "pct": "60.6%"
+                "dps": 17.0,
+                "pct": "81.6%"
             },
             {
                 "rank": 13,
@@ -5108,9 +4800,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Rock Wrecker",
-                "dps": 9.82,
-                "er": 296.22,
-                "pct": "59.6%"
+                "dps": 16.73,
+                "pct": "80.3%"
             },
             {
                 "rank": 14,
@@ -5124,9 +4815,8 @@
                 ],
                 "fastMove": "Double Kick",
                 "chargedMove": "Rock Slide",
-                "dps": 9.76,
-                "er": 319.96,
-                "pct": "59.3%"
+                "dps": 16.64,
+                "pct": "79.9%"
             },
             {
                 "rank": 15,
@@ -5140,9 +4830,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Rock Blast",
-                "dps": 9.74,
-                "er": 323.23,
-                "pct": "59.1%"
+                "dps": 16.59,
+                "pct": "79.7%"
             },
             {
                 "rank": 16,
@@ -5155,9 +4844,8 @@
                 ],
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Rock Slide",
-                "dps": 9.63,
-                "er": 267.99,
-                "pct": "58.5%"
+                "dps": 16.42,
+                "pct": "78.8%"
             },
             {
                 "rank": 17,
@@ -5171,9 +4859,8 @@
                 ],
                 "fastMove": "Acid",
                 "chargedMove": "Rock Slide",
-                "dps": 9.54,
-                "er": 329.52,
-                "pct": "57.9%"
+                "dps": 16.26,
+                "pct": "78.0%"
             },
             {
                 "rank": 18,
@@ -5187,9 +4874,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Stone Edge",
-                "dps": 9.46,
-                "er": 289.23,
-                "pct": "57.4%"
+                "dps": 16.12,
+                "pct": "77.4%"
             },
             {
                 "rank": 19,
@@ -5203,9 +4889,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Stone Edge",
-                "dps": 9.38,
-                "er": 285.38,
-                "pct": "57.0%"
+                "dps": 15.98,
+                "pct": "76.7%"
             },
             {
                 "rank": 20,
@@ -5219,9 +4904,8 @@
                 ],
                 "fastMove": "Snarl",
                 "chargedMove": "Rock Slide",
-                "dps": 9.18,
-                "er": 279.65,
-                "pct": "55.7%"
+                "dps": 15.65,
+                "pct": "75.1%"
             }
         ],
         "Steel": [
@@ -5237,9 +4921,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Flash Cannon",
-                "dps": 15.57,
-                "er": 549.36,
-                "pct": "94.5%"
+                "dps": 26.53,
+                "pct": "101.0%"
             },
             {
                 "rank": 2,
@@ -5253,9 +4936,8 @@
                 ],
                 "fastMove": "Charge Beam",
                 "chargedMove": "Doom Desire",
-                "dps": 15.42,
-                "er": 524.36,
-                "pct": "93.6%"
+                "dps": 26.27,
+                "pct": "100.0%"
             },
             {
                 "rank": 3,
@@ -5269,9 +4951,8 @@
                 ],
                 "fastMove": "Bullet Punch",
                 "chargedMove": "Meteor Mash",
-                "dps": 12.96,
-                "er": 396.94,
-                "pct": "78.7%"
+                "dps": 22.09,
+                "pct": "84.1%"
             },
             {
                 "rank": 4,
@@ -5284,9 +4965,8 @@
                 ],
                 "fastMove": "Metal Sound",
                 "chargedMove": "Heavy Slam",
-                "dps": 12.61,
-                "er": 448.65,
-                "pct": "76.6%"
+                "dps": 21.49,
+                "pct": "81.8%"
             },
             {
                 "rank": 5,
@@ -5300,9 +4980,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Flash Cannon",
-                "dps": 12.2,
-                "er": 388.77,
-                "pct": "74.1%"
+                "dps": 20.78,
+                "pct": "79.1%"
             },
             {
                 "rank": 6,
@@ -5316,9 +4995,8 @@
                 ],
                 "fastMove": "Thunder Fang",
                 "chargedMove": "Heavy Slam",
-                "dps": 11.99,
-                "er": 430.42,
-                "pct": "72.8%"
+                "dps": 20.44,
+                "pct": "77.8%"
             },
             {
                 "rank": 7,
@@ -5331,9 +5009,8 @@
                 ],
                 "fastMove": "Lock-On",
                 "chargedMove": "Heavy Slam",
-                "dps": 11.35,
-                "er": 354.46,
-                "pct": "68.9%"
+                "dps": 19.34,
+                "pct": "73.6%"
             },
             {
                 "rank": 8,
@@ -5347,9 +5024,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Iron Head",
-                "dps": 10.49,
-                "er": 349.23,
-                "pct": "63.7%"
+                "dps": 17.88,
+                "pct": "68.1%"
             },
             {
                 "rank": 9,
@@ -5363,9 +5039,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Iron Head",
-                "dps": 10.44,
-                "er": 351.55,
-                "pct": "63.4%"
+                "dps": 17.78,
+                "pct": "67.7%"
             },
             {
                 "rank": 10,
@@ -5378,27 +5053,11 @@
                 ],
                 "fastMove": "Thunder Shock",
                 "chargedMove": "Flash Cannon",
-                "dps": 10.31,
-                "er": 355.8,
-                "pct": "62.6%"
+                "dps": 17.56,
+                "pct": "66.9%"
             },
             {
                 "rank": 11,
-                "name": "Registeel",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Lock-On",
-                "chargedMove": "Flash Cannon",
-                "dps": 10.14,
-                "er": 340.6,
-                "pct": "61.6%"
-            },
-            {
-                "rank": 12,
                 "name": "Necrozma",
                 "form": "Dusk_mane",
                 "isShadow": false,
@@ -5409,9 +5068,22 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Iron Head",
-                "dps": 10.14,
-                "er": 339.0,
-                "pct": "61.6%"
+                "dps": 17.27,
+                "pct": "65.8%"
+            },
+            {
+                "rank": 12,
+                "name": "Registeel",
+                "form": "",
+                "isShadow": true,
+                "isMega": false,
+                "types": [
+                    "Steel"
+                ],
+                "fastMove": "Lock-On",
+                "chargedMove": "Flash Cannon",
+                "dps": 17.27,
+                "pct": "65.8%"
             },
             {
                 "rank": 13,
@@ -5425,9 +5097,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Magnet Bomb",
-                "dps": 9.99,
-                "er": 316.17,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "64.8%"
             },
             {
                 "rank": 14,
@@ -5441,9 +5112,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Magnet Bomb",
-                "dps": 9.99,
-                "er": 316.17,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "64.8%"
             },
             {
                 "rank": 15,
@@ -5457,9 +5127,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Magnet Bomb",
-                "dps": 9.99,
-                "er": 316.17,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "64.8%"
             },
             {
                 "rank": 16,
@@ -5473,9 +5142,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Magnet Bomb",
-                "dps": 9.99,
-                "er": 316.17,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "64.8%"
             },
             {
                 "rank": 17,
@@ -5489,9 +5157,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Magnet Bomb",
-                "dps": 9.99,
-                "er": 316.17,
-                "pct": "60.7%"
+                "dps": 17.02,
+                "pct": "64.8%"
             },
             {
                 "rank": 18,
@@ -5505,9 +5172,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Iron Head",
-                "dps": 9.88,
-                "er": 332.66,
-                "pct": "60.0%"
+                "dps": 16.83,
+                "pct": "64.1%"
             },
             {
                 "rank": 19,
@@ -5520,9 +5186,8 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Heavy Slam",
-                "dps": 9.67,
-                "er": 322.76,
-                "pct": "58.7%"
+                "dps": 16.47,
+                "pct": "62.7%"
             },
             {
                 "rank": 20,
@@ -5536,9 +5201,8 @@
                 ],
                 "fastMove": "Bug Bite",
                 "chargedMove": "Iron Head",
-                "dps": 9.54,
-                "er": 305.87,
-                "pct": "57.9%"
+                "dps": 16.25,
+                "pct": "61.9%"
             }
         ],
         "Water": [
@@ -5554,9 +5218,8 @@
                 ],
                 "fastMove": "Psywave",
                 "chargedMove": "Liquidation+",
-                "dps": 16.24,
-                "er": 517.21,
-                "pct": "98.6%"
+                "dps": 27.67,
+                "pct": "143.7%"
             },
             {
                 "rank": 2,
@@ -5570,9 +5233,8 @@
                 ],
                 "fastMove": "Water Shuriken",
                 "chargedMove": "Surf+",
-                "dps": 15.25,
-                "er": 472.51,
-                "pct": "92.6%"
+                "dps": 25.99,
+                "pct": "135.0%"
             },
             {
                 "rank": 3,
@@ -5586,9 +5248,8 @@
                 ],
                 "fastMove": "Mud Shot",
                 "chargedMove": "Surf",
-                "dps": 12.58,
-                "er": 431.78,
-                "pct": "76.4%"
+                "dps": 21.44,
+                "pct": "111.4%"
             },
             {
                 "rank": 4,
@@ -5601,9 +5262,8 @@
                 ],
                 "fastMove": "Waterfall",
                 "chargedMove": "Hydro Pump",
-                "dps": 12.24,
-                "er": 437.9,
-                "pct": "74.3%"
+                "dps": 20.85,
+                "pct": "108.3%"
             },
             {
                 "rank": 5,
@@ -5616,9 +5276,8 @@
                 ],
                 "fastMove": "Rollout",
                 "chargedMove": "Hydro Pump",
-                "dps": 12.08,
-                "er": 405.59,
-                "pct": "73.3%"
+                "dps": 20.59,
+                "pct": "107.0%"
             },
             {
                 "rank": 6,
@@ -5632,9 +5291,8 @@
                 ],
                 "fastMove": "Psywave",
                 "chargedMove": "Sparkling Aria",
-                "dps": 11.62,
-                "er": 379.76,
-                "pct": "70.6%"
+                "dps": 19.8,
+                "pct": "102.9%"
             },
             {
                 "rank": 7,
@@ -5648,9 +5306,8 @@
                 ],
                 "fastMove": "Psywave",
                 "chargedMove": "Sparkling Aria",
-                "dps": 11.62,
-                "er": 379.76,
-                "pct": "70.6%"
+                "dps": 19.8,
+                "pct": "102.9%"
             },
             {
                 "rank": 8,
@@ -5664,9 +5321,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Razor Shell",
-                "dps": 11.3,
-                "er": 371.4,
-                "pct": "68.6%"
+                "dps": 19.25,
+                "pct": "100.0%"
             },
             {
                 "rank": 9,
@@ -5679,9 +5335,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Razor Shell",
-                "dps": 11.28,
-                "er": 339.53,
-                "pct": "68.5%"
+                "dps": 19.22,
+                "pct": "99.8%"
             },
             {
                 "rank": 10,
@@ -5695,9 +5350,8 @@
                 ],
                 "fastMove": "Bite",
                 "chargedMove": "Hydro Pump",
-                "dps": 11.03,
-                "er": 386.15,
-                "pct": "67.0%"
+                "dps": 18.8,
+                "pct": "97.7%"
             },
             {
                 "rank": 11,
@@ -5710,9 +5364,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Hydro Pump",
-                "dps": 10.95,
-                "er": 365.32,
-                "pct": "66.5%"
+                "dps": 18.66,
+                "pct": "96.9%"
             },
             {
                 "rank": 12,
@@ -5725,9 +5378,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Hydro Pump",
-                "dps": 10.95,
-                "er": 365.32,
-                "pct": "66.5%"
+                "dps": 18.66,
+                "pct": "96.9%"
             },
             {
                 "rank": 13,
@@ -5741,9 +5393,8 @@
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Razor Shell",
-                "dps": 10.24,
-                "er": 326.95,
-                "pct": "62.2%"
+                "dps": 17.45,
+                "pct": "90.7%"
             },
             {
                 "rank": 14,
@@ -5756,9 +5407,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Hydro Pump",
-                "dps": 10.14,
-                "er": 311.97,
-                "pct": "61.6%"
+                "dps": 17.28,
+                "pct": "89.8%"
             },
             {
                 "rank": 15,
@@ -5771,9 +5421,8 @@
                 ],
                 "fastMove": "Bubble",
                 "chargedMove": "Crabhammer",
-                "dps": 10.07,
-                "er": 286.38,
-                "pct": "61.1%"
+                "dps": 17.17,
+                "pct": "89.2%"
             },
             {
                 "rank": 16,
@@ -5787,28 +5436,11 @@
                 ],
                 "fastMove": "Fire Fang",
                 "chargedMove": "Hydro Pump",
-                "dps": 9.93,
-                "er": 348.9,
-                "pct": "60.3%"
+                "dps": 16.92,
+                "pct": "87.9%"
             },
             {
                 "rank": 17,
-                "name": "Palkia",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Water",
-                    "Dragon"
-                ],
-                "fastMove": "Dragon Breath",
-                "chargedMove": "Hydro Pump",
-                "dps": 9.83,
-                "er": 308.56,
-                "pct": "59.7%"
-            },
-            {
-                "rank": 18,
                 "name": "Keldeo",
                 "form": "",
                 "isShadow": false,
@@ -5819,12 +5451,11 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Hydro Pump",
-                "dps": 9.83,
-                "er": 322.26,
-                "pct": "59.7%"
+                "dps": 16.76,
+                "pct": "87.1%"
             },
             {
-                "rank": 19,
+                "rank": 18,
                 "name": "Keldeo",
                 "form": "Ordinary",
                 "isShadow": false,
@@ -5835,12 +5466,11 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Hydro Pump",
-                "dps": 9.83,
-                "er": 322.26,
-                "pct": "59.7%"
+                "dps": 16.76,
+                "pct": "87.1%"
             },
             {
-                "rank": 20,
+                "rank": 19,
                 "name": "Keldeo",
                 "form": "Resolute",
                 "isShadow": false,
@@ -5851,9 +5481,23 @@
                 ],
                 "fastMove": "Low Kick",
                 "chargedMove": "Hydro Pump",
-                "dps": 9.83,
-                "er": 322.26,
-                "pct": "59.7%"
+                "dps": 16.76,
+                "pct": "87.1%"
+            },
+            {
+                "rank": 20,
+                "name": "Palkia",
+                "form": "",
+                "isShadow": true,
+                "isMega": false,
+                "types": [
+                    "Water",
+                    "Dragon"
+                ],
+                "fastMove": "Dragon Breath",
+                "chargedMove": "Hydro Pump",
+                "dps": 16.75,
+                "pct": "87.0%"
             }
         ]
     }

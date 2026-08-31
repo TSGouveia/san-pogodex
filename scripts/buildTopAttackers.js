@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-async function buildAllTypesOverallLogic() {
-  console.log("Building all 18 types using exact overall scale...");
+async function build1to1Dialgadex() {
+  console.log("Building 1:1 DialgaDex dataset for overall and all 18 types...");
 
   const pkmRes = await fetch('https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_pkm.min.json');
   const fmRes = await fetch('https://raw.githubusercontent.com/mgrann03/pokemon-resources/main/pogo_fm.json');
@@ -40,8 +40,8 @@ async function buildAllTypesOverallLogic() {
     const fm_stab = (types.includes(fm_obj.type) && fm_obj.name !== "Hidden Power") ? 1.2 : 1.0;
     const cm_stab = types.includes(cm_obj.type) ? 1.2 : 1.0;
 
-    const fm_dmg = calcDamage(atk, 180, processPower(fm_obj), 1.6 * fm_stab);
-    const cm_dmg = calcDamage(atk, 180, processPower(cm_obj), 1.6 * cm_stab);
+    const fm_dmg = calcDamage(atk, 180, processPower(fm_obj), fm_stab);
+    const cm_dmg = calcDamage(atk, 180, processPower(cm_obj), cm_stab);
 
     const fm_dur = processDuration(fm_obj.duration);
     const cm_dur = processDuration(cm_obj.duration);
@@ -82,14 +82,11 @@ async function buildAllTypesOverallLogic() {
     const hp = Math.floor((baseHp + 15) * CPM40);
 
     const rawDps = GetDPS(pkm.types, atk, def, hp, fm, cm);
-    const dps = rawDps / 15.2;
-
-    return { dps, fmName: fm.name, cmName: cm.name, cmType: cm.type };
+    return { dps: rawDps, fmName: fm.name, cmName: cm.name, cmType: cm.type };
   }
 
   const types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"];
   const byType = {};
-  const baselineDPS = 16.47;
 
   types.forEach(t => {
     const list = [];
@@ -98,9 +95,9 @@ async function buildAllTypesOverallLogic() {
       (pkm.fm || []).forEach(fm => {
         (pkm.cm || []).forEach(cm => {
           const cmObj = cmByName[cm.toLowerCase()];
-          if (cmObj && (cmObj.type.toLowerCase() === t.toLowerCase() || (pkm.types || []).includes(t))) {
+          if (cmObj && cmObj.type.toLowerCase() === t.toLowerCase()) {
             const res = getAttacker(pkm, fm, cm);
-            if (res && res.dps > 0 && res.cmType.toLowerCase() === t.toLowerCase()) {
+            if (res && res.dps > 0) {
               const formStr = pkm.form !== 'Normal' ? pkm.form : '';
               const isMegaForm = formStr.includes('Mega') || formStr.includes('Primal') || (pkm.name || '').startsWith('Mega') || (pkm.name || '').startsWith('Primal');
               list.push({
@@ -111,7 +108,7 @@ async function buildAllTypesOverallLogic() {
                 types: pkm.types,
                 fastMove: res.fmName,
                 chargedMove: res.cmName,
-                dps: parseFloat(res.dps.toFixed(2))
+                dps: res.dps
               });
             }
           }
@@ -130,9 +127,20 @@ async function buildAllTypesOverallLogic() {
       }
     });
 
+    // Find baseline mon (Volcarona for Bug, Reshiram for Fire, etc.)
+    const baselineMon = unique.find(item => !item.isMega && !item.isShadow && !item.form.includes('Apex') && !item.form.includes('White') && !item.form.includes('Black')) || unique[0];
+    const baselineDPS = baselineMon ? baselineMon.dps : 1.0;
+
     byType[t] = unique.slice(0, 20).map((item, idx) => ({
       rank: idx + 1,
-      ...item,
+      name: item.name,
+      form: item.form,
+      isShadow: item.isShadow,
+      isMega: item.isMega,
+      types: item.types,
+      fastMove: item.fastMove,
+      chargedMove: item.chargedMove,
+      dps: parseFloat((item.dps / 8.92).toFixed(2)),
       pct: `${((item.dps / baselineDPS) * 100).toFixed(1)}%`
     }));
   });
@@ -161,7 +169,7 @@ async function buildAllTypesOverallLogic() {
 
   fs.writeFileSync(path.join(filesDir, 'topAttackers.json'), JSON.stringify(result, null, 4), 'utf-8');
   fs.writeFileSync(path.join(filesDir, 'topAttackers.min.json'), JSON.stringify(result), 'utf-8');
-  console.log("Updated files/topAttackers.json & files/topAttackers.min.json using overall scale!");
+  console.log("Updated files/topAttackers.json & files/topAttackers.min.json 1:1 matching DialgaDex!");
 }
 
-buildAllTypesOverallLogic();
+build1to1Dialgadex();

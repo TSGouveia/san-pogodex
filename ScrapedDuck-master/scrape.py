@@ -550,7 +550,6 @@ def scrape_top_attackers():
 
         types = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
         by_type = {}
-        baseline_dps = 16.47
 
         for t in types:
             type_list = []
@@ -562,7 +561,6 @@ def scrape_top_attackers():
                         if res and res['dps'] > 0 and res['cmType'].lower() == t.lower():
                             form_val = pkm.get('form', '')
                             is_mega = bool(form_val and ('Mega' in form_val or 'Primal' in form_val)) or pkm.get('name', '').startswith('Mega') or pkm.get('name', '').startswith('Primal')
-                            dps_val = round(res['dps'] / 15.2, 2)
                             type_list.append({
                                 "name": pkm.get('name'),
                                 "form": form_val if form_val != 'Normal' else '',
@@ -571,10 +569,10 @@ def scrape_top_attackers():
                                 "types": pkm.get('types', []),
                                 "fastMove": res['fmName'],
                                 "chargedMove": res['cmName'],
-                                "dps": dps_val,
+                                "rawDps": res['dps'],
                                 "er": res['er']
                             })
-            type_list.sort(key=lambda x: x['dps'], reverse=True)
+            type_list.sort(key=lambda x: x['rawDps'], reverse=True)
             seen = set()
             unique = []
             for item in type_list:
@@ -583,11 +581,21 @@ def scrape_top_attackers():
                     seen.add(key)
                     unique.append(item)
 
+            baseline_mon = next((item for item in unique if not item['isMega'] and not item['isShadow'] and 'Apex' not in item['form'] and 'White' not in item['form'] and 'Black' not in item['form']), unique[0] if unique else None)
+            baseline_dps = baseline_mon['rawDps'] if baseline_mon else 1.0
+
             by_type[t] = [
                 {
                     "rank": idx + 1,
-                    **item,
-                    "pct": f"{round((item['dps'] / baseline_dps) * 100, 1)}%"
+                    "name": item['name'],
+                    "form": item['form'],
+                    "isShadow": item['isShadow'],
+                    "isMega": item['isMega'],
+                    "types": item['types'],
+                    "fastMove": item['fastMove'],
+                    "chargedMove": item['chargedMove'],
+                    "dps": round(item['rawDps'] / 8.92, 2),
+                    "pct": f"{round((item['rawDps'] / baseline_dps) * 100, 1)}%"
                 }
                 for idx, item in enumerate(unique[:20])
             ]
