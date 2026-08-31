@@ -210,6 +210,14 @@ function getPokemonImageUrl(name, matchedPoke) {
     if (!name) return matchedPoke ? matchedPoke.img : '';
     const nameLower = name.toLowerCase().trim();
     
+    // Check special legend forms
+    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10156.png`;
+    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10155.png`;
+    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png`;
+    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png`;
+    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png`;
+    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png`;
+
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
     if (rfId) {
@@ -6162,8 +6170,8 @@ function renderAttackersPane() {
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; font-weight: 700; background: var(--bg-tertiary); padding: 6px 10px; border-radius: 6px; margin-top: 2px;">
-                <span style="color: var(--text-secondary);">Score <span style="color: #fbbf24; font-size: 0.85rem; font-weight: 900; margin-left: 4px;">ER ${item.er}</span></span>
-                <span style="color: var(--text-secondary);">DPS <span style="color: #38bdf8; font-size: 0.85rem; font-weight: 900; margin-left: 4px;">${item.dps}</span></span>
+                <span style="color: var(--text-secondary);">eDPS <span style="color: #38bdf8; font-size: 0.88rem; font-weight: 900; margin-left: 4px;">${item.dps ? item.dps.toFixed(2) : '—'}</span></span>
+                <span style="color: var(--text-secondary);">Rating <span style="color: #fbbf24; font-size: 0.88rem; font-weight: 900; margin-left: 4px;">${item.pct || '100%'}</span></span>
             </div>
         `;
 
