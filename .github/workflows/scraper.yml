@@ -50,5 +50,6 @@ jobs:
             echo "Nenhuma alteração nos dados do scraper."
           else
             git commit -m "chore: auto-update scraped data [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin main
           fi
