@@ -5,6 +5,7 @@
         "description": "Redeem this promo code for the 2026 Worlds Tee (Green) avatar item from the 2026 Pokémon World Championships. Expires Friday, September 11, 2026, at 20:00 UTC. More detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=SANFRANCISCO2026",
         "expires": "September 11, 2026 at 8:00 PM",
+        "isExpired": false,
         "rewards": [
             "2026 Worlds Tee (Green)"
         ]
@@ -15,6 +16,7 @@
         "description": "To celebrate the Pokémon GO and Major League Baseball collaboration returning for the 2026 season, trainers can redeem this code to get an exclusive MLB-branded T-shirt avatar item. Learn morehere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=MLBxPOKEMONGO2026",
         "expires": "???",
+        "isExpired": false,
         "rewards": [
             "MLB-branded T-shirt"
         ]
@@ -25,6 +27,7 @@
         "description": "Redeem this promo code for Bonus Timed Research that awards berries, XP, Stardust, and the 2026 LEGO® Pokémon Cap. The Cap Timed Research is only available in select countries, including but not exclusive to the ones with participating LEGO Stores. Trainers in countries that are not included will get Timed Research that rewards a Lucky Egg instead. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxCAP",
         "expires": "???",
+        "isExpired": false,
         "rewards": [
             "×3 Pinap Berry",
             "×3 Razz Berry",
@@ -40,6 +43,7 @@
         "description": "Promo code for free berries and Poké Balls tied to the Pokémon GO and LEGO Group partnership. Learn morehere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=LEGOxPOKEMONGOxBERRIES",
         "expires": "???",
+        "isExpired": false,
         "rewards": [
             "×5 Razz Berry",
             "×10 Poké Ball",
@@ -53,6 +57,7 @@
         "description": "Trainers can redeem this code to get an exclusive FENDI x FRGMT x POKÉMON hoodie avatar item. (This code should have expired on January 4, 2025 but it appears to still work.)",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=FENDIxFRGMTxPOKEMON",
         "expires": "???",
+        "isExpired": false,
         "rewards": [
             "FENDI x FRGMT x POKÉMON hoodie"
         ]
@@ -63,6 +68,7 @@
         "description": "To celebrate Pokémon GO Fest 2026: Global, this code unlocked after the community reached 750K check-ins at local meetups. Check-in window was July 11 at 6 a.m. to July 12 at 8 p.m. local time. Trainers at the maximum Link Charge capacity will need to free up space before redeeming this reward code.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=FBLYVRG5QJKE6",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "×100 Link Charge",
             "×15 Poké Ball"
@@ -74,6 +80,7 @@
         "description": "To celebrate Pokémon GO Fest 2026: Global, this code unlocked after the community reached 750K RSVPs to local meetups. RSVP window was July 7 at midnight to July 11 at 10 a.m. local time. Trainers at the maximum Link Charge capacity will need to free up space before redeeming this reward code.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=62EGDH625ABMP",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "×100 Link Charge",
             "×15 Poké Ball"
@@ -85,6 +92,7 @@
         "description": "Timed Research to encounter 6 of your choice of Fennekin, Froakie, or Chespin with a Special Background for Pokémon GO Tour: Kalos - Global.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=GOTOURKALOS",
         "expires": "March 2, 2026 at 6:00 AM",
+        "isExpired": false,
         "rewards": [
             "Fennekin",
             "Froakie",
@@ -97,6 +105,7 @@
         "description": "Complete a Field Research task to earn a Pokémon encounter from Timed Research.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=6K343X373BDQM",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "Unown Y",
             "×3 Unown Candy"
@@ -108,6 +117,7 @@
         "description": "Complete a Field Research task to earn Pokémon encounters from Timed Research.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=2PKXPAT2RJXKL",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "Unown Z",
             "Unown A",
@@ -120,6 +130,7 @@
         "description": "Complete a Field Research task to earn a Pokémon encounter from Timed Research.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=QFWM3SRJPVRY5",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "Unown X",
             "×3 Unown Candy"
@@ -131,6 +142,7 @@
         "description": "Fairy type Timed Research available starting with Pokémon GO Tour in person events. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=TH4NKY0UF41RYMUCH",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "×2068 XP",
             "Sylveon",
@@ -143,6 +155,7 @@
         "description": "A reward for helping Pokémon GO’s YouTube channel gain 8,000 subscribers.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=SYJMGFM3SWRLQ",
         "expires": "Expired",
+        "isExpired": true,
         "rewards": [
             "×800 Max Particle",
             "×4 Purified Gem"
@@ -154,6 +167,7 @@
         "description": "To celebrate the Pokémon GO and Major League Baseball collaboration, trainers can redeem this code to get an exclusive MLB-branded cap avatar item. Learn morehere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=MLBxPOKEMONGO",
         "expires": "September 26, 2025 at 11:59 PM",
+        "isExpired": false,
         "rewards": [
             "MLB-branded Cap"
         ]
@@ -164,6 +178,7 @@
         "description": "Timed Research to encounter Psyduck (Swim Ring) with a special background from the Pokémon Concierge Celebration event. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=PokemonConcierge",
         "expires": "September 14, 2025 at 8:00 PM",
+        "isExpired": false,
         "rewards": [
             "Psyduck with a swim ring",
             "×5000 XP",
@@ -176,6 +191,7 @@
         "description": "Welcome to Anaheim Timed Research to encounter Pikachu wearing a varsity jacket from World Championships co-stream. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=JST9U45YFXGNQ",
         "expires": "August 31, 2025 at 8:00 PM",
+        "isExpired": false,
         "rewards": [
             "Pikachu wearing a varsity jacket"
         ]
@@ -186,6 +202,7 @@
         "description": "Branching Timed Research for Great League team building from 2025 Pokémon World Championships Day 2 Twitch Drop. Trainers will choose between three Great League lineups featuring Lileep, Squirtle, or Sentret. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=V7L7NS9HRKSL4",
         "expires": "August 31, 2025 at 8:00 PM",
+        "isExpired": false,
         "rewards": [
             "×8500 Stardust",
             "Lileep",
@@ -199,6 +216,7 @@
         "description": "Timed Research to encounter Skarmory from 2025 Pokémon World Championships Day 1 Twitch Drop. Research detailshere.",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=NG94RKDHXWMUL",
         "expires": "August 31, 2025 at 8:00 PM",
+        "isExpired": false,
         "rewards": [
             "Skarmory",
             "×1 Elite Charged TM"
@@ -210,6 +228,7 @@
         "description": "Avatar item: 2025 Worlds Tee (White) shared during World Championships stream",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=Z3USC2JQS9LWN",
         "expires": "August 30, 2025 at 11:00 PM",
+        "isExpired": false,
         "rewards": [
             "2025 Worlds Tee (White)"
         ]
@@ -220,6 +239,7 @@
         "description": "Pokémon GO’s official YouTube channel gained 2,000 subscribers on August 23, so a promo code was released to claim 200 Max Particles!",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=68TTGWN79E7XE",
         "expires": "August 26, 2025 at 6:00 PM",
+        "isExpired": false,
         "rewards": [
             "×200 Max Particle"
         ]
@@ -230,6 +250,7 @@
         "description": "Pokémon GO’s official YouTube channel gained 2,000 subscribers on August 22, so a promo code was released to claim 200 Max Particles!",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=47KP3GM76TK2F",
         "expires": "August 26, 2025 at 6:00 PM",
+        "isExpired": false,
         "rewards": [
             "×200 Max Particle"
         ]
@@ -240,6 +261,7 @@
         "description": "Pokémon GO’s official YouTube channel gained 2,000 subscribers on August 21, so a promo code was released to claim 200 Max Particles!",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=J85D4HVHQFFYV",
         "expires": "August 26, 2025 at 6:00 PM",
+        "isExpired": false,
         "rewards": [
             "×200 Max Particle"
         ]
@@ -250,6 +272,7 @@
         "description": "Pokémon GO’s official YouTube channel gained 2,000 subscribers on August 20, so a promo code was released to claim 200 Max Particles!",
         "link": "https://store.pokemongo.com/offer-redemption?passcode=REN73F559HY3T",
         "expires": "August 26, 2025 at 6:00 PM",
+        "isExpired": false,
         "rewards": [
             "×200 Max Particle"
         ]
