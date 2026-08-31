@@ -971,7 +971,9 @@ async function loadPokedex() {
                             dex: dex,
                             image: r.image || r.img || null,
                             shiny: r.canBeShiny || r.shiny || false,
-                            cp: r.combatPower ? { max: r.combatPower.max } : (r.cp ? { max: r.cp } : null)
+                            min_cp: r.min_cp || (r.combatPower ? r.combatPower.min : null),
+                            max_cp: r.max_cp || (r.combatPower ? r.combatPower.max : null),
+                            cp: r.combatPower ? { max: r.combatPower.max, min: r.combatPower.min } : (r.cp ? { max: r.cp } : null)
                         });
                     });
                     if (rewardList.length > 0) {
