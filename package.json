@@ -18,11 +18,8 @@
   ],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "playwright": "^1.62.1",
-    "vite": "^5.0.0"
-  },
   "dependencies": {
-    "firebase": "^12.17.1"
+    "firebase": "^12.17.1",
+    "vite": "^5.0.0"
   }
 }
