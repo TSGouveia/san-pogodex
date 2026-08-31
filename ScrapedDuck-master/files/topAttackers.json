@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-08-31T22:28:06.227604+00:00",
+    "updatedAt": "2026-08-31T22:31:21.046729+00:00",
     "overall": [
         {
             "rank": 1,
@@ -796,321 +796,322 @@
         "Bug": [
             {
                 "rank": 1,
-                "name": "Mega Heracross",
+                "name": "Heracross",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Bug",
                     "Fighting"
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "Megahorn",
-                "dps": 380.12,
-                "er": 830.06,
-                "pct": "100.0%"
+                "dps": 27.59,
+                "pct": "124.2%",
+                "er": 68.9
             },
             {
                 "rank": 2,
-                "name": "Mega Scizor",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
+                "name": "Regigigas",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Bug",
-                    "Steel"
+                    "Normal",
+                    "Bug"
                 ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "dps": 278.96,
-                "er": 610.74,
-                "pct": "73.4%"
+                "fastMove": "Hidden Power Bug",
+                "chargedMove": "Crush Grip*",
+                "dps": 25.14,
+                "pct": "113.2%",
+                "er": 62.8
             },
             {
                 "rank": 3,
-                "name": "Mega Pinsir",
+                "name": "Pinsir",
                 "form": "Mega",
-                "isShadow": false,
                 "isMega": true,
+                "isShadow": false,
                 "types": [
                     "Bug",
                     "Flying"
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 267.33,
-                "er": 567.52,
-                "pct": "70.3%"
+                "dps": 24.45,
+                "pct": "110.0%",
+                "er": 61.1
             },
             {
                 "rank": 4,
-                "name": "Heracross",
+                "name": "Vikavolt",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Bug",
-                    "Fighting"
+                    "Electric"
                 ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "Megahorn",
-                "dps": 241.19,
-                "er": 500.46,
-                "pct": "63.5%"
+                "fastMove": "Bug Bite",
+                "chargedMove": "X-Scissor",
+                "dps": 23.36,
+                "pct": "105.1%",
+                "er": 58.4
             },
             {
                 "rank": 5,
-                "name": "Frosmoth",
-                "form": "",
+                "name": "Scizor",
+                "form": "Mega",
+                "isMega": true,
                 "isShadow": false,
-                "isMega": false,
                 "types": [
-                    "Ice",
-                    "Bug"
+                    "Bug",
+                    "Steel"
                 ],
-                "fastMove": "Powder Snow",
-                "chargedMove": "Bug Buzz",
-                "dps": 231.39,
-                "er": 453.38,
-                "pct": "60.9%"
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 23.29,
+                "pct": "104.8%",
+                "er": 58.2
             },
             {
                 "rank": 6,
+                "name": "Scizor",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
+                "types": [
+                    "Bug",
+                    "Steel"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 22.71,
+                "pct": "102.2%",
+                "er": 56.8
+            },
+            {
+                "rank": 7,
                 "name": "Volcarona",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Bug",
                     "Fire"
                 ],
                 "fastMove": "Bug Bite",
                 "chargedMove": "Bug Buzz",
-                "dps": 225.82,
-                "er": 478.82,
-                "pct": "59.4%"
-            },
-            {
-                "rank": 7,
-                "name": "Accelgor",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug"
-                ],
-                "fastMove": "Water Shuriken",
-                "chargedMove": "Bug Buzz",
-                "dps": 223.18,
-                "er": 404.1,
-                "pct": "58.7%"
+                "dps": 22.22,
+                "pct": "100.0%",
+                "er": 55.6
             },
             {
                 "rank": 8,
-                "name": "Golisopod",
-                "form": "",
+                "name": "Beedrill",
+                "form": "Mega",
+                "isMega": true,
                 "isShadow": false,
-                "isMega": false,
                 "types": [
                     "Bug",
-                    "Water"
+                    "Poison"
                 ],
-                "fastMove": "Fury Cutter",
+                "fastMove": "Bug Bite*",
                 "chargedMove": "X-Scissor",
-                "dps": 222.7,
-                "er": 481.7,
-                "pct": "58.6%"
+                "dps": 22.17,
+                "pct": "99.8%",
+                "er": 55.4
             },
             {
                 "rank": 9,
-                "name": "Genesect",
+                "name": "Pinsir",
                 "form": "",
-                "isShadow": false,
                 "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Bug",
-                    "Steel"
+                    "Bug"
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 218.18,
-                "er": 454.34,
-                "pct": "57.4%"
+                "dps": 21.88,
+                "pct": "98.5%",
+                "er": 54.7
             },
             {
                 "rank": 10,
-                "name": "Genesect",
-                "form": "Burn",
-                "isShadow": false,
+                "name": "Regigigas",
+                "form": "",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
-                    "Bug",
-                    "Steel"
+                    "Normal",
+                    "Bug"
                 ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "dps": 218.18,
-                "er": 454.34,
-                "pct": "57.4%"
+                "fastMove": "Hidden Power Bug",
+                "chargedMove": "Crush Grip*",
+                "dps": 21.63,
+                "pct": "97.4%",
+                "er": 54.1
             },
             {
                 "rank": 11,
-                "name": "Genesect",
-                "form": "Chill",
-                "isShadow": false,
+                "name": "Escavalier",
+                "form": "",
                 "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Bug",
                     "Steel"
                 ],
-                "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "dps": 218.18,
-                "er": 454.34,
-                "pct": "57.4%"
+                "fastMove": "Bug Bite",
+                "chargedMove": "Megahorn",
+                "dps": 21.43,
+                "pct": "96.5%",
+                "er": 53.6
             },
             {
                 "rank": 12,
-                "name": "Genesect",
-                "form": "Douse",
-                "isShadow": false,
+                "name": "Metagross",
+                "form": "",
                 "isMega": false,
+                "isShadow": true,
                 "types": [
-                    "Bug",
-                    "Steel"
+                    "Steel",
+                    "Psychic"
                 ],
                 "fastMove": "Fury Cutter",
-                "chargedMove": "X-Scissor",
-                "dps": 218.18,
-                "er": 454.34,
-                "pct": "57.4%"
+                "chargedMove": "Meteor Mash*",
+                "dps": 21.14,
+                "pct": "95.2%",
+                "er": 52.8
             },
             {
                 "rank": 13,
-                "name": "Genesect",
-                "form": "Shock",
+                "name": "Metagross",
+                "form": "Mega",
+                "isMega": true,
                 "isShadow": false,
+                "types": [
+                    "Steel",
+                    "Psychic"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Meteor Mash*",
+                "dps": 21.07,
+                "pct": "94.8%",
+                "er": 52.7
+            },
+            {
+                "rank": 14,
+                "name": "Kartana",
+                "form": "",
                 "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Grass",
+                    "Steel"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 20.89,
+                "pct": "94.0%",
+                "er": 52.2
+            },
+            {
+                "rank": 15,
+                "name": "Genesect",
+                "form": "Douse Drive",
+                "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Bug",
                     "Steel"
                 ],
                 "fastMove": "Fury Cutter",
                 "chargedMove": "X-Scissor",
-                "dps": 218.18,
-                "er": 454.34,
-                "pct": "57.4%"
-            },
-            {
-                "rank": 14,
-                "name": "Vikavolt",
-                "form": "",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Electric"
-                ],
-                "fastMove": "Spark",
-                "chargedMove": "X-Scissor",
-                "dps": 216.96,
-                "er": 414.7,
-                "pct": "57.1%"
-            },
-            {
-                "rank": 15,
-                "name": "Vikavolt",
-                "form": "Winter_2025",
-                "isShadow": true,
-                "isMega": false,
-                "types": [
-                    "Bug",
-                    "Electric"
-                ],
-                "fastMove": "Spark",
-                "chargedMove": "X-Scissor",
-                "dps": 216.96,
-                "er": 414.7,
-                "pct": "57.1%"
+                "dps": 20.88,
+                "pct": "94.0%",
+                "er": 52.2
             },
             {
                 "rank": 16,
-                "name": "Pheromosa",
-                "form": "",
-                "isShadow": false,
+                "name": "Genesect",
+                "form": "Chill Drive",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
                     "Bug",
-                    "Fighting"
+                    "Steel"
                 ],
-                "fastMove": "Low Kick",
-                "chargedMove": "Bug Buzz",
-                "dps": 214.26,
-                "er": 368.9,
-                "pct": "56.4%"
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 20.88,
+                "pct": "94.0%",
+                "er": 52.2
             },
             {
                 "rank": 17,
-                "name": "Xerneas",
-                "form": "",
-                "isShadow": false,
+                "name": "Genesect",
+                "form": "Burn Drive",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
-                    "Fairy"
+                    "Bug",
+                    "Steel"
                 ],
-                "fastMove": "Tackle",
-                "chargedMove": "Megahorn",
-                "dps": 211.66,
-                "er": 469.92,
-                "pct": "55.7%"
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 20.88,
+                "pct": "94.0%",
+                "er": 52.2
             },
             {
                 "rank": 18,
-                "name": "Centiskorch",
-                "form": "",
-                "isShadow": false,
+                "name": "Genesect",
+                "form": "Shock Drive",
                 "isMega": false,
+                "isShadow": false,
                 "types": [
-                    "Fire",
-                    "Bug"
+                    "Bug",
+                    "Steel"
                 ],
-                "fastMove": "Ember",
-                "chargedMove": "Bug Buzz",
-                "dps": 210.04,
-                "er": 440.15,
-                "pct": "55.3%"
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 20.88,
+                "pct": "94.0%",
+                "er": 52.2
             },
             {
                 "rank": 19,
-                "name": "Yanmega",
-                "form": "",
-                "isShadow": false,
+                "name": "Genesect",
+                "form": "No Drive",
                 "isMega": false,
+                "isShadow": false,
+                "types": [
+                    "Bug",
+                    "Steel"
+                ],
+                "fastMove": "Fury Cutter",
+                "chargedMove": "X-Scissor",
+                "dps": 20.88,
+                "pct": "94.0%",
+                "er": 52.2
+            },
+            {
+                "rank": 20,
+                "name": "Scyther",
+                "form": "",
+                "isMega": false,
+                "isShadow": true,
                 "types": [
                     "Bug",
                     "Flying"
                 ],
-                "fastMove": "Wing Attack",
-                "chargedMove": "Bug Buzz",
-                "dps": 209.64,
-                "er": 425.96,
-                "pct": "55.2%"
-            },
-            {
-                "rank": 20,
-                "name": "Tapu Bulu",
-                "form": "",
-                "isShadow": false,
-                "isMega": false,
-                "types": [
-                    "Grass",
-                    "Fairy"
-                ],
-                "fastMove": "Bullet Seed",
-                "chargedMove": "Megahorn",
-                "dps": 209.1,
-                "er": 441.87,
-                "pct": "55.0%"
+                "fastMove": "Fury Cutter",
+                "chargedMove": "Bug Buzz*",
+                "dps": 20.4,
+                "pct": "91.8%",
+                "er": 51.0
             }
         ],
         "Dark": [
