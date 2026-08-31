@@ -6075,12 +6075,37 @@ function renderAttackersPane() {
         return;
     }
 
+    const tableWrapper = document.createElement('div');
+    tableWrapper.style.cssText = `
+        grid-column: 1 / -1;
+        width: 100%;
+        overflow-x: auto;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    `;
+
+    let tableHtml = `
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem;">
+            <thead>
+                <tr style="background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color); color: var(--text-secondary); text-transform: uppercase; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.5px;">
+                    <th style="padding: 12px 14px; width: 50px; text-align: center;">#</th>
+                    <th style="padding: 12px 14px;">Pokémon</th>
+                    <th style="padding: 12px 14px;">Fast Move</th>
+                    <th style="padding: 12px 14px;">Charged Move</th>
+                    <th style="padding: 12px 14px; text-align: right;">eDPS</th>
+                    <th style="padding: 12px 14px; text-align: right;">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
     filteredList.forEach((item, index) => {
         const rank = index + 1;
         const rankColor = rank === 1 ? '#fbbf24' : (rank === 2 ? '#cbd5e1' : (rank === 3 ? '#d97706' : 'var(--text-secondary)'));
-        const rankBg = rank <= 3 ? 'rgba(251, 191, 36, 0.12)' : 'rgba(255, 255, 255, 0.04)';
+        const rankBg = rank <= 3 ? 'rgba(251, 191, 36, 0.12)' : 'transparent';
 
-        // Match in pokemonDatabase
         const pokeNameLower = safeLower(item.name);
         const matchedPoke = pokemonDatabase.find(p => safeLower(p.name) === pokeNameLower) ||
             pokemonDatabase.find(p => pokeNameLower.includes(safeLower(p.name)));
@@ -6092,11 +6117,11 @@ function renderAttackersPane() {
 
         let statusBadgeHtml = '';
         if (isCaught) {
-            statusBadgeHtml = `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-check"></i> CAUGHT</span>`;
+            statusBadgeHtml = `<span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 0.62rem;"><i class="fa-solid fa-check"></i> CAUGHT</span>`;
         } else if (isCandyNeeded) {
-            statusBadgeHtml = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-candy-cane"></i> CANDY NEEDED</span>`;
+            statusBadgeHtml = `<span style="background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 0.62rem;"><i class="fa-solid fa-candy-cane"></i> CANDY</span>`;
         } else if (isMissing) {
-            statusBadgeHtml = `<span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 8px; border-radius: 6px; font-weight: 800; font-size: 0.68rem;"><i class="fa-solid fa-xmark"></i> MISSING</span>`;
+            statusBadgeHtml = `<span style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); padding: 1px 6px; border-radius: 4px; font-weight: 800; font-size: 0.62rem;"><i class="fa-solid fa-xmark"></i> MISSING</span>`;
         }
 
         let searchFormName = item.name;
@@ -6112,7 +6137,6 @@ function renderAttackersPane() {
 
         let formBadge = '';
         const formStr = (item.form || '').trim();
-
         if (formStr.includes('Primal')) {
             formBadge = `<span style="background: linear-gradient(135deg, #f59e0b, #ef4444); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">PRIMAL</span>`;
         } else if (formStr.includes('Mega') || item.isMega) {
@@ -6124,74 +6148,53 @@ function renderAttackersPane() {
             formBadge = `<span style="background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; padding: 1px 6px; border-radius: 4px; font-size: 0.62rem; font-weight: 800;">${formStr.toUpperCase()}</span>`;
         }
 
-        const card = document.createElement('div');
-        card.className = 'attacker-card';
-        card.style.cssText = `
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            cursor: ${matchedPoke ? 'pointer' : 'default'};
-            position: relative;
-            transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
-        `;
-
-        card.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span style="background: ${rankBg}; color: ${rankColor}; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 900; border: 1px solid ${rankColor}33;">#${rank}</span>
-                    ${formBadge}
-                </div>
-                ${statusBadgeHtml}
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 12px; margin-top: 2px;">
-                <img src="${imgUrl}" style="width: 48px; height: 48px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
-                <div style="flex: 1; min-width: 0;">
-                    <h4 style="margin: 0; font-size: 0.95rem; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${item.name} ${item.form ? `<span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">(${item.form})</span>` : ''}</h4>
-                    <div style="display: flex; gap: 4px; margin-top: 4px;">
-                        ${(item.types || []).map(t => `<span style="background: ${typeColors[t] || '#64748b'}; color: white; padding: 0 6px; border-radius: 3px; font-size: 0.6rem; font-weight: 800; text-transform: uppercase;">${t}</span>`).join('')}
+        tableHtml += `
+            <tr class="attacker-table-row" style="border-bottom: 1px solid var(--border-color); background: ${rankBg}; transition: background 0.15s; cursor: ${matchedPoke ? 'pointer' : 'default'};" data-poke-id="${matchedPoke ? matchedPoke.id : ''}">
+                <td style="padding: 10px 14px; text-align: center; font-weight: 900; color: ${rankColor}; font-size: 0.9rem;">${rank}</td>
+                <td style="padding: 10px 14px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="${imgUrl}" style="width: 40px; height: 40px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <strong style="color: var(--text-primary); font-size: 0.92rem;">${item.name}</strong>
+                                ${formBadge}
+                                ${statusBadgeHtml}
+                            </div>
+                            <div style="display: flex; gap: 3px; margin-top: 3px;">
+                                ${(item.types || []).map(t => `<span style="background: ${typeColors[t] || '#64748b'}; color: white; padding: 0 5px; border-radius: 3px; font-size: 0.58rem; font-weight: 800; text-transform: uppercase;">${t}</span>`).join('')}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-
-            <div style="background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 8px 10px; font-size: 0.76rem; display: flex; flex-direction: column; gap: 4px;">
-                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
-                    <span><i class="fa-solid fa-person-running" style="color: #60a5fa; margin-right: 4px;"></i> Fast</span>
-                    <strong style="color: var(--text-primary);">${item.fastMove || '—'}</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; color: var(--text-secondary);">
-                    <span><i class="fa-solid fa-burst" style="color: #f43f5e; margin-right: 4px;"></i> Charged</span>
-                    <strong style="color: var(--text-primary);">${item.chargedMove || '—'}</strong>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; font-weight: 700; background: var(--bg-tertiary); padding: 6px 10px; border-radius: 6px; margin-top: 2px;">
-                <span style="color: var(--text-secondary);">eDPS <span style="color: #38bdf8; font-size: 0.88rem; font-weight: 900; margin-left: 4px;">${item.dps ? item.dps.toFixed(2) : '—'}</span></span>
-                <span style="color: var(--text-secondary);">Rating <span style="color: #fbbf24; font-size: 0.88rem; font-weight: 900; margin-left: 4px;">${item.pct || '100%'}</span></span>
-            </div>
+                </td>
+                <td style="padding: 10px 14px; color: var(--text-primary); font-weight: 600;">${item.fastMove || '—'}</td>
+                <td style="padding: 10px 14px; color: var(--text-primary); font-weight: 600;">${item.chargedMove || '—'}</td>
+                <td style="padding: 10px 14px; text-align: right; color: #38bdf8; font-weight: 900; font-size: 0.92rem;">${item.dps ? item.dps.toFixed(2) : '—'}</td>
+                <td style="padding: 10px 14px; text-align: right; color: #fbbf24; font-weight: 900; font-size: 0.92rem;">${item.pct || '100%'}</td>
+            </tr>
         `;
+    });
+
+    tableHtml += `
+            </tbody>
+        </table>
+    `;
+
+    tableWrapper.innerHTML = tableHtml;
+    gridContainer.appendChild(tableWrapper);
+
+    // Attach click listeners to table rows
+    const rows = tableWrapper.querySelectorAll('.attacker-table-row');
+    rows.forEach((row, index) => {
+        const item = filteredList[index];
+        const pokeNameLower = safeLower(item.name);
+        const matchedPoke = pokemonDatabase.find(p => safeLower(p.name) === pokeNameLower) ||
+            pokemonDatabase.find(p => pokeNameLower.includes(safeLower(p.name)));
 
         if (matchedPoke) {
-            card.addEventListener('click', () => {
-                openModal(matchedPoke);
-            });
-            card.addEventListener('mouseenter', () => {
-                card.style.borderColor = 'var(--accent-color)';
-                card.style.transform = 'translateY(-2px)';
-                card.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.3)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.borderColor = 'var(--border-color)';
-                card.style.transform = 'none';
-                card.style.boxShadow = 'none';
-            });
+            row.addEventListener('click', () => openModal(matchedPoke));
+            row.addEventListener('mouseenter', () => row.style.background = 'rgba(255, 255, 255, 0.06)');
+            row.addEventListener('mouseleave', () => row.style.background = index < 3 ? 'rgba(251, 191, 36, 0.12)' : 'transparent');
         }
-
-        gridContainer.appendChild(card);
     });
 }
 
