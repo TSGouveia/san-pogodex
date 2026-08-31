@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-    "updatedAt": "2026-08-31T22:16:02.120125+00:00",
-=======
-    "updatedAt": "2026-08-31T22:18:43.299Z",
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
+    "updatedAt": "2026-08-31T22:19:18.727217+00:00",
     "overall": [
         {
             "name": "Mega Mewtwo Y",
@@ -31,7 +27,7 @@
             "fastMove": "Psycho Cut",
             "chargedMove": "Dynamic Punch+",
             "moveType": "Fighting",
-            "er": 50,
+            "er": 50.0,
             "dps": 22.13
         },
         {
@@ -224,10 +220,6 @@
             "fastMove": "Metal Claw",
             "chargedMove": "Draco Meteor",
             "moveType": "Dragon",
-<<<<<<< HEAD
-            "er": 54.81,
-            "dps": 23.0
-=======
             "er": 41.88,
             "dps": 19.11
         },
@@ -244,7 +236,6 @@
             "moveType": "Psychic",
             "er": 41.67,
             "dps": 19.49
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
         },
         {
             "name": "Mega Tyranitar",
@@ -1126,13 +1117,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
-<<<<<<< HEAD
-                "er": 82.53,
-                "dps": 34.62
-=======
                 "er": 61.08,
                 "dps": 27.88
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Reshiram",
@@ -1145,13 +1131,8 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
-<<<<<<< HEAD
-                "er": 82.53,
-                "dps": 34.62
-=======
                 "er": 61.08,
                 "dps": 27.88
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Kyurem",
@@ -1206,7 +1187,7 @@
                 "fastMove": "Dragon Tail",
                 "chargedMove": "Draco Meteor",
                 "er": 56.69,
-                "dps": 26
+                "dps": 26.0
             },
             {
                 "name": "Mega Latios",
@@ -1289,10 +1270,6 @@
                 ],
                 "fastMove": "Dragon Breath",
                 "chargedMove": "Draco Meteor",
-<<<<<<< HEAD
-                "er": 69.34,
-                "dps": 28.62
-=======
                 "er": 52.97,
                 "dps": 23.81
             },
@@ -1309,7 +1286,6 @@
                 "chargedMove": "Dragon Pulse",
                 "er": 52.6,
                 "dps": 23.03
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             }
         ],
         "Electric": [
@@ -1443,7 +1419,7 @@
                 ],
                 "fastMove": "Volt Switch",
                 "chargedMove": "Wild Charge",
-                "er": 53,
+                "er": 53.0,
                 "dps": 25.36
             },
             {
@@ -1457,7 +1433,7 @@
                 "fastMove": "Thunder Fang",
                 "chargedMove": "Wild Charge",
                 "er": 52.65,
-                "dps": 26
+                "dps": 26.0
             },
             {
                 "name": "Zapdos",
@@ -1611,7 +1587,7 @@
                 "fastMove": "Metal Claw",
                 "chargedMove": "Play Rough",
                 "er": 53.4,
-                "dps": 24
+                "dps": 24.0
             },
             {
                 "name": "Gardevoir",
@@ -1681,7 +1657,7 @@
                 "fastMove": "Metal Claw",
                 "chargedMove": "Play Rough",
                 "er": 42.39,
-                "dps": 19.13
+                "dps": 19.12
             },
             {
                 "name": "Xurkitree",
@@ -2324,7 +2300,7 @@
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Flamethrower",
                 "er": 54.68,
-                "dps": 24
+                "dps": 24.0
             },
             {
                 "name": "Primal Groudon",
@@ -2351,7 +2327,7 @@
                 ],
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Flamethrower",
-                "er": 53,
+                "er": 53.0,
                 "dps": 23.46
             },
             {
@@ -2506,7 +2482,7 @@
                 "fastMove": "Air Slash",
                 "chargedMove": "Hurricane",
                 "er": 50.68,
-                "dps": 25
+                "dps": 25.0
             },
             {
                 "name": "Tornadus",
@@ -2519,7 +2495,7 @@
                 "fastMove": "Air Slash",
                 "chargedMove": "Hurricane",
                 "er": 50.68,
-                "dps": 25
+                "dps": 25.0
             },
             {
                 "name": "Mega Pidgeot",
@@ -2909,7 +2885,7 @@
                 ],
                 "fastMove": "Astonish",
                 "chargedMove": "Shadow Ball",
-                "er": 45,
+                "er": 45.0,
                 "dps": 21.85
             },
             {
@@ -3006,10 +2982,6 @@
                 ],
                 "fastMove": "Razor Leaf",
                 "chargedMove": "Leaf Blade",
-<<<<<<< HEAD
-                "er": 67.0,
-                "dps": 32.14
-=======
                 "er": 50.88,
                 "dps": 26.28
             },
@@ -3040,7 +3012,6 @@
                 "chargedMove": "Leaf Blade",
                 "er": 50.44,
                 "dps": 24.69
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Shaymin",
@@ -3510,7 +3481,7 @@
                 "fastMove": "Dragon Tail",
                 "chargedMove": "Earthquake",
                 "er": 44.81,
-                "dps": 22
+                "dps": 22.0
             },
             {
                 "name": "Metagross",
@@ -3566,26 +3537,8 @@
                 ],
                 "fastMove": "Ice Fang",
                 "chargedMove": "Blizzard",
-<<<<<<< HEAD
-                "er": 73.33,
-                "dps": 30.49
-            },
-            {
-                "name": "Primal Kyogre",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Water"
-                ],
-                "fastMove": "Waterfall",
-                "chargedMove": "Avalanche",
-                "er": 66.82,
-                "dps": 26.0
-=======
                 "er": 55.61,
                 "dps": 25.14
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Mamoswine",
@@ -3639,7 +3592,7 @@
                 "fastMove": "Psycho Cut",
                 "chargedMove": "Ice Beam",
                 "er": 47.05,
-                "dps": 22
+                "dps": 22.0
             },
             {
                 "name": "Kyurem",
@@ -3694,10 +3647,6 @@
                 ],
                 "fastMove": "Powder Snow",
                 "chargedMove": "Weather Ball Ice",
-<<<<<<< HEAD
-                "er": 57.0,
-                "dps": 24.46
-=======
                 "er": 43.76,
                 "dps": 20.38
             },
@@ -3738,8 +3687,7 @@
                 "fastMove": "Lock-On",
                 "chargedMove": "Blizzard",
                 "er": 43.48,
-                "dps": 21.63
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
+                "dps": 21.62
             },
             {
                 "name": "Articuno",
@@ -3766,7 +3714,7 @@
                 "fastMove": "Ice Fang",
                 "chargedMove": "Avalanche",
                 "er": 43.18,
-                "dps": 22
+                "dps": 22.0
             },
             {
                 "name": "Mega Glalie",
@@ -3889,13 +3837,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-<<<<<<< HEAD
-                "er": 66.0,
-                "dps": 26.62
-=======
                 "er": 50.63,
                 "dps": 22.26
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Meloetta",
@@ -3908,13 +3851,8 @@
                 ],
                 "fastMove": "Quick Attack",
                 "chargedMove": "Hyper Beam",
-<<<<<<< HEAD
-                "er": 66.0,
-                "dps": 26.62
-=======
                 "er": 50.63,
                 "dps": 22.26
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Zamazenta",
@@ -3982,7 +3920,7 @@
                 ],
                 "fastMove": "Tackle",
                 "chargedMove": "Swift",
-                "er": 44,
+                "er": 44.0,
                 "dps": 19.38
             },
             {
@@ -4566,7 +4504,7 @@
                 "fastMove": "Zen Headbutt",
                 "chargedMove": "Psychic",
                 "er": 56.08,
-                "dps": 24
+                "dps": 24.0
             },
             {
                 "name": "Hoopa",
@@ -4634,13 +4572,8 @@
                 ],
                 "fastMove": "Confusion",
                 "chargedMove": "Psychic",
-<<<<<<< HEAD
-                "er": 67.0,
-                "dps": 27.05
-=======
                 "er": 51.03,
                 "dps": 22.44
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Latias",
@@ -4835,26 +4768,8 @@
                 ],
                 "fastMove": "Rock Throw",
                 "chargedMove": "Rock Slide",
-<<<<<<< HEAD
-                "er": 59.0,
-                "dps": 25.69
-            },
-            {
-                "name": "Mega Aggron",
-                "form": "Mega",
-                "isShadow": false,
-                "isMega": true,
-                "types": [
-                    "Steel"
-                ],
-                "fastMove": "Smack Down",
-                "chargedMove": "Meteor Beam",
-                "er": 58.45,
-                "dps": 22.89
-=======
                 "er": 45.49,
                 "dps": 21.49
->>>>>>> 69eb8a2 (Fix Level 40 CPM GamePress/DialgaDex calculation and load form-specific sprites for Mega/Primal/Shadow/Origin forms)
             },
             {
                 "name": "Terrakion",
@@ -5065,7 +4980,7 @@
                 "fastMove": "Metal Claw",
                 "chargedMove": "Iron Head",
                 "er": 48.4,
-                "dps": 22
+                "dps": 22.0
             },
             {
                 "name": "Mega Aggron",
@@ -5480,7 +5395,7 @@
                 "fastMove": "Dragon Tail",
                 "chargedMove": "Hydro Pump",
                 "er": 43.88,
-                "dps": 20.13
+                "dps": 20.12
             },
             {
                 "name": "Empoleon",
