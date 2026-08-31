@@ -1008,7 +1008,10 @@ async function loadPokedex() {
                 seenEventKeys.add(eventKey);
 
                 const rawImg = ev.image || ev.banner || '';
-                const hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
+                let hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
+                if (!hdBanner || !hdBanner.trim()) {
+                    hdBanner = "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg";
+                }
                 liveEvents.push({
                     title: ev.name || ev.title || '',
                     category: ev.heading || ev.eventType || ev.category || 'Event',
