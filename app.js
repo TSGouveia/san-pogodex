@@ -784,60 +784,61 @@ async function loadPokedex() {
             }
         }
         
-        const processed = [];
-        const seenDexNrs = new Set();
-        
-        // Pass 1: Parse primary base forms
-        data.forEach(p => {
-            if (p.id === p.formId && !seenDexNrs.has(p.dexNr)) {
-                seenDexNrs.add(p.dexNr);
-                processed.push(formatPokemon(p));
-            }
-        });
-        
-        // Pass 2: Grab base forms normal forms
-        data.forEach(p => {
-            if (!seenDexNrs.has(p.dexNr)) {
-                const hasNoFormSuffix = !p.formId.includes('_');
-                if (hasNoFormSuffix || p.formId.endsWith('_NORMAL')) {
+        let processed = [];
+        if (Array.isArray(data) && data.length > 0 && data[0].num) {
+            // Already processed Pokedex array from Firestore
+            processed = data;
+        } else {
+            const seenDexNrs = new Set();
+            
+            // Pass 1: Parse primary base forms
+            data.forEach(p => {
+                if (p.formId && p.id === p.formId && !seenDexNrs.has(p.dexNr)) {
                     seenDexNrs.add(p.dexNr);
                     processed.push(formatPokemon(p));
                 }
-            }
-        });
-
-        // Pass 3: Fallback for any other missing entries
-        data.forEach(p => {
-            if (!seenDexNrs.has(p.dexNr)) {
-                seenDexNrs.add(p.dexNr);
-                processed.push(formatPokemon(p));
-            }
-        });
-
-        // Inject missing Basculegion (902) since it's not present in the upstream Pokémon GO API
-        if (!seenDexNrs.has(902)) {
-            seenDexNrs.add(902);
-            processed.push({
-                id: "902",
-                idName: "BASCULEGION",
-                num: "902",
-                name: "Basculegion",
-                gen: 8.5,
-                types: ["water", "ghost"],
-                img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/902.png`,
-                stats: {
-                    atk: 247,
-                    def: 146,
-                    sta: 260
-                },
-                obtaining: [
-                    { method: "Evolution", desc: "Evolves from White-Striped Basculin." }
-                ],
-                rawEvolutions: []
             });
+            
+            // Pass 2: Grab base forms normal forms
+            data.forEach(p => {
+                if (!seenDexNrs.has(p.dexNr)) {
+                    const formIdStr = p.formId || '';
+                    const hasNoFormSuffix = !formIdStr.includes('_');
+                    if (hasNoFormSuffix || formIdStr.endsWith('_NORMAL')) {
+                        seenDexNrs.add(p.dexNr);
+                        processed.push(formatPokemon(p));
+                    }
+                }
+            });
+
+            // Pass 3: Fallback for any other missing entries
+            data.forEach(p => {
+                if (!seenDexNrs.has(p.dexNr)) {
+                    seenDexNrs.add(p.dexNr);
+                    processed.push(formatPokemon(p));
+                }
+            });
+
+            // Inject missing Basculegion (902)
+            if (!seenDexNrs.has(902)) {
+                seenDexNrs.add(902);
+                processed.push({
+                    id: "902",
+                    idName: "BASCULEGION",
+                    num: "902",
+                    name: "Basculegion",
+                    gen: 8.5,
+                    types: ["water", "ghost"],
+                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/902.png`,
+                    stats: { atk: 247, def: 146, sta: 260 },
+                    obtaining: [{ method: "Evolution", desc: "Evolves from White-Striped Basculin." }],
+                    rawEvolutions: []
+                });
+            }
+
+            processed.sort((a, b) => Number(a.id) - Number(b.id));
         }
 
-        processed.sort((a, b) => Number(a.id) - Number(b.id));
         pokemonDatabase = processed;
 
         const basculin = processed.find(p => p.id === "550");
