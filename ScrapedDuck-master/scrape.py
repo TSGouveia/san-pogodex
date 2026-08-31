@@ -514,7 +514,7 @@ def scrape_top_attackers():
             den = cm_eps + fm_eps + (cm_dps - fm_dps) / float(y)
             return fm_dps + (num / float(den)) if den != 0 else fm_dps
 
-        def get_attacker(pkm, fm_name, cm_name):
+        def get_attacker(pkm, fm_name, cm_name, target_type):
             fm = fm_by_name.get(fm_name.lower())
             cm = cm_by_name.get(cm_name.lower())
             if not fm or not cm: return None
@@ -532,18 +532,24 @@ def scrape_top_attackers():
             def_stat = (base_def + 15) * CPM40 * shadow_def_mult
             hp = int((base_hp + 15) * CPM40)
 
-            dps = get_dps(pkm.get('types', []), atk, def_stat, hp, fm, cm, 1.0, 1.0)
+            fm_mult = 1.6 if (fm.get('type', '').lower() == target_type.lower() or fm.get('name', '').startswith("Hidden Power")) else 1.0
+            cm_mult = 1.6 if cm.get('type', '').lower() == target_type.lower() else 1.0
+
+            dps = get_dps(pkm.get('types', []), atk, def_stat, hp, fm, cm, fm_mult, cm_mult)
             if dps <= 0: return None
 
             y = est_y_num / float(def_stat)
             tdo = dps * (hp / float(y))
             er = ((dps ** 3) * tdo) ** 0.25 if (dps > 0 and tdo > 0) else 0
 
+            is_elite_fm = fm.get('name') in pkm.get('fm_elite', [])
+            is_elite_cm = cm.get('name') in pkm.get('cm_elite', [])
+
             return {
-                'dps': round(dps, 2),
-                'er': round(er, 2),
-                'fmName': fm.get('name'),
-                'cmName': cm.get('name'),
+                'dps': dps,
+                'er': er,
+                'fmName': fm.get('name') + ('*' if is_elite_fm else ''),
+                'cmName': cm.get('name') + ('*' if is_elite_cm else ''),
                 'cmType': cm.get('type'),
                 'fmType': fm.get('type')
             }
@@ -555,10 +561,12 @@ def scrape_top_attackers():
             type_list = []
             for pkm in pkm_data:
                 if not pkm.get('released'): continue
-                for fm in pkm.get('fm', []):
-                    for cm in pkm.get('cm', []):
-                        res = get_attacker(pkm, fm, cm)
-                        if res and res['dps'] > 0 and res['cmType'].lower() == t.lower():
+                all_fm = list(pkm.get('fm', [])) + list(pkm.get('fm_elite', []))
+                all_cm = list(pkm.get('cm', [])) + list(pkm.get('cm_elite', []))
+                for fm in all_fm:
+                    for cm in all_cm:
+                        res = get_attacker(pkm, fm, cm, t)
+                        if res and res['er'] > 0 and res['cmType'].lower() == t.lower():
                             form_val = pkm.get('form', '')
                             is_mega = bool(form_val and ('Mega' in form_val or 'Primal' in form_val)) or pkm.get('name', '').startswith('Mega') or pkm.get('name', '').startswith('Primal')
                             type_list.append({
@@ -572,7 +580,7 @@ def scrape_top_attackers():
                                 "rawDps": res['dps'],
                                 "er": res['er']
                             })
-            type_list.sort(key=lambda x: x['rawDps'], reverse=True)
+            type_list.sort(key=lambda x: x['er'], reverse=True)
             seen = set()
             unique = []
             for item in type_list:
@@ -594,7 +602,7 @@ def scrape_top_attackers():
                     "types": item['types'],
                     "fastMove": item['fastMove'],
                     "chargedMove": item['chargedMove'],
-                    "dps": round(item['rawDps'] / 8.92, 2),
+                    "dps": round(item['rawDps'] / 0.9667, 2),
                     "pct": f"{round((item['rawDps'] / baseline_dps) * 100, 1)}%"
                 }
                 for idx, item in enumerate(unique[:20])
