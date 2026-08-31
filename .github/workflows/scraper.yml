@@ -22,17 +22,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install Node dependencies & Playwright Chromium
-        run: |
-          npm ci || npm install
-          npx playwright install --with-deps chromium
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -56,6 +45,6 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes detected in scraped data."
           else
-            git commit -m "chore: auto-update scraped data from DialgaDex and LeekDuck [skip ci]"
+            git commit -m "chore: auto-update scraped data from LeekDuck [skip ci]"
             git push origin main
           fi
