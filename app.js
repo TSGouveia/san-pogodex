@@ -657,7 +657,7 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges'];
+        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances'];
         const fetchPromises = modules.map(m => 
             fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
                 .then(r => r.ok ? r.json() : null)
@@ -744,6 +744,7 @@ async function loadPokedex() {
             if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
             if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
             if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
+            if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
@@ -4207,7 +4208,7 @@ function isReadyToEvolve(poke) {
 
 
 function getBuddyDistanceForFamily(family) {
-    if (!family || !family.base) return 3;
+    if (!family || !family.base) return undefined;
     const candidates = [
         family.base.id,
         Number(family.base.id),
@@ -4224,22 +4225,7 @@ function getBuddyDistanceForFamily(family) {
             return buddyDistances[cand];
         }
     }
-    // Infer fallback based on legendary/mythical status (20km) or standard Pokémon GO default (3km)
-    const isLegendaryOrMythical = family.members && family.members.some(m => {
-        const n = safeLower(m.name);
-        const idNum = Number(m.id);
-        return m.gen === 99 || (idNum >= 144 && idNum <= 151) ||
-            ["mewtwo", "mew", "raikou", "entei", "suicune", "lugia", "ho-oh", "celebi",
-             "kyogre", "groudon", "rayquaza", "jirachi", "deoxys", "dialga", "palkia",
-             "giratina", "darkrai", "arceus", "victini", "reshiram", "zekrom", "kyurem",
-             "xerneas", "yveltal", "zygarde", "diancie", "hoopa", "volcanion", "tapu koko",
-             "solgaleo", "lunala", "nihilego", "buzzwole", "pheromosa", "xurkitree",
-             "celesteela", "kartana", "guzzlord", "necrozma", "magearna", "marshadow",
-             "poipole", "naganadel", "stakataka", "blacephalon", "zeraora", "meltan", "melmetal",
-             "zacian", "zamazenta", "eternatus", "kubfu", "urshifu", "zarude", "regieleki",
-             "regidrago", "glastrier", "spectrier", "calyrex", "enamorus", "koraidon", "miraidon"].some(leg => n.includes(leg));
-    });
-    return isLegendaryOrMythical ? 20 : 3;
+    return undefined;
 }
 
 function isSpecialVersion(member) {
