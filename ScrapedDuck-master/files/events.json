@@ -1,15 +1,5 @@
 [
     {
-        "eventID": "max-mondays-2026-08-31",
-        "title": "Dynamax Eevee during Max Monday",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
-        "link": "https://leekduck.com/events/max-mondays-2026-08-31/",
-        "start": "2026-08-31T06:00:00.000",
-        "end": "2026-08-31T21:00:00.000"
-    },
-    {
         "eventID": "raidhour20260902",
         "title": "Regirock, Regice, and Registeel Raid Hour",
         "type": "",
