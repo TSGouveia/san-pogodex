@@ -5727,13 +5727,13 @@ function renderToDoPane() {
     function addPriority(poke, type, source, detail, sectionTarget, scrollTarget) {
         const item = {
             poke,
-            type, // 'Missing' or 'Candy'
+            type, // 'Missing', 'Transferred', or 'Candy'
             source, // 'Raid', 'Egg', 'Quest', 'Rocket', 'Party'
             detail,
             sectionTarget,
             scrollTarget
         };
-        if (type === 'Missing') {
+        if (type === 'Missing' || type === 'Transferred') {
             if (!missingItems.some(i => i.poke.id === poke.id && i.source === source && i.detail === detail)) {
                 missingItems.push(item);
             }
@@ -5761,11 +5761,14 @@ function renderToDoPane() {
                     tierLabel = 'Shadow ' + tierLabel.replace('shadow_', '').replace('lvl', 'Tier ');
                 }
                 
-                const isMiss = isPokemonMissing(matched);
+                const isTransf = isPokemonTransferred(matched);
+                const isMiss = isPokemonMissing(matched) && !isTransf;
                 const isCandy = needsCandies(matched);
                 const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
-                if (isMiss) {
+                if (isTransf) {
+                    addPriority(matched, 'Transferred', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
+                } else if (isMiss) {
                     addPriority(matched, 'Missing', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
                 } else if (isCandy) {
                     addPriority(matched, 'Candy', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
@@ -5793,11 +5796,14 @@ function renderToDoPane() {
             const matched = pokemonDatabase.find(p => p.id == egg.dex);
             if (matched) {
                 const eggDist = getEggFriendlyName(egg.eggT);
-                const isMiss = isPokemonMissing(matched);
+                const isTransf = isPokemonTransferred(matched);
+                const isMiss = isPokemonMissing(matched) && !isTransf;
                 const isCandy = needsCandies(matched);
                 const key = `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(egg.eggT).replace(/[^a-z0-9]/g, '')}`;
 
-                if (isMiss) {
+                if (isTransf) {
+                    addPriority(matched, 'Transferred', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
+                } else if (isMiss) {
                     addPriority(matched, 'Missing', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
                 } else if (isCandy) {
                     addPriority(matched, 'Candy', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
@@ -5815,11 +5821,14 @@ function renderToDoPane() {
                         const rName = safeLower(reward.name);
                         const matched = pokemonDatabase.find(p => safeLower(p.name) === rName) || pokemonDatabase.find(p => p.id == reward.dex);
                         if (matched) {
-                            const isMiss = isPokemonMissing(matched);
+                            const isTransf = isPokemonTransferred(matched);
+                            const isMiss = isPokemonMissing(matched) && !isTransf;
                             const isCandy = needsCandies(matched);
                             const key = `quest-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(task.text).replace(/[^a-z0-9]/g, '')}`;
 
-                            if (isMiss) {
+                            if (isTransf) {
+                                addPriority(matched, 'Transferred', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
+                            } else if (isMiss) {
                                 addPriority(matched, 'Missing', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
                             } else if (isCandy) {
                                 addPriority(matched, 'Candy', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
@@ -5842,11 +5851,14 @@ function renderToDoPane() {
                             if (pName) {
                                 const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName);
                                 if (matched) {
-                                    const isMiss = isPokemonMissing(matched);
+                                    const isTransf = isPokemonTransferred(matched);
+                                    const isMiss = isPokemonMissing(matched) && !isTransf;
                                     const isCandy = needsCandies(matched);
                                     const key = `rocket-${safeLower(charName).replace(/\s+/g, '-')}`;
 
-                                    if (isMiss) {
+                                    if (isTransf) {
+                                        addPriority(matched, 'Transferred', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                    } else if (isMiss) {
                                         addPriority(matched, 'Missing', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
                                     } else if (isCandy) {
                                         addPriority(matched, 'Candy', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
@@ -5866,11 +5878,14 @@ function renderToDoPane() {
             const pName = safeLower(party.name);
             const matched = pokemonDatabase.find(p => p.id == party.dex) || pokemonDatabase.find(p => safeLower(p.name) === pName);
             if (matched) {
-                const isMiss = isPokemonMissing(matched);
+                const isTransf = isPokemonTransferred(matched);
+                const isMiss = isPokemonMissing(matched) && !isTransf;
                 const isCandy = needsCandies(matched);
                 const key = `party-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(party.task).replace(/[^a-z0-9]/g, '')}`;
 
-                if (isMiss) {
+                if (isTransf) {
+                    addPriority(matched, 'Transferred', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
+                } else if (isMiss) {
                     addPriority(matched, 'Missing', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
                 } else if (isCandy) {
                     addPriority(matched, 'Candy', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
@@ -5908,8 +5923,22 @@ function renderToDoPane() {
         const iconClass = icons[item.source] || 'fa-solid fa-star';
         const color = colors[item.source] || 'var(--accent-color)';
         const borderCol = borderColors[item.source] || 'var(--border-color)';
-        const badgeText = item.type === 'Missing' ? 'MISSING' : 'CANDY';
-        const badgeColor = item.type === 'Missing' ? '#ef4444' : 'var(--accent-color)';
+        
+        let badgeText = 'MISSING';
+        let badgeColor = '#ef4444';
+        let badgeTextColor = '#1e1b4b';
+        let badgeIcon = '';
+
+        if (item.type === 'Transferred') {
+            badgeText = 'TRANSFERRED';
+            badgeColor = '#3b82f6';
+            badgeTextColor = '#ffffff';
+            badgeIcon = '<i class="fa-solid fa-arrows-spin"></i>';
+        } else if (item.type === 'Candy') {
+            badgeText = 'CANDY';
+            badgeColor = 'var(--accent-color)';
+            badgeTextColor = '#1e1b4b';
+        }
 
         const div = document.createElement('div');
         div.className = 'todo-item active-rotation-link';
@@ -5920,7 +5949,7 @@ function renderToDoPane() {
                 <img src="${imgUrl}" style="width: 38px; height: 38px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
                 <div>
                     <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 6px;">
-                        ${item.poke.name} <span style="font-size: 0.62rem; background: ${badgeColor}; color: #1e1b4b; padding: 1px 5px; border-radius: 4px; font-weight: 800;">${badgeText}</span>
+                        ${item.poke.name} <span style="font-size: 0.62rem; background: ${badgeColor}; color: ${badgeTextColor}; padding: 1px 5px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">${badgeIcon} ${badgeText}</span>
                     </h4>
                     <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0; line-height: 1.3;">
                         <i class="${iconClass}" style="color: ${color}; margin-right: 4px;"></i> ${item.detail}
@@ -5956,7 +5985,7 @@ function renderToDoPane() {
         missingList.innerHTML = `
             <div style="text-align: center; padding: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;">
                 <i class="fa-solid fa-circle-check" style="color: var(--accent-green); font-size: 1.8rem; margin-bottom: 0.5rem; display: block;"></i>
-                No active rotation has missing Pokémon! You are up to date.
+                No active rotation has missing or transferred Pokémon! You are up to date.
             </div>
         `;
     } else {
