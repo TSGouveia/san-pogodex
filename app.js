@@ -775,6 +775,10 @@ async function loadPokedex() {
                         list.forEach(item => {
                             if (item.pokemon_id) {
                                 buddyDistances[item.pokemon_id] = distVal;
+                                buddyDistances[String(item.pokemon_id)] = distVal;
+                            }
+                            if (item.pokemon_name) {
+                                buddyDistances[item.pokemon_name.toLowerCase()] = distVal;
                             }
                         });
                     }
@@ -4203,17 +4207,39 @@ function isReadyToEvolve(poke) {
 
 
 function getBuddyDistanceForFamily(family) {
-    let dist = buddyDistances[family.base.id];
-    if (dist === undefined) dist = buddyDistances[Number(family.base.id)];
-    if (dist === undefined) dist = buddyDistances[String(family.base.id)];
-    if (dist !== undefined) return dist;
-    for (const member of family.members) {
-        dist = buddyDistances[member.id];
-        if (dist === undefined) dist = buddyDistances[Number(member.id)];
-        if (dist === undefined) dist = buddyDistances[String(member.id)];
-        if (dist !== undefined) return dist;
+    if (!family || !family.base) return 3;
+    const candidates = [
+        family.base.id,
+        Number(family.base.id),
+        String(family.base.id),
+        safeLower(family.base.name)
+    ];
+    if (Array.isArray(family.members)) {
+        family.members.forEach(member => {
+            candidates.push(member.id, Number(member.id), String(member.id), safeLower(member.name));
+        });
     }
-    return undefined;
+    for (const cand of candidates) {
+        if (cand !== undefined && cand !== null && buddyDistances[cand] !== undefined) {
+            return buddyDistances[cand];
+        }
+    }
+    // Infer fallback based on legendary/mythical status (20km) or standard Pokémon GO default (3km)
+    const isLegendaryOrMythical = family.members && family.members.some(m => {
+        const n = safeLower(m.name);
+        const idNum = Number(m.id);
+        return m.gen === 99 || (idNum >= 144 && idNum <= 151) ||
+            ["mewtwo", "mew", "raikou", "entei", "suicune", "lugia", "ho-oh", "celebi",
+             "kyogre", "groudon", "rayquaza", "jirachi", "deoxys", "dialga", "palkia",
+             "giratina", "darkrai", "arceus", "victini", "reshiram", "zekrom", "kyurem",
+             "xerneas", "yveltal", "zygarde", "diancie", "hoopa", "volcanion", "tapu koko",
+             "solgaleo", "lunala", "nihilego", "buzzwole", "pheromosa", "xurkitree",
+             "celesteela", "kartana", "guzzlord", "necrozma", "magearna", "marshadow",
+             "poipole", "naganadel", "stakataka", "blacephalon", "zeraora", "meltan", "melmetal",
+             "zacian", "zamazenta", "eternatus", "kubfu", "urshifu", "zarude", "regieleki",
+             "regidrago", "glastrier", "spectrier", "calyrex", "enamorus", "koraidon", "miraidon"].some(leg => n.includes(leg));
+    });
+    return isLegendaryOrMythical ? 20 : 3;
 }
 
 function isSpecialVersion(member) {
