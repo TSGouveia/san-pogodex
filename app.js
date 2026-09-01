@@ -657,7 +657,7 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'pokedex'];
+        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges'];
         const fetchPromises = modules.map(m => 
             fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
                 .then(r => r.ok ? r.json() : null)
@@ -747,98 +747,97 @@ async function loadPokedex() {
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
-        let data = null;
-        if (dbScrapedData && isNonEmpty(dbScrapedData.pokedex)) {
-            data = dbScrapedData.pokedex;
-            rawPokedexData = data;
-        } else {
-            const [pokedexRes, typesRes, buddyRes] = await Promise.all([
-                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
-                fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
-            ]);
-            
-            if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
-            data = await pokedexRes.json();
-            rawPokedexData = data;
+        const [pokedexRes, typesRes, buddyRes] = await Promise.all([
+            fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
+            fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
+            fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
+        ]);
+        
+        if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
+        const data = await pokedexRes.json();
+        rawPokedexData = data;
 
-            if (typesRes.ok) {
-                try { typesDatabase = await typesRes.json(); } catch (e) { console.warn("Types API parsing failed:", e); }
+        if (typesRes.ok) {
+            try {
+                typesDatabase = await typesRes.json();
+            } catch (err) {
+                console.warn("Types API parsing failed:", err);
             }
+        }
 
-            if (buddyRes && buddyRes.ok) {
-                try {
-                    const buddyData = await buddyRes.json();
-                    buddyDistances = {};
-                    Object.entries(buddyData).forEach(([distStr, list]) => {
-                        const dist = parseFloat(distStr);
-                        if (Array.isArray(list)) {
-                            list.forEach(item => {
-                                if (item.pokemon_id) buddyDistances[item.pokemon_id] = dist;
-                            });
-                        }
-                    });
-                } catch (e) {
-                    console.warn("Buddy Distances API parsing failed:", e);
-                }
+        if (buddyRes && buddyRes.ok) {
+            try {
+                const buddyData = await buddyRes.json();
+                buddyDistances = {};
+                Object.entries(buddyData).forEach(([distanceKey, list]) => {
+                    const distVal = parseFloat(distanceKey);
+                    if (Array.isArray(list)) {
+                        list.forEach(item => {
+                            if (item.pokemon_id) {
+                                buddyDistances[item.pokemon_id] = distVal;
+                            }
+                        });
+                    }
+                });
+            } catch (err) {
+                console.warn("Buddy Distances API parsing failed:", err);
             }
         }
         
-        let processed = [];
-        if (Array.isArray(data) && data.length > 0 && data[0].num) {
-            // Already processed Pokedex array from Firestore
-            processed = data;
-        } else {
-            const seenDexNrs = new Set();
-            
-            // Pass 1: Parse primary base forms
-            data.forEach(p => {
-                if (p.formId && p.id === p.formId && !seenDexNrs.has(p.dexNr)) {
-                    seenDexNrs.add(p.dexNr);
-                    processed.push(formatPokemon(p));
-                }
-            });
-            
-            // Pass 2: Grab base forms normal forms
-            data.forEach(p => {
-                if (!seenDexNrs.has(p.dexNr)) {
-                    const formIdStr = p.formId || '';
-                    const hasNoFormSuffix = !formIdStr.includes('_');
-                    if (hasNoFormSuffix || formIdStr.endsWith('_NORMAL')) {
-                        seenDexNrs.add(p.dexNr);
-                        processed.push(formatPokemon(p));
-                    }
-                }
-            });
-
-            // Pass 3: Fallback for any other missing entries
-            data.forEach(p => {
-                if (!seenDexNrs.has(p.dexNr)) {
-                    seenDexNrs.add(p.dexNr);
-                    processed.push(formatPokemon(p));
-                }
-            });
-
-            // Inject missing Basculegion (902)
-            if (!seenDexNrs.has(902)) {
-                seenDexNrs.add(902);
-                processed.push({
-                    id: "902",
-                    idName: "BASCULEGION",
-                    num: "902",
-                    name: "Basculegion",
-                    gen: 8.5,
-                    types: ["water", "ghost"],
-                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/902.png`,
-                    stats: { atk: 247, def: 146, sta: 260 },
-                    obtaining: [{ method: "Evolution", desc: "Evolves from White-Striped Basculin." }],
-                    rawEvolutions: []
-                });
+        const processed = [];
+        const seenDexNrs = new Set();
+        
+        // Pass 1: Parse primary base forms
+        data.forEach(p => {
+            if (p.id === p.formId && !seenDexNrs.has(p.dexNr)) {
+                seenDexNrs.add(p.dexNr);
+                processed.push(formatPokemon(p));
             }
+        });
+        
+        // Pass 2: Grab base forms normal forms
+        data.forEach(p => {
+            if (!seenDexNrs.has(p.dexNr)) {
+                const hasNoFormSuffix = !p.formId.includes('_');
+                if (hasNoFormSuffix || p.formId.endsWith('_NORMAL')) {
+                    seenDexNrs.add(p.dexNr);
+                    processed.push(formatPokemon(p));
+                }
+            }
+        });
 
-            processed.sort((a, b) => Number(a.id) - Number(b.id));
+        // Pass 3: Fallback for any other missing entries
+        data.forEach(p => {
+            if (!seenDexNrs.has(p.dexNr)) {
+                seenDexNrs.add(p.dexNr);
+                processed.push(formatPokemon(p));
+            }
+        });
+
+        // Inject missing Basculegion (902) since it's not present in the upstream Pokémon GO API
+        if (!seenDexNrs.has(902)) {
+            seenDexNrs.add(902);
+            processed.push({
+                id: "902",
+                idName: "BASCULEGION",
+                num: "902",
+                name: "Basculegion",
+                gen: 8.5,
+                types: ["water", "ghost"],
+                img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/902.png`,
+                stats: {
+                    atk: 247,
+                    def: 146,
+                    sta: 260
+                },
+                obtaining: [
+                    { method: "Evolution", desc: "Evolves from White-Striped Basculin." }
+                ],
+                rawEvolutions: []
+            });
         }
 
+        processed.sort((a, b) => Number(a.id) - Number(b.id));
         pokemonDatabase = processed;
 
         const basculin = processed.find(p => p.id === "550");
