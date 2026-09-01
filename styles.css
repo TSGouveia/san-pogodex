@@ -517,6 +517,18 @@ input, button, select {
     opacity: 1;
 }
 
+.pokemon-card.transferred-missing,
+.pokemon-card.missing.transferred-missing {
+    border: 1px solid rgba(59, 130, 246, 0.4) !important;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(17, 27, 46, 0.75) 100%) !important;
+}
+
+.pokemon-card.transferred-missing:hover,
+.pokemon-card.missing.transferred-missing:hover {
+    border-color: rgba(96, 165, 250, 0.8) !important;
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.35) !important;
+}
+
 /* Hover effects */
 .pokemon-card::after {
     content: '';

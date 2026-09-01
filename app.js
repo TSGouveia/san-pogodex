@@ -332,7 +332,23 @@ let transferredPokemon = new Set();
 
 function isPokemonTransferred(poke) {
     if (!poke) return false;
-    return transferredPokemon.has(poke.id) || transferredPokemon.has(Number(poke.id)) || transferredPokemon.has(String(poke.id));
+    const strId = String(poke.id);
+    const numId = Number(poke.id);
+    if (transferredPokemon.has(strId) || (!isNaN(numId) && transferredPokemon.has(numId))) {
+        return true;
+    }
+    if (typeof findEvolutionChain === 'function') {
+        const chain = findEvolutionChain(poke);
+        if (chain && chain.length > 0) {
+            const baseId = chain[0].id;
+            const strBaseId = String(baseId);
+            const numBaseId = Number(baseId);
+            if (transferredPokemon.has(strBaseId) || (!isNaN(numBaseId) && transferredPokemon.has(numBaseId))) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function isPokemonMissing(poke) {
@@ -1789,9 +1805,9 @@ function getFilteredAndSortedPokemon() {
     }
 
     if (currentCollectionFilter === 'caught') {
-        result = result.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id)));
+        result = result.filter(p => (caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))) && !isPokemonTransferred(p));
     } else if (currentCollectionFilter === 'missing') {
-        result = result.filter(p => !caughtPokemon.has(p.id) && !caughtPokemon.has(Number(p.id)));
+        result = result.filter(p => isPokemonMissing(p));
     }
 
     if (currentSearchQuery) {
@@ -1853,11 +1869,11 @@ function renderPokedex(forceClear = false) {
         currentRenderedIds.add(poke.id);
 
         const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
-        const isTransf = transferredPokemon.has(poke.id) || transferredPokemon.has(Number(poke.id)) || transferredPokemon.has(String(poke.id));
+        const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
         const cardClass = isCaught 
             ? (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught') 
-            : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing');
+            : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
         const card = document.createElement('div');
@@ -2076,7 +2092,7 @@ function renderMissingSummary() {
             }
         }
 
-        const isTransf = transferredPokemon.has(poke.id) || transferredPokemon.has(Number(poke.id)) || transferredPokemon.has(String(poke.id));
+        const isTransf = isPokemonTransferred(poke);
         if (isTransf) {
             previewText = `<span style="color: #60a5fa; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem;"><i class="fa-solid fa-arrows-spin"></i> Transferred (Need for Evolution)</span>`;
         }
@@ -2093,7 +2109,14 @@ function renderMissingSummary() {
             </svg>
             
             <div class="card-top">
-                <span class="poke-number">#${poke.num}</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <span class="poke-number">#${poke.num}</span>
+                    ${isTransf ? `
+                        <span style="background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-size: 0.6rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; display: inline-flex; align-items: center; gap: 3px;">
+                            <i class="fa-solid fa-arrows-spin"></i> TRANSFERRED
+                        </span>
+                    ` : ''}
+                </div>
                 <button class="catch-indicator-btn" aria-label="Mark as Caught" title="Mark as Caught">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
                         <circle cx="50" cy="50" r="44" fill="transparent" stroke="currentColor" stroke-width="8"/>
@@ -2857,8 +2880,9 @@ function renderActiveRotations() {
                         .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '');
                     return pokemonDatabase.find(p => p.name && safeLower(p.name) === baseName) || null;
                 })();
-                const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+                const targetPoke = matchedPoke || baseFormPoke;
+                const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
+                const isMissing = targetPoke && !isTransferred && (!caughtPokemon.has(targetPoke.id) && !caughtPokemon.has(Number(targetPoke.id)));
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
@@ -3030,7 +3054,7 @@ function renderActiveRotations() {
                 const card = document.createElement('div');
                 const matchedPoke = pokemonDatabase.find(p => p.id == egg.dex);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+                const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
@@ -3148,7 +3172,7 @@ function renderActiveRotations() {
                 const card = document.createElement('div');
                 const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.fullPokeName);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+                const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
                 const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item theme-blue ${highlightClass} spawn-animation`;
@@ -3346,7 +3370,7 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             const card = document.createElement('div');
             const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
             const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-            const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+            const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
             const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
             card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
@@ -3380,7 +3404,7 @@ function renderRewardsListHelper(container, data, cardTheme) {
         const card = document.createElement('div');
         const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
         const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-        const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
+        const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
         const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
         card.className = `rotation-card-item ${cardTheme} ${highlightClass}`;
