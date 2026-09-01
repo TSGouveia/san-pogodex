@@ -657,11 +657,14 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances'];
+        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'pokedex', 'types'];
         const fetchPromises = modules.map(m => 
             fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
                 .then(r => r.ok ? r.json() : null)
-                .catch(() => null)
+                .catch(err => {
+                    if (window.sendNtfyNotification) window.sendNtfyNotification(`Erro ao carregar documento ${m} do Firestore: ${err}`);
+                    return null;
+                })
         );
 
         const results = await Promise.all(fetchPromises);
@@ -682,6 +685,7 @@ async function loadScrapedDataFromFirestore() {
 
         return parsed;
     } catch (err) {
+        if (window.sendNtfyNotification) window.sendNtfyNotification(`Erro crítico de autenticação Firestore: ${err}`);
         console.warn("Could not fetch scraped data from Firestore database, falling back to network endpoints:", err);
         return null;
     }
@@ -736,6 +740,8 @@ async function loadPokedex() {
             return true;
         };
 
+        let data = null;
+
         if (dbScrapedData) {
             if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
             if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
@@ -745,47 +751,54 @@ async function loadPokedex() {
             if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
             if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
             if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
+            if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
+            if (isNonEmpty(dbScrapedData.pokedex)) {
+                data = dbScrapedData.pokedex;
+                rawPokedexData = data;
+            }
             if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
         }
 
-        const [pokedexRes, typesRes, buddyRes] = await Promise.all([
-            fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-            fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
-            fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
-        ]);
-        
-        if (!pokedexRes.ok) throw new Error("Could not load Pokedex API");
-        const data = await pokedexRes.json();
-        rawPokedexData = data;
-
-        if (typesRes.ok) {
-            try {
-                typesDatabase = await typesRes.json();
-            } catch (err) {
-                console.warn("Types API parsing failed:", err);
+        if (!data) {
+            if (window.sendNtfyNotification) window.sendNtfyNotification("Aviso: Pokédex não encontrada na Firestore, recorrendo às APIs externas");
+            const [pokedexRes, typesRes, buddyRes] = await Promise.all([
+                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
+                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
+                fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
+            ]);
+            
+            if (!pokedexRes.ok) {
+                if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Pokédex API indisponível");
+                throw new Error("Could not load Pokedex API");
             }
-        }
+            data = await pokedexRes.json();
+            rawPokedexData = data;
 
-        if (buddyRes && buddyRes.ok) {
-            try {
-                const buddyData = await buddyRes.json();
-                buddyDistances = {};
-                Object.entries(buddyData).forEach(([distanceKey, list]) => {
-                    const distVal = parseFloat(distanceKey);
-                    if (Array.isArray(list)) {
-                        list.forEach(item => {
-                            if (item.pokemon_id) {
-                                buddyDistances[item.pokemon_id] = distVal;
-                                buddyDistances[String(item.pokemon_id)] = distVal;
-                            }
-                            if (item.pokemon_name) {
-                                buddyDistances[item.pokemon_name.toLowerCase()] = distVal;
-                            }
-                        });
-                    }
-                });
-            } catch (err) {
-                console.warn("Buddy Distances API parsing failed:", err);
+            if (typesRes.ok) {
+                try { typesDatabase = await typesRes.json(); } catch (e) { console.warn("Types API parsing failed:", e); }
+            }
+
+            if (buddyRes && buddyRes.ok) {
+                try {
+                    const buddyData = await buddyRes.json();
+                    buddyDistances = {};
+                    Object.entries(buddyData).forEach(([distanceKey, list]) => {
+                        const distVal = parseFloat(distanceKey);
+                        if (Array.isArray(list)) {
+                            list.forEach(item => {
+                                if (item.pokemon_id) {
+                                    buddyDistances[item.pokemon_id] = distVal;
+                                    buddyDistances[String(item.pokemon_id)] = distVal;
+                                }
+                                if (item.pokemon_name) {
+                                    buddyDistances[item.pokemon_name.toLowerCase()] = distVal;
+                                }
+                            });
+                        }
+                    });
+                } catch (e) {
+                    console.warn("Buddy Distances API parsing failed:", e);
+                }
             }
         }
         

@@ -14,7 +14,7 @@ from scrapers.scrape_eggs import scrape_eggs
 from scrapers.scrape_rocket import scrape_rocket
 from scrapers.scrape_promos import scrape_promo_codes
 from scrapers.scrape_party import scrape_party
-from scrapers.scrape_pokedex import scrape_pokedex
+from scrapers.scrape_pokedex import scrape_pokedex, scrape_types
 from scrapers.scrape_buddy import scrape_buddy_distances
 
 HEADERS = {
@@ -45,7 +45,7 @@ def save_json(filename, data):
         with open(min_filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, separators=(",", ":"), ensure_ascii=False)
 
-def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances):
+def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types):
     print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
@@ -69,7 +69,9 @@ def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, part
             "rocketLineups": rocket,
             "promoCodes": promo_codes,
             "partyChallenges": party_challenges,
-            "buddyDistances": buddy_distances
+            "buddyDistances": buddy_distances,
+            "pokedex": pokedex,
+            "types": types
         }
 
         success_count = 0
@@ -131,8 +133,16 @@ def main():
     buddy_distances = scrape_buddy_distances()
     save_json("buddyDistances.json", buddy_distances)
 
-    # 9. Upload All Aggregated Data to Firestore
-    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances)
+    # 9. Scrape Pokedex
+    pokedex = scrape_pokedex()
+    save_json("pokedex.json", pokedex)
+
+    # 10. Scrape Types
+    types = scrape_types()
+    save_json("types.json", types)
+
+    # 11. Upload All Aggregated Data to Firestore
+    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types)
     print("=== ALL SCRAPING AND FIRESTORE UPLOAD COMPLETE! ===")
 
 if __name__ == "__main__":
