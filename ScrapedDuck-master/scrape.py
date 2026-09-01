@@ -70,9 +70,15 @@ def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, part
             "promoCodes": promo_codes,
             "partyChallenges": party_challenges,
             "buddyDistances": buddy_distances,
-            "pokedex": pokedex,
             "types": types
         }
+
+        # Chunk pokedex array (100 items per chunk) to stay under 1MB Firestore limit
+        if isinstance(pokedex, list):
+            chunk_size = 100
+            for idx, i in enumerate(range(0, len(pokedex), chunk_size)):
+                chunk = pokedex[i:i + chunk_size]
+                modules[f"pokedex_part{idx + 1}"] = chunk
 
         success_count = 0
         for doc_name, doc_data in modules.items():

@@ -657,7 +657,10 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const modules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'pokedex', 'types'];
+        const baseModules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types'];
+        const pokedexParts = Array.from({ length: 11 }, (_, i) => `pokedex_part${i + 1}`);
+        const modules = [...baseModules, ...pokedexParts];
+
         const fetchPromises = modules.map(m => 
             fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
                 .then(r => r.ok ? r.json() : null)
@@ -669,19 +672,33 @@ async function loadScrapedDataFromFirestore() {
 
         const results = await Promise.all(fetchPromises);
         const parsed = {};
+        let assembledPokedex = [];
 
         modules.forEach((mod, idx) => {
             const doc = results[idx];
             const fields = doc ? doc.fields : null;
             if (fields) {
+                let modContent = null;
                 if (fields.data?.stringValue) {
-                    try { parsed[mod] = JSON.parse(fields.data.stringValue); } catch (e) {}
+                    try { modContent = JSON.parse(fields.data.stringValue); } catch (e) {}
                 } else if (fields[mod]?.stringValue) {
-                    try { parsed[mod] = JSON.parse(fields[mod].stringValue); } catch (e) {}
+                    try { modContent = JSON.parse(fields[mod].stringValue); } catch (e) {}
+                }
+
+                if (mod.startsWith('pokedex_part')) {
+                    if (Array.isArray(modContent)) {
+                        assembledPokedex.push(...modContent);
+                    }
+                } else {
+                    parsed[mod] = modContent;
                 }
                 if (fields.updatedAt?.stringValue) parsed.updatedAt = fields.updatedAt.stringValue;
             }
         });
+
+        if (assembledPokedex.length > 0) {
+            parsed.pokedex = assembledPokedex;
+        }
 
         return parsed;
     } catch (err) {
