@@ -9124,6 +9124,327 @@
                 "hasMegaEvolution": false,
                 "megaEvolutions": [],
                 "hasGigantamaxEvolution": false
+            },
+            "PIKACHU_K_2026_A_01": {
+                "id": "PIKACHU",
+                "formId": "PIKACHU_K_2026_A_01",
+                "dexNr": 25,
+                "generation": 1,
+                "names": {
+                    "English": "Pikachu",
+                    "German": "Pikachu",
+                    "French": "Pikachu",
+                    "Italian": "Pikachu",
+                    "Japanese": "ピカチュウ",
+                    "Korean": "피카츄",
+                    "Spanish": "Pikachu"
+                },
+                "stats": {
+                    "stamina": 111,
+                    "attack": 112,
+                    "defense": 96
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ELECTRIC",
+                    "names": {
+                        "English": "Electric",
+                        "German": "Elektro",
+                        "French": "Électrik",
+                        "Italian": "Elettro",
+                        "Japanese": "でんき",
+                        "Korean": "전기",
+                        "Spanish": "Eléctrico"
+                    }
+                },
+                "secondaryType": null,
+                "pokemonClass": null,
+                "quickMoves": {
+                    "THUNDER_SHOCK_FAST": {
+                        "id": "THUNDER_SHOCK_FAST",
+                        "power": 4,
+                        "energy": 7,
+                        "durationMs": 500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ELECTRIC",
+                            "names": {
+                                "English": "Electric",
+                                "German": "Elektro",
+                                "French": "Électrik",
+                                "Italian": "Elettro",
+                                "Japanese": "でんき",
+                                "Korean": "전기",
+                                "Spanish": "Eléctrico"
+                            }
+                        },
+                        "names": {
+                            "English": "Thunder Shock",
+                            "German": "Donnerschock",
+                            "French": "Éclair",
+                            "Italian": "Tuonoshock",
+                            "Japanese": "でんきショック",
+                            "Korean": "전기쇼크",
+                            "Spanish": "Impactrueno"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 4,
+                            "turns": 2,
+                            "buffs": null
+                        }
+                    },
+                    "QUICK_ATTACK_FAST": {
+                        "id": "QUICK_ATTACK_FAST",
+                        "power": 10,
+                        "energy": 13,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Quick Attack",
+                            "German": "Ruckzuckhieb",
+                            "French": "Vive-Attaque",
+                            "Italian": "Attacco Rapido",
+                            "Japanese": "でんこうせっか",
+                            "Korean": "전광석화",
+                            "Spanish": "Ataque Rápido"
+                        },
+                        "combat": {
+                            "energy": 8,
+                            "power": 5,
+                            "turns": 2,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "DISCHARGE": {
+                        "id": "DISCHARGE",
+                        "power": 65,
+                        "energy": -33,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ELECTRIC",
+                            "names": {
+                                "English": "Electric",
+                                "German": "Elektro",
+                                "French": "Électrik",
+                                "Italian": "Elettro",
+                                "Japanese": "でんき",
+                                "Korean": "전기",
+                                "Spanish": "Eléctrico"
+                            }
+                        },
+                        "names": {
+                            "English": "Discharge",
+                            "German": "Ladungsstoß",
+                            "French": "Coup d’Jus",
+                            "Italian": "Scarica",
+                            "Japanese": "ほうでん",
+                            "Korean": "방전",
+                            "Spanish": "Chispazo"
+                        },
+                        "combat": {
+                            "energy": -40,
+                            "power": 55,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "THUNDERBOLT": {
+                        "id": "THUNDERBOLT",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ELECTRIC",
+                            "names": {
+                                "English": "Electric",
+                                "German": "Elektro",
+                                "French": "Électrik",
+                                "Italian": "Elettro",
+                                "Japanese": "でんき",
+                                "Korean": "전기",
+                                "Spanish": "Eléctrico"
+                            }
+                        },
+                        "names": {
+                            "English": "Thunderbolt",
+                            "German": "Donnerblitz",
+                            "French": "Tonnerre",
+                            "Italian": "Fulmine",
+                            "Japanese": "１０まんボルト",
+                            "Korean": "10만볼트",
+                            "Spanish": "Rayo"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 90,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "WILD_CHARGE": {
+                        "id": "WILD_CHARGE",
+                        "power": 90,
+                        "energy": -50,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ELECTRIC",
+                            "names": {
+                                "English": "Electric",
+                                "German": "Elektro",
+                                "French": "Électrik",
+                                "Italian": "Elettro",
+                                "Japanese": "でんき",
+                                "Korean": "전기",
+                                "Spanish": "Eléctrico"
+                            }
+                        },
+                        "names": {
+                            "English": "Wild Charge",
+                            "German": "Stromstoß",
+                            "French": "Éclair Fou",
+                            "Italian": "Sprizzalampo",
+                            "Japanese": "ワイルドボルト",
+                            "Korean": "와일드볼트",
+                            "Spanish": "Voltio Cruel"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 100,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 100,
+                                "attackerAttackStatsChange": null,
+                                "attackerDefenseStatsChange": -2,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    }
+                },
+                "eliteQuickMoves": {
+                    "PRESENT_FAST": {
+                        "id": "PRESENT_FAST",
+                        "power": 6,
+                        "energy": 23,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Present",
+                            "German": "Geschenk",
+                            "French": "Cadeau",
+                            "Italian": "Regalino",
+                            "Japanese": "プレゼント",
+                            "Korean": "프레젠트",
+                            "Spanish": "Presente"
+                        },
+                        "combat": {
+                            "energy": 12,
+                            "power": 3,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteCinematicMoves": {
+                    "SURF": {
+                        "id": "SURF",
+                        "power": 60,
+                        "energy": -50,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_WATER",
+                            "names": {
+                                "English": "Water",
+                                "German": "Wasser",
+                                "French": "Eau",
+                                "Italian": "Acqua",
+                                "Japanese": "みず",
+                                "Korean": "물",
+                                "Spanish": "Agua"
+                            }
+                        },
+                        "names": {
+                            "English": "Surf",
+                            "German": "Surfer",
+                            "French": "Surf",
+                            "Italian": "Surf",
+                            "Japanese": "なみのり",
+                            "Korean": "파도타기",
+                            "Spanish": "Surf"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 75,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "THUNDER": {
+                        "id": "THUNDER",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ELECTRIC",
+                            "names": {
+                                "English": "Electric",
+                                "German": "Elektro",
+                                "French": "Électrik",
+                                "Italian": "Elettro",
+                                "Japanese": "でんき",
+                                "Korean": "전기",
+                                "Spanish": "Eléctrico"
+                            }
+                        },
+                        "names": {
+                            "English": "Thunder",
+                            "German": "Donner",
+                            "French": "Fatal-Foudre",
+                            "Italian": "Tuono",
+                            "Japanese": "かみなり",
+                            "Korean": "번개",
+                            "Spanish": "Trueno"
+                        },
+                        "combat": {
+                            "energy": -60,
+                            "power": 100,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm25.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm25.s.icon.png"
+                },
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
             }
         },
         "evolutions": [
@@ -147640,8 +147961,55 @@
         },
         "regionForms": [],
         "evolutions": [],
-        "hasMegaEvolution": false,
-        "megaEvolutions": [],
+        "hasMegaEvolution": true,
+        "megaEvolutions": {
+            "STARAPTOR_MEGA": {
+                "id": "STARAPTOR_MEGA",
+                "names": {
+                    "English": "Mega Staraptor",
+                    "German": "Mega-Staraptor",
+                    "French": "Méga-Étouraptor",
+                    "Italian": "MegaStaraptor",
+                    "Japanese": "メガムクホーク",
+                    "Korean": "메가찌르호크",
+                    "Spanish": "Mega-Staraptor"
+                },
+                "stats": {
+                    "stamina": 198,
+                    "attack": 278,
+                    "defense": 207
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_FIGHTING",
+                    "names": {
+                        "English": "Fighting",
+                        "German": "Kampf",
+                        "French": "Combat",
+                        "Italian": "Lotta",
+                        "Japanese": "かくとう",
+                        "Korean": "격투",
+                        "Spanish": "Lucha"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "energyCost": 300,
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm398.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm398.s.icon.png"
+                }
+            }
+        },
         "hasGigantamaxEvolution": false,
         "assetForms": [
             {
@@ -358951,37 +359319,43 @@
                     }
                 }
             },
-            "PAYBACK": {
-                "id": "PAYBACK",
-                "power": 95,
-                "energy": -100,
-                "durationMs": 2000,
+            "PSYCHIC_FANGS": {
+                "id": "PSYCHIC_FANGS",
+                "power": 25,
+                "energy": -33,
+                "durationMs": 1000,
                 "type": {
-                    "type": "POKEMON_TYPE_DARK",
+                    "type": "POKEMON_TYPE_PSYCHIC",
                     "names": {
-                        "English": "Dark",
-                        "German": "Unlicht",
-                        "French": "Ténèbres",
-                        "Italian": "Buio",
-                        "Japanese": "あく",
-                        "Korean": "악",
-                        "Spanish": "Siniestro"
+                        "English": "Psychic",
+                        "German": "Psycho",
+                        "French": "Psy",
+                        "Italian": "Psico",
+                        "Japanese": "エスパー",
+                        "Korean": "에스퍼",
+                        "Spanish": "Psíquico"
                     }
                 },
                 "names": {
-                    "English": "Payback",
-                    "German": "Gegenstoß",
-                    "French": "Représailles",
-                    "Italian": "Rivincita",
-                    "Japanese": "しっぺがえし",
-                    "Korean": "보복",
-                    "Spanish": "Vendetta"
+                    "English": "Psychic Fangs",
+                    "German": "Psychobeißer",
+                    "French": "Psycho-Croc",
+                    "Italian": "Psicozanna",
+                    "Japanese": "サイコファング",
+                    "Korean": "사이코팽",
+                    "Spanish": "Psicocolmillo"
                 },
                 "combat": {
-                    "energy": -60,
-                    "power": 110,
+                    "energy": -35,
+                    "power": 40,
                     "turns": 1,
-                    "buffs": null
+                    "buffs": {
+                        "activationChance": 100,
+                        "attackerAttackStatsChange": null,
+                        "attackerDefenseStatsChange": null,
+                        "targetAttackStatsChange": null,
+                        "targetDefenseStatsChange": -1
+                    }
                 }
             },
             "DIG": {
@@ -359177,37 +359551,43 @@
                     }
                 }
             },
-            "PAYBACK": {
-                "id": "PAYBACK",
-                "power": 95,
-                "energy": -100,
-                "durationMs": 2000,
+            "PSYCHIC_FANGS": {
+                "id": "PSYCHIC_FANGS",
+                "power": 25,
+                "energy": -33,
+                "durationMs": 1000,
                 "type": {
-                    "type": "POKEMON_TYPE_DARK",
+                    "type": "POKEMON_TYPE_PSYCHIC",
                     "names": {
-                        "English": "Dark",
-                        "German": "Unlicht",
-                        "French": "Ténèbres",
-                        "Italian": "Buio",
-                        "Japanese": "あく",
-                        "Korean": "악",
-                        "Spanish": "Siniestro"
+                        "English": "Psychic",
+                        "German": "Psycho",
+                        "French": "Psy",
+                        "Italian": "Psico",
+                        "Japanese": "エスパー",
+                        "Korean": "에스퍼",
+                        "Spanish": "Psíquico"
                     }
                 },
                 "names": {
-                    "English": "Payback",
-                    "German": "Gegenstoß",
-                    "French": "Représailles",
-                    "Italian": "Rivincita",
-                    "Japanese": "しっぺがえし",
-                    "Korean": "보복",
-                    "Spanish": "Vendetta"
+                    "English": "Psychic Fangs",
+                    "German": "Psychobeißer",
+                    "French": "Psycho-Croc",
+                    "Italian": "Psicozanna",
+                    "Japanese": "サイコファング",
+                    "Korean": "사이코팽",
+                    "Spanish": "Psicocolmillo"
                 },
                 "combat": {
-                    "energy": -60,
-                    "power": 110,
+                    "energy": -35,
+                    "power": 40,
                     "turns": 1,
-                    "buffs": null
+                    "buffs": {
+                        "activationChance": 100,
+                        "attackerAttackStatsChange": null,
+                        "attackerDefenseStatsChange": null,
+                        "targetAttackStatsChange": null,
+                        "targetDefenseStatsChange": -1
+                    }
                 }
             },
             "DIG": {
