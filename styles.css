@@ -1585,11 +1585,6 @@ input, button, select {
     border: 1px solid rgba(148, 163, 184, 0.15);
 }
 
-.pokemon-card.active-wild-spawn {
-    border-color: rgba(34, 197, 94, 0.45) !important;
-    background: linear-gradient(180deg, rgba(34, 197, 94, 0.05) 0%, rgba(17, 27, 46, 1) 100%) !important;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.25) !important;
-}
 
 /* ==========================================================================
    ACTIVE ROTATIONS COLUMNS & MINI CARDS

@@ -1894,17 +1894,9 @@ function renderPokedex(forceClear = false) {
         const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
         
-        // Active Wild Spawn check (spawnRate >= 0.5%)
-        const activeSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
-        const isWildSpawning = activeSpawn && activeSpawn.spawnRate >= 0.5;
-        
-        let cardClass = isCaught 
+        const cardClass = isCaught 
             ? (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught') 
             : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
-        
-        if (isWildSpawning) {
-            cardClass += ' active-wild-spawn';
-        }
 
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
