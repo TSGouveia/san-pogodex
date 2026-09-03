@@ -727,26 +727,31 @@ async function loadScrapedDataFromFirestore() {
     }
 }
 
-function displayLastUpdatedTime(isoString) {
-    if (!isoString) return;
-    try {
-        const date = new Date(isoString);
-        if (isNaN(date.getTime())) return;
+let cachedLastUpdatedFormattedDate = '';
 
-        const options = {
-            day: '2-digit',
-            month: 'short',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-        };
-        const formattedDate = date.toLocaleDateString('en-US', options);
+function displayLastUpdatedTime(isoString) {
+    try {
+        if (isoString) {
+            const date = new Date(isoString);
+            if (!isNaN(date.getTime())) {
+                const options = {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                cachedLastUpdatedFormattedDate = date.toLocaleDateString('en-US', options);
+            }
+        }
+
+        if (!cachedLastUpdatedFormattedDate) return;
 
         const badgeEls = document.querySelectorAll('.last-updated-badge');
         const textEls = document.querySelectorAll('.last-updated-text');
 
         badgeEls.forEach(el => el.style.display = 'inline-flex');
-        textEls.forEach(el => el.textContent = `Last Updated: ${formattedDate}`);
+        textEls.forEach(el => el.textContent = `Last Updated: ${cachedLastUpdatedFormattedDate}`);
     } catch (e) {
         console.warn("Could not display last updated date:", e);
     }

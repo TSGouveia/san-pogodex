@@ -3158,4 +3158,21 @@ html {
     text-shadow: none !important;
 }
 
+/* Last Updated Badge Styling */
+.last-updated-badge {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    background: rgba(245, 166, 35, 0.08);
+    border: 1px solid rgba(245, 166, 35, 0.25);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+
 

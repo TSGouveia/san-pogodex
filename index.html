@@ -66,11 +66,7 @@
                 </div>
             </div>
 
-            <!-- Last Updated Badge (Centered Horizontally on Page) -->
-            <div class="last-updated-badge" style="display: none; align-items: center; justify-content: center; gap: 6px; font-size: 0.88rem; font-weight: 600; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 6px 18px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); margin: 0 auto; text-align: center;">
-                <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.85rem; color: #f5a623;"></i>
-                <span class="last-updated-text"></span>
-            </div>
+
 
             <!-- Statistics Card -->
             <div class="stats-panel" id="stats-panel">
@@ -157,6 +153,11 @@
                 <div class="region-stats-badge" id="region-stats-badge">
                     <span class="region-name-lbl" id="active-region-name">All Regions</span>
                     <span class="region-ratio-val" id="active-region-ratio">0 / 0</span>
+                </div>
+                
+                <div class="last-updated-badge">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                    <span class="last-updated-text"></span>
                 </div>
                 
                 <div class="filter-actions" id="filter-actions-bar">
@@ -264,9 +265,13 @@
 
             <!-- Wild Spawns Section -->
             <div class="rotation-section hidden" id="rotations-spawns-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-location-dot"></i>
                     <h2>Active Wild Spawns</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="spawns-grid-container">
                     <!-- Dynamic Wild Spawns populated here by JS -->
@@ -275,9 +280,13 @@
 
             <!-- Active Raids -->
             <div class="rotation-section" id="rotations-raids-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-shield-halved"></i>
                     <h2>Active Raid Bosses</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="raids-tiers-container">
                     <!-- Dynamic Tier Sub-sections with grids inside -->
@@ -286,9 +295,13 @@
             
             <!-- Egg Hatching Pool -->
             <div class="rotation-section hidden" id="rotations-eggs-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-egg"></i>
                     <h2>Egg Hatch Pools</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="eggs-types-container">
                     <!-- Dynamic Egg Sub-sections with grids inside -->
@@ -297,9 +310,13 @@
 
             <!-- Active Quests -->
             <div class="rotation-section hidden" id="rotations-quests-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-scroll"></i>
                     <h2>Active Quest Encounters</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="active-research-grid">
                     <!-- Dynamic quest reward cards -->
@@ -308,9 +325,13 @@
 
             <!-- Team GO Rocket -->
             <div class="rotation-section hidden" id="rotations-rocket-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-user-ninja"></i>
                     <h2>Team GO Rocket Lineups</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="rocket-lineups-container">
                     <!-- Dynamic Team Rocket sections with slots and encounter indicators -->
@@ -319,9 +340,13 @@
 
             <!-- Party Challenges -->
             <div class="rotation-section hidden" id="rotations-party-section">
-                <div class="rotation-section-header">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-users" style="color: var(--accent-color);"></i>
                     <h2>Party Play Challenges</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <div id="party-rewards-grid">
                     <!-- Dynamic party play rewards -->
@@ -330,9 +355,13 @@
 
             <!-- Active Promo Codes -->
             <div class="rotation-section hidden" id="rotations-promocodes-section">
-                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem;">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                     <i class="fa-solid fa-gift" style="color: #f59e0b;"></i>
                     <h2>Active Pokémon GO Promo Codes</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
                 </div>
                 <p style="color: var(--text-secondary); font-size: 0.88rem; margin-top: -0.5rem; margin-bottom: 1.25rem; line-height: 1.5;">
                     Copy code with one click or use the direct redemption links to claim free rewards on the official Pokémon GO Web Store!
@@ -345,11 +374,15 @@
 
         <!-- PANE 4: Candies Calculator Panel -->
         <section class="view-pane hidden" id="candies-pane">
-            <div class="rotation-section-header">
+            <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                 <i class="fa-solid fa-candy-cane" style="color: var(--accent-color);"></i>
                 <h2>Candies & Evolving Calculator</h2>
+                <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                    <span class="last-updated-text"></span>
+                </div>
             </div>
-            
+
             <div class="candies-controls-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
                 <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; max-width: 600px;">
                     Set your current candy count for each evolution family to see how many kilometers you need to walk with your buddy to evolve the remaining Pokémon.
@@ -407,9 +440,13 @@
 
         <!-- PANE 4: To-Do Guide Panel -->
         <section class="view-pane hidden" id="todo-pane">
-            <div class="rotation-section-header">
+            <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
                 <i class="fa-solid fa-list-check" style="color: var(--accent-color);"></i>
                 <h2>To-Do Guide</h2>
+                <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                    <span class="last-updated-text"></span>
+                </div>
             </div>
             
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
