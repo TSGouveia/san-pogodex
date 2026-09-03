@@ -1,68 +1,74 @@
 [
     {
-        "dexNr": 650,
-        "internalFormId": 3022,
-        "spawnRate": 1.4,
-        "canBeShiny": true
-    },
-    {
         "dexNr": 686,
         "internalFormId": 3048,
         "spawnRate": 1.38,
         "canBeShiny": true
     },
     {
+        "dexNr": 656,
+        "internalFormId": 3028,
+        "spawnRate": 1.34,
+        "canBeShiny": true
+    },
+    {
         "dexNr": 147,
         "internalFormId": 190,
-        "spawnRate": 1.37,
+        "spawnRate": 1.32,
         "canBeShiny": true
     },
     {
         "dexNr": 653,
         "internalFormId": 3025,
-        "spawnRate": 1.36,
+        "spawnRate": 1.31,
         "canBeShiny": true
     },
     {
-        "dexNr": 656,
-        "internalFormId": 3028,
-        "spawnRate": 1.36,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 120,
-        "internalFormId": 1074,
-        "spawnRate": 1.34,
+        "dexNr": 650,
+        "internalFormId": 3022,
+        "spawnRate": 1.3,
         "canBeShiny": true
     },
     {
         "dexNr": 870,
         "internalFormId": 2325,
-        "spawnRate": 1.31,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 227,
-        "internalFormId": 1295,
         "spawnRate": 1.28,
         "canBeShiny": true
     },
     {
         "dexNr": 25,
         "internalFormId": 598,
-        "spawnRate": 1.28,
+        "spawnRate": 1.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 227,
+        "internalFormId": 1295,
+        "spawnRate": 1.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 120,
+        "internalFormId": 1074,
+        "spawnRate": 1.22,
         "canBeShiny": true
     },
     {
         "dexNr": 69,
         "internalFormId": 664,
-        "spawnRate": 1.17,
+        "spawnRate": 1.16,
         "canBeShiny": true
     },
     {
-        "dexNr": 540,
-        "internalFormId": 2024,
-        "spawnRate": 0.34,
+        "dexNr": 506,
+        "internalFormId": 1922,
+        "spawnRate": 0.33,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 10,
+        "internalFormId": 953,
+        "spawnRate": 0.33,
         "canBeShiny": true
     },
     {
@@ -72,39 +78,63 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 511,
-        "internalFormId": 1937,
+        "dexNr": 540,
+        "internalFormId": 2024,
         "spawnRate": 0.33,
         "canBeShiny": true
     },
     {
-        "dexNr": 506,
-        "internalFormId": 1922,
-        "spawnRate": 0.32,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 813,
-        "internalFormId": 3153,
+        "dexNr": 261,
+        "internalFormId": 1367,
         "spawnRate": 0.31,
         "canBeShiny": true
     },
     {
-        "dexNr": 338,
-        "internalFormId": 1547,
+        "dexNr": 543,
+        "internalFormId": 2033,
         "spawnRate": 0.31,
         "canBeShiny": true
     },
     {
         "dexNr": 915,
         "internalFormId": 3231,
-        "spawnRate": 0.31,
+        "spawnRate": 0.3,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 43,
+        "internalFormId": 265,
+        "spawnRate": 0.3,
         "canBeShiny": true
     },
     {
         "dexNr": 177,
         "internalFormId": 1190,
-        "spawnRate": 0.31,
+        "spawnRate": 0.3,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 13,
+        "internalFormId": 616,
+        "spawnRate": 0.3,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 23,
+        "internalFormId": 697,
+        "spawnRate": 0.3,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 338,
+        "internalFormId": 1547,
+        "spawnRate": 0.3,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 535,
+        "internalFormId": 2009,
+        "spawnRate": 0.3,
         "canBeShiny": true
     },
     {
@@ -114,62 +144,44 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 10,
-        "internalFormId": 953,
-        "spawnRate": 0.3,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 631,
-        "internalFormId": 2285,
-        "spawnRate": 0.3,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 821,
-        "internalFormId": 3160,
+        "dexNr": 539,
+        "internalFormId": 2021,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 661,
-        "internalFormId": 3033,
+        "dexNr": 56,
+        "internalFormId": 999,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 13,
-        "internalFormId": 616,
+        "dexNr": 296,
+        "internalFormId": 1451,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 574,
-        "internalFormId": 2120,
+        "dexNr": 725,
+        "internalFormId": 3078,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 396,
-        "internalFormId": 1658,
+        "dexNr": 511,
+        "internalFormId": 1937,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 261,
-        "internalFormId": 1367,
+        "dexNr": 21,
+        "internalFormId": 971,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
     {
-        "dexNr": 543,
-        "internalFormId": 2033,
-        "spawnRate": 0.29,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 43,
-        "internalFormId": 265,
+        "dexNr": 501,
+        "internalFormId": 1907,
         "spawnRate": 0.29,
         "canBeShiny": true
     },
@@ -180,92 +192,56 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 519,
-        "internalFormId": 1961,
+        "dexNr": 198,
+        "internalFormId": 855,
         "spawnRate": 0.29,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 133,
-        "internalFormId": 1092,
-        "spawnRate": 0.29,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 572,
-        "internalFormId": 2114,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 56,
-        "internalFormId": 999,
-        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
         "dexNr": 919,
         "internalFormId": 3234,
+        "spawnRate": 0.29,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 179,
+        "internalFormId": 646,
+        "spawnRate": 0.29,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 631,
+        "internalFormId": 2285,
+        "spawnRate": 0.29,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 187,
+        "internalFormId": 1205,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 831,
-        "internalFormId": 2861,
+        "dexNr": 313,
+        "internalFormId": 1496,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 539,
-        "internalFormId": 2021,
+        "dexNr": 495,
+        "internalFormId": 1889,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 725,
-        "internalFormId": 3078,
+        "dexNr": 661,
+        "internalFormId": 3033,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 155,
-        "internalFormId": 1127,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 296,
-        "internalFormId": 1451,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 276,
-        "internalFormId": 1400,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 529,
-        "internalFormId": 1991,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 535,
-        "internalFormId": 2009,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 425,
-        "internalFormId": 1745,
-        "spawnRate": 0.28,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 501,
-        "internalFormId": 1907,
+        "dexNr": 7,
+        "internalFormId": 181,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
@@ -276,176 +252,68 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 152,
-        "internalFormId": 1118,
+        "dexNr": 595,
+        "internalFormId": 2177,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 21,
-        "internalFormId": 971,
+        "dexNr": 387,
+        "internalFormId": 688,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 63,
-        "internalFormId": 304,
+        "dexNr": 133,
+        "internalFormId": 1092,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 179,
-        "internalFormId": 646,
+        "dexNr": 906,
+        "internalFormId": 3222,
         "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 29,
-        "internalFormId": 776,
-        "spawnRate": 0.27,
+        "dexNr": 574,
+        "internalFormId": 2120,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 498,
-        "internalFormId": 1898,
-        "spawnRate": 0.27,
+        "dexNr": 276,
+        "internalFormId": 1400,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 682,
-        "internalFormId": 3044,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 187,
-        "internalFormId": 1205,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 66,
-        "internalFormId": 809,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 7,
-        "internalFormId": 181,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 200,
-        "internalFormId": 719,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 316,
-        "internalFormId": 1505,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 111,
-        "internalFormId": 846,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 427,
-        "internalFormId": 1751,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 819,
-        "internalFormId": 3158,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 333,
-        "internalFormId": 1532,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 60,
-        "internalFormId": 235,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 35,
-        "internalFormId": 981,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 495,
-        "internalFormId": 1889,
-        "spawnRate": 0.27,
+        "dexNr": 813,
+        "internalFormId": 3153,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
         "dexNr": 102,
         "internalFormId": 729,
-        "spawnRate": 0.27,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 39,
-        "internalFormId": 987,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 731,
-        "internalFormId": 3084,
-        "spawnRate": 0.27,
+        "dexNr": 155,
+        "internalFormId": 1127,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
         "dexNr": 309,
         "internalFormId": 1484,
-        "spawnRate": 0.27,
+        "spawnRate": 0.28,
         "canBeShiny": true
     },
     {
-        "dexNr": 313,
-        "internalFormId": 1496,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 759,
-        "internalFormId": 3108,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 4,
-        "internalFormId": 172,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 325,
-        "internalFormId": 1526,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 23,
-        "internalFormId": 697,
-        "spawnRate": 0.27,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 928,
-        "internalFormId": 3242,
+        "dexNr": 39,
+        "internalFormId": 987,
         "spawnRate": 0.27,
         "canBeShiny": true
     },
@@ -456,26 +324,176 @@
         "canBeShiny": false
     },
     {
-        "dexNr": 198,
-        "internalFormId": 855,
+        "dexNr": 498,
+        "internalFormId": 1898,
         "spawnRate": 0.27,
         "canBeShiny": true
     },
     {
-        "dexNr": 769,
-        "internalFormId": 3117,
+        "dexNr": 928,
+        "internalFormId": 3242,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 831,
+        "internalFormId": 2861,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 63,
+        "internalFormId": 304,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 396,
+        "internalFormId": 1658,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 152,
+        "internalFormId": 1118,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 821,
+        "internalFormId": 3160,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 519,
+        "internalFormId": 1961,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 111,
+        "internalFormId": 846,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 223,
+        "internalFormId": 1286,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 278,
+        "internalFormId": 1406,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 431,
+        "internalFormId": 1757,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 759,
+        "internalFormId": 3108,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 921,
+        "internalFormId": 3236,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 333,
+        "internalFormId": 1532,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 316,
+        "internalFormId": 1505,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 32,
+        "internalFormId": 776,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 736,
+        "internalFormId": 3089,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 29,
+        "internalFormId": 776,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 322,
+        "internalFormId": 1517,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 427,
+        "internalFormId": 1751,
+        "spawnRate": 0.27,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 425,
+        "internalFormId": 1745,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 517,
-        "internalFormId": 1955,
+        "dexNr": 109,
+        "internalFormId": 703,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 616,
-        "internalFormId": 2240,
+        "dexNr": 193,
+        "internalFormId": 1223,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 273,
+        "internalFormId": 625,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 827,
+        "internalFormId": 3166,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 48,
+        "internalFormId": 259,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 587,
+        "internalFormId": 2153,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 125,
+        "internalFormId": 640,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
@@ -486,68 +504,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 906,
-        "internalFormId": 3222,
+        "dexNr": 283,
+        "internalFormId": 1412,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 318,
-        "internalFormId": 734,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 582,
-        "internalFormId": 2144,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 183,
-        "internalFormId": 1196,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 434,
-        "internalFormId": 791,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 355,
-        "internalFormId": 914,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 185,
-        "internalFormId": 1202,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 206,
-        "internalFormId": 1250,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 81,
-        "internalFormId": 655,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 431,
-        "internalFormId": 1757,
-        "spawnRate": 0.26,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 387,
-        "internalFormId": 688,
+        "dexNr": 767,
+        "internalFormId": 3115,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
@@ -558,92 +522,152 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 1,
-        "internalFormId": 163,
+        "dexNr": 529,
+        "internalFormId": 1991,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 595,
-        "internalFormId": 2177,
+        "dexNr": 66,
+        "internalFormId": 809,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 32,
-        "internalFormId": 776,
+        "dexNr": 856,
+        "internalFormId": 3190,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 278,
-        "internalFormId": 1406,
+        "dexNr": 434,
+        "internalFormId": 791,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 322,
-        "internalFormId": 1517,
+        "dexNr": 816,
+        "internalFormId": 3155,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 829,
-        "internalFormId": 3168,
-        "spawnRate": 0.26,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 546,
-        "internalFormId": 2042,
+        "dexNr": 265,
+        "internalFormId": 600,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 161,
-        "internalFormId": 1145,
+        "dexNr": 453,
+        "internalFormId": 1802,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 203,
-        "internalFormId": 1241,
+        "dexNr": 459,
+        "internalFormId": 932,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 509,
-        "internalFormId": 1931,
+        "dexNr": 311,
+        "internalFormId": 1490,
         "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 659,
-        "internalFormId": 3031,
-        "spawnRate": 0.25,
+        "dexNr": 200,
+        "internalFormId": 719,
+        "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
-        "dexNr": 283,
-        "internalFormId": 1412,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 827,
-        "internalFormId": 3166,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 607,
-        "internalFormId": 2213,
-        "spawnRate": 0.25,
+        "dexNr": 4,
+        "internalFormId": 172,
+        "spawnRate": 0.26,
         "canBeShiny": true
     },
     {
         "dexNr": 393,
         "internalFormId": 1649,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 682,
+        "internalFormId": 3044,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 258,
+        "internalFormId": 205,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 731,
+        "internalFormId": 3084,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 850,
+        "internalFormId": 3186,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 504,
+        "internalFormId": 1916,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 819,
+        "internalFormId": 3158,
+        "spawnRate": 0.26,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 185,
+        "internalFormId": 1202,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 684,
+        "internalFormId": 3046,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 315,
+        "internalFormId": 1502,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 84,
+        "internalFormId": 1026,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 456,
+        "internalFormId": 1811,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 616,
+        "internalFormId": 2240,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 775,
+        "internalFormId": 3121,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
@@ -654,128 +678,62 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 265,
-        "internalFormId": 600,
+        "dexNr": 158,
+        "internalFormId": 1136,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 293,
-        "internalFormId": 1442,
+        "dexNr": 126,
+        "internalFormId": 634,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 736,
-        "internalFormId": 3089,
+        "dexNr": 755,
+        "internalFormId": 3104,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 273,
-        "internalFormId": 625,
+        "dexNr": 751,
+        "internalFormId": 3100,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 228,
-        "internalFormId": 229,
+        "dexNr": 938,
+        "internalFormId": 3251,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 580,
-        "internalFormId": 2138,
+        "dexNr": 692,
+        "internalFormId": 3054,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 209,
-        "internalFormId": 1253,
+        "dexNr": 190,
+        "internalFormId": 1214,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 163,
-        "internalFormId": 1151,
+        "dexNr": 35,
+        "internalFormId": 981,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 280,
-        "internalFormId": 292,
+        "dexNr": 83,
+        "internalFormId": 1023,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 252,
-        "internalFormId": 1349,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 610,
-        "internalFormId": 2222,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 459,
-        "internalFormId": 932,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 971,
-        "internalFormId": 3283,
-        "spawnRate": 0.25,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 125,
-        "internalFormId": 640,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 418,
-        "internalFormId": 1724,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 124,
-        "internalFormId": 1083,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 143,
-        "internalFormId": 199,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 241,
-        "internalFormId": 1325,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 312,
-        "internalFormId": 1493,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 92,
-        "internalFormId": 1038,
-        "spawnRate": 0.25,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 408,
-        "internalFormId": 1694,
+        "dexNr": 285,
+        "internalFormId": 1418,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
@@ -786,140 +744,200 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 816,
-        "internalFormId": 3155,
+        "dexNr": 191,
+        "internalFormId": 1217,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 874,
-        "internalFormId": 3201,
-        "spawnRate": 0.25,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 667,
-        "internalFormId": 3036,
+        "dexNr": 225,
+        "internalFormId": 938,
         "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 751,
-        "internalFormId": 3100,
-        "spawnRate": 0.24,
+        "dexNr": 418,
+        "internalFormId": 1724,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 401,
-        "internalFormId": 1673,
-        "spawnRate": 0.24,
+        "dexNr": 769,
+        "internalFormId": 3117,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 684,
-        "internalFormId": 3046,
-        "spawnRate": 0.24,
+        "dexNr": 280,
+        "internalFormId": 292,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 585,
-        "internalFormId": 586,
-        "spawnRate": 0.24,
+        "dexNr": 209,
+        "internalFormId": 1253,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 107,
-        "internalFormId": 277,
-        "spawnRate": 0.24,
+        "dexNr": 325,
+        "internalFormId": 1526,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 165,
-        "internalFormId": 1157,
-        "spawnRate": 0.24,
+        "dexNr": 161,
+        "internalFormId": 1145,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 1,
+        "internalFormId": 163,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 355,
+        "internalFormId": 914,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
         "dexNr": 129,
         "internalFormId": 253,
-        "spawnRate": 0.24,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 315,
-        "internalFormId": 1502,
-        "spawnRate": 0.24,
+        "dexNr": 702,
+        "internalFormId": 2860,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 231,
-        "internalFormId": 1301,
-        "spawnRate": 0.24,
+        "dexNr": 829,
+        "internalFormId": 3168,
+        "spawnRate": 0.25,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 183,
+        "internalFormId": 1196,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 358,
-        "internalFormId": 1592,
-        "spawnRate": 0.24,
+        "dexNr": 572,
+        "internalFormId": 2114,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 285,
-        "internalFormId": 1418,
-        "spawnRate": 0.24,
+        "dexNr": 312,
+        "internalFormId": 1493,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 504,
-        "internalFormId": 1916,
-        "spawnRate": 0.24,
+        "dexNr": 554,
+        "internalFormId": 2063,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 390,
-        "internalFormId": 818,
-        "spawnRate": 0.24,
+        "dexNr": 60,
+        "internalFormId": 235,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 775,
-        "internalFormId": 3121,
-        "spawnRate": 0.24,
+        "dexNr": 287,
+        "internalFormId": 1424,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 48,
-        "internalFormId": 259,
-        "spawnRate": 0.24,
+        "dexNr": 307,
+        "internalFormId": 1478,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 921,
-        "internalFormId": 3236,
-        "spawnRate": 0.24,
+        "dexNr": 54,
+        "internalFormId": 286,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 343,
-        "internalFormId": 1562,
-        "spawnRate": 0.24,
+        "dexNr": 659,
+        "internalFormId": 3031,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 113,
-        "internalFormId": 1056,
-        "spawnRate": 0.24,
+        "dexNr": 81,
+        "internalFormId": 655,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 850,
-        "internalFormId": 3186,
-        "spawnRate": 0.24,
+        "dexNr": 302,
+        "internalFormId": 923,
+        "spawnRate": 0.25,
         "canBeShiny": true
     },
     {
-        "dexNr": 761,
-        "internalFormId": 3109,
+        "dexNr": 926,
+        "internalFormId": 3240,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 912,
+        "internalFormId": 3228,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 810,
+        "internalFormId": 3151,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 602,
+        "internalFormId": 2198,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 106,
+        "internalFormId": 713,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 742,
+        "internalFormId": 3094,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 517,
+        "internalFormId": 1955,
+        "spawnRate": 0.25,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 837,
+        "internalFormId": 3174,
+        "spawnRate": 0.24,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 228,
+        "internalFormId": 229,
         "spawnRate": 0.24,
         "canBeShiny": true
     },
@@ -930,116 +948,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 453,
-        "internalFormId": 1802,
+        "dexNr": 293,
+        "internalFormId": 1442,
         "spawnRate": 0.24,
         "canBeShiny": true
     },
     {
-        "dexNr": 456,
-        "internalFormId": 1811,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 722,
-        "internalFormId": 3076,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 96,
-        "internalFormId": 214,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 258,
-        "internalFormId": 205,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 109,
-        "internalFormId": 703,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 202,
-        "internalFormId": 602,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 255,
-        "internalFormId": 1358,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 126,
-        "internalFormId": 634,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 299,
-        "internalFormId": 1460,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 734,
-        "internalFormId": 3087,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 856,
-        "internalFormId": 3190,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 84,
-        "internalFormId": 1026,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 742,
-        "internalFormId": 3094,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 602,
-        "internalFormId": 2198,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 353,
-        "internalFormId": 908,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 304,
-        "internalFormId": 1469,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 912,
-        "internalFormId": 3228,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 422,
-        "internalFormId": 97,
+        "dexNr": 582,
+        "internalFormId": 2144,
         "spawnRate": 0.24,
         "canBeShiny": true
     },
@@ -1050,158 +966,332 @@
         "canBeShiny": true
     },
     {
+        "dexNr": 216,
+        "internalFormId": 1265,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 971,
+        "internalFormId": 3283,
+        "spawnRate": 0.24,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 557,
+        "internalFormId": 2069,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 422,
+        "internalFormId": 97,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 108,
+        "internalFormId": 1053,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 163,
+        "internalFormId": 1151,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 318,
+        "internalFormId": 734,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 203,
+        "internalFormId": 1241,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 696,
+        "internalFormId": 3058,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 607,
+        "internalFormId": 2213,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 353,
+        "internalFormId": 908,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 509,
+        "internalFormId": 1931,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 114,
+        "internalFormId": 1059,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 118,
+        "internalFormId": 1068,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 300,
+        "internalFormId": 1463,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 127,
+        "internalFormId": 898,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 107,
+        "internalFormId": 277,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 140,
+        "internalFormId": 1104,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 304,
+        "internalFormId": 1469,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 734,
+        "internalFormId": 3087,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 401,
+        "internalFormId": 1673,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 206,
+        "internalFormId": 1250,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 451,
+        "internalFormId": 1796,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 667,
+        "internalFormId": 3036,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 124,
+        "internalFormId": 1083,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 588,
+        "internalFormId": 2156,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 420,
+        "internalFormId": 1730,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 299,
+        "internalFormId": 1460,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 722,
+        "internalFormId": 3076,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 142,
+        "internalFormId": 1110,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 358,
+        "internalFormId": 1592,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 527,
+        "internalFormId": 1985,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 747,
+        "internalFormId": 3096,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 165,
+        "internalFormId": 1157,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 712,
+        "internalFormId": 3069,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 339,
+        "internalFormId": 1550,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 92,
+        "internalFormId": 1038,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 270,
+        "internalFormId": 1391,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 874,
+        "internalFormId": 3201,
+        "spawnRate": 0.24,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 343,
+        "internalFormId": 1562,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 202,
+        "internalFormId": 602,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 524,
+        "internalFormId": 1976,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 570,
+        "internalFormId": 2108,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 213,
+        "internalFormId": 827,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 96,
+        "internalFormId": 214,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 176,
+        "internalFormId": 1187,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 597,
+        "internalFormId": 2183,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 546,
+        "internalFormId": 2042,
+        "spawnRate": 0.24,
+        "canBeShiny": true
+    },
+    {
         "dexNr": 522,
         "internalFormId": 1970,
         "spawnRate": 0.24,
         "canBeShiny": true
     },
     {
-        "dexNr": 810,
-        "internalFormId": 3151,
+        "dexNr": 241,
+        "internalFormId": 1325,
         "spawnRate": 0.24,
         "canBeShiny": true
     },
     {
-        "dexNr": 234,
-        "internalFormId": 941,
-        "spawnRate": 0.24,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 513,
-        "internalFormId": 1943,
+        "dexNr": 568,
+        "internalFormId": 2102,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 415,
-        "internalFormId": 1715,
+        "dexNr": 231,
+        "internalFormId": 1301,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 108,
-        "internalFormId": 1053,
+        "dexNr": 580,
+        "internalFormId": 2138,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 557,
-        "internalFormId": 2069,
+        "dexNr": 585,
+        "internalFormId": 586,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 554,
-        "internalFormId": 2063,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 223,
-        "internalFormId": 1286,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 237,
-        "internalFormId": 1313,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 527,
-        "internalFormId": 1985,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 859,
-        "internalFormId": 3193,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 714,
-        "internalFormId": 3070,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 127,
-        "internalFormId": 898,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 627,
-        "internalFormId": 2273,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 303,
-        "internalFormId": 833,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 242,
-        "internalFormId": 1328,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 118,
-        "internalFormId": 1068,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 588,
-        "internalFormId": 2156,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 410,
-        "internalFormId": 1700,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 122,
-        "internalFormId": 1080,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 137,
-        "internalFormId": 677,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 216,
-        "internalFormId": 1265,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 436,
-        "internalFormId": 1766,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 193,
-        "internalFormId": 1223,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 938,
-        "internalFormId": 3251,
+        "dexNr": 255,
+        "internalFormId": 1358,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
@@ -1212,62 +1302,38 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 570,
-        "internalFormId": 2108,
+        "dexNr": 714,
+        "internalFormId": 3070,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 218,
-        "internalFormId": 1271,
+        "dexNr": 252,
+        "internalFormId": 1349,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 190,
-        "internalFormId": 1214,
+        "dexNr": 513,
+        "internalFormId": 1943,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 311,
-        "internalFormId": 1490,
+        "dexNr": 234,
+        "internalFormId": 941,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 703,
-        "internalFormId": 3064,
+        "dexNr": 204,
+        "internalFormId": 1244,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 213,
-        "internalFormId": 827,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 50,
-        "internalFormId": 59,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 339,
-        "internalFormId": 1550,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 225,
-        "internalFormId": 938,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 54,
-        "internalFormId": 286,
+        "dexNr": 143,
+        "internalFormId": 199,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
@@ -1278,141 +1344,117 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 597,
-        "internalFormId": 2183,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 307,
-        "internalFormId": 1478,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 767,
-        "internalFormId": 3115,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 926,
-        "internalFormId": 3240,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 142,
-        "internalFormId": 1110,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 587,
-        "internalFormId": 2153,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 270,
-        "internalFormId": 1391,
-        "spawnRate": 0.23,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 824,
-        "internalFormId": 3163,
-        "spawnRate": 0.23,
-        "canBeShiny": false
-    },
-    {
         "dexNr": 531,
         "internalFormId": 1997,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 114,
-        "internalFormId": 1059,
+        "dexNr": 27,
+        "internalFormId": 51,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 622,
-        "internalFormId": 2258,
+        "dexNr": 779,
+        "internalFormId": 3124,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 692,
-        "internalFormId": 3054,
+        "dexNr": 137,
+        "internalFormId": 677,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 300,
-        "internalFormId": 1463,
+        "dexNr": 777,
+        "internalFormId": 3123,
         "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 696,
-        "internalFormId": 3058,
-        "spawnRate": 0.22,
+        "dexNr": 859,
+        "internalFormId": 3193,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 712,
-        "internalFormId": 3069,
-        "spawnRate": 0.22,
+        "dexNr": 627,
+        "internalFormId": 2273,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 106,
-        "internalFormId": 713,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 83,
-        "internalFormId": 1023,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 420,
-        "internalFormId": 1730,
-        "spawnRate": 0.22,
+        "dexNr": 610,
+        "internalFormId": 2222,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
         "dexNr": 366,
         "internalFormId": 1607,
-        "spawnRate": 0.22,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 128,
-        "internalFormId": 1086,
-        "spawnRate": 0.22,
+        "dexNr": 95,
+        "internalFormId": 902,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 191,
-        "internalFormId": 1217,
-        "spawnRate": 0.22,
+        "dexNr": 122,
+        "internalFormId": 1080,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 140,
-        "internalFormId": 1104,
-        "spawnRate": 0.22,
+        "dexNr": 449,
+        "internalFormId": 888,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
-        "dexNr": 568,
-        "internalFormId": 2102,
-        "spawnRate": 0.22,
+        "dexNr": 694,
+        "internalFormId": 3056,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 237,
+        "internalFormId": 1313,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 113,
+        "internalFormId": 1056,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 761,
+        "internalFormId": 3109,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 436,
+        "internalFormId": 1766,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 370,
+        "internalFormId": 1619,
+        "spawnRate": 0.23,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 415,
+        "internalFormId": 1715,
+        "spawnRate": 0.23,
         "canBeShiny": true
     },
     {
@@ -1422,146 +1464,92 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 837,
-        "internalFormId": 3174,
+        "dexNr": 303,
+        "internalFormId": 833,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 337,
+        "internalFormId": 1544,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 242,
+        "internalFormId": 1328,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 541,
+        "internalFormId": 2027,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 390,
+        "internalFormId": 818,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 50,
+        "internalFormId": 59,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 410,
+        "internalFormId": 1700,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 622,
+        "internalFormId": 2258,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 824,
+        "internalFormId": 3163,
         "spawnRate": 0.22,
         "canBeShiny": false
     },
     {
-        "dexNr": 702,
-        "internalFormId": 2860,
+        "dexNr": 218,
+        "internalFormId": 1271,
         "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 694,
-        "internalFormId": 3056,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 755,
-        "internalFormId": 3104,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 548,
-        "internalFormId": 2048,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 58,
-        "internalFormId": 280,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 524,
-        "internalFormId": 1976,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 287,
-        "internalFormId": 1424,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 158,
-        "internalFormId": 1136,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 779,
-        "internalFormId": 3124,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 676,
-        "internalFormId": 2629,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 538,
-        "internalFormId": 2018,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 814,
-        "internalFormId": 3154,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 449,
-        "internalFormId": 888,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 176,
-        "internalFormId": 1187,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 302,
-        "internalFormId": 923,
-        "spawnRate": 0.22,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 222,
-        "internalFormId": 1283,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 451,
-        "internalFormId": 1796,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 777,
-        "internalFormId": 3123,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 370,
-        "internalFormId": 1619,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 710,
-        "internalFormId": 2644,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 590,
-        "internalFormId": 2162,
-        "spawnRate": 0.21,
         "canBeShiny": true
     },
     {
         "dexNr": 917,
         "internalFormId": 3232,
-        "spawnRate": 0.21,
+        "spawnRate": 0.22,
         "canBeShiny": false
     },
     {
-        "dexNr": 536,
-        "internalFormId": 2012,
+        "dexNr": 207,
+        "internalFormId": 803,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 408,
+        "internalFormId": 1694,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 19,
+        "internalFormId": 46,
+        "spawnRate": 0.22,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 128,
+        "internalFormId": 1086,
         "spawnRate": 0.21,
         "canBeShiny": true
     },
@@ -1572,38 +1560,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 90,
-        "internalFormId": 876,
+        "dexNr": 662,
+        "internalFormId": 3034,
         "spawnRate": 0.21,
         "canBeShiny": true
     },
     {
-        "dexNr": 204,
-        "internalFormId": 1244,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 207,
-        "internalFormId": 803,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 541,
-        "internalFormId": 2027,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 98,
-        "internalFormId": 870,
-        "spawnRate": 0.21,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 27,
-        "internalFormId": 51,
+        "dexNr": 536,
+        "internalFormId": 2012,
         "spawnRate": 0.21,
         "canBeShiny": true
     },
@@ -1614,26 +1578,50 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 95,
-        "internalFormId": 902,
+        "dexNr": 590,
+        "internalFormId": 2162,
         "spawnRate": 0.21,
         "canBeShiny": true
     },
     {
-        "dexNr": 19,
-        "internalFormId": 46,
+        "dexNr": 548,
+        "internalFormId": 2048,
+        "spawnRate": 0.21,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 58,
+        "internalFormId": 280,
+        "spawnRate": 0.21,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 676,
+        "internalFormId": 2629,
+        "spawnRate": 0.21,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 98,
+        "internalFormId": 870,
+        "spawnRate": 0.21,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 222,
+        "internalFormId": 1283,
         "spawnRate": 0.2,
         "canBeShiny": true
     },
     {
-        "dexNr": 337,
-        "internalFormId": 1544,
+        "dexNr": 538,
+        "internalFormId": 2018,
         "spawnRate": 0.2,
         "canBeShiny": true
     },
     {
-        "dexNr": 747,
-        "internalFormId": 3096,
+        "dexNr": 507,
+        "internalFormId": 1925,
         "spawnRate": 0.2,
         "canBeShiny": true
     },
@@ -1644,26 +1632,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 948,
-        "internalFormId": 3261,
-        "spawnRate": 0.19,
+        "dexNr": 703,
+        "internalFormId": 3064,
+        "spawnRate": 0.2,
         "canBeShiny": true
     },
     {
-        "dexNr": 226,
-        "internalFormId": 1292,
-        "spawnRate": 0.19,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 263,
-        "internalFormId": 946,
-        "spawnRate": 0.19,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 662,
-        "internalFormId": 3034,
+        "dexNr": 814,
+        "internalFormId": 3154,
         "spawnRate": 0.19,
         "canBeShiny": true
     },
@@ -1671,6 +1647,24 @@
         "dexNr": 626,
         "internalFormId": 2270,
         "spawnRate": 0.19,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 74,
+        "internalFormId": 68,
+        "spawnRate": 0.19,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 263,
+        "internalFormId": 946,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 90,
+        "internalFormId": 876,
+        "spawnRate": 0.18,
         "canBeShiny": true
     },
     {
@@ -1686,32 +1680,8 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 726,
-        "internalFormId": 3079,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 973,
-        "internalFormId": 3285,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 400,
-        "internalFormId": 1670,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 100,
-        "internalFormId": 1047,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 17,
-        "internalFormId": 965,
+        "dexNr": 948,
+        "internalFormId": 3261,
         "spawnRate": 0.18,
         "canBeShiny": true
     },
@@ -1722,68 +1692,62 @@
         "canBeShiny": true
     },
     {
+        "dexNr": 973,
+        "internalFormId": 3285,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 765,
+        "internalFormId": 3113,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 710,
+        "internalFormId": 2644,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 24,
+        "internalFormId": 700,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 17,
+        "internalFormId": 965,
+        "spawnRate": 0.18,
+        "canBeShiny": true
+    },
+    {
         "dexNr": 79,
         "internalFormId": 1017,
         "spawnRate": 0.18,
         "canBeShiny": true
     },
     {
-        "dexNr": 156,
-        "internalFormId": 1130,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 507,
-        "internalFormId": 1925,
-        "spawnRate": 0.18,
+        "dexNr": 351,
+        "internalFormId": 29,
+        "spawnRate": 0.17,
         "canBeShiny": true
     },
     {
         "dexNr": 11,
         "internalFormId": 956,
-        "spawnRate": 0.18,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 22,
-        "internalFormId": 974,
         "spawnRate": 0.17,
         "canBeShiny": true
     },
     {
-        "dexNr": 74,
-        "internalFormId": 68,
+        "dexNr": 618,
+        "internalFormId": 2246,
         "spawnRate": 0.17,
         "canBeShiny": true
     },
     {
-        "dexNr": 741,
-        "internalFormId": 2683,
-        "spawnRate": 0.17,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 707,
-        "internalFormId": 3066,
-        "spawnRate": 0.17,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 24,
-        "internalFormId": 700,
-        "spawnRate": 0.17,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 765,
-        "internalFormId": 3113,
-        "spawnRate": 0.17,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 77,
-        "internalFormId": 1011,
+        "dexNr": 726,
+        "internalFormId": 3079,
         "spawnRate": 0.17,
         "canBeShiny": true
     },
@@ -1794,14 +1758,56 @@
         "canBeShiny": false
     },
     {
-        "dexNr": 19,
-        "internalFormId": 45,
+        "dexNr": 544,
+        "internalFormId": 2036,
+        "spawnRate": 0.17,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 100,
+        "internalFormId": 1047,
+        "spawnRate": 0.17,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 400,
+        "internalFormId": 1670,
+        "spawnRate": 0.17,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 441,
+        "internalFormId": 1781,
+        "spawnRate": 0.17,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 226,
+        "internalFormId": 1292,
+        "spawnRate": 0.17,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 732,
+        "internalFormId": 3085,
         "spawnRate": 0.16,
         "canBeShiny": true
     },
     {
-        "dexNr": 37,
-        "internalFormId": 55,
+        "dexNr": 156,
+        "internalFormId": 1130,
+        "spawnRate": 0.16,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 741,
+        "internalFormId": 2683,
+        "spawnRate": 0.16,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 77,
+        "internalFormId": 1011,
         "spawnRate": 0.16,
         "canBeShiny": true
     },
@@ -1812,56 +1818,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 544,
-        "internalFormId": 2036,
-        "spawnRate": 0.16,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 441,
-        "internalFormId": 1781,
-        "spawnRate": 0.16,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 153,
-        "internalFormId": 1121,
-        "spawnRate": 0.16,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 931,
-        "internalFormId": 2985,
-        "spawnRate": 0.16,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 907,
-        "internalFormId": 3223,
+        "dexNr": 214,
+        "internalFormId": 1262,
         "spawnRate": 0.15,
         "canBeShiny": true
     },
     {
-        "dexNr": 520,
-        "internalFormId": 1964,
-        "spawnRate": 0.15,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 88,
-        "internalFormId": 73,
-        "spawnRate": 0.15,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 262,
-        "internalFormId": 1370,
-        "spawnRate": 0.15,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 618,
-        "internalFormId": 2246,
+        "dexNr": 188,
+        "internalFormId": 1208,
         "spawnRate": 0.15,
         "canBeShiny": true
     },
@@ -1872,8 +1836,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 214,
-        "internalFormId": 1262,
+        "dexNr": 37,
+        "internalFormId": 55,
+        "spawnRate": 0.15,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 707,
+        "internalFormId": 3066,
         "spawnRate": 0.15,
         "canBeShiny": true
     },
@@ -1884,38 +1854,20 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 167,
-        "internalFormId": 1163,
+        "dexNr": 931,
+        "internalFormId": 2985,
+        "spawnRate": 0.15,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 423,
+        "internalFormId": 99,
         "spawnRate": 0.15,
         "canBeShiny": true
     },
     {
-        "dexNr": 5,
-        "internalFormId": 175,
-        "spawnRate": 0.14,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 732,
-        "internalFormId": 3085,
-        "spawnRate": 0.14,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 496,
-        "internalFormId": 1892,
-        "spawnRate": 0.14,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 728,
-        "internalFormId": 3081,
-        "spawnRate": 0.14,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 188,
-        "internalFormId": 1208,
+        "dexNr": 822,
+        "internalFormId": 3161,
         "spawnRate": 0.14,
         "canBeShiny": true
     },
@@ -1926,8 +1878,62 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 20,
-        "internalFormId": 47,
+        "dexNr": 14,
+        "internalFormId": 619,
+        "spawnRate": 0.14,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 88,
+        "internalFormId": 73,
+        "spawnRate": 0.14,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 153,
+        "internalFormId": 1121,
+        "spawnRate": 0.14,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 22,
+        "internalFormId": 974,
+        "spawnRate": 0.14,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 19,
+        "internalFormId": 45,
+        "spawnRate": 0.14,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 496,
+        "internalFormId": 1892,
+        "spawnRate": 0.13,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 669,
+        "internalFormId": 2617,
+        "spawnRate": 0.13,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 167,
+        "internalFormId": 1163,
+        "spawnRate": 0.13,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 520,
+        "internalFormId": 1964,
+        "spawnRate": 0.13,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 728,
+        "internalFormId": 3081,
         "spawnRate": 0.13,
         "canBeShiny": true
     },
@@ -1938,134 +1944,62 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 562,
-        "internalFormId": 2084,
+        "dexNr": 5,
+        "internalFormId": 175,
         "spawnRate": 0.13,
         "canBeShiny": true
     },
     {
-        "dexNr": 822,
-        "internalFormId": 3161,
-        "spawnRate": 0.13,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 2,
-        "internalFormId": 166,
-        "spawnRate": 0.13,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 423,
-        "internalFormId": 99,
-        "spawnRate": 0.13,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 351,
-        "internalFormId": 29,
-        "spawnRate": 0.13,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 277,
-        "internalFormId": 1403,
+        "dexNr": 723,
+        "internalFormId": 3077,
         "spawnRate": 0.12,
         "canBeShiny": true
     },
     {
-        "dexNr": 14,
-        "internalFormId": 619,
-        "spawnRate": 0.12,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 169,
-        "internalFormId": 202,
-        "spawnRate": 0.12,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 417,
-        "internalFormId": 1721,
+        "dexNr": 262,
+        "internalFormId": 1370,
         "spawnRate": 0.12,
         "canBeShiny": true
     },
     {
         "dexNr": 916,
-        "internalFormId": 2981,
+        "internalFormId": 2982,
         "spawnRate": 0.12,
         "canBeShiny": true
     },
     {
-        "dexNr": 669,
-        "internalFormId": 2617,
+        "dexNr": 575,
+        "internalFormId": 2123,
         "spawnRate": 0.12,
         "canBeShiny": true
     },
     {
-        "dexNr": 40,
-        "internalFormId": 990,
+        "dexNr": 562,
+        "internalFormId": 2084,
         "spawnRate": 0.12,
         "canBeShiny": true
     },
     {
         "dexNr": 8,
         "internalFormId": 184,
-        "spawnRate": 0.12,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 931,
-        "internalFormId": 2987,
-        "spawnRate": 0.12,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 103,
-        "internalFormId": 77,
         "spawnRate": 0.11,
         "canBeShiny": true
     },
     {
-        "dexNr": 131,
-        "internalFormId": 322,
+        "dexNr": 363,
+        "internalFormId": 1598,
         "spawnRate": 0.11,
         "canBeShiny": true
     },
     {
-        "dexNr": 670,
-        "internalFormId": 2622,
+        "dexNr": 40,
+        "internalFormId": 990,
         "spawnRate": 0.11,
         "canBeShiny": true
     },
     {
-        "dexNr": 264,
-        "internalFormId": 948,
-        "spawnRate": 0.11,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 263,
-        "internalFormId": 945,
-        "spawnRate": 0.11,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 916,
-        "internalFormId": 2982,
-        "spawnRate": 0.11,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 88,
-        "internalFormId": 74,
-        "spawnRate": 0.11,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 723,
-        "internalFormId": 3077,
+        "dexNr": 169,
+        "internalFormId": 202,
         "spawnRate": 0.11,
         "canBeShiny": true
     },
@@ -2076,14 +2010,80 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 575,
-        "internalFormId": 2123,
+        "dexNr": 74,
+        "internalFormId": 67,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 131,
+        "internalFormId": 322,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 37,
+        "internalFormId": 56,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 907,
+        "internalFormId": 3223,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 20,
+        "internalFormId": 47,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 88,
+        "internalFormId": 74,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 931,
+        "internalFormId": 2987,
+        "spawnRate": 0.11,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 916,
+        "internalFormId": 2981,
+        "spawnRate": 0.11,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 2,
+        "internalFormId": 166,
         "spawnRate": 0.1,
         "canBeShiny": true
     },
     {
-        "dexNr": 170,
-        "internalFormId": 1169,
+        "dexNr": 670,
+        "internalFormId": 2622,
+        "spawnRate": 0.1,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 77,
+        "internalFormId": 2336,
+        "spawnRate": 0.1,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 263,
+        "internalFormId": 945,
+        "spawnRate": 0.1,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 832,
+        "internalFormId": 2862,
         "spawnRate": 0.1,
         "canBeShiny": true
     },
@@ -2094,14 +2094,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 74,
-        "internalFormId": 67,
+        "dexNr": 397,
+        "internalFormId": 1661,
         "spawnRate": 0.1,
         "canBeShiny": true
     },
     {
-        "dexNr": 178,
-        "internalFormId": 1193,
+        "dexNr": 277,
+        "internalFormId": 1403,
         "spawnRate": 0.1,
         "canBeShiny": true
     },
@@ -2112,74 +2112,20 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 89,
-        "internalFormId": 75,
+        "dexNr": 178,
+        "internalFormId": 1193,
         "spawnRate": 0.1,
         "canBeShiny": true
     },
     {
-        "dexNr": 363,
-        "internalFormId": 1598,
+        "dexNr": 103,
+        "internalFormId": 77,
         "spawnRate": 0.09,
         "canBeShiny": true
     },
     {
-        "dexNr": 52,
-        "internalFormId": 64,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 432,
-        "internalFormId": 1760,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 20,
-        "internalFormId": 48,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 52,
-        "internalFormId": 2335,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 690,
-        "internalFormId": 3052,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 820,
-        "internalFormId": 3159,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 397,
-        "internalFormId": 1661,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 351,
-        "internalFormId": 31,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 37,
-        "internalFormId": 56,
-        "spawnRate": 0.09,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 832,
-        "internalFormId": 2862,
+        "dexNr": 388,
+        "internalFormId": 691,
         "spawnRate": 0.09,
         "canBeShiny": true
     },
@@ -2190,8 +2136,8 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 215,
-        "internalFormId": 2794,
+        "dexNr": 417,
+        "internalFormId": 1721,
         "spawnRate": 0.09,
         "canBeShiny": true
     },
@@ -2202,32 +2148,50 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 77,
-        "internalFormId": 2336,
+        "dexNr": 432,
+        "internalFormId": 1760,
+        "spawnRate": 0.09,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 52,
+        "internalFormId": 2335,
+        "spawnRate": 0.09,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 215,
+        "internalFormId": 2794,
+        "spawnRate": 0.09,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 820,
+        "internalFormId": 3159,
+        "spawnRate": 0.09,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 264,
+        "internalFormId": 948,
+        "spawnRate": 0.09,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 52,
+        "internalFormId": 64,
         "spawnRate": 0.08,
         "canBeShiny": true
     },
     {
-        "dexNr": 885,
-        "internalFormId": 3209,
-        "spawnRate": 0.08,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 836,
-        "internalFormId": 3173,
-        "spawnRate": 0.08,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 710,
-        "internalFormId": 2641,
+        "dexNr": 28,
+        "internalFormId": 53,
         "spawnRate": 0.08,
         "canBeShiny": true
     },
     {
-        "dexNr": 428,
-        "internalFormId": 1754,
+        "dexNr": 20,
+        "internalFormId": 48,
         "spawnRate": 0.08,
         "canBeShiny": true
     },
@@ -2238,26 +2202,8 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 505,
-        "internalFormId": 1919,
-        "spawnRate": 0.08,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 93,
-        "internalFormId": 1041,
-        "spawnRate": 0.08,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 618,
-        "internalFormId": 2345,
-        "spawnRate": 0.08,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 284,
-        "internalFormId": 1415,
+        "dexNr": 412,
+        "internalFormId": 119,
         "spawnRate": 0.08,
         "canBeShiny": true
     },
@@ -2268,26 +2214,68 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 132,
-        "internalFormId": 1089,
+        "dexNr": 194,
+        "internalFormId": 1226,
         "spawnRate": 0.08,
         "canBeShiny": true
     },
     {
-        "dexNr": 391,
-        "internalFormId": 821,
-        "spawnRate": 0.07,
+        "dexNr": 885,
+        "internalFormId": 3209,
+        "spawnRate": 0.08,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 608,
+        "internalFormId": 2216,
+        "spawnRate": 0.08,
         "canBeShiny": true
     },
     {
-        "dexNr": 741,
-        "internalFormId": 2680,
-        "spawnRate": 0.07,
+        "dexNr": 284,
+        "internalFormId": 1415,
+        "spawnRate": 0.08,
         "canBeShiny": true
     },
     {
-        "dexNr": 79,
-        "internalFormId": 2582,
+        "dexNr": 710,
+        "internalFormId": 2641,
+        "spawnRate": 0.08,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 26,
+        "internalFormId": 49,
+        "spawnRate": 0.08,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 455,
+        "internalFormId": 1808,
+        "spawnRate": 0.08,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 170,
+        "internalFormId": 1169,
+        "spawnRate": 0.08,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 618,
+        "internalFormId": 2345,
+        "spawnRate": 0.08,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 836,
+        "internalFormId": 3173,
+        "spawnRate": 0.08,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 690,
+        "internalFormId": 3052,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
@@ -2298,20 +2286,50 @@
         "canBeShiny": true
     },
     {
+        "dexNr": 89,
+        "internalFormId": 75,
+        "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 58,
+        "internalFormId": 2792,
+        "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 688,
+        "internalFormId": 3050,
+        "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
         "dexNr": 279,
         "internalFormId": 1409,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
     {
-        "dexNr": 26,
-        "internalFormId": 49,
+        "dexNr": 710,
+        "internalFormId": 2643,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
     {
-        "dexNr": 101,
-        "internalFormId": 1050,
+        "dexNr": 913,
+        "internalFormId": 3229,
+        "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 105,
+        "internalFormId": 79,
+        "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 30,
+        "internalFormId": 779,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
@@ -2322,44 +2340,8 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 28,
-        "internalFormId": 53,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 608,
-        "internalFormId": 2216,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 194,
-        "internalFormId": 1226,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 660,
-        "internalFormId": 3032,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 53,
-        "internalFormId": 66,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 817,
-        "internalFormId": 3156,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 72,
-        "internalFormId": 1005,
+        "dexNr": 743,
+        "internalFormId": 3095,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
@@ -2370,116 +2352,56 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 264,
-        "internalFormId": 947,
+        "dexNr": 351,
+        "internalFormId": 31,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
     {
-        "dexNr": 85,
-        "internalFormId": 1029,
+        "dexNr": 79,
+        "internalFormId": 2582,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
     {
-        "dexNr": 960,
-        "internalFormId": 3273,
+        "dexNr": 505,
+        "internalFormId": 1919,
         "spawnRate": 0.07,
         "canBeShiny": true
     },
     {
-        "dexNr": 455,
-        "internalFormId": 1808,
+        "dexNr": 97,
+        "internalFormId": 217,
         "spawnRate": 0.07,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 100,
+        "internalFormId": 2728,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 817,
+        "internalFormId": 3156,
+        "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
         "dexNr": 592,
         "internalFormId": 2330,
-        "spawnRate": 0.07,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 412,
-        "internalFormId": 118,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 294,
-        "internalFormId": 1445,
+        "dexNr": 33,
+        "internalFormId": 785,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 710,
-        "internalFormId": 2643,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 256,
-        "internalFormId": 1361,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 782,
-        "internalFormId": 3127,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 58,
-        "internalFormId": 2792,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 369,
-        "internalFormId": 1616,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 180,
-        "internalFormId": 649,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 412,
-        "internalFormId": 119,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 596,
-        "internalFormId": 2180,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 159,
-        "internalFormId": 1139,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 75,
-        "internalFormId": 69,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 83,
-        "internalFormId": 2338,
-        "spawnRate": 0.06,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 688,
-        "internalFormId": 3050,
+        "dexNr": 341,
+        "internalFormId": 1556,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
@@ -2490,26 +2412,38 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 323,
-        "internalFormId": 1520,
+        "dexNr": 596,
+        "internalFormId": 2180,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 110,
-        "internalFormId": 706,
+        "dexNr": 83,
+        "internalFormId": 2338,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 913,
-        "internalFormId": 3229,
+        "dexNr": 412,
+        "internalFormId": 118,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 743,
-        "internalFormId": 3095,
+        "dexNr": 82,
+        "internalFormId": 658,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 132,
+        "internalFormId": 1089,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 660,
+        "internalFormId": 3032,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
@@ -2520,32 +2454,80 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 97,
-        "internalFormId": 217,
+        "dexNr": 93,
+        "internalFormId": 1041,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 510,
-        "internalFormId": 1934,
+        "dexNr": 741,
+        "internalFormId": 2680,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
-        "dexNr": 388,
-        "internalFormId": 691,
+        "dexNr": 53,
+        "internalFormId": 66,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 669,
+        "internalFormId": 2615,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 72,
+        "internalFormId": 1005,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 356,
+        "internalFormId": 917,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 428,
+        "internalFormId": 1754,
         "spawnRate": 0.06,
         "canBeShiny": true
     },
     {
         "dexNr": 931,
-        "internalFormId": 2986,
+        "internalFormId": 2988,
         "spawnRate": 0.06,
         "canBeShiny": false
     },
     {
-        "dexNr": 857,
-        "internalFormId": 3191,
+        "dexNr": 294,
+        "internalFormId": 1445,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 828,
+        "internalFormId": 3167,
+        "spawnRate": 0.06,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 110,
+        "internalFormId": 706,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 112,
+        "internalFormId": 849,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 256,
+        "internalFormId": 1361,
         "spawnRate": 0.05,
         "canBeShiny": true
     },
@@ -2556,8 +2538,32 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 166,
-        "internalFormId": 1160,
+        "dexNr": 75,
+        "internalFormId": 70,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 101,
+        "internalFormId": 1050,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 264,
+        "internalFormId": 947,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 391,
+        "internalFormId": 821,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 782,
+        "internalFormId": 3127,
         "spawnRate": 0.05,
         "canBeShiny": true
     },
@@ -2568,20 +2574,56 @@
         "canBeShiny": true
     },
     {
+        "dexNr": 310,
+        "internalFormId": 1487,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 159,
+        "internalFormId": 1139,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 323,
+        "internalFormId": 1520,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 85,
+        "internalFormId": 1029,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 510,
+        "internalFormId": 1934,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 960,
+        "internalFormId": 3273,
+        "spawnRate": 0.05,
+        "canBeShiny": true
+    },
+    {
         "dexNr": 741,
         "internalFormId": 2679,
         "spawnRate": 0.05,
         "canBeShiny": true
     },
     {
-        "dexNr": 764,
-        "internalFormId": 3112,
+        "dexNr": 64,
+        "internalFormId": 307,
         "spawnRate": 0.05,
-        "canBeShiny": false
+        "canBeShiny": true
     },
     {
-        "dexNr": 112,
-        "internalFormId": 849,
+        "dexNr": 75,
+        "internalFormId": 69,
         "spawnRate": 0.05,
         "canBeShiny": true
     },
@@ -2592,129 +2634,15 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 259,
-        "internalFormId": 208,
+        "dexNr": 89,
+        "internalFormId": 76,
         "spawnRate": 0.05,
         "canBeShiny": true
     },
     {
-        "dexNr": 274,
-        "internalFormId": 628,
+        "dexNr": 211,
+        "internalFormId": 1259,
         "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 105,
-        "internalFormId": 79,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 931,
-        "internalFormId": 2988,
-        "spawnRate": 0.05,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 341,
-        "internalFormId": 1556,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 33,
-        "internalFormId": 785,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 67,
-        "internalFormId": 812,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 669,
-        "internalFormId": 2615,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 356,
-        "internalFormId": 917,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 100,
-        "internalFormId": 2728,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 82,
-        "internalFormId": 658,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 30,
-        "internalFormId": 779,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 75,
-        "internalFormId": 70,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 116,
-        "internalFormId": 1062,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 669,
-        "internalFormId": 2614,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 828,
-        "internalFormId": 3167,
-        "spawnRate": 0.05,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 558,
-        "internalFormId": 2072,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 288,
-        "internalFormId": 1427,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 423,
-        "internalFormId": 98,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 138,
-        "internalFormId": 740,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 253,
-        "internalFormId": 1352,
-        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
@@ -2724,74 +2652,32 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 215,
-        "internalFormId": 797,
+        "dexNr": 210,
+        "internalFormId": 1256,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 64,
-        "internalFormId": 307,
+        "dexNr": 259,
+        "internalFormId": 208,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 811,
-        "internalFormId": 3152,
+        "dexNr": 67,
+        "internalFormId": 812,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 394,
-        "internalFormId": 1652,
+        "dexNr": 116,
+        "internalFormId": 1062,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 290,
-        "internalFormId": 1433,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 443,
-        "internalFormId": 861,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 454,
-        "internalFormId": 1805,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 310,
-        "internalFormId": 1487,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 669,
-        "internalFormId": 2618,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 59,
-        "internalFormId": 283,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 328,
-        "internalFormId": 746,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 419,
-        "internalFormId": 1727,
+        "dexNr": 331,
+        "internalFormId": 610,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
@@ -2803,139 +2689,145 @@
     },
     {
         "dexNr": 669,
-        "internalFormId": 2616,
+        "internalFormId": 2618,
         "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 211,
-        "internalFormId": 1259,
+        "dexNr": 369,
+        "internalFormId": 1616,
         "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 927,
-        "internalFormId": 3241,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 89,
-        "internalFormId": 76,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 210,
-        "internalFormId": 1256,
-        "spawnRate": 0.04,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 581,
-        "internalFormId": 2141,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 670,
-        "internalFormId": 2620,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 830,
-        "internalFormId": 3169,
-        "spawnRate": 0.03,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 670,
-        "internalFormId": 2619,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 232,
-        "internalFormId": 1304,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 319,
-        "internalFormId": 737,
-        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
         "dexNr": 402,
         "internalFormId": 1676,
-        "spawnRate": 0.03,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 613,
-        "internalFormId": 2231,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 115,
-        "internalFormId": 839,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 838,
-        "internalFormId": 3175,
-        "spawnRate": 0.03,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 586,
-        "internalFormId": 590,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 340,
-        "internalFormId": 1553,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 592,
-        "internalFormId": 2168,
-        "spawnRate": 0.03,
+        "dexNr": 669,
+        "internalFormId": 2614,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
         "dexNr": 354,
         "internalFormId": 911,
-        "spawnRate": 0.03,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 345,
-        "internalFormId": 1568,
-        "spawnRate": 0.03,
+        "dexNr": 525,
+        "internalFormId": 1979,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 508,
-        "internalFormId": 1928,
-        "spawnRate": 0.03,
+        "dexNr": 929,
+        "internalFormId": 3243,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
-        "dexNr": 78,
-        "internalFormId": 2337,
-        "spawnRate": 0.03,
+        "dexNr": 931,
+        "internalFormId": 2986,
+        "spawnRate": 0.04,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 253,
+        "internalFormId": 1352,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 764,
+        "internalFormId": 3112,
+        "spawnRate": 0.04,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 320,
+        "internalFormId": 1511,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 669,
+        "internalFormId": 2616,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 319,
+        "internalFormId": 737,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 857,
+        "internalFormId": 3191,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 811,
+        "internalFormId": 3152,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 830,
+        "internalFormId": 3169,
+        "spawnRate": 0.04,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 290,
+        "internalFormId": 1433,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 558,
+        "internalFormId": 2072,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 180,
+        "internalFormId": 649,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 138,
+        "internalFormId": 740,
+        "spawnRate": 0.04,
         "canBeShiny": true
     },
     {
         "dexNr": 555,
         "internalFormId": 138,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 288,
+        "internalFormId": 1427,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 215,
+        "internalFormId": 797,
+        "spawnRate": 0.04,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 419,
+        "internalFormId": 1727,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
@@ -2946,44 +2838,8 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 347,
-        "internalFormId": 1574,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 525,
-        "internalFormId": 1979,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 735,
-        "internalFormId": 3088,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 51,
-        "internalFormId": 61,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 331,
-        "internalFormId": 610,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 80,
-        "internalFormId": 1020,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 220,
-        "internalFormId": 1277,
+        "dexNr": 670,
+        "internalFormId": 2619,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
@@ -2994,26 +2850,20 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 564,
-        "internalFormId": 2090,
+        "dexNr": 115,
+        "internalFormId": 839,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 286,
-        "internalFormId": 1421,
+        "dexNr": 59,
+        "internalFormId": 283,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 27,
-        "internalFormId": 52,
-        "spawnRate": 0.03,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 38,
-        "internalFormId": 57,
+        "dexNr": 613,
+        "internalFormId": 2231,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
@@ -3024,8 +2874,38 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 344,
-        "internalFormId": 1565,
+        "dexNr": 564,
+        "internalFormId": 2090,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 166,
+        "internalFormId": 1160,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 220,
+        "internalFormId": 1277,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 119,
+        "internalFormId": 1071,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 927,
+        "internalFormId": 3241,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 51,
+        "internalFormId": 62,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
@@ -3036,165 +2916,93 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 815,
-        "internalFormId": 3016,
+        "dexNr": 560,
+        "internalFormId": 2078,
         "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 560,
-        "internalFormId": 2078,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 357,
-        "internalFormId": 1589,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 603,
-        "internalFormId": 2201,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 633,
-        "internalFormId": 2291,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 184,
-        "internalFormId": 1199,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 154,
-        "internalFormId": 1124,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 851,
-        "internalFormId": 3187,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 320,
-        "internalFormId": 1511,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 911,
-        "internalFormId": 3227,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 537,
-        "internalFormId": 2015,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 908,
-        "internalFormId": 3224,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 737,
-        "internalFormId": 3090,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 3,
-        "internalFormId": 169,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 542,
-        "internalFormId": 2030,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 6,
-        "internalFormId": 178,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 708,
-        "internalFormId": 3067,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 594,
-        "internalFormId": 2174,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 15,
-        "internalFormId": 622,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 698,
-        "internalFormId": 3060,
-        "spawnRate": 0.02,
+        "dexNr": 274,
+        "internalFormId": 628,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
         "dexNr": 195,
         "internalFormId": 1229,
-        "spawnRate": 0.02,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 929,
-        "internalFormId": 3243,
-        "spawnRate": 0.02,
+        "dexNr": 347,
+        "internalFormId": 1574,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 452,
-        "internalFormId": 1799,
-        "spawnRate": 0.02,
+        "dexNr": 328,
+        "internalFormId": 746,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 42,
-        "internalFormId": 160,
-        "spawnRate": 0.02,
+        "dexNr": 38,
+        "internalFormId": 57,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 326,
-        "internalFormId": 1529,
-        "spawnRate": 0.02,
+        "dexNr": 443,
+        "internalFormId": 861,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 545,
-        "internalFormId": 2039,
-        "spawnRate": 0.02,
+        "dexNr": 581,
+        "internalFormId": 2141,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
-        "dexNr": 189,
-        "internalFormId": 1211,
-        "spawnRate": 0.02,
+        "dexNr": 286,
+        "internalFormId": 1421,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 80,
+        "internalFormId": 1020,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 164,
+        "internalFormId": 1154,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 15,
+        "internalFormId": 622,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 670,
+        "internalFormId": 2620,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 454,
+        "internalFormId": 1805,
+        "spawnRate": 0.03,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 508,
+        "internalFormId": 1928,
+        "spawnRate": 0.03,
         "canBeShiny": true
     },
     {
@@ -3204,110 +3012,20 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 12,
-        "internalFormId": 959,
+        "dexNr": 735,
+        "internalFormId": 3088,
         "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 9,
-        "internalFormId": 187,
+        "dexNr": 939,
+        "internalFormId": 3252,
         "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 663,
-        "internalFormId": 3035,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 374,
-        "internalFormId": 764,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 18,
-        "internalFormId": 968,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 860,
-        "internalFormId": 3194,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 38,
-        "internalFormId": 58,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 119,
-        "internalFormId": 1071,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 219,
-        "internalFormId": 1274,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 576,
-        "internalFormId": 2126,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 704,
-        "internalFormId": 3065,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 497,
-        "internalFormId": 1895,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 566,
-        "internalFormId": 2096,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 569,
-        "internalFormId": 2105,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 36,
-        "internalFormId": 984,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 503,
-        "internalFormId": 1913,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 61,
-        "internalFormId": 238,
-        "spawnRate": 0.02,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 70,
-        "internalFormId": 667,
+        "dexNr": 592,
+        "internalFormId": 2168,
         "spawnRate": 0.02,
         "canBeShiny": true
     },
@@ -3318,182 +3036,284 @@
         "canBeShiny": false
     },
     {
-        "dexNr": 752,
-        "internalFormId": 3101,
-        "spawnRate": 0.01,
+        "dexNr": 851,
+        "internalFormId": 3187,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 611,
-        "internalFormId": 2225,
-        "spawnRate": 0.01,
+        "dexNr": 326,
+        "internalFormId": 1529,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 157,
-        "internalFormId": 1133,
-        "spawnRate": 0.01,
+        "dexNr": 44,
+        "internalFormId": 268,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 271,
-        "internalFormId": 1394,
-        "spawnRate": 0.01,
+        "dexNr": 374,
+        "internalFormId": 764,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 693,
-        "internalFormId": 3055,
-        "spawnRate": 0.01,
+        "dexNr": 394,
+        "internalFormId": 1652,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 523,
-        "internalFormId": 1973,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 701,
-        "internalFormId": 3063,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 825,
-        "internalFormId": 3164,
-        "spawnRate": 0.01,
+        "dexNr": 838,
+        "internalFormId": 3175,
+        "spawnRate": 0.02,
         "canBeShiny": false
     },
     {
-        "dexNr": 861,
-        "internalFormId": 3195,
-        "spawnRate": 0.01,
+        "dexNr": 357,
+        "internalFormId": 1589,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 961,
-        "internalFormId": 3274,
-        "spawnRate": 0.01,
+        "dexNr": 6,
+        "internalFormId": 178,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 28,
-        "internalFormId": 54,
-        "spawnRate": 0.01,
+        "dexNr": 345,
+        "internalFormId": 1568,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 266,
-        "internalFormId": 1379,
-        "spawnRate": 0.01,
+        "dexNr": 569,
+        "internalFormId": 2105,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 673,
-        "internalFormId": 3038,
-        "spawnRate": 0.01,
+        "dexNr": 305,
+        "internalFormId": 1472,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 254,
-        "internalFormId": 1355,
-        "spawnRate": 0.01,
+        "dexNr": 78,
+        "internalFormId": 2337,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 219,
+        "internalFormId": 1274,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 340,
+        "internalFormId": 1553,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 18,
+        "internalFormId": 968,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
         "dexNr": 500,
         "internalFormId": 1904,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 51,
-        "internalFormId": 62,
-        "spawnRate": 0.01,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
         "dexNr": 229,
         "internalFormId": 232,
-        "spawnRate": 0.01,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 858,
-        "internalFormId": 3192,
-        "spawnRate": 0.01,
+        "dexNr": 232,
+        "internalFormId": 1304,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 980,
-        "internalFormId": 3291,
-        "spawnRate": 0.01,
+        "dexNr": 708,
+        "internalFormId": 3067,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 421,
-        "internalFormId": 94,
-        "spawnRate": 0.01,
+        "dexNr": 523,
+        "internalFormId": 1973,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 823,
-        "internalFormId": 3162,
-        "spawnRate": 0.01,
+        "dexNr": 698,
+        "internalFormId": 3060,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 996,
-        "internalFormId": 3306,
-        "spawnRate": 0.01,
+        "dexNr": 59,
+        "internalFormId": 2793,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 275,
-        "internalFormId": 631,
-        "spawnRate": 0.01,
+        "dexNr": 184,
+        "internalFormId": 1199,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 923,
-        "internalFormId": 3238,
-        "spawnRate": 0.01,
+        "dexNr": 9,
+        "internalFormId": 187,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
-        "dexNr": 727,
-        "internalFormId": 3080,
-        "spawnRate": 0.01,
+        "dexNr": 38,
+        "internalFormId": 58,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 663,
+        "internalFormId": 3035,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 860,
+        "internalFormId": 3194,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 737,
+        "internalFormId": 3090,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 27,
+        "internalFormId": 52,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 349,
+        "internalFormId": 1580,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 452,
+        "internalFormId": 1799,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 36,
+        "internalFormId": 984,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 423,
+        "internalFormId": 98,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 566,
+        "internalFormId": 2096,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 12,
+        "internalFormId": 959,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 189,
+        "internalFormId": 1211,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 815,
+        "internalFormId": 3016,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 576,
+        "internalFormId": 2126,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 61,
+        "internalFormId": 238,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 673,
+        "internalFormId": 3038,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 157,
+        "internalFormId": 1133,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 586,
+        "internalFormId": 590,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 594,
+        "internalFormId": 2174,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 70,
+        "internalFormId": 667,
+        "spawnRate": 0.02,
         "canBeShiny": true
     },
     {
         "dexNr": 181,
         "internalFormId": 652,
+        "spawnRate": 0.02,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 121,
+        "internalFormId": 1077,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 101,
-        "internalFormId": 2735,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 606,
-        "internalFormId": 2210,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 392,
-        "internalFormId": 824,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 164,
-        "internalFormId": 1154,
+        "dexNr": 31,
+        "internalFormId": 782,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
@@ -3504,68 +3324,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 421,
-        "internalFormId": 95,
+        "dexNr": 247,
+        "internalFormId": 316,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 217,
-        "internalFormId": 1268,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 762,
-        "internalFormId": 3110,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 351,
-        "internalFormId": 30,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 395,
-        "internalFormId": 1655,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 668,
-        "internalFormId": 2587,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 389,
-        "internalFormId": 694,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 305,
-        "internalFormId": 1472,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 939,
-        "internalFormId": 3252,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 724,
-        "internalFormId": 2809,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 282,
-        "internalFormId": 298,
+        "dexNr": 908,
+        "internalFormId": 3224,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
@@ -3576,38 +3342,26 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 450,
-        "internalFormId": 891,
+        "dexNr": 911,
+        "internalFormId": 3227,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 78,
-        "internalFormId": 1014,
+        "dexNr": 421,
+        "internalFormId": 95,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 121,
-        "internalFormId": 1077,
+        "dexNr": 282,
+        "internalFormId": 298,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 44,
-        "internalFormId": 268,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 91,
-        "internalFormId": 879,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 349,
-        "internalFormId": 1580,
+        "dexNr": 628,
+        "internalFormId": 2276,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
@@ -3618,50 +3372,38 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 295,
-        "internalFormId": 1448,
+        "dexNr": 480,
+        "internalFormId": 1847,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 437,
-        "internalFormId": 1769,
+        "dexNr": 823,
+        "internalFormId": 3162,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 34,
-        "internalFormId": 788,
+        "dexNr": 344,
+        "internalFormId": 1565,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 59,
-        "internalFormId": 2793,
+        "dexNr": 727,
+        "internalFormId": 3080,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 756,
-        "internalFormId": 3105,
+        "dexNr": 411,
+        "internalFormId": 1703,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 301,
-        "internalFormId": 1466,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 561,
-        "internalFormId": 2081,
-        "spawnRate": 0.01,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 460,
-        "internalFormId": 935,
+        "dexNr": 996,
+        "internalFormId": 3306,
         "spawnRate": 0.01,
         "canBeShiny": true
     },
@@ -3672,92 +3414,314 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 87,
-        "internalFormId": 1035,
-        "spawnRate": 0,
+        "dexNr": 154,
+        "internalFormId": 1124,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 435,
-        "internalFormId": 794,
-        "spawnRate": 0,
+        "dexNr": 266,
+        "internalFormId": 1379,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 628,
-        "internalFormId": 2276,
-        "spawnRate": 0,
+        "dexNr": 537,
+        "internalFormId": 2015,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 372,
-        "internalFormId": 758,
-        "spawnRate": 0,
+        "dexNr": 301,
+        "internalFormId": 1466,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 591,
-        "internalFormId": 2165,
-        "spawnRate": 0,
+        "dexNr": 3,
+        "internalFormId": 169,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 784,
-        "internalFormId": 3129,
-        "spawnRate": 0,
+        "dexNr": 858,
+        "internalFormId": 3192,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 375,
-        "internalFormId": 767,
-        "spawnRate": 0,
+        "dexNr": 389,
+        "internalFormId": 694,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 247,
-        "internalFormId": 316,
-        "spawnRate": 0,
+        "dexNr": 633,
+        "internalFormId": 2291,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 585,
-        "internalFormId": 588,
-        "spawnRate": 0,
+        "dexNr": 275,
+        "internalFormId": 631,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 257,
-        "internalFormId": 1364,
-        "spawnRate": 0,
+        "dexNr": 603,
+        "internalFormId": 2201,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 171,
-        "internalFormId": 1172,
-        "spawnRate": 0,
+        "dexNr": 450,
+        "internalFormId": 891,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 741,
-        "internalFormId": 2681,
-        "spawnRate": 0,
+        "dexNr": 444,
+        "internalFormId": 864,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
         "dexNr": 914,
         "internalFormId": 3230,
-        "spawnRate": 0,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 762,
+        "internalFormId": 3110,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 606,
+        "internalFormId": 2210,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 101,
+        "internalFormId": 2735,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 257,
+        "internalFormId": 1364,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 724,
+        "internalFormId": 2809,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 42,
+        "internalFormId": 160,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 271,
+        "internalFormId": 1394,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 542,
+        "internalFormId": 2030,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 503,
+        "internalFormId": 1913,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 224,
+        "internalFormId": 1289,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 565,
+        "internalFormId": 2093,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 561,
+        "internalFormId": 2081,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 752,
+        "internalFormId": 3101,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 28,
+        "internalFormId": 54,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 421,
+        "internalFormId": 94,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 497,
+        "internalFormId": 1895,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 701,
+        "internalFormId": 3063,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 160,
+        "internalFormId": 1142,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 295,
+        "internalFormId": 1448,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 34,
+        "internalFormId": 788,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 693,
+        "internalFormId": 3055,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 611,
+        "internalFormId": 2225,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 51,
+        "internalFormId": 61,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 482,
+        "internalFormId": 1853,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 783,
+        "internalFormId": 3128,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 71,
+        "internalFormId": 670,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 217,
+        "internalFormId": 1268,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 598,
+        "internalFormId": 2186,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 460,
+        "internalFormId": 935,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 375,
+        "internalFormId": 767,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 78,
+        "internalFormId": 1014,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 545,
+        "internalFormId": 2039,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 756,
+        "internalFormId": 3105,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 668,
+        "internalFormId": 2587,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
         "dexNr": 260,
         "internalFormId": 211,
-        "spawnRate": 0,
+        "spawnRate": 0.01,
         "canBeShiny": true
     },
     {
-        "dexNr": 62,
-        "internalFormId": 241,
+        "dexNr": 91,
+        "internalFormId": 879,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 437,
+        "internalFormId": 1769,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 704,
+        "internalFormId": 3065,
+        "spawnRate": 0.01,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 205,
+        "internalFormId": 1247,
         "spawnRate": 0,
         "canBeShiny": true
     },
@@ -3768,80 +3732,26 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 160,
-        "internalFormId": 1142,
+        "dexNr": 920,
+        "internalFormId": 3235,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 565,
-        "internalFormId": 2093,
+        "dexNr": 980,
+        "internalFormId": 3291,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 31,
-        "internalFormId": 782,
+        "dexNr": 770,
+        "internalFormId": 3118,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 224,
-        "internalFormId": 1289,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 853,
-        "internalFormId": 3189,
-        "spawnRate": 0,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 697,
-        "internalFormId": 3059,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 583,
-        "internalFormId": 2147,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 117,
-        "internalFormId": 1065,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 205,
-        "internalFormId": 1247,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 364,
-        "internalFormId": 1601,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 818,
-        "internalFormId": 3157,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 623,
-        "internalFormId": 2261,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 715,
-        "internalFormId": 3071,
+        "dexNr": 748,
+        "internalFormId": 3097,
         "spawnRate": 0,
         "canBeShiny": true
     },
@@ -3852,26 +3762,14 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 45,
-        "internalFormId": 271,
+        "dexNr": 591,
+        "internalFormId": 2165,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 411,
-        "internalFormId": 1703,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 480,
-        "internalFormId": 1847,
-        "spawnRate": 0,
-        "canBeShiny": true
-    },
-    {
-        "dexNr": 482,
-        "internalFormId": 1853,
+        "dexNr": 583,
+        "internalFormId": 2147,
         "spawnRate": 0,
         "canBeShiny": true
     },
@@ -3882,16 +3780,100 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 598,
-        "internalFormId": 2186,
+        "dexNr": 148,
+        "internalFormId": 193,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 554,
-        "internalFormId": 2341,
+        "dexNr": 623,
+        "internalFormId": 2261,
         "spawnRate": 0,
         "canBeShiny": true
+    },
+    {
+        "dexNr": 839,
+        "internalFormId": 3176,
+        "spawnRate": 0,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 961,
+        "internalFormId": 3274,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 818,
+        "internalFormId": 3157,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 825,
+        "internalFormId": 3164,
+        "spawnRate": 0,
+        "canBeShiny": false
+    },
+    {
+        "dexNr": 168,
+        "internalFormId": 1166,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 812,
+        "internalFormId": 2326,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 62,
+        "internalFormId": 241,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 923,
+        "internalFormId": 3238,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 585,
+        "internalFormId": 588,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 612,
+        "internalFormId": 2228,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 254,
+        "internalFormId": 1355,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 372,
+        "internalFormId": 758,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 297,
+        "internalFormId": 1454,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 853,
+        "internalFormId": 3189,
+        "spawnRate": 0,
+        "canBeShiny": false
     },
     {
         "dexNr": 141,
@@ -3900,20 +3882,20 @@
         "canBeShiny": true
     },
     {
-        "dexNr": 826,
-        "internalFormId": 3165,
-        "spawnRate": 0,
-        "canBeShiny": false
-    },
-    {
-        "dexNr": 148,
-        "internalFormId": 193,
+        "dexNr": 392,
+        "internalFormId": 824,
         "spawnRate": 0,
         "canBeShiny": true
     },
     {
-        "dexNr": 930,
-        "internalFormId": 3244,
+        "dexNr": 445,
+        "internalFormId": 867,
+        "spawnRate": 0,
+        "canBeShiny": true
+    },
+    {
+        "dexNr": 861,
+        "internalFormId": 3195,
         "spawnRate": 0,
         "canBeShiny": true
     }
