@@ -1080,9 +1080,17 @@ async function loadPokedex() {
         // 5. Parse Wild Spawns from shungo API
         liveSpawns = [];
         try {
-            const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
-            if (spawnsRes.ok) {
-                const spawnsData = await spawnsRes.json();
+            let spawnsData = null;
+            try {
+                const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
+                if (spawnsRes.ok) spawnsData = await spawnsRes.json();
+            } catch (corsErr) {
+                console.warn("Direct shungo API fetch blocked by CORS, trying CORS proxy...", corsErr);
+                const proxyRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://shungo.app/api/shungo/data/spawns'));
+                if (proxyRes.ok) spawnsData = await proxyRes.json();
+            }
+
+            if (spawnsData) {
                 const items = Array.isArray(spawnsData.result) ? spawnsData.result : (Array.isArray(spawnsData) ? spawnsData : []);
                 items.forEach(item => {
                     if (Array.isArray(item) && item.length >= 4) {
