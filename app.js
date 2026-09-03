@@ -1951,11 +1951,7 @@ function renderPokedex(forceClear = false) {
                 ${typeBadges}
             </div>
 
-            ${isWildSpawning ? `
-            <div class="pokedex-spawn-badge" style="position: absolute; bottom: 0.5rem; left: 0.5rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 0.6rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; border: 1px solid rgba(34, 197, 94, 0.4); display: flex; align-items: center; gap: 3px; z-index: 5;" title="Active Wild Spawn">
-                <i class="fa-solid fa-location-dot"></i> SPAWN
-            </div>
-            ` : ''}
+
 
             ${isTransf ? `
             <div class="pokedex-transferred-badge" style="position: absolute; bottom: 0.5rem; right: 0.5rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 0.6rem; font-weight: 800; padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.4); display: flex; align-items: center; gap: 2px; z-index: 5;">
