@@ -1939,6 +1939,23 @@ input, button, select {
     box-shadow: 0 0 10px rgba(245, 166, 35, 0.1);
 }
 
+.spawn-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 12px rgba(245, 166, 35, 0.2) !important;
+}
+
+.spawns-filter-btn.active {
+    background: var(--accent-color) !important;
+    color: #000 !important;
+    border-color: var(--accent-color) !important;
+}
+
+.spawns-filter-btn:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #fff !important;
+}
+
 /* Shiny star badge on rotation cards */
 .rotation-card-item .shiny-icon {
     position: absolute;

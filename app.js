@@ -362,6 +362,9 @@ let liveRaids = [];
 let liveResearch = [];
 let liveRocket = null;
 let liveEvents = [];
+let liveSpawns = [];
+let currentSpawnFilter = 'all';
+let currentSpawnSearch = '';
 let currentEventTab = 'active';
 let pokedexLimit = 60;
 let currentRenderedIds = new Set();
@@ -1074,6 +1077,37 @@ async function loadPokedex() {
         }
         liveEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
+        // 5. Parse Wild Spawns from shungo API
+        liveSpawns = [];
+        try {
+            const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
+            if (spawnsRes.ok) {
+                const spawnsData = await spawnsRes.json();
+                const items = Array.isArray(spawnsData.result) ? spawnsData.result : (Array.isArray(spawnsData) ? spawnsData : []);
+                items.forEach(item => {
+                    if (Array.isArray(item) && item.length >= 4) {
+                        const dexNr = item[0];
+                        const internalFormId = item[1];
+                        const spawnRate = parseFloat(item[2]) || 0;
+                        const canBeShiny = Boolean(item[3]);
+                        
+                        const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
+                        liveSpawns.push({
+                            dexNr: dexNr,
+                            internalFormId: internalFormId,
+                            spawnRate: spawnRate,
+                            shiny: canBeShiny,
+                            pokemon: matchedPoke || null,
+                            name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
+                        });
+                    }
+                });
+                liveSpawns.sort((a, b) => b.spawnRate - a.spawnRate);
+            }
+        } catch (spErr) {
+            console.warn("Failed to fetch wild spawns data:", spErr);
+        }
+
         filterObtainingMethods();
         migrateCaughtState();
         buildStaticEvolutionMaps();
@@ -1083,6 +1117,7 @@ async function loadPokedex() {
         renderMissingSummary();
         updateDashboardStats();
         updateRegionStatsBadge();
+        renderWildSpawns();
         
         // Double requestAnimationFrame (standard technique to guarantee DOM is rendered & painted)
         requestAnimationFrame(() => {
@@ -1672,7 +1707,9 @@ function setupEventListeners() {
                 }
             });
 
-            if (targetSectionId === 'rotations-events-section') {
+            if (targetSectionId === 'rotations-spawns-section') {
+                renderWildSpawns();
+            } else if (targetSectionId === 'rotations-events-section') {
                 renderEventsPane();
             } else if (targetSectionId === 'rotations-promocodes-section') {
                 renderPromoCodes();
@@ -1681,6 +1718,24 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Wild Spawns filters & search listeners
+    const spawnSearchInput = document.getElementById('spawns-search-input');
+    if (spawnSearchInput) {
+        spawnSearchInput.addEventListener('input', (e) => {
+            currentSpawnSearch = e.target.value.toLowerCase().trim();
+            renderWildSpawns();
+        });
+    }
+    const spawnFilterBtns = document.querySelectorAll('.spawns-filter-btn');
+    spawnFilterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            spawnFilterBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentSpawnFilter = btn.dataset.spawnFilter;
+            renderWildSpawns();
+        });
+    });
 
     searchInput.addEventListener('input', (e) => {
         currentSearchQuery = e.target.value.toLowerCase().trim();
@@ -2771,6 +2826,88 @@ function loadTypeMatchupsTab(poke) {
     addIndicatorColor('.weakness', '#fb923c');
     addIndicatorColor('.resistance', '#34d399');
     addIndicatorColor('.double-resistance', '#60a5fa');
+}
+
+function renderWildSpawns() {
+    const grid = document.getElementById('spawns-grid-container');
+    if (!grid) return;
+
+    if (liveSpawns.length === 0) {
+        grid.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">Loading wild spawns...</p>';
+        return;
+    }
+
+    let filtered = liveSpawns;
+
+    if (currentSpawnSearch) {
+        filtered = filtered.filter(s => {
+            const pokeName = s.name.toLowerCase();
+            const dexStr = String(s.dexNr);
+            return pokeName.includes(currentSpawnSearch) || dexStr.includes(currentSpawnSearch);
+        });
+    }
+
+    if (currentSpawnFilter === 'missing') {
+        filtered = filtered.filter(s => {
+            if (!s.pokemon) return true;
+            return isPokemonMissing(s.pokemon);
+        });
+    } else if (currentSpawnFilter === 'shiny') {
+        filtered = filtered.filter(s => s.shiny);
+    }
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1.5rem 0;">No wild spawns match the selected filter.</p>';
+        return;
+    }
+
+    let html = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem;">
+    `;
+
+    filtered.forEach(s => {
+        const poke = s.pokemon;
+        const dexFormatted = '#' + String(s.dexNr).padStart(3, '0');
+        const isMissing = poke ? isPokemonMissing(poke) : false;
+        const isTransferred = poke ? isPokemonTransferred(poke) : false;
+        
+        let imgUrl = '';
+        if (poke && poke.img) {
+            imgUrl = poke.img;
+        } else {
+            imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png`;
+        }
+
+        const rateBadge = s.spawnRate > 0 ? `<span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">${s.spawnRate}%</span>` : `<span style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">Rare / Event</span>`;
+
+        html += `
+            <div class="spawn-card" data-dex="${s.dexNr}" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;">
+                ${s.shiny ? shinySparkleSvg : ''}
+                <div style="position: absolute; top: 0.6rem; left: 0.6rem; display: flex; gap: 4px; flex-direction: column;">
+                    ${isTransferred ? '<span class="transferred-rotation-badge" style="font-size:0.65rem; padding: 2px 5px;"><i class="fa-solid fa-arrows-spin"></i></span>' : (isMissing ? '<span class="missing-rotation-badge" style="font-size:0.65rem; padding: 2px 5px;"><i class="fa-solid fa-crosshairs"></i></span>' : '')}
+                </div>
+                <img src="${imgUrl}" alt="${s.name}" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
+                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-bottom: 2px;">${dexFormatted}</span>
+                <strong style="font-size: 0.92rem; color: #fff; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.2;">${s.name}</strong>
+                <div style="margin-top: auto; display: flex; align-items: center; gap: 6px;">
+                    ${rateBadge}
+                </div>
+            </div>
+        `;
+    });
+
+    html += `</div>`;
+    grid.innerHTML = html;
+
+    grid.querySelectorAll('.spawn-card').forEach(card => {
+        card.addEventListener('click', () => {
+            const dex = card.dataset.dex;
+            const targetPoke = pokemonDatabase.find(p => Number(p.id) === Number(dex));
+            if (targetPoke) {
+                openModal(targetPoke.id);
+            }
+        });
+    });
 }
 
 function updateModalCatchBtn(id) {
