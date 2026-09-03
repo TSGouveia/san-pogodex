@@ -1727,23 +1727,7 @@ function setupEventListeners() {
         });
     }
 
-    // Wild Spawns filters & search listeners
-    const spawnSearchInput = document.getElementById('spawns-search-input');
-    if (spawnSearchInput) {
-        spawnSearchInput.addEventListener('input', (e) => {
-            currentSpawnSearch = e.target.value.toLowerCase().trim();
-            renderWildSpawns();
-        });
-    }
-    const spawnFilterBtns = document.querySelectorAll('.spawns-filter-btn');
-    spawnFilterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            spawnFilterBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentSpawnFilter = btn.dataset.spawnFilter;
-            renderWildSpawns();
-        });
-    });
+
 
     searchInput.addEventListener('input', (e) => {
         currentSearchQuery = e.target.value.toLowerCase().trim();
@@ -2847,35 +2831,8 @@ function renderWildSpawns() {
 
     let filtered = liveSpawns;
 
-    if (currentSpawnSearch) {
-        filtered = filtered.filter(s => {
-            const pokeName = s.name.toLowerCase();
-            const dexStr = String(s.dexNr);
-            return pokeName.includes(currentSpawnSearch) || dexStr.includes(currentSpawnSearch);
-        });
-    }
-
-    if (currentSpawnFilter === 'missing') {
-        filtered = filtered.filter(s => {
-            if (!s.pokemon) return true;
-            return isPokemonMissing(s.pokemon);
-        });
-    } else if (currentSpawnFilter === 'candy') {
-        filtered = filtered.filter(s => {
-            if (!s.pokemon) return false;
-            return needsCandies(s.pokemon);
-        });
-    } else if (currentSpawnFilter === 'transferred') {
-        filtered = filtered.filter(s => {
-            if (!s.pokemon) return false;
-            return isPokemonTransferred(s.pokemon);
-        });
-    } else if (currentSpawnFilter === 'shiny') {
-        filtered = filtered.filter(s => s.shiny);
-    }
-
     if (filtered.length === 0) {
-        grid.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1.5rem 0;">No wild spawns match the selected filter.</p>';
+        grid.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1.5rem 0;">No active wild spawns available.</p>';
         return;
     }
 

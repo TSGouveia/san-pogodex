@@ -264,20 +264,9 @@
 
             <!-- Wild Spawns Section -->
             <div class="rotation-section hidden" id="rotations-spawns-section">
-                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                    <i class="fa-solid fa-location-dot" style="color: var(--accent-color);"></i>
+                <div class="rotation-section-header">
+                    <i class="fa-solid fa-location-dot"></i>
                     <h2>Active Wild Spawns</h2>
-                    <div class="spawns-filter-bar" style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-                        <div class="spawns-search-box" style="position: relative; display: flex; align-items: center;">
-                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; color: #94a3b8; font-size: 0.8rem;"></i>
-                            <input type="text" id="spawns-search-input" placeholder="Search spawn..." style="padding: 6px 12px 6px 30px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 6px; color: #fff; font-size: 0.82rem; outline: none; width: 160px;">
-                        </div>
-                        <button class="spawns-filter-btn active" data-spawn-filter="all" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; color: #94a3b8; font-weight: 700; font-size: 0.8rem; border-radius: 6px; cursor: pointer;">All</button>
-                        <button class="spawns-filter-btn" data-spawn-filter="missing" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; color: #94a3b8; font-weight: 700; font-size: 0.8rem; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-crosshairs"></i> Missing</button>
-                        <button class="spawns-filter-btn" data-spawn-filter="candy" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; color: #94a3b8; font-weight: 700; font-size: 0.8rem; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-candy-cane"></i> Candy Needed</button>
-                        <button class="spawns-filter-btn" data-spawn-filter="transferred" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; color: #94a3b8; font-weight: 700; font-size: 0.8rem; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-arrows-spin"></i> Transferred</button>
-                        <button class="spawns-filter-btn" data-spawn-filter="shiny" style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 6px 12px; color: #94a3b8; font-weight: 700; font-size: 0.8rem; border-radius: 6px; cursor: pointer;"><i class="fa-solid fa-sparkles" style="color: #f5a623;"></i> Shiny Available</button>
-                    </div>
                 </div>
                 <div id="spawns-grid-container">
                     <!-- Dynamic Wild Spawns populated here by JS -->
