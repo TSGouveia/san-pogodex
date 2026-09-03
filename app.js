@@ -2880,7 +2880,7 @@ function renderWildSpawns() {
     }
 
     let html = `
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div class="rotation-grid-layout" style="margin-top: 1rem;">
     `;
 
     filtered.forEach(s => {
@@ -2899,20 +2899,24 @@ function renderWildSpawns() {
             imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png`;
         }
 
-        const rateBadge = s.spawnRate > 0 ? `<span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">${s.spawnRate}%</span>` : `<span style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">Rare / Event</span>`;
+        const rateBadge = s.spawnRate > 0 
+            ? `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Spawn Rate: <strong style="color: var(--accent-color);">${s.spawnRate}%</strong></span></div>` 
+            : `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Rarity: <strong style="color: #94a3b8;">Rare / Event</strong></span></div>`;
 
         html += `
-            <div class="spawn-card rotation-card-item theme-blue ${highlightClass}" data-dex="${s.dexNr}" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;">
+            <div class="spawn-card rotation-card-item theme-blue ${highlightClass}" data-dex="${s.dexNr}">
                 ${s.shiny ? shinySparkleSvg : ''}
-                <div class="rotation-badges" style="position: absolute; top: 0.6rem; left: 0.6rem; display: flex; gap: 4px; flex-direction: column; z-index: 5;">
+                <div class="rotation-badges">
                     ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                     ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                 </div>
-                <img src="${imgUrl}" alt="${s.name}" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
-                <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-bottom: 2px;">${dexFormatted}</span>
-                <strong style="font-size: 0.92rem; color: #fff; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.2;">${s.name}</strong>
-                <div style="margin-top: auto; display: flex; align-items: center; gap: 6px;">
-                    ${rateBadge}
+                <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
+                <div class="rotation-card-details-wrapper">
+                    <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${dexFormatted}</span>
+                    <span class="rotation-card-name">${s.name}</span>
+                    <div class="rotation-cp-details">
+                        ${rateBadge}
+                    </div>
                 </div>
             </div>
         `;
