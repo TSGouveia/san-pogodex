@@ -40,7 +40,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add files/ ScrapedDuck-master/files/
+          git add -f files/ ScrapedDuck-master/files/
           
           if git diff --staged --quiet; then
             echo "No changes detected in scraped data."
