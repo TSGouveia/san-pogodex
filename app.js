@@ -2595,6 +2595,7 @@ function loadObtainingTab(poke) {
             if (rotationsTabBtn) rotationsTabBtn.click();
             const spawnsSubnavBtn = document.querySelector('.subnav-btn[data-target="rotations-spawns-section"]');
             if (spawnsSubnavBtn) spawnsSubnavBtn.click();
+            jumpToRotationTarget(`spawn-${activeSpawn.dexNr}`);
         });
         container.appendChild(spawnCard);
     }
@@ -2898,7 +2899,7 @@ function renderWildSpawns() {
             : `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Rarity: <strong style="color: #94a3b8;">Rare / Event</strong></span></div>`;
 
         html += `
-            <div class="spawn-card rotation-card-item theme-blue ${highlightClass}" data-dex="${s.dexNr}">
+            <div class="spawn-card rotation-card-item theme-blue ${highlightClass} spawn-animation" data-dex="${s.dexNr}" data-scroll-target="spawn-${s.dexNr}">
                 ${s.shiny ? shinySparkleSvg : ''}
                 <div class="rotation-badges">
                     ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
