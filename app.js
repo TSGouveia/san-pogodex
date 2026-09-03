@@ -2551,8 +2551,8 @@ function loadObtainingTab(poke) {
             : 'linear-gradient(135deg, rgba(245, 166, 35, 0.08), var(--bg-tertiary))';
         
         const badgeHtml = isHighChance 
-            ? `<span style="font-size: 0.65rem; background: #22c55e; color: #052e16; padding: 2px 7px; border-radius: 4px; font-weight: 800;"><i class="fa-solid fa-fire"></i> HIGH CHANCE WILD SPAWN (${activeSpawn.spawnRate}%)</span>`
-            : `<span style="font-size: 0.65rem; background: #f5a623; color: #451a03; padding: 2px 7px; border-radius: 4px; font-weight: 800;">ACTIVE WILD SPAWN</span>`;
+            ? `<span style="font-size: 0.65rem; background: #22c55e; color: #052e16; padding: 2px 6px; border-radius: 4px; font-weight: 800;">ACTIVE</span>`
+            : `<span style="font-size: 0.65rem; background: #f5a623; color: #451a03; padding: 2px 6px; border-radius: 4px; font-weight: 800;">ACTIVE</span>`;
 
         const descText = isHighChance 
             ? `Currently spawning in the wild with a high rate of <strong>${activeSpawn.spawnRate}%</strong>! Click to view all active wild spawns.`
