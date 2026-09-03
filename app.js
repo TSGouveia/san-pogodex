@@ -780,65 +780,30 @@ async function loadPokedex() {
 
         let rawSpawns = null;
 
-        if (dbScrapedData) {
-            if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
-            if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
-            if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
-            if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
-            if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
-            if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
-            if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
-            if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
-            if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
-            if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
-            if (isNonEmpty(dbScrapedData.pokedex)) {
-                data = dbScrapedData.pokedex;
-                rawPokedexData = data;
-            }
-            if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
+        if (!dbScrapedData) {
+            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Falha ao carregar base de dados Firestore");
+            throw new Error("Could not connect to Firebase Firestore database. All external API fallbacks are disabled.");
         }
 
-        if (!data) {
-            if (window.sendNtfyNotification) window.sendNtfyNotification("Aviso: Pokédex não encontrada na Firestore, recorrendo às APIs externas");
-            const [pokedexRes, typesRes, buddyRes] = await Promise.all([
-                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/pokedex.json'),
-                fetch('https://pokemon-go-api.github.io/pokemon-go-api/api/types.json'),
-                fetch('https://pogoapi.net/api/v1/pokemon_buddy_distances.json')
-            ]);
-            
-            if (!pokedexRes.ok) {
-                if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Pokédex API indisponível");
-                throw new Error("Could not load Pokedex API");
-            }
-            data = await pokedexRes.json();
+        if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
+        if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
+        if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
+        if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
+        if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
+        if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
+        if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
+        if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
+        if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
+        if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
+        if (isNonEmpty(dbScrapedData.pokedex)) {
+            data = dbScrapedData.pokedex;
             rawPokedexData = data;
+        }
+        if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
 
-            if (typesRes.ok) {
-                try { typesDatabase = await typesRes.json(); } catch (e) { console.warn("Types API parsing failed:", e); }
-            }
-
-            if (buddyRes && buddyRes.ok) {
-                try {
-                    const buddyData = await buddyRes.json();
-                    buddyDistances = {};
-                    Object.entries(buddyData).forEach(([distanceKey, list]) => {
-                        const distVal = parseFloat(distanceKey);
-                        if (Array.isArray(list)) {
-                            list.forEach(item => {
-                                if (item.pokemon_id) {
-                                    buddyDistances[item.pokemon_id] = distVal;
-                                    buddyDistances[String(item.pokemon_id)] = distVal;
-                                }
-                                if (item.pokemon_name) {
-                                    buddyDistances[item.pokemon_name.toLowerCase()] = distVal;
-                                }
-                            });
-                        }
-                    });
-                } catch (e) {
-                    console.warn("Buddy Distances API parsing failed:", e);
-                }
-            }
+        if (!data) {
+            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Dados da Pokédex em falta no Firestore");
+            throw new Error("Pokédex data is missing or empty in Firebase Firestore database.");
         }
         
         const processed = [];
@@ -1080,66 +1045,50 @@ async function loadPokedex() {
         }
         liveEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-        // 5. Parse Wild Spawns (from Firestore or live API fallback)
+        // 5. Parse Wild Spawns strictly from Firestore database
         liveSpawns = [];
-        try {
-            let spawnsData = rawSpawns;
-            if (!spawnsData) {
-                try {
-                    const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
-                    if (spawnsRes.ok) spawnsData = await spawnsRes.json();
-                } catch (corsErr) {
-                    console.warn("Direct shungo API fetch blocked by CORS, trying CORS proxy...", corsErr);
-                    const proxyRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://shungo.app/api/shungo/data/spawns'));
-                    if (proxyRes.ok) spawnsData = await proxyRes.json();
-                }
+        if (rawSpawns) {
+            let items = [];
+            if (Array.isArray(rawSpawns.result)) {
+                items = rawSpawns.result;
+            } else if (Array.isArray(rawSpawns)) {
+                items = rawSpawns;
             }
 
-            if (spawnsData) {
-                let items = [];
-                if (Array.isArray(spawnsData.result)) {
-                    items = spawnsData.result;
-                } else if (Array.isArray(spawnsData)) {
-                    items = spawnsData;
+            items.forEach(item => {
+                if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+                    const dexNr = item.dexNr;
+                    const internalFormId = item.internalFormId;
+                    const spawnRate = parseFloat(item.spawnRate) || 0;
+                    const canBeShiny = Boolean(item.canBeShiny);
+                    
+                    const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
+                    liveSpawns.push({
+                        dexNr: dexNr,
+                        internalFormId: internalFormId,
+                        spawnRate: spawnRate,
+                        shiny: canBeShiny,
+                        pokemon: matchedPoke || null,
+                        name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
+                    });
+                } else if (Array.isArray(item) && item.length >= 4) {
+                    const dexNr = item[0];
+                    const internalFormId = item[1];
+                    const spawnRate = parseFloat(item[2]) || 0;
+                    const canBeShiny = Boolean(item[3]);
+                    
+                    const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
+                    liveSpawns.push({
+                        dexNr: dexNr,
+                        internalFormId: internalFormId,
+                        spawnRate: spawnRate,
+                        shiny: canBeShiny,
+                        pokemon: matchedPoke || null,
+                        name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
+                    });
                 }
-
-                items.forEach(item => {
-                    if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
-                        const dexNr = item.dexNr;
-                        const internalFormId = item.internalFormId;
-                        const spawnRate = parseFloat(item.spawnRate) || 0;
-                        const canBeShiny = Boolean(item.canBeShiny);
-                        
-                        const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
-                        liveSpawns.push({
-                            dexNr: dexNr,
-                            internalFormId: internalFormId,
-                            spawnRate: spawnRate,
-                            shiny: canBeShiny,
-                            pokemon: matchedPoke || null,
-                            name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
-                        });
-                    } else if (Array.isArray(item) && item.length >= 4) {
-                        const dexNr = item[0];
-                        const internalFormId = item[1];
-                        const spawnRate = parseFloat(item[2]) || 0;
-                        const canBeShiny = Boolean(item[3]);
-                        
-                        const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
-                        liveSpawns.push({
-                            dexNr: dexNr,
-                            internalFormId: internalFormId,
-                            spawnRate: spawnRate,
-                            shiny: canBeShiny,
-                            pokemon: matchedPoke || null,
-                            name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
-                        });
-                    }
-                });
-                liveSpawns.sort((a, b) => b.spawnRate - a.spawnRate);
-            }
-        } catch (spErr) {
-            console.warn("Failed to fetch wild spawns data:", spErr);
+            });
+            liveSpawns.sort((a, b) => b.spawnRate - a.spawnRate);
         }
 
         filterObtainingMethods();
