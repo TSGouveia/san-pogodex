@@ -1893,9 +1893,19 @@ function renderPokedex(forceClear = false) {
         const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
         const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
-        const cardClass = isCaught 
+        
+        // Active Wild Spawn check (spawnRate >= 0.5%)
+        const activeSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
+        const isWildSpawning = activeSpawn && activeSpawn.spawnRate >= 0.5;
+        
+        let cardClass = isCaught 
             ? (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught') 
             : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
+        
+        if (isWildSpawning) {
+            cardClass += ' active-wild-spawn';
+        }
+
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
         const card = document.createElement('div');
@@ -1940,6 +1950,12 @@ function renderPokedex(forceClear = false) {
             <div class="types-container">
                 ${typeBadges}
             </div>
+
+            ${isWildSpawning ? `
+            <div class="pokedex-spawn-badge" style="position: absolute; bottom: 0.5rem; left: 0.5rem; background: rgba(34, 197, 94, 0.2); color: #4ade80; font-size: 0.6rem; font-weight: 800; padding: 2px 5px; border-radius: 4px; border: 1px solid rgba(34, 197, 94, 0.4); display: flex; align-items: center; gap: 3px; z-index: 5;" title="Active Wild Spawn (${activeSpawn.spawnRate}%)">
+                <i class="fa-solid fa-location-dot"></i> SPAWN ${activeSpawn.spawnRate}%
+            </div>
+            ` : ''}
 
             ${isTransf ? `
             <div class="pokedex-transferred-badge" style="position: absolute; bottom: 0.5rem; right: 0.5rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 0.6rem; font-weight: 800; padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.4); display: flex; align-items: center; gap: 2px; z-index: 5;">
@@ -2111,6 +2127,11 @@ function renderMissingSummary() {
             const matchedRaid = liveRaids.find(r => r.name.toLowerCase() === poke.name.toLowerCase() || r.name.toLowerCase().replace(/^shadow\s+/g, '') === poke.name.toLowerCase());
             if (matchedRaid) {
                 previewText = `Available in: ${matchedRaid.tier}`;
+            }
+        } else if (currentHuntMethod === 'wild') {
+            const matchedSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
+            if (matchedSpawn && matchedSpawn.spawnRate >= 0.5) {
+                previewText = `Active Spawn: ${matchedSpawn.spawnRate}%`;
             }
         }
 
