@@ -2860,6 +2860,16 @@ function renderWildSpawns() {
             if (!s.pokemon) return true;
             return isPokemonMissing(s.pokemon);
         });
+    } else if (currentSpawnFilter === 'candy') {
+        filtered = filtered.filter(s => {
+            if (!s.pokemon) return false;
+            return needsCandies(s.pokemon);
+        });
+    } else if (currentSpawnFilter === 'transferred') {
+        filtered = filtered.filter(s => {
+            if (!s.pokemon) return false;
+            return isPokemonTransferred(s.pokemon);
+        });
     } else if (currentSpawnFilter === 'shiny') {
         filtered = filtered.filter(s => s.shiny);
     }
@@ -2876,9 +2886,12 @@ function renderWildSpawns() {
     filtered.forEach(s => {
         const poke = s.pokemon;
         const dexFormatted = '#' + String(s.dexNr).padStart(3, '0');
-        const isMissing = poke ? isPokemonMissing(poke) : false;
         const isTransferred = poke ? isPokemonTransferred(poke) : false;
+        const isMissing = poke ? (!isTransferred && isPokemonMissing(poke)) : false;
+        const isCandyNeeded = poke ? needsCandies(poke) : false;
         
+        const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
+
         let imgUrl = '';
         if (poke && poke.img) {
             imgUrl = poke.img;
@@ -2889,10 +2902,11 @@ function renderWildSpawns() {
         const rateBadge = s.spawnRate > 0 ? `<span style="background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">${s.spawnRate}%</span>` : `<span style="background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); padding: 2px 7px; border-radius: 12px; font-size: 0.72rem; font-weight: 700;">Rare / Event</span>`;
 
         html += `
-            <div class="spawn-card" data-dex="${s.dexNr}" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;">
+            <div class="spawn-card rotation-card-item theme-blue ${highlightClass}" data-dex="${s.dexNr}" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; cursor: pointer; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;">
                 ${s.shiny ? shinySparkleSvg : ''}
-                <div style="position: absolute; top: 0.6rem; left: 0.6rem; display: flex; gap: 4px; flex-direction: column;">
-                    ${isTransferred ? '<span class="transferred-rotation-badge" style="font-size:0.65rem; padding: 2px 5px;"><i class="fa-solid fa-arrows-spin"></i></span>' : (isMissing ? '<span class="missing-rotation-badge" style="font-size:0.65rem; padding: 2px 5px;"><i class="fa-solid fa-crosshairs"></i></span>' : '')}
+                <div class="rotation-badges" style="position: absolute; top: 0.6rem; left: 0.6rem; display: flex; gap: 4px; flex-direction: column; z-index: 5;">
+                    ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
+                    ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                 </div>
                 <img src="${imgUrl}" alt="${s.name}" style="width: 85px; height: 85px; object-fit: contain; margin-bottom: 0.5rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
                 <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600; margin-bottom: 2px;">${dexFormatted}</span>
