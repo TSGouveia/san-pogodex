@@ -676,7 +676,7 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const baseModules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types'];
+        const baseModules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns'];
         const pokedexParts = Array.from({ length: 11 }, (_, i) => `pokedex_part${i + 1}`);
         const modules = [...baseModules, ...pokedexParts];
 
@@ -778,6 +778,8 @@ async function loadPokedex() {
 
         let data = null;
 
+        let rawSpawns = null;
+
         if (dbScrapedData) {
             if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
             if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
@@ -788,6 +790,7 @@ async function loadPokedex() {
             if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
             if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
             if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
+            if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
             if (isNonEmpty(dbScrapedData.pokedex)) {
                 data = dbScrapedData.pokedex;
                 rawPokedexData = data;
@@ -1077,23 +1080,46 @@ async function loadPokedex() {
         }
         liveEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
 
-        // 5. Parse Wild Spawns from shungo API
+        // 5. Parse Wild Spawns (from Firestore or live API fallback)
         liveSpawns = [];
         try {
-            let spawnsData = null;
-            try {
-                const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
-                if (spawnsRes.ok) spawnsData = await spawnsRes.json();
-            } catch (corsErr) {
-                console.warn("Direct shungo API fetch blocked by CORS, trying CORS proxy...", corsErr);
-                const proxyRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://shungo.app/api/shungo/data/spawns'));
-                if (proxyRes.ok) spawnsData = await proxyRes.json();
+            let spawnsData = rawSpawns;
+            if (!spawnsData) {
+                try {
+                    const spawnsRes = await fetch('https://shungo.app/api/shungo/data/spawns');
+                    if (spawnsRes.ok) spawnsData = await spawnsRes.json();
+                } catch (corsErr) {
+                    console.warn("Direct shungo API fetch blocked by CORS, trying CORS proxy...", corsErr);
+                    const proxyRes = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent('https://shungo.app/api/shungo/data/spawns'));
+                    if (proxyRes.ok) spawnsData = await proxyRes.json();
+                }
             }
 
             if (spawnsData) {
-                const items = Array.isArray(spawnsData.result) ? spawnsData.result : (Array.isArray(spawnsData) ? spawnsData : []);
+                let items = [];
+                if (Array.isArray(spawnsData.result)) {
+                    items = spawnsData.result;
+                } else if (Array.isArray(spawnsData)) {
+                    items = spawnsData;
+                }
+
                 items.forEach(item => {
-                    if (Array.isArray(item) && item.length >= 4) {
+                    if (typeof item === 'object' && item !== null && !Array.isArray(item)) {
+                        const dexNr = item.dexNr;
+                        const internalFormId = item.internalFormId;
+                        const spawnRate = parseFloat(item.spawnRate) || 0;
+                        const canBeShiny = Boolean(item.canBeShiny);
+                        
+                        const matchedPoke = pokemonDatabase.find(p => Number(p.id) === Number(dexNr));
+                        liveSpawns.push({
+                            dexNr: dexNr,
+                            internalFormId: internalFormId,
+                            spawnRate: spawnRate,
+                            shiny: canBeShiny,
+                            pokemon: matchedPoke || null,
+                            name: matchedPoke ? matchedPoke.name : `Pokémon #${dexNr}`
+                        });
+                    } else if (Array.isArray(item) && item.length >= 4) {
                         const dexNr = item[0];
                         const internalFormId = item[1];
                         const spawnRate = parseFloat(item[2]) || 0;

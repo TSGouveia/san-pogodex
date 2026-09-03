@@ -45,7 +45,33 @@ def save_json(filename, data):
         with open(min_filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, separators=(",", ":"), ensure_ascii=False)
 
-def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types):
+def scrape_spawns():
+    print("Scraping Wild Spawns from shungo.app...")
+    url = "https://shungo.app/api/shungo/data/spawns"
+    try:
+        r = requests.get(url, headers=HEADERS, timeout=15)
+        if r.status_code == 200:
+            data = r.json()
+            items = data.get("result", []) if isinstance(data, dict) else (data if isinstance(data, list) else [])
+            spawns = []
+            for item in items:
+                if isinstance(item, list) and len(item) >= 4:
+                    spawns.append({
+                        "dexNr": item[0],
+                        "internalFormId": item[1],
+                        "spawnRate": item[2],
+                        "canBeShiny": bool(item[3])
+                    })
+            print(f"Successfully scraped {len(spawns)} wild spawns!")
+            return spawns
+        else:
+            print(f"Failed to fetch spawns: {r.status_code}")
+            return []
+    except Exception as e:
+        print(f"Error scraping spawns: {e}")
+        return []
+
+def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns):
     print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
@@ -70,7 +96,8 @@ def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, part
             "promoCodes": promo_codes,
             "partyChallenges": party_challenges,
             "buddyDistances": buddy_distances,
-            "types": types
+            "types": types,
+            "spawns": spawns
         }
 
         # Chunk pokedex array (100 items per chunk) to stay under 1MB Firestore limit
@@ -147,8 +174,12 @@ def main():
     types = scrape_types()
     save_json("types.json", types)
 
-    # 11. Upload All Aggregated Data to Firestore
-    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types)
+    # 11. Scrape Wild Spawns
+    spawns = scrape_spawns()
+    save_json("spawns.json", spawns)
+
+    # 12. Upload All Aggregated Data to Firestore
+    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns)
     print("=== ALL SCRAPING AND FIRESTORE UPLOAD COMPLETE! ===")
 
 if __name__ == "__main__":
