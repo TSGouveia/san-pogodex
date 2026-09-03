@@ -2538,9 +2538,54 @@ function loadObtainingTab(poke) {
         container.appendChild(partyCard);
     });
 
+    // 6. Dynamic Active Rotation Check: Wild Spawns (with High Chance badge for >= 1%)
+    const activeSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
+    if (activeSpawn) {
+        const isHighChance = activeSpawn.spawnRate >= 1.0;
+        const spawnCard = document.createElement('div');
+        spawnCard.className = 'obtain-card active-rotation-link';
+        spawnCard.style.cursor = 'pointer';
+        spawnCard.style.border = isHighChance ? '1px solid rgba(34, 197, 94, 0.5)' : '1px solid rgba(245, 166, 35, 0.4)';
+        spawnCard.style.background = isHighChance 
+            ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.1), var(--bg-tertiary))' 
+            : 'linear-gradient(135deg, rgba(245, 166, 35, 0.08), var(--bg-tertiary))';
+        
+        const badgeHtml = isHighChance 
+            ? `<span style="font-size: 0.65rem; background: #22c55e; color: #052e16; padding: 2px 7px; border-radius: 4px; font-weight: 800;"><i class="fa-solid fa-fire"></i> HIGH CHANCE WILD SPAWN (${activeSpawn.spawnRate}%)</span>`
+            : `<span style="font-size: 0.65rem; background: #f5a623; color: #451a03; padding: 2px 7px; border-radius: 4px; font-weight: 800;">ACTIVE WILD SPAWN</span>`;
+
+        const descText = isHighChance 
+            ? `Currently spawning in the wild with a high rate of <strong>${activeSpawn.spawnRate}%</strong>! Click to view all active wild spawns.`
+            : `Currently active in wild spawns (${activeSpawn.spawnRate > 0 ? activeSpawn.spawnRate + '%' : 'Rare/Event'}). Click to view all active wild spawns.`;
+
+        spawnCard.innerHTML = `
+            <div class="obtain-icon-box" style="color: ${isHighChance ? '#4ade80' : '#f5a623'}; background: ${isHighChance ? 'rgba(34, 197, 94, 0.15)' : 'rgba(245, 166, 35, 0.15)'};">
+                <i class="fa-solid fa-location-dot"></i>
+            </div>
+            <div class="obtain-card-content" style="flex-grow: 1;">
+                <h4 style="color: ${isHighChance ? '#4ade80' : '#f5a623'}; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    Wild Spawn ${badgeHtml}
+                </h4>
+                <p>${descText}</p>
+            </div>
+            <div style="align-self: center; padding-right: 0.5rem; color: ${isHighChance ? '#4ade80' : '#f5a623'}; opacity: 0.8;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        `;
+        spawnCard.addEventListener('click', () => {
+            closeModal();
+            const rotationsTabBtn = document.querySelector('.view-switch-container .view-btn[data-view="rotations-pane"]');
+            if (rotationsTabBtn) rotationsTabBtn.click();
+            const spawnsSubnavBtn = document.querySelector('.subnav-btn[data-target="rotations-spawns-section"]');
+            if (spawnsSubnavBtn) spawnsSubnavBtn.click();
+        });
+        container.appendChild(spawnCard);
+    }
+
     poke.obtaining.forEach(opt => {
         // Skip adding static placeholders if we already have the active card to prevent duplication
         if (opt.method.toLowerCase().includes('raid') && activeRaid) return;
+        if ((opt.method.toLowerCase().includes('wild') || opt.method.toLowerCase().includes('spawn')) && activeSpawn) return;
         if ((opt.method.toLowerCase().includes('egg') || opt.method.toLowerCase().includes('hatch')) && activeEgg) return;
         if ((opt.method.toLowerCase().includes('research') || opt.method.toLowerCase().includes('quest') || opt.method.toLowerCase().includes('special')) && activeQuests.length > 0) return;
         if (opt.method.toLowerCase().includes('rocket') && activeRockets.length > 0) return;
