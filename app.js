@@ -334,21 +334,7 @@ function isPokemonTransferred(poke) {
     if (!poke) return false;
     const strId = String(poke.id);
     const numId = Number(poke.id);
-    if (transferredPokemon.has(strId) || (!isNaN(numId) && transferredPokemon.has(numId))) {
-        return true;
-    }
-    if (typeof findEvolutionChain === 'function') {
-        const chain = findEvolutionChain(poke);
-        if (chain && chain.length > 0) {
-            const baseId = chain[0].id;
-            const strBaseId = String(baseId);
-            const numBaseId = Number(baseId);
-            if (transferredPokemon.has(strBaseId) || (!isNaN(numBaseId) && transferredPokemon.has(numBaseId))) {
-                return true;
-            }
-        }
-    }
-    return false;
+    return transferredPokemon.has(strId) || (!isNaN(numId) && transferredPokemon.has(numId));
 }
 
 function isPokemonMissing(poke) {
@@ -1948,14 +1934,6 @@ function renderPokedex(forceClear = false) {
             <div class="types-container">
                 ${typeBadges}
             </div>
-
-
-
-            ${isTransf ? `
-            <div class="pokedex-transferred-badge" style="position: absolute; bottom: 0.5rem; right: 0.5rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 0.6rem; font-weight: 800; padding: 2px 4px; border-radius: 4px; border: 1px solid rgba(59, 130, 246, 0.4); display: flex; align-items: center; gap: 2px; z-index: 5;">
-                <i class="fa-solid fa-arrows-spin"></i> Transferred
-            </div>
-            ` : ''}
         `;
 
         card.addEventListener('click', (e) => {
