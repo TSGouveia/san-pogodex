@@ -6249,6 +6249,7 @@ function renderPromoCodes() {
 
     function createCard(item, isExpiredCard = false) {
         const code = item.code || '';
+        const isUnknownCode = !code || code.includes('?');
         const title = item.title || code;
         const description = item.description || '';
         const link = item.link || `https://store.pokemongo.com/offer-redemption?passcode=${encodeURIComponent(code)}`;
@@ -6292,16 +6293,20 @@ function renderPromoCodes() {
 
             <div style="background: rgba(0,0,0,0.3); border: 1px dashed ${isExpiredCard ? 'rgba(239, 68, 68, 0.25)' : 'rgba(255,255,255,0.15)'}; border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
                 <span style="font-family: monospace; font-size: 1rem; font-weight: 900; color: ${isExpiredCard ? '#94a3b8' : '#fbbf24'}; letter-spacing: 1px; ${isExpiredCard ? 'text-decoration: line-through;' : ''}">${code}</span>
-                <button class="copy-code-btn" data-code="${code}" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
-                    <i class="fa-regular fa-copy"></i> Copy
-                </button>
+                ${!isUnknownCode ? `
+                    <button class="copy-code-btn" data-code="${code}" style="background: rgba(255,255,255,0.08); border: 1px solid var(--border-color); color: var(--text-primary); padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: background 0.2s;">
+                        <i class="fa-regular fa-copy"></i> Copy
+                    </button>
+                ` : ''}
             </div>
 
-            <a href="${link}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin-top: 4px;">
-                <button style="width: 100%; background: ${isExpiredCard ? 'var(--bg-tertiary)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'}; color: ${isExpiredCard ? 'var(--text-secondary)' : '#1e1b4b'}; border: 1px solid ${isExpiredCard ? 'var(--border-color)' : 'transparent'}; border-radius: 8px; padding: 10px; font-size: 0.88rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: ${isExpiredCard ? '0.7' : '1'}; transition: filter 0.15s, transform 0.1s;">
-                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Redeem Code on Web Store
-                </button>
-            </a>
+            ${!isUnknownCode ? `
+                <a href="${link}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; margin-top: 4px;">
+                    <button style="width: 100%; background: ${isExpiredCard ? 'var(--bg-tertiary)' : 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)'}; color: ${isExpiredCard ? 'var(--text-secondary)' : '#1e1b4b'}; border: 1px solid ${isExpiredCard ? 'var(--border-color)' : 'transparent'}; border-radius: 8px; padding: 10px; font-size: 0.88rem; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; opacity: ${isExpiredCard ? '0.7' : '1'}; transition: filter 0.15s, transform 0.1s;">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Redeem Code on Web Store
+                    </button>
+                </a>
+            ` : ''}
         `;
 
         const copyBtn = card.querySelector('.copy-code-btn');
