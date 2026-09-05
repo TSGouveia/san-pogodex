@@ -940,6 +940,7 @@ async function loadPokedex() {
             });
         } else if (rawRaids && rawRaids.currentList) {
             const tierMapping = {
+                'super_mega': 'Super Mega Raids',
                 'mega': 'Mega Raids',
                 'lvl5': '5-Star Raids',
                 'shadow_lvl5': 'Shadow 5-Star Raids',
@@ -2339,6 +2340,8 @@ function loadObtainingTab(poke) {
         let tierLabel = activeRaid.tier || 'Raid';
         if (tierLabel.startsWith('lvl')) {
             tierLabel = 'Tier ' + tierLabel.substring(3);
+        } else if (tierLabel.toLowerCase().includes('super mega')) {
+            tierLabel = 'Super Mega Raid';
         } else if (tierLabel.toLowerCase().includes('mega')) {
             tierLabel = 'Mega Raid';
         } else if (tierLabel.toLowerCase().includes('shadow')) {
@@ -2965,6 +2968,7 @@ function renderActiveRotations() {
         });
 
         const sortedTiers = [
+            "Super Mega Raids",
             "Mega Raids", 
             "5-Star Raids", 
             "Shadow 5-Star Raids", 
@@ -2985,7 +2989,11 @@ function renderActiveRotations() {
             let cardTheme = 'theme-green';
             let icon = 'fa-circle-chevron-up';
 
-            if (tier.includes("Mega")) {
+            if (tier.includes("Super Mega")) {
+                subClass = 'super-mega';
+                cardTheme = 'theme-super-mega';
+                icon = 'fa-bolt-lightning';
+            } else if (tier.includes("Mega")) {
                 subClass = 'mega';
                 cardTheme = 'theme-mega';
                 icon = 'fa-bolt';
@@ -5930,6 +5938,8 @@ function renderToDoPane() {
                 let tierLabel = String(raid.tier || 'Raid');
                 if (tierLabel.startsWith('lvl')) {
                     tierLabel = 'Tier ' + tierLabel.substring(3);
+                } else if (safeLower(tierLabel).includes('super mega')) {
+                    tierLabel = 'Super Mega Raid';
                 } else if (safeLower(tierLabel).includes('mega')) {
                     tierLabel = 'Mega Raid';
                 } else if (safeLower(tierLabel).includes('shadow')) {
