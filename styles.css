@@ -1835,10 +1835,10 @@ input, button, select {
 }
 
 /* Color Themes */
-/* Super Mega (Golden / Radiant Amber-Orange) */
+/* Super Mega (Orange) */
 .rotation-subchapter.super-mega .rotation-subchapter-title { color: #fb923c; }
-.rotation-card-item.theme-super-mega { border-color: rgba(251, 146, 60, 0.35); background: linear-gradient(160deg, rgba(251, 146, 60, 0.12), var(--bg-tertiary)); }
-.rotation-card-item.theme-super-mega:hover { border-color: #fb923c; box-shadow: 0 0 16px rgba(251, 146, 60, 0.4); }
+.rotation-card-item.theme-super-mega { border-color: rgba(251, 146, 60, 0.25); }
+.rotation-card-item.theme-super-mega:hover { border-color: #fb923c; box-shadow: 0 0 12px rgba(251, 146, 60, 0.25); }
 
 /* Mega (Red) */
 .rotation-subchapter.mega .rotation-subchapter-title { color: #f87171; }
