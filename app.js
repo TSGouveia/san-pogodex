@@ -3179,27 +3179,30 @@ function renderActiveRotations() {
 
                 if (!recommendedTrainers && raid.estimatedPlayers) {
                     const est = raid.estimatedPlayers;
-                    const estVal = typeof est === 'number' ? (Number.isInteger(est) ? est : est.toFixed(2)) : est;
+                    let estLabel = 'Soloable (1 Player)';
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
                     if (est == 2) {
+                        estLabel = 'Duo (2 Players)';
                         estColor = '#3b82f6';
                         estBg = 'rgba(59, 130, 246, 0.12)';
                         estBorder = 'rgba(59, 130, 246, 0.25)';
                     } else if (est == 3) {
+                        estLabel = 'Trio (3 Players)';
                         estColor = '#f5a623';
                         estBg = 'rgba(245, 166, 35, 0.12)';
                         estBorder = 'rgba(245, 166, 35, 0.25)';
                     } else if (est >= 4) {
+                        estLabel = `Group (${est}+ Players)`;
                         estColor = '#ef4444';
                         estBg = 'rgba(239, 68, 68, 0.12)';
                         estBorder = 'rgba(239, 68, 68, 0.25)';
                     }
                     recommendedTrainers = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estVal} ${estVal == 1 ? 'Player' : 'Players'}</strong>
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estLabel}</strong>
                             </span>
                         </div>
                     `;
@@ -3312,19 +3315,22 @@ function renderActiveRotations() {
                     }
 
                     const est = boss.estimatedPlayers || 1;
-                    const estVal = typeof est === 'number' ? (Number.isInteger(est) ? est : est.toFixed(2)) : est;
+                    let estLabel = 'Soloable (1 Player)';
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
                     if (est == 2) {
+                        estLabel = 'Duo (2 Players)';
                         estColor = '#3b82f6';
                         estBg = 'rgba(59, 130, 246, 0.12)';
                         estBorder = 'rgba(59, 130, 246, 0.25)';
                     } else if (est == 3) {
+                        estLabel = 'Trio (3 Players)';
                         estColor = '#f5a623';
                         estBg = 'rgba(245, 166, 35, 0.12)';
                         estBorder = 'rgba(245, 166, 35, 0.25)';
                     } else if (est >= 4) {
+                        estLabel = `Group (${est}+ Players)`;
                         estColor = '#ef4444';
                         estBg = 'rgba(239, 68, 68, 0.12)';
                         estBorder = 'rgba(239, 68, 68, 0.25)';
@@ -3332,8 +3338,8 @@ function renderActiveRotations() {
 
                     const estimatorBadge = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estVal} ${estVal == 1 ? 'Player' : 'Players'}</strong>
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estLabel}</strong>
                             </span>
                         </div>
                     `;
