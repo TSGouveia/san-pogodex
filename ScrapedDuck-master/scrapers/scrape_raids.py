@@ -27,6 +27,22 @@ def load_pokedex_map():
                 print(f"  Warning loading pokedex for raids: {e}")
     return poke_map
 
+def build_pokebattler_raid_url(boss_name):
+    name = boss_name.strip()
+    if name.lower().startswith("mega "):
+        base = name[5:].strip().upper().replace(" ", "_")
+        slug = f"{base}_MEGA"
+    elif name.lower().startswith("shadow "):
+        base = name[7:].strip().upper().replace(" ", "_")
+        slug = f"SHADOW_{base}"
+    else:
+        slug = name.upper().replace(" ", "_")
+    return f"https://www.pokebattler.com/raids/{slug}"
+
+def build_pokebattler_max_url(boss_name):
+    name = boss_name.replace("Dynamax", "").replace("Gigantamax", "").strip().upper().replace(" ", "_")
+    return f"https://www.pokebattler.com/max/DYNAMAX_{name}"
+
 def scrape_raids():
     print("Scraping Raids & Pokebattler Estimators...")
     bosses = []
@@ -80,7 +96,7 @@ def scrape_raids():
                             if t_name:
                                 types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
 
-                        pb_url_item = f"https://www.pokebattler.com/max/defenders/{raw_id_upper}/levels/{tier_name}/strategies/CINEMATIC_OR_BY_ATTACK_ALONGSIDE?sort=ESTIMATOR"
+                        pb_url_item = build_pokebattler_max_url(name_eng)
 
                         max_battles.append({
                             "name": f"Dynamax {name_eng}",
@@ -101,23 +117,17 @@ def scrape_raids():
                     for r in t.get("raids", []):
                         poke_name = r.get("pokemon", "")
                         if poke_name:
-                            pb_url_item = f"https://www.pokebattler.com/raids/defenders/{poke_name.upper()}/levels/{tier_name}/strategies/CINEMATIC_OR_BY_ATTACK_ALONGSIDE?sort=ESTIMATOR"
-                            pb_map[poke_name.upper()] = {
-                                "est": est,
-                                "url": pb_url_item
-                            }
+                            pb_map[poke_name.upper()] = est
     except Exception as e:
         print(f"Error fetching Pokebattler estimator data: {e}")
 
     # 3. Enrich base raids with estimatedPlayers and pokebattlerUrl
     for r in bosses:
         clean_name = r["name"].replace("Mega ", "").replace("Shadow ", "").strip().upper()
-        pb_info = pb_map.get(clean_name) or pb_map.get(r["name"].upper())
-        if pb_info:
-            r["estimatedPlayers"] = pb_info["est"]
-            r["pokebattlerUrl"] = pb_info["url"]
-        else:
-            r["pokebattlerUrl"] = f"https://www.pokebattler.com/raids"
+        est = pb_map.get(clean_name) or pb_map.get(r["name"].upper())
+        if est:
+            r["estimatedPlayers"] = est
+        r["pokebattlerUrl"] = build_pokebattler_raid_url(r["name"])
 
     print(f"  -> Saved {len(bosses)} standard raid bosses and {len(max_battles)} max battle bosses.")
     return bosses, max_battles

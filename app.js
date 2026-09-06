@@ -902,6 +902,28 @@ async function loadPokedex() {
             });
         }
 
+function buildPokebattlerRaidUrl(bossName) {
+    if (!bossName) return 'https://www.pokebattler.com/raids';
+    let name = bossName.trim();
+    let slug = '';
+    if (name.toLowerCase().startsWith('mega ')) {
+        const base = name.substring(5).trim().toUpperCase().replace(/\s+/g, '_');
+        slug = `${base}_MEGA`;
+    } else if (name.toLowerCase().startsWith('shadow ')) {
+        const base = name.substring(7).trim().toUpperCase().replace(/\s+/g, '_');
+        slug = `SHADOW_${base}`;
+    } else {
+        slug = name.toUpperCase().replace(/\s+/g, '_');
+    }
+    return `https://www.pokebattler.com/raids/${slug}`;
+}
+
+function buildPokebattlerMaxUrl(bossName) {
+    if (!bossName) return 'https://www.pokebattler.com/max';
+    const clean = bossName.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '').trim().toUpperCase().replace(/\s+/g, '_');
+    return `https://www.pokebattler.com/max/DYNAMAX_${clean}`;
+}
+
         // 2. Parse Raid Bosses from ScrapedDuck array or pokemon-go-api (grouped currentList format)
         liveRaids = [];
         if (Array.isArray(rawRaids)) {
@@ -912,6 +934,7 @@ async function loadPokedex() {
                 if (isShadow && !tier.startsWith('Shadow')) {
                     tier = 'Shadow ' + tier;
                 }
+
                 liveRaids.push({
                     idName: matchedPoke ? matchedPoke.idName : boss.name,
                     name: boss.name,
@@ -922,7 +945,7 @@ async function loadPokedex() {
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
                     estimatedPlayers: boss.estimatedPlayers || null,
-                    pokebattlerUrl: boss.pokebattlerUrl || `https://www.pokebattler.com/raids`,
+                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(boss.name),
                     counters: {},
                     battleResult: null
                 });
@@ -945,7 +968,7 @@ async function loadPokedex() {
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
                     estimatedPlayers: boss.estimatedPlayers || 1,
-                    pokebattlerUrl: boss.pokebattlerUrl || `https://www.pokebattler.com/max`
+                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerMaxUrl(boss.name)
                 });
             });
         } else if (rawRaids && rawRaids.currentList) {
