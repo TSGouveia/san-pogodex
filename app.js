@@ -922,6 +922,7 @@ async function loadPokedex() {
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
                     estimatedPlayers: boss.estimatedPlayers || null,
+                    pokebattlerUrl: boss.pokebattlerUrl || `https://www.pokebattler.com/raids`,
                     counters: {},
                     battleResult: null
                 });
@@ -943,7 +944,8 @@ async function loadPokedex() {
                     cp: boss.combatPower || null,
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
-                    estimatedPlayers: boss.estimatedPlayers || 1
+                    estimatedPlayers: boss.estimatedPlayers || 1,
+                    pokebattlerUrl: boss.pokebattlerUrl || `https://www.pokebattler.com/max`
                 });
             });
         } else if (rawRaids && rawRaids.currentList) {
@@ -2123,7 +2125,7 @@ function renderMissingSummary() {
                 let estText = '';
                 if (matchedRaid.estimatedPlayers) {
                     const est = matchedRaid.estimatedPlayers;
-                    estText = est == 1 ? ' - Soloable' : (est == 2 ? ' - Duo' : (est == 3 ? ' - Trio' : ` - Group ${est}+`));
+                    estText = ` (${est} ${est === 1 ? 'Player' : 'Players'})`;
                 }
                 previewText = `Available in: ${matchedRaid.tier}${estText}`;
             }
@@ -2356,8 +2358,7 @@ function loadObtainingTab(poke) {
         let estBadge = '';
         if (activeRaid.estimatedPlayers) {
             const est = activeRaid.estimatedPlayers;
-            let estText = est == 1 ? 'Soloable (1 Player)' : (est == 2 ? 'Duo (2 Players)' : (est == 3 ? 'Trio (3 Players)' : `Group (${est}+ Players)`));
-            estBadge = ` (Difficulty: <strong>${estText}</strong>)`;
+            estBadge = ` (Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>)`;
         }
         
         raidCard.innerHTML = `
@@ -3142,24 +3143,31 @@ function renderActiveRotations() {
                     `;
                 }
 
+                let pokebattlerBtn = '';
+                if (raid.pokebattlerUrl) {
+                    pokebattlerBtn = `
+                        <div style="margin-top: 0.4rem; display: flex; align-items: center;">
+                            <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #a78bfa; background: rgba(167, 139, 250, 0.12); border: 1px solid rgba(167, 139, 250, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(167, 139, 250, 0.25)'" onmouseout="this.style.background='rgba(167, 139, 250, 0.12)'">
+                                <i class="fa-solid fa-crosshairs"></i> Pokebattler Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                            </a>
+                        </div>
+                    `;
+                }
+
                 if (!recommendedTrainers && raid.estimatedPlayers) {
                     const est = raid.estimatedPlayers;
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
-                    let estText = 'Soloable (1 Player)';
                     if (est == 2) {
-                        estText = 'Duo (2 Players)';
                         estColor = '#3b82f6';
                         estBg = 'rgba(59, 130, 246, 0.12)';
                         estBorder = 'rgba(59, 130, 246, 0.25)';
                     } else if (est == 3) {
-                        estText = 'Trio (3 Players)';
                         estColor = '#f5a623';
                         estBg = 'rgba(245, 166, 35, 0.12)';
                         estBorder = 'rgba(245, 166, 35, 0.25)';
                     } else if (est >= 4) {
-                        estText = `Group (${est}+ Players)`;
                         estColor = '#ef4444';
                         estBg = 'rgba(239, 68, 68, 0.12)';
                         estBorder = 'rgba(239, 68, 68, 0.25)';
@@ -3167,7 +3175,7 @@ function renderActiveRotations() {
                     recommendedTrainers = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
                             <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: ${estText}
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>
                             </span>
                         </div>
                     `;
@@ -3220,6 +3228,7 @@ function renderActiveRotations() {
                         ${recommendedTrainers}
                         ${weatherHtml}
                         ${countersHtml}
+                        ${pokebattlerBtn}
                     </div>
                 `;
 
@@ -3282,19 +3291,15 @@ function renderActiveRotations() {
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
-                    let estText = 'Soloable (1 Player)';
                     if (est == 2) {
-                        estText = 'Duo (2 Players)';
                         estColor = '#3b82f6';
                         estBg = 'rgba(59, 130, 246, 0.12)';
                         estBorder = 'rgba(59, 130, 246, 0.25)';
                     } else if (est == 3) {
-                        estText = 'Trio (3 Players)';
                         estColor = '#f5a623';
                         estBg = 'rgba(245, 166, 35, 0.12)';
                         estBorder = 'rgba(245, 166, 35, 0.25)';
                     } else if (est >= 4) {
-                        estText = `Group (${est}+ Players)`;
                         estColor = '#ef4444';
                         estBg = 'rgba(239, 68, 68, 0.12)';
                         estBorder = 'rgba(239, 68, 68, 0.25)';
@@ -3303,10 +3308,21 @@ function renderActiveRotations() {
                     const estimatorBadge = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
                             <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> ${estText}
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>
                             </span>
                         </div>
                     `;
+
+                    let pokebattlerBtn = '';
+                    if (boss.pokebattlerUrl) {
+                        pokebattlerBtn = `
+                            <div style="margin-top: 0.4rem; display: flex; align-items: center;">
+                                <a href="${boss.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
+                                    <i class="fa-solid fa-crosshairs"></i> Pokebattler Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                </a>
+                            </div>
+                        `;
+                    }
 
                     let cpMeta = '';
                     if (boss.cp && boss.cp.normal && boss.cp.normal.max) {
@@ -3324,6 +3340,7 @@ function renderActiveRotations() {
                             <span class="rotation-card-name">${boss.name}</span>
                             ${cpMeta}
                             ${estimatorBadge}
+                            ${pokebattlerBtn}
                         </div>
                     `;
 
