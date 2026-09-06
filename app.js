@@ -3148,7 +3148,7 @@ function renderActiveRotations() {
                     pokebattlerBtn = `
                         <div style="margin-top: 0.4rem; display: flex; align-items: center;">
                             <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #a78bfa; background: rgba(167, 139, 250, 0.12); border: 1px solid rgba(167, 139, 250, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(167, 139, 250, 0.25)'" onmouseout="this.style.background='rgba(167, 139, 250, 0.12)'">
-                                <i class="fa-solid fa-crosshairs"></i> Pokebattler Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                             </a>
                         </div>
                     `;
@@ -3156,6 +3156,7 @@ function renderActiveRotations() {
 
                 if (!recommendedTrainers && raid.estimatedPlayers) {
                     const est = raid.estimatedPlayers;
+                    const estVal = typeof est === 'number' ? (Number.isInteger(est) ? est : est.toFixed(2)) : est;
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
@@ -3174,8 +3175,8 @@ function renderActiveRotations() {
                     }
                     recommendedTrainers = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estVal} ${estVal == 1 ? 'Player' : 'Players'}</strong>
                             </span>
                         </div>
                     `;
@@ -3288,6 +3289,7 @@ function renderActiveRotations() {
                     }
 
                     const est = boss.estimatedPlayers || 1;
+                    const estVal = typeof est === 'number' ? (Number.isInteger(est) ? est : est.toFixed(2)) : est;
                     let estColor = '#22c55e';
                     let estBg = 'rgba(34, 197, 94, 0.12)';
                     let estBorder = 'rgba(34, 197, 94, 0.25)';
@@ -3307,8 +3309,8 @@ function renderActiveRotations() {
 
                     const estimatorBadge = `
                         <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estVal} ${estVal == 1 ? 'Player' : 'Players'}</strong>
                             </span>
                         </div>
                     `;
@@ -3318,7 +3320,7 @@ function renderActiveRotations() {
                         pokebattlerBtn = `
                             <div style="margin-top: 0.4rem; display: flex; align-items: center;">
                                 <a href="${boss.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
-                                    <i class="fa-solid fa-crosshairs"></i> Pokebattler Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                    <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                 </a>
                             </div>
                         `;
