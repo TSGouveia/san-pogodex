@@ -2120,7 +2120,12 @@ function renderMissingSummary() {
         } else if (currentHuntMethod === 'raid') {
             const matchedRaid = liveRaids.find(r => r.name.toLowerCase() === poke.name.toLowerCase() || r.name.toLowerCase().replace(/^shadow\s+/g, '') === poke.name.toLowerCase());
             if (matchedRaid) {
-                previewText = `Available in: ${matchedRaid.tier}`;
+                let estText = '';
+                if (matchedRaid.estimatedPlayers) {
+                    const est = matchedRaid.estimatedPlayers;
+                    estText = est == 1 ? ' - Soloable' : (est == 2 ? ' - Duo' : (est == 3 ? ' - Trio' : ` - Group ${est}+`));
+                }
+                previewText = `Available in: ${matchedRaid.tier}${estText}`;
             }
         } else if (currentHuntMethod === 'wild') {
             const matchedSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
@@ -2348,6 +2353,13 @@ function loadObtainingTab(poke) {
             tierLabel = 'Shadow ' + tierLabel.replace('shadow_', '').replace('lvl', 'Tier ');
         }
         
+        let estBadge = '';
+        if (activeRaid.estimatedPlayers) {
+            const est = activeRaid.estimatedPlayers;
+            let estText = est == 1 ? 'Soloable (1 Player)' : (est == 2 ? 'Duo (2 Players)' : (est == 3 ? 'Trio (3 Players)' : `Group (${est}+ Players)`));
+            estBadge = ` (Difficulty: <strong>${estText}</strong>)`;
+        }
+        
         raidCard.innerHTML = `
             <div class="obtain-icon-box" style="color: #a78bfa; background: rgba(167, 139, 250, 0.15);">
                 <i class="fa-solid fa-hand-fist"></i>
@@ -2356,7 +2368,7 @@ function loadObtainingTab(poke) {
                 <h4 style="color: #a78bfa; display: flex; align-items: center; gap: 6px;">
                     Active Raid Boss <span style="font-size: 0.65rem; background: #a78bfa; color: #1e1b4b; padding: 2px 6px; border-radius: 4px; font-weight: 800;">ACTIVE</span>
                 </h4>
-                <p>Currently appearing in <strong>${tierLabel}</strong>! Click to view details, CP values, and counters.</p>
+                <p>Currently appearing in <strong>${tierLabel}</strong>${estBadge}! Click to view details, CP values, and counters.</p>
             </div>
             <div style="align-self: center; padding-right: 0.5rem; color: #a78bfa; opacity: 0.8;">
                 <i class="fa-solid fa-chevron-right"></i>
