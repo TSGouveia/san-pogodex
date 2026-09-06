@@ -153,36 +153,60 @@ def scrape_raids():
     except Exception as e:
         print(f"Error fetching Pokebattler estimator data: {e}")
 
-    # Helper mapping for specific forms
-    form_slug_map = {
-        "ARMORED MEWTWO": ("MEWTWO_A_FORM", "RAID_LEVEL_5"),
-        "MEWTWO (ARMORED)": ("MEWTWO_A_FORM", "RAID_LEVEL_5"),
-        "MEGA MEWTWO Y": ("MEWTWO_MEGA_Y_FORM", "RAID_LEVEL_5_MEGA_ENHANCED"),
-        "MEGA MEWTWO X": ("MEWTWO_MEGA_X_FORM", "RAID_LEVEL_5_MEGA_ENHANCED"),
-        "MEGA AGGRON": ("AGGRON_MEGA", "RAID_LEVEL_MEGA"),
-    }
+    # Helper helper resolution for raid slugs & tiers
+    def resolve_raid_slug_and_tier(boss_name, duck_tier):
+        u = boss_name.strip().upper()
+        
+        # Exact form overrides
+        if u == "MEGA MEWTWO Y": return "MEWTWO_MEGA_Y", "RAID_LEVEL_5_MEGA_ENHANCED"
+        if u == "MEGA MEWTWO X": return "MEWTWO_MEGA_X", "RAID_LEVEL_5_MEGA_ENHANCED"
+        if u == "ARMORED MEWTWO": return "MEWTWO_A_FORM", "RAID_LEVEL_5"
+        if "SHADOW GIRATINA (ALTERED)" in u or u == "SHADOW GIRATINA": return "GIRATINA_SHADOW_FORM", "RAID_LEVEL_5_SHADOW"
+        if "SHADOW GIRATINA (ORIGIN)" in u: return "GIRATINA_ORIGIN_SHADOW_FORM", "RAID_LEVEL_5_SHADOW"
+        
+        # Determine pokebattler tier
+        tier = "RAID_LEVEL_5"
+        if "Mega" in boss_name and "Super" in duck_tier:
+            tier = "RAID_LEVEL_5_MEGA_ENHANCED"
+        elif "Mega" in boss_name:
+            tier = "RAID_LEVEL_MEGA"
+        elif "Shadow" in boss_name:
+            if "1-Star" in duck_tier: tier = "RAID_LEVEL_1_SHADOW"
+            elif "3-Star" in duck_tier: tier = "RAID_LEVEL_3_SHADOW"
+            elif "5-Star" in duck_tier: tier = "RAID_LEVEL_5_SHADOW"
+        elif "5-Star" in duck_tier: tier = "RAID_LEVEL_5"
+        elif "3-Star" in duck_tier: tier = "RAID_LEVEL_3"
+        elif "1-Star" in duck_tier: tier = "RAID_LEVEL_1"
+
+        # Determine pokebattler slug
+        if u in pb_slug_map:
+            return pb_slug_map[u], tier
+
+        if u.startswith("SHADOW "):
+            base = u.replace("SHADOW ", "").strip()
+            shadow_slug = f"{base}_SHADOW_FORM"
+            if shadow_slug in pb_slug_map:
+                return shadow_slug, tier
+            return shadow_slug, tier
+
+        if u.startswith("MEGA "):
+            base = u.replace("MEGA ", "").strip()
+            mega_slug = f"{base}_MEGA"
+            if mega_slug in pb_slug_map:
+                return mega_slug, tier
+            return mega_slug, tier
+
+        clean_name = u.replace("MEGA ", "").replace("SHADOW ", "").strip()
+        if clean_name in pb_slug_map:
+            return pb_slug_map[clean_name], tier
+
+        return u.replace(" ", "_"), tier
 
     # 3. Enrich base raids with estimatedPlayers and pokebattlerUrl
     for r in bosses:
-        boss_name_upper = r["name"].strip().upper()
-        clean_name = boss_name_upper.replace("MEGA ", "").replace("SHADOW ", "").strip()
+        exact_slug, exact_tier = resolve_raid_slug_and_tier(r["name"], r.get("tier", ""))
         
-        form_info = form_slug_map.get(boss_name_upper)
-        custom_slug = form_info[0] if form_info else None
-        custom_tier = form_info[1] if form_info else None
-        
-        exact_slug = custom_slug or pb_slug_map.get(boss_name_upper) or pb_slug_map.get(clean_name)
-        exact_tier = custom_tier or pb_tier_map.get(boss_name_upper) or pb_tier_map.get(clean_name) or "RAID_LEVEL_5"
-
-        est = None
-        if exact_slug:
-            est = fetch_exact_pokebattler_estimator(exact_slug, exact_tier)
-            
-        if not est:
-            est = pb_map.get(boss_name_upper) or pb_map.get(clean_name)
-            if custom_slug and not est:
-                est = pb_map.get(custom_slug)
-            
+        est = fetch_exact_pokebattler_estimator(exact_slug, exact_tier)
         if est:
             r["estimatedPlayers"] = est
         
