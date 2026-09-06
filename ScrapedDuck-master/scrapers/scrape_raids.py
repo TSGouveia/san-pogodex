@@ -43,6 +43,23 @@ def build_pokebattler_max_url(boss_name):
     name = boss_name.replace("Dynamax", "").replace("Gigantamax", "").strip().upper().replace(" ", "_")
     return f"https://www.pokebattler.com/max/DYNAMAX_{name}"
 
+def fetch_exact_pokebattler_estimator(poke_id, tier_name="RAID_LEVEL_5"):
+    """Fetch exact simulation estimator for a specific boss from Pokebattler API."""
+    try:
+        url = f"https://fight.pokebattler.com/raids/defenders/{poke_id}/levels/{tier_name}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC?sort=ESTIMATOR&numCounters=1"
+        res = requests.get(url, headers=HEADERS, timeout=8)
+        if res.status_code == 200:
+            data = res.json()
+            attackers = data.get("attackers", [])
+            if attackers:
+                total = attackers[0].get("total", {})
+                est = total.get("estimator")
+                if est and isinstance(est, (int, float)):
+                    return round(float(est))
+    except Exception as e:
+        pass
+    return None
+
 def scrape_raids():
     print("Scraping Raids & Pokebattler Estimators...")
     bosses = []
@@ -59,6 +76,7 @@ def scrape_raids():
     # 2. Fetch Pokebattler data for Estimators & Max Battles & exact Slugs
     pb_map = {}
     pb_slug_map = {}
+    pb_tier_map = {}
     max_battles = []
     poke_map = load_pokedex_map()
 
@@ -100,11 +118,14 @@ def scrape_raids():
                         slug = r.get("pokemonId") or r.get("pokemon", "")
                         pb_url_item = f"https://www.pokebattler.com/max/{slug}" if slug.startswith("DYNAMAX_") else build_pokebattler_max_url(name_eng)
 
+                        # Try fetching exact simulation estimator for max battle boss
+                        exact_est = fetch_exact_pokebattler_estimator(slug, tier_name) or est
+
                         max_battles.append({
                             "name": f"Dynamax {name_eng}",
                             "tier": tier_label,
                             "canBeShiny": r.get("shiny", False),
-                            "estimatedPlayers": est,
+                            "estimatedPlayers": exact_est,
                             "pokebattlerUrl": pb_url_item,
                             "types": types,
                             "combatPower": {
@@ -122,19 +143,21 @@ def scrape_raids():
                         if poke_name:
                             pb_map[poke_name.upper()] = est
                             pb_slug_map[poke_name.upper()] = poke_id
+                            pb_tier_map[poke_name.upper()] = tier_name
                         if poke_id:
                             pb_map[poke_id.upper()] = est
                             pb_slug_map[poke_id.upper()] = poke_id
+                            pb_tier_map[poke_id.upper()] = tier_name
     except Exception as e:
         print(f"Error fetching Pokebattler estimator data: {e}")
 
     # Helper mapping for specific forms
     form_slug_map = {
-        "ARMORED MEWTWO": "MEWTWO_A_FORM",
-        "MEWTWO (ARMORED)": "MEWTWO_A_FORM",
-        "MEGA MEWTWO Y": "MEWTWO_MEGA_Y_FORM",
-        "MEGA MEWTWO X": "MEWTWO_MEGA_X_FORM",
-        "MEGA AGGRON": "AGGRON_MEGA",
+        "ARMORED MEWTWO": ("MEWTWO_A_FORM", "RAID_LEVEL_5"),
+        "MEWTWO (ARMORED)": ("MEWTWO_A_FORM", "RAID_LEVEL_5"),
+        "MEGA MEWTWO Y": ("MEWTWO_MEGA_Y_FORM", "RAID_LEVEL_5_MEGA_ENHANCED"),
+        "MEGA MEWTWO X": ("MEWTWO_MEGA_X_FORM", "RAID_LEVEL_5_MEGA_ENHANCED"),
+        "MEGA AGGRON": ("AGGRON_MEGA", "RAID_LEVEL_MEGA"),
     }
 
     # 3. Enrich base raids with estimatedPlayers and pokebattlerUrl
@@ -142,18 +165,25 @@ def scrape_raids():
         boss_name_upper = r["name"].strip().upper()
         clean_name = boss_name_upper.replace("MEGA ", "").replace("SHADOW ", "").strip()
         
-        # Check direct form map first
-        custom_slug = form_slug_map.get(boss_name_upper)
+        form_info = form_slug_map.get(boss_name_upper)
+        custom_slug = form_info[0] if form_info else None
+        custom_tier = form_info[1] if form_info else None
         
-        est = pb_map.get(boss_name_upper) or pb_map.get(clean_name)
-        if custom_slug and not est:
-            est = pb_map.get(custom_slug)
+        exact_slug = custom_slug or pb_slug_map.get(boss_name_upper) or pb_slug_map.get(clean_name)
+        exact_tier = custom_tier or pb_tier_map.get(boss_name_upper) or pb_tier_map.get(clean_name) or "RAID_LEVEL_5"
+
+        est = None
+        if exact_slug:
+            est = fetch_exact_pokebattler_estimator(exact_slug, exact_tier)
+            
+        if not est:
+            est = pb_map.get(boss_name_upper) or pb_map.get(clean_name)
+            if custom_slug and not est:
+                est = pb_map.get(custom_slug)
             
         if est:
             r["estimatedPlayers"] = est
         
-        # Use exact Pokebattler ID/Slug if available from Pokebattler API or custom map
-        exact_slug = custom_slug or pb_slug_map.get(boss_name_upper) or pb_slug_map.get(clean_name)
         if exact_slug:
             r["pokebattlerUrl"] = f"https://www.pokebattler.com/raids/{exact_slug}"
         else:
