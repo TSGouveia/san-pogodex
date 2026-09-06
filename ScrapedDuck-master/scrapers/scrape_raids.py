@@ -122,18 +122,38 @@ def scrape_raids():
                         if poke_name:
                             pb_map[poke_name.upper()] = est
                             pb_slug_map[poke_name.upper()] = poke_id
+                        if poke_id:
+                            pb_map[poke_id.upper()] = est
+                            pb_slug_map[poke_id.upper()] = poke_id
     except Exception as e:
         print(f"Error fetching Pokebattler estimator data: {e}")
 
+    # Helper mapping for specific forms
+    form_slug_map = {
+        "ARMORED MEWTWO": "MEWTWO_A_FORM",
+        "MEWTWO (ARMORED)": "MEWTWO_A_FORM",
+        "MEGA MEWTWO Y": "MEWTWO_MEGA_Y_FORM",
+        "MEGA MEWTWO X": "MEWTWO_MEGA_X_FORM",
+        "MEGA AGGRON": "AGGRON_MEGA",
+    }
+
     # 3. Enrich base raids with estimatedPlayers and pokebattlerUrl
     for r in bosses:
-        clean_name = r["name"].replace("Mega ", "").replace("Shadow ", "").strip().upper()
-        est = pb_map.get(clean_name) or pb_map.get(r["name"].upper())
+        boss_name_upper = r["name"].strip().upper()
+        clean_name = boss_name_upper.replace("MEGA ", "").replace("SHADOW ", "").strip()
+        
+        # Check direct form map first
+        custom_slug = form_slug_map.get(boss_name_upper)
+        
+        est = pb_map.get(boss_name_upper) or pb_map.get(clean_name)
+        if custom_slug and not est:
+            est = pb_map.get(custom_slug)
+            
         if est:
             r["estimatedPlayers"] = est
         
-        # Use exact Pokebattler ID/Slug if available from Pokebattler API
-        exact_slug = pb_slug_map.get(r["name"].upper()) or pb_slug_map.get(clean_name)
+        # Use exact Pokebattler ID/Slug if available from Pokebattler API or custom map
+        exact_slug = custom_slug or pb_slug_map.get(boss_name_upper) or pb_slug_map.get(clean_name)
         if exact_slug:
             r["pokebattlerUrl"] = f"https://www.pokebattler.com/raids/{exact_slug}"
         else:
