@@ -56,8 +56,9 @@ def scrape_raids():
     except Exception as e:
         print(f"Error scraping base raids: {e}")
     
-    # 2. Fetch Pokebattler data for Estimators & Max Battles
+    # 2. Fetch Pokebattler data for Estimators & Max Battles & exact Slugs
     pb_map = {}
+    pb_slug_map = {}
     max_battles = []
     poke_map = load_pokedex_map()
 
@@ -96,7 +97,8 @@ def scrape_raids():
                             if t_name:
                                 types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
 
-                        pb_url_item = build_pokebattler_max_url(name_eng)
+                        slug = r.get("pokemonId") or r.get("pokemon", "")
+                        pb_url_item = f"https://www.pokebattler.com/max/{slug}" if slug.startswith("DYNAMAX_") else build_pokebattler_max_url(name_eng)
 
                         max_battles.append({
                             "name": f"Dynamax {name_eng}",
@@ -116,8 +118,10 @@ def scrape_raids():
                 else:
                     for r in t.get("raids", []):
                         poke_name = r.get("pokemon", "")
+                        poke_id = r.get("pokemonId") or poke_name
                         if poke_name:
                             pb_map[poke_name.upper()] = est
+                            pb_slug_map[poke_name.upper()] = poke_id
     except Exception as e:
         print(f"Error fetching Pokebattler estimator data: {e}")
 
@@ -127,7 +131,13 @@ def scrape_raids():
         est = pb_map.get(clean_name) or pb_map.get(r["name"].upper())
         if est:
             r["estimatedPlayers"] = est
-        r["pokebattlerUrl"] = build_pokebattler_raid_url(r["name"])
+        
+        # Use exact Pokebattler ID/Slug if available from Pokebattler API
+        exact_slug = pb_slug_map.get(r["name"].upper()) or pb_slug_map.get(clean_name)
+        if exact_slug:
+            r["pokebattlerUrl"] = f"https://www.pokebattler.com/raids/{exact_slug}"
+        else:
+            r["pokebattlerUrl"] = build_pokebattler_raid_url(r["name"])
 
     print(f"  -> Saved {len(bosses)} standard raid bosses and {len(max_battles)} max battle bosses.")
     return bosses, max_battles
