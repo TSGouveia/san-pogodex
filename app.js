@@ -2981,6 +2981,7 @@ function updateModalCatchBtn(id) {
 
 function renderActiveRotations() {
     const raidsContainer = document.getElementById('raids-tiers-container');
+    const maxBattlesContainer = document.getElementById('maxbattles-container');
     const eggsContainer = document.getElementById('eggs-types-container');
     const researchGrid = document.getElementById('active-research-grid');
 
