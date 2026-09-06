@@ -52,10 +52,12 @@ def fetch_exact_pokebattler_estimator(poke_id, tier_name="RAID_LEVEL_5"):
             data = res.json()
             attackers = data.get("attackers", [])
             if attackers:
-                total = attackers[0].get("total", {})
-                est = total.get("estimator")
-                if est and isinstance(est, (int, float)):
-                    return round(float(est))
+                by_move = attackers[0].get("byMove", [])
+                if by_move:
+                    total = by_move[0].get("total", {})
+                    est = total.get("estimator")
+                    if est and isinstance(est, (int, float)):
+                        return round(float(est), 2)
     except Exception as e:
         pass
     return None
