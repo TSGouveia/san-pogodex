@@ -3317,39 +3317,6 @@ function renderActiveRotations() {
                         imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png`;
                     }
 
-                    const est = boss.estimatedPlayers || 1;
-                    const estNum = typeof est === 'number' ? est : parseFloat(est);
-                    const estVal = !isNaN(estNum) ? (Number.isInteger(estNum) ? estNum : estNum.toFixed(2)) : est;
-
-                    let estLabel = `${estVal} (Soloable)`;
-                    let estColor = '#22c55e';
-                    let estBg = 'rgba(34, 197, 94, 0.12)';
-                    let estBorder = 'rgba(34, 197, 94, 0.25)';
-                    if (estNum > 1 && estNum <= 2) {
-                        estLabel = `${estVal} (Duo)`;
-                        estColor = '#3b82f6';
-                        estBg = 'rgba(59, 130, 246, 0.12)';
-                        estBorder = 'rgba(59, 130, 246, 0.25)';
-                    } else if (estNum > 2 && estNum <= 3) {
-                        estLabel = `${estVal} (Trio)`;
-                        estColor = '#f5a623';
-                        estBg = 'rgba(245, 166, 35, 0.12)';
-                        estBorder = 'rgba(245, 166, 35, 0.25)';
-                    } else if (estNum > 3) {
-                        estLabel = `${estVal} (Group)`;
-                        estColor = '#ef4444';
-                        estBg = 'rgba(239, 68, 68, 0.12)';
-                        estBorder = 'rgba(239, 68, 68, 0.25)';
-                    }
-
-                    const estimatorBadge = `
-                        <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estLabel}</strong>
-                            </span>
-                        </div>
-                    `;
-
                     let pokebattlerBtn = '';
                     if (boss.pokebattlerUrl) {
                         pokebattlerBtn = `
@@ -3376,7 +3343,6 @@ function renderActiveRotations() {
                         <div class="rotation-card-details-wrapper">
                             <span class="rotation-card-name">${boss.name}</span>
                             ${cpMeta}
-                            ${estimatorBadge}
                             ${pokebattlerBtn}
                         </div>
                     `;
