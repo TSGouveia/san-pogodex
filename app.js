@@ -2881,7 +2881,6 @@ function renderWildSpawns() {
                 </div>
                 <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
                 <div class="rotation-card-details-wrapper">
-                    <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${dexFormatted}</span>
                     <span class="rotation-card-name">${s.name}</span>
                     <div class="rotation-cp-details">
                         ${rateBadge}
