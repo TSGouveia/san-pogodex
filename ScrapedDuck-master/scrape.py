@@ -71,7 +71,7 @@ def scrape_spawns():
         print(f"Error scraping spawns: {e}")
         return []
 
-def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns):
+def upload_to_firestore(events, raids, max_battles, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns):
     print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
     api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
     project_id = "pogo-website-14a46"
@@ -90,6 +90,7 @@ def upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, part
         modules = {
             "events": events,
             "raids": raids,
+            "maxBattles": max_battles,
             "research": research,
             "eggs": eggs,
             "rocketLineups": rocket,
@@ -138,9 +139,10 @@ def main():
     events = scrape_events()
     save_json("events.json", events)
 
-    # 2. Scrape Raids
-    raids = scrape_raids()
+    # 2. Scrape Raids & Max Battles
+    raids, max_battles = scrape_raids()
     save_json("raids.json", raids)
+    save_json("maxBattles.json", max_battles)
 
     # 3. Scrape Research
     research = scrape_research()
@@ -178,9 +180,9 @@ def main():
     spawns = scrape_spawns()
     save_json("spawns.json", spawns)
 
-    # 12. Upload All Aggregated Data to Firestore
-    upload_to_firestore(events, raids, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns)
-    print("=== ALL SCRAPING AND FIRESTORE UPLOAD COMPLETE! ===")
+    # 12. Upload all modules to Firestore
+    upload_to_firestore(events, raids, max_battles, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns)
+    print("=== SCRAPE COMPLETE ===")
 
 if __name__ == "__main__":
     main()

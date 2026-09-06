@@ -345,6 +345,7 @@ function isPokemonMissing(poke) {
 }
 let liveEggs = [];
 let liveRaids = [];
+let liveMaxBattles = [];
 let liveResearch = [];
 let liveRocket = null;
 let liveEvents = [];
@@ -662,7 +663,7 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        const baseModules = ['events', 'raids', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns'];
+        const baseModules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns'];
         const pokedexParts = Array.from({ length: 11 }, (_, i) => `pokedex_part${i + 1}`);
         const modules = [...baseModules, ...pokedexParts];
 
@@ -920,8 +921,29 @@ async function loadPokedex() {
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
+                    estimatedPlayers: boss.estimatedPlayers || null,
                     counters: {},
                     battleResult: null
+                });
+            });
+        }
+
+        // Parse Max Battles from Firestore
+        liveMaxBattles = [];
+        let rawMaxBattles = dbScrapedData.maxBattles || [];
+        if (Array.isArray(rawMaxBattles)) {
+            rawMaxBattles.forEach(boss => {
+                const baseName = boss.name.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '');
+                const matchedPoke = findPokemonByName(baseName);
+                liveMaxBattles.push({
+                    idName: matchedPoke ? matchedPoke.idName : boss.name,
+                    name: boss.name,
+                    tier: boss.tier || 'Max Battles',
+                    image: boss.image || '',
+                    cp: boss.combatPower || null,
+                    shiny: boss.canBeShiny || false,
+                    types: boss.types || [],
+                    estimatedPlayers: boss.estimatedPlayers || 1
                 });
             });
         } else if (rawRaids && rawRaids.currentList) {
@@ -2352,6 +2374,42 @@ function loadObtainingTab(poke) {
         container.appendChild(raidCard);
     }
 
+    // 1.5 Dynamic Active Rotation Check: Max Battles
+    const activeMaxBattle = liveMaxBattles.find(m => 
+        (m.name && m.name.toLowerCase().includes(poke.name.toLowerCase())) ||
+        (m.idName && poke.idName && m.idName.toLowerCase() === poke.idName.toLowerCase())
+    );
+    if (activeMaxBattle) {
+        const maxCard = document.createElement('div');
+        maxCard.className = 'obtain-card active-rotation-link';
+        maxCard.style.cursor = 'pointer';
+        maxCard.style.border = '1px solid rgba(245, 166, 35, 0.4)';
+        maxCard.style.background = 'linear-gradient(135deg, rgba(245, 166, 35, 0.08), var(--bg-tertiary))';
+        
+        maxCard.innerHTML = `
+            <div class="obtain-icon-box" style="color: #f5a623; background: rgba(245, 166, 35, 0.15);">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div class="obtain-card-content" style="flex-grow: 1;">
+                <h4 style="color: #f5a623; display: flex; align-items: center; gap: 6px;">
+                    Active Max Battle <span style="font-size: 0.65rem; background: #f5a623; color: #451a03; padding: 2px 6px; border-radius: 4px; font-weight: 800;">ACTIVE</span>
+                </h4>
+                <p>Currently appearing in <strong>${activeMaxBattle.tier || 'Max Battles'}</strong>! Click to view details.</p>
+            </div>
+            <div style="align-self: center; padding-right: 0.5rem; color: #f5a623; opacity: 0.8;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        `;
+        maxCard.addEventListener('click', () => {
+            closeModal();
+            const rotationsTabBtn = document.querySelector('.view-switch-container .view-btn[data-view="rotations-pane"]');
+            if (rotationsTabBtn) rotationsTabBtn.click();
+            const maxSubnavBtn = document.querySelector('.subnav-btn[data-target="rotations-maxbattles-section"]');
+            if (maxSubnavBtn) maxSubnavBtn.click();
+        });
+        container.appendChild(maxCard);
+    }
+
     // 2. Dynamic Active Rotation Check: Eggs
     const activeEgg = liveEggs.find(e => 
         (e.name && e.name.toLowerCase() === poke.name.toLowerCase())
@@ -3071,6 +3129,37 @@ function renderActiveRotations() {
                     `;
                 }
 
+                if (!recommendedTrainers && raid.estimatedPlayers) {
+                    const est = raid.estimatedPlayers;
+                    let estColor = '#22c55e';
+                    let estBg = 'rgba(34, 197, 94, 0.12)';
+                    let estBorder = 'rgba(34, 197, 94, 0.25)';
+                    let estText = 'Soloable (1 Player)';
+                    if (est == 2) {
+                        estText = 'Duo (2 Players)';
+                        estColor = '#3b82f6';
+                        estBg = 'rgba(59, 130, 246, 0.12)';
+                        estBorder = 'rgba(59, 130, 246, 0.25)';
+                    } else if (est == 3) {
+                        estText = 'Trio (3 Players)';
+                        estColor = '#f5a623';
+                        estBg = 'rgba(245, 166, 35, 0.12)';
+                        estBorder = 'rgba(245, 166, 35, 0.25)';
+                    } else if (est >= 4) {
+                        estText = `Group (${est}+ Players)`;
+                        estColor = '#ef4444';
+                        estBg = 'rgba(239, 68, 68, 0.12)';
+                        estBorder = 'rgba(239, 68, 68, 0.25)';
+                    }
+                    recommendedTrainers = `
+                        <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: ${estText}
+                            </span>
+                        </div>
+                    `;
+                }
+
                 let weatherHtml = '';
                 if (raid.weatherBoosts && raid.weatherBoosts.length > 0) {
                     const wIcons = {
@@ -3121,7 +3210,6 @@ function renderActiveRotations() {
                     </div>
                 `;
 
-                // Allow clicking if we have either a direct match or a base form match
                 const clickTarget = matchedPoke || baseFormPoke;
                 if (clickTarget) {
                     card.style.cursor = 'pointer';
@@ -3132,6 +3220,108 @@ function renderActiveRotations() {
                 grid.appendChild(card);
             });
         });
+    }
+
+    // 1.5 Render Max Battles Section
+    if (maxBattlesContainer) {
+        maxBattlesContainer.innerHTML = '';
+        if (liveMaxBattles.length === 0) {
+            maxBattlesContainer.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active max battles found.</p>';
+        } else {
+            const maxByTier = {};
+            liveMaxBattles.forEach(m => {
+                const tier = m.tier || "Max Battles";
+                if (!maxByTier[tier]) maxByTier[tier] = [];
+                maxByTier[tier].push(m);
+            });
+
+            const keys = Object.keys(maxByTier).sort().reverse();
+            keys.forEach(tier => {
+                const sub = document.createElement('div');
+                sub.className = 'rotation-subchapter mega';
+                sub.innerHTML = `
+                    <h4 class="rotation-subchapter-title">
+                        <i class="fa-solid fa-bolt"></i> ${tier}
+                    </h4>
+                    <div class="rotation-grid-layout"></div>
+                `;
+                maxBattlesContainer.appendChild(sub);
+
+                const grid = sub.querySelector('.rotation-grid-layout');
+                maxByTier[tier].forEach(boss => {
+                    const card = document.createElement('div');
+                    const baseName = boss.name.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '');
+                    const matchedPoke = findPokemonByName(baseName);
+                    
+                    const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
+                    const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                    const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                    const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
+
+                    card.className = `rotation-card-item theme-mega ${highlightClass} spawn-animation`;
+
+                    let imgUrl = matchedPoke ? matchedPoke.img : boss.image;
+                    if (!imgUrl) {
+                        imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png`;
+                    }
+
+                    const est = boss.estimatedPlayers || 1;
+                    let estColor = '#22c55e';
+                    let estBg = 'rgba(34, 197, 94, 0.12)';
+                    let estBorder = 'rgba(34, 197, 94, 0.25)';
+                    let estText = 'Soloable (1 Player)';
+                    if (est == 2) {
+                        estText = 'Duo (2 Players)';
+                        estColor = '#3b82f6';
+                        estBg = 'rgba(59, 130, 246, 0.12)';
+                        estBorder = 'rgba(59, 130, 246, 0.25)';
+                    } else if (est == 3) {
+                        estText = 'Trio (3 Players)';
+                        estColor = '#f5a623';
+                        estBg = 'rgba(245, 166, 35, 0.12)';
+                        estBorder = 'rgba(245, 166, 35, 0.25)';
+                    } else if (est >= 4) {
+                        estText = `Group (${est}+ Players)`;
+                        estColor = '#ef4444';
+                        estBg = 'rgba(239, 68, 68, 0.12)';
+                        estBorder = 'rgba(239, 68, 68, 0.25)';
+                    }
+
+                    const estimatorBadge = `
+                        <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
+                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${est} players needed">
+                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> ${estText}
+                            </span>
+                        </div>
+                    `;
+
+                    let cpMeta = '';
+                    if (boss.cp && boss.cp.normal && boss.cp.normal.max) {
+                        cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-bolt" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${boss.cp.normal.max}</strong></span></div></div>`;
+                    }
+
+                    card.innerHTML = `
+                        ${boss.shiny ? shinySparkleSvg : ''}
+                        <div class="rotation-badges">
+                            ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
+                            ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
+                        </div>
+                        <img class="rotation-card-img" src="${imgUrl}" alt="${boss.name}">
+                        <div class="rotation-card-details-wrapper">
+                            <span class="rotation-card-name">${boss.name}</span>
+                            ${cpMeta}
+                            ${estimatorBadge}
+                        </div>
+                    `;
+
+                    if (matchedPoke) {
+                        card.style.cursor = 'pointer';
+                        card.addEventListener('click', () => openModal(matchedPoke.id));
+                    }
+                    grid.appendChild(card);
+                });
+            });
+        }
     }
 
     // 2. Group and Render Eggs by Type
