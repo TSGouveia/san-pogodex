@@ -3135,6 +3135,17 @@ function renderActiveRotations() {
                     }
                 }
 
+                let pokebattlerBtn = '';
+                if (raid.pokebattlerUrl) {
+                    pokebattlerBtn = `
+                        <div style="margin-top: 0.4rem; display: flex; align-items: center;">
+                            <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
+                                <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                            </a>
+                        </div>
+                    `;
+                }
+
                 let weatherHtml = '';
                 if (raid.weatherBoosts && raid.weatherBoosts.length > 0) {
                     const wIcons = {
