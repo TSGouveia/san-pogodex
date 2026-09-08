@@ -13,23 +13,25 @@ def scrape_rocket():
         res = requests.get(url, headers=HEADERS)
         if res.status_code == 200:
             rocket = res.json()
-            for gr in rocket:
-                lineups = gr.get("lineups") or gr.get("pokemons") or []
+            gr_list = rocket.values() if isinstance(rocket, dict) else rocket
+            for gr in gr_list:
+                lineups = gr if isinstance(gr, list) else (gr.get("lineups") or gr.get("pokemons") or [])
                 if isinstance(lineups, list):
                     for slot in lineups:
-                        p_list = slot.get("pokemons") or slot.get("pokemon") or []
-                        if isinstance(p_list, list):
-                            for p in p_list:
-                                name = p.get("name") or p.get("pokemon") or ""
-                                stats = get_pokedex_stats(poke_map, name)
-                                if stats:
-                                    # Shadow catch: Lvl 8 min IV 0, Boosted: Lvl 13 min IV 0
-                                    cp_norm = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=8, min_iv=0)
-                                    cp_boost = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=13, min_iv=0)
-                                    p["combatPower"] = {
-                                        "normal": cp_norm,
-                                        "boosted": cp_boost
-                                    }
+                        if isinstance(slot, dict):
+                            p_list = slot.get("pokemons") or slot.get("pokemon") or []
+                            if isinstance(p_list, list):
+                                for p in p_list:
+                                    if isinstance(p, dict):
+                                        name = p.get("name") or p.get("pokemon") or ""
+                                        stats = get_pokedex_stats(poke_map, name)
+                                        if stats:
+                                            cp_norm = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=8, min_iv=0)
+                                            cp_boost = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=13, min_iv=0)
+                                            p["combatPower"] = {
+                                                "normal": cp_norm,
+                                                "boosted": cp_boost
+                                            }
             print(f"  -> Saved {len(rocket)} rocket lineups with CP calculations.")
             return rocket
     except Exception as e:
