@@ -3572,23 +3572,27 @@ function renderActiveRotations() {
     }
 
     // Toggle tab buttons and sections based on actual data availability
+    const hasMaxBattles = liveMaxBattles.length > 0;
     const hasRaids = liveRaids.length > 0;
     const hasEggs = liveEggs.length > 0;
     const hasQuests = researchEncounters.length > 0;
     const hasRocket = liveRocket && Object.keys(liveRocket).length > 0;
 
+    const navBtnMaxBattles = document.querySelector('.subnav-btn[data-target="rotations-maxbattles-section"]');
     const navBtnRaids = document.querySelector('.subnav-btn[data-target="rotations-raids-section"]');
     const navBtnEggs = document.querySelector('.subnav-btn[data-target="rotations-eggs-section"]');
     const navBtnQuests = document.querySelector('.subnav-btn[data-target="rotations-quests-section"]');
     const navBtnRocket = document.querySelector('.subnav-btn[data-target="rotations-rocket-section"]');
     const navBtnParty = document.querySelector('.subnav-btn[data-target="rotations-party-section"]');
 
+    const secMaxBattles = document.getElementById('rotations-maxbattles-section');
     const secRaids = document.getElementById('rotations-raids-section');
     const secEggs = document.getElementById('rotations-eggs-section');
     const secQuests = document.getElementById('rotations-quests-section');
     const secRocket = document.getElementById('rotations-rocket-section');
     const secParty = document.getElementById('rotations-party-section');
 
+    if (navBtnMaxBattles) navBtnMaxBattles.style.display = hasMaxBattles ? '' : 'none';
     if (navBtnRaids) navBtnRaids.style.display = hasRaids ? '' : 'none';
     if (navBtnEggs) navBtnEggs.style.display = hasEggs ? '' : 'none';
     if (navBtnQuests) navBtnQuests.style.display = hasQuests ? '' : 'none';
@@ -3602,6 +3606,7 @@ function renderActiveRotations() {
         document.querySelectorAll('.subnav-btn').forEach(btn => btn.classList.remove('active'));
         
         // Hide all rotation sections initially
+        if (secMaxBattles) secMaxBattles.classList.add('hidden');
         if (secRaids) secRaids.classList.add('hidden');
         if (secEggs) secEggs.classList.add('hidden');
         if (secQuests) secQuests.classList.add('hidden');
@@ -3619,6 +3624,7 @@ function renderActiveRotations() {
     } else {
         // Just make sure active tab section is visible and other sections are hidden
         const targetSecId = activeBtn.dataset.target;
+        if (secMaxBattles) secMaxBattles.classList.toggle('hidden', targetSecId !== 'rotations-maxbattles-section');
         if (secRaids) secRaids.classList.toggle('hidden', targetSecId !== 'rotations-raids-section');
         if (secEggs) secEggs.classList.toggle('hidden', targetSecId !== 'rotations-eggs-section');
         if (secQuests) secQuests.classList.toggle('hidden', targetSecId !== 'rotations-quests-section');
