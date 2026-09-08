@@ -890,12 +890,16 @@ async function loadPokedex() {
                     else if (eggTypeLower.includes("1")) eggT = "1km";
                     if (egg.isGiftExchange) eggT = "route"; // Route Gift eggs shown as 7km
 
+                    let cpObj = egg.combatPower || null;
+                    if (!cpObj && (egg.max_cp || egg.maxCp)) {
+                        cpObj = { normal: { max: egg.max_cp || egg.maxCp, min: egg.min_cp || egg.minCp } };
+                    }
                     liveEggs.push({
                         dex: Number(dexNr),
                         name: egg.name,
                         eggT: eggT,
                         shiny: egg.canBeShiny || false,
-                        cp: egg.combatPower || null,
+                        cp: cpObj,
                         rarity: egg.rarity || null
                     });
                 }
@@ -3414,10 +3418,11 @@ function renderActiveRotations() {
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');"`;
 
                 let cpMeta = '';
-                if ((egg.cp && egg.cp.max && egg.cp.max !== 'N/A') || egg.rarity) {
+                const maxHatchCp = (egg.cp && egg.cp.normal && egg.cp.normal.max) ? egg.cp.normal.max : ((egg.cp && egg.cp.max && egg.cp.max !== 'N/A') ? egg.cp.max : null);
+                if (maxHatchCp || egg.rarity) {
                     let cpPart = '';
-                    if (egg.cp && egg.cp.max && egg.cp.max !== 'N/A') {
-                        cpPart = `<div><i class="fa-solid fa-egg" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max Hatch: <strong>${egg.cp.max}</strong> CP</span></div>`;
+                    if (maxHatchCp) {
+                        cpPart = `<div><i class="fa-solid fa-egg" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max Hatch: <strong>${maxHatchCp}</strong> CP</span></div>`;
                     }
                     let rarityPart = '';
                     if (egg.rarity) {
@@ -3529,8 +3534,9 @@ function renderActiveRotations() {
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
 
                 let cpMeta = '';
-                if (encounter.maxCp) {
-                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${encounter.maxCp}</strong></span></div></div>`;
+                const maxQuestCp = encounter.maxCp || (encounter.combatPower && encounter.combatPower.normal ? encounter.combatPower.normal.max : null);
+                if (maxQuestCp) {
+                    cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${maxQuestCp}</strong></span></div></div>`;
                 }
 
                 card.innerHTML = `
@@ -3718,6 +3724,12 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             let imgUrl = matchedPoke ? matchedPoke.img : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png`;
             const imgOnerror = `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
 
+            let cpMeta = '';
+            const partyMaxCp = item.max_cp || (item.combatPower && item.combatPower.normal ? item.combatPower.normal.max : null);
+            if (partyMaxCp) {
+                cpMeta = `<div class="rotation-cp-details" style="margin-top: 4px;"><div><i class="fa-solid fa-users" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${partyMaxCp}</strong></span></div></div>`;
+            }
+
             card.innerHTML = `
                 ${item.shiny ? shinySparkleSvg : ''}
                 <div class="rotation-badges">
@@ -3726,6 +3738,7 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
                 </div>
                 <img class="rotation-card-img" src="${imgUrl}" alt="${item.name}" ${imgOnerror}>
                 <span class="rotation-card-name">${item.name}</span>
+                ${cpMeta}
             `;
 
             card.addEventListener('click', () => {
@@ -3947,6 +3960,17 @@ function renderRocketLineups() {
                             pokeCard.addEventListener('click', () => openModal(matchedPoke.id));
                         }
 
+                        let cpDetailsHtml = '';
+                        if (poke && poke.combatPower) {
+                            const normMax = poke.combatPower.normal ? poke.combatPower.normal.max : null;
+                            const boostMax = poke.combatPower.boosted ? poke.combatPower.boosted.max : null;
+                            let normText = normMax ? `<span>Shadow: <strong>${normMax}</strong> CP</span>` : '';
+                            let boostText = boostMax ? `<span>WB: <strong>${boostMax}</strong> CP</span>` : '';
+                            if (normText || boostText) {
+                                cpDetailsHtml = `<div style="font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; display: flex; gap: 6px;">${normText}${boostText}</div>`;
+                            }
+                        }
+
                         pokeCard.innerHTML = `
                             <img src="${imgUrl}" alt="${displayName}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.src='${poke.asset_url || ''}'; this.onerror=null;">
                             <div style="display: flex; flex-direction: column; gap: 2px;">
@@ -3954,6 +3978,7 @@ function renderRocketLineups() {
                                     ${displayName}${shinyHtml}
                                 </span>
                                 <div style="display: flex; gap: 4px; flex-wrap: wrap;">${statusBadges.join('')}</div>
+                                ${cpDetailsHtml}
                             </div>
                         `;
                         pokeList.appendChild(pokeCard);
