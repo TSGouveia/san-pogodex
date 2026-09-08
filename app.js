@@ -3120,10 +3120,16 @@ function renderActiveRotations() {
 
                 let cpMeta = '';
                 if (raid.cp) {
+                    const getCpVal = (obj) => {
+                        if (obj == null) return null;
+                        if (typeof obj === 'number' || typeof obj === 'string') return Number(obj) || null;
+                        if (typeof obj === 'object') return obj.max || obj.min || obj.cp || null;
+                        return null;
+                    };
                     let normalText = '';
                     let boostedText = '';
-                    const normVal = raid.cp.normal ? (raid.cp.normal.max || raid.cp.normal.min) : null;
-                    const boostVal = raid.cp.boosted ? (raid.cp.boosted.max || raid.cp.boosted.min) : null;
+                    const normVal = getCpVal(raid.cp.normal) || (typeof raid.cp === 'number' ? raid.cp : null);
+                    const boostVal = getCpVal(raid.cp.boosted);
                     if (normVal) {
                         normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                     }
@@ -3264,10 +3270,16 @@ function renderActiveRotations() {
 
                     let cpMeta = '';
                     if (boss.cp) {
+                        const getCpVal = (obj) => {
+                            if (obj == null) return null;
+                            if (typeof obj === 'number' || typeof obj === 'string') return Number(obj) || null;
+                            if (typeof obj === 'object') return obj.max || obj.min || obj.cp || null;
+                            return null;
+                        };
                         let normalText = '';
                         let boostedText = '';
-                        const normVal = boss.cp.normal ? (boss.cp.normal.max || boss.cp.normal.min) : null;
-                        const boostVal = boss.cp.boosted ? (boss.cp.boosted.max || boss.cp.boosted.min) : null;
+                        const normVal = getCpVal(boss.cp.normal) || (typeof boss.cp === 'number' ? boss.cp : null);
+                        const boostVal = getCpVal(boss.cp.boosted);
                         if (normVal) {
                             normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                         }

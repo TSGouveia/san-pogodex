@@ -271,24 +271,25 @@ def scrape_raids():
                                 weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
 
                     cp_dict = None
-                    if guide_info["cp_normal_max"] and guide_info["cp_boosted_max"]:
-                        cp_dict = {
-                            "normal": {
-                                "min": guide_info["cp_normal_min"] or 0,
-                                "max": guide_info["cp_normal_max"] or 0
-                            },
-                            "boosted": {
-                                "min": guide_info["cp_boosted_min"] or 0,
-                                "max": guide_info["cp_boosted_max"] or 0
-                            }
-                        }
-                    elif dex_entry.get("stats"):
+                    if dex_entry.get("stats"):
                         stats = dex_entry["stats"]
                         b_atk = stats.get("attack") or stats.get("baseAttack") or stats.get("atk", 0)
                         b_def = stats.get("defense") or stats.get("baseDefense") or stats.get("def", 0)
                         b_sta = stats.get("stamina") or stats.get("baseStamina") or stats.get("sta", 0)
                         if b_atk and b_def and b_sta:
                             cp_dict = get_cp_from_stats(b_atk, b_def, b_sta)
+
+                    if not cp_dict and (guide_info.get("cp_normal_max") or guide_info.get("cp_boosted_max")):
+                        cp_dict = {
+                            "normal": {
+                                "min": guide_info.get("cp_normal_min") or 0,
+                                "max": guide_info.get("cp_normal_max") or 0
+                            },
+                            "boosted": {
+                                "min": guide_info.get("cp_boosted_min") or 0,
+                                "max": guide_info.get("cp_boosted_max") or 0
+                            }
+                        }
 
                     img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else ""
 
