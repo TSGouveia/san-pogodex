@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -7,6 +8,7 @@ HEADERS = {
 
 def scrape_research():
     print("Scraping Field Research...")
+    poke_map = load_pokedex_map()
     try:
         url = "https://leekduck.com/research/"
         res = requests.get(url, headers=HEADERS, timeout=10)
@@ -34,13 +36,22 @@ def scrape_research():
                 min_cp = min_cp_el.text.replace("Min CP", "").strip() if min_cp_el else None
                 max_cp = max_cp_el.text.replace("Max CP", "").strip() if max_cp_el else None
 
+                stats = get_pokedex_stats(poke_map, reward_name)
+                cp_dict = None
+                if stats:
+                    cp_data = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=15, min_iv=10)
+                    cp_dict = {"normal": cp_data}
+                    min_cp = min_cp or cp_data["min"]
+                    max_cp = max_cp or cp_data["max"]
+
                 if reward_name:
                     encounter_rewards.append({
                         "name": reward_name,
                         "image": img_url,
                         "shiny": shiny,
                         "min_cp": min_cp,
-                        "max_cp": max_cp
+                        "max_cp": max_cp,
+                        "combatPower": cp_dict
                     })
 
             if encounter_rewards:
@@ -49,7 +60,7 @@ def scrape_research():
                     "rewards": encounter_rewards
                 })
 
-        print(f"  -> Saved {len(tasks)} Pokémon encounter research tasks.")
+        print(f"  -> Saved {len(tasks)} Pokémon encounter research tasks with CP calculations.")
         return tasks
     except Exception as e:
         print(f"Error scraping research: {e}")
@@ -57,4 +68,5 @@ def scrape_research():
 
 if __name__ == "__main__":
     scrape_research()
+
 

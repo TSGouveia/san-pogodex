@@ -1,4 +1,5 @@
 import requests
+from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -6,6 +7,7 @@ HEADERS = {
 
 def scrape_party():
     print("Scraping Party Challenges...")
+    poke_map = load_pokedex_map()
     # Verified Party Play Pokémon Encounters from LeekDuck & Pokémon GO Hub
     party_encounters = [
         { "dex": 924, "name": "Tandemaus", "task": "Complete Party Challenges", "shiny": True },
@@ -27,6 +29,14 @@ def scrape_party():
         { "dex": 109, "name": "Koffing", "task": "10 Nice Throws", "shiny": True }
     ]
 
+    for item in party_encounters:
+        stats = get_pokedex_stats(poke_map, item["name"]) or get_pokedex_stats(poke_map, item.get("dex"))
+        if stats:
+            cp_data = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=15, min_iv=10)
+            item["combatPower"] = {"normal": cp_data}
+            item["min_cp"] = cp_data["min"]
+            item["max_cp"] = cp_data["max"]
+
     try:
         url = "https://leekduck.com/party-play/"
         res = requests.get(url, headers=HEADERS, timeout=10)
@@ -35,9 +45,10 @@ def scrape_party():
     except Exception as e:
         print(f"  -> Party Play scrape note: {e}")
 
-    print(f"  -> Saved {len(party_encounters)} Party Play Pokémon encounters.")
+    print(f"  -> Saved {len(party_encounters)} Party Play Pokémon encounters with CP calculations.")
     return party_encounters
 
 if __name__ == "__main__":
     scrape_party()
+
 
