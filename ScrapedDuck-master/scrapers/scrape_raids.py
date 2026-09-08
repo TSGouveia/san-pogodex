@@ -323,9 +323,11 @@ def scrape_raids():
                     for r in t.get("raids", []):
                         raw_id = r.get("pokemonId") or r.get("pokemon", "")
                         raw_id_upper = raw_id.upper()
-                        p_info = poke_map.get(raw_id_upper) or poke_map.get(name_eng.upper()) or {}
-                        dex_nr = p_info.get("dexNr")
+                        p_info = poke_map.get(raw_id_upper) or {}
                         name_eng = p_info.get("names", {}).get("English") or r.get("pokemon", "").capitalize()
+                        if not p_info:
+                            p_info = poke_map.get(name_eng.upper()) or {}
+                        dex_nr = p_info.get("dexNr")
                         img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
                         
                         types = []
