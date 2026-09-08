@@ -3273,7 +3273,7 @@ function renderActiveRotations() {
                         const getCpVal = (obj) => {
                             if (obj == null) return null;
                             if (typeof obj === 'number' || typeof obj === 'string') return Number(obj) || null;
-                            if (typeof obj === 'object') return obj.max || obj.min || obj.cp || null;
+                            if (typeof obj === 'object') return obj.max || obj.cp || obj.min || null;
                             return null;
                         };
                         let normalText = '';
