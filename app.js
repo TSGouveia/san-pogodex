@@ -3679,7 +3679,9 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
                     dex: matchedPoke.id,
                     name: matchedPoke.name,
                     task: item.task || "Party Challenge",
-                    shiny: item.shiny || false
+                    shiny: item.shiny || false,
+                    max_cp: item.max_cp || item.maxCp || null,
+                    combatPower: item.combatPower || null
                 });
             }
         }
