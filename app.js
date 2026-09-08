@@ -3122,8 +3122,8 @@ function renderActiveRotations() {
                 if (raid.cp) {
                     let normalText = '';
                     let boostedText = '';
-                    const normVal = raid.cp.normal ? (raid.cp.normal.min && raid.cp.normal.min !== raid.cp.normal.max ? `${raid.cp.normal.min}–${raid.cp.normal.max}` : raid.cp.normal.max) : null;
-                    const boostVal = raid.cp.boosted ? (raid.cp.boosted.min && raid.cp.boosted.min !== raid.cp.boosted.max ? `${raid.cp.boosted.min}–${raid.cp.boosted.max}` : raid.cp.boosted.max) : null;
+                    const normVal = raid.cp.normal ? (raid.cp.normal.max || raid.cp.normal.min) : null;
+                    const boostVal = raid.cp.boosted ? (raid.cp.boosted.max || raid.cp.boosted.min) : null;
                     if (normVal) {
                         normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                     }
@@ -3266,8 +3266,8 @@ function renderActiveRotations() {
                     if (boss.cp) {
                         let normalText = '';
                         let boostedText = '';
-                        const normVal = boss.cp.normal ? (boss.cp.normal.min && boss.cp.normal.min !== boss.cp.normal.max ? `${boss.cp.normal.min}–${boss.cp.normal.max}` : boss.cp.normal.max) : null;
-                        const boostVal = boss.cp.boosted ? (boss.cp.boosted.min && boss.cp.boosted.min !== boss.cp.boosted.max ? `${boss.cp.boosted.min}–${boss.cp.boosted.max}` : boss.cp.boosted.max) : null;
+                        const normVal = boss.cp.normal ? (boss.cp.normal.max || boss.cp.normal.min) : null;
+                        const boostVal = boss.cp.boosted ? (boss.cp.boosted.max || boss.cp.boosted.min) : null;
                         if (normVal) {
                             normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                         }
