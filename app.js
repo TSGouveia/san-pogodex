@@ -944,6 +944,7 @@ function buildPokebattlerMaxUrl(bossName) {
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
+                    trainersText: boss.trainersText || null,
                     estimatedPlayers: boss.estimatedPlayers || null,
                     pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(boss.name),
                     counters: {},
@@ -967,7 +968,7 @@ function buildPokebattlerMaxUrl(bossName) {
                     cp: boss.combatPower || null,
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
-                    estimatedPlayers: boss.estimatedPlayers || 1,
+                    weatherBoosts: boss.boostedWeather || [],
                     pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerMaxUrl(boss.name)
                 });
             });
@@ -2145,12 +2146,7 @@ function renderMissingSummary() {
         } else if (currentHuntMethod === 'raid') {
             const matchedRaid = liveRaids.find(r => r.name.toLowerCase() === poke.name.toLowerCase() || r.name.toLowerCase().replace(/^shadow\s+/g, '') === poke.name.toLowerCase());
             if (matchedRaid) {
-                let estText = '';
-                if (matchedRaid.estimatedPlayers) {
-                    const est = matchedRaid.estimatedPlayers;
-                    estText = ` (${est} ${est === 1 ? 'Player' : 'Players'})`;
-                }
-                previewText = `Available in: ${matchedRaid.tier}${estText}`;
+                previewText = `Available in: ${matchedRaid.tier}`;
             }
         } else if (currentHuntMethod === 'wild') {
             const matchedSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
@@ -2379,10 +2375,6 @@ function loadObtainingTab(poke) {
         }
         
         let estBadge = '';
-        if (activeRaid.estimatedPlayers) {
-            const est = activeRaid.estimatedPlayers;
-            estBadge = ` (Estimator: <strong>${est} ${est === 1 ? 'Player' : 'Players'}</strong>)`;
-        }
         
         raidCard.innerHTML = `
             <div class="obtain-icon-box" style="color: #a78bfa; background: rgba(167, 139, 250, 0.15);">
@@ -3130,85 +3122,17 @@ function renderActiveRotations() {
                 if (raid.cp) {
                     let normalText = '';
                     let boostedText = '';
-                    if (raid.cp.normal && raid.cp.normal.max) {
-                        normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${raid.cp.normal.max}</strong> CP</span></div>`;
+                    const normVal = raid.cp.normal ? (raid.cp.normal.min && raid.cp.normal.min !== raid.cp.normal.max ? `${raid.cp.normal.min}–${raid.cp.normal.max}` : raid.cp.normal.max) : null;
+                    const boostVal = raid.cp.boosted ? (raid.cp.boosted.min && raid.cp.boosted.min !== raid.cp.boosted.max ? `${raid.cp.boosted.min}–${raid.cp.boosted.max}` : raid.cp.boosted.max) : null;
+                    if (normVal) {
+                        normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                     }
-                    if (raid.cp.boosted && raid.cp.boosted.max) {
-                        boostedText = `<div><i class="fa-solid fa-cloud-sun-rain" style="font-size:0.65rem; opacity:0.7;"></i> <span>Boosted: <strong>${raid.cp.boosted.max}</strong> CP</span></div>`;
+                    if (boostVal) {
+                        boostedText = `<div><i class="fa-solid fa-cloud-sun-rain" style="font-size:0.65rem; opacity:0.7;"></i> <span>Boosted: <strong>${boostVal}</strong> CP</span></div>`;
                     }
                     if (normalText || boostedText) {
                         cpMeta = `<div class="rotation-cp-details">${normalText}${boostedText}</div>`;
                     }
-                }
-
-                let recommendedTrainers = '';
-                if (raid.battleResult) {
-                    const easyEst = raid.battleResult.easy ? raid.battleResult.easy.totalEstimator : null;
-                    const normalEst = raid.battleResult.normal ? raid.battleResult.normal.totalEstimator : null;
-                    const hardEst = raid.battleResult.hard ? raid.battleResult.hard.totalEstimator : null;
-
-                    const easyVal = typeof easyEst === 'number' ? easyEst.toFixed(1) : '-';
-                    const normalVal = typeof normalEst === 'number' ? normalEst.toFixed(1) : '-';
-                    const hardVal = typeof hardEst === 'number' ? hardEst.toFixed(1) : '-';
-
-                    recommendedTrainers = `
-                        <div class="difficulty-estimators" style="display: flex; gap: 6px; justify-content: flex-start; margin-top: 0.3rem; font-size: 0.7rem; font-weight: 700;">
-                            <span style="color: #ef4444; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.2); padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 2px;" title="Hard (Lvl 40)">
-                                <i class="fa-solid fa-fire-flame-curved" style="font-size:0.6rem;"></i> H:${hardVal}
-                            </span>
-                            <span style="color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.2); padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 2px;" title="Normal (Lvl 30)">
-                                <i class="fa-solid fa-shield" style="font-size:0.6rem;"></i> N:${normalVal}
-                            </span>
-                            <span style="color: #34d399; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.2); padding: 2px 6px; border-radius: 4px; display: flex; align-items: center; gap: 2px;" title="Easy (Lvl 20)">
-                                <i class="fa-solid fa-leaf" style="font-size:0.6rem;"></i> E:${easyVal}
-                            </span>
-                        </div>
-                    `;
-                }
-
-                let pokebattlerBtn = '';
-                if (raid.pokebattlerUrl) {
-                    pokebattlerBtn = `
-                        <div style="margin-top: 0.4rem; display: flex; align-items: center;">
-                            <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
-                                <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
-                            </a>
-                        </div>
-                    `;
-                }
-
-                if (!recommendedTrainers && raid.estimatedPlayers) {
-                    const est = raid.estimatedPlayers;
-                    const estNum = typeof est === 'number' ? est : parseFloat(est);
-                    const estVal = !isNaN(estNum) ? (Number.isInteger(estNum) ? estNum : estNum.toFixed(2)) : est;
-                    
-                    let estLabel = `${estVal} (Soloable)`;
-                    let estColor = '#22c55e';
-                    let estBg = 'rgba(34, 197, 94, 0.12)';
-                    let estBorder = 'rgba(34, 197, 94, 0.25)';
-                    if (estNum > 1 && estNum <= 2) {
-                        estLabel = `${estVal} (Duo)`;
-                        estColor = '#3b82f6';
-                        estBg = 'rgba(59, 130, 246, 0.12)';
-                        estBorder = 'rgba(59, 130, 246, 0.25)';
-                    } else if (estNum > 2 && estNum <= 3) {
-                        estLabel = `${estVal} (Trio)`;
-                        estColor = '#f5a623';
-                        estBg = 'rgba(245, 166, 35, 0.12)';
-                        estBorder = 'rgba(245, 166, 35, 0.25)';
-                    } else if (estNum > 3) {
-                        estLabel = `${estVal} (Group)`;
-                        estColor = '#ef4444';
-                        estBg = 'rgba(239, 68, 68, 0.12)';
-                        estBorder = 'rgba(239, 68, 68, 0.25)';
-                    }
-                    recommendedTrainers = `
-                        <div style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700;">
-                            <span style="color: ${estColor}; background: ${estBg}; border: 1px solid ${estBorder}; padding: 2px 7px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;" title="Pokebattler Estimator: ${estVal} players needed">
-                                <i class="fa-solid fa-users" style="font-size:0.65rem;"></i> Estimator: <strong>${estLabel}</strong>
-                            </span>
-                        </div>
-                    `;
                 }
 
                 let weatherHtml = '';
@@ -3255,7 +3179,6 @@ function renderActiveRotations() {
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
                         ${cpMeta}
-                        ${recommendedTrainers}
                         ${weatherHtml}
                         ${countersHtml}
                         ${pokebattlerBtn}
@@ -3329,8 +3252,41 @@ function renderActiveRotations() {
                     }
 
                     let cpMeta = '';
-                    if (boss.cp && boss.cp.normal && boss.cp.normal.max) {
-                        cpMeta = `<div class="rotation-cp-details"><div><i class="fa-solid fa-bolt" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${boss.cp.normal.max}</strong></span></div></div>`;
+                    if (boss.cp) {
+                        let normalText = '';
+                        let boostedText = '';
+                        const normVal = boss.cp.normal ? (boss.cp.normal.min && boss.cp.normal.min !== boss.cp.normal.max ? `${boss.cp.normal.min}–${boss.cp.normal.max}` : boss.cp.normal.max) : null;
+                        const boostVal = boss.cp.boosted ? (boss.cp.boosted.min && boss.cp.boosted.min !== boss.cp.boosted.max ? `${boss.cp.boosted.min}–${boss.cp.boosted.max}` : boss.cp.boosted.max) : null;
+                        if (normVal) {
+                            normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
+                        }
+                        if (boostVal) {
+                            boostedText = `<div><i class="fa-solid fa-cloud-sun-rain" style="font-size:0.65rem; opacity:0.7;"></i> <span>Boosted: <strong>${boostVal}</strong> CP</span></div>`;
+                        }
+                        if (normalText || boostedText) {
+                            cpMeta = `<div class="rotation-cp-details">${normalText}${boostedText}</div>`;
+                        }
+                    }
+
+                    let weatherHtml = '';
+                    if (boss.weatherBoosts && boss.weatherBoosts.length > 0) {
+                        const wIcons = {
+                            sunny: 'fa-sun',
+                            clear: 'fa-sun',
+                            rainy: 'fa-cloud-showers-water',
+                            partlycloudy: 'fa-cloud-sun',
+                            cloudy: 'fa-cloud',
+                            windy: 'fa-wind',
+                            snow: 'fa-snowflake',
+                            fog: 'fa-smog'
+                        };
+                        const badges = boss.weatherBoosts.map(w => {
+                            const wName = typeof w === 'object' && w ? (w.name || '') : String(w || '');
+                            const wLower = safeLower(wName).replace(/_/g, '').trim();
+                            const icon = wIcons[wLower] || 'fa-cloud-sun';
+                            return `<span class="weather-badge" style="font-size: 0.68rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 3px;" title="Boosted in ${wName} weather"><i class="fa-solid ${icon}"></i> ${wName}</span>`;
+                        }).join(', ');
+                        weatherHtml = `<div class="raid-weather-boosts" style="margin-top: 0.3rem; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span>Weather Boost:</span> ${badges}</div>`;
                     }
 
                     card.innerHTML = `
@@ -3343,6 +3299,7 @@ function renderActiveRotations() {
                         <div class="rotation-card-details-wrapper">
                             <span class="rotation-card-name">${boss.name}</span>
                             ${cpMeta}
+                            ${weatherHtml}
                             ${pokebattlerBtn}
                         </div>
                     `;
