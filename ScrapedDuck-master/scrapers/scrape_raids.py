@@ -157,6 +157,82 @@ def build_pokebattler_max_url(boss_name):
     name = boss_name.replace("Dynamax", "").replace("Gigantamax", "").strip().upper().replace(" ", "_")
     return f"https://www.pokebattler.com/max/DYNAMAX_{name}"
 
+def get_boss_image_url(name, dex_nr):
+    name_lower = name.lower().strip()
+    clean_lower = re.sub(r'^(shadow|dynamax|gigantamax)\s+', '', name_lower).strip()
+
+    # Special legend forms
+    if 'dawn wings' in clean_lower or 'dawn_wings' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10156.png"
+    if 'dusk mane' in clean_lower or 'dusk_mane' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10155.png"
+    if 'black kyurem' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png"
+    if 'white kyurem' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png"
+    if 'crowned sword' in clean_lower or 'zacian crowned' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png"
+    if 'crowned shield' in clean_lower or 'zamazenta crowned' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png"
+    if 'giratina' in clean_lower and 'origin' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png"
+    if 'giratina' in clean_lower and 'altered' in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/487.png"
+
+    # Megas & Primals
+    if clean_lower.startswith('mega ') or clean_lower.startswith('super mega '):
+        base = re.sub(r'^(super mega|mega)\s+', '', clean_lower).strip()
+        if base.endswith(' x'):
+            key = f"{base[:-2].strip()}-mega-x"
+        elif base.endswith(' y'):
+            key = f"{base[:-2].strip()}-mega-y"
+        else:
+            key = f"{base}-mega"
+        mega_ids = {
+            "venusaur-mega": 10033, "charizard-mega-x": 10034, "charizard-mega-y": 10035, "blastoise-mega": 10036,
+            "beedrill-mega": 10090, "pidgeot-mega": 10073, "alakazam-mega": 10037, "slowbro-mega": 10071,
+            "gengar-mega": 10038, "kangaskhan-mega": 10039, "pinsir-mega": 10040, "gyarados-mega": 10041,
+            "aerodactyl-mega": 10042, "mewtwo-mega-x": 10043, "mewtwo-mega-y": 10044, "ampharos-mega": 10045,
+            "steelix-mega": 10072, "scizor-mega": 10046, "heracross-mega": 10047, "houndoom-mega": 10048,
+            "tyranitar-mega": 10049, "sceptile-mega": 10065, "blaziken-mega": 10050, "swampert-mega": 10064,
+            "gardevoir-mega": 10051, "sableye-mega": 10066, "mawile-mega": 10052, "aggron-mega": 10053,
+            "medicham-mega": 10054, "manectric-mega": 10055, "sharpedo-mega": 10070, "camerupt-mega": 10087,
+            "altaria-mega": 10067, "banette-mega": 10056, "absol-mega": 10057, "glalie-mega": 10074,
+            "salamence-mega": 10089, "metagross-mega": 10076, "latias-mega": 10062, "latios-mega": 10063,
+            "kyogre-primal": 10077, "groudon-primal": 10078, "rayquaza-mega": 10079, "lopunny-mega": 10088,
+            "garchomp-mega": 10058, "lucario-mega": 10059, "abomasnow-mega": 10060, "gallade-mega": 10068,
+            "audino-mega": 10069, "diancie-mega": 10075
+        }
+        if key in mega_ids:
+            return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{mega_ids[key]}.png"
+
+    # Regional forms
+    regional_ids = {
+        "rattata-alola": 10091, "raticate-alola": 10092, "raichu-alola": 10100, "sandshrew-alola": 10101,
+        "sandslash-alola": 10102, "vulpix-alola": 10103, "ninetales-alola": 10104, "diglett-alola": 10105,
+        "dugtrio-alola": 10106, "meowth-alola": 10107, "persian-alola": 10108, "geodude-alola": 10109,
+        "graveler-alola": 10110, "golem-alola": 10111, "grimer-alola": 10112, "muk-alola": 10113,
+        "exeggutor-alola": 10114, "marowak-alola": 10115, "meowth-galar": 10161, "ponyta-galar": 10162,
+        "rapidash-galar": 10163, "slowpoke-galar": 10164, "slowbro-galar": 10165, "farfetchd-galar": 10166,
+        "weezing-galar": 10167, "mr-mime-galar": 10168, "articuno-galar": 10169, "zapdos-galar": 10170,
+        "moltres-galar": 10171, "slowking-galar": 10172, "corsola-galar": 10173, "zigzagoon-galar": 10174,
+        "linoone-galar": 10175, "darumaka-galar": 10176, "darmanitan-galar": 10177, "yamask-galar": 10179,
+        "stunfisk-galar": 10180, "growlithe-hisui": 10229, "arcanine-hisui": 10230, "voltorb-hisui": 10231,
+        "electrode-hisui": 10232, "typhlosion-hisui": 10233, "qwilfish-hisui": 10234, "sneasel-hisui": 10235,
+        "samurott-hisui": 10236, "lilligant-hisui": 10237, "zorua-hisui": 10238, "zoroark-hisui": 10239,
+        "braviary-hisui": 10240, "sliggoo-hisui": 10241, "goodra-hisui": 10242, "avalugg-hisui": 10243,
+        "decidueye-hisui": 10244, "tauros-paldea": 10250, "wooper-paldea": 10253
+    }
+    for prefix, region in [('alolan ', 'alola'), ('alola ', 'alola'), ('galarian ', 'galar'), ('galar ', 'galar'), ('hisuian ', 'hisui'), ('hisui ', 'hisui'), ('paldean ', 'paldea'), ('paldea ', 'paldea')]:
+        if prefix in clean_lower:
+            base = clean_lower.replace(prefix, '').strip()
+            base = re.sub(r'\s*\([^)]*\)', '', base).strip()
+            key = f"{base}-{region}".replace(' ', '-')
+            if key in regional_ids:
+                return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{regional_ids[key]}.png"
+
+    return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else ""
+
 def scrape_raids():
     print("Scraping Raids from Pokémon GO Hub...")
     bosses = []
@@ -291,7 +367,7 @@ def scrape_raids():
                             }
                         }
 
-                    img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else ""
+                    img_url = get_boss_image_url(clean_name, dex_nr)
 
                     can_be_shiny = bool((dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
                     pb_url = build_pokebattler_raid_url(clean_name)
@@ -323,8 +399,9 @@ def scrape_raids():
                     for r in t.get("raids", []):
                         raw_id = r.get("pokemonId") or r.get("pokemon", "")
                         raw_id_upper = raw_id.upper()
-                        p_info = poke_map.get(raw_id_upper) or {}
-                        name_eng = p_info.get("names", {}).get("English") or r.get("pokemon", "").capitalize()
+                        clean_id = re.sub(r'^(DYNAMAX_|GIGANTAMAX_|MEGA_|SHADOW_)', '', raw_id_upper).strip()
+                        p_info = poke_map.get(clean_id) or poke_map.get(raw_id_upper) or {}
+                        name_eng = p_info.get("names", {}).get("English") or clean_id.capitalize()
                         if not p_info:
                             p_info = poke_map.get(name_eng.upper()) or {}
                         dex_nr = p_info.get("dexNr")

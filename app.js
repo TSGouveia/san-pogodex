@@ -153,11 +153,15 @@ function getRegionalFormPokeApiId(name) {
 
 function getMegaPokeApiIdFallback(key) {
     const fallbacks = {
+        // Gen 1
         "venusaur-mega": "10033",
         "charizard-mega-x": "10034",
         "charizard-mega-y": "10035",
         "blastoise-mega": "10036",
+        "beedrill-mega": "10090",
+        "pidgeot-mega": "10073",
         "alakazam-mega": "10037",
+        "slowbro-mega": "10071",
         "gengar-mega": "10038",
         "kangaskhan-mega": "10039",
         "pinsir-mega": "10040",
@@ -165,43 +169,51 @@ function getMegaPokeApiIdFallback(key) {
         "aerodactyl-mega": "10042",
         "mewtwo-mega-x": "10043",
         "mewtwo-mega-y": "10044",
+
+        // Gen 2
         "ampharos-mega": "10045",
-        "steelix-mega": "10046",
-        "scizor-mega": "10047",
-        "heracross-mega": "10048",
-        "houndoom-mega": "10049",
-        "tyranitar-mega": "10050",
+        "steelix-mega": "10072",
+        "scizor-mega": "10046",
+        "heracross-mega": "10047",
+        "houndoom-mega": "10048",
+        "tyranitar-mega": "10049",
+
+        // Gen 3
         "sceptile-mega": "10065",
-        "blaziken-mega": "10066",
-        "swampert-mega": "10067",
-        "gardevoir-mega": "10068",
-        "sableye-mega": "10069",
-        "mawile-mega": "10070",
-        "aggron-mega": "10071",
-        "medicham-mega": "10072",
-        "manectric-mega": "10073",
-        "sharpedo-mega": "10074",
-        "camerupt-mega": "10075",
-        "altaria-mega": "10076",
-        "banette-mega": "10077",
-        "absol-mega": "10078",
-        "glalie-mega": "10079",
-        "salamence-mega": "10080",
-        "metagross-mega": "10081",
-        "latias-mega": "10082",
-        "latios-mega": "10083",
-        "rayquaza-mega": "10084",
-        "garchomp-mega": "10085",
-        "lucario-mega": "10086",
-        "abomasnow-mega": "10087",
-        "gallade-mega": "10091",
-        "audino-mega": "10092",
-        "diancie-mega": "10093",
-        "beedrill-mega": "10100",
-        "pidgeot-mega": "10101",
-        "slowbro-mega": "10102",
-        "kyogre-primal": "10088",
-        "groudon-primal": "10089"
+        "blaziken-mega": "10050",
+        "swampert-mega": "10064",
+        "gardevoir-mega": "10051",
+        "sableye-mega": "10066",
+        "mawile-mega": "10052",
+        "aggron-mega": "10053",
+        "medicham-mega": "10054",
+        "manectric-mega": "10055",
+        "sharpedo-mega": "10070",
+        "camerupt-mega": "10087",
+        "altaria-mega": "10067",
+        "banette-mega": "10056",
+        "absol-mega": "10057",
+        "glalie-mega": "10074",
+        "salamence-mega": "10089",
+        "metagross-mega": "10076",
+        "latias-mega": "10062",
+        "latios-mega": "10063",
+        "kyogre-primal": "10077",
+        "groudon-primal": "10078",
+        "rayquaza-mega": "10079",
+
+        // Gen 4
+        "lopunny-mega": "10088",
+        "garchomp-mega": "10058",
+        "lucario-mega": "10059",
+        "abomasnow-mega": "10060",
+        "gallade-mega": "10068",
+
+        // Gen 5
+        "audino-mega": "10069",
+
+        // Gen 6
+        "diancie-mega": "10075"
     };
     return fallbacks[key] || null;
 }
@@ -3970,17 +3982,6 @@ function renderRocketLineups() {
                             pokeCard.addEventListener('click', () => openModal(matchedPoke.id));
                         }
 
-                        let cpDetailsHtml = '';
-                        if (poke && poke.combatPower) {
-                            const normMax = poke.combatPower.normal ? poke.combatPower.normal.max : null;
-                            const boostMax = poke.combatPower.boosted ? poke.combatPower.boosted.max : null;
-                            let normText = normMax ? `<span>Shadow: <strong>${normMax}</strong> CP</span>` : '';
-                            let boostText = boostMax ? `<span>WB: <strong>${boostMax}</strong> CP</span>` : '';
-                            if (normText || boostText) {
-                                cpDetailsHtml = `<div style="font-size: 0.68rem; color: var(--text-secondary); margin-top: 2px; display: flex; gap: 6px;">${normText}${boostText}</div>`;
-                            }
-                        }
-
                         pokeCard.innerHTML = `
                             <img src="${imgUrl}" alt="${displayName}" style="width: 32px; height: 32px; object-fit: contain;" onerror="this.src='${poke.asset_url || ''}'; this.onerror=null;">
                             <div style="display: flex; flex-direction: column; gap: 2px;">
@@ -3988,7 +3989,6 @@ function renderRocketLineups() {
                                     ${displayName}${shinyHtml}
                                 </span>
                                 <div style="display: flex; gap: 4px; flex-wrap: wrap;">${statusBadges.join('')}</div>
-                                ${cpDetailsHtml}
                             </div>
                         `;
                         pokeList.appendChild(pokeCard);

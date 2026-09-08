@@ -9,6 +9,9 @@ CPM_MAP = {
     15: 0.51739399,  # Field Research / Party Play / Special Research
     20: 0.59740001,  # Raids / Max Battles / Eggs / PvP Rewards (Normal)
     25: 0.66793400,  # Raids / Max Battles (Weather Boosted)
+    30: 0.73170000,  # Wild Max (Normal L30)
+    35: 0.76156380,  # Wild Max (Boosted L35)
+    50: 0.84030000,  # Max Level 50
 }
 
 def load_pokedex_map():
