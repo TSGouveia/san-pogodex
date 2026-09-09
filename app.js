@@ -514,6 +514,25 @@ function formatItemName(itemId) {
         .join(' ');
 }
 
+// Evolution Quest name formatter
+function formatQuestName(quest) {
+    if (!quest) return '';
+    if (typeof quest === 'string') return quest;
+    if (typeof quest === 'object') {
+        if (quest.names && quest.names.English) return quest.names.English;
+        if (quest.text) return quest.text;
+        if (quest.id) {
+            return quest.id
+                .replace(/_EVOLUTION_QUEST$/, '')
+                .replace(/QUEST_/, '')
+                .split('_')
+                .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                .join(' ');
+        }
+    }
+    return String(quest);
+}
+
 /**
  * Formats raw spawn/event names from the API (often ALL_CAPS or Title Case with form suffixes)
  * into readable display names.
@@ -2290,7 +2309,7 @@ function compileObtainingDetails(poke) {
             req += ` + ${formatItemName(parentInfo.item)}`;
         }
         if (parentInfo.quests && parentInfo.quests.length > 0) {
-            req += ` after completing Buddy quest: "${parentInfo.quests[0]}"`;
+            req += ` after completing Buddy quest: "${formatQuestName(parentInfo.quests[0])}"`;
         }
         
         lines.push(`
@@ -2390,7 +2409,7 @@ function loadObtainingTab(poke) {
         const candy = parentInfo.candies;
         let req = `Evolves from ${parentInfo.name} with ${candy} Candies`;
         if (parentInfo.item) req += ` + ${formatItemName(parentInfo.item)}`;
-        if (parentInfo.quests && parentInfo.quests.length > 0) req += ` after completing Buddy quest: "${parentInfo.quests[0]}"`;
+        if (parentInfo.quests && parentInfo.quests.length > 0) req += ` after completing Buddy quest: "${formatQuestName(parentInfo.quests[0])}"`;
 
         const evoCard = document.createElement('div');
         evoCard.className = 'obtain-card';
