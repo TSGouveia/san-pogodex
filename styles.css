@@ -2231,11 +2231,35 @@ input, button, select {
     flex-grow: 1;
 }
 
+.family-header-interactive {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.family-header-interactive:hover {
+    opacity: 0.85;
+}
+
+.family-header-interactive:hover .family-title {
+    color: var(--accent-color);
+}
+
 .family-stage-item {
     display: flex;
     align-items: center;
     font-size: 0.8rem;
     gap: 0.5rem;
+    padding: 3px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.family-stage-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.family-stage-item:hover .stage-name {
+    color: var(--accent-color);
 }
 
 .family-stage-item.caught {

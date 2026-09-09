@@ -1,4 +1,4 @@
-﻿/**
+/**
  * SilphRoad Dex - Core Application JavaScript
  * Dynamic Pokémon GO PokéDex Loader, local storage state persistence, and filtering.
  */
@@ -4875,10 +4875,12 @@ function renderCandiesPane() {
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
-                <img src="${displayImg}" alt="${family.base.name}" class="family-base-img">
-                <div class="family-info">
-                    <h3 class="family-title">${family.base.name}</h3>
-                    <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
+                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View ${family.base.name} details">
+                    <img src="${displayImg}" alt="${family.base.name}" class="family-base-img">
+                    <div class="family-info">
+                        <h3 class="family-title">${family.base.name} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i></h3>
+                        <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
+                    </div>
                 </div>
                 <div class="candy-input-wrapper">
                     <img src="https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/rare-candy.png" class="candy-icon">
@@ -4902,7 +4904,7 @@ function renderCandiesPane() {
                     ` : '';
                     
                     return `
-                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}">
+                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
                             <span class="stage-caught-status">
                                 <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : 'fa-circle-xmark')}"></i>
                             </span>
@@ -4939,6 +4941,25 @@ function renderCandiesPane() {
                 renderCandiesPane();
                 updateDashboardStats();
                 updateRegionStatsBadge();
+            });
+        });
+
+        // Click header (image/name) to open base Pokemon modal
+        const headerInteractive = card.querySelector('.family-header-interactive');
+        if (headerInteractive) {
+            headerInteractive.addEventListener('click', () => {
+                openModal(family.base.id);
+            });
+        }
+
+        // Click individual evolution stages to open that specific Pokemon modal
+        const stageItems = card.querySelectorAll('.family-stage-item[data-poke-id]');
+        stageItems.forEach(stg => {
+            stg.addEventListener('click', (e) => {
+                // Ignore if clicked on the inline toggle button
+                if (e.target.closest('.transferred-inline-toggle')) return;
+                const pokeId = stg.getAttribute('data-poke-id');
+                if (pokeId) openModal(pokeId);
             });
         });
 
