@@ -130,22 +130,32 @@ const regionalFormPokeApiIds = {
 let pokeApiIdMapping = {};
 
 function getRegionalFormPokeApiId(name) {
-    const nameLower = name.toLowerCase().trim();
+    if (!name) return null;
+    let nameLower = name.toLowerCase().trim();
+    
+    // Clean up shadow prefix if present (e.g. "Alola Shadow Sandslash" or "Shadow Alolan Rattata")
+    nameLower = nameLower.replace(/\bshadow\b/g, '').replace(/\s+/g, ' ').trim();
+    
     let key = '';
-    if (nameLower.includes('alolan ')) {
-        key = `${nameLower.replace('alolan ', '')}-alola`;
-    } else if (nameLower.includes('galarian ')) {
-        key = `${nameLower.replace('galarian ', '')}-galar`;
-    } else if (nameLower.includes('hisuian ')) {
-        key = `${nameLower.replace('hisuian ', '')}-hisui`;
-    } else if (nameLower.includes('paldean ')) {
-        key = `${nameLower.replace('paldean ', '')}-paldea`;
-    } else if (nameLower.includes('white-striped ')) {
-        key = `${nameLower.replace('white-striped ', '')}-white-striped`;
+    if (/\b(alolan|alola)\b/.test(nameLower)) {
+        const base = nameLower.replace(/\b(alolan|alola)\b/g, '').trim();
+        key = `${base}-alola`;
+    } else if (/\b(galarian|galar)\b/.test(nameLower)) {
+        const base = nameLower.replace(/\b(galarian|galar)\b/g, '').trim();
+        key = `${base}-galar`;
+    } else if (/\b(hisuian|hisui)\b/.test(nameLower)) {
+        const base = nameLower.replace(/\b(hisuian|hisui)\b/g, '').trim();
+        key = `${base}-hisui`;
+    } else if (/\b(paldean|paldea)\b/.test(nameLower)) {
+        const base = nameLower.replace(/\b(paldean|paldea)\b/g, '').trim();
+        key = `${base}-paldea`;
+    } else if (nameLower.includes('white-striped')) {
+        const base = nameLower.replace('white-striped', '').trim();
+        key = `${base}-white-striped`;
     }
     
     if (key) {
-        key = key.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+        key = key.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         return pokeApiIdMapping[key] || regionalFormPokeApiIds[key] || null;
     }
     return null;
@@ -920,17 +930,46 @@ async function loadPokedex() {
 
 function buildPokebattlerRaidUrl(bossName) {
     if (!bossName) return 'https://www.pokebattler.com/raids';
-    let name = bossName.trim();
-    let slug = '';
-    if (name.toLowerCase().startsWith('mega ')) {
-        const base = name.substring(5).trim().toUpperCase().replace(/\s+/g, '_');
+    const n = bossName.trim();
+    const nl = n.toLowerCase();
+    const isShadow = nl.includes('shadow');
+    const isMega = nl.startsWith('mega ');
+
+    let region = null;
+    if (nl.includes('alola') || nl.includes('alolan')) region = 'ALOLA';
+    else if (nl.includes('galar') || nl.includes('galarian')) region = 'GALAR';
+    else if (nl.includes('hisui') || nl.includes('hisuian')) region = 'HISUI';
+    else if (nl.includes('paldea') || nl.includes('paldean')) region = 'PALDEA';
+
+    let form = null;
+    if (nl.includes('hero')) form = 'HERO';
+    else if (nl.includes('incarnate')) form = 'INCARNATE';
+    else if (nl.includes('therian')) form = 'THERIAN';
+    else if (nl.includes('origin')) form = 'ORIGIN';
+    else if (nl.includes('altered')) form = 'ALTERED';
+
+    let base = nl
+        .replace(/\b(shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered)\b/gi, '')
+        .trim()
+        .toUpperCase()
+        .replace(/[^A-Z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '');
+
+    let slug = base;
+    if (isMega) {
         slug = `${base}_MEGA`;
-    } else if (name.toLowerCase().startsWith('shadow ')) {
-        const base = name.substring(7).trim().toUpperCase().replace(/\s+/g, '_');
-        slug = `SHADOW_${base}`;
-    } else {
-        slug = name.toUpperCase().replace(/\s+/g, '_');
+    } else if (region && isShadow) {
+        slug = `${base}_${region}_SHADOW_FORM`;
+    } else if (region) {
+        slug = `${base}_${region}_FORM`;
+    } else if (form && isShadow) {
+        slug = `${base}_SHADOW_FORM`;
+    } else if (form) {
+        slug = `${base}_${form}_FORM`;
+    } else if (isShadow) {
+        slug = `${base}_SHADOW_FORM`;
     }
+
     return `https://www.pokebattler.com/raids/${slug}`;
 }
 
@@ -3208,7 +3247,7 @@ function renderActiveRotations() {
                         ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                         ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                     </div>
-                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke ? matchedPoke.id : ''}.png'">
+                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseFormPoke.id}.png'` : 'null'}) { this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
                         ${cpMeta}

@@ -141,17 +141,79 @@ def fetch_guide_details(guide_url, tier="5-Star Raids"):
 
     return details
 
+_POKEBATTLER_IDS = None
+
+def load_pokebattler_ids():
+    global _POKEBATTLER_IDS
+    if _POKEBATTLER_IDS is not None:
+        return _POKEBATTLER_IDS
+    paths = [
+        os.path.join(os.path.dirname(__file__), "..", "files", "pokebattler_ids.json"),
+        os.path.join(os.path.dirname(__file__), "..", "..", "files", "pokebattler_ids.json"),
+        os.path.join("files", "pokebattler_ids.json")
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    _POKEBATTLER_IDS = set(json.load(f))
+                    return _POKEBATTLER_IDS
+            except Exception as e:
+                print(f"  Warning loading pokebattler_ids: {e}")
+    _POKEBATTLER_IDS = set()
+    return _POKEBATTLER_IDS
+
 def build_pokebattler_raid_url(boss_name):
-    name = boss_name.strip()
-    if name.lower().startswith("mega "):
-        base = name[5:].strip().upper().replace(" ", "_")
-        slug = f"{base}_MEGA"
-    elif name.lower().startswith("shadow "):
-        base = name[7:].strip().upper().replace(" ", "_")
-        slug = f"SHADOW_{base}"
-    else:
-        slug = name.upper().replace(" ", "_")
-    return f"https://www.pokebattler.com/raids/{slug}"
+    n = boss_name.strip()
+    nl = n.lower()
+    is_shadow = "shadow" in nl
+    is_mega = nl.startswith("mega ")
+    
+    # Region
+    region = None
+    if "alola" in nl or "alolan" in nl: region = "ALOLA"
+    elif "galar" in nl or "galarian" in nl: region = "GALAR"
+    elif "hisui" in nl or "hisuian" in nl: region = "HISUI"
+    elif "paldea" in nl or "paldean" in nl: region = "PALDEA"
+
+    # Special forms
+    form = None
+    if "hero" in nl: form = "HERO"
+    elif "incarnate" in nl: form = "INCARNATE"
+    elif "therian" in nl: form = "THERIAN"
+    elif "origin" in nl: form = "ORIGIN"
+    elif "altered" in nl: form = "ALTERED"
+
+    base = re.sub(r'\b(shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered)\b', '', nl, flags=re.IGNORECASE).strip().upper()
+    base = re.sub(r'[^A-Z0-9]+', '_', base).strip('_')
+
+    candidates = []
+    if is_mega:
+        candidates.append(f"{base}_MEGA")
+    if region and is_shadow:
+        candidates.append(f"{base}_{region}_SHADOW_FORM")
+        candidates.append(f"SHADOW_{base}_{region}_FORM")
+    elif region:
+        candidates.append(f"{base}_{region}_FORM")
+    elif form and is_shadow:
+        candidates.append(f"{base}_{form}_SHADOW_FORM")
+        candidates.append(f"{base}_SHADOW_FORM")
+        candidates.append(f"SHADOW_{base}_{form}_FORM")
+    elif form:
+        candidates.append(f"{base}_{form}_FORM")
+    elif is_shadow:
+        candidates.append(f"{base}_SHADOW_FORM")
+        candidates.append(f"SHADOW_{base}")
+    
+    candidates.append(base)
+
+    pids = load_pokebattler_ids()
+    if pids:
+        for c in candidates:
+            if c in pids:
+                return f"https://www.pokebattler.com/raids/{c}"
+
+    return f"https://www.pokebattler.com/raids/{candidates[0]}"
 
 def build_pokebattler_max_url(boss_name):
     name = boss_name.replace("Dynamax", "").replace("Gigantamax", "").strip().upper().replace(" ", "_")
@@ -240,6 +302,64 @@ def scrape_raids():
     poke_map = load_pokedex_map()
     shiny_dexes, shiny_names = load_shiny_set()
 
+    REGIONAL_TYPES = {
+        "rattata-alola": ["dark", "normal"],
+        "raticate-alola": ["dark", "normal"],
+        "raichu-alola": ["electric", "psychic"],
+        "sandshrew-alola": ["ice", "steel"],
+        "sandslash-alola": ["ice", "steel"],
+        "vulpix-alola": ["ice"],
+        "ninetales-alola": ["ice", "fairy"],
+        "diglett-alola": ["ground", "steel"],
+        "dugtrio-alola": ["ground", "steel"],
+        "meowth-alola": ["dark"],
+        "persian-alola": ["dark"],
+        "geodude-alola": ["rock", "electric"],
+        "graveler-alola": ["rock", "electric"],
+        "golem-alola": ["rock", "electric"],
+        "grimer-alola": ["poison", "dark"],
+        "muk-alola": ["poison", "dark"],
+        "exeggutor-alola": ["grass", "dragon"],
+        "marowak-alola": ["fire", "ghost"],
+        "meowth-galar": ["steel"],
+        "ponyta-galar": ["psychic"],
+        "rapidash-galar": ["psychic", "fairy"],
+        "slowpoke-galar": ["psychic"],
+        "slowbro-galar": ["poison", "psychic"],
+        "farfetchd-galar": ["fighting"],
+        "weezing-galar": ["poison", "fairy"],
+        "mr-mime-galar": ["ice", "psychic"],
+        "articuno-galar": ["psychic", "flying"],
+        "zapdos-galar": ["fighting", "flying"],
+        "moltres-galar": ["dark", "flying"],
+        "slowking-galar": ["poison", "psychic"],
+        "corsola-galar": ["ghost"],
+        "zigzagoon-galar": ["dark", "normal"],
+        "linoone-galar": ["dark", "normal"],
+        "darumaka-galar": ["ice"],
+        "darmanitan-galar": ["ice"],
+        "yamask-galar": ["ground", "ghost"],
+        "stunfisk-galar": ["ground", "steel"],
+        "growlithe-hisui": ["fire", "rock"],
+        "arcanine-hisui": ["fire", "rock"],
+        "voltorb-hisui": ["electric", "grass"],
+        "electrode-hisui": ["electric", "grass"],
+        "typhlosion-hisui": ["fire", "ghost"],
+        "qwilfish-hisui": ["dark", "poison"],
+        "sneasel-hisui": ["fighting", "poison"],
+        "samurott-hisui": ["water", "dark"],
+        "lilligant-hisui": ["grass", "fighting"],
+        "zorua-hisui": ["normal", "ghost"],
+        "zoroark-hisui": ["normal", "ghost"],
+        "braviary-hisui": ["psychic", "flying"],
+        "sliggoo-hisui": ["steel", "dragon"],
+        "goodra-hisui": ["steel", "dragon"],
+        "avalugg-hisui": ["ice", "rock"],
+        "decidueye-hisui": ["grass", "fighting"],
+        "tauros-paldea": ["fighting"],
+        "wooper-paldea": ["poison", "ground"]
+    }
+
     try:
         url = "https://pokemongohub.net/post/guide/current-go-raids/"
         res = requests.get(url, headers=HEADERS, timeout=15)
@@ -248,8 +368,36 @@ def scrape_raids():
             post_body = soup.find("div", class_="td-post-content")
             
             if post_body:
+                # 1. Collect all guide links in the post to attach to boss cards
+                guide_map = {}
+                for p_tag in post_body.find_all("p"):
+                    for a_tag in p_tag.find_all("a"):
+                        href = a_tag.get("href", "")
+                        if "pokemongohub.net/post/guide/" in href:
+                            txt = a_tag.get_text(strip=True).lower()
+                            if txt not in ["shadow raids", "raid guides", "guides", "related guides"]:
+                                guide_map[txt] = href
+
+                def extract_key_words(s):
+                    s = re.sub(r'\b(raid|raids|counter|counters|guide|guides|boss|bosses|shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean)\b', '', s, flags=re.IGNORECASE)
+                    return set(re.findall(r'[a-zA-Z]+', s.lower()))
+
+                def match_guide_url(boss_name):
+                    b_keys = extract_key_words(boss_name)
+                    if not b_keys:
+                        return None
+                    best_match = None
+                    best_score = 0
+                    for g_title, g_url in guide_map.items():
+                        g_keys = extract_key_words(g_title)
+                        common = b_keys.intersection(g_keys)
+                        if len(common) > best_score:
+                            best_score = len(common)
+                            best_match = g_url
+                    return best_match if best_score > 0 else None
+
                 current_tier = None
-                bosses_map = {}
+                seen_bosses = set()
 
                 for h in post_body.find_all(['h2', 'h3', 'h4']):
                     htxt = h.get_text(strip=True)
@@ -272,116 +420,149 @@ def scrape_raids():
 
                     curr = h.find_next_sibling()
                     while curr and curr.name not in ['h2', 'h3', 'h4']:
-                        for a in curr.find_all('a'):
-                            name_span = a.find('span', class_='name')
-                            name = name_span.get_text(strip=True) if name_span else a.get_text(strip=True)
-                            href = a.get('href', '')
+                        # Only look inside actual Pokemon cards containers, never <p> raid guides lists
+                        containers = []
+                        if curr.name == 'div' and any(cls in curr.get('class', []) for cls in ['hub-pokemon-list', 'hub-pokemon-grid', 'hub-flex-list']):
+                            containers.append(curr)
+                        containers.extend(curr.find_all('div', class_=lambda c: c and any(k in c for k in ['hub-pokemon-list', 'hub-pokemon-grid', 'hub-flex-list'])))
 
-                            if not name or name.lower() in ['shadow raids', 'raid guides', 'related guides', 'current pokémon go raid bosses', 'guides']:
-                                continue
-                            
-                            cname = canonicalize_boss_name(name)
-                            if not cname:
-                                continue
+                        for container in containers:
+                            for a in container.find_all('a'):
+                                name_span = a.find('span', class_='name')
+                                raw_name = name_span.get_text(strip=True) if name_span else a.get_text(strip=True)
+                                lbl_span = a.find('span', class_='label')
+                                lbl = lbl_span.get_text(strip=True) if lbl_span else ''
+                                href = a.get('href', '')
 
-                            key = (current_tier, cname.lower())
-                            is_guide_link = 'pokemongohub.net/post/guide/' in href
+                                if not raw_name or raw_name.lower() in ['shadow raids', 'raid guides', 'related guides', 'current pokémon go raid bosses', 'guides']:
+                                    continue
 
-                            db_dex = None
-                            db_m = re.search(r'/pokemon/(\d+)', href)
-                            if db_m:
-                                db_dex = int(db_m.group(1))
+                                clean_name = canonicalize_boss_name(raw_name)
+                                if not clean_name:
+                                    continue
 
-                            if key not in bosses_map:
-                                bosses_map[key] = {'name': cname, 'tier': current_tier, 'href': href, 'is_guide': is_guide_link, 'db_dex': db_dex}
-                            else:
-                                if db_dex and not bosses_map[key].get('db_dex'):
-                                    bosses_map[key]['db_dex'] = db_dex
-                                if is_guide_link and not bosses_map[key]['is_guide']:
-                                    bosses_map[key]['href'] = href
-                                    bosses_map[key]['is_guide'] = True
+                                boss_key = (current_tier, clean_name.lower())
+                                if boss_key in seen_bosses:
+                                    continue
+                                seen_bosses.add(boss_key)
+
+                                db_dex = None
+                                db_m = re.search(r'/pokemon/(\d+)', href)
+                                if db_m:
+                                    db_dex = int(db_m.group(1))
+
+                                classes = a.get('class', [])
+                                has_shiny_class = 'shiny' in classes
+
+                                # Extract types directly from card type icon images
+                                card_types = []
+                                for img in a.find_all('img', class_='pokemon-type-icon'):
+                                    alt = img.get('alt', '')
+                                    tm = re.search(r'([A-Za-z]+)\s+type\s+icon', alt, re.I)
+                                    if tm:
+                                        card_types.append(tm.group(1).lower())
+
+                                guide_url = match_guide_url(clean_name)
+                                guide_info = fetch_guide_details(guide_url, current_tier) if guide_url else {
+                                    "cp_normal_min": None, "cp_normal_max": None,
+                                    "cp_boosted_min": None, "cp_boosted_max": None,
+                                    "canBeShiny": False
+                                }
+
+                                print(f"  -> Scraping [{current_tier}] {clean_name}")
+
+                                # Parse CP from card label first (e.g., '2188 CP / 2735 CP' or '1054 CP/1318 CP')
+                                cp_dict = None
+                                lbl_m = re.search(r'(\d{3,4})\s*CP\s*(?:/|to|-)\s*(\d{3,4})\s*CP', lbl, re.IGNORECASE)
+                                if lbl_m:
+                                    norm_max = int(lbl_m.group(1))
+                                    boost_max = int(lbl_m.group(2))
+                                    norm_min = guide_info.get("cp_normal_min") or 0
+                                    boost_min = guide_info.get("cp_boosted_min") or 0
+                                    cp_dict = {
+                                        "normal": {"min": norm_min, "max": norm_max},
+                                        "boosted": {"min": boost_min, "max": boost_max}
+                                    }
+                                elif guide_info.get("cp_normal_max") or guide_info.get("cp_boosted_max"):
+                                    cp_dict = {
+                                        "normal": {
+                                            "min": guide_info.get("cp_normal_min") or 0,
+                                            "max": guide_info.get("cp_normal_max") or 0
+                                        },
+                                        "boosted": {
+                                            "min": guide_info.get("cp_boosted_min") or 0,
+                                            "max": guide_info.get("cp_boosted_max") or 0
+                                        }
+                                    }
+
+                                base_species = re.sub(r'^(Hisuian|Alolan|Galarian|Paldean|Shadow|Mega|Hero|Incarnate|Therian)\s+', '', clean_name, flags=re.IGNORECASE)
+                                base_species = re.sub(r'\s*\([^\)]*\)', '', base_species).strip().upper()
+
+                                dex_entry = (poke_map.get(db_dex) if db_dex else None) or poke_map.get(clean_name.upper()) or poke_map.get(base_species) or {}
+                                dex_nr = dex_entry.get("dexNr") or db_dex
+
+                                # Fallback CP calculation from base stats
+                                if not cp_dict and dex_entry.get("stats"):
+                                    stats = dex_entry["stats"]
+                                    b_atk = stats.get("attack") or stats.get("baseAttack") or stats.get("atk", 0)
+                                    b_def = stats.get("defense") or stats.get("baseDefense") or stats.get("def", 0)
+                                    b_sta = stats.get("stamina") or stats.get("baseStamina") or stats.get("sta", 0)
+                                    if b_atk and b_def and b_sta:
+                                        cp_dict = get_cp_from_stats(b_atk, b_def, b_sta)
+
+                                # Resolve Types
+                                type_names = list(card_types)
+                                if not type_names:
+                                    # Check Regional Types mapping
+                                    reg_key = None
+                                    c_low = clean_name.lower()
+                                    for prefix, reg in [('alolan ', 'alola'), ('alola ', 'alola'), ('galarian ', 'galar'), ('galar ', 'galar'), ('hisuian ', 'hisui'), ('hisui ', 'hisui'), ('paldean ', 'paldea'), ('paldea ', 'paldea')]:
+                                        if prefix in c_low:
+                                            b = c_low.replace(prefix, '').strip()
+                                            b = re.sub(r'^(shadow|hero|incarnate|therian)\s+', '', b).strip()
+                                            b = re.sub(r'\s*\([^)]*\)', '', b).strip()
+                                            reg_key = f"{b}-{reg}".replace(' ', '-')
+                                            break
+                                    if reg_key and reg_key in REGIONAL_TYPES:
+                                        type_names = list(REGIONAL_TYPES[reg_key])
+
+                                if not type_names:
+                                    if dex_entry.get("primaryType"):
+                                        t_name = dex_entry["primaryType"].get("names", {}).get("English", "").lower()
+                                        if t_name:
+                                            type_names.append(t_name)
+                                    if dex_entry.get("secondaryType"):
+                                        t_name = dex_entry["secondaryType"].get("names", {}).get("English", "").lower()
+                                        if t_name:
+                                            type_names.append(t_name)
+
+                                types = [{"name": t, "image": f"https://leekduck.com/assets/img/types/{t}.png"} for t in type_names]
+
+                                weather_boosts = []
+                                seen_weathers = set()
+                                for t in type_names:
+                                    w_name = TYPE_WEATHER_MAP.get(t)
+                                    if w_name and w_name not in seen_weathers:
+                                        seen_weathers.add(w_name)
+                                        w_img = w_name.replace(" ", "_")
+                                        weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
+
+                                img_url = get_boss_image_url(clean_name, dex_nr)
+                                can_be_shiny = bool(has_shiny_class or (dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
+                                pb_url = build_pokebattler_raid_url(clean_name)
+
+                                bosses.append({
+                                    "name": clean_name,
+                                    "tier": current_tier,
+                                    "canBeShiny": can_be_shiny,
+                                    "types": types,
+                                    "combatPower": cp_dict,
+                                    "boostedWeather": weather_boosts,
+                                    "image": img_url,
+                                    "pokebattlerUrl": pb_url
+                                })
 
                         curr = curr.find_next_sibling()
-
-                for b in bosses_map.values():
-                    clean_name = b['name']
-                    current_tier = b['tier']
-                    href = b['href']
-                    db_dex = b.get('db_dex')
-
-                    print(f"  -> Scraping [{current_tier}] {clean_name}")
-                    guide_info = fetch_guide_details(href, current_tier) if 'guide' in href else {
-                        "cp_normal_min": None, "cp_normal_max": None,
-                        "cp_boosted_min": None, "cp_boosted_max": None,
-                        "canBeShiny": False
-                    }
-
-                    base_species = re.sub(r'^(Hisuian|Alolan|Galarian|Paldean|Shadow|Mega)\s+', '', clean_name, flags=re.IGNORECASE)
-                    base_species = re.sub(r'\s*\([^\)]*\)', '', base_species).strip().upper()
-
-                    dex_entry = (poke_map.get(db_dex) if db_dex else None) or poke_map.get(clean_name.upper()) or poke_map.get(base_species) or {}
-                    dex_nr = dex_entry.get("dexNr") or db_dex
-
-                    types = []
-                    weather_boosts = []
-                    seen_weathers = set()
-
-                    if dex_entry.get("primaryType"):
-                        t_name = dex_entry["primaryType"].get("names", {}).get("English", "").lower()
-                        if t_name:
-                            types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
-                            w_name = TYPE_WEATHER_MAP.get(t_name)
-                            if w_name and w_name not in seen_weathers:
-                                seen_weathers.add(w_name)
-                                w_img = w_name.replace(" ", "_")
-                                weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
-
-                    if dex_entry.get("secondaryType"):
-                        t_name = dex_entry["secondaryType"].get("names", {}).get("English", "").lower()
-                        if t_name:
-                            types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
-                            w_name = TYPE_WEATHER_MAP.get(t_name)
-                            if w_name and w_name not in seen_weathers:
-                                seen_weathers.add(w_name)
-                                w_img = w_name.replace(" ", "_")
-                                weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
-
-                    cp_dict = None
-                    if dex_entry.get("stats"):
-                        stats = dex_entry["stats"]
-                        b_atk = stats.get("attack") or stats.get("baseAttack") or stats.get("atk", 0)
-                        b_def = stats.get("defense") or stats.get("baseDefense") or stats.get("def", 0)
-                        b_sta = stats.get("stamina") or stats.get("baseStamina") or stats.get("sta", 0)
-                        if b_atk and b_def and b_sta:
-                            cp_dict = get_cp_from_stats(b_atk, b_def, b_sta)
-
-                    if not cp_dict and (guide_info.get("cp_normal_max") or guide_info.get("cp_boosted_max")):
-                        cp_dict = {
-                            "normal": {
-                                "min": guide_info.get("cp_normal_min") or 0,
-                                "max": guide_info.get("cp_normal_max") or 0
-                            },
-                            "boosted": {
-                                "min": guide_info.get("cp_boosted_min") or 0,
-                                "max": guide_info.get("cp_boosted_max") or 0
-                            }
-                        }
-
-                    img_url = get_boss_image_url(clean_name, dex_nr)
-
-                    can_be_shiny = bool((dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
-                    pb_url = build_pokebattler_raid_url(clean_name)
-
-                    bosses.append({
-                        "name": clean_name,
-                        "tier": current_tier,
-                        "canBeShiny": can_be_shiny,
-                        "types": types,
-                        "combatPower": cp_dict,
-                        "boostedWeather": weather_boosts,
-                        "image": img_url,
-                        "pokebattlerUrl": pb_url
-                    })
     except Exception as e:
         print(f"Error scraping Pokémon GO Hub raids: {e}")
 
