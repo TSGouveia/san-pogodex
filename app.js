@@ -1,4 +1,4 @@
-/**
+﻿/**
  * SilphRoad Dex - Core Application JavaScript
  * Dynamic Pokémon GO PokéDex Loader, local storage state persistence, and filtering.
  */
@@ -233,17 +233,17 @@ function getPokemonImageUrl(name, matchedPoke) {
     const nameLower = name.toLowerCase().trim();
     
     // Check special legend forms
-    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10156.png`;
-    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10155.png`;
-    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png`;
-    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png`;
-    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png`;
-    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png`;
+    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10156.png`;
+    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10155.png`;
+    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10022.png`;
+    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10023.png`;
+    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10188.png`;
+    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10189.png`;
 
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
     if (rfId) {
-        return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${rfId}.png`;
+        return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${rfId}.png`;
     }
     
     // Check if it's a Mega evolution
@@ -257,7 +257,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         }
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
         }
     }
 
@@ -267,7 +267,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         let key = `${baseName}-primal`;
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
         }
     }
     
@@ -287,7 +287,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         formKey = formKey.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
         const mappedId = pokeApiIdMapping[formKey];
         if (mappedId) {
-            return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
         }
     }
 
@@ -860,7 +860,7 @@ async function loadPokedex() {
                 name: "Basculegion",
                 gen: 8.5,
                 types: ["water", "ghost"],
-                img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/902.png`,
+                img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/902.png`,
                 stats: {
                     atk: 247,
                     def: 146,
@@ -1266,7 +1266,7 @@ function formatPokemon(p) {
         name: p.names.English,
         gen: gen,
         types: types,
-        img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
+        img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
         stats: {
             atk: p.stats ? p.stats.attack : 100,
             def: p.stats ? p.stats.defense : 100,
@@ -3006,7 +3006,7 @@ function renderWildSpawns() {
         if (poke && poke.img) {
             imgUrl = poke.img;
         } else {
-            imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png`;
+            imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${s.dexNr}.png`;
         }
 
         const rateBadge = s.spawnRate > 0 
@@ -3020,7 +3020,7 @@ function renderWildSpawns() {
                     ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                     ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                 </div>
-                <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
+                <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
                 <div class="rotation-card-details-wrapper">
                     <span class="rotation-card-name">${s.name}</span>
                     <div class="rotation-cp-details">
@@ -3247,7 +3247,7 @@ function renderActiveRotations() {
                         ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                         ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                     </div>
-                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseFormPoke.id}.png'` : 'null'}) { this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
+                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${baseFormPoke.id}.png'` : 'null'}) { this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
                         ${cpMeta}
@@ -3309,7 +3309,7 @@ function renderActiveRotations() {
 
                     let imgUrl = matchedPoke ? matchedPoke.img : boss.image;
                     if (!imgUrl) {
-                        imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png`;
+                        imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/1.png`;
                     }
 
                     let pokebattlerBtn = '';
@@ -3465,7 +3465,7 @@ function renderActiveRotations() {
                     }
                 }
                 const eggOnerror = (egg.dex && egg.dex !== 'null') 
-                    ? `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${egg.dex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');};"`
+                    ? `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${egg.dex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');};"`
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');"`;
 
                 let cpMeta = '';
@@ -3577,11 +3577,11 @@ function renderActiveRotations() {
                 // Prioritize official Pokemon artwork over LeekDuck images
                 let imgUrl = matchedPoke ? matchedPoke.img : getPokemonImageUrl(encounter.fullPokeName, matchedPoke);
                 if (!imgUrl) {
-                    imgUrl = encounter.image || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${encounter.dex}.png`;
+                    imgUrl = encounter.image || `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${encounter.dex}.png`;
                 }
                 const fallbackDex = matchedPoke ? matchedPoke.id : encounter.dex;
                 const questOnerror = (fallbackDex && fallbackDex !== 'null') 
-                    ? `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${fallbackDex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');};"`
+                    ? `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${fallbackDex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');};"`
                     : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
 
                 let cpMeta = '';
@@ -3782,8 +3782,8 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
             card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
 
-            let imgUrl = matchedPoke ? matchedPoke.img : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png`;
-            const imgOnerror = `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
+            let imgUrl = matchedPoke ? matchedPoke.img : `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png`;
+            const imgOnerror = `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
 
             let cpMeta = '';
             const partyMaxCp = item.max_cp || (item.combatPower && item.combatPower.normal ? item.combatPower.normal.max : null);
@@ -3827,7 +3827,7 @@ function renderRewardsListHelper(container, data, cardTheme) {
             imgUrl = `https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm${item.dex}.icon.png`;
         }
         
-        const imgOnerror = `onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
+        const imgOnerror = `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
 
         card.innerHTML = `
             ${item.shiny ? shinySparkleSvg : ''}
@@ -3987,7 +3987,7 @@ function renderRocketLineups() {
 
                         let imgUrl = getPokemonImageUrl(rawName, matchedPoke);
                         if (!imgUrl && matchedPoke) {
-                            imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
+                            imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
                         }
                         if (!imgUrl) imgUrl = '';
 
@@ -4514,7 +4514,7 @@ function getEvolutionParentInfo(poke) {
             return {
                 parent: basePoke,
                 name: "Basculin",
-                img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/550.png`,
+                img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/550.png`,
                 candies: 50,
                 item: null,
                 quests: []
@@ -4537,7 +4537,7 @@ function getEvolutionParentInfo(poke) {
                     return {
                         parent: basePoke,
                         name: p.names.English,
-                        img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
+                        img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
                         candies: match.candies || 50,
                         item: match.item || null,
                         quests: match.quests || []
@@ -4560,8 +4560,8 @@ function getEvolutionParentInfo(poke) {
                             const rfId = rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null;
                             
                             let img = rfId 
-                                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${rfId}.png`
-                                : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`;
+                                ? `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${rfId}.png`
+                                : `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`;
                             
                             const displayName = getRegionalFormDisplayName(rf);
                             
@@ -4881,7 +4881,7 @@ function renderCandiesPane() {
                     <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
                 </div>
                 <div class="candy-input-wrapper">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon">
+                    <img src="https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/rare-candy.png" class="candy-icon">
                     <input type="number" min="0" value="${currentCandies}" class="candy-count-input" data-family-id="${baseId}" placeholder="0">
                 </div>
             </div>
@@ -5945,7 +5945,7 @@ function openEventModal(ev) {
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
                 if (matchedPoke) {
-                    pokeImgUrl = matchedPoke.img || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
+                    pokeImgUrl = matchedPoke.img || `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
                 } else {
                     // asset_url from the API has the correct sprite for Megas and alternate forms
                     pokeImgUrl = spawn.asset_url || '';
@@ -6606,3 +6606,4 @@ function renderPromoCodes() {
         });
     }
 }
+
