@@ -2317,6 +2317,12 @@ input, button, select {
     color: var(--accent-green);
 }
 
+.family-calculation-result.km-quest {
+    background: rgba(168, 85, 247, 0.1);
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    color: #c084fc;
+}
+
 .family-calculation-result.km-walk {
     background: rgba(245, 166, 35, 0.08);
     border: 1px solid rgba(245, 166, 35, 0.2);

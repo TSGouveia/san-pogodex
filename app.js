@@ -385,6 +385,7 @@ const shinySparkleSvg = `
 let typesDatabase = [];
 let buddyDistances = {};
 let userCandies = {};
+let completedBuddyQuests = new Set();
 let currentUser = null;
 let currentTrainerUsername = null;
 let userDocListenerUnsubscribe = null; // Firestore real-time listener cleanup handle
@@ -4117,6 +4118,28 @@ function loadCandyState() {
     }
 }
 
+function loadBuddyQuestState() {
+    try {
+        const stored = localStorage.getItem('pogo_completed_buddy_quests');
+        if (stored) {
+            const arr = JSON.parse(stored);
+            completedBuddyQuests = new Set(arr.map(x => String(x)));
+        } else {
+            completedBuddyQuests = new Set();
+        }
+    } catch (e) {
+        console.error("Failed to load buddy quest state:", e);
+        completedBuddyQuests = new Set();
+    }
+}
+
+function saveBuddyQuestState() {
+    localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
+    if (currentUser) {
+        saveUserDataToFirestore();
+    }
+}
+
 let saveCandiesCloudTimeout = null;
 function saveCandyState(debounceCloud = false) {
     localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
@@ -4145,6 +4168,7 @@ async function saveUserDataToFirestore() {
             caught: Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
             candies: userCandies,
             transferred: Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
+            completedQuests: Array.from(completedBuddyQuests).map(x => String(x)),
             updatedAt: new Date().toISOString()
         };
         if (currentTrainerUsername) {
@@ -4174,6 +4198,7 @@ async function loadUserDataFromFirestore(user) {
             const cloudCaught = data.caught || [];
             const cloudCandies = data.candies || {};
             const cloudTransferred = data.transferred || [];
+            const cloudQuests = data.completedQuests || [];
             
             // Union of local and cloud caught Pokemon
             const mergedCaught = new Set([...caughtPokemon, ...cloudCaught.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
@@ -4184,14 +4209,19 @@ async function loadUserDataFromFirestore(user) {
             // Union of local and cloud transferred Pokemon
             const mergedTransferred = new Set([...transferredPokemon, ...cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
             
+            // Union of local and cloud completed quests
+            const mergedQuests = new Set([...completedBuddyQuests, ...cloudQuests.map(x => String(x))]);
+
             caughtPokemon = mergedCaught;
             userCandies = mergedCandies;
             transferredPokemon = mergedTransferred;
+            completedBuddyQuests = mergedQuests;
             
             // Sync with local storage
             localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
             localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
             localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
+            localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
             
             // Sync merged state back to cloud immediately so both are up-to-date
             await saveUserDataToFirestore();
@@ -4258,6 +4288,7 @@ onAuthStateChanged(auth, async (user) => {
                     userCandies = {};
                     loadCaughtState();
                     loadCandyState();
+                    loadBuddyQuestState();
                     loadTransferredState();
                     
                     renderPokedex();
@@ -4295,12 +4326,15 @@ onAuthStateChanged(auth, async (user) => {
                 const cloudCaught = data.caught || [];
                 const cloudCandies = data.candies || {};
                 const cloudTransferred = data.transferred || [];
+                const cloudQuests = data.completedQuests || [];
                 caughtPokemon = new Set(cloudCaught.map(x => (isNaN(Number(x)) ? x : Number(x))));
                 userCandies = cloudCandies;
                 transferredPokemon = new Set(cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x))));
+                completedBuddyQuests = new Set(cloudQuests.map(x => String(x)));
                 localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
                 localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
                 localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
+                localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
                 
                 renderPokedex();
                 renderMissingSummary();
@@ -4606,7 +4640,8 @@ function getEvolutionParentAndCandies(poke) {
     if (parentInfo) {
         return {
             parent: parentInfo.parent,
-            candies: parentInfo.candies
+            candies: parentInfo.candies,
+            quests: parentInfo.quests || []
         };
     }
     return null;
@@ -4689,7 +4724,17 @@ function isReadyToEvolve(poke) {
     if (!baseId) return false;
     const currentCandies = userCandies[baseId] || 0;
 
-    return currentCandies >= parentInfo.candies;
+    if (currentCandies < parentInfo.candies) return false;
+
+    // If there is an evolution buddy quest, check if completed
+    if (parentInfo.quests && parentInfo.quests.length > 0) {
+        const questKey = String(poke.id);
+        if (!completedBuddyQuests.has(questKey)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 
@@ -4732,6 +4777,7 @@ function isSpecialVersion(member) {
 
 function renderCandiesPane() {
     const gridReady = document.getElementById('grid-ready-evolve');
+    const gridNeedQuest = document.getElementById('grid-need-quest');
     const gridNeed = document.getElementById('grid-need-candies');
     const gridMissing = document.getElementById('grid-missing-base');
     const gridTransferred = document.getElementById('grid-transferred-base');
@@ -4740,6 +4786,7 @@ function renderCandiesPane() {
     if (!gridReady || !gridNeed || !gridMissing || !gridTransferred) return;
     
     gridReady.innerHTML = '';
+    if (gridNeedQuest) gridNeedQuest.innerHTML = '';
     gridNeed.innerHTML = '';
     gridMissing.innerHTML = '';
     gridTransferred.innerHTML = '';
@@ -4786,11 +4833,22 @@ function renderCandiesPane() {
         const currentCandies = (userCandies[baseId] !== undefined) ? userCandies[baseId] : ((userCandies[Number(baseId)] !== undefined) ? userCandies[Number(baseId)] : 0);
         
         let totalNeeded = 0;
+        let hasPendingQuestEvolution = false;
+        let pendingQuestCount = 0;
+
         family.members.forEach(member => {
-            if (!caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id))) {
+            const isMemberCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+            if (!isMemberCaught) {
                 const parentInfo = getEvolutionParentAndCandies(member);
                 if (parentInfo) {
                     totalNeeded += parentInfo.candies;
+                    if (parentInfo.quests && parentInfo.quests.length > 0) {
+                        const questDone = completedBuddyQuests.has(String(member.id));
+                        if (!questDone) {
+                            hasPendingQuestEvolution = true;
+                            pendingQuestCount++;
+                        }
+                    }
                 }
             }
         });
@@ -4806,6 +4864,8 @@ function renderCandiesPane() {
             currentCandies,
             totalNeeded,
             remaining,
+            hasPendingQuestEvolution,
+            pendingQuestCount,
             baseIsCaught,
             buddyDist,
             km
@@ -4845,6 +4905,7 @@ function renderCandiesPane() {
 
     // Distribute into categories
     let readyCount = 0;
+    let questCount = 0;
     let needCount = 0;
     let missingCount = 0;
     let transferredCount = 0;
@@ -4856,6 +4917,7 @@ function renderCandiesPane() {
         const totalNeeded = data.totalNeeded;
         const remaining = data.remaining;
         const baseIsCaught = data.baseIsCaught;
+        const hasPendingQuest = data.hasPendingQuestEvolution;
         
         const buddyDist = data.buddyDist;
         
@@ -4865,8 +4927,13 @@ function renderCandiesPane() {
             kmText = 'Already Fully Evolved/Caught';
             kmClass = 'km-complete';
         } else if (remaining === 0) {
-            kmText = 'Enough candies to evolve!';
-            kmClass = 'km-success';
+            if (hasPendingQuest) {
+                kmText = 'Candies ready! Complete buddy quest to evolve.';
+                kmClass = 'km-quest';
+            } else {
+                kmText = 'Enough candies to evolve!';
+                kmClass = 'km-success';
+            }
         } else {
             if (buddyDist === undefined) {
                 kmText = '⚠️ Distance unknown (not in API)';
@@ -4913,12 +4980,22 @@ function renderCandiesPane() {
                     const isMemberTransf = transferredPokemon.has(member.id) || transferredPokemon.has(Number(member.id)) || transferredPokemon.has(String(member.id));
                     const parentInfo = getEvolutionParentAndCandies(member);
                     const candyCost = parentInfo ? parentInfo.candies : 0;
+                    const hasQuest = parentInfo && parentInfo.quests && parentInfo.quests.length > 0;
+                    const isQuestDone = completedBuddyQuests.has(String(member.id));
+                    const questText = hasQuest ? formatQuestName(parentInfo.quests[0]) : '';
                     
                     const isBase = member.id === family.base.id;
                     const actionButton = (isBase && isCaught) ? `
                         <button class="transferred-inline-toggle" title="Toggle Transferred Status" style="margin-left: auto; margin-right: 0.25rem; background: ${isMemberTransf ? 'rgba(59, 130, 246, 0.15)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${isMemberTransf ? 'rgba(59, 130, 246, 0.4)' : 'rgba(255,255,255,0.1)'}; color: ${isMemberTransf ? '#60a5fa' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; outline: none; text-decoration: none !important;" data-family-id="${baseId}">
                             <i class="fa-solid fa-right-left"></i>
                             <span>Transferred</span>
+                        </button>
+                    ` : '';
+
+                    const questButton = (!isCaught && hasQuest) ? `
+                        <button class="quest-inline-toggle ${isQuestDone ? 'done' : 'pending'}" title="${isQuestDone ? 'Buddy Quest complete: ' + questText : 'Buddy Quest pending: ' + questText}" style="margin-left: auto; margin-right: 0.25rem; background: ${isQuestDone ? 'rgba(168, 85, 247, 0.18)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${isQuestDone ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.12)'}; color: ${isQuestDone ? '#c084fc' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; outline: none;" data-poke-id="${member.id}">
+                            <i class="fa-solid ${isQuestDone ? 'fa-check' : 'fa-scroll'}"></i>
+                            <span>${isQuestDone ? 'Quest Done' : 'Quest'}</span>
                         </button>
                     ` : '';
                     
@@ -4929,7 +5006,8 @@ function renderCandiesPane() {
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${member.name}</span>
                             ${actionButton}
-                            ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
+                            ${questButton}
+                            ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
                         </div>
                     `;
                 }).join('')}
@@ -4963,6 +5041,25 @@ function renderCandiesPane() {
             });
         });
 
+        // Quest completion toggle button
+        const questToggles = card.querySelectorAll('.quest-inline-toggle');
+        questToggles.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const pokeId = String(btn.getAttribute('data-poke-id'));
+                if (completedBuddyQuests.has(pokeId)) {
+                    completedBuddyQuests.delete(pokeId);
+                } else {
+                    completedBuddyQuests.add(pokeId);
+                }
+                saveBuddyQuestState();
+                renderPokedex();
+                renderMissingSummary();
+                renderCandiesPane();
+            });
+        });
+
         // Click header (image/name) to open base Pokemon modal
         const headerInteractive = card.querySelector('.family-header-interactive');
         if (headerInteractive) {
@@ -4975,8 +5072,8 @@ function renderCandiesPane() {
         const stageItems = card.querySelectorAll('.family-stage-item[data-poke-id]');
         stageItems.forEach(stg => {
             stg.addEventListener('click', (e) => {
-                // Ignore if clicked on the inline toggle button
-                if (e.target.closest('.transferred-inline-toggle')) return;
+                // Ignore if clicked on the inline toggle or quest button
+                if (e.target.closest('.transferred-inline-toggle') || e.target.closest('.quest-inline-toggle')) return;
                 const pokeId = stg.getAttribute('data-poke-id');
                 if (pokeId) openModal(pokeId);
             });
@@ -4984,11 +5081,6 @@ function renderCandiesPane() {
 
         const input = card.querySelector('.candy-count-input');
         
-        // Listen to change/input, but use a small trick: if they focus out or change, we re-render.
-        // Using 'change' or keeping the focus state in mind so they can type.
-        // To allow natural typing without losing focus, we save userCandies on input,
-        // and only trigger renderCandiesPane on 'change' or 'blur' (when they press Enter or focus out).
-        // That prevents the card from moving out of the mouse/keyboard focus mid-typing!
         input.addEventListener('input', (e) => {
             const val = parseInt(e.target.value) || 0;
             userCandies[baseId] = val;
@@ -5013,8 +5105,13 @@ function renderCandiesPane() {
             gridMissing.appendChild(card);
             missingCount++;
         } else if (remaining === 0) {
-            gridReady.appendChild(card);
-            readyCount++;
+            if (hasPendingQuest && gridNeedQuest) {
+                gridNeedQuest.appendChild(card);
+                questCount++;
+            } else {
+                gridReady.appendChild(card);
+                readyCount++;
+            }
         } else {
             gridNeed.appendChild(card);
             needCount++;
@@ -5023,6 +5120,8 @@ function renderCandiesPane() {
 
     // Hide/Show category sections based on count
     document.getElementById('cat-ready-evolve').style.display = readyCount > 0 ? 'block' : 'none';
+    const catNeedQuest = document.getElementById('cat-need-quest');
+    if (catNeedQuest) catNeedQuest.style.display = questCount > 0 ? 'block' : 'none';
     document.getElementById('cat-need-candies').style.display = needCount > 0 ? 'block' : 'none';
     document.getElementById('cat-missing-base').style.display = missingCount > 0 ? 'block' : 'none';
     document.getElementById('cat-transferred-base').style.display = transferredCount > 0 ? 'block' : 'none';
@@ -5777,6 +5876,7 @@ function setupFriendsListeners() {
 window.addEventListener('DOMContentLoaded', () => {
     loadCaughtState();
     loadCandyState();
+    loadBuddyQuestState();
     loadTransferredState();
     setupEventListeners();
     setupEventsTabListener();
