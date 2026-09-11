@@ -2971,11 +2971,26 @@ function findEvolutionChain(poke) {
     current = poke;
     while (true) {
         if (current.rawEvolutions && current.rawEvolutions.length > 0) {
-            const nextEvoInfo = current.rawEvolutions[0];
-            const next = pokemonDatabase.find(p => p.idName && (
-                p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
-                (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
-            ));
+            let next = null;
+            for (const nextEvoInfo of current.rawEvolutions) {
+                const candidate = pokemonDatabase.find(p => p.idName && (
+                    p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
+                    (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
+                ));
+                if (candidate) {
+                    const candidateParentInfo = getEvolutionParentInfo(candidate);
+                    const currentName = current.name || '';
+                    if (candidateParentInfo && candidateParentInfo.name && currentName) {
+                        if (candidateParentInfo.name.toLowerCase() === currentName.toLowerCase()) {
+                            next = candidate;
+                            break;
+                        }
+                    } else if (candidateParentInfo && candidateParentInfo.parent && candidateParentInfo.parent.id === current.id) {
+                        next = candidate;
+                        break;
+                    }
+                }
+            }
             if (next) {
                 if (chain.some(c => c.id === next.id)) break;
                 chain.push(next);
