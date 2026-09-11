@@ -5152,7 +5152,7 @@ function renderCandiesPane() {
                         </button>
                     ` : '';
                     
-                    let stageDisplayName = member.name;
+                    let stageDisplayName = isBase ? displayTitle : member.name;
 
                     return `
                         <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
