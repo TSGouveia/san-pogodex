@@ -2971,19 +2971,28 @@ function findEvolutionChain(poke) {
 }
 
 function getEvolutionBranches(poke) {
-    // 1. Find the root stage by tracing backwards to the base form
+    // 1. Find root stage by tracing backwards with cycle detection
     let root = poke;
+    const visitedParents = new Set([String(root.id)]);
     while (true) {
         const parentInfo = getEvolutionParentInfo(root);
-        if (parentInfo && parentInfo.parent && parentInfo.parent.id !== root.id) {
+        if (parentInfo && parentInfo.parent && parentInfo.parent.id && !visitedParents.has(String(parentInfo.parent.id))) {
+            visitedParents.add(String(parentInfo.parent.id));
             root = parentInfo.parent;
         } else {
             break;
         }
     }
 
-    // 2. Recursive function to build paths from a node
-    function buildPaths(currentStage) {
+    // 2. Recursive function with visited tracking to build paths from a node
+    function buildPaths(currentStage, visitedInBranch = new Set()) {
+        const stageKey = `${currentStage.id}-${currentStage.name}`;
+        if (visitedInBranch.has(stageKey)) {
+            return [[{ ...currentStage }]];
+        }
+        const newVisited = new Set(visitedInBranch);
+        newVisited.add(stageKey);
+
         const parentInfoOfCurrent = getEvolutionParentInfo(currentStage);
         let node = { ...currentStage };
         if (parentInfoOfCurrent && parentInfoOfCurrent.name && parentInfoOfCurrent.name !== currentStage.name) {
@@ -3001,8 +3010,8 @@ function getEvolutionBranches(poke) {
                 p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
                 (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
             ));
-            if (candidate) {
-                const subPaths = buildPaths(candidate);
+            if (candidate && candidate.id !== currentStage.id) {
+                const subPaths = buildPaths(candidate, newVisited);
                 subPaths.forEach(subPath => {
                     allPaths.push([node, ...subPath]);
                 });
