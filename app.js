@@ -2972,6 +2972,8 @@ function findEvolutionChain(poke) {
     while (true) {
         if (current.rawEvolutions && current.rawEvolutions.length > 0) {
             let next = null;
+            let neededParentInfo = null;
+
             for (const nextEvoInfo of current.rawEvolutions) {
                 const candidate = pokemonDatabase.find(p => p.idName && (
                     p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
@@ -2979,20 +2981,27 @@ function findEvolutionChain(poke) {
                 ));
                 if (candidate) {
                     const candidateParentInfo = getEvolutionParentInfo(candidate);
-                    const currentName = current.name || '';
-                    if (candidateParentInfo && candidateParentInfo.name && currentName) {
-                        if (candidateParentInfo.name.toLowerCase() === currentName.toLowerCase()) {
-                            next = candidate;
-                            break;
-                        }
-                    } else if (candidateParentInfo && candidateParentInfo.parent && candidateParentInfo.parent.id === current.id) {
+                    if (candidateParentInfo) {
                         next = candidate;
+                        neededParentInfo = candidateParentInfo;
                         break;
                     }
                 }
             }
+
             if (next) {
                 if (chain.some(c => c.id === next.id)) break;
+                // If the current starting element in chain is the base pokemon (e.g. Corsola #222) 
+                // but the evolution requires a regional form (e.g. Galarian Corsola), update the starting stage's name and image.
+                if (neededParentInfo && chain.length > 0 && chain[0].id === current.id) {
+                    if (neededParentInfo.name && chain[0].name !== neededParentInfo.name) {
+                        chain[0] = {
+                            ...chain[0],
+                            name: neededParentInfo.name,
+                            img: neededParentInfo.img || chain[0].img
+                        };
+                    }
+                }
                 chain.push(next);
                 current = next;
             } else {
