@@ -4707,38 +4707,6 @@ if (googleAuthBtn) {
     });
 }
 
-function getRegionalFormKey(rf) {
-    if (!rf) return null;
-    const name = rf.names && rf.names.English ? rf.names.English.toLowerCase().trim() : '';
-    let key = '';
-    if (/\b(alolan|alola)\b/.test(name)) {
-        const base = name.replace(/\b(alolan|alola)\b/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-alola`;
-    } else if (/\b(galarian|galar)\b/.test(name)) {
-        const base = name.replace(/\b(galarian|galar)\b/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-galar`;
-    } else if (/\b(hisuian|hisui)\b/.test(name)) {
-        const base = name.replace(/\b(hisuian|hisui)\b/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-hisui`;
-    } else if (/\b(paldean|paldea)\b/.test(name)) {
-        const base = name.replace(/\b(paldean|paldea)\b/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-paldea`;
-    } else if (name.includes('white-striped') || name.includes('white striped')) {
-        const base = name.replace(/white[- ]striped/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-white-striped`;
-    }
-    if (key) {
-        return key.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-    }
-    return null;
-}
-
-function getRegionalFormDisplayName(rf) {
-    if (rf && rf.names && rf.names.English) {
-        return rf.names.English;
-    }
-    return null;
-}
 
 function getEvolutionParentInfo(poke) {
     if (poke.id === "902" || (poke.idName && poke.idName.toLowerCase() === "basculegion")) {
