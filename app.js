@@ -5093,6 +5093,7 @@ function renderCandiesPane() {
             }
         }
 
+        let displayImg = family.base.img;
         let displayTitle = family.base.name;
         family.members.forEach(member => {
             const isCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
