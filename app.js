@@ -40,8 +40,18 @@ function safeLower(val) {
     return (val && typeof val === 'string') ? val.toLowerCase() : (val != null ? String(val).toLowerCase() : '');
 }
 
-// Ntfy Notification helper for error alerts
+// Ntfy Notification helper for error alerts (with rate limiting and deduplication)
+let lastNtfySentTime = 0;
+const sentNtfyMessages = new Set();
+
 window.sendNtfyNotification = function(message, title = 'PoGo Website Warning', tags = 'warning') {
+    const now = Date.now();
+    if (sentNtfyMessages.has(message) || (now - lastNtfySentTime < 5000)) {
+        return;
+    }
+    sentNtfyMessages.add(message);
+    lastNtfySentTime = now;
+
     try {
         fetch('https://ntfy.sh/lazysan', {
             method: 'POST',
@@ -57,8 +67,12 @@ window.sendNtfyNotification = function(message, title = 'PoGo Website Warning', 
 };
 
 window.addEventListener('error', (event) => {
+    // Do not spam ntfy for image load failures (handled by UI fallbacks)
+    if (event.target && event.target.tagName === 'IMG') {
+        return;
+    }
     if (window.sendNtfyNotification) {
-        const msg = event.message || (event.target && event.target.src ? `Recurso falhou ao carregar: ${event.target.src}` : 'Erro JavaScript');
+        const msg = event.message || 'Erro JavaScript';
         window.sendNtfyNotification(`Erro no site: ${msg}`, 'PoGo Website Error', 'warning,bug');
     }
 }, true);
@@ -120,11 +134,13 @@ const regionalFormPokeApiIds = {
   "goodra-hisui": "10242",
   "avalugg-hisui": "10243",
   "decidueye-hisui": "10244",
+  "tauros-paldea": "10250",
   "tauros-paldea-combat-breed": "10250",
   "tauros-paldea-blaze-breed": "10251",
   "tauros-paldea-aqua-breed": "10252",
   "wooper-paldea": "10253",
-  "basculin-white-striped": "10247"
+  "basculin-white-striped": "10247",
+  "darmanitan-galar": "10177"
 };
 
 let pokeApiIdMapping = {};
@@ -138,19 +154,19 @@ function getRegionalFormPokeApiId(name) {
     
     let key = '';
     if (/\b(alolan|alola)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(alolan|alola)\b/g, '').trim();
+        const base = nameLower.replace(/\b(alolan|alola)\b/g, '').replace(/[()]/g, '').trim();
         key = `${base}-alola`;
     } else if (/\b(galarian|galar)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(galarian|galar)\b/g, '').trim();
+        const base = nameLower.replace(/\b(galarian|galar)\b/g, '').replace(/[()]/g, '').trim();
         key = `${base}-galar`;
     } else if (/\b(hisuian|hisui)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(hisuian|hisui)\b/g, '').trim();
+        const base = nameLower.replace(/\b(hisuian|hisui)\b/g, '').replace(/[()]/g, '').trim();
         key = `${base}-hisui`;
     } else if (/\b(paldean|paldea)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(paldean|paldea)\b/g, '').trim();
+        const base = nameLower.replace(/\b(paldean|paldea)\b/g, '').replace(/[()]/g, '').trim();
         key = `${base}-paldea`;
-    } else if (nameLower.includes('white-striped')) {
-        const base = nameLower.replace('white-striped', '').trim();
+    } else if (nameLower.includes('white-striped') || nameLower.includes('white striped')) {
+        const base = nameLower.replace(/white[- ]striped/g, '').replace(/[()]/g, '').trim();
         key = `${base}-white-striped`;
     }
     
@@ -228,22 +244,25 @@ function getMegaPokeApiIdFallback(key) {
     return fallbacks[key] || null;
 }
 
+const POKE_SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
+const POKE_SPRITE_BACKUP_URL = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
+
 function getPokemonImageUrl(name, matchedPoke) {
     if (!name) return matchedPoke ? matchedPoke.img : '';
     const nameLower = name.toLowerCase().trim();
     
     // Check special legend forms
-    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10156.png`;
-    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10155.png`;
-    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10022.png`;
-    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10023.png`;
-    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10188.png`;
-    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/10189.png`;
+    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `${POKE_SPRITE_BASE_URL}/10156.png`;
+    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `${POKE_SPRITE_BASE_URL}/10155.png`;
+    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `${POKE_SPRITE_BASE_URL}/10022.png`;
+    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `${POKE_SPRITE_BASE_URL}/10023.png`;
+    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `${POKE_SPRITE_BASE_URL}/10188.png`;
+    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `${POKE_SPRITE_BASE_URL}/10189.png`;
 
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
     if (rfId) {
-        return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${rfId}.png`;
+        return `${POKE_SPRITE_BASE_URL}/${rfId}.png`;
     }
     
     // Check if it's a Mega evolution
@@ -257,7 +276,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         }
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
         }
     }
 
@@ -267,7 +286,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         let key = `${baseName}-primal`;
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
         }
     }
     
@@ -287,7 +306,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         formKey = formKey.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
         const mappedId = pokeApiIdMapping[formKey];
         if (mappedId) {
-            return `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${mappedId}.png`;
+            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
         }
     }
 
@@ -691,9 +710,60 @@ function normalizeRocketLineups(rawRocket) {
     return map;
 }
 
+// Lightweight IndexedDB helper for fast offline/local caching of Pokedex & Scraped Data
+const POGO_CACHE_DB = 'pogo_cache_db';
+const POGO_CACHE_STORE = 'pogo_cache_store';
+
+function openPogoCacheDB() {
+    return new Promise((resolve, reject) => {
+        if (!('indexedDB' in window)) {
+            return reject(new Error('IndexedDB not supported'));
+        }
+        const req = indexedDB.open(POGO_CACHE_DB, 1);
+        req.onupgradeneeded = () => {
+            if (!req.result.objectStoreNames.contains(POGO_CACHE_STORE)) {
+                req.result.createObjectStore(POGO_CACHE_STORE);
+            }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function getPogoLocalCache(key) {
+    try {
+        const db = await openPogoCacheDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(POGO_CACHE_STORE, 'readonly');
+            const req = tx.objectStore(POGO_CACHE_STORE).get(key);
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => resolve(null);
+        });
+    } catch (e) {
+        return null;
+    }
+}
+
+async function setPogoLocalCache(key, value) {
+    try {
+        const db = await openPogoCacheDB();
+        return new Promise((resolve) => {
+            const tx = db.transaction(POGO_CACHE_STORE, 'readwrite');
+            tx.objectStore(POGO_CACHE_STORE).put(value, key);
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => resolve(false);
+        });
+    } catch (e) {
+        return false;
+    }
+}
+
 async function loadScrapedDataFromFirestore() {
     const api_key = "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU";
     const project_id = "pogo-website-14a46";
+
+    // 1. Check local IndexedDB cache first
+    const cachedData = await getPogoLocalCache('scraped_data_cache');
 
     try {
         const authRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {
@@ -705,6 +775,25 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
+        // 2. If we have valid local cache, check only the 'events' doc to verify updatedAt
+        if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0) {
+            try {
+                const checkRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/events`, { headers });
+                if (checkRes.ok) {
+                    const checkDoc = await checkRes.json();
+                    const latestUpdatedAt = checkDoc?.fields?.updatedAt?.stringValue;
+                    if (latestUpdatedAt && latestUpdatedAt === cachedData.updatedAt) {
+                        console.log("Serving cached Pokémon data from browser IndexedDB storage (saved 21 Firestore reads).");
+                        return cachedData;
+                    }
+                }
+            } catch (e) {
+                console.warn("Could not check latest timestamp, serving from local cache:", e);
+                return cachedData;
+            }
+        }
+
+        // 3. Otherwise fetch all modules from Firestore
         const baseModules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns'];
         const pokedexParts = Array.from({ length: 11 }, (_, i) => `pokedex_part${i + 1}`);
         const modules = [...baseModules, ...pokedexParts];
@@ -748,8 +837,17 @@ async function loadScrapedDataFromFirestore() {
             parsed.pokedex = assembledPokedex;
         }
 
+        // 4. Save freshly fetched data to local cache
+        if (parsed.pokedex && parsed.pokedex.length > 0) {
+            await setPogoLocalCache('scraped_data_cache', parsed);
+        }
+
         return parsed;
     } catch (err) {
+        if (cachedData && cachedData.pokedex && cachedData.pokedex.length > 0) {
+            console.warn("Firestore error, serving from local cache:", err);
+            return cachedData;
+        }
         if (window.sendNtfyNotification) window.sendNtfyNotification(`Erro crítico de autenticação Firestore: ${err}`);
         console.warn("Could not fetch scraped data from Firestore database, falling back to network endpoints:", err);
         return null;
@@ -880,7 +978,7 @@ async function loadPokedex() {
                 name: "Basculegion",
                 gen: 8.5,
                 types: ["water", "ghost"],
-                img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/902.png`,
+                img: `${POKE_SPRITE_BASE_URL}/902.png`,
                 stats: {
                     atk: 247,
                     def: 146,
@@ -1286,7 +1384,7 @@ function formatPokemon(p) {
         name: p.names.English,
         gen: gen,
         types: types,
-        img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
+        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
         stats: {
             atk: p.stats ? p.stats.attack : 100,
             def: p.stats ? p.stats.defense : 100,
@@ -3026,7 +3124,7 @@ function renderWildSpawns() {
         if (poke && poke.img) {
             imgUrl = poke.img;
         } else {
-            imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${s.dexNr}.png`;
+            imgUrl = `${POKE_SPRITE_BASE_URL}/${s.dexNr}.png`;
         }
 
         const rateBadge = s.spawnRate > 0 
@@ -3040,7 +3138,7 @@ function renderWildSpawns() {
                     ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                     ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                 </div>
-                <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${s.dexNr}.png'; this.onerror=null;">
+                <img class="rotation-card-img" src="${imgUrl}" alt="${s.name}" onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${s.dexNr}.png';}else{this.style.opacity=0.3;}">
                 <div class="rotation-card-details-wrapper">
                     <span class="rotation-card-name">${s.name}</span>
                     <div class="rotation-cp-details">
@@ -3267,7 +3365,7 @@ function renderActiveRotations() {
                         ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                         ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                     </div>
-                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${baseFormPoke.id}.png'` : 'null'}) { this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
+                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
                         ${cpMeta}
@@ -3327,9 +3425,9 @@ function renderActiveRotations() {
 
                     card.className = `rotation-card-item theme-mega ${highlightClass} spawn-animation`;
 
-                    let imgUrl = matchedPoke ? matchedPoke.img : boss.image;
+                    let imgUrl = getPokemonImageUrl(boss.name, matchedPoke);
                     if (!imgUrl) {
-                        imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/1.png`;
+                        imgUrl = (matchedPoke ? matchedPoke.img : '') || boss.image || `${POKE_SPRITE_BASE_URL}/1.png`;
                     }
 
                     let pokebattlerBtn = '';
@@ -3484,9 +3582,11 @@ function renderActiveRotations() {
                         imgUrl = 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.3%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>';
                     }
                 }
-                const eggOnerror = (egg.dex && egg.dex !== 'null') 
-                    ? `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${egg.dex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');};"`
-                    : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${egg.name}');"`;
+                const eggRfId = getRegionalFormPokeApiId(egg.name);
+                const eggFallbackDex = eggRfId || (egg.dex && egg.dex !== 'null' ? egg.dex : (matchedPoke ? matchedPoke.id : null));
+                const eggOnerror = (eggFallbackDex && eggFallbackDex !== 'null') 
+                    ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${eggFallbackDex}.png';}else{this.style.opacity=0.3;}"`
+                    : `onerror="this.style.opacity=0.3;"`;
 
                 let cpMeta = '';
                 const maxHatchCp = (egg.cp && egg.cp.normal && egg.cp.normal.max) ? egg.cp.normal.max : ((egg.cp && egg.cp.max && egg.cp.max !== 'N/A') ? egg.cp.max : null);
@@ -3595,14 +3695,15 @@ function renderActiveRotations() {
                 card.setAttribute('data-scroll-target', `quest-${safeLower(keyName).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
                 
                 // Prioritize official Pokemon artwork over LeekDuck images
-                let imgUrl = matchedPoke ? matchedPoke.img : getPokemonImageUrl(encounter.fullPokeName, matchedPoke);
+                let imgUrl = getPokemonImageUrl(encounter.fullPokeName, matchedPoke);
                 if (!imgUrl) {
-                    imgUrl = encounter.image || `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${encounter.dex}.png`;
+                    imgUrl = (matchedPoke ? matchedPoke.img : '') || encounter.image || `${POKE_SPRITE_BASE_URL}/${encounter.dex}.png`;
                 }
-                const fallbackDex = matchedPoke ? matchedPoke.id : encounter.dex;
+                const rfId = getRegionalFormPokeApiId(encounter.fullPokeName);
+                const fallbackDex = rfId || (matchedPoke ? matchedPoke.id : encounter.dex);
                 const questOnerror = (fallbackDex && fallbackDex !== 'null') 
-                    ? `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${fallbackDex}.png'; this.onerror=function(){this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');};"`
-                    : `onerror="this.style.opacity=0.3; if(window.sendNtfyNotification) window.sendNtfyNotification('Imagem falhou ao carregar: ${encounter.fullPokeName}');"`;
+                    ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${fallbackDex}.png';}else{this.style.opacity=0.3;}"`
+                    : `onerror="this.style.opacity=0.3;"`;
 
                 let cpMeta = '';
                 const maxQuestCp = encounter.maxCp || (encounter.combatPower && encounter.combatPower.normal ? encounter.combatPower.normal.max : null);
@@ -3802,8 +3903,15 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
             card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
 
-            let imgUrl = matchedPoke ? matchedPoke.img : `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png`;
-            const imgOnerror = `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
+            let imgUrl = getPokemonImageUrl(item.name, matchedPoke);
+            if (!imgUrl) {
+                imgUrl = (matchedPoke ? matchedPoke.img : '') || `${POKE_SPRITE_BASE_URL}/${item.dex}.png`;
+            }
+            const partyRfId = getRegionalFormPokeApiId(item.name);
+            const partyFallbackDex = partyRfId || (matchedPoke ? matchedPoke.id : item.dex);
+            const imgOnerror = (partyFallbackDex && partyFallbackDex !== 'null')
+                ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${partyFallbackDex}.png';}else{this.style.opacity=0.3;}"`
+                : `onerror="this.style.opacity=0.3;"`;
 
             let cpMeta = '';
             const partyMaxCp = item.max_cp || (item.combatPower && item.combatPower.normal ? item.combatPower.normal.max : null);
@@ -3842,12 +3950,16 @@ function renderRewardsListHelper(container, data, cardTheme) {
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
         card.className = `rotation-card-item ${cardTheme} ${highlightClass}`;
         
-        let imgUrl = matchedPoke ? matchedPoke.img : '';
+        let imgUrl = getPokemonImageUrl(item.name, matchedPoke);
         if (!imgUrl) {
-            imgUrl = `https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm${item.dex}.icon.png`;
+            imgUrl = (matchedPoke ? matchedPoke.img : '') || `https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm${item.dex}.icon.png`;
         }
         
-        const imgOnerror = `onerror="this.src='https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${item.dex}.png'; this.onerror=null;"`;
+        const helperRfId = getRegionalFormPokeApiId(item.name);
+        const helperFallbackDex = helperRfId || item.dex;
+        const imgOnerror = (helperFallbackDex && helperFallbackDex !== 'null')
+            ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${helperFallbackDex}.png';}else{this.style.opacity=0.3;}"`
+            : `onerror="this.style.opacity=0.3;"`;
 
         card.innerHTML = `
             ${item.shiny ? shinySparkleSvg : ''}
@@ -4007,7 +4119,7 @@ function renderRocketLineups() {
 
                         let imgUrl = getPokemonImageUrl(rawName, matchedPoke);
                         if (!imgUrl && matchedPoke) {
-                            imgUrl = `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
+                            imgUrl = `${POKE_SPRITE_BASE_URL}/${matchedPoke.id}.png`;
                         }
                         if (!imgUrl) imgUrl = '';
 
@@ -4567,7 +4679,7 @@ function getEvolutionParentInfo(poke) {
             return {
                 parent: basePoke,
                 name: "Basculin",
-                img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/550.png`,
+                img: `${POKE_SPRITE_BASE_URL}/550.png`,
                 candies: 50,
                 item: null,
                 quests: []
@@ -4590,7 +4702,7 @@ function getEvolutionParentInfo(poke) {
                     return {
                         parent: basePoke,
                         name: p.names.English,
-                        img: `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`,
+                        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
                         candies: match.candies || 50,
                         item: match.item || null,
                         quests: match.quests || []
@@ -4613,8 +4725,8 @@ function getEvolutionParentInfo(poke) {
                             const rfId = rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null;
                             
                             let img = rfId 
-                                ? `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${rfId}.png`
-                                : `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${p.dexNr}.png`;
+                                ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
+                                : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`;
                             
                             const displayName = getRegionalFormDisplayName(rf);
                             
@@ -4969,7 +5081,7 @@ function renderCandiesPane() {
                     </div>
                 </div>
                 <div class="candy-input-wrapper">
-                    <img src="https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/items/rare-candy.png" class="candy-icon">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon">
                     <input type="number" min="0" value="${currentCandies}" class="candy-count-input" data-family-id="${baseId}" placeholder="0">
                 </div>
             </div>
@@ -6085,7 +6197,7 @@ function openEventModal(ev) {
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
                 if (matchedPoke) {
-                    pokeImgUrl = matchedPoke.img || `https://fastly.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork/${matchedPoke.id}.png`;
+                    pokeImgUrl = matchedPoke.img || `${POKE_SPRITE_BASE_URL}/${matchedPoke.id}.png`;
                 } else {
                     // asset_url from the API has the correct sprite for Megas and alternate forms
                     pokeImgUrl = spawn.asset_url || '';
