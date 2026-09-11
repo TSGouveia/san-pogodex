@@ -4819,7 +4819,7 @@ function getEvolutionParentInfo(poke) {
                         if (basePoke) {
                             const displayName = getRegionalFormDisplayName(rf) || p.names.English;
                             const rKey = getRegionalFormKey(rf);
-                            const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName);
+                            const rfId = pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey];
                             
                             let img = rfId 
                                 ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
