@@ -5093,15 +5093,14 @@ function renderCandiesPane() {
             }
         }
 
-        let displayImg = family.base.img;
-        let regionalParentName = null;
+        let displayTitle = family.base.name;
         family.members.forEach(member => {
             const isCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
             if (!isCaught) {
                 const parentInfo = getEvolutionParentInfo(member);
                 if (parentInfo && parentInfo.parent.id === family.base.id && parentInfo.name !== family.base.name) {
                     displayImg = parentInfo.img;
-                    regionalParentName = parentInfo.name;
+                    displayTitle = parentInfo.name;
                 }
             }
         });
@@ -5111,11 +5110,11 @@ function renderCandiesPane() {
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
-                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View ${family.base.name} details">
-                    <img src="${displayImg}" alt="${family.base.name}" class="family-base-img">
+                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View ${displayTitle} details">
+                    <img src="${displayImg}" alt="${displayTitle}" class="family-base-img">
                     <div class="family-info">
                         <h3 class="family-title">
-                            ${family.base.name}
+                            ${displayTitle}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
