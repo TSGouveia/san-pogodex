@@ -2944,7 +2944,7 @@ function loadEvolutionTab(poke) {
 function findEvolutionChain(poke) {
     const chain = [poke];
     
-    // Build backwards
+    // Build backwards if this pokemon has a parent (e.g. Persian -> Meowth / Alolan Meowth, Perrserker -> Galarian Meowth, Cursola -> Galarian Corsola)
     let current = poke;
     while (true) {
         const parentInfo = getEvolutionParentInfo(current);
@@ -2967,13 +2967,14 @@ function findEvolutionChain(poke) {
         }
     }
     
-    // Build forwards
+    // Build forwards from the current pokemon
     current = poke;
     while (true) {
         if (current.rawEvolutions && current.rawEvolutions.length > 0) {
             let next = null;
             let neededParentInfo = null;
 
+            // 1. Try finding an evolution whose getEvolutionParentInfo matches the current stage's name
             for (const nextEvoInfo of current.rawEvolutions) {
                 const candidate = pokemonDatabase.find(p => p.idName && (
                     p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
@@ -2981,7 +2982,26 @@ function findEvolutionChain(poke) {
                 ));
                 if (candidate) {
                     const candidateParentInfo = getEvolutionParentInfo(candidate);
-                    if (candidateParentInfo) {
+                    const currentName = current.name || '';
+                    if (candidateParentInfo && candidateParentInfo.name) {
+                        if (candidateParentInfo.name.toLowerCase() === currentName.toLowerCase()) {
+                            next = candidate;
+                            neededParentInfo = candidateParentInfo;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // 2. If no exact parent name match was found (e.g., standard base form for regional-only evolution), fallback to first candidate
+            if (!next) {
+                for (const nextEvoInfo of current.rawEvolutions) {
+                    const candidate = pokemonDatabase.find(p => p.idName && (
+                        p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
+                        (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
+                    ));
+                    if (candidate) {
+                        const candidateParentInfo = getEvolutionParentInfo(candidate);
                         next = candidate;
                         neededParentInfo = candidateParentInfo;
                         break;
@@ -2991,8 +3011,7 @@ function findEvolutionChain(poke) {
 
             if (next) {
                 if (chain.some(c => c.id === next.id)) break;
-                // If the current starting element in chain is the base pokemon (e.g. Corsola #222) 
-                // but the evolution requires a regional form (e.g. Galarian Corsola), update the starting stage's name and image.
+                // If opening a standard base pokemon, update its display name & image to regional form if the evolution requires it
                 if (neededParentInfo && chain.length > 0 && chain[0].id === current.id) {
                     if (neededParentInfo.name && chain[0].name !== neededParentInfo.name) {
                         chain[0] = {
