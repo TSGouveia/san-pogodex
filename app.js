@@ -2964,7 +2964,15 @@ function findEvolutionChain(poke) {
     return branches.length > 0 ? branches[0] : [poke];
 }
 
+const evolutionBranchesCache = new Map();
+
 function getEvolutionBranches(poke) {
+    if (!poke || !poke.id) return [[poke]];
+    const cacheKey = String(poke.id);
+    if (evolutionBranchesCache.has(cacheKey)) {
+        return evolutionBranchesCache.get(cacheKey);
+    }
+
     // 1. Find root stage by tracing backwards with cycle detection
     let root = poke;
     const visitedParents = new Set([String(root.id)]);
@@ -3026,7 +3034,9 @@ function getEvolutionBranches(poke) {
         return allPaths;
     }
 
-    return buildPaths(root);
+    const result = buildPaths(root);
+    evolutionBranchesCache.set(cacheKey, result);
+    return result;
 }
 
 
