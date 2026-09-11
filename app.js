@@ -4726,27 +4726,7 @@ function getEvolutionParentInfo(poke) {
     if (!rawPokedexData) return null;
     
     for (const p of rawPokedexData) {
-        // Check base form evolutions
-        if (p.evolutions) {
-            const match = p.evolutions.find(e => 
-                e.id.toLowerCase() === poke.idName.toLowerCase() || 
-                (e.formId && e.formId.toLowerCase() === poke.idName.toLowerCase())
-            );
-            if (match) {
-                const basePoke = pokemonDatabase.find(x => x.id === String(p.dexNr));
-                if (basePoke) {
-                    return {
-                        parent: basePoke,
-                        name: p.names.English,
-                        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
-                        candies: match.candies || 50,
-                        item: match.item || null,
-                        quests: match.quests || []
-                    };
-                }
-            }
-        }
-        // Check regional forms
+        // Check regional forms first (so regional evolutions like Galarian Corsola -> Cursola match before standard Corsola)
         if (p.regionForms) {
             for (const rf of Object.values(p.regionForms)) {
                 if (rf.evolutions) {
@@ -4776,6 +4756,26 @@ function getEvolutionParentInfo(poke) {
                             };
                         }
                     }
+                }
+            }
+        }
+        // Check base form evolutions
+        if (p.evolutions) {
+            const match = p.evolutions.find(e => 
+                e.id.toLowerCase() === poke.idName.toLowerCase() || 
+                (e.formId && e.formId.toLowerCase() === poke.idName.toLowerCase())
+            );
+            if (match) {
+                const basePoke = pokemonDatabase.find(x => x.id === String(p.dexNr));
+                if (basePoke) {
+                    return {
+                        parent: basePoke,
+                        name: p.names.English,
+                        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
+                        candies: match.candies || 50,
+                        item: match.item || null,
+                        quests: match.quests || []
+                    };
                 }
             }
         }
