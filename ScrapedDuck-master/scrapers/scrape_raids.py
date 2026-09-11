@@ -98,15 +98,21 @@ def get_cp_from_stats(base_atk, base_def, base_sta):
 
 def canonicalize_boss_name(name):
     n = name.strip()
-    if re.search(r'giratina', n, re.IGNORECASE) and re.search(r'shadow', n, re.IGNORECASE):
-        if re.search(r'origin', n, re.IGNORECASE):
-            return "Shadow Origin Forme Giratina"
-        return "Shadow Altered Forme Giratina"
     if re.search(r'giratina', n, re.IGNORECASE):
         if re.search(r'origin', n, re.IGNORECASE):
             return "Giratina (Origin Forme)"
         return "Giratina (Altered Forme)"
     n = re.sub(r'\s+Raid Guide.*$', '', n, flags=re.IGNORECASE).strip()
+    
+    # Standardize regional names to proper adjectives
+    n = re.sub(r'\bAlola\b', 'Alolan', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bHisui\b', 'Hisuian', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bGalar\b', 'Galarian', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bPaldea\b', 'Paldean', n, flags=re.IGNORECASE)
+    
+    # Remove redundant word 'Shadow' from boss name (tier / badge already specifies Shadow)
+    n = re.sub(r'\bShadow\b', '', n, flags=re.IGNORECASE)
+    n = re.sub(r'\s+', ' ', n).strip()
     return n
 
 def fetch_guide_details(guide_url, tier="5-Star Raids"):
@@ -163,10 +169,10 @@ def load_pokebattler_ids():
     _POKEBATTLER_IDS = set()
     return _POKEBATTLER_IDS
 
-def build_pokebattler_raid_url(boss_name):
+def build_pokebattler_raid_url(boss_name, tier=None):
     n = boss_name.strip()
     nl = n.lower()
-    is_shadow = "shadow" in nl
+    is_shadow = "shadow" in nl or (tier and "shadow" in tier.lower())
     is_mega = nl.startswith("mega ")
     
     # Region
@@ -549,7 +555,7 @@ def scrape_raids():
 
                                 img_url = get_boss_image_url(clean_name, dex_nr)
                                 can_be_shiny = bool(has_shiny_class or (dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
-                                pb_url = build_pokebattler_raid_url(clean_name)
+                                pb_url = build_pokebattler_raid_url(clean_name, current_tier)
 
                                 bosses.append({
                                     "name": clean_name,

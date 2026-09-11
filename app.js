@@ -1046,11 +1046,11 @@ async function loadPokedex() {
             });
         }
 
-function buildPokebattlerRaidUrl(bossName) {
+function buildPokebattlerRaidUrl(bossName, tier = null) {
     if (!bossName) return 'https://www.pokebattler.com/raids';
     const n = bossName.trim();
     const nl = n.toLowerCase();
-    const isShadow = nl.includes('shadow');
+    const isShadow = nl.includes('shadow') || (tier && safeLower(tier).includes('shadow'));
     const isMega = nl.startsWith('mega ');
 
     let region = null;
@@ -1101,16 +1101,26 @@ function buildPokebattlerMaxUrl(bossName) {
         liveRaids = [];
         if (Array.isArray(rawRaids)) {
             rawRaids.forEach(boss => {
-                const matchedPoke = findPokemonByName(boss.name);
                 let tier = boss.tier || '5-Star Raids';
-                const isShadow = safeLower(boss.name).startsWith('shadow') || safeLower(tier).includes('shadow');
+                const isShadow = safeLower(boss.name).includes('shadow') || safeLower(tier).includes('shadow');
                 if (isShadow && !tier.startsWith('Shadow')) {
                     tier = 'Shadow ' + tier;
                 }
 
+                let cleanName = (boss.name || '')
+                    .replace(/\bAlola\b/gi, 'Alolan')
+                    .replace(/\bHisui\b/gi, 'Hisuian')
+                    .replace(/\bGalar\b/gi, 'Galarian')
+                    .replace(/\bPaldea\b/gi, 'Paldean')
+                    .replace(/\bShadow\b/gi, '')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                const matchedPoke = findPokemonByName(cleanName) || findPokemonByName(boss.name);
+
                 liveRaids.push({
-                    idName: matchedPoke ? matchedPoke.idName : boss.name,
-                    name: boss.name,
+                    idName: matchedPoke ? matchedPoke.idName : cleanName,
+                    name: cleanName,
                     tier: tier,
                     image: boss.image || '',
                     cp: boss.combatPower || null,
@@ -1119,7 +1129,7 @@ function buildPokebattlerMaxUrl(bossName) {
                     weatherBoosts: boss.boostedWeather || [],
                     trainersText: boss.trainersText || null,
                     estimatedPlayers: boss.estimatedPlayers || null,
-                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(boss.name),
+                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(cleanName, tier),
                     counters: {},
                     battleResult: null
                 });
@@ -1160,19 +1170,31 @@ function buildPokebattlerMaxUrl(bossName) {
                 if (Array.isArray(list)) {
                     list.forEach(boss => {
                         const englishName = boss.names && boss.names.English ? boss.names.English : boss.id;
-                        let finalName = englishName;
-                        if (boss.level && boss.level.startsWith('shadow_') && !englishName.startsWith('Shadow ')) {
-                            finalName = 'Shadow ' + englishName;
+                        let rawFinalName = englishName;
+                        const isShadow = (boss.level && boss.level.startsWith('shadow_')) || safeLower(englishName).includes('shadow') || safeLower(key).includes('shadow');
+                        let tier = tierMapping[key] || key;
+                        if (isShadow && !tier.startsWith('Shadow')) {
+                            tier = 'Shadow ' + tier;
                         }
-                        const matchedPoke = findPokemonByName(finalName);
+
+                        let cleanName = rawFinalName
+                            .replace(/\bAlola\b/gi, 'Alolan')
+                            .replace(/\bHisui\b/gi, 'Hisuian')
+                            .replace(/\bGalar\b/gi, 'Galarian')
+                            .replace(/\bPaldea\b/gi, 'Paldean')
+                            .replace(/\bShadow\b/gi, '')
+                            .replace(/\s+/g, ' ')
+                            .trim();
+
+                        const matchedPoke = findPokemonByName(cleanName) || findPokemonByName(rawFinalName);
                         
                         const normalMax = boss.cpRange && boss.cpRange[1] ? boss.cpRange[1] : null;
                         const boostedMax = boss.cpRangeBoost && boss.cpRangeBoost[1] ? boss.cpRangeBoost[1] : null;
                         
                         liveRaids.push({
-                            idName: matchedPoke ? matchedPoke.idName : finalName,
-                            name: finalName,
-                            tier: tierMapping[key] || key,
+                            idName: matchedPoke ? matchedPoke.idName : cleanName,
+                            name: cleanName,
+                            tier: tier,
                             image: boss.assets ? (boss.assets.image || '') : '',
                             cp: {
                                 normal: normalMax ? { max: normalMax } : null,
@@ -1377,6 +1399,19 @@ function formatPokemon(p) {
         gen = 99;
     }
 
+    const allEvos = [...(p.evolutions || [])];
+    if (p.regionForms) {
+        Object.values(p.regionForms).forEach(rf => {
+            if (rf && Array.isArray(rf.evolutions)) {
+                rf.evolutions.forEach(e => {
+                    if (!allEvos.some(existing => (existing.formId && e.formId && existing.formId === e.formId) || (existing.id === e.id))) {
+                        allEvos.push(e);
+                    }
+                });
+            }
+        });
+    }
+
     return {
         id: String(p.dexNr),
         idName: p.formId || p.id,
@@ -1391,7 +1426,7 @@ function formatPokemon(p) {
             sta: p.stats ? p.stats.stamina : 100
         },
         obtaining: obtaining,
-        rawEvolutions: p.evolutions || []
+        rawEvolutions: allEvos
     };
 }
 
@@ -4672,14 +4707,47 @@ if (googleAuthBtn) {
     });
 }
 
+function getRegionalFormKey(rf) {
+    if (!rf) return null;
+    const name = rf.names && rf.names.English ? rf.names.English.toLowerCase().trim() : '';
+    let key = '';
+    if (/\b(alolan|alola)\b/.test(name)) {
+        const base = name.replace(/\b(alolan|alola)\b/g, '').replace(/[()]/g, '').trim();
+        key = `${base}-alola`;
+    } else if (/\b(galarian|galar)\b/.test(name)) {
+        const base = name.replace(/\b(galarian|galar)\b/g, '').replace(/[()]/g, '').trim();
+        key = `${base}-galar`;
+    } else if (/\b(hisuian|hisui)\b/.test(name)) {
+        const base = name.replace(/\b(hisuian|hisui)\b/g, '').replace(/[()]/g, '').trim();
+        key = `${base}-hisui`;
+    } else if (/\b(paldean|paldea)\b/.test(name)) {
+        const base = name.replace(/\b(paldean|paldea)\b/g, '').replace(/[()]/g, '').trim();
+        key = `${base}-paldea`;
+    } else if (name.includes('white-striped') || name.includes('white striped')) {
+        const base = name.replace(/white[- ]striped/g, '').replace(/[()]/g, '').trim();
+        key = `${base}-white-striped`;
+    }
+    if (key) {
+        return key.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+    return null;
+}
+
+function getRegionalFormDisplayName(rf) {
+    if (rf && rf.names && rf.names.English) {
+        return rf.names.English;
+    }
+    return null;
+}
+
 function getEvolutionParentInfo(poke) {
     if (poke.id === "902" || (poke.idName && poke.idName.toLowerCase() === "basculegion")) {
         const basePoke = pokemonDatabase.find(x => x.id === "550");
         if (basePoke) {
             return {
                 parent: basePoke,
-                name: "Basculin",
-                img: `${POKE_SPRITE_BASE_URL}/550.png`,
+                name: "White-Striped Basculin",
+                img: `${POKE_SPRITE_BASE_URL}/10247.png`,
                 candies: 50,
                 item: null,
                 quests: []
@@ -4728,7 +4796,7 @@ function getEvolutionParentInfo(poke) {
                                 ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
                                 : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`;
                             
-                            const displayName = getRegionalFormDisplayName(rf);
+                            const displayName = getRegionalFormDisplayName(rf) || p.names.English;
                             
                             return {
                                 parent: basePoke,
@@ -5058,12 +5126,14 @@ function renderCandiesPane() {
         }
 
         let displayImg = family.base.img;
+        let regionalParentName = null;
         family.members.forEach(member => {
             const isCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
             if (!isCaught) {
                 const parentInfo = getEvolutionParentInfo(member);
                 if (parentInfo && parentInfo.parent.id === family.base.id && parentInfo.name !== family.base.name) {
                     displayImg = parentInfo.img;
+                    regionalParentName = parentInfo.name;
                 }
             }
         });
@@ -5076,7 +5146,11 @@ function renderCandiesPane() {
                 <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View ${family.base.name} details">
                     <img src="${displayImg}" alt="${family.base.name}" class="family-base-img">
                     <div class="family-info">
-                        <h3 class="family-title">${family.base.name} <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i></h3>
+                        <h3 class="family-title">
+                            ${family.base.name}
+                            ${regionalParentName ? `<span style="font-size: 0.72rem; color: #a78bfa; font-weight: 600; display: block; margin-top: 1px;">(${regionalParentName} • Shares Candies)</span>` : ''}
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
+                        </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
                     </div>
                 </div>
@@ -5111,12 +5185,19 @@ function renderCandiesPane() {
                         </button>
                     ` : '';
                     
+                    let stageDisplayName = member.name;
+                    if (isBase && regionalParentName) {
+                        stageDisplayName = `${member.name} / ${regionalParentName}`;
+                    } else if (parentInfo && parentInfo.name && parentInfo.name !== family.base.name) {
+                        stageDisplayName = `${member.name} (from ${parentInfo.name})`;
+                    }
+
                     return `
                         <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
                             <span class="stage-caught-status">
                                 <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : 'fa-circle-xmark')}"></i>
                             </span>
-                            <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${member.name}</span>
+                            <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
                             ${actionButton}
                             ${questButton}
                             ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
