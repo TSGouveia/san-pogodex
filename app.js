@@ -2971,50 +2971,52 @@ function findEvolutionChain(poke) {
 }
 
 function getEvolutionBranches(poke) {
-    const branches = [];
-
-    // If poke is an evolved form (e.g. Persian, Perrserker, Cursola, Basculegion), trace backwards
-    const parentInfo = getEvolutionParentInfo(poke);
-    if (parentInfo && parentInfo.parent && parentInfo.parent.id !== poke.id) {
-        const parentStage = {
-            id: parentInfo.parent.id,
-            idName: parentInfo.parent.idName,
-            num: parentInfo.parent.num,
-            name: parentInfo.name,
-            img: parentInfo.img,
-            types: parentInfo.parent.types,
-            stats: parentInfo.parent.stats,
-            rawEvolutions: parentInfo.parent.rawEvolutions
-        };
-        branches.push([parentStage, poke]);
-        return branches;
+    // 1. Find the root stage by tracing backwards to the base form
+    let root = poke;
+    while (true) {
+        const parentInfo = getEvolutionParentInfo(root);
+        if (parentInfo && parentInfo.parent && parentInfo.parent.id !== root.id) {
+            root = parentInfo.parent;
+        } else {
+            break;
+        }
     }
 
-    // If poke is a base form with rawEvolutions (e.g. Meowth, Corsola, Basculin, Eevee)
-    if (poke.rawEvolutions && poke.rawEvolutions.length > 0) {
-        poke.rawEvolutions.forEach(nextEvoInfo => {
+    // 2. Recursive function to build paths from a node
+    function buildPaths(currentStage) {
+        const parentInfoOfCurrent = getEvolutionParentInfo(currentStage);
+        let node = { ...currentStage };
+        if (parentInfoOfCurrent && parentInfoOfCurrent.name && parentInfoOfCurrent.name !== currentStage.name) {
+            node.name = parentInfoOfCurrent.name;
+            if (parentInfoOfCurrent.img) node.img = parentInfoOfCurrent.img;
+        }
+
+        if (!currentStage.rawEvolutions || currentStage.rawEvolutions.length === 0) {
+            return [[node]];
+        }
+
+        const allPaths = [];
+        currentStage.rawEvolutions.forEach(nextEvoInfo => {
             const candidate = pokemonDatabase.find(p => p.idName && (
                 p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
                 (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
             ));
             if (candidate) {
-                const candidateParentInfo = getEvolutionParentInfo(candidate);
-                let baseStage = { ...poke };
-                
-                if (candidateParentInfo && candidateParentInfo.name) {
-                    baseStage.name = candidateParentInfo.name;
-                    if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
-                }
-                branches.push([baseStage, candidate]);
+                const subPaths = buildPaths(candidate);
+                subPaths.forEach(subPath => {
+                    allPaths.push([node, ...subPath]);
+                });
             }
         });
+
+        if (allPaths.length === 0) {
+            return [[node]];
+        }
+
+        return allPaths;
     }
 
-    if (branches.length === 0) {
-        branches.push([poke]);
-    }
-
-    return branches;
+    return buildPaths(root);
 }
 
 
