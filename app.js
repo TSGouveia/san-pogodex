@@ -324,7 +324,19 @@ function getRegionalFormKey(rf) {
     const parts = formId.split('_');
     if (parts.length < 2) return '';
     
-    const species = parts[0].toLowerCase();
+    let species = parts[0].toLowerCase();
+    let regionIndex = -1;
+    parts.forEach((p, idx) => {
+        if (['ALOLA', 'GALAR', 'HISUI', 'PALDEA', 'WHITE_STRIPED'].some(r => p.includes(r))) {
+            if (regionIndex === -1) regionIndex = idx;
+        }
+    });
+    
+    if (regionIndex > 0) {
+        species = parts.slice(0, regionIndex).join('-').toLowerCase();
+    }
+    species = species.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
+
     const regionPart = parts.slice(1).join('_');
     
     let suffix = '';
@@ -4805,14 +4817,13 @@ function getEvolutionParentInfo(poke) {
                     if (match) {
                         const basePoke = pokemonDatabase.find(x => x.id === String(p.dexNr));
                         if (basePoke) {
+                            const displayName = getRegionalFormDisplayName(rf) || p.names.English;
                             const rKey = getRegionalFormKey(rf);
-                            const rfId = rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null;
+                            const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName);
                             
                             let img = rfId 
                                 ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
                                 : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`;
-                            
-                            const displayName = getRegionalFormDisplayName(rf) || p.names.English;
                             
                             return {
                                 parent: basePoke,
