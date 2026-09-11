@@ -3000,9 +3000,16 @@ function getEvolutionBranches(poke) {
             if (candidate) {
                 const candidateParentInfo = getEvolutionParentInfo(candidate);
                 let baseStage = { ...poke };
+                
+                // Only override baseStage with regional parent info if candidateParentInfo specifies a regional parent AND candidate is a regional evolution
                 if (candidateParentInfo && candidateParentInfo.name && candidateParentInfo.name !== poke.name) {
-                    baseStage.name = candidateParentInfo.name;
-                    if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
+                    const parentNameLower = candidateParentInfo.name.toLowerCase();
+                    const currentNameLower = (poke.name || '').toLowerCase();
+                    // If candidate parent is regional (e.g. Galarian Meowth, White-Striped Basculin)
+                    if (parentNameLower !== currentNameLower) {
+                        baseStage.name = candidateParentInfo.name;
+                        if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
+                    }
                 }
                 branches.push([baseStage, candidate]);
             }
