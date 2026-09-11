@@ -2896,142 +2896,124 @@ function loadEvolutionTab(poke) {
     const container = document.getElementById('evolution-flow');
     container.innerHTML = '';
 
-    const chain = findEvolutionChain(poke);
-    if (chain.length <= 1) {
+    const branches = getEvolutionBranches(poke);
+    if (!branches || branches.length === 0 || (branches.length === 1 && branches[0].length <= 1)) {
         container.innerHTML = `<p class="no-evo-text" style="color: var(--text-secondary); font-size: 0.9rem;">This Pokémon has no evolution line.</p>`;
         return;
     }
 
-    chain.forEach((stage, idx) => {
-        if (idx > 0) {
-            const prevStage = chain[idx - 1];
-            const candyNeeded = prevStage.rawEvolutions.find(e => {
-                const targetEvoId = e.formId || e.id;
-                return targetEvoId && stage.idName && targetEvoId.toLowerCase() === stage.idName.toLowerCase();
-            })?.candies || 50;
+    // Render each evolution branch (e.g. Meowth -> Persian, Meowth (Galarian) -> Perrserker)
+    branches.forEach((chain, branchIdx) => {
+        if (branchIdx > 0) {
+            const divider = document.createElement('div');
+            divider.style.width = '100%';
+            divider.style.borderTop = '1px dashed var(--border-color)';
+            divider.style.margin = '1rem 0';
+            container.appendChild(divider);
+        }
 
-            const arrow = document.createElement('div');
-            arrow.className = 'evo-arrow';
-            arrow.innerHTML = `
-                <span class="candy-req">${candyNeeded} Candies</span>
-                <i class="fa-solid fa-angles-right"></i>
+        const branchRow = document.createElement('div');
+        branchRow.className = 'evo-branch-row';
+        branchRow.style.display = 'flex';
+        branchRow.style.alignItems = 'center';
+        branchRow.style.justify = 'center';
+        branchRow.style.gap = '1rem';
+        branchRow.style.flexWrap = 'wrap';
+
+        chain.forEach((stage, idx) => {
+            if (idx > 0) {
+                const prevStage = chain[idx - 1];
+                let candyNeeded = 50;
+                if (prevStage.rawEvolutions) {
+                    candyNeeded = prevStage.rawEvolutions.find(e => {
+                        const targetEvoId = e.formId || e.id;
+                        return targetEvoId && stage.idName && targetEvoId.toLowerCase() === stage.idName.toLowerCase();
+                    })?.candies || 50;
+                }
+
+                const arrow = document.createElement('div');
+                arrow.className = 'evo-arrow';
+                arrow.innerHTML = `
+                    <span class="candy-req">${candyNeeded} Candies</span>
+                    <i class="fa-solid fa-angles-right"></i>
+                `;
+                branchRow.appendChild(arrow);
+            }
+
+            const step = document.createElement('div');
+            step.className = `evo-step ${stage.id === poke.id ? 'active-evo' : ''}`;
+            if (stage.id === poke.id) {
+                step.style.border = '1px solid var(--accent-color)';
+                step.style.background = 'rgba(245, 166, 35, 0.05)';
+            }
+            
+            step.innerHTML = `
+                <div class="evo-img-container">
+                    <img src="${stage.img}" alt="${stage.name}">
+                </div>
+                <span class="evo-name">${stage.name}</span>
             `;
-            container.appendChild(arrow);
-        }
 
-        const step = document.createElement('div');
-        step.className = `evo-step ${stage.id === poke.id ? 'active-evo' : ''}`;
-        if (stage.id === poke.id) {
-            step.style.border = '1px solid var(--accent-color)';
-            step.style.background = 'rgba(245, 166, 35, 0.05)';
-        }
-        
-        step.innerHTML = `
-            <div class="evo-img-container">
-                <img src="${stage.img}" alt="${stage.name}">
-            </div>
-            <span class="evo-name">${stage.name}</span>
-        `;
+            step.addEventListener('click', () => {
+                openModal(stage.id);
+            });
 
-        step.addEventListener('click', () => {
-            openModal(stage.id);
+            branchRow.appendChild(step);
         });
 
-        container.appendChild(step);
+        container.appendChild(branchRow);
     });
 }
 
 function findEvolutionChain(poke) {
-    const chain = [poke];
-    
-    // Build backwards if this pokemon has a parent (e.g. Persian -> Meowth / Alolan Meowth, Perrserker -> Galarian Meowth, Cursola -> Galarian Corsola)
-    let current = poke;
-    while (true) {
-        const parentInfo = getEvolutionParentInfo(current);
-        if (parentInfo && parentInfo.parent) {
-            const parentStage = {
-                id: parentInfo.parent.id,
-                idName: parentInfo.parent.idName,
-                num: parentInfo.parent.num,
-                name: parentInfo.name,
-                img: parentInfo.img,
-                types: parentInfo.parent.types,
-                stats: parentInfo.parent.stats,
-                rawEvolutions: parentInfo.parent.rawEvolutions
-            };
-            if (chain.some(c => c.name === parentStage.name)) break;
-            chain.unshift(parentStage);
-            current = parentInfo.parent;
-        } else {
-            break;
-        }
+    const branches = getEvolutionBranches(poke);
+    return branches.length > 0 ? branches[0] : [poke];
+}
+
+function getEvolutionBranches(poke) {
+    const branches = [];
+
+    // If poke is an evolved form (e.g. Persian, Perrserker, Cursola, Basculegion), trace backwards
+    const parentInfo = getEvolutionParentInfo(poke);
+    if (parentInfo && parentInfo.parent) {
+        const parentStage = {
+            id: parentInfo.parent.id,
+            idName: parentInfo.parent.idName,
+            num: parentInfo.parent.num,
+            name: parentInfo.name,
+            img: parentInfo.img,
+            types: parentInfo.parent.types,
+            stats: parentInfo.parent.stats,
+            rawEvolutions: parentInfo.parent.rawEvolutions
+        };
+        branches.push([parentStage, poke]);
+        return branches;
     }
-    
-    // Build forwards from the current pokemon
-    current = poke;
-    while (true) {
-        if (current.rawEvolutions && current.rawEvolutions.length > 0) {
-            let next = null;
-            let neededParentInfo = null;
 
-            // 1. Try finding an evolution whose getEvolutionParentInfo matches the current stage's name
-            for (const nextEvoInfo of current.rawEvolutions) {
-                const candidate = pokemonDatabase.find(p => p.idName && (
-                    p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
-                    (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
-                ));
-                if (candidate) {
-                    const candidateParentInfo = getEvolutionParentInfo(candidate);
-                    const currentName = current.name || '';
-                    if (candidateParentInfo && candidateParentInfo.name) {
-                        if (candidateParentInfo.name.toLowerCase() === currentName.toLowerCase()) {
-                            next = candidate;
-                            neededParentInfo = candidateParentInfo;
-                            break;
-                        }
-                    }
+    // If poke is a base form with rawEvolutions (e.g. Meowth, Corsola, Basculin, Eevee)
+    if (poke.rawEvolutions && poke.rawEvolutions.length > 0) {
+        poke.rawEvolutions.forEach(nextEvoInfo => {
+            const candidate = pokemonDatabase.find(p => p.idName && (
+                p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
+                (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
+            ));
+            if (candidate) {
+                const candidateParentInfo = getEvolutionParentInfo(candidate);
+                let baseStage = { ...poke };
+                if (candidateParentInfo && candidateParentInfo.name && candidateParentInfo.name !== poke.name) {
+                    baseStage.name = candidateParentInfo.name;
+                    if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
                 }
+                branches.push([baseStage, candidate]);
             }
-
-            // 2. If no exact parent name match was found (e.g., standard base form for regional-only evolution), fallback to first candidate
-            if (!next) {
-                for (const nextEvoInfo of current.rawEvolutions) {
-                    const candidate = pokemonDatabase.find(p => p.idName && (
-                        p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
-                        (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
-                    ));
-                    if (candidate) {
-                        const candidateParentInfo = getEvolutionParentInfo(candidate);
-                        next = candidate;
-                        neededParentInfo = candidateParentInfo;
-                        break;
-                    }
-                }
-            }
-
-            if (next) {
-                if (chain.some(c => c.id === next.id)) break;
-                // If opening a standard base pokemon, update its display name & image to regional form if the evolution requires it
-                if (neededParentInfo && chain.length > 0 && chain[0].id === current.id) {
-                    if (neededParentInfo.name && chain[0].name !== neededParentInfo.name) {
-                        chain[0] = {
-                            ...chain[0],
-                            name: neededParentInfo.name,
-                            img: neededParentInfo.img || chain[0].img
-                        };
-                    }
-                }
-                chain.push(next);
-                current = next;
-            } else {
-                break;
-            }
-        } else {
-            break;
-        }
+        });
     }
-    
-    return chain;
+
+    if (branches.length === 0) {
+        branches.push([poke]);
+    }
+
+    return branches;
 }
 
 
