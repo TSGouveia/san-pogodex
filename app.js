@@ -5116,7 +5116,6 @@ function renderCandiesPane() {
                     <div class="family-info">
                         <h3 class="family-title">
                             ${family.base.name}
-                            ${regionalParentName ? `<span style="font-size: 0.72rem; color: #a78bfa; font-weight: 600; display: block; margin-top: 1px;">(${regionalParentName} • Shares Candies)</span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
