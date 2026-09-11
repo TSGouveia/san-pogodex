@@ -2976,7 +2976,7 @@ function getEvolutionBranches(poke) {
     const visitedParents = new Set([String(root.id)]);
     while (true) {
         const parentInfo = getEvolutionParentInfo(root);
-        if (parentInfo && parentInfo.parent && parentInfo.parent.id && !visitedParents.has(String(parentInfo.parent.id))) {
+        if (parentInfo && parentInfo.parent && parentInfo.parent.id && parentInfo.parent.id !== root.id && !visitedParents.has(String(parentInfo.parent.id))) {
             visitedParents.add(String(parentInfo.parent.id));
             root = parentInfo.parent;
         } else {
@@ -2984,21 +2984,16 @@ function getEvolutionBranches(poke) {
         }
     }
 
-    // 2. Recursive function with visited tracking to build paths from a node
+    // 2. Recursive function to build paths from a node
     function buildPaths(currentStage, visitedInBranch = new Set()) {
-        const stageKey = `${currentStage.id}-${currentStage.name}`;
+        const stageKey = String(currentStage.id);
         if (visitedInBranch.has(stageKey)) {
             return [[{ ...currentStage }]];
         }
         const newVisited = new Set(visitedInBranch);
         newVisited.add(stageKey);
 
-        const parentInfoOfCurrent = getEvolutionParentInfo(currentStage);
         let node = { ...currentStage };
-        if (parentInfoOfCurrent && parentInfoOfCurrent.name && parentInfoOfCurrent.name !== currentStage.name) {
-            node.name = parentInfoOfCurrent.name;
-            if (parentInfoOfCurrent.img) node.img = parentInfoOfCurrent.img;
-        }
 
         if (!currentStage.rawEvolutions || currentStage.rawEvolutions.length === 0) {
             return [[node]];
@@ -3010,10 +3005,22 @@ function getEvolutionBranches(poke) {
                 p.idName.toLowerCase() === nextEvoInfo.id.toLowerCase() ||
                 (nextEvoInfo.formId && p.idName.toLowerCase() === nextEvoInfo.formId.toLowerCase())
             ));
-            if (candidate && candidate.id !== currentStage.id) {
+            if (candidate && String(candidate.id) !== String(currentStage.id)) {
+                // Determine if candidate requires a specific regional form parent
+                const candidateParentInfo = getEvolutionParentInfo(candidate);
+                let currentStepNode = { ...node };
+                if (candidateParentInfo && candidateParentInfo.name && candidateParentInfo.name !== node.name) {
+                    const parentNameLower = candidateParentInfo.name.toLowerCase();
+                    const nodeNameLower = (node.name || '').toLowerCase();
+                    if (parentNameLower !== nodeNameLower) {
+                        currentStepNode.name = candidateParentInfo.name;
+                        if (candidateParentInfo.img) currentStepNode.img = candidateParentInfo.img;
+                    }
+                }
+
                 const subPaths = buildPaths(candidate, newVisited);
                 subPaths.forEach(subPath => {
-                    allPaths.push([node, ...subPath]);
+                    allPaths.push([currentStepNode, ...subPath]);
                 });
             }
         });
