@@ -2922,14 +2922,8 @@ function loadEvolutionTab(poke) {
 
         chain.forEach((stage, idx) => {
             if (idx > 0) {
-                const prevStage = chain[idx - 1];
-                let candyNeeded = 50;
-                if (prevStage.rawEvolutions) {
-                    candyNeeded = prevStage.rawEvolutions.find(e => {
-                        const targetEvoId = e.formId || e.id;
-                        return targetEvoId && stage.idName && targetEvoId.toLowerCase() === stage.idName.toLowerCase();
-                    })?.candies || 50;
-                }
+                const parentInfo = getEvolutionParentInfo(stage);
+                const candyNeeded = (parentInfo && parentInfo.candies) ? parentInfo.candies : 50;
 
                 const arrow = document.createElement('div');
                 arrow.className = 'evo-arrow';
