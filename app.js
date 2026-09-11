@@ -2975,7 +2975,7 @@ function getEvolutionBranches(poke) {
 
     // If poke is an evolved form (e.g. Persian, Perrserker, Cursola, Basculegion), trace backwards
     const parentInfo = getEvolutionParentInfo(poke);
-    if (parentInfo && parentInfo.parent) {
+    if (parentInfo && parentInfo.parent && parentInfo.parent.id !== poke.id) {
         const parentStage = {
             id: parentInfo.parent.id,
             idName: parentInfo.parent.idName,
@@ -3001,15 +3001,9 @@ function getEvolutionBranches(poke) {
                 const candidateParentInfo = getEvolutionParentInfo(candidate);
                 let baseStage = { ...poke };
                 
-                // Only override baseStage with regional parent info if candidateParentInfo specifies a regional parent AND candidate is a regional evolution
-                if (candidateParentInfo && candidateParentInfo.name && candidateParentInfo.name !== poke.name) {
-                    const parentNameLower = candidateParentInfo.name.toLowerCase();
-                    const currentNameLower = (poke.name || '').toLowerCase();
-                    // If candidate parent is regional (e.g. Galarian Meowth, White-Striped Basculin)
-                    if (parentNameLower !== currentNameLower) {
-                        baseStage.name = candidateParentInfo.name;
-                        if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
-                    }
+                if (candidateParentInfo && candidateParentInfo.name) {
+                    baseStage.name = candidateParentInfo.name;
+                    if (candidateParentInfo.img) baseStage.img = candidateParentInfo.img;
                 }
                 branches.push([baseStage, candidate]);
             }
@@ -4758,12 +4752,32 @@ function getEvolutionParentInfo(poke) {
     if (!rawPokedexData) return null;
     
     for (const p of rawPokedexData) {
-        // Check regional forms first (so regional evolutions like Galarian Corsola -> Cursola match before standard Corsola)
+        // 1. Check base form evolutions first (so standard evolutions like Meowth -> Persian match standard Meowth)
+        if (p.evolutions) {
+            const match = p.evolutions.find(e => 
+                (e.id && e.id.toLowerCase() === poke.idName.toLowerCase()) || 
+                (e.formId && e.formId.toLowerCase() === poke.idName.toLowerCase())
+            );
+            if (match) {
+                const basePoke = pokemonDatabase.find(x => x.id === String(p.dexNr));
+                if (basePoke) {
+                    return {
+                        parent: basePoke,
+                        name: p.names.English,
+                        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
+                        candies: match.candies || 50,
+                        item: match.item || null,
+                        quests: match.quests || []
+                    };
+                }
+            }
+        }
+        // 2. Check regional forms (for regional evolutions like Galarian Meowth -> Perrserker, Galarian Corsola -> Cursola)
         if (p.regionForms) {
             for (const rf of Object.values(p.regionForms)) {
                 if (rf.evolutions) {
                     const match = rf.evolutions.find(e => 
-                        e.id.toLowerCase() === poke.idName.toLowerCase() || 
+                        (e.id && e.id.toLowerCase() === poke.idName.toLowerCase()) || 
                         (e.formId && e.formId.toLowerCase() === poke.idName.toLowerCase())
                     );
                     if (match) {
@@ -4788,26 +4802,6 @@ function getEvolutionParentInfo(poke) {
                             };
                         }
                     }
-                }
-            }
-        }
-        // Check base form evolutions
-        if (p.evolutions) {
-            const match = p.evolutions.find(e => 
-                e.id.toLowerCase() === poke.idName.toLowerCase() || 
-                (e.formId && e.formId.toLowerCase() === poke.idName.toLowerCase())
-            );
-            if (match) {
-                const basePoke = pokemonDatabase.find(x => x.id === String(p.dexNr));
-                if (basePoke) {
-                    return {
-                        parent: basePoke,
-                        name: p.names.English,
-                        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
-                        candies: match.candies || 50,
-                        item: match.item || null,
-                        quests: match.quests || []
-                    };
                 }
             }
         }
