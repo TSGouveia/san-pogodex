@@ -5153,11 +5153,6 @@ function renderCandiesPane() {
                     ` : '';
                     
                     let stageDisplayName = member.name;
-                    if (isBase && regionalParentName) {
-                        stageDisplayName = `${member.name} / ${regionalParentName}`;
-                    } else if (parentInfo && parentInfo.name && parentInfo.name !== family.base.name) {
-                        stageDisplayName = `${member.name} (from ${parentInfo.name})`;
-                    }
 
                     return `
                         <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
