@@ -5105,7 +5105,7 @@ function renderCandiesPane() {
                     ` : '';
 
                     const questButton = (!isCaught && hasQuest) ? `
-                        <button class="quest-inline-toggle ${isQuestDone ? 'done' : 'pending'}" title="${isQuestDone ? 'Buddy Quest complete: ' + questText : 'Buddy Quest pending: ' + questText}" style="margin-left: auto; margin-right: 0.25rem; background: ${isQuestDone ? 'rgba(168, 85, 247, 0.18)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${isQuestDone ? 'rgba(168, 85, 247, 0.5)' : 'rgba(255,255,255,0.12)'}; color: ${isQuestDone ? '#c084fc' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; outline: none;" data-poke-id="${member.id}">
+                        <button class="quest-inline-toggle ${isQuestDone ? 'done' : 'pending'}" title="${isQuestDone ? 'Buddy Quest complete: ' + questText : 'Buddy Quest pending: ' + questText}" style="margin-left: auto; margin-right: 0.25rem; background: ${isQuestDone ? 'rgba(16, 185, 129, 0.18)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${isQuestDone ? 'rgba(16, 185, 129, 0.5)' : 'rgba(255,255,255,0.12)'}; color: ${isQuestDone ? 'var(--accent-green)' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; transition: all 0.2s; outline: none;" data-poke-id="${member.id}">
                             <i class="fa-solid ${isQuestDone ? 'fa-check' : 'fa-scroll'}"></i>
                             <span>${isQuestDone ? 'Quest Done' : 'Quest'}</span>
                         </button>
