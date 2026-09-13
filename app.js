@@ -34,6 +34,7 @@ import {
 // Global Application Database loaded dynamically
 let pokemonDatabase = [];
 let rawPokedexData = null;
+let hideUnreleased = false;
 
 // Safe lowercasing helper function
 function safeLower(val) {
@@ -999,7 +1000,8 @@ async function loadPokedex() {
                 obtaining: [
                     { method: "Evolution", desc: "Evolves from White-Striped Basculin." }
                 ],
-                rawEvolutions: []
+                rawEvolutions: [],
+                unreleased: true
             });
         }
 
@@ -1438,7 +1440,8 @@ function formatPokemon(p) {
             sta: p.stats ? p.stats.stamina : 100
         },
         obtaining: obtaining,
-        rawEvolutions: allEvos
+        rawEvolutions: allEvos,
+        unreleased: Boolean(p.unreleased)
     };
 }
 
@@ -2002,6 +2005,25 @@ function setupEventListeners() {
         });
     });
 
+    const toggleUnreleasedBtn = document.getElementById('toggle-unreleased-btn');
+    if (toggleUnreleasedBtn) {
+        toggleUnreleasedBtn.addEventListener('click', () => {
+            hideUnreleased = !hideUnreleased;
+            if (hideUnreleased) {
+                toggleUnreleasedBtn.classList.add('hide-active');
+                toggleUnreleasedBtn.title = "Show unreleased Pokémon";
+                toggleUnreleasedBtn.querySelector('i').className = "fa-solid fa-eye-slash";
+            } else {
+                toggleUnreleasedBtn.classList.remove('hide-active');
+                toggleUnreleasedBtn.title = "Hide unreleased Pokémon";
+                toggleUnreleasedBtn.querySelector('i').className = "fa-solid fa-eye";
+            }
+            pokedexLimit = Infinity;
+            renderPokedex(true);
+            renderMissingSummary();
+        });
+    }
+
     catchAllBtn.addEventListener('click', () => {
         const visible = getFilteredAndSortedPokemon();
         if (visible.length === 0) return;
@@ -2081,6 +2103,10 @@ function setupEventListeners() {
 function getFilteredAndSortedPokemon() {
     let result = [...pokemonDatabase];
 
+    if (hideUnreleased) {
+        result = result.filter(p => !p.unreleased);
+    }
+
     if (currentGenFilter !== 'all') {
         const genNum = parseFloat(currentGenFilter);
         result = result.filter(p => p.gen === genNum);
@@ -2154,9 +2180,13 @@ function renderPokedex(forceClear = false) {
         const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
         
-        const cardClass = isCaught 
+        let cardClass = isCaught 
             ? (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught') 
             : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
+
+        if (poke.unreleased) {
+            cardClass += ' unreleased';
+        }
 
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
@@ -2182,6 +2212,7 @@ function renderPokedex(forceClear = false) {
                 <div style="display: flex; align-items: center; gap: 4px;">
                     <span class="poke-number">#${poke.num}</span>
                     ${readyToEvolve ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
+                    ${poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO">Unreleased</span>` : ''}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
@@ -4987,6 +5018,7 @@ function renderCandiesPane() {
     const gridNeedQuest = document.getElementById('grid-need-quest');
     const gridNeed = document.getElementById('grid-need-candies');
     const gridMissing = document.getElementById('grid-missing-base');
+    const gridUnreleased = document.getElementById('grid-unreleased-base');
     const gridTransferred = document.getElementById('grid-transferred-base');
     const candiesSortSelect = document.getElementById('candies-sort');
     
@@ -4996,6 +5028,7 @@ function renderCandiesPane() {
     if (gridNeedQuest) gridNeedQuest.innerHTML = '';
     gridNeed.innerHTML = '';
     gridMissing.innerHTML = '';
+    if (gridUnreleased) gridUnreleased.innerHTML = '';
     gridTransferred.innerHTML = '';
 
     const sortOrder = candiesSortSelect ? candiesSortSelect.value : 'num-asc';
@@ -5115,6 +5148,7 @@ function renderCandiesPane() {
     let questCount = 0;
     let needCount = 0;
     let missingCount = 0;
+    let unreleasedCount = 0;
     let transferredCount = 0;
 
     familyDataList.forEach(data => {
@@ -5125,6 +5159,7 @@ function renderCandiesPane() {
         const remaining = data.remaining;
         const baseIsCaught = data.baseIsCaught;
         const hasPendingQuest = data.hasPendingQuestEvolution;
+        const baseIsUnreleased = Boolean(family.base.unreleased);
         
         const buddyDist = data.buddyDist;
         
@@ -5163,7 +5198,7 @@ function renderCandiesPane() {
         });
 
         const card = document.createElement('div');
-        card.className = 'candy-family-card';
+        card.className = baseIsUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
@@ -5172,6 +5207,7 @@ function renderCandiesPane() {
                     <div class="family-info">
                         <h3 class="family-title">
                             ${displayTitle}
+                            ${baseIsUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;">Unreleased</span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
@@ -5192,6 +5228,7 @@ function renderCandiesPane() {
                     const hasQuest = parentInfo && parentInfo.quests && parentInfo.quests.length > 0;
                     const isQuestDone = completedBuddyQuests.has(String(member.id));
                     const questText = hasQuest ? formatQuestName(parentInfo.quests[0]) : '';
+                    const isUnreleasedMember = Boolean(member.unreleased);
                     
                     const isBase = member.id === family.base.id;
                     const actionButton = (isBase && isCaught) ? `
@@ -5211,11 +5248,12 @@ function renderCandiesPane() {
                     let stageDisplayName = isBase ? displayTitle : member.name;
 
                     return `
-                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
+                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'} ${isUnreleasedMember ? 'unreleased-stage' : ''}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
                             <span class="stage-caught-status">
-                                <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : 'fa-circle-xmark')}"></i>
+                                <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark'))}"></i>
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
+                            ${isUnreleasedMember ? `<span class="unreleased-badge-tag" style="font-size: 0.58rem; padding: 0 4px; margin-left: 4px;">Unreleased</span>` : ''}
                             ${actionButton}
                             ${questButton}
                             ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
@@ -5312,6 +5350,14 @@ function renderCandiesPane() {
         if (isTransf) {
             gridTransferred.appendChild(card);
             transferredCount++;
+        } else if (baseIsUnreleased) {
+            if (gridUnreleased) {
+                gridUnreleased.appendChild(card);
+                unreleasedCount++;
+            } else {
+                gridMissing.appendChild(card);
+                missingCount++;
+            }
         } else if (!baseIsCaught) {
             gridMissing.appendChild(card);
             missingCount++;
@@ -5335,6 +5381,8 @@ function renderCandiesPane() {
     if (catNeedQuest) catNeedQuest.style.display = questCount > 0 ? 'block' : 'none';
     document.getElementById('cat-need-candies').style.display = needCount > 0 ? 'block' : 'none';
     document.getElementById('cat-missing-base').style.display = missingCount > 0 ? 'block' : 'none';
+    const catUnreleased = document.getElementById('cat-unreleased-base');
+    if (catUnreleased) catUnreleased.style.display = unreleasedCount > 0 ? 'block' : 'none';
     document.getElementById('cat-transferred-base').style.display = transferredCount > 0 ? 'block' : 'none';
 }
 

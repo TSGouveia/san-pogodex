@@ -517,16 +517,76 @@ input, button, select {
     opacity: 1;
 }
 
-.pokemon-card.transferred-missing,
-.pokemon-card.missing.transferred-missing {
-    border: 1px solid rgba(59, 130, 246, 0.4) !important;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(17, 27, 46, 0.75) 100%) !important;
-}
-
 .pokemon-card.transferred-missing:hover,
 .pokemon-card.missing.transferred-missing:hover {
     border-color: rgba(96, 165, 250, 0.8) !important;
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.35) !important;
+}
+
+/* Unreleased Pokémon Card Styles (Red Border & Badging) */
+.pokemon-card.unreleased {
+    border: 1px solid rgba(239, 68, 68, 0.5) !important;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(17, 27, 46, 0.85) 100%) !important;
+}
+
+.pokemon-card.unreleased:hover {
+    border-color: rgba(248, 113, 113, 0.9) !important;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.4) !important;
+}
+
+.unreleased-badge-tag {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.filter-btn.toggle-unreleased-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-btn.toggle-unreleased-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #fff;
+}
+
+.filter-btn.toggle-unreleased-btn.hide-active {
+    background: rgba(239, 68, 68, 0.8);
+    border-color: #ef4444;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Candies Pane Unreleased Styles */
+.candy-family-card.unreleased {
+    border: 1px solid rgba(239, 68, 68, 0.4) !important;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.06) 0%, rgba(17, 27, 46, 0.85) 100%) !important;
+}
+
+.family-stage-item.unreleased-stage {
+    border-left: 2px solid rgba(239, 68, 68, 0.6);
+}
+
+.family-stage-item.unreleased-stage .stage-caught-status i {
+    color: #f87171;
 }
 
 /* Hover effects */
