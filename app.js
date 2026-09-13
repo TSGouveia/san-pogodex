@@ -2012,11 +2012,9 @@ function setupEventListeners() {
             if (hideUnreleased) {
                 toggleUnreleasedBtn.classList.add('hide-active');
                 toggleUnreleasedBtn.title = "Show unreleased Pokémon";
-                toggleUnreleasedBtn.querySelector('i').className = "fa-solid fa-eye-slash";
             } else {
                 toggleUnreleasedBtn.classList.remove('hide-active');
                 toggleUnreleasedBtn.title = "Hide unreleased Pokémon";
-                toggleUnreleasedBtn.querySelector('i').className = "fa-solid fa-eye";
             }
             pokedexLimit = Infinity;
             renderPokedex(true);
