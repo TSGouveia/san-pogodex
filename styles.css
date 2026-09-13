@@ -523,28 +523,41 @@ input, button, select {
     box-shadow: 0 0 15px rgba(59, 130, 246, 0.35) !important;
 }
 
-/* Unreleased Pokémon Card Styles (Red Border & Badging) */
-.pokemon-card.unreleased {
-    border: 1px solid rgba(239, 68, 68, 0.5) !important;
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(17, 27, 46, 0.85) 100%) !important;
+/* Unreleased Pokémon Card Styles (Red Border & Priority over everything) */
+.pokemon-card.unreleased,
+.pokemon-card.unreleased.caught,
+.pokemon-card.unreleased.missing,
+.pokemon-card.unreleased.ready-to-evolve,
+.pokemon-card.unreleased.transferred {
+    border: 1px solid rgba(239, 68, 68, 0.75) !important;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.14) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.25) !important;
 }
 
-.pokemon-card.unreleased:hover {
-    border-color: rgba(248, 113, 113, 0.9) !important;
-    box-shadow: 0 0 18px rgba(239, 68, 68, 0.4) !important;
+.pokemon-card.unreleased:hover,
+.pokemon-card.unreleased.caught:hover,
+.pokemon-card.unreleased.missing:hover,
+.pokemon-card.unreleased.ready-to-evolve:hover,
+.pokemon-card.unreleased.transferred:hover {
+    border-color: rgba(248, 113, 113, 1) !important;
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.55) !important;
+}
+
+.pokemon-card.unreleased::after {
+    border-color: rgba(239, 68, 68, 0.4) !important;
 }
 
 .unreleased-badge-tag {
-    background: rgba(239, 68, 68, 0.2);
+    background: rgba(239, 68, 68, 0.25);
     color: #f87171;
-    border: 1px solid rgba(239, 68, 68, 0.4);
+    border: 1px solid rgba(239, 68, 68, 0.5);
     font-size: 0.65rem;
-    font-weight: 700;
-    padding: 1px 6px;
+    font-weight: 800;
+    padding: 2px 6px;
     border-radius: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filter-btn.toggle-unreleased-btn {

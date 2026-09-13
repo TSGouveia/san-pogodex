@@ -2211,8 +2211,8 @@ function renderPokedex(forceClear = false) {
             <div class="card-top">
                 <div style="display: flex; align-items: center; gap: 4px;">
                     <span class="poke-number">#${poke.num}</span>
-                    ${readyToEvolve ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
-                    ${poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO">Unreleased</span>` : ''}
+                    ${readyToEvolve && !poke.unreleased ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
+                    ${poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
@@ -5207,7 +5207,7 @@ function renderCandiesPane() {
                     <div class="family-info">
                         <h3 class="family-title">
                             ${displayTitle}
-                            ${baseIsUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;">Unreleased</span>` : ''}
+                            ${baseIsUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
@@ -5253,7 +5253,7 @@ function renderCandiesPane() {
                                 <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark'))}"></i>
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
-                            ${isUnreleasedMember ? `<span class="unreleased-badge-tag" style="font-size: 0.58rem; padding: 0 4px; margin-left: 4px;">Unreleased</span>` : ''}
+                            ${isUnreleasedMember ? `<span class="unreleased-badge-tag" style="font-size: 0.58rem; padding: 1px 4px; margin-left: 4px;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
                             ${actionButton}
                             ${questButton}
                             ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
