@@ -825,7 +825,7 @@ input, button, select {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     width: 100%;
-    max-width: 580px;
+    max-width: 840px;
     border-radius: var(--border-radius-lg);
     overflow: hidden;
     position: relative;
