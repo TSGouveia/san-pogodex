@@ -5295,7 +5295,7 @@ function renderCandiesPane() {
         const remaining = data.remaining;
         const baseIsCaught = data.baseIsCaught;
         const hasPendingQuest = data.hasPendingQuestEvolution;
-        const baseIsUnreleased = Boolean(family.base.unreleased);
+        const hasUnreleasedMember = Boolean(family.base.unreleased) || family.members.some(m => Boolean(m.unreleased));
         
         const buddyDist = data.buddyDist;
         
@@ -5334,7 +5334,7 @@ function renderCandiesPane() {
         });
 
         const card = document.createElement('div');
-        card.className = baseIsUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
+        card.className = hasUnreleasedMember ? 'candy-family-card unreleased' : 'candy-family-card';
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
@@ -5485,7 +5485,7 @@ function renderCandiesPane() {
         if (isTransf) {
             gridTransferred.appendChild(card);
             transferredCount++;
-        } else if (baseIsUnreleased) {
+        } else if (hasUnreleasedMember) {
             if (gridUnreleased) {
                 gridUnreleased.appendChild(card);
                 unreleasedCount++;
