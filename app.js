@@ -1393,6 +1393,8 @@ function buildPokebattlerMaxUrl(bossName) {
         updateDashboardStats();
         updateRegionStatsBadge();
     }
+}
+
 function calculateClientSideCombatPower(stats) {
     if (!stats) return null;
     const atk = stats.attack || stats.atk || 100;
