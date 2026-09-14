@@ -2585,22 +2585,23 @@ function loadCpsTab(poke) {
         return;
     }
 
-    const cards = [
-        {
-            title: "Max CP (LV 50)",
-            icon: "fa-solid fa-crown",
-            color: "#f5a623",
-            bg: "rgba(245, 166, 35, 0.1)",
-            border: "rgba(245, 166, 35, 0.3)",
-            desc: "100% IV (15/15/15) at Level 50",
-            val: `${cps.maxL50 || '---'} CP`
-        },
+    const maxCard = {
+        title: "Max CP (Level 50)",
+        icon: "fa-solid fa-crown",
+        color: "#f5a623",
+        bg: "linear-gradient(135deg, rgba(245, 166, 35, 0.15) 0%, rgba(18, 30, 54, 0.8) 100%)",
+        border: "rgba(245, 166, 35, 0.4)",
+        desc: "100% IV (15/15/15) at max Level 50",
+        val: `${cps.maxL50 || '---'} CP`
+    };
+
+    const gridCards = [
         {
             title: "Research / Special (LV 15)",
             icon: "fa-solid fa-scroll",
             color: "#60a5fa",
-            bg: "rgba(96, 165, 250, 0.1)",
-            border: "rgba(96, 165, 250, 0.3)",
+            bg: "rgba(96, 165, 250, 0.08)",
+            border: "rgba(96, 165, 250, 0.25)",
             desc: "10/10/10 min - 15/15/15 max",
             val: cps.researchL15 ? `${cps.researchL15.min} - ${cps.researchL15.max} CP` : '---'
         },
@@ -2608,17 +2609,17 @@ function loadCpsTab(poke) {
             title: "Eggs Hatch (LV 20)",
             icon: "fa-solid fa-egg",
             color: "#34d399",
-            bg: "rgba(52, 211, 153, 0.1)",
-            border: "rgba(52, 211, 153, 0.3)",
+            bg: "rgba(52, 211, 153, 0.08)",
+            border: "rgba(52, 211, 153, 0.25)",
             desc: "10/10/10 min - 15/15/15 max",
             val: cps.eggsL20 ? `${cps.eggsL20.min} - ${cps.eggsL20.max} CP` : '---'
         },
         {
-            title: "Raids (LV 20)",
+            title: "Raids Encounter (LV 20)",
             icon: "fa-solid fa-hand-fist",
             color: "#a78bfa",
-            bg: "rgba(167, 139, 250, 0.1)",
-            border: "rgba(167, 139, 250, 0.3)",
+            bg: "rgba(167, 139, 250, 0.08)",
+            border: "rgba(167, 139, 250, 0.25)",
             desc: "10/10/10 min - 15/15/15 max",
             val: cps.raidsL20 ? `${cps.raidsL20.min} - ${cps.raidsL20.max} CP` : '---'
         },
@@ -2626,35 +2627,67 @@ function loadCpsTab(poke) {
             title: "Raids Weather Boosted (LV 25)",
             icon: "fa-solid fa-cloud-sun",
             color: "#f87171",
-            bg: "rgba(248, 113, 113, 0.1)",
-            border: "rgba(248, 113, 113, 0.3)",
+            bg: "rgba(248, 113, 113, 0.08)",
+            border: "rgba(248, 113, 113, 0.25)",
             desc: "10/10/10 min - 15/15/15 max",
             val: cps.raidsWbL25 ? `${cps.raidsWbL25.min} - ${cps.raidsWbL25.max} CP` : '---'
         }
     ];
 
-    cards.forEach(card => {
+    // Max CP Hero Card (Spans full top row)
+    const maxDiv = document.createElement('div');
+    maxDiv.className = 'cp-hero-card';
+    maxDiv.style.gridColumn = '1 / -1';
+    maxDiv.style.background = maxCard.bg;
+    maxDiv.style.border = `1px solid ${maxCard.border}`;
+    maxDiv.style.borderRadius = '14px';
+    maxDiv.style.padding = '1rem 1.25rem';
+    maxDiv.style.display = 'flex';
+    maxDiv.style.alignItems = 'center';
+    maxDiv.style.justifyContent = 'space-between';
+    maxDiv.style.gap = '1rem';
+
+    maxDiv.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.85rem;">
+            <div style="width: 44px; height: 44px; background: rgba(245, 166, 35, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: ${maxCard.color}; font-size: 1.25rem; flex-shrink: 0;">
+                <i class="${maxCard.icon}"></i>
+            </div>
+            <div>
+                <div style="color: ${maxCard.color}; font-weight: 800; font-size: 0.95rem;">${maxCard.title}</div>
+                <div style="font-size: 0.78rem; color: #94a3b8; margin-top: 2px;">${maxCard.desc}</div>
+            </div>
+        </div>
+        <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; text-shadow: 0 0 12px rgba(245, 166, 35, 0.3);">
+            ${maxCard.val}
+        </div>
+    `;
+    container.appendChild(maxDiv);
+
+    // 2x2 Grid for standard benchmarks (Horizontal card layouts)
+    gridCards.forEach(card => {
         const div = document.createElement('div');
-        div.className = 'cp-benchmark-card';
+        div.className = 'cp-sub-card';
         div.style.background = card.bg;
         div.style.border = `1px solid ${card.border}`;
         div.style.borderRadius = '12px';
-        div.style.padding = '0.85rem 1rem';
+        div.style.padding = '0.9rem 1.1rem';
         div.style.display = 'flex';
-        div.style.flexDirection = 'column';
-        div.style.gap = '0.35rem';
-        div.style.transition = 'transform 0.2s ease, border-color 0.2s ease';
+        div.style.alignItems = 'center';
+        div.style.justifyContent = 'space-between';
+        div.style.gap = '0.75rem';
 
         div.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 0.5rem; color: ${card.color}; font-weight: 700; font-size: 0.85rem;">
-                <i class="${card.icon}"></i>
-                <span>${card.title}</span>
+            <div style="display: flex; align-items: center; gap: 0.65rem; min-width: 0;">
+                <div style="width: 36px; height: 36px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: ${card.color}; font-size: 1rem; flex-shrink: 0;">
+                    <i class="${card.icon}"></i>
+                </div>
+                <div style="min-width: 0;">
+                    <div style="color: ${card.color}; font-weight: 700; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${card.title}</div>
+                    <div style="font-size: 0.72rem; color: #94a3b8; margin-top: 1px;">${card.desc}</div>
+                </div>
             </div>
-            <div style="font-size: 1.15rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px; margin-top: 0.1rem;">
+            <div style="font-size: 1.1rem; font-weight: 800; color: #ffffff; letter-spacing: -0.3px; flex-shrink: 0;">
                 ${card.val}
-            </div>
-            <div style="font-size: 0.72rem; color: #94a3b8;">
-                ${card.desc}
             </div>
         `;
         container.appendChild(div);
@@ -5184,12 +5217,12 @@ function renderCandiesPane() {
         }
     });
 
-    // Filter families that have at least one evolution and at least one missing member, OR where the base is unreleased
+    // Filter families that MUST have at least one evolution (hasEvolution) and either missing members or unreleased members
     let evolutionFamilies = Object.values(families).filter(f => {
-        const baseIsUnreleased = Boolean(f.base.unreleased) || f.members.some(m => Boolean(m.unreleased));
         const hasEvolution = f.members.length > 1;
+        const hasUnreleasedMember = Boolean(f.base.unreleased) || f.members.some(m => Boolean(m.unreleased));
         const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
-        return baseIsUnreleased || (hasEvolution && hasMissingMember);
+        return hasEvolution && (hasUnreleasedMember || hasMissingMember);
     });
 
     // Filter by search query if active
