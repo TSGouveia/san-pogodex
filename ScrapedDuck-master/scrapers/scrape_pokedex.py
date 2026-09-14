@@ -8,22 +8,47 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept": "application/json, text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     "Accept-Language": "en-US,en;q=0.5"
 }
 
 BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
+BULBAPEDIA_API_URL = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=text&format=json"
 
 def scrape_unreleased_names_from_bulbapedia():
     print("Scraping Unreleased Pokémon from Bulbapedia...")
     unreleased_set = set()
-    try:
-        res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
-        if res.status_code != 200:
-            print(f"  -> Warning: Bulbapedia returned status {res.status_code}.")
-            return unreleased_set
+    html_content = None
 
-        soup = BeautifulSoup(res.content, "html.parser")
+    # Method 1: Try MediaWiki API (bypasses Cloudflare / HTML 403 blocks)
+    try:
+        res = requests.get(BULBAPEDIA_API_URL, headers=HEADERS, timeout=20, verify=False)
+        if res.status_code == 200:
+            data = res.json()
+            if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
+                html_content = data["parse"]["text"]["*"]
+                print("  -> Fetched Bulbapedia via MediaWiki API endpoint.")
+    except Exception as api_err:
+        print(f"  -> MediaWiki API fetch failed: {api_err}")
+
+    # Method 2: Direct HTML URL fallback
+    if not html_content:
+        try:
+            res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
+            if res.status_code == 200:
+                html_content = res.content
+                print("  -> Fetched Bulbapedia via direct HTML endpoint.")
+            else:
+                print(f"  -> Warning: Bulbapedia HTML returned status {res.status_code}.")
+        except Exception as html_err:
+            print(f"  -> Direct HTML fetch failed: {html_err}")
+
+    if not html_content:
+        print("  -> Error: Could not retrieve Bulbapedia content from any endpoint.")
+        return unreleased_set
+
+    try:
+        soup = BeautifulSoup(html_content, "html.parser")
         heading = soup.find(lambda e: e.name in ["h2", "h3"] and "Unreleased" in e.text)
         if not heading:
             print("  -> Warning: Could not find 'Unreleased' heading on Bulbapedia.")
@@ -46,7 +71,8 @@ def scrape_unreleased_names_from_bulbapedia():
 
         print(f"  -> Successfully scraped {len(unreleased_set)} unreleased species directly from Bulbapedia.")
     except Exception as e:
-        print(f"  -> Error scraping Bulbapedia: {e}")
+        print(f"  -> Error parsing Bulbapedia content: {e}")
+
     return unreleased_set
 
 def scrape_pokedex():
