@@ -2639,21 +2639,21 @@ function loadCpsTab(poke) {
         div.style.background = card.bg;
         div.style.border = `1px solid ${card.border}`;
         div.style.borderRadius = '12px';
-        div.style.padding = '1.2rem';
+        div.style.padding = '0.85rem 1rem';
         div.style.display = 'flex';
         div.style.flexDirection = 'column';
-        div.style.gap = '0.5rem';
+        div.style.gap = '0.35rem';
         div.style.transition = 'transform 0.2s ease, border-color 0.2s ease';
 
         div.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 0.6rem; color: ${card.color}; font-weight: 700; font-size: 0.95rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: ${card.color}; font-weight: 700; font-size: 0.85rem;">
                 <i class="${card.icon}"></i>
                 <span>${card.title}</span>
             </div>
-            <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-top: 0.2rem;">
+            <div style="font-size: 1.15rem; font-weight: 700; color: #ffffff; letter-spacing: -0.3px; margin-top: 0.1rem;">
                 ${card.val}
             </div>
-            <div style="font-size: 0.78rem; color: #94a3b8;">
+            <div style="font-size: 0.72rem; color: #94a3b8;">
                 ${card.desc}
             </div>
         `;
