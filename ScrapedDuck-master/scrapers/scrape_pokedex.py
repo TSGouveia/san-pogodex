@@ -12,8 +12,8 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.5"
 }
 
-BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
 BULBAPEDIA_API_URL = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=text&format=json"
+BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
 
 def scrape_unreleased_names_from_bulbapedia():
     print("Scraping Unreleased Pokémon from Bulbapedia...")
@@ -28,10 +28,26 @@ def scrape_unreleased_names_from_bulbapedia():
             if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
                 html_content = data["parse"]["text"]["*"]
                 print("  -> Fetched Bulbapedia via MediaWiki API endpoint.")
+            else:
+                print(f"  -> MediaWiki API JSON missing parse structure. Keys: {list(data.keys()) if isinstance(data, dict) else 'Not dict'}")
+        else:
+            print(f"  -> MediaWiki API status code: {res.status_code}")
     except Exception as api_err:
         print(f"  -> MediaWiki API fetch failed: {api_err}")
 
-    # Method 2: Direct HTML URL fallback
+    # Method 2: Retry MediaWiki API without custom headers if first attempt failed
+    if not html_content:
+        try:
+            res = requests.get(BULBAPEDIA_API_URL, timeout=20, verify=False)
+            if res.status_code == 200:
+                data = res.json()
+                if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
+                    html_content = data["parse"]["text"]["*"]
+                    print("  -> Fetched Bulbapedia via MediaWiki API (default UA).")
+        except Exception as api_err2:
+            print(f"  -> MediaWiki API default UA fetch failed: {api_err2}")
+
+    # Method 3: Direct HTML URL fallback
     if not html_content:
         try:
             res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
