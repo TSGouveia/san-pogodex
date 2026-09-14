@@ -5184,11 +5184,12 @@ function renderCandiesPane() {
         }
     });
 
-    // Filter families that have at least one evolution and at least one missing member
+    // Filter families that have at least one evolution and at least one missing member, OR where the base is unreleased
     let evolutionFamilies = Object.values(families).filter(f => {
+        const baseIsUnreleased = Boolean(f.base.unreleased) || f.members.some(m => Boolean(m.unreleased));
         const hasEvolution = f.members.length > 1;
         const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
-        return hasEvolution && hasMissingMember;
+        return baseIsUnreleased || (hasEvolution && hasMissingMember);
     });
 
     // Filter by search query if active
