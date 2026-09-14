@@ -137,8 +137,10 @@ def scrape_pokedex():
         scraped_unreleased = scrape_unreleased_names_from_bulbapedia()
         unreleased_lower = {name.lower() for name in scraped_unreleased}
 
-        # Tag entries with unreleased boolean
+        # Tag entries with unreleased boolean and calculate standard CP benchmarks
         unreleased_flagged_count = 0
+        from scrapers.cp_utils import calculate_cp, CPM_MAP
+
         for entry in pokedex_data:
             eng_name = entry.get("names", {}).get("English", "")
             if eng_name and eng_name.lower() in unreleased_lower:
@@ -146,6 +148,38 @@ def scrape_pokedex():
                 unreleased_flagged_count += 1
             else:
                 entry["unreleased"] = False
+
+            # Calculate standard Combat Power values if stats exist
+            stats = entry.get("stats")
+            if stats and "attack" in stats and "defense" in stats and "stamina" in stats:
+                b_atk = stats["attack"]
+                b_def = stats["defense"]
+                b_sta = stats["stamina"]
+
+                cpm_l50 = CPM_MAP.get(50, 0.84030000)
+                cpm_l25 = CPM_MAP.get(25, 0.66793400)
+                cpm_l20 = CPM_MAP.get(20, 0.59740001)
+                cpm_l15 = CPM_MAP.get(15, 0.51739399)
+
+                entry["combatPower"] = {
+                    "maxL50": calculate_cp(b_atk, b_def, b_sta, 15, 15, 15, cpm_l50),
+                    "researchL15": {
+                        "min": calculate_cp(b_atk, b_def, b_sta, 10, 10, 10, cpm_l15),
+                        "max": calculate_cp(b_atk, b_def, b_sta, 15, 15, 15, cpm_l15)
+                    },
+                    "eggsL20": {
+                        "min": calculate_cp(b_atk, b_def, b_sta, 10, 10, 10, cpm_l20),
+                        "max": calculate_cp(b_atk, b_def, b_sta, 15, 15, 15, cpm_l20)
+                    },
+                    "raidsL20": {
+                        "min": calculate_cp(b_atk, b_def, b_sta, 10, 10, 10, cpm_l20),
+                        "max": calculate_cp(b_atk, b_def, b_sta, 15, 15, 15, cpm_l20)
+                    },
+                    "raidsWbL25": {
+                        "min": calculate_cp(b_atk, b_def, b_sta, 10, 10, 10, cpm_l25),
+                        "max": calculate_cp(b_atk, b_def, b_sta, 15, 15, 15, cpm_l25)
+                    }
+                }
 
         print(f"  -> Flagged {unreleased_flagged_count} Pokédex entries as unreleased.")
         return pokedex_data

@@ -700,7 +700,10 @@
             <div class="modal-body">
                 <!-- Navigation within Modal -->
                 <div class="modal-nav">
-                    <button class="modal-tab-btn active" data-target="obtaining-tab">
+                    <button class="modal-tab-btn active" data-target="cps-tab">
+                        <i class="fa-solid fa-gauge-high"></i> CPs & Levels
+                    </button>
+                    <button class="modal-tab-btn" data-target="obtaining-tab">
                         <i class="fa-solid fa-map-location-dot"></i> How to Get
                     </button>
                     <button class="modal-tab-btn" data-target="evolution-tab">
@@ -716,8 +719,16 @@
 
                 <!-- Tab Contents -->
                 <div class="modal-tab-content">
+                    <!-- CPs & Level Benchmarks Tab (Default) -->
+                    <div class="tab-pane active" id="cps-tab">
+                        <h3 class="pane-title">Combat Power (CP) Benchmarks</h3>
+                        <div class="cps-benchmarks-grid" id="cps-benchmarks-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
                     <!-- Obtaining Guide Tab -->
-                    <div class="tab-pane active" id="obtaining-tab">
+                    <div class="tab-pane" id="obtaining-tab">
                         <h3 class="pane-title">Capture & Obtaining Guide</h3>
                         <div class="obtaining-grid" id="obtaining-methods">
                             <!-- Populated dynamically -->

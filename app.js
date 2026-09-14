@@ -1393,6 +1393,28 @@ function buildPokebattlerMaxUrl(bossName) {
         updateDashboardStats();
         updateRegionStatsBadge();
     }
+function calculateClientSideCombatPower(stats) {
+    if (!stats) return null;
+    const atk = stats.attack || stats.atk || 100;
+    const def = stats.defense || stats.def || 100;
+    const sta = stats.stamina || stats.sta || 100;
+
+    const calcCp = (aIv, dIv, sIv, cpm) => {
+        return Math.max(10, Math.floor(((atk + aIv) * Math.sqrt(def + dIv) * Math.sqrt(sta + sIv) * (cpm ** 2)) / 10));
+    };
+
+    const cpm50 = 0.84030000;
+    const cpm25 = 0.66793400;
+    const cpm20 = 0.59740001;
+    const cpm15 = 0.51739399;
+
+    return {
+        maxL50: calcCp(15, 15, 15, cpm50),
+        researchL15: { min: calcCp(10, 10, 10, cpm15), max: calcCp(15, 15, 15, cpm15) },
+        eggsL20: { min: calcCp(10, 10, 10, cpm20), max: calcCp(15, 15, 15, cpm20) },
+        raidsL20: { min: calcCp(10, 10, 10, cpm20), max: calcCp(15, 15, 15, cpm20) },
+        raidsWbL25: { min: calcCp(10, 10, 10, cpm25), max: calcCp(15, 15, 15, cpm25) }
+    };
 }
 
 function formatPokemon(p) {
@@ -1441,7 +1463,8 @@ function formatPokemon(p) {
         },
         obtaining: obtaining,
         rawEvolutions: allEvos,
-        unreleased: Boolean(p.unreleased)
+        unreleased: Boolean(p.unreleased),
+        combatPower: p.combatPower || calculateClientSideCombatPower(p.stats)
     };
 }
 
@@ -2529,6 +2552,7 @@ function openModal(id) {
     modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
     modalPokeTypes.innerHTML = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
+    loadCpsTab(poke);
     loadObtainingTab(poke);
     loadEvolutionTab(poke);
     loadStatsTab(poke);
@@ -2536,12 +2560,103 @@ function openModal(id) {
     updateModalCatchBtn(id);
 
     modalTabButtons.forEach(btn => btn.classList.remove('active'));
-    modalTabButtons[0].classList.add('active');
+    const cpsBtn = document.querySelector('.modal-nav .modal-tab-btn[data-target="cps-tab"]');
+    if (cpsBtn) cpsBtn.classList.add('active');
+    else if (modalTabButtons[0]) modalTabButtons[0].classList.add('active');
+
     modalPanes.forEach(pane => pane.classList.remove('active'));
-    document.getElementById('obtaining-tab').classList.add('active');
+    const cpsPane = document.getElementById('cps-tab');
+    if (cpsPane) cpsPane.classList.add('active');
 
     detailModal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
+}
+
+function loadCpsTab(poke) {
+    const container = document.getElementById('cps-benchmarks-grid');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const cps = poke.combatPower || calculateClientSideCombatPower(poke.stats);
+    if (!cps) {
+        container.innerHTML = `<p style="color: var(--text-secondary); grid-column: 1 / -1; text-align: center;">CP benchmark data unavailable.</p>`;
+        return;
+    }
+
+    const cards = [
+        {
+            title: "Max CP (LV 50)",
+            icon: "fa-solid fa-crown",
+            color: "#f5a623",
+            bg: "rgba(245, 166, 35, 0.1)",
+            border: "rgba(245, 166, 35, 0.3)",
+            desc: "100% IV (15/15/15) at Level 50",
+            val: `${cps.maxL50 || '---'} CP`
+        },
+        {
+            title: "Research / Special (LV 15)",
+            icon: "fa-solid fa-scroll",
+            color: "#60a5fa",
+            bg: "rgba(96, 165, 250, 0.1)",
+            border: "rgba(96, 165, 250, 0.3)",
+            desc: "10/10/10 min - 15/15/15 max",
+            val: cps.researchL15 ? `${cps.researchL15.min} - ${cps.researchL15.max} CP` : '---'
+        },
+        {
+            title: "Eggs Hatch (LV 20)",
+            icon: "fa-solid fa-egg",
+            color: "#34d399",
+            bg: "rgba(52, 211, 153, 0.1)",
+            border: "rgba(52, 211, 153, 0.3)",
+            desc: "10/10/10 min - 15/15/15 max",
+            val: cps.eggsL20 ? `${cps.eggsL20.min} - ${cps.eggsL20.max} CP` : '---'
+        },
+        {
+            title: "Raids (LV 20)",
+            icon: "fa-solid fa-hand-fist",
+            color: "#a78bfa",
+            bg: "rgba(167, 139, 250, 0.1)",
+            border: "rgba(167, 139, 250, 0.3)",
+            desc: "10/10/10 min - 15/15/15 max",
+            val: cps.raidsL20 ? `${cps.raidsL20.min} - ${cps.raidsL20.max} CP` : '---'
+        },
+        {
+            title: "Raids Weather Boosted (LV 25)",
+            icon: "fa-solid fa-cloud-sun",
+            color: "#f87171",
+            bg: "rgba(248, 113, 113, 0.1)",
+            border: "rgba(248, 113, 113, 0.3)",
+            desc: "10/10/10 min - 15/15/15 max",
+            val: cps.raidsWbL25 ? `${cps.raidsWbL25.min} - ${cps.raidsWbL25.max} CP` : '---'
+        }
+    ];
+
+    cards.forEach(card => {
+        const div = document.createElement('div');
+        div.className = 'cp-benchmark-card';
+        div.style.background = card.bg;
+        div.style.border = `1px solid ${card.border}`;
+        div.style.borderRadius = '12px';
+        div.style.padding = '1.2rem';
+        div.style.display = 'flex';
+        div.style.flexDirection = 'column';
+        div.style.gap = '0.5rem';
+        div.style.transition = 'transform 0.2s ease, border-color 0.2s ease';
+
+        div.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.6rem; color: ${card.color}; font-weight: 700; font-size: 0.95rem;">
+                <i class="${card.icon}"></i>
+                <span>${card.title}</span>
+            </div>
+            <div style="font-size: 1.6rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-top: 0.2rem;">
+                ${card.val}
+            </div>
+            <div style="font-size: 0.78rem; color: #94a3b8;">
+                ${card.desc}
+            </div>
+        `;
+        container.appendChild(div);
+    });
 }
 
 function closeModal() {
@@ -2567,6 +2682,26 @@ function jumpToRotationTarget(targetId) {
 function loadObtainingTab(poke) {
     const container = document.getElementById('obtaining-methods');
     container.innerHTML = '';
+
+    if (poke.unreleased) {
+        const unreleasedCard = document.createElement('div');
+        unreleasedCard.className = 'obtain-card unreleased-notice-card';
+        unreleasedCard.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+        unreleasedCard.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.12), var(--bg-tertiary))';
+        unreleasedCard.style.gridColumn = '1 / -1';
+        unreleasedCard.innerHTML = `
+            <div class="obtain-icon-box" style="color: #ef4444; background: rgba(239, 68, 68, 0.2);">
+                <i class="fa-solid fa-eye-slash"></i>
+            </div>
+            <div class="obtain-card-content">
+                <h4 style="color: #f87171; display: flex; align-items: center; gap: 6px;">
+                    Unreleased in Pokémon GO
+                </h4>
+                <p style="color: #fca5a5;">This Pokémon has not been released in Pokémon GO yet. Stay tuned for upcoming events and debuts!</p>
+            </div>
+        `;
+        container.appendChild(unreleasedCard);
+    }
 
     const getIcon = (method) => {
         const m = method.toLowerCase();
@@ -5251,7 +5386,6 @@ function renderCandiesPane() {
                                 <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark'))}"></i>
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
-                            ${isUnreleasedMember ? `<span class="unreleased-badge-tag" style="font-size: 0.58rem; padding: 1px 4px; margin-left: 4px;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
                             ${actionButton}
                             ${questButton}
                             ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
