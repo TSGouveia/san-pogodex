@@ -12,6 +12,12 @@ HEADERS = {
     "Accept-Language": "en-US,en;q=0.5"
 }
 
+API_HEADERS = [
+    {"User-Agent": "SanDexScraper/1.0 (https://pogowebsite.local)"},
+    {"User-Agent": "MediaWiki/1.39.0 (https://bulbapedia.bulbagarden.net)"},
+    {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"}
+]
+
 BULBAPEDIA_API_URL = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=text&format=json"
 BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
 
@@ -20,34 +26,20 @@ def scrape_unreleased_names_from_bulbapedia():
     unreleased_set = set()
     html_content = None
 
-    # Method 1: Try MediaWiki API (bypasses Cloudflare / HTML 403 blocks)
-    try:
-        res = requests.get(BULBAPEDIA_API_URL, headers=HEADERS, timeout=20, verify=False)
-        if res.status_code == 200:
-            data = res.json()
-            if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
-                html_content = data["parse"]["text"]["*"]
-                print("  -> Fetched Bulbapedia via MediaWiki API endpoint.")
-            else:
-                print(f"  -> MediaWiki API JSON missing parse structure. Keys: {list(data.keys()) if isinstance(data, dict) else 'Not dict'}")
-        else:
-            print(f"  -> MediaWiki API status code: {res.status_code}")
-    except Exception as api_err:
-        print(f"  -> MediaWiki API fetch failed: {api_err}")
-
-    # Method 2: Retry MediaWiki API without custom headers if first attempt failed
-    if not html_content:
+    # Method 1: Try MediaWiki API with multiple bot & standard User-Agents (bypasses Cloudflare / Linux 403 blocks)
+    for idx, api_hdr in enumerate(API_HEADERS):
         try:
-            res = requests.get(BULBAPEDIA_API_URL, timeout=20, verify=False)
+            res = requests.get(BULBAPEDIA_API_URL, headers=api_hdr, timeout=20, verify=False)
             if res.status_code == 200:
                 data = res.json()
                 if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
                     html_content = data["parse"]["text"]["*"]
-                    print("  -> Fetched Bulbapedia via MediaWiki API (default UA).")
-        except Exception as api_err2:
-            print(f"  -> MediaWiki API default UA fetch failed: {api_err2}")
+                    print(f"  -> Fetched Bulbapedia via MediaWiki API endpoint (header strategy {idx + 1}).")
+                    break
+        except Exception as api_err:
+            print(f"  -> MediaWiki API header strategy {idx + 1} failed: {api_err}")
 
-    # Method 3: Direct HTML URL fallback
+    # Method 2: Direct HTML URL fallback
     if not html_content:
         try:
             res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
