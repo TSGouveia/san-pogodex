@@ -3205,9 +3205,25 @@ html {
 
 /* Needs Candies Base Pokémon Card styling (Yellow border highlight) */
 .pokemon-card.needs-candy-base {
-    border: 1px dashed rgba(245, 166, 35, 0.6) !important;
-    background: linear-gradient(145deg, rgba(17, 27, 46, 0.9) 0%, rgba(245, 166, 35, 0.06) 100%) !important;
-    box-shadow: 0 0 12px rgba(245, 166, 35, 0.15) !important;
+    border: 1px dashed rgba(245, 166, 35, 0.85) !important;
+    background: linear-gradient(145deg, rgba(17, 27, 46, 0.95) 0%, rgba(245, 166, 35, 0.12) 100%) !important;
+    box-shadow: 0 0 14px rgba(245, 166, 35, 0.3) !important;
+}
+
+/* Faded but Needs Candies (Yellow version of ready-to-evolve for missing evolution cards) */
+.pokemon-card.needs-candy-missing {
+    border: 1px dashed rgba(245, 166, 35, 0.7) !important;
+    background: linear-gradient(145deg, rgba(17, 27, 46, 0.8) 0%, rgba(245, 166, 35, 0.08) 100%) !important;
+    box-shadow: 0 0 12px rgba(245, 166, 35, 0.2) !important;
+}
+
+.pokemon-card.needs-candy-missing .card-img-wrapper img {
+    filter: grayscale(75%) opacity(55%) !important;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.pokemon-card.needs-candy-missing:hover .card-img-wrapper img {
+    filter: grayscale(10%) opacity(90%) !important;
 }
 
 /* Pulsing Green Dot animation for evolve indicators */

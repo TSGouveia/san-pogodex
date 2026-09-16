@@ -2227,11 +2227,19 @@ function renderPokedex(forceClear = false) {
         const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
         const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
-        const candyNeeded = isCaught && needsCandies(poke);
+        const candyNeeded = needsCandies(poke);
         
-        let cardClass = isCaught 
-            ? (candyNeeded ? 'pokemon-card caught needs-candy-base' : (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught')) 
-            : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
+        let cardClass = 'pokemon-card ';
+        if (isCaught) {
+            cardClass += 'caught';
+            if (candyNeeded) cardClass += ' needs-candy-base';
+            else if (isTransf) cardClass += ' transferred';
+        } else {
+            cardClass += 'missing';
+            if (isTransf) cardClass += ' transferred-missing';
+            else if (readyToEvolve) cardClass += ' ready-to-evolve';
+            else if (candyNeeded) cardClass += ' needs-candy-missing';
+        }
 
         if (poke.unreleased) {
             cardClass += ' unreleased';
@@ -5098,31 +5106,48 @@ function getEvolutionParentAndCandies(poke) {
     return null;
 }
 
+function getCandyCount(baseId) {
+    if (userCandies[baseId] !== undefined) return Number(userCandies[baseId]);
+    if (userCandies[Number(baseId)] !== undefined) return Number(userCandies[Number(baseId)]);
+    if (userCandies[String(baseId)] !== undefined) return Number(userCandies[String(baseId)]);
+    return 0;
+}
+
 function needsCandies(poke) {
     if (!poke) return false;
     const chain = findEvolutionChain(poke);
-    if (!chain || chain.length === 0) return false;
+    if (!chain || chain.length <= 1) return false;
+
     const basePoke = chain[0];
     const baseId = basePoke.id;
-    
-    // Only care about candies if we already have the base form of the family
-    const baseIsCaught = caughtPokemon.has(baseId) || caughtPokemon.has(Number(baseId));
-    if (!baseIsCaught) return false;
+    const isBaseCaught = caughtPokemon.has(basePoke.id) || caughtPokemon.has(Number(basePoke.id));
+    if (!isBaseCaught) return false;
 
-    const currentCandies = userCandies[baseId] || 0;
-    
-    let totalNeeded = 0;
-    chain.forEach(member => {
-        if (!caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id))) {
-            const parentInfo = getEvolutionParentAndCandies(member);
-            if (parentInfo) {
-                totalNeeded += parentInfo.candies;
+    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
+    const currentCandies = getCandyCount(baseId);
+
+    if (isCaught) {
+        let totalNeeded = 0;
+        let hasMissing = false;
+        chain.forEach(member => {
+            const isMemCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+            if (!isMemCaught) {
+                const parentInfo = getEvolutionParentAndCandies(member);
+                if (parentInfo) {
+                    totalNeeded += parentInfo.candies;
+                    hasMissing = true;
+                }
             }
-        }
-    });
-    
-    const remaining = Math.max(0, totalNeeded - currentCandies);
-    return remaining > 0 && totalNeeded > 0;
+        });
+        return hasMissing && currentCandies < totalNeeded;
+    } else {
+        const parentInfo = getEvolutionParentAndCandies(poke);
+        if (!parentInfo || !parentInfo.parent) return false;
+        const isParentCaught = caughtPokemon.has(parentInfo.parent.id) || caughtPokemon.has(Number(parentInfo.parent.id));
+        if (!isParentCaught) return false;
+
+        return currentCandies < parentInfo.candies;
+    }
 }
 
 const parentToEvolutionsMap = new Map();
@@ -5187,7 +5212,6 @@ function isReadyToEvolve(poke) {
 
     return true;
 }
-
 
 function getBuddyDistanceForFamily(family) {
     if (!family || !family.base) return undefined;
