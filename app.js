@@ -1586,8 +1586,8 @@ function updateRegionStatsBadge() {
     
     const pct = total > 0 ? Math.round((caught / total) * 100) : 0;
     
-    activeRegionNameEl.textContent = name;
-    activeRegionRatioEl.textContent = `${caught} / ${total} (${pct}%)`;
+    if (activeRegionNameEl) activeRegionNameEl.textContent = name;
+    if (activeRegionRatioEl) activeRegionRatioEl.textContent = `${caught} / ${total} (${pct}%)`;
 }
 
 // ==========================================================================
@@ -1823,10 +1823,10 @@ function updateDashboardStats() {
     const caught = pokemonDatabase.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
     const pct = total > 0 ? Math.round((caught / total) * 100) : 0;
     
-    caughtCountEl.textContent = caught;
-    totalCountEl.textContent = total;
-    progressBarFill.style.width = `${pct}%`;
-    progressPctEl.textContent = `${pct}% Completed`;
+    if (caughtCountEl) caughtCountEl.textContent = caught;
+    if (totalCountEl) totalCountEl.textContent = total;
+    if (progressBarFill) progressBarFill.style.width = `${pct}%`;
+    if (progressPctEl) progressPctEl.textContent = `${pct}% Completed`;
     
     // Update To-Do and Candies pane targets dynamically
     if (typeof renderToDoPane === 'function') {
