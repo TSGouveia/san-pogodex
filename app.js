@@ -5117,6 +5117,9 @@ function needsCandies(poke) {
     const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
     if (isCaught) return false;
 
+    // Green has priority! If it is ready to evolve, it's green, not yellow
+    if (isReadyToEvolve(poke)) return false;
+
     const chain = findEvolutionChain(poke);
     if (!chain || chain.length <= 1) return false;
 
