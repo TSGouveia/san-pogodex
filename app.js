@@ -5122,16 +5122,16 @@ function needsCandies(poke) {
 
     const basePoke = chain[0];
     const baseId = basePoke.id;
+    // If poke is the base pokemon itself, it's just a missing base
+    if (String(poke.id) === String(baseId)) return false;
+
     const isBaseCaught = caughtPokemon.has(basePoke.id) || caughtPokemon.has(Number(basePoke.id));
     if (!isBaseCaught) return false;
 
-    const parentInfo = getEvolutionParentAndCandies(poke);
-    if (!parentInfo || !parentInfo.parent) return false;
-    const isParentCaught = caughtPokemon.has(parentInfo.parent.id) || caughtPokemon.has(Number(parentInfo.parent.id));
-    if (!isParentCaught) return false;
+    // If the base pokemon is transferred, evolutions do NOT show yellow
+    if (isPokemonTransferred(basePoke)) return false;
 
-    const currentCandies = getCandyCount(baseId);
-    return currentCandies < parentInfo.candies;
+    return true;
 }
 
 const parentToEvolutionsMap = new Map();
