@@ -2657,7 +2657,7 @@ function loadCpsTab(poke) {
             val: cps.raidsL20 ? `${cps.raidsL20.min} - ${cps.raidsL20.max} CP` : '---'
         },
         {
-            title: "Raids Weather Boosted (LV 25)",
+            title: "Raids Boosted (LV 25)",
             icon: "fa-solid fa-cloud-sun",
             color: "#f87171",
             bg: "rgba(248, 113, 113, 0.08)",
