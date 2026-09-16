@@ -1878,14 +1878,28 @@ function setupEventListeners() {
                 }
             });
             
+            const searchWrapper = document.querySelector('.search-wrapper');
+            const radioFilters = document.querySelector('.radio-filters');
+            const bulkActions = document.querySelector('.bulk-actions');
+            const sortWrapper = document.querySelector('.sort-wrapper');
+            const regionStatsBadge = document.getElementById('region-stats-badge');
+            const toggleUnreleasedBtn = document.getElementById('toggle-unreleased-btn');
+
+            const setVisible = (el, visible) => {
+                if (!el) return;
+                if (visible) el.classList.remove('hidden');
+                else el.classList.add('hidden');
+            };
+            
             if (targetPaneId === 'rotations-pane') {
-                document.querySelector('.search-wrapper').classList.add('hidden');
-                document.querySelector('.radio-filters').classList.add('hidden');
-                document.querySelector('.bulk-actions').classList.add('hidden');
-                document.querySelector('.sort-wrapper').classList.add('hidden');
-                document.getElementById('region-stats-badge').classList.add('hidden');
-                genTabsScroll.classList.add('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, false);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
                 
                 // Show the active rotations category section
                 const activeSubnavBtn = document.querySelector('#rotations-subnav .subnav-btn.active') || document.querySelector('#rotations-subnav .subnav-btn');
@@ -1895,49 +1909,54 @@ function setupEventListeners() {
                     renderActiveRotations();
                 }
             } else if (targetPaneId === 'candies-pane') {
-                document.querySelector('.search-wrapper').classList.remove('hidden');
-                document.querySelector('.radio-filters').classList.add('hidden');
-                document.querySelector('.bulk-actions').classList.add('hidden');
-                document.querySelector('.sort-wrapper').classList.add('hidden');
-                document.getElementById('region-stats-badge').classList.add('hidden');
-                genTabsScroll.classList.add('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, true);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
                 renderCandiesPane();
             } else if (targetPaneId === 'todo-pane') {
-                document.querySelector('.search-wrapper').classList.add('hidden');
-                document.querySelector('.radio-filters').classList.add('hidden');
-                document.querySelector('.bulk-actions').classList.add('hidden');
-                document.querySelector('.sort-wrapper').classList.add('hidden');
-                document.getElementById('region-stats-badge').classList.add('hidden');
-                genTabsScroll.classList.add('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, false);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
                 renderToDoPane();
             } else if (targetPaneId === 'friends-pane') {
-                document.querySelector('.search-wrapper').classList.add('hidden');
-                document.querySelector('.radio-filters').classList.add('hidden');
-                document.querySelector('.bulk-actions').classList.add('hidden');
-                document.querySelector('.sort-wrapper').classList.add('hidden');
-                document.getElementById('region-stats-badge').classList.add('hidden');
-                genTabsScroll.classList.add('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, false);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
                 renderFriendsPane();
             } else if (targetPaneId === 'attackers-pane') {
-                document.querySelector('.search-wrapper').classList.remove('hidden');
-                document.querySelector('.radio-filters').classList.add('hidden');
-                document.querySelector('.bulk-actions').classList.add('hidden');
-                document.querySelector('.sort-wrapper').classList.add('hidden');
-                document.getElementById('region-stats-badge').classList.add('hidden');
-                genTabsScroll.classList.add('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, true);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
                 renderAttackersPane();
             } else {
-                document.querySelector('.search-wrapper').classList.remove('hidden');
-                document.querySelector('.radio-filters').classList.remove('hidden');
-                document.querySelector('.bulk-actions').classList.remove('hidden');
-                document.querySelector('.sort-wrapper').classList.remove('hidden');
-                document.getElementById('region-stats-badge').classList.remove('hidden');
-                genTabsScroll.classList.remove('hidden');
-                if (huntTabsScroll) huntTabsScroll.classList.add('hidden');
+                setVisible(searchWrapper, true);
+                setVisible(radioFilters, true);
+                setVisible(bulkActions, true);
+                setVisible(sortWrapper, true);
+                setVisible(regionStatsBadge, true);
+                setVisible(toggleUnreleasedBtn, true);
+                setVisible(genTabsScroll, true);
+                setVisible(huntTabsScroll, false);
             }
         });
     });
