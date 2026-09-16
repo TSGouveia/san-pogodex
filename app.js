@@ -1230,6 +1230,7 @@ function buildPokebattlerMaxUrl(bossName) {
         if (Array.isArray(rawResearch)) {
             rawResearch.forEach(t => {
                 const taskText = (t.task || t.text || t.title || '').replace(/<[^>]+>/g, '').trim();
+                const categoryText = (t.category || t.category_name || '').replace(/<[^>]+>/g, '').trim() || 'Field Research';
                 if (t.rewards && Array.isArray(t.rewards)) {
                     const rewardList = [];
                     t.rewards.forEach(r => {
@@ -1248,13 +1249,14 @@ function buildPokebattlerMaxUrl(bossName) {
                         });
                     });
                     if (rewardList.length > 0) {
-                        liveResearch.push({ text: taskText, rewards: rewardList });
+                        liveResearch.push({ category: categoryText, text: taskText, rewards: rewardList });
                     }
                 } else if (t.reward || t.name) {
                     const pokeName = (t.reward || t.name || '').replace(/<[^>]+>/g, '').trim();
                     const matchedPoke = findPokemonByName(pokeName);
                     const dex = matchedPoke ? matchedPoke.id : null;
                     liveResearch.push({
+                        category: categoryText,
                         text: taskText,
                         rewards: [{
                             type: 'encounter',
@@ -1740,6 +1742,10 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
 }
 
 function toggleCaughtState(id, eventSource = null) {
+    if (friendViewModeActive) {
+        alert("You are viewing a friend's PokéDex in Read-Only mode.");
+        return;
+    }
     const strId = String(id);
     const numId = Number(id);
     const isNowCaught = !(caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId)));
@@ -2202,9 +2208,10 @@ function renderPokedex(forceClear = false) {
         const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
         const isTransf = isPokemonTransferred(poke);
         const readyToEvolve = isReadyToEvolve(poke);
+        const candyNeeded = isCaught && needsCandies(poke);
         
         let cardClass = isCaught 
-            ? (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught') 
+            ? (candyNeeded ? 'pokemon-card caught needs-candy-base' : (isTransf ? 'pokemon-card caught transferred' : 'pokemon-card caught')) 
             : (isTransf ? 'pokemon-card missing transferred-missing' : (readyToEvolve ? 'pokemon-card missing ready-to-evolve' : 'pokemon-card missing'));
 
         if (poke.unreleased) {
@@ -2235,6 +2242,7 @@ function renderPokedex(forceClear = false) {
                 <div style="display: flex; align-items: center; gap: 4px;">
                     <span class="poke-number">#${poke.num}</span>
                     ${readyToEvolve && !poke.unreleased ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
+                    ${candyNeeded && !poke.unreleased ? `<span class="candy-indicator-dot" style="width: 7px; height: 7px; background-color: #f5a623; border-radius: 50%; display: inline-block;" title="Needs Candies to Evolve!"></span>` : ''}
                     ${poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
@@ -3922,6 +3930,7 @@ function renderActiveRotations() {
     liveResearch.forEach(task => {
         const rawTaskText = task.text || task.task || task.title || "Field Research Task";
         const cleanTaskText = rawTaskText.replace(/<[^>]*>/g, '').trim();
+        const categoryName = task.category || "Field Research";
         if (task.rewards && Array.isArray(task.rewards)) {
             task.rewards.forEach(reward => {
                 const rawName = reward.name || reward.pokemon || "Reward";
@@ -3939,6 +3948,7 @@ function renderActiveRotations() {
                         maxCp = typeof reward.cp === 'object' ? reward.cp.max : String(reward.cp);
                     }
                     researchEncounters.push({
+                        category: categoryName,
                         taskText: cleanTaskText,
                         fullPokeName: cleanName,
                         basePokeName: matchedPoke.name,
@@ -3957,26 +3967,41 @@ function renderActiveRotations() {
         researchGrid.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active research rewards found.</p>';
     } else {
         researchGrid.innerHTML = '';
-        const encountersByQuest = {};
+
+        // Group by category first, then by quest task
+        const encountersByCategory = {};
         researchEncounters.forEach(encounter => {
-            if (!encountersByQuest[encounter.taskText]) {
-                encountersByQuest[encounter.taskText] = [];
+            const cat = encounter.category || "Field Research";
+            if (!encountersByCategory[cat]) {
+                encountersByCategory[cat] = {};
             }
-            encountersByQuest[encounter.taskText].push(encounter);
+            if (!encountersByCategory[cat][encounter.taskText]) {
+                encountersByCategory[cat][encounter.taskText] = [];
+            }
+            encountersByCategory[cat][encounter.taskText].push(encounter);
         });
 
-        Object.entries(encountersByQuest).forEach(([taskText, encounters]) => {
-            const sub = document.createElement('div');
-            sub.className = 'rotation-subchapter';
-            sub.innerHTML = `
-                <h4 class="rotation-subchapter-title">
-                    <i class="fa-solid fa-scroll"></i> ${taskText}
-                </h4>
-                <div class="rotation-grid-layout"></div>
+        Object.entries(encountersByCategory).forEach(([categoryName, tasksMap]) => {
+            const catHeader = document.createElement('div');
+            catHeader.style.cssText = "margin-top: 1.5rem; margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.5rem;";
+            catHeader.innerHTML = `
+                <i class="fa-solid fa-folder-open" style="color: var(--accent-color); font-size: 1.1rem;"></i>
+                <h3 style="font-size: 1.15rem; font-weight: 800; color: var(--text-primary); margin: 0;">${categoryName}</h3>
             `;
-            researchGrid.appendChild(sub);
-            
-            const grid = sub.querySelector('.rotation-grid-layout');
+            researchGrid.appendChild(catHeader);
+
+            Object.entries(tasksMap).forEach(([taskText, encounters]) => {
+                const sub = document.createElement('div');
+                sub.className = 'rotation-subchapter';
+                sub.innerHTML = `
+                    <h4 class="rotation-subchapter-title">
+                        <i class="fa-solid fa-scroll"></i> ${taskText}
+                    </h4>
+                    <div class="rotation-grid-layout"></div>
+                `;
+                researchGrid.appendChild(sub);
+                
+                const grid = sub.querySelector('.rotation-grid-layout');
             encounters.forEach(encounter => {
                 const card = document.createElement('div');
                 const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.fullPokeName);
@@ -4026,6 +4051,7 @@ function renderActiveRotations() {
                 grid.appendChild(card);
             });
         });
+    });
     }
 
     // 5. Render Team GO Rocket Lineups
@@ -4425,7 +4451,7 @@ function renderRocketLineups() {
                             } else if (isMissing) {
                                 statusBadges.push(`<span style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-crosshairs"></i> Missing</span>`);
                             } else if (isCandyNeeded) {
-                                statusBadges.push(`<span style="background: rgba(245, 166, 35, 0.15); color: var(--accent-color); border: 1px solid rgba(245, 166, 35, 0.25); font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-candy-cane"></i> Candy</span>`);
+                                statusBadges.push(`<span style="background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 2px;"><i class="fa-solid fa-candy-cane"></i> Candy</span>`);
                             }
                         }
 
@@ -5663,8 +5689,22 @@ function renderFriendsPaneFromData(data) {
                         <i class="fa-solid fa-user" style="color: ${isSelected ? 'var(--accent-color)' : '#94a3b8'};"></i>
                         <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">${friendName}</span>
                     </div>
-                    <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; color: #64748b;"></i>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-border-all"></i> PokéDex
+                        </button>
+                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; color: #64748b;"></i>
+                    </div>
                 `;
+
+                const dexBtn = item.querySelector('.view-friend-dex-btn');
+                if (dexBtn) {
+                    dexBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        openFriendPokedex(friend);
+                    });
+                }
+
                 item.addEventListener('click', () => {
                     activeFriendUid = friend.uid;
                     activeFriendEmail = friend.email;
@@ -7172,5 +7212,97 @@ function renderPromoCodes() {
             grid.appendChild(createCard(item, true));
         });
     }
+}
+
+// ==========================================================================
+// FRIEND POKÉDEX READ-ONLY MODE
+// ==========================================================================
+let friendViewModeActive = false;
+let friendViewBackupCaught = null;
+let friendViewBackupTransferred = null;
+let friendViewFriendName = '';
+
+async function openFriendPokedex(friend) {
+    if (!friend || !friend.uid) return;
+    const friendName = friend.displayName || friend.email.split('@')[0];
+
+    try {
+        const friendDocRef = doc(db, "users_data", friend.uid);
+        const friendSnap = await getDoc(friendDocRef);
+        if (!friendSnap.exists()) {
+            alert(`Could not load Pokédex data for ${friendName}.`);
+            return;
+        }
+
+        const data = friendSnap.data();
+        const friendCaughtArray = data.caught || [];
+        const friendTransferredArray = data.transferred || [];
+
+        // Save backup of current user's local state
+        if (!friendViewModeActive) {
+            friendViewBackupCaught = new Set(caughtPokemon);
+            friendViewBackupTransferred = new Set(transferredPokemon);
+        }
+
+        friendViewModeActive = true;
+        friendViewFriendName = friendName;
+
+        // Temporarily swap caught and transferred sets with friend's data
+        caughtPokemon = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+        transferredPokemon = new Set(friendTransferredArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+
+        // Update Banner UI
+        const banner = document.getElementById('friend-mode-banner');
+        const titleEl = document.getElementById('friend-mode-title');
+        if (banner && titleEl) {
+            titleEl.textContent = `Viewing ${friendName}'s PokéDex (Read-Only Mode)`;
+            banner.classList.remove('hidden');
+        }
+
+        // Hide catch buttons / catch-all / reset-all when in friend view mode
+        const bulkActions = document.querySelector('.bulk-actions');
+        if (bulkActions) bulkActions.style.display = 'none';
+
+        // Switch to PokéDex Grid pane and re-render
+        switchToPane('grid-pane');
+        pokedexLimit = Infinity;
+        renderPokedex(true);
+        updateDashboardStats();
+        updateRegionStatsBadge();
+    } catch (e) {
+        console.error("Error opening friend pokedex:", e);
+        alert(`Failed to load ${friendName}'s PokéDex.`);
+    }
+}
+
+function exitFriendPokedexMode() {
+    if (!friendViewModeActive) return;
+
+    // Restore user's caught state
+    if (friendViewBackupCaught) caughtPokemon = new Set(friendViewBackupCaught);
+    if (friendViewBackupTransferred) transferredPokemon = new Set(friendViewBackupTransferred);
+
+    friendViewModeActive = false;
+    friendViewBackupCaught = null;
+    friendViewBackupTransferred = null;
+    friendViewFriendName = '';
+
+    // Hide Banner
+    const banner = document.getElementById('friend-mode-banner');
+    if (banner) banner.classList.add('hidden');
+
+    // Restore bulk actions
+    const bulkActions = document.querySelector('.bulk-actions');
+    if (bulkActions) bulkActions.style.display = '';
+
+    renderPokedex(true);
+    updateDashboardStats();
+    updateRegionStatsBadge();
+}
+
+// Setup exit friend mode button listener
+const exitFriendBtn = document.getElementById('exit-friend-mode-btn');
+if (exitFriendBtn) {
+    exitFriendBtn.addEventListener('click', exitFriendPokedexMode);
 }
 

@@ -1,0 +1,5 @@
+a cor do candy não esta constante, por exemplo no team go rocket ta amarelo,
+quando tags stackam por exemplo candy e missing, elas deviam estar na horizontal uma da outra, tipo lado a lado e não na vertical
+as quests de field research o leek duck agrupa por categorias, se conseguisses mostrar essas categorias também era fixe somehow, provavelmente vais ter que mexer no scraper
+os ovos de 5km parecem estar errados oq é estranho idk
+era fixe tipo os pokemons que tipo parecido a cena do ready to evolve, se tu tens o base mas n tens candies aparecia parecido ao ready to evolve na pokedex grid mas sei la a amarelo ig idk, isto só se tiver o base pokemon, ou seja se tiver na aba needs candies o needs budy quest

@@ -15,52 +15,57 @@ def scrape_research():
         soup = BeautifulSoup(res.text, "html.parser")
         tasks = []
 
-        for item in soup.select("li.task-item, .research-task"):
-            task_el = item.select_one(".task-text, .task-name")
-            if not task_el:
-                continue
-            task_text = task_el.text.strip()
+        for cat_div in soup.select(".task-category"):
+            h2_el = cat_div.select_one("h2")
+            category_name = h2_el.text.strip() if h2_el else "Field Research"
 
-            encounter_rewards = []
-            for r in item.select("li.reward"):
-                if r.get("data-reward-type") != "encounter":
+            for item in cat_div.select("li.task-item, .research-task"):
+                task_el = item.select_one(".task-text, .task-name")
+                if not task_el:
                     continue
-                label_el = r.select_one(".reward-label")
-                reward_name = label_el.text.strip() if label_el else ""
-                img_el = r.select_one(".reward-image")
-                img_url = img_el["src"] if img_el and img_el.has_attr("src") else ""
-                shiny = bool(r.select_one(".shiny-icon, [alt*='shiny']"))
-                
-                min_cp_el = r.select_one(".min-cp")
-                max_cp_el = r.select_one(".max-cp")
-                min_cp = min_cp_el.text.replace("Min CP", "").strip() if min_cp_el else None
-                max_cp = max_cp_el.text.replace("Max CP", "").strip() if max_cp_el else None
+                task_text = task_el.text.strip()
 
-                stats = get_pokedex_stats(poke_map, reward_name)
-                cp_dict = None
-                if stats:
-                    cp_data = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=15, min_iv=10)
-                    cp_dict = {"normal": cp_data}
-                    min_cp = min_cp or cp_data["min"]
-                    max_cp = max_cp or cp_data["max"]
+                encounter_rewards = []
+                for r in item.select("li.reward"):
+                    if r.get("data-reward-type") != "encounter":
+                        continue
+                    label_el = r.select_one(".reward-label")
+                    reward_name = label_el.text.strip() if label_el else ""
+                    img_el = r.select_one(".reward-image")
+                    img_url = img_el["src"] if img_el and img_el.has_attr("src") else ""
+                    shiny = bool(r.select_one(".shiny-icon, [alt*='shiny']"))
+                    
+                    min_cp_el = r.select_one(".min-cp")
+                    max_cp_el = r.select_one(".max-cp")
+                    min_cp = min_cp_el.text.replace("Min CP", "").strip() if min_cp_el else None
+                    max_cp = max_cp_el.text.replace("Max CP", "").strip() if max_cp_el else None
 
-                if reward_name:
-                    encounter_rewards.append({
-                        "name": reward_name,
-                        "image": img_url,
-                        "shiny": shiny,
-                        "min_cp": min_cp,
-                        "max_cp": max_cp,
-                        "combatPower": cp_dict
+                    stats = get_pokedex_stats(poke_map, reward_name)
+                    cp_dict = None
+                    if stats:
+                        cp_data = get_cp_for_level(stats["atk"], stats["def"], stats["sta"], level=15, min_iv=10)
+                        cp_dict = {"normal": cp_data}
+                        min_cp = min_cp or cp_data["min"]
+                        max_cp = max_cp or cp_data["max"]
+
+                    if reward_name:
+                        encounter_rewards.append({
+                            "name": reward_name,
+                            "image": img_url,
+                            "shiny": shiny,
+                            "min_cp": min_cp,
+                            "max_cp": max_cp,
+                            "combatPower": cp_dict
+                        })
+
+                if encounter_rewards:
+                    tasks.append({
+                        "category": category_name,
+                        "task": task_text,
+                        "rewards": encounter_rewards
                     })
 
-            if encounter_rewards:
-                tasks.append({
-                    "task": task_text,
-                    "rewards": encounter_rewards
-                })
-
-        print(f"  -> Saved {len(tasks)} Pokémon encounter research tasks with CP calculations.")
+        print(f"  -> Saved {len(tasks)} Pokémon encounter research tasks with categories and CP calculations.")
         return tasks
     except Exception as e:
         print(f"Error scraping research: {e}")
