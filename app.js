@@ -745,9 +745,9 @@ function openPogoCacheDB() {
 
 async function getPogoLocalCache(key) {
     try {
-        const db = await openPogoCacheDB();
+        const iDB = await openPogoCacheDB();
         return new Promise((resolve) => {
-            const tx = db.transaction(POGO_CACHE_STORE, 'readonly');
+            const tx = iDB.transaction(POGO_CACHE_STORE, 'readonly');
             const req = tx.objectStore(POGO_CACHE_STORE).get(key);
             req.onsuccess = () => resolve(req.result || null);
             req.onerror = () => resolve(null);
@@ -759,9 +759,9 @@ async function getPogoLocalCache(key) {
 
 async function setPogoLocalCache(key, value) {
     try {
-        const db = await openPogoCacheDB();
+        const iDB = await openPogoCacheDB();
         return new Promise((resolve) => {
-            const tx = db.transaction(POGO_CACHE_STORE, 'readwrite');
+            const tx = iDB.transaction(POGO_CACHE_STORE, 'readwrite');
             tx.objectStore(POGO_CACHE_STORE).put(value, key);
             tx.oncomplete = () => resolve(true);
             tx.onerror = () => resolve(false);
