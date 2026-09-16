@@ -2231,9 +2231,7 @@ function renderPokedex(forceClear = false) {
         
         let cardClass = 'pokemon-card ';
         if (isCaught) {
-            cardClass += 'caught';
-            if (candyNeeded) cardClass += ' needs-candy-base';
-            else if (isTransf) cardClass += ' transferred';
+            cardClass += isTransf ? 'caught transferred' : 'caught';
         } else {
             cardClass += 'missing';
             if (isTransf) cardClass += ' transferred-missing';
@@ -5115,6 +5113,10 @@ function getCandyCount(baseId) {
 
 function needsCandies(poke) {
     if (!poke) return false;
+    // If poke itself is caught, it is NEVER yellow
+    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
+    if (isCaught) return false;
+
     const chain = findEvolutionChain(poke);
     if (!chain || chain.length <= 1) return false;
 
@@ -5123,31 +5125,13 @@ function needsCandies(poke) {
     const isBaseCaught = caughtPokemon.has(basePoke.id) || caughtPokemon.has(Number(basePoke.id));
     if (!isBaseCaught) return false;
 
-    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
+    const parentInfo = getEvolutionParentAndCandies(poke);
+    if (!parentInfo || !parentInfo.parent) return false;
+    const isParentCaught = caughtPokemon.has(parentInfo.parent.id) || caughtPokemon.has(Number(parentInfo.parent.id));
+    if (!isParentCaught) return false;
+
     const currentCandies = getCandyCount(baseId);
-
-    if (isCaught) {
-        let totalNeeded = 0;
-        let hasMissing = false;
-        chain.forEach(member => {
-            const isMemCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
-            if (!isMemCaught) {
-                const parentInfo = getEvolutionParentAndCandies(member);
-                if (parentInfo) {
-                    totalNeeded += parentInfo.candies;
-                    hasMissing = true;
-                }
-            }
-        });
-        return hasMissing && currentCandies < totalNeeded;
-    } else {
-        const parentInfo = getEvolutionParentAndCandies(poke);
-        if (!parentInfo || !parentInfo.parent) return false;
-        const isParentCaught = caughtPokemon.has(parentInfo.parent.id) || caughtPokemon.has(Number(parentInfo.parent.id));
-        if (!isParentCaught) return false;
-
-        return currentCandies < parentInfo.candies;
-    }
+    return currentCandies < parentInfo.candies;
 }
 
 const parentToEvolutionsMap = new Map();
