@@ -1345,6 +1345,7 @@ function buildPokebattlerMaxUrl(bossName) {
         filterObtainingMethods();
         migrateCaughtState();
         buildStaticEvolutionMaps();
+        cleanTransferredWhenEvolutionCaught();
         
         generateGenTabs();
         renderPokedex(true);
@@ -1628,6 +1629,73 @@ function saveTransferredState() {
     }
 }
 
+function getEvolutionAncestors(poke) {
+    const ancestors = [];
+    if (!poke) return ancestors;
+    let curr = poke;
+    const visited = new Set([String(curr.id)]);
+    while (true) {
+        const parentInfo = getEvolutionParentInfo(curr);
+        if (parentInfo && parentInfo.parent && parentInfo.parent.id && !visited.has(String(parentInfo.parent.id))) {
+            visited.add(String(parentInfo.parent.id));
+            ancestors.push(parentInfo.parent);
+            curr = parentInfo.parent;
+        } else {
+            break;
+        }
+    }
+    return ancestors;
+}
+
+function cleanTransferredWhenEvolutionCaught(changedIds = null) {
+    if (!pokemonDatabase || pokemonDatabase.length === 0 || transferredPokemon.size === 0) return false;
+    let changed = false;
+    
+    if (changedIds && changedIds.length > 0) {
+        changedIds.forEach(id => {
+            const poke = pokemonDatabase.find(p => String(p.id) === String(id) || Number(p.id) === Number(id));
+            if (!poke) return;
+            const ancestors = getEvolutionAncestors(poke);
+            ancestors.forEach(anc => {
+                const ancStr = String(anc.id);
+                const ancNum = Number(anc.id);
+                if (transferredPokemon.has(ancStr)) {
+                    transferredPokemon.delete(ancStr);
+                    changed = true;
+                }
+                if (!isNaN(ancNum) && transferredPokemon.has(ancNum)) {
+                    transferredPokemon.delete(ancNum);
+                    changed = true;
+                }
+            });
+        });
+    } else {
+        pokemonDatabase.forEach(poke => {
+            const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id)) || caughtPokemon.has(String(poke.id));
+            if (isCaught) {
+                const ancestors = getEvolutionAncestors(poke);
+                ancestors.forEach(anc => {
+                    const ancStr = String(anc.id);
+                    const ancNum = Number(anc.id);
+                    if (transferredPokemon.has(ancStr)) {
+                        transferredPokemon.delete(ancStr);
+                        changed = true;
+                    }
+                    if (!isNaN(ancNum) && transferredPokemon.has(ancNum)) {
+                        transferredPokemon.delete(ancNum);
+                        changed = true;
+                    }
+                });
+            }
+        });
+    }
+
+    if (changed) {
+        saveTransferredState();
+    }
+    return changed;
+}
+
 function migrateCaughtState() {
     if (!pokemonDatabase || pokemonDatabase.length === 0) return;
     
@@ -1696,7 +1764,17 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
                 pokedexGrid.classList.add('hidden');
             }
         } else {
-            pokedexCard.className = isCaught ? 'pokemon-card caught' : 'pokemon-card missing';
+            const pokeObj = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
+            const isTransf = pokeObj ? isPokemonTransferred(pokeObj) : false;
+            let cardClass = 'pokemon-card ';
+            if (isCaught) {
+                cardClass += isTransf ? 'caught transferred' : 'caught';
+            } else {
+                cardClass += 'missing';
+                if (isTransf) cardClass += ' transferred-missing';
+            }
+            if (pokeObj && pokeObj.unreleased) cardClass += ' unreleased';
+            pokedexCard.className = cardClass;
             
             // Add temporary 3D animation class
             if (isNowCaught !== null && !isNowCaught) {
@@ -1727,7 +1805,10 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
     // 2. Update the Hunt Grid Card if it exists
     if (huntGrid) {
         const huntCard = huntGrid.querySelector(`.pokemon-card[data-id="${id}"]`);
-        if (isCaught) {
+        const pokeObj = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
+        const isTransf = pokeObj ? isPokemonTransferred(pokeObj) : false;
+
+        if (isCaught && !isTransf) {
             if (huntCard) {
                 huntCard.remove();
                 if (huntGrid.querySelectorAll('.pokemon-card').length === 0) {
@@ -1738,6 +1819,8 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
         } else {
             if (!huntCard) {
                 renderMissingSummary();
+            } else {
+                huntCard.className = `pokemon-card missing ${isTransf ? 'transferred-missing' : ''}`;
             }
         }
     }
@@ -1752,6 +1835,8 @@ function toggleCaughtState(id, eventSource = null) {
     const numId = Number(id);
     const isNowCaught = !(caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId)));
     
+    const affectedTransferredAncestors = [];
+
     if (caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId))) {
         caughtPokemon.delete(strId);
         if (!isNaN(numId)) caughtPokemon.delete(numId);
@@ -1761,6 +1846,22 @@ function toggleCaughtState(id, eventSource = null) {
         caughtPokemon.add(strId);
         transferredPokemon.delete(strId);
         if (!isNaN(numId)) transferredPokemon.delete(numId);
+        
+        // If this Pokemon is an evolution, any transferred ancestors should no longer be transferred
+        const poke = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
+        if (poke) {
+            const ancestors = getEvolutionAncestors(poke);
+            ancestors.forEach(anc => {
+                const ancStr = String(anc.id);
+                const ancNum = Number(anc.id);
+                if (transferredPokemon.has(ancStr) || (!isNaN(ancNum) && transferredPokemon.has(ancNum))) {
+                    transferredPokemon.delete(ancStr);
+                    if (!isNaN(ancNum)) transferredPokemon.delete(ancNum);
+                    affectedTransferredAncestors.push(anc.id);
+                }
+            });
+        }
+
         if (eventSource) {
             triggerPremiumParticleBurst(eventSource, true);
         }
@@ -1768,6 +1869,15 @@ function toggleCaughtState(id, eventSource = null) {
     saveCaughtState();
     saveTransferredState();
     syncPokemonCaughtStateUI(id, isNowCaught);
+
+    if (affectedTransferredAncestors.length > 0) {
+        affectedTransferredAncestors.forEach(ancId => {
+            const ancIsCaught = caughtPokemon.has(String(ancId)) || caughtPokemon.has(Number(ancId));
+            syncPokemonCaughtStateUI(ancId, ancIsCaught);
+        });
+        renderMissingSummary();
+        renderCandiesPane();
+    }
 }
 
 // Particle Burst System (WOW Celebration or Fade effect)
@@ -2083,9 +2193,11 @@ function setupEventListeners() {
         if (visible.length === 0) return;
         
         visible.forEach(p => caughtPokemon.add(p.id));
+        cleanTransferredWhenEvolutionCaught(visible.map(p => p.id));
         saveCaughtState();
         renderPokedex(true);
         renderMissingSummary();
+        renderCandiesPane();
     });
 
     resetAllBtn.addEventListener('click', () => {
