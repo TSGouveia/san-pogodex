@@ -18,15 +18,96 @@ API_HEADERS = [
     {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"}
 ]
 
+BULBAPEDIA_RAW_URL = "https://bulbapedia.bulbagarden.net/w/index.php?title=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&action=raw"
+BULBAPEDIA_REVISIONS_API = "https://bulbapedia.bulbagarden.net/w/api.php?action=query&prop=revisions&titles=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&rvslots=*&rvprop=content&format=json"
+BULBAPEDIA_PARSE_WIKITEXT_API = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=wikitext&format=json"
 BULBAPEDIA_API_URL = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=text&format=json"
 BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
+
+def parse_unreleased_from_wikitext(text):
+    import re
+    m = re.search(r'==+\s*Unreleased.*?\n(.*?)(?=\n==+|$)', text, re.DOTALL | re.IGNORECASE)
+    if not m:
+        return set()
+    part = m.group(1)
+    tables = part.split('{|')
+    if len(tables) > 1:
+        species_table = tables[1]
+        names = re.findall(r'\{\{MSP(?:/GO)?\|[^|}]+\|([^}|]+)', species_table)
+        return {n.strip() for n in names if n.strip()}
+    return set()
+
+def parse_unreleased_from_html(html_content):
+    soup = BeautifulSoup(html_content, "html.parser")
+    heading = soup.find(lambda e: e.name in ["h2", "h3"] and "Unreleased" in e.text)
+    if not heading:
+        return set()
+    elem = heading.find_next_sibling()
+    tables = []
+    while elem and elem.name not in ["h2", "h3"]:
+        if elem.name == "table":
+            tables.append(elem)
+        elem = elem.find_next_sibling()
+    unreleased_set = set()
+    if tables:
+        species_table = tables[0]
+        for img in species_table.find_all("img"):
+            alt = img.get("alt", "").strip()
+            if alt:
+                unreleased_set.add(alt)
+    return unreleased_set
 
 def scrape_unreleased_names_from_bulbapedia():
     print("Scraping Unreleased Pokémon from Bulbapedia...")
     unreleased_set = set()
-    html_content = None
 
-    # Method 1: Try MediaWiki API with multiple bot & standard User-Agents (bypasses Cloudflare / Linux 403 blocks)
+    # Strategy 1: Direct Raw Wikitext endpoint (fastest, ~150KB, minimal bot-block risk)
+    for idx, hdr in enumerate(API_HEADERS + [HEADERS]):
+        try:
+            res = requests.get(BULBAPEDIA_RAW_URL, headers=hdr, timeout=15, verify=False)
+            if res.status_code == 200 and "Unreleased" in res.text:
+                names = parse_unreleased_from_wikitext(res.text)
+                if names:
+                    print(f"  -> Successfully fetched {len(names)} unreleased species via raw wikitext (header {idx + 1}).")
+                    return names
+        except Exception as e:
+            print(f"  -> Raw wikitext strategy {idx + 1} attempt failed: {e}")
+
+    # Strategy 2: MediaWiki Query Revisions API (official JSON content endpoint)
+    for idx, hdr in enumerate(API_HEADERS):
+        try:
+            res = requests.get(BULBAPEDIA_REVISIONS_API, headers=hdr, timeout=15, verify=False)
+            if res.status_code == 200:
+                data = res.json()
+                pages = data.get("query", {}).get("pages", {})
+                for pid, page in pages.items():
+                    revs = page.get("revisions", [])
+                    if revs:
+                        wikitext = revs[0].get("slots", {}).get("main", {}).get("*", "")
+                        if wikitext and "Unreleased" in wikitext:
+                            names = parse_unreleased_from_wikitext(wikitext)
+                            if names:
+                                print(f"  -> Successfully fetched {len(names)} unreleased species via revisions API (header {idx + 1}).")
+                                return names
+        except Exception as e:
+            print(f"  -> Revisions API strategy {idx + 1} attempt failed: {e}")
+
+    # Strategy 3: MediaWiki Parse Wikitext API
+    for idx, hdr in enumerate(API_HEADERS):
+        try:
+            res = requests.get(BULBAPEDIA_PARSE_WIKITEXT_API, headers=hdr, timeout=15, verify=False)
+            if res.status_code == 200:
+                data = res.json()
+                wikitext = data.get("parse", {}).get("wikitext", {}).get("*", "")
+                if wikitext and "Unreleased" in wikitext:
+                    names = parse_unreleased_from_wikitext(wikitext)
+                    if names:
+                        print(f"  -> Successfully fetched {len(names)} unreleased species via parse wikitext API.")
+                        return names
+        except Exception as e:
+            print(f"  -> Parse wikitext API attempt failed: {e}")
+
+    # Strategy 4: MediaWiki Parse HTML API
     for idx, api_hdr in enumerate(API_HEADERS):
         try:
             res = requests.get(BULBAPEDIA_API_URL, headers=api_hdr, timeout=20, verify=False)
@@ -34,53 +115,27 @@ def scrape_unreleased_names_from_bulbapedia():
                 data = res.json()
                 if "parse" in data and "text" in data["parse"] and "*" in data["parse"]["text"]:
                     html_content = data["parse"]["text"]["*"]
-                    print(f"  -> Fetched Bulbapedia via MediaWiki API endpoint (header strategy {idx + 1}).")
-                    break
+                    names = parse_unreleased_from_html(html_content)
+                    if names:
+                        print(f"  -> Successfully fetched {len(names)} unreleased species via MediaWiki parse HTML endpoint.")
+                        return names
         except Exception as api_err:
-            print(f"  -> MediaWiki API header strategy {idx + 1} failed: {api_err}")
+            print(f"  -> MediaWiki API parse HTML header strategy {idx + 1} failed: {api_err}")
 
-    # Method 2: Direct HTML URL fallback
-    if not html_content:
-        try:
-            res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
-            if res.status_code == 200:
-                html_content = res.content
-                print("  -> Fetched Bulbapedia via direct HTML endpoint.")
-            else:
-                print(f"  -> Warning: Bulbapedia HTML returned status {res.status_code}.")
-        except Exception as html_err:
-            print(f"  -> Direct HTML fetch failed: {html_err}")
-
-    if not html_content:
-        print("  -> Error: Could not retrieve Bulbapedia content from any endpoint.")
-        return unreleased_set
-
+    # Strategy 5: Direct HTML Webpage URL
     try:
-        soup = BeautifulSoup(html_content, "html.parser")
-        heading = soup.find(lambda e: e.name in ["h2", "h3"] and "Unreleased" in e.text)
-        if not heading:
-            print("  -> Warning: Could not find 'Unreleased' heading on Bulbapedia.")
-            return unreleased_set
+        res = requests.get(BULBAPEDIA_URL, headers=HEADERS, timeout=20, verify=False)
+        if res.status_code == 200:
+            names = parse_unreleased_from_html(res.content)
+            if names:
+                print(f"  -> Successfully fetched {len(names)} unreleased species via direct HTML webpage.")
+                return names
+        else:
+            print(f"  -> Warning: Bulbapedia HTML returned status {res.status_code}.")
+    except Exception as html_err:
+        print(f"  -> Direct HTML fetch failed: {html_err}")
 
-        elem = heading.find_next_sibling()
-        tables = []
-        while elem and elem.name not in ["h2", "h3"]:
-            if elem.name == "table":
-                tables.append(elem)
-            elem = elem.find_next_sibling()
-
-        # Table 1 on Bulbapedia contains unreleased species
-        if tables:
-            species_table = tables[0]
-            for img in species_table.find_all("img"):
-                alt = img.get("alt", "").strip()
-                if alt:
-                    unreleased_set.add(alt)
-
-        print(f"  -> Successfully scraped {len(unreleased_set)} unreleased species directly from Bulbapedia.")
-    except Exception as e:
-        print(f"  -> Error parsing Bulbapedia content: {e}")
-
+    print("  -> Error: Could not retrieve Bulbapedia content from any endpoint.")
     return unreleased_set
 
 def scrape_pokedex():
@@ -133,8 +188,47 @@ def scrape_pokedex():
             pokedex_data.append(basculegion_entry)
             print("  -> Injected missing #902 Basculegion into Pokédex dataset.")
 
-        # Scrape Bulbapedia unreleased list strictly from live site
+        # Scrape Bulbapedia unreleased list
         scraped_unreleased = scrape_unreleased_names_from_bulbapedia()
+
+        # Fallback handling: if Bulbapedia was blocked (e.g. Cloudflare 403 on CI) or returned empty, load from cache/pokedex.json
+        import os
+        cache_paths = [
+            os.path.join(os.path.dirname(__file__), "unreleased_fallback.json"),
+            os.path.join(os.path.dirname(__file__), "..", "files", "unreleased_cache.json"),
+            os.path.join(os.path.dirname(__file__), "..", "..", "files", "unreleased_cache.json"),
+            os.path.join(os.path.dirname(__file__), "..", "files", "pokedex.json"),
+            os.path.join(os.path.dirname(__file__), "..", "..", "files", "pokedex.json"),
+        ]
+
+        if not scraped_unreleased:
+            print("  -> Bulbapedia scrape returned 0 unreleased. Attempting fallback from local cache/pokedex...")
+            for cp in cache_paths:
+                if os.path.exists(cp):
+                    try:
+                        with open(cp, "r", encoding="utf-8") as f:
+                            cached_data = json.load(f)
+                            if isinstance(cached_data, list):
+                                if cached_data and isinstance(cached_data[0], str):
+                                    scraped_unreleased = set(cached_data)
+                                elif cached_data and isinstance(cached_data[0], dict):
+                                    fallback_names = {p.get("names", {}).get("English") for p in cached_data if p.get("unreleased") and p.get("names", {}).get("English")}
+                                    if fallback_names:
+                                        scraped_unreleased = fallback_names
+                            if scraped_unreleased:
+                                print(f"  -> Successfully restored {len(scraped_unreleased)} unreleased species from fallback: {cp}")
+                                break
+                    except Exception as e:
+                        print(f"  -> Error reading fallback {cp}: {e}")
+        else:
+            try:
+                for cp in cache_paths[:2]:
+                    os.makedirs(os.path.dirname(cp), exist_ok=True)
+                    with open(cp, "w", encoding="utf-8") as f:
+                        json.dump(sorted(list(scraped_unreleased)), f, indent=2, ensure_ascii=False)
+            except Exception as e:
+                print(f"  -> Warning: Could not save unreleased cache: {e}")
+
         unreleased_lower = {name.lower() for name in scraped_unreleased}
 
         # Tag entries with unreleased boolean and calculate standard CP benchmarks

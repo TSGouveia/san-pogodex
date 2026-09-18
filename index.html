@@ -717,6 +717,9 @@
                     <button class="modal-tab-btn" data-target="stats-tab">
                         <i class="fa-solid fa-chart-simple"></i> Base Stats
                     </button>
+                    <button class="modal-tab-btn" data-target="moves-tab">
+                        <i class="fa-solid fa-bolt"></i> Moves
+                    </button>
                     <button class="modal-tab-btn" data-target="matchups-tab">
                         <i class="fa-solid fa-shield-halved"></i> Type Matchups
                     </button>
@@ -752,6 +755,20 @@
                     <div class="tab-pane" id="stats-tab">
                         <h3 class="pane-title">Pokémon GO Base Stats</h3>
                         <div class="stats-bars" id="stats-bars">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Combat Moves Tab -->
+                    <div class="tab-pane" id="moves-tab">
+                        <div class="moves-tab-header">
+                            <h3 class="pane-title" style="margin-bottom: 0;">Combat Attacks & Stats</h3>
+                            <div class="moves-mode-selector">
+                                <button type="button" class="move-mode-btn active" data-mode="pve">Gyms & Raids (PvE)</button>
+                                <button type="button" class="move-mode-btn" data-mode="pvp">Trainer Battles (PvP)</button>
+                            </div>
+                        </div>
+                        <div class="moves-container" id="moves-container">
                             <!-- Populated dynamically -->
                         </div>
                     </div>

@@ -1468,7 +1468,9 @@ function formatPokemon(p) {
         obtaining: obtaining,
         rawEvolutions: allEvos,
         unreleased: Boolean(p.unreleased),
-        combatPower: p.combatPower || calculateClientSideCombatPower(p.stats)
+        combatPower: p.combatPower || calculateClientSideCombatPower(p.stats),
+        quickMoves: p.quickMoves || {},
+        cinematicMoves: p.cinematicMoves || {}
     };
 }
 
@@ -2017,12 +2019,16 @@ function setupEventListeners() {
 
 
 
+    let searchDebounceTimeout = null;
     searchInput.addEventListener('input', (e) => {
         currentSearchQuery = e.target.value.toLowerCase().trim();
-        pokedexLimit = Infinity; // Immediately load all search results
-        renderPokedex(true);
-        renderMissingSummary();
-        renderCandiesPane();
+        clearTimeout(searchDebounceTimeout);
+        searchDebounceTimeout = setTimeout(() => {
+            pokedexLimit = Infinity; // Immediately load all search results
+            renderPokedex(true);
+            renderMissingSummary();
+            renderCandiesPane();
+        }, 120);
     });
 
     sortSelect.addEventListener('change', (e) => {
@@ -2591,6 +2597,7 @@ function openModal(id) {
     loadObtainingTab(poke);
     loadEvolutionTab(poke);
     loadStatsTab(poke);
+    loadMovesTab(poke);
     loadTypeMatchupsTab(poke);
     updateModalCatchBtn(id);
 
@@ -3318,6 +3325,137 @@ function loadStatsTab(poke) {
             if (barInner) barInner.style.width = `${pct}%`;
         }, 50);
     });
+}
+
+let currentMovesMode = 'pve'; // 'pve' or 'pvp'
+
+function loadMovesTab(poke) {
+    const container = document.getElementById('moves-container');
+    if (!container) return;
+    container.innerHTML = '';
+
+    // Bind mode toggle buttons if present
+    const modeBtns = document.querySelectorAll('.move-mode-btn');
+    modeBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === currentMovesMode);
+        btn.onclick = () => {
+            currentMovesMode = btn.dataset.mode;
+            modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === currentMovesMode));
+            renderMovesContent(poke, container);
+        };
+    });
+
+    renderMovesContent(poke, container);
+}
+
+function renderMovesContent(poke, container) {
+    if (!container || !poke) return;
+    container.innerHTML = '';
+
+    const quickMovesList = poke.quickMoves 
+        ? (Array.isArray(poke.quickMoves) ? poke.quickMoves : Object.values(poke.quickMoves))
+        : [];
+    const cinematicMovesList = poke.cinematicMoves 
+        ? (Array.isArray(poke.cinematicMoves) ? poke.cinematicMoves : Object.values(poke.cinematicMoves))
+        : [];
+
+    if (quickMovesList.length === 0 && cinematicMovesList.length === 0) {
+        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">No combat moves available for this Pokémon.</p>`;
+        return;
+    }
+
+    const formatMoveCard = (move, isFast) => {
+        const moveName = move.names ? (move.names.English || move.id || "Unknown") : (move.id || "Unknown");
+        const typeObj = move.type || {};
+        const typeName = (typeObj.names ? typeObj.names.English : (typeObj.type ? typeObj.type.replace('POKEMON_TYPE_', '') : 'Normal')).toLowerCase();
+        
+        let statsHtml = '';
+
+        if (currentMovesMode === 'pvp') {
+            const combat = move.combat || {};
+            const power = combat.power !== undefined && combat.power !== null ? combat.power : (move.power || 0);
+            const energy = combat.energy !== undefined && combat.energy !== null ? combat.energy : (move.energy || 0);
+            const turns = combat.turns || (isFast ? 1 : 1);
+            const durationSec = turns * 0.5;
+            const dpt = durationSec > 0 ? (power / durationSec).toFixed(1) : power;
+            const ept = durationSec > 0 ? (energy / durationSec).toFixed(1) : energy;
+
+            statsHtml = `
+                <div class="move-stat-badge power" title="Base Damage in PvP">
+                    <span>Power:</span> <strong>${power}</strong>
+                </div>
+                <div class="move-stat-badge energy" title="Energy Generated/Consumed in PvP">
+                    <span>Energy:</span> <strong>${energy > 0 ? `+${energy}` : energy}</strong>
+                </div>
+                <div class="move-stat-badge" title="Attack Duration in PvP (Turns)">
+                    <span>Turns:</span> <strong>${turns} (${durationSec}s)</strong>
+                </div>
+                <div class="move-stat-badge dps" title="Damage Per Second (PvP)">
+                    <span>DPS:</span> <strong>${dpt}</strong>
+                </div>
+            `;
+        } else {
+            // PvE (Gyms & Raids)
+            const power = move.power || 0;
+            const energy = move.energy || 0;
+            const durationSec = move.durationMs ? (move.durationMs / 1000) : 1;
+            const dps = durationSec > 0 ? (power / durationSec).toFixed(1) : power;
+            const eps = durationSec > 0 ? (energy / durationSec).toFixed(1) : energy;
+
+            statsHtml = `
+                <div class="move-stat-badge power" title="Base Damage in Gyms & Raids">
+                    <span>Power:</span> <strong>${power}</strong>
+                </div>
+                <div class="move-stat-badge energy" title="Energy Cost/Gain in Gyms & Raids">
+                    <span>Energy:</span> <strong>${energy > 0 ? `+${energy}` : energy}</strong>
+                </div>
+                <div class="move-stat-badge" title="Attack Duration">
+                    <span>Duration:</span> <strong>${durationSec}s</strong>
+                </div>
+                <div class="move-stat-badge dps" title="Damage Per Second (PvE)">
+                    <span>DPS:</span> <strong>${dps}</strong>
+                </div>
+            `;
+        }
+
+        return `
+            <div class="move-card">
+                <div class="move-card-header">
+                    <span class="move-card-name">${moveName}</span>
+                    <span class="type-badge type-${typeName}">${typeName}</span>
+                </div>
+                <div class="move-stats-row">
+                    ${statsHtml}
+                </div>
+            </div>
+        `;
+    };
+
+    if (quickMovesList.length > 0) {
+        const fastSection = document.createElement('div');
+        fastSection.innerHTML = `
+            <div class="moves-section-title">
+                <i class="fa-solid fa-bolt" style="color: var(--accent-color);"></i> Fast Attacks
+            </div>
+            <div class="moves-grid">
+                ${quickMovesList.map(m => formatMoveCard(m, true)).join('')}
+            </div>
+        `;
+        container.appendChild(fastSection);
+    }
+
+    if (cinematicMovesList.length > 0) {
+        const chargeSection = document.createElement('div');
+        chargeSection.innerHTML = `
+            <div class="moves-section-title" style="margin-top: 1rem;">
+                <i class="fa-solid fa-burst" style="color: #f87171;"></i> Charged Attacks
+            </div>
+            <div class="moves-grid">
+                ${cinematicMovesList.map(m => formatMoveCard(m, false)).join('')}
+            </div>
+        `;
+        container.appendChild(chargeSection);
+    }
 }
 
 function loadTypeMatchupsTab(poke) {
@@ -5278,7 +5416,18 @@ function renderCandiesPane() {
         const hasEvolution = f.members.length > 1;
         const hasUnreleasedMember = Boolean(f.base.unreleased) || f.members.some(m => Boolean(m.unreleased));
         const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
-        return hasEvolution && (hasUnreleasedMember || hasMissingMember);
+        if (!hasEvolution || (!hasUnreleasedMember && !hasMissingMember)) return false;
+
+        // If all evolutions (non-base stages) are already caught, do not include in Candies pane even if base is missing
+        const nonBaseMembers = f.members.filter(m => String(m.id) !== String(f.base.id));
+        if (nonBaseMembers.length > 0) {
+            const hasMissingEvolution = nonBaseMembers.some(m => !caughtPokemon.has(m.id) && !caughtPokemon.has(Number(m.id)) && !caughtPokemon.has(String(m.id)));
+            if (!hasMissingEvolution) {
+                return false;
+            }
+        }
+
+        return true;
     });
 
     // Filter by search query if active
