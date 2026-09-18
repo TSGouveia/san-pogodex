@@ -3581,7 +3581,7 @@ function renderWildSpawns() {
         const dexFormatted = '#' + String(s.dexNr).padStart(3, '0');
         const isTransferred = poke ? isPokemonTransferred(poke) : false;
         const isMissing = poke ? (!isTransferred && isPokemonMissing(poke)) : false;
-        const isCandyNeeded = poke ? needsCandies(poke) : false;
+        const isCandyNeeded = poke ? (familyNeedsCandies(poke) || needsCandies(poke)) : false;
         
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
 
@@ -3744,7 +3744,7 @@ function renderActiveRotations() {
                 const targetPoke = matchedPoke || baseFormPoke;
                 const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
                 const isMissing = targetPoke && !isTransferred && (!caughtPokemon.has(targetPoke.id) && !caughtPokemon.has(Number(targetPoke.id)));
-                const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
                 card.setAttribute('data-scroll-target', `raid-${raidName.replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`);
@@ -3885,7 +3885,7 @@ function renderActiveRotations() {
                     
                     const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                     const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
-                    const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                    const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                     const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
 
                     card.className = `rotation-card-item theme-mega ${highlightClass} spawn-animation`;
@@ -4032,7 +4032,7 @@ function renderActiveRotations() {
                 const matchedPoke = pokemonDatabase.find(p => p.id == egg.dex);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
-                const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
                 card.setAttribute('data-scroll-target', `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(eggT).replace(/[^a-z0-9]/g, '')}`);
@@ -4170,7 +4170,7 @@ function renderActiveRotations() {
                 const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.fullPokeName);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
-                const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item theme-blue ${highlightClass} spawn-animation`;
                 const keyName = matchedPoke ? matchedPoke.name : encounter.fullPokeName;
@@ -4381,7 +4381,7 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
             const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
             const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
-            const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+            const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
             card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
             card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
@@ -4429,7 +4429,7 @@ function renderRewardsListHelper(container, data, cardTheme) {
         const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
         const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
         const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
-        const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+        const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
         card.className = `rotation-card-item ${cardTheme} ${highlightClass}`;
         
@@ -4579,10 +4579,10 @@ function renderRocketLineups() {
                 if (Array.isArray(slot.pokemons)) {
                     slot.pokemons.forEach(poke => {
                         const pokeNameStr = safeLower(poke && typeof poke === 'object' ? poke.name : poke);
-                        const matchedPoke = pokemonDatabase.find(p => p.name && safeLower(p.name) === pokeNameStr);
+                        const matchedPoke = pokemonDatabase.find(p => p.name && safeLower(p.name) === pokeNameStr) || findPokemonByName(pokeNameStr);
                         const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                         const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
-                        const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                        const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                         const isEncounterPoke = (poke && (poke.isEncounter || poke.is_encounter)) || isSlotEncounter;
 
                         const rawName = poke && typeof poke === 'object' ? poke.name : poke;
@@ -5249,6 +5249,35 @@ function getCandyCount(baseId) {
     return 0;
 }
 
+function familyNeedsCandies(poke) {
+    if (!poke) return false;
+    const chain = findEvolutionChain(poke);
+    if (!chain || chain.length <= 1) return false;
+
+    const basePoke = chain[0];
+    const baseId = basePoke.id;
+
+    // Check if any member in the family is missing and needs evolution candies
+    let totalNeeded = 0;
+    let hasMissingEvolution = false;
+
+    chain.forEach(member => {
+        const isMemberCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+        if (!isMemberCaught) {
+            const parentInfo = getEvolutionParentAndCandies(member);
+            if (parentInfo) {
+                totalNeeded += (parentInfo.candies || 50);
+                hasMissingEvolution = true;
+            }
+        }
+    });
+
+    if (!hasMissingEvolution) return false;
+
+    const currentCandies = getCandyCount(baseId);
+    return currentCandies < totalNeeded;
+}
+
 function needsCandies(poke) {
     if (!poke) return false;
     // If poke itself is caught, it is NEVER yellow
@@ -5272,7 +5301,12 @@ function needsCandies(poke) {
     // If the base pokemon is transferred, evolutions do NOT show yellow
     if (isPokemonTransferred(basePoke)) return false;
 
-    return true;
+    // Check if the family actually still needs candies for this evolution
+    const parentInfo = getEvolutionParentAndCandies(poke);
+    const requiredCandies = parentInfo ? parentInfo.candies : 50;
+    const currentCandies = getCandyCount(baseId);
+
+    return currentCandies < requiredCandies;
 }
 
 const parentToEvolutionsMap = new Map();
@@ -5323,7 +5357,7 @@ function isReadyToEvolve(poke) {
     // Get family base ID and current candies
     const baseId = pokeToFamilyBaseIdMap.get(poke.id);
     if (!baseId) return false;
-    const currentCandies = userCandies[baseId] || 0;
+    const currentCandies = getCandyCount(baseId);
 
     if (currentCandies < parentInfo.candies) return false;
 
@@ -6708,7 +6742,7 @@ function openEventModal(ev) {
                 const matchedPoke = pokemonDatabase.find(p => p.name && spawn.name && p.name.toLowerCase() === spawn.name.toLowerCase());
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
-                const isCandyNeeded = matchedPoke && needsCandies(matchedPoke);
+                const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
 
                 // Format the raw API name into a readable display name
                 const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(spawn.name);
@@ -6988,7 +7022,7 @@ function renderToDoPane() {
                 
                 const isTransf = isPokemonTransferred(matched);
                 const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = needsCandies(matched);
+                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
                 const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -7023,7 +7057,7 @@ function renderToDoPane() {
                 const eggDist = getEggFriendlyName(egg.eggT);
                 const isTransf = isPokemonTransferred(matched);
                 const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = needsCandies(matched);
+                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
                 const key = `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(egg.eggT).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -7048,7 +7082,7 @@ function renderToDoPane() {
                         if (matched) {
                             const isTransf = isPokemonTransferred(matched);
                             const isMiss = isPokemonMissing(matched) && !isTransf;
-                            const isCandy = needsCandies(matched);
+                            const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
                             const key = `quest-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(task.text).replace(/[^a-z0-9]/g, '')}`;
 
                             if (isTransf) {
@@ -7074,11 +7108,11 @@ function renderToDoPane() {
                         slot.pokemons.forEach(p => {
                             const pName = safeLower(p && typeof p === 'object' ? p.name : p);
                             if (pName) {
-                                const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName);
+                                const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName) || findPokemonByName(pName);
                                 if (matched) {
                                     const isTransf = isPokemonTransferred(matched);
                                     const isMiss = isPokemonMissing(matched) && !isTransf;
-                                    const isCandy = needsCandies(matched);
+                                    const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
                                     const key = `rocket-${safeLower(charName).replace(/\s+/g, '-')}`;
 
                                     if (isTransf) {
@@ -7105,7 +7139,7 @@ function renderToDoPane() {
             if (matched) {
                 const isTransf = isPokemonTransferred(matched);
                 const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = needsCandies(matched);
+                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
                 const key = `party-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(party.task).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
