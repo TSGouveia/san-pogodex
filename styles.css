@@ -1989,10 +1989,8 @@ input, button, select {
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     padding: 5px;
-    padding-top: 10px;
     border-radius: var(--border-radius-md);
     box-shadow: var(--shadow-sm);
-    overflow: visible;
 }
 
 .subnav-btn {
@@ -2702,10 +2700,8 @@ input, button, select {
         display: flex !important;
         flex-wrap: nowrap !important;
         overflow-x: auto !important;
-        overflow-y: visible !important;
         width: 100% !important;
         padding: 4px !important;
-        padding-top: 10px !important;
         gap: 2px !important;
         -webkit-overflow-scrolling: touch;
         scrollbar-width: none;
