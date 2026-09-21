@@ -7530,13 +7530,17 @@ function renderPromoCodes() {
                     </button>
                 </a>
             ` : ''}
+            ${!isExpiredCard && !isUnknownCode ? `
+                <button class="redeem-toggle-btn" style="width: 100%; background: transparent; border: 1px solid var(--border-color); color: var(--text-secondary); border-radius: 8px; padding: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;">
+                    <i class="fa-solid fa-check-double"></i> Mark as Redeemed
+                </button>
+            ` : ''}
         `;
 
         const copyBtn = card.querySelector('.copy-code-btn');
         if (copyBtn) {
             copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                markPromoCodeClicked(code);
                 navigator.clipboard.writeText(code).then(() => {
                     copyBtn.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Copied!`;
                     copyBtn.style.borderColor = '#10b981';
@@ -7548,11 +7552,45 @@ function renderPromoCodes() {
             });
         }
 
-        const redeemLink = card.querySelector('a[target="_blank"]');
-        if (redeemLink) {
-            redeemLink.addEventListener('click', () => {
-                markPromoCodeClicked(code);
-            });
+        // Mark as Redeemed toggle (only for active, known codes)
+        if (!isExpiredCard && !isUnknownCode) {
+            const redeemToggleBtn = card.querySelector('.redeem-toggle-btn');
+            if (redeemToggleBtn) {
+                const updateRedeemState = (redeemed) => {
+                    if (redeemed) {
+                        card.style.opacity = '0.55';
+                        card.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                        redeemToggleBtn.innerHTML = `<i class="fa-solid fa-rotate-left"></i> Undo Redeemed`;
+                        redeemToggleBtn.style.background = 'rgba(16, 185, 129, 0.12)';
+                        redeemToggleBtn.style.color = '#10b981';
+                        redeemToggleBtn.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                    } else {
+                        card.style.opacity = '1';
+                        card.style.borderColor = 'var(--border-color)';
+                        redeemToggleBtn.innerHTML = `<i class="fa-solid fa-check-double"></i> Mark as Redeemed`;
+                        redeemToggleBtn.style.background = 'transparent';
+                        redeemToggleBtn.style.color = 'var(--text-secondary)';
+                        redeemToggleBtn.style.borderColor = 'var(--border-color)';
+                    }
+                };
+
+                // Set initial state
+                const initialRedeemed = getClickedPromoCodes().has(code);
+                updateRedeemState(initialRedeemed);
+
+                redeemToggleBtn.addEventListener('click', () => {
+                    const clicked = getClickedPromoCodes();
+                    const nowRedeemed = !clicked.has(code);
+                    if (nowRedeemed) {
+                        clicked.add(code);
+                    } else {
+                        clicked.delete(code);
+                    }
+                    try { localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...clicked])); } catch {}
+                    updateRedeemState(nowRedeemed);
+                    updatePromoCodesBadge();
+                });
+            }
         }
 
         return card;
