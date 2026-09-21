@@ -4919,6 +4919,12 @@ async function loadUserDataFromFirestore(user) {
             // Union of local and cloud completed quests
             const mergedQuests = new Set([...completedBuddyQuests, ...cloudQuests.map(x => String(x))]);
 
+            // Merge redeemed promo codes (union of local + cloud)
+            const cloudRedeemed = data.redeemedPromoCodes || [];
+            cloudRedeemed.forEach(c => redeemedPromoCodes.add(c));
+            try { localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...redeemedPromoCodes])); } catch {}
+            updatePromoCodesBadge();
+
             caughtPokemon = mergedCaught;
             userCandies = mergedCandies;
             transferredPokemon = mergedTransferred;
@@ -5042,6 +5048,12 @@ onAuthStateChanged(auth, async (user) => {
                 localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
                 localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
                 localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
+
+                // Sync redeemed promo codes from cloud in real-time
+                const cloudRedeemed = data.redeemedPromoCodes || [];
+                redeemedPromoCodes = new Set(cloudRedeemed);
+                try { localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...redeemedPromoCodes])); } catch {}
+                updatePromoCodesBadge();
                 
                 renderPokedex();
                 renderMissingSummary();
@@ -7389,19 +7401,42 @@ let rawPromoCodes = [];
 
 const PROMO_CLICKED_KEY = 'pogodex_clicked_promo_codes';
 
-function getClickedPromoCodes() {
+// In-memory set, kept in sync with localStorage and/or Firestore
+let redeemedPromoCodes = new Set();
+
+function _loadRedeemedFromLocalStorage() {
     try {
-        return new Set(JSON.parse(localStorage.getItem(PROMO_CLICKED_KEY) || '[]'));
-    } catch { return new Set(); }
+        const saved = JSON.parse(localStorage.getItem(PROMO_CLICKED_KEY) || '[]');
+        saved.forEach(c => redeemedPromoCodes.add(c));
+    } catch {}
+}
+_loadRedeemedFromLocalStorage();
+
+function getClickedPromoCodes() {
+    return redeemedPromoCodes;
 }
 
-function markPromoCodeClicked(code) {
+async function markPromoCodeClicked(code, redeemed = true) {
     if (!code) return;
-    const clicked = getClickedPromoCodes();
-    clicked.add(code);
+    if (redeemed) {
+        redeemedPromoCodes.add(code);
+    } else {
+        redeemedPromoCodes.delete(code);
+    }
+    // Always sync to localStorage as fallback
     try {
-        localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...clicked]));
+        localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...redeemedPromoCodes]));
     } catch {}
+    // Sync to Firestore if logged in
+    if (currentUser) {
+        try {
+            await updateDoc(doc(db, 'users_data', currentUser.uid), {
+                redeemedPromoCodes: [...redeemedPromoCodes]
+            });
+        } catch (e) {
+            console.warn('Could not save redeemed promo codes to Firestore:', e);
+        }
+    }
     updatePromoCodesBadge();
 }
 
@@ -7413,8 +7448,7 @@ function updatePromoCodesBadge() {
         const expLower = (item.expires || '').toLowerCase();
         return !item.isExpired && !expLower.includes('expired');
     });
-    const clicked = getClickedPromoCodes();
-    const unseenCount = activeList.filter(item => item.code && !item.code.includes('?') && !clicked.has(item.code)).length;
+    const unseenCount = activeList.filter(item => item.code && !item.code.includes('?') && !redeemedPromoCodes.has(item.code)).length;
     if (unseenCount > 0) {
         badge.textContent = unseenCount > 99 ? '99+' : unseenCount;
         badge.style.display = 'flex';
@@ -7579,16 +7613,9 @@ function renderPromoCodes() {
                 updateRedeemState(initialRedeemed);
 
                 redeemToggleBtn.addEventListener('click', () => {
-                    const clicked = getClickedPromoCodes();
-                    const nowRedeemed = !clicked.has(code);
-                    if (nowRedeemed) {
-                        clicked.add(code);
-                    } else {
-                        clicked.delete(code);
-                    }
-                    try { localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...clicked])); } catch {}
+                    const nowRedeemed = !redeemedPromoCodes.has(code);
+                    markPromoCodeClicked(code, nowRedeemed);
                     updateRedeemState(nowRedeemed);
-                    updatePromoCodesBadge();
                 });
             }
         }
