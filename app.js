@@ -934,7 +934,7 @@ async function loadPokedex() {
         if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
         if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
         if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
-        if (isNonEmpty(dbScrapedData.promoCodes)) rawPromoCodes = dbScrapedData.promoCodes;
+        if (isNonEmpty(dbScrapedData.promoCodes)) { rawPromoCodes = dbScrapedData.promoCodes; updatePromoCodesBadge(); }
         if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
         if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
         if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
@@ -7387,11 +7387,48 @@ function renderToDoPane() {
 // ==========================================================================
 let rawPromoCodes = [];
 
+const PROMO_CLICKED_KEY = 'pogodex_clicked_promo_codes';
+
+function getClickedPromoCodes() {
+    try {
+        return new Set(JSON.parse(localStorage.getItem(PROMO_CLICKED_KEY) || '[]'));
+    } catch { return new Set(); }
+}
+
+function markPromoCodeClicked(code) {
+    if (!code) return;
+    const clicked = getClickedPromoCodes();
+    clicked.add(code);
+    try {
+        localStorage.setItem(PROMO_CLICKED_KEY, JSON.stringify([...clicked]));
+    } catch {}
+    updatePromoCodesBadge();
+}
+
+function updatePromoCodesBadge() {
+    const badge = document.getElementById('promocodes-unseen-badge');
+    if (!badge) return;
+    const list = Array.isArray(rawPromoCodes) ? rawPromoCodes : [];
+    const activeList = list.filter(item => {
+        const expLower = (item.expires || '').toLowerCase();
+        return !item.isExpired && !expLower.includes('expired');
+    });
+    const clicked = getClickedPromoCodes();
+    const unseenCount = activeList.filter(item => item.code && !item.code.includes('?') && !clicked.has(item.code)).length;
+    if (unseenCount > 0) {
+        badge.textContent = unseenCount > 99 ? '99+' : unseenCount;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
 function loadPromoCodesFallback() {
     fetch('files/promoCodes.min.json')
         .then(r => r.json())
         .then(data => {
             rawPromoCodes = data;
+            updatePromoCodesBadge();
             const sec = document.getElementById('rotations-promocodes-section');
             if (sec && !sec.classList.contains('hidden')) {
                 renderPromoCodes();
@@ -7499,6 +7536,7 @@ function renderPromoCodes() {
         if (copyBtn) {
             copyBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                markPromoCodeClicked(code);
                 navigator.clipboard.writeText(code).then(() => {
                     copyBtn.innerHTML = `<i class="fa-solid fa-check" style="color: #10b981;"></i> Copied!`;
                     copyBtn.style.borderColor = '#10b981';
@@ -7507,6 +7545,13 @@ function renderPromoCodes() {
                         copyBtn.style.borderColor = 'var(--border-color)';
                     }, 2000);
                 });
+            });
+        }
+
+        const redeemLink = card.querySelector('a[target="_blank"]');
+        if (redeemLink) {
+            redeemLink.addEventListener('click', () => {
+                markPromoCodeClicked(code);
             });
         }
 
@@ -7537,6 +7582,7 @@ function renderPromoCodes() {
             grid.appendChild(createCard(item, true));
         });
     }
+    updatePromoCodesBadge();
 }
 
 // ==========================================================================
