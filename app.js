@@ -1870,6 +1870,9 @@ function toggleCaughtState(id, eventSource = null) {
     saveTransferredState();
     syncPokemonCaughtStateUI(id, isNowCaught);
 
+    // Refresh Pokédex cards so family evolution states (ready/needs candies) update immediately
+    renderPokedex(true);
+
     if (affectedTransferredAncestors.length > 0) {
         affectedTransferredAncestors.forEach(ancId => {
             const ancIsCaught = caughtPokemon.has(String(ancId)) || caughtPokemon.has(Number(ancId));
@@ -5402,6 +5405,31 @@ function familyNeedsCandies(poke) {
     return currentCandies < totalNeeded;
 }
 
+function getCumulativeCandiesToEvolve(targetPoke, chain) {
+    if (!targetPoke || !chain || chain.length <= 1) return 0;
+    const targetIdx = chain.findIndex(p => String(p.id) === String(targetPoke.id));
+    if (targetIdx <= 0) return 0;
+
+    // Find the closest ancestor in the chain that is currently caught
+    let caughtAncestorIdx = -1;
+    for (let i = targetIdx - 1; i >= 0; i--) {
+        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+            caughtAncestorIdx = i;
+            break;
+        }
+    }
+    if (caughtAncestorIdx === -1) return 0;
+
+    // Sum all candies required from that caught ancestor up to targetPoke
+    let total = 0;
+    for (let i = caughtAncestorIdx; i < targetIdx; i++) {
+        const stagePoke = chain[i + 1];
+        const pInfo = getEvolutionParentAndCandies(stagePoke);
+        total += (pInfo ? pInfo.candies : 50);
+    }
+    return total;
+}
+
 function needsCandies(poke) {
     if (!poke) return false;
     // If poke itself is caught, it is NEVER yellow
@@ -5425,10 +5453,9 @@ function needsCandies(poke) {
     // If the base pokemon is transferred, evolutions do NOT show yellow
     if (isPokemonTransferred(basePoke)) return false;
 
-    // Check if the family actually still needs candies for this evolution
-    const parentInfo = getEvolutionParentAndCandies(poke);
-    const requiredCandies = parentInfo ? parentInfo.candies : 50;
     const currentCandies = getCandyCount(baseId);
+    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain);
+    if (requiredCandies <= 0) return false;
 
     return currentCandies < requiredCandies;
 }
@@ -5870,11 +5897,13 @@ function renderCandiesPane() {
         input.addEventListener('blur', () => {
             saveCandyState(false);
             renderCandiesPane();
+            renderPokedex(true);
         });
         
         input.addEventListener('change', () => {
             saveCandyState(false);
             renderCandiesPane();
+            renderPokedex(true);
         });
 
         // Append to appropriate grid
