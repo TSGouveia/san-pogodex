@@ -5565,26 +5565,47 @@ function isReadyToEvolve(poke) {
     const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
     if (isCaught) return false;
 
-    // Get the parent info of this target pokemon
-    const parentInfo = getEvolutionParentAndCandies(poke);
-    if (!parentInfo || !parentInfo.parent) return false;
+    const chain = findEvolutionChain(poke);
+    if (!chain || chain.length <= 1) return false;
 
-    // The parent must be caught
-    const isParentCaught = caughtPokemon.has(parentInfo.parent.id) || caughtPokemon.has(Number(parentInfo.parent.id));
-    if (!isParentCaught) return false;
+    // Find the closest ancestor in the chain that is currently caught
+    const targetIdx = chain.findIndex(p => String(p.id) === String(poke.id));
+    if (targetIdx <= 0) return false;
+
+    let caughtAncestorIdx = -1;
+    for (let i = targetIdx - 1; i >= 0; i--) {
+        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+            caughtAncestorIdx = i;
+            break;
+        }
+    }
+    // If no ancestor in the chain is caught, cannot evolve to this pokemon
+    if (caughtAncestorIdx === -1) return false;
+
+    // Base pokemon of the family must not be transferred
+    const basePoke = chain[0];
+    if (isPokemonTransferred(basePoke)) return false;
 
     // Get family base ID and current candies
-    const baseId = pokeToFamilyBaseIdMap.get(poke.id);
+    const baseId = basePoke.id || pokeToFamilyBaseIdMap.get(poke.id);
     if (!baseId) return false;
     const currentCandies = getCandyCount(baseId);
 
-    if (currentCandies < parentInfo.candies) return false;
+    // Calculate cumulative candies needed from closest caught ancestor up to poke
+    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain);
+    if (requiredCandies <= 0) return false;
 
-    // If there is an evolution buddy quest, check if completed
-    if (parentInfo.quests && parentInfo.quests.length > 0) {
-        const questKey = String(poke.id);
-        if (!completedBuddyQuests.has(questKey)) {
-            return false;
+    if (currentCandies < requiredCandies) return false;
+
+    // Check buddy quests for any stage between caught ancestor and target
+    for (let i = caughtAncestorIdx; i < targetIdx; i++) {
+        const stagePoke = chain[i + 1];
+        const pInfo = getEvolutionParentAndCandies(stagePoke);
+        if (pInfo && pInfo.quests && pInfo.quests.length > 0) {
+            const questKey = String(stagePoke.id);
+            if (!completedBuddyQuests.has(questKey)) {
+                return false;
+            }
         }
     }
 
