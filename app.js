@@ -266,6 +266,24 @@ function getPokemonImageUrl(name, matchedPoke) {
         return `${POKE_SPRITE_BASE_URL}/${rfId}.png`;
     }
     
+    // Check if it's a Gigantamax form
+    if (nameLower.startsWith('gigantamax ') || nameLower.includes('gigantamax') || nameLower.includes('gmax')) {
+        const baseName = nameLower.replace(/^gigantamax\s+/i, '').replace(/_gigantamax/i, '').replace(/-gmax/i, '').trim();
+        const gmaxIds = {
+            "venusaur": "10195", "charizard": "10196", "blastoise": "10197", "butterfree": "10198",
+            "pikachu": "10199", "meowth": "10200", "machamp": "10201", "gengar": "10202",
+            "kingler": "10203", "lapras": "10204", "eevee": "10205", "snorlax": "10206",
+            "garbodor": "10207", "melmetal": "10208", "rillaboom": "10209", "cinderace": "10210",
+            "inteleon": "10211", "corviknight": "10212", "orbeetle": "10213", "drednaw": "10214",
+            "coalossal": "10215", "flapple": "10216", "appletun": "10217", "sandaconda": "10218",
+            "toxtricity": "10219", "centiskorch": "10220", "hatterene": "10221", "grimmsnarl": "10222",
+            "alcremie": "10223", "copperajah": "10224", "duraludon": "10225", "urshifu": "10226"
+        };
+        if (gmaxIds[baseName]) {
+            return `${POKE_SPRITE_BASE_URL}/${gmaxIds[baseName]}.png`;
+        }
+    }
+
     // Check if it's a Mega evolution
     if (nameLower.startsWith('mega ')) {
         const baseName = nameLower.replace('mega ', '').trim();
@@ -1107,7 +1125,11 @@ function buildPokebattlerRaidUrl(bossName, tier = null) {
 
 function buildPokebattlerMaxUrl(bossName) {
     if (!bossName) return 'https://www.pokebattler.com/max';
-    const clean = bossName.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '').trim().toUpperCase().replace(/\s+/g, '_');
+    const isGmax = /gigantamax/i.test(bossName);
+    const clean = bossName.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '').replace(/_GIGANTAMAX/i, '').replace(/_DYNAMAX/i, '').trim().toUpperCase().replace(/\s+/g, '_');
+    if (isGmax) {
+        return `https://www.pokebattler.com/max/${clean}_GIGANTAMAX`;
+    }
     return `https://www.pokebattler.com/max/DYNAMAX_${clean}`;
 }
 
@@ -1155,18 +1177,24 @@ function buildPokebattlerMaxUrl(bossName) {
         let rawMaxBattles = dbScrapedData.maxBattles || [];
         if (Array.isArray(rawMaxBattles)) {
             rawMaxBattles.forEach(boss => {
-                const baseName = boss.name.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '');
+                let displayName = boss.name || '';
+                // Fix potential "Dynamax Cinderace_Gigantamax" legacy scraped naming
+                if (/gigantamax/i.test(displayName)) {
+                    let cleaned = displayName.replace(/^Dynamax\s+/i, '').replace(/_Gigantamax/i, '').replace(/_GIGANTAMAX/i, '').replace(/^Gigantamax\s+/i, '').trim();
+                    displayName = `Gigantamax ${cleaned}`;
+                }
+                const baseName = displayName.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '').trim();
                 const matchedPoke = findPokemonByName(baseName);
                 liveMaxBattles.push({
-                    idName: matchedPoke ? matchedPoke.idName : boss.name,
-                    name: boss.name,
+                    idName: matchedPoke ? matchedPoke.idName : displayName,
+                    name: displayName,
                     tier: boss.tier || 'Max Battles',
                     image: boss.image || '',
                     cp: boss.combatPower || null,
                     shiny: boss.canBeShiny || false,
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
-                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerMaxUrl(boss.name)
+                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerMaxUrl(displayName)
                 });
             });
         } else if (rawRaids && rawRaids.currentList) {
@@ -1766,15 +1794,41 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
         } else {
             const pokeObj = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
             const isTransf = pokeObj ? isPokemonTransferred(pokeObj) : false;
+            const readyToEvolve = pokeObj ? isReadyToEvolve(pokeObj) : false;
+            const candyNeeded = pokeObj ? needsCandies(pokeObj) : false;
+            
             let cardClass = 'pokemon-card ';
             if (isCaught) {
                 cardClass += isTransf ? 'caught transferred' : 'caught';
             } else {
                 cardClass += 'missing';
                 if (isTransf) cardClass += ' transferred-missing';
+                else if (readyToEvolve) cardClass += ' ready-to-evolve';
+                else if (candyNeeded) cardClass += ' needs-candy-missing';
             }
             if (pokeObj && pokeObj.unreleased) cardClass += ' unreleased';
             pokedexCard.className = cardClass;
+
+            // Update evolve / candy indicator dots
+            const cardTopDiv = pokedexCard.querySelector('.card-top > div');
+            if (cardTopDiv && pokeObj) {
+                cardTopDiv.querySelectorAll('.evolve-indicator-dot, .candy-indicator-dot').forEach(el => el.remove());
+                if (!pokeObj.unreleased) {
+                    if (readyToEvolve) {
+                        const dot = document.createElement('span');
+                        dot.className = 'evolve-indicator-dot';
+                        dot.style.cssText = 'width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;';
+                        dot.title = 'Ready to Evolve (Almost Unlocked!)';
+                        cardTopDiv.appendChild(dot);
+                    } else if (candyNeeded) {
+                        const dot = document.createElement('span');
+                        dot.className = 'candy-indicator-dot';
+                        dot.style.cssText = 'width: 7px; height: 7px; background-color: #f5a623; border-radius: 50%; display: inline-block;';
+                        dot.title = 'Needs Candies to Evolve!';
+                        cardTopDiv.appendChild(dot);
+                    }
+                }
+            }
             
             // Add temporary 3D animation class
             if (isNowCaught !== null && !isNowCaught) {
@@ -1869,6 +1923,20 @@ function toggleCaughtState(id, eventSource = null) {
     saveCaughtState();
     saveTransferredState();
     syncPokemonCaughtStateUI(id, isNowCaught);
+
+    // Refresh all members of this evolution family on the Pokédex grid
+    const targetPoke = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
+    if (targetPoke) {
+        const familyChain = findEvolutionChain(targetPoke);
+        if (familyChain && familyChain.length > 0) {
+            familyChain.forEach(member => {
+                if (String(member.id) !== strId && Number(member.id) !== numId) {
+                    const mCaught = caughtPokemon.has(String(member.id)) || caughtPokemon.has(Number(member.id));
+                    syncPokemonCaughtStateUI(member.id, mCaught);
+                }
+            });
+        }
+    }
 
     // Refresh Pokédex cards so family evolution states (ready/needs candies) update immediately
     renderPokedex(true);

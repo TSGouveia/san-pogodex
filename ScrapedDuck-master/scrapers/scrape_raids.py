@@ -586,13 +586,32 @@ def scrape_raids():
                     for r in t.get("raids", []):
                         raw_id = r.get("pokemonId") or r.get("pokemon", "")
                         raw_id_upper = raw_id.upper()
-                        clean_id = re.sub(r'^(DYNAMAX_|GIGANTAMAX_|MEGA_|SHADOW_)', '', raw_id_upper).strip()
+                        is_gigantamax = "GIGANTAMAX" in raw_id_upper or "GMAX" in raw_id_upper
+                        clean_id = re.sub(r'^(DYNAMAX_|GIGANTAMAX_|MEGA_|SHADOW_)', '', raw_id_upper)
+                        clean_id = re.sub(r'(_GIGANTAMAX|_DYNAMAX|_GMAX)$', '', clean_id).strip()
                         p_info = poke_map.get(clean_id) or poke_map.get(raw_id_upper) or {}
                         name_eng = p_info.get("names", {}).get("English") or clean_id.capitalize()
                         if not p_info:
                             p_info = poke_map.get(name_eng.upper()) or {}
                         dex_nr = p_info.get("dexNr")
-                        img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
+                        
+                        gmax_ids = {
+                            "venusaur": 10195, "charizard": 10196, "blastoise": 10197, "butterfree": 10198,
+                            "pikachu": 10199, "meowth": 10200, "machamp": 10201, "gengar": 10202,
+                            "kingler": 10203, "lapras": 10204, "eevee": 10205, "snorlax": 10206,
+                            "garbodor": 10207, "melmetal": 10208, "rillaboom": 10209, "cinderace": 10210,
+                            "inteleon": 10211, "corviknight": 10212, "orbeetle": 10213, "drednaw": 10214,
+                            "coalossal": 10215, "flapple": 10216, "appletun": 10217, "sandaconda": 10218,
+                            "toxtricity": 10219, "centiskorch": 10220, "hatterene": 10221, "grimmsnarl": 10222,
+                            "alcremie": 10223, "copperajah": 10224, "duraludon": 10225, "urshifu": 10226
+                        }
+                        
+                        if is_gigantamax and clean_id.lower() in gmax_ids:
+                            img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{gmax_ids[clean_id.lower()]}.png"
+                        elif dex_nr:
+                            img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png"
+                        else:
+                            img_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
                         
                         types = []
                         weather_boosts = []
@@ -638,10 +657,17 @@ def scrape_raids():
                             }
 
                         slug = r.get("pokemonId") or r.get("pokemon", "")
-                        pb_url_item = f"https://www.pokebattler.com/max/{slug}" if slug.startswith("DYNAMAX_") else build_pokebattler_max_url(name_eng)
+                        if is_gigantamax:
+                            boss_display_name = f"Gigantamax {name_eng}"
+                            pb_slug = slug if slug else f"{clean_id.upper()}_GIGANTAMAX"
+                            pb_url_item = f"https://www.pokebattler.com/max/{pb_slug}"
+                        else:
+                            boss_display_name = f"Dynamax {name_eng}"
+                            pb_slug = slug if slug.startswith("DYNAMAX_") else f"DYNAMAX_{clean_id.upper()}"
+                            pb_url_item = f"https://www.pokebattler.com/max/{pb_slug}"
 
                         max_battles.append({
-                            "name": f"Dynamax {name_eng}",
+                            "name": boss_display_name,
                             "tier": tier_label,
                             "canBeShiny": r.get("shiny", False),
                             "pokebattlerUrl": pb_url_item,
