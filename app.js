@@ -2706,7 +2706,7 @@ function renderPokedex(forceClear = false) {
                     <span class="poke-number">#${poke.num}</span>
                     ${readyToEvolve && !poke.unreleased ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
                     ${candyNeeded && !poke.unreleased ? `<span class="candy-indicator-dot" style="width: 7px; height: 7px; background-color: #f5a623; border-radius: 50%; display: inline-block;" title="Needs Candies to Evolve!"></span>` : ''}
-                    ${poke.releasingSoon ? `<span class="releasing-soon-badge-tag" style="color: #f5a623; font-size: 0.75rem; opacity: 0.85; margin-left: 2px;" title="Releasing Soon: ${poke.releaseDate}"><i class="fa-solid fa-hourglass-half"></i></span>` : (poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
+                    ${poke.releasingSoon ? `<span class="releasing-soon-badge-tag" style="color: #ff8c66; font-size: 0.75rem; opacity: 0.9; margin-left: 2px;" title="Releasing Soon: ${poke.releaseDate}"><i class="fa-solid fa-hourglass-half"></i></span>` : (poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
@@ -3196,19 +3196,19 @@ function loadObtainingTab(poke) {
     if (isFutureRelease) {
         const releaseCard = document.createElement('div');
         releaseCard.className = 'obtain-card';
-        releaseCard.style.border = '1px solid rgba(245, 166, 35, 0.5)';
-        releaseCard.style.background = 'linear-gradient(135deg, rgba(245, 166, 35, 0.18) 0%, rgba(251, 191, 36, 0.08) 50%, var(--bg-tertiary) 100%)';
-        releaseCard.style.boxShadow = '0 4px 15px rgba(245, 166, 35, 0.15)';
+        releaseCard.style.border = '1px solid rgba(249, 115, 22, 0.5)';
+        releaseCard.style.background = 'linear-gradient(135deg, rgba(249, 115, 22, 0.2) 0%, rgba(255, 107, 74, 0.1) 50%, var(--bg-tertiary) 100%)';
+        releaseCard.style.boxShadow = '0 4px 18px rgba(249, 115, 22, 0.2)';
         releaseCard.style.gridColumn = '1 / -1';
         releaseCard.innerHTML = `
-            <div class="obtain-icon-box" style="color: #fbbf24; background: rgba(245, 166, 35, 0.25); border: 1px solid rgba(245, 166, 35, 0.4); box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);">
+            <div class="obtain-icon-box" style="color: #ff8c66; background: rgba(249, 115, 22, 0.25); border: 1px solid rgba(249, 115, 22, 0.45); box-shadow: 0 0 12px rgba(249, 115, 22, 0.25);">
                 <i class="fa-solid fa-hourglass-half"></i>
             </div>
             <div class="obtain-card-content">
-                <h4 style="color: #fbbf24; display: flex; align-items: center; gap: 6px; font-weight: 800; letter-spacing: 0.2px;">
+                <h4 style="color: #ff8c66; display: flex; align-items: center; gap: 6px; font-weight: 800; letter-spacing: 0.2px;">
                     Upcoming Debut ⏳
                 </h4>
-                <p style="color: var(--text-primary); margin-top: 4px; font-size: 0.92rem;">This Pokémon will be released on <strong style="color: #fef08a; background: rgba(245, 166, 35, 0.2); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(245, 166, 35, 0.3);">${poke.releaseDate}</strong>!</p>
+                <p style="color: var(--text-primary); margin-top: 4px; font-size: 0.92rem;">This Pokémon will be released on <strong style="color: #ffedd5; background: rgba(249, 115, 22, 0.25); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(249, 115, 22, 0.4);">${poke.releaseDate}</strong>!</p>
             </div>
         `;
         container.appendChild(releaseCard);
@@ -3577,6 +3577,7 @@ function loadObtainingTab(poke) {
 
     poke.obtaining.forEach(opt => {
         // Skip adding static placeholders if we already have the active card to prevent duplication
+        if (opt.method.toLowerCase().includes('upcoming debut')) return;
         if (opt.method.toLowerCase().includes('raid') && activeRaid) return;
         if ((opt.method.toLowerCase().includes('wild') || opt.method.toLowerCase().includes('spawn')) && activeSpawn && activeSpawn.spawnRate >= 0.5) return;
         if ((opt.method.toLowerCase().includes('egg') || opt.method.toLowerCase().includes('hatch')) && activeEgg) return;
