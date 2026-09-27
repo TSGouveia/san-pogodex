@@ -2656,7 +2656,9 @@ function renderPokedex(forceClear = false) {
             else if (candyNeeded) cardClass += ' needs-candy-missing';
         }
 
-        if (poke.unreleased) {
+        if (poke.releasingSoon) {
+            cardClass += ' releasing-soon';
+        } else if (poke.unreleased) {
             cardClass += ' unreleased';
         }
 
@@ -3194,18 +3196,19 @@ function loadObtainingTab(poke) {
     if (isFutureRelease) {
         const releaseCard = document.createElement('div');
         releaseCard.className = 'obtain-card';
-        releaseCard.style.border = '1px solid rgba(245, 166, 35, 0.4)';
-        releaseCard.style.background = 'linear-gradient(135deg, rgba(245, 166, 35, 0.08), var(--bg-tertiary))';
+        releaseCard.style.border = '1px solid rgba(245, 166, 35, 0.5)';
+        releaseCard.style.background = 'linear-gradient(135deg, rgba(245, 166, 35, 0.18) 0%, rgba(251, 191, 36, 0.08) 50%, var(--bg-tertiary) 100%)';
+        releaseCard.style.boxShadow = '0 4px 15px rgba(245, 166, 35, 0.15)';
         releaseCard.style.gridColumn = '1 / -1';
         releaseCard.innerHTML = `
-            <div class="obtain-icon-box" style="color: #f5a623; background: rgba(245, 166, 35, 0.2);">
+            <div class="obtain-icon-box" style="color: #fbbf24; background: rgba(245, 166, 35, 0.25); border: 1px solid rgba(245, 166, 35, 0.4); box-shadow: 0 0 10px rgba(245, 166, 35, 0.2);">
                 <i class="fa-solid fa-hourglass-half"></i>
             </div>
             <div class="obtain-card-content">
-                <h4 style="color: #f5a623; display: flex; align-items: center; gap: 6px;">
+                <h4 style="color: #fbbf24; display: flex; align-items: center; gap: 6px; font-weight: 800; letter-spacing: 0.2px;">
                     Upcoming Debut ⏳
                 </h4>
-                <p style="color: var(--text-primary);">This Pokémon will be released on <strong>${poke.releaseDate}</strong>!</p>
+                <p style="color: var(--text-primary); margin-top: 4px; font-size: 0.92rem;">This Pokémon will be released on <strong style="color: #fef08a; background: rgba(245, 166, 35, 0.2); padding: 2px 8px; border-radius: 6px; border: 1px solid rgba(245, 166, 35, 0.3);">${poke.releaseDate}</strong>!</p>
             </div>
         `;
         container.appendChild(releaseCard);
