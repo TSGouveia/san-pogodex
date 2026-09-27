@@ -2429,34 +2429,14 @@ function getFilteredAndSortedPokemon() {
         result = result.filter(p => !p.unreleased);
     }
 
-    if (currentDexType === 'soon') {
-        result = result.filter(p => {
-            return p.releaseDate || (p.obtaining && p.obtaining.some(o => o.method && (o.method.toLowerCase().includes('soon') || o.method.toLowerCase().includes('upcoming'))));
-        });
-    } else if (currentDexType === 'gmax') {
-        result = result.filter(p => {
-            const nameL = p.name.toLowerCase();
-            const idNameL = (p.idName || '').toLowerCase();
-            return nameL.includes('gmax') || nameL.includes('gigantamax') || idNameL.includes('gmax') || idNameL.includes('gigantamax') || p.gmax;
-        });
+    if (currentDexType === 'gmax') {
+        result = result.filter(p => p.gmax || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('gmax') || o.method.toLowerCase().includes('gigantamax'))));
     } else if (currentDexType === 'mega') {
-        result = result.filter(p => {
-            const nameL = p.name.toLowerCase();
-            const idNameL = (p.idName || '').toLowerCase();
-            return nameL.includes('mega') || nameL.includes('primal') || idNameL.includes('mega') || idNameL.includes('primal') || p.mega;
-        });
+        result = result.filter(p => p.mega || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('mega') || o.method.toLowerCase().includes('primal'))));
     } else if (currentDexType === 'shadow') {
-        result = result.filter(p => {
-            const nameL = p.name.toLowerCase();
-            const idNameL = (p.idName || '').toLowerCase();
-            return nameL.includes('shadow') || idNameL.includes('shadow') || p.shadow;
-        });
+        result = result.filter(p => p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('shadow'))));
     } else if (currentDexType === 'purified') {
-        result = result.filter(p => {
-            const nameL = p.name.toLowerCase();
-            const idNameL = (p.idName || '').toLowerCase();
-            return nameL.includes('purified') || idNameL.includes('purified') || nameL.includes('shadow') || idNameL.includes('shadow') || p.shadow || p.purified;
-        });
+        result = result.filter(p => p.purified || p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('purified') || o.method.toLowerCase().includes('shadow'))));
     }
 
     if (currentGenFilter !== 'all') {
@@ -3086,7 +3066,27 @@ function loadObtainingTab(poke) {
     const container = document.getElementById('obtaining-methods');
     container.innerHTML = '';
 
-    if (poke.unreleased) {
+    if (poke.releaseDate) {
+        const releaseCard = document.createElement('div');
+        releaseCard.className = 'obtain-card';
+        releaseCard.style.border = '1px solid rgba(99, 102, 241, 0.4)';
+        releaseCard.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.08), var(--bg-tertiary))';
+        releaseCard.style.gridColumn = '1 / -1';
+        releaseCard.innerHTML = `
+            <div class="obtain-icon-box" style="color: #818cf8; background: rgba(99, 102, 241, 0.2);">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="obtain-card-content">
+                <h4 style="color: #818cf8; display: flex; align-items: center; gap: 6px;">
+                    Debut / Release Date
+                </h4>
+                <p style="color: var(--text-primary);">${poke.unreleased ? 'This Pokémon will be released on: ' : 'Released in Pokémon GO on: '}<strong>${poke.releaseDate}</strong></p>
+            </div>
+        `;
+        container.appendChild(releaseCard);
+    }
+
+    if (poke.unreleased && !poke.releaseDate) {
         const unreleasedCard = document.createElement('div');
         unreleasedCard.className = 'obtain-card unreleased-notice-card';
         unreleasedCard.style.border = '1px solid rgba(239, 68, 68, 0.4)';
