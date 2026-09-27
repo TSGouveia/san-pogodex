@@ -7479,7 +7479,8 @@ function renderStatsPane() {
     const updateQrDisplay = (code) => {
         const cleanCode = (code || '').replace(/\s+/g, '');
         if (cleanCode && cleanCode.length >= 12 && qrImg && qrPlaceholder) {
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(cleanCode)}`;
+            const pogoDeepLink = `https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pogoDeepLink)}`;
             qrImg.style.display = 'block';
             qrPlaceholder.style.display = 'none';
         } else if (qrImg && qrPlaceholder) {
