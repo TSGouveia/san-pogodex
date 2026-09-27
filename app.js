@@ -3108,40 +3108,6 @@ function loadObtainingTab(poke) {
         container.appendChild(unreleasedCard);
     }
 
-    if (poke.mega) {
-        const megaCard = document.createElement('div');
-        megaCard.className = 'obtain-card';
-        megaCard.style.border = '1px solid rgba(236, 72, 153, 0.4)';
-        megaCard.style.background = 'linear-gradient(135deg, rgba(236, 72, 153, 0.1), var(--bg-tertiary))';
-        megaCard.innerHTML = `
-            <div class="obtain-icon-box" style="color: #ec4899; background: rgba(236, 72, 153, 0.2);">
-                <i class="fa-solid fa-dna"></i>
-            </div>
-            <div class="obtain-card-content">
-                <h4 style="color: #f472b6;">Mega Evolution Available</h4>
-                <p>Can Mega Evolve using Mega Energy obtained from Mega Raids or Special Research.</p>
-            </div>
-        `;
-        container.appendChild(megaCard);
-    }
-
-    if (poke.gmax) {
-        const gmaxCard = document.createElement('div');
-        gmaxCard.className = 'obtain-card';
-        gmaxCard.style.border = '1px solid rgba(239, 68, 68, 0.4)';
-        gmaxCard.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), var(--bg-tertiary))';
-        gmaxCard.innerHTML = `
-            <div class="obtain-icon-box" style="color: #ef4444; background: rgba(239, 68, 68, 0.2);">
-                <i class="fa-solid fa-bolt"></i>
-            </div>
-            <div class="obtain-card-content">
-                <h4 style="color: #f87171;">Gigantamax Available</h4>
-                <p>Gigantamax form available via 6-Star Max Battles and Power Spots.</p>
-            </div>
-        `;
-        container.appendChild(gmaxCard);
-    }
-
     const getIcon = (method) => {
         const m = method.toLowerCase();
         if (m.includes('wild') || m.includes('spawn')) return 'fa-solid fa-tree';
