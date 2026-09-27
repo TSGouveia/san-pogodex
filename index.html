@@ -108,7 +108,7 @@
                     <i class="fa-solid fa-list-check"></i> To-Do Guide
                 </button>
                 <button class="view-btn" data-view="stats-pane" id="btn-view-stats">
-                    <i class="fa-solid fa-chart-pie"></i> Detailed Stats
+                    <i class="fa-solid fa-id-card"></i> Profile & Stats
                 </button>
                 <button class="view-btn" data-view="friends-pane" id="btn-view-friends" style="position: relative; overflow: visible !important;">
                     <i class="fa-solid fa-users"></i> Friends
@@ -660,15 +660,45 @@
                     </div>
                 </div>
             </div>
-        <!-- PANE 6: Detailed Stats Panel -->
+        </section>
+
+        <!-- PANE 6: Trainer Profile & Stats Panel -->
         <section class="view-pane hidden" id="stats-pane">
             <div class="rotation-section-header">
-                <i class="fa-solid fa-chart-pie" style="color: var(--accent-color);"></i>
-                <h2>Trainer PokéDex Analytics & Breakdown</h2>
+                <i class="fa-solid fa-user-gear" style="color: var(--accent-color);"></i>
+                <h2>Trainer Profile & PokéDex Analytics</h2>
             </div>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
-                Comprehensive analytics across all PokéDex categories, candy readiness, evolution status, and regional statistics.
+                Manage your Trainer Friend Code, view your QR code for quick adding, and analyze your full PokéDex collection stats.
             </p>
+
+            <!-- Trainer Card & Friend Code QR Section -->
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;">
+                <!-- QR Code Display Box -->
+                <div style="background: #ffffff; padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 160px; height: 160px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" id="qr-code-box">
+                    <img id="trainer-qr-img" src="" alt="Trainer QR Code" style="width: 130px; height: 130px; display: none;">
+                    <div id="qr-placeholder" style="color: #64748b; text-align: center; font-size: 0.8rem; font-weight: 600;">
+                        <i class="fa-solid fa-qrcode" style="font-size: 2.5rem; margin-bottom: 0.4rem; color: #94a3b8;"></i><br>
+                        Enter Friend Code
+                    </div>
+                </div>
+
+                <!-- Trainer Info & Inputs -->
+                <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 1rem;">
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Trainer Profile</div>
+                        <h3 id="profile-trainer-name" style="color: var(--text-primary); margin: 2px 0 0 0; font-size: 1.4rem;">Guest Trainer</h3>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 450px;">
+                        <input type="text" id="friend-code-input" placeholder="e.g. 1234 5678 9012" maxlength="14" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; flex: 1; outline: none;">
+                        <button id="save-friend-code-btn" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Code
+                        </button>
+                    </div>
+                    <div id="friend-code-msg" style="font-size: 0.8rem; font-weight: 600; display: none;"></div>
+                </div>
+            </div>
 
             <!-- Overall Summary Cards -->
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">

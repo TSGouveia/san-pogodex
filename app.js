@@ -7460,7 +7460,67 @@ function renderStatsPane() {
     const statsCategoriesList = document.getElementById('stats-categories-list');
     const statsRegionsGrid = document.getElementById('stats-regions-grid');
 
-    if (!statsCategoriesList || !statsRegionsGrid) return;
+    // 0. Trainer Profile & QR Code Update
+    const profileTrainerName = document.getElementById('profile-trainer-name');
+    const friendCodeInput = document.getElementById('friend-code-input');
+    const saveFriendCodeBtn = document.getElementById('save-friend-code-btn');
+    const friendCodeMsg = document.getElementById('friend-code-msg');
+    const qrImg = document.getElementById('trainer-qr-img');
+    const qrPlaceholder = document.getElementById('qr-placeholder');
+
+    if (profileTrainerName) {
+        profileTrainerName.textContent = currentTrainerUsername ? currentTrainerUsername : (currentUser ? currentUser.email.split('@')[0] : 'Guest Trainer');
+    }
+
+    const savedFriendCode = localStorage.getItem('trainer_friend_code') || '';
+    if (friendCodeInput && !friendCodeInput.value) {
+        friendCodeInput.value = savedFriendCode;
+    }
+
+    const updateQrDisplay = (code) => {
+        const cleanCode = (code || '').replace(/\s+/g, '');
+        if (cleanCode && cleanCode.length >= 12 && qrImg && qrPlaceholder) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(cleanCode)}`;
+            qrImg.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+        } else if (qrImg && qrPlaceholder) {
+            qrImg.style.display = 'none';
+            qrPlaceholder.style.display = 'block';
+        }
+    };
+
+    updateQrDisplay(friendCodeInput ? friendCodeInput.value : savedFriendCode);
+
+    if (saveFriendCodeBtn && !saveFriendCodeBtn.dataset.bound) {
+        saveFriendCodeBtn.dataset.bound = 'true';
+        saveFriendCodeBtn.addEventListener('click', () => {
+            const rawVal = friendCodeInput.value.trim();
+            const clean = rawVal.replace(/\s+/g, '');
+            if (clean.length < 12) {
+                if (friendCodeMsg) {
+                    friendCodeMsg.style.color = '#ef4444';
+                    friendCodeMsg.textContent = 'Please enter a valid 12-digit Friend Code.';
+                    friendCodeMsg.style.display = 'block';
+                }
+                return;
+            }
+            localStorage.setItem('trainer_friend_code', rawVal);
+            updateQrDisplay(rawVal);
+            
+            // Save to Firestore user doc if logged in
+            if (currentUser) {
+                const userRef = doc(db, 'users', currentUser.uid);
+                setDoc(userRef, { friendCode: rawVal }, { merge: true }).catch(err => console.error('Failed to save friend code to Firestore:', err));
+            }
+
+            if (friendCodeMsg) {
+                friendCodeMsg.style.color = '#34d399';
+                friendCodeMsg.textContent = 'Friend Code & QR Code updated successfully!';
+                friendCodeMsg.style.display = 'block';
+                setTimeout(() => { friendCodeMsg.style.display = 'none'; }, 3000);
+            }
+        });
+    }
 
     // 1. Overall Summary Calculations
     const totalAll = pokemonDatabase.length;
