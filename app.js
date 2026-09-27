@@ -6407,31 +6407,96 @@ function renderFriendsPaneFromData(data) {
         if (pendingSection) pendingSection.classList.add('hidden');
     }
     
-    // 3. Render Friends List
+    // 3. Render Friends List (With Team Colors & Completion Stats Rework)
     if (friendsListDiv) {
         friendsListDiv.innerHTML = '';
         if (friends.length === 0) {
             friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.9rem; padding: 1rem 0; text-align: center;">No friends added yet.</p>';
         } else {
-            friends.forEach(friend => {
+            friends.forEach(async (friend) => {
                 const item = document.createElement('div');
                 const isSelected = activeFriendUid === friend.uid;
-                item.className = `rotation-card-item theme-blue ${isSelected ? 'active-friend' : ''}`;
+                item.className = `rotation-card-item ${isSelected ? 'active-friend' : ''}`;
                 item.style.cursor = 'pointer';
-                item.style.padding = '10px 14px';
+                item.style.padding = '12px 14px';
                 item.style.display = 'flex';
                 item.style.justifyContent = 'space-between';
                 item.style.alignItems = 'center';
                 item.style.width = '100%';
-                
+                item.style.position = 'relative';
+                item.style.overflow = 'hidden';
+                item.style.borderRadius = '10px';
+                item.style.background = isSelected ? 'rgba(245, 166, 35, 0.08)' : 'var(--bg-tertiary)';
+                item.style.border = isSelected ? '1px solid var(--accent-color)' : '1px solid var(--border-color)';
+                item.style.boxSizing = 'border-box';
+                item.style.marginBottom = '0.5rem';
+
                 const friendName = friend.displayName || friend.email.split('@')[0];
+
+                // Fetch extra stats for friend asynchronously
+                let teamColor = '#94a3b8';
+                let teamIcon = 'fa-user';
+                let teamName = 'No Team';
+                let caughtCount = 0;
+                let friendCode = '';
+                
+                try {
+                    const friendDocRef = doc(db, "users_data", friend.uid);
+                    const friendSnap = await getDoc(friendDocRef);
+                    if (friendSnap.exists()) {
+                        const fd = friendSnap.data();
+                        const caughtArr = fd.caught || [];
+                        caughtCount = caughtArr.length;
+                        friendCode = fd.friendCode || '';
+                        
+                        // Also check users collection for team
+                        const userProfileRef = doc(db, "users", friend.uid);
+                        const userProfileSnap = await getDoc(userProfileRef);
+                        if (userProfileSnap.exists()) {
+                            const up = userProfileSnap.data();
+                            if (up.pogoTeam) {
+                                const tm = up.pogoTeam.toLowerCase();
+                                if (tm === 'instinct') {
+                                    teamColor = '#f5a623';
+                                    teamIcon = 'fa-bolt';
+                                    teamName = 'Instinct';
+                                } else if (tm === 'mystic') {
+                                    teamColor = '#60a5fa';
+                                    teamIcon = 'fa-snowflake';
+                                    teamName = 'Mystic';
+                                } else if (tm === 'valor') {
+                                    teamColor = '#f87171';
+                                    teamIcon = 'fa-fire';
+                                    teamName = 'Valor';
+                                }
+                            }
+                            if (up.friendCode) friendCode = up.friendCode;
+                        }
+                    }
+                } catch(e) {
+                    console.error("Error fetching friend extra data:", e);
+                }
+
+                const totalPokes = pokemonDatabase.length || 1024;
+                const pct = Math.round((caughtCount / totalPokes) * 100);
+
                 item.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fa-solid fa-user" style="color: ${isSelected ? 'var(--accent-color)' : '#94a3b8'};"></i>
-                        <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">${friendName}</span>
+                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: ${teamColor};"></div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 6px;">
+                        <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; flex-shrink: 0;">
+                            <i class="fa-solid ${teamIcon}"></i>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 2px;">
+                            <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">${friendName}</span>
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94a3b8;">
+                                <span style="color: ${teamColor}; font-weight: 700;">${teamName}</span>
+                                <span>•</span>
+                                <span style="color: #cbd5e1; font-weight: 600;">${pct}% PokéDex</span>
+                            </div>
+                        </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                        <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 5px 10px; font-size: 0.78rem; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
                             <i class="fa-solid fa-border-all"></i> PokéDex
                         </button>
                         <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; color: #64748b;"></i>
@@ -6569,6 +6634,11 @@ async function compareFriendsCollections(friend) {
     
     const friendName = friend.displayName || friend.email.split('@')[0];
     document.getElementById('comparison-friend-name').textContent = `Comparing with: ${friendName}`;
+
+    const openSelectedDexBtn = document.getElementById('open-selected-friend-dex-btn');
+    if (openSelectedDexBtn) {
+        openSelectedDexBtn.onclick = () => openFriendPokedex(friend);
+    }
     
     const giveGrid = document.getElementById('friends-give-grid');
     const getGrid = document.getElementById('friends-get-grid');
@@ -7619,9 +7689,58 @@ function renderStatsPane() {
         return formatted;
     };
 
+    const friendCodeDisplayWrapper = document.getElementById('friend-code-display-wrapper');
+    const friendCodeEditText = document.getElementById('friend-code-display-text');
+    const friendCodeEditWrapper = document.getElementById('friend-code-edit-wrapper');
+    const toggleEditCodeBtn = document.getElementById('toggle-edit-code-btn');
+    const cancelFriendCodeBtn = document.getElementById('cancel-friend-code-btn');
+    const copyMyCodeBtn = document.getElementById('copy-my-code-btn');
+
     const savedFriendCode = localStorage.getItem('trainer_friend_code') || '';
+    const formattedSavedCode = formatFriendCode(savedFriendCode);
+
+    if (friendCodeEditText) {
+        friendCodeEditText.textContent = formattedSavedCode || 'Not Set (Click Edit)';
+    }
+
     if (friendCodeInput && !friendCodeInput.value) {
-        friendCodeInput.value = formatFriendCode(savedFriendCode);
+        friendCodeInput.value = formattedSavedCode;
+    }
+
+    if (toggleEditCodeBtn && !toggleEditCodeBtn.dataset.bound) {
+        toggleEditCodeBtn.dataset.bound = 'true';
+        toggleEditCodeBtn.addEventListener('click', () => {
+            if (friendCodeDisplayWrapper) friendCodeDisplayWrapper.classList.add('hidden');
+            if (friendCodeEditWrapper) friendCodeEditWrapper.classList.remove('hidden');
+            if (friendCodeInput) {
+                friendCodeInput.value = formatFriendCode(localStorage.getItem('trainer_friend_code') || '');
+                friendCodeInput.focus();
+            }
+        });
+    }
+
+    if (cancelFriendCodeBtn && !cancelFriendCodeBtn.dataset.bound) {
+        cancelFriendCodeBtn.dataset.bound = 'true';
+        cancelFriendCodeBtn.addEventListener('click', () => {
+            if (friendCodeEditWrapper) friendCodeEditWrapper.classList.add('hidden');
+            if (friendCodeDisplayWrapper) friendCodeDisplayWrapper.classList.remove('hidden');
+        });
+    }
+
+    if (copyMyCodeBtn && !copyMyCodeBtn.dataset.bound) {
+        copyMyCodeBtn.dataset.bound = 'true';
+        copyMyCodeBtn.addEventListener('click', () => {
+            const codeToCopy = (localStorage.getItem('trainer_friend_code') || '').replace(/\D/g, '');
+            if (!codeToCopy) {
+                alert('No Friend Code set yet!');
+                return;
+            }
+            navigator.clipboard.writeText(codeToCopy).then(() => {
+                const origHtml = copyMyCodeBtn.innerHTML;
+                copyMyCodeBtn.innerHTML = '<i class="fa-solid fa-check" style="color: #34d399;"></i>';
+                setTimeout(() => { copyMyCodeBtn.innerHTML = origHtml; }, 2000);
+            }).catch(e => console.error('Copy failed:', e));
+        });
     }
 
     if (friendCodeInput && !friendCodeInput.dataset.boundFormat) {
@@ -7670,8 +7789,12 @@ function renderStatsPane() {
             const formattedCode = formatFriendCode(clean);
             friendCodeInput.value = formattedCode;
             localStorage.setItem('trainer_friend_code', formattedCode);
+            if (friendCodeEditText) friendCodeEditText.textContent = formattedCode;
             updateQrDisplay(formattedCode);
             
+            if (friendCodeEditWrapper) friendCodeEditWrapper.classList.add('hidden');
+            if (friendCodeDisplayWrapper) friendCodeDisplayWrapper.classList.remove('hidden');
+
             // Save to Firestore user doc if logged in
             if (currentUser) {
                 const userRef = doc(db, 'users', currentUser.uid);
@@ -7764,7 +7887,7 @@ function renderStatsPane() {
             readyCount++;
         } else if (needsCandies(p)) {
             candyCount++;
-        } else if (!isCaught) {
+        } else if (!isCaught && !p.unreleased) {
             fullyMissingCount++;
         }
     });

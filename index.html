@@ -623,13 +623,33 @@
                             </div>
                         </div>
 
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 450px;">
-                            <input type="text" id="friend-code-input" placeholder="e.g. 1234 5678 9012" maxlength="14" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; flex: 1; outline: none;">
-                            <button id="save-friend-code-btn" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
-                                <i class="fa-solid fa-floppy-disk"></i> Save Code
-                            </button>
+                        <!-- Friend Code Section -->
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem;">Trainer Friend Code</div>
+                            
+                            <!-- Static Display Mode (Code + Copy & Edit Buttons) -->
+                            <div id="friend-code-display-wrapper" style="display: flex; align-items: center; gap: 0.6rem; max-width: 450px;">
+                                <div id="friend-code-display-text" style="font-size: 1.2rem; font-family: monospace; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 14px;">1234 5678 9012</div>
+                                <button id="copy-my-code-btn" title="Copy Friend Code" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                                    <i class="fa-solid fa-copy" style="font-size: 0.9rem;"></i>
+                                </button>
+                                <button id="toggle-edit-code-btn" title="Edit Friend Code" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                                    <i class="fa-solid fa-pen-to-square" style="font-size: 0.9rem;"></i>
+                                </button>
+                            </div>
+
+                            <!-- Edit Mode (Input + Save & Cancel Buttons) -->
+                            <div id="friend-code-edit-wrapper" class="hidden" style="display: flex; gap: 0.5rem; align-items: center; max-width: 450px; margin-top: 0.3rem;">
+                                <input type="text" id="friend-code-input" placeholder="1234 5678 9012" maxlength="14" style="background: rgba(17, 27, 46, 0.8); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 1rem; font-weight: 700; flex: 1; outline: none;">
+                                <button id="save-friend-code-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-check"></i> Save
+                                </button>
+                                <button id="cancel-friend-code-btn" style="background: rgba(148, 163, 184, 0.1); border: 1px solid rgba(148, 163, 184, 0.2); color: #94a3b8; border-radius: 8px; padding: 8px 12px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div id="friend-code-msg" style="font-size: 0.8rem; font-weight: 600; margin-top: 0.4rem; display: none;"></div>
                         </div>
-                        <div id="friend-code-msg" style="font-size: 0.8rem; font-weight: 600; display: none;"></div>
                     </div>
                 </div>
 
@@ -756,7 +776,12 @@
                                         <h3 id="comparison-friend-name" style="color: var(--text-primary); margin: 0;">Comparing with Trainer</h3>
                                         <p style="color: #94a3b8; font-size: 0.8rem; margin: 0; margin-top: 2px;">Find matches for trade opportunities</p>
                                     </div>
-                                    <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <button id="open-selected-friend-dex-btn" class="bulk-btn" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                                            <i class="fa-solid fa-border-all"></i> View PokéDex
+                                        </button>
+                                        <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
+                                    </div>
                                 </div>
 
                                 <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
