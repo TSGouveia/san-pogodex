@@ -7498,16 +7498,41 @@ function renderStatsPane() {
         });
     }
 
+    const formatFriendCode = (val) => {
+        const digits = (val || '').replace(/\D/g, '').slice(0, 12);
+        let formatted = '';
+        for (let i = 0; i < digits.length; i++) {
+            if (i > 0 && i % 4 === 0) formatted += ' ';
+            formatted += digits[i];
+        }
+        return formatted;
+    };
+
     const savedFriendCode = localStorage.getItem('trainer_friend_code') || '';
     if (friendCodeInput && !friendCodeInput.value) {
-        friendCodeInput.value = savedFriendCode;
+        friendCodeInput.value = formatFriendCode(savedFriendCode);
+    }
+
+    if (friendCodeInput && !friendCodeInput.dataset.boundFormat) {
+        friendCodeInput.dataset.boundFormat = 'true';
+        friendCodeInput.addEventListener('input', (e) => {
+            const cursorPosition = e.target.selectionStart;
+            const prevLen = e.target.value.length;
+            const formatted = formatFriendCode(e.target.value);
+            e.target.value = formatted;
+            
+            // Adjust cursor position if space was added
+            if (formatted.length > prevLen && (cursorPosition === 5 || cursorPosition === 10)) {
+                e.target.setSelectionRange(cursorPosition + 1, cursorPosition + 1);
+            }
+        });
     }
 
     const updateQrDisplay = (code) => {
-        const cleanCode = (code || '').replace(/\s+/g, '');
-        if (cleanCode && cleanCode.length >= 12 && qrImg && qrPlaceholder) {
+        const cleanCode = (code || '').replace(/\D/g, '');
+        if (cleanCode && cleanCode.length === 12 && qrImg && qrPlaceholder) {
             const pogoDeepLink = `https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`;
-            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pogoDeepLink)}`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pogoDeepLink)}`;
             qrImg.style.display = 'block';
             qrPlaceholder.style.display = 'none';
         } else if (qrImg && qrPlaceholder) {
@@ -7522,22 +7547,24 @@ function renderStatsPane() {
         saveFriendCodeBtn.dataset.bound = 'true';
         saveFriendCodeBtn.addEventListener('click', () => {
             const rawVal = friendCodeInput.value.trim();
-            const clean = rawVal.replace(/\s+/g, '');
-            if (clean.length < 12) {
+            const clean = rawVal.replace(/\D/g, '');
+            if (clean.length !== 12) {
                 if (friendCodeMsg) {
                     friendCodeMsg.style.color = '#ef4444';
-                    friendCodeMsg.textContent = 'Please enter a valid 12-digit Friend Code.';
+                    friendCodeMsg.textContent = 'Friend code must contain exactly 12 digits (e.g. 1234 5678 9012).';
                     friendCodeMsg.style.display = 'block';
                 }
                 return;
             }
-            localStorage.setItem('trainer_friend_code', rawVal);
-            updateQrDisplay(rawVal);
+            const formattedCode = formatFriendCode(clean);
+            friendCodeInput.value = formattedCode;
+            localStorage.setItem('trainer_friend_code', formattedCode);
+            updateQrDisplay(formattedCode);
             
             // Save to Firestore user doc if logged in
             if (currentUser) {
                 const userRef = doc(db, 'users', currentUser.uid);
-                setDoc(userRef, { friendCode: rawVal }, { merge: true }).catch(err => console.error('Failed to save friend code to Firestore:', err));
+                setDoc(userRef, { friendCode: formattedCode }, { merge: true }).catch(err => console.error('Failed to save friend code to Firestore:', err));
             }
 
             if (friendCodeMsg) {
