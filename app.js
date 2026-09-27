@@ -2637,7 +2637,6 @@ function renderPokedex(forceClear = false) {
             if (poke.megaForm) {
                 const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name} ${poke.megaForm}`, poke);
                 if (megaSpriteUrl) imgSrc = megaSpriteUrl;
-                subTitleText = `<div style="font-size: 0.72rem; color: #f472b6; font-weight: 700; margin-top: 2px;">Mega ${poke.megaForm}</div>`;
             } else {
                 const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
                 if (megaSpriteUrl) imgSrc = megaSpriteUrl;

@@ -239,30 +239,6 @@
 
         <!-- PANE 1: Pokédex Cards Grid View -->
         <section class="view-pane" id="grid-pane">
-            <!-- Dynamic Grid Metrics Summary Bar -->
-            <div id="grid-metrics-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.8rem; font-weight: 600;">
-                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-                    <span style="color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
-                        <i class="fa-solid fa-gamepad" style="color: var(--accent-color);"></i> Active: <strong id="grid-stat-caught" style="color: #fff;">0 / 0</strong>
-                    </span>
-                    <span style="color: #34d399; display: flex; align-items: center; gap: 4px;" title="Ready to Evolve (Sufficient candies unlocked)">
-                        <span style="width: 8px; height: 8px; background-color: #34d399; border-radius: 50%; display: inline-block;"></span> Ready: <strong id="grid-stat-ready">0</strong>
-                    </span>
-                    <span style="color: #f5a623; display: flex; align-items: center; gap: 4px;" title="Needs candies to evolve">
-                        <span style="width: 8px; height: 8px; background-color: #f5a623; border-radius: 50%; display: inline-block;"></span> Candy Needed: <strong id="grid-stat-candy">0</strong>
-                    </span>
-                    <span style="color: #60a5fa; display: flex; align-items: center; gap: 4px;" title="Transferred ancestor required for evolution">
-                        <i class="fa-solid fa-arrows-spin" style="font-size: 0.75rem;"></i> Transferred: <strong id="grid-stat-transferred">0</strong>
-                    </span>
-                    <span style="color: #f87171; display: flex; align-items: center; gap: 4px;" title="Unreleased Pokémon in Pokémon GO">
-                        <i class="fa-solid fa-eye-slash" style="font-size: 0.75rem;"></i> Unreleased: <strong id="grid-stat-unreleased">0</strong>
-                    </span>
-                </div>
-                <div style="color: #94a3b8; font-size: 0.78rem;" id="grid-stat-pct">
-                    0% Completed
-                </div>
-            </div>
-
             <div class="grid-container" id="pokedex-grid" aria-live="polite">
                 <!-- Dynamically filled with JS -->
             </div>
