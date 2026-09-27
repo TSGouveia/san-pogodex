@@ -1502,6 +1502,23 @@ function formatPokemon(p) {
         });
     }
 
+const knownUnreleasedSet = new Set([
+    "alcremie", "arceus", "archaludon", "arctovish", "arctozolt", "basculegion", "brambleghast",
+    "bramblin", "brute bonnet", "calyrex", "capsakid", "chewtle", "chi-yu", "chien-pao",
+    "copperajah", "cufant", "cyclizar", "dracovish", "dracozolt", "drednaw", "eiscue",
+    "farigiraf", "fezandipiti", "finizen", "flutter mane", "glastrier", "gouging fire",
+    "great tusk", "iron boulder", "iron bundle", "iron crown", "iron hands", "iron jugulis",
+    "iron leaves", "iron moth", "iron thorns", "iron treads", "iron valiant", "koraidon",
+    "magearna", "manaphy", "milcery", "minior", "miraidon", "munkidori", "ogerpon",
+    "okidogi", "palafin", "pecharunt", "phione", "pincurchin", "pyukumuku", "rabsca",
+    "raging bolt", "rellor", "roaring moon", "sandy shocks", "scovillain", "scream tail",
+    "silvally", "slither wing", "spectrier", "terapagos", "ting-lu", "type: null",
+    "veluza", "walking wake", "wishiwashi", "wo-chien"
+]);
+
+    const engNameLower = (p.names && p.names.English ? p.names.English : '').toLowerCase();
+    const isUnreleasedEntry = Boolean(p.unreleased) || knownUnreleasedSet.has(engNameLower);
+
     return {
         id: String(p.dexNr),
         idName: p.formId || p.id,
@@ -1517,7 +1534,7 @@ function formatPokemon(p) {
         },
         obtaining: obtaining,
         rawEvolutions: allEvos,
-        unreleased: Boolean(p.unreleased),
+        unreleased: isUnreleasedEntry,
         releaseDate: p.releaseDate || null,
         mega: Boolean(p.hasMegaEvolution || (p.megaEvolutions && (Array.isArray(p.megaEvolutions) ? p.megaEvolutions.length > 0 : Object.keys(p.megaEvolutions).length > 0)) || (p.assetForms && p.assetForms.some(f => f.form === "MEGA"))),
         gmax: Boolean(p.hasGigantamaxEvolution || (p.assetForms && p.assetForms.some(f => f.form === "GIGANTAMAX"))),
