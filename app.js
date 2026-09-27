@@ -7873,13 +7873,17 @@ function renderStatsPane() {
         const isCaught = caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id));
         const isTransf = isPokemonTransferred(p);
 
-        if (isTransf) {
-            transfCount++;
+        if (isCaught) {
+            if (isTransf) {
+                transfCount++;
+            }
+        } else if (p.unreleased) {
+            // Unreleased Pokémon (not caught)
         } else if (isReadyToEvolve(p)) {
             readyCount++;
         } else if (needsCandies(p)) {
             candyCount++;
-        } else if (!isCaught && !p.unreleased) {
+        } else {
             fullyMissingCount++;
         }
     });
