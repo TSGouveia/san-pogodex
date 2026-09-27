@@ -312,6 +312,104 @@ input, button, select {
     background: rgba(255, 255, 255, 0.06);
 }
 
+/* PokéDex Type Tabs Styling */
+.dex-type-tabs {
+    display: flex;
+    gap: 0.5rem;
+    width: max-content;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    margin: 0 auto;
+}
+
+.dex-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    border: none;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.dex-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.dex-tab-btn.active {
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Category specific tab active colors */
+.dex-tab-btn[data-dextype="normal"].active { background: #3b82f6; }
+.dex-tab-btn[data-dextype="shiny"].active { background: #f5a623; color: #111b2e; }
+.dex-tab-btn[data-dextype="lucky"].active { background: #f5a623; color: #111b2e; }
+.dex-tab-btn[data-dextype="xxl"].active { background: #38bdf8; color: #0f172a; }
+.dex-tab-btn[data-dextype="xxs"].active { background: #1e3a8a; }
+.dex-tab-btn[data-dextype="soon"].active { background: #8b5cf6; color: #ffffff; }
+.dex-tab-btn[data-dextype="gmax"].active { background: #dc2626; }
+.dex-tab-btn[data-dextype="mega"].active { background: #ec4899; }
+.dex-tab-btn[data-dextype="shadow"].active { background: #7e22ce; }
+.dex-tab-btn[data-dextype="purified"].active { background: #14b8a6; color: #0f172a; }
+.dex-tab-btn[data-dextype="hundo"].active { background: #e11d48; }
+
+/* Category card background themes */
+.pokemon-card.theme-soon {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(139, 92, 246, 0.5) !important;
+}
+.pokemon-card.theme-shiny,
+.pokemon-card.theme-lucky {
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.25) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(245, 166, 35, 0.4) !important;
+}
+
+.pokemon-card.theme-xxl {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.25) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+.pokemon-card.theme-xxs {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.45) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(30, 58, 138, 0.6) !important;
+}
+
+.pokemon-card.theme-gmax {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.3) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(220, 38, 38, 0.5) !important;
+}
+
+.pokemon-card.theme-mega {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(236, 72, 153, 0.5) !important;
+}
+
+.pokemon-card.theme-shadow {
+    background: linear-gradient(135deg, rgba(126, 34, 206, 0.35) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(126, 34, 206, 0.5) !important;
+}
+
+.pokemon-card.theme-purified {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.3) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(20, 184, 166, 0.5) !important;
+}
+
+.pokemon-card.theme-hundo {
+    background: linear-gradient(135deg, rgba(225, 29, 72, 0.3) 0%, rgba(18, 30, 54, 0.95) 100%) !important;
+    border-color: rgba(225, 29, 72, 0.5) !important;
+}
+
 .tab-btn.active {
     color: #111b2e;
     background: var(--accent-color);
@@ -3477,6 +3575,238 @@ html {
 
 .move-stat-badge.dps strong {
     color: #34d399;
+}
+
+/* ==========================================================================
+   POKÉDEX CATEGORIES TABS & CARD THEMES
+   ========================================================================== */
+.dex-type-tabs {
+    display: flex;
+    gap: 0.45rem;
+    width: max-content;
+    padding: 6px;
+    background: rgba(17, 27, 46, 0.75);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    margin: 0 auto;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+}
+
+.dex-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.dex-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dex-tab-btn.active {
+    color: #111b2e;
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px var(--accent-glow);
+    font-weight: 800;
+}
+
+/* Specific Active Colors for Dex Tabs */
+.dex-tab-btn[data-dextype="shiny"].active,
+.dex-tab-btn[data-dextype="lucky"].active {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    border-color: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+}
+
+.dex-tab-btn[data-dextype="xxl"].active {
+    background: linear-gradient(135deg, #38bdf8, #0284c7);
+    border-color: #38bdf8;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
+}
+
+.dex-tab-btn[data-dextype="xxs"].active {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    border-color: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+}
+
+.dex-tab-btn[data-dextype="gmax"].active {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    border-color: #ef4444;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.45);
+}
+
+.dex-tab-btn[data-dextype="mega"].active {
+    background: linear-gradient(135deg, #ec4899, #be185d);
+    border-color: #ec4899;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.45);
+}
+
+.dex-tab-btn[data-dextype="shadow"].active {
+    background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+    border-color: #8b5cf6;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.45);
+}
+
+.dex-tab-btn[data-dextype="purified"].active {
+    background: linear-gradient(135deg, #2dd4bf, #0f766e);
+    border-color: #2dd4bf;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(45, 212, 191, 0.45);
+}
+
+.dex-tab-btn[data-dextype="hundo"].active {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    border-color: #f43f5e;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.45);
+}
+
+/* ==========================================================================
+   POKÉDEX CARD THEMES (Shiny, Lucky, XXL, XXS, G-Max, Mega, Shadow, Purified, 100%)
+   ========================================================================== */
+
+/* SHINY & LUCKY: Fundo Laranja */
+.pokemon-card.theme-shiny,
+.pokemon-card.theme-lucky {
+    background: linear-gradient(145deg, rgba(245, 158, 11, 0.16) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.12) !important;
+}
+.pokemon-card.theme-shiny.caught,
+.pokemon-card.theme-lucky.caught {
+    border-color: rgba(245, 158, 11, 0.75) !important;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.25) !important;
+}
+.pokemon-card.theme-shiny:hover,
+.pokemon-card.theme-lucky:hover {
+    border-color: #f59e0b !important;
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.4) !important;
+}
+
+/* XXL: Fundo Azul Claro */
+.pokemon-card.theme-xxl {
+    background: linear-gradient(145deg, rgba(56, 189, 248, 0.16) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.12) !important;
+}
+.pokemon-card.theme-xxl.caught {
+    border-color: rgba(56, 189, 248, 0.75) !important;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.25) !important;
+}
+.pokemon-card.theme-xxl:hover {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.4) !important;
+}
+
+/* XXS: Fundo Azul Escuro */
+.pokemon-card.theme-xxs {
+    background: linear-gradient(145deg, rgba(30, 58, 138, 0.35) 0%, rgba(15, 23, 42, 0.95) 100%) !important;
+    border-color: rgba(59, 130, 246, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.2) !important;
+}
+.pokemon-card.theme-xxs.caught {
+    border-color: rgba(96, 165, 250, 0.75) !important;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.3) !important;
+}
+.pokemon-card.theme-xxs:hover {
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.45) !important;
+}
+
+/* G-MAX: Fundo Vermelho */
+.pokemon-card.theme-gmax {
+    background: linear-gradient(145deg, rgba(239, 68, 68, 0.18) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(239, 68, 68, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.15) !important;
+}
+.pokemon-card.theme-gmax.caught {
+    border-color: rgba(239, 68, 68, 0.8) !important;
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.3) !important;
+}
+.pokemon-card.theme-gmax:hover {
+    border-color: #ef4444 !important;
+    box-shadow: 0 0 22px rgba(239, 68, 68, 0.5) !important;
+}
+
+/* MEGA: Fundo Rosa */
+.pokemon-card.theme-mega {
+    background: linear-gradient(145deg, rgba(236, 72, 153, 0.18) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(236, 72, 153, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.15) !important;
+}
+.pokemon-card.theme-mega.caught {
+    border-color: rgba(236, 72, 153, 0.8) !important;
+    box-shadow: 0 0 18px rgba(236, 72, 153, 0.3) !important;
+}
+.pokemon-card.theme-mega:hover {
+    border-color: #ec4899 !important;
+    box-shadow: 0 0 22px rgba(236, 72, 153, 0.5) !important;
+}
+
+/* SHADOW: Fundo Roxo */
+.pokemon-card.theme-shadow {
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.2) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(139, 92, 246, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(139, 92, 246, 0.15) !important;
+}
+.pokemon-card.theme-shadow.caught {
+    border-color: rgba(139, 92, 246, 0.8) !important;
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.35) !important;
+}
+.pokemon-card.theme-shadow:hover {
+    border-color: #8b5cf6 !important;
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.55) !important;
+}
+
+/* PURIFIED: Fundo Verde Água */
+.pokemon-card.theme-purified {
+    background: linear-gradient(145deg, rgba(45, 212, 191, 0.18) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(45, 212, 191, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(45, 212, 191, 0.15) !important;
+}
+.pokemon-card.theme-purified.caught {
+    border-color: rgba(45, 212, 191, 0.8) !important;
+    box-shadow: 0 0 18px rgba(45, 212, 191, 0.3) !important;
+}
+.pokemon-card.theme-purified:hover {
+    border-color: #2dd4bf !important;
+    box-shadow: 0 0 22px rgba(45, 212, 191, 0.5) !important;
+}
+
+/* 100% ★: Fundo Rosa Avermelhado */
+.pokemon-card.theme-hundo {
+    background: linear-gradient(145deg, rgba(244, 63, 94, 0.18) 0%, rgba(17, 27, 46, 0.95) 100%) !important;
+    border-color: rgba(244, 63, 94, 0.45) !important;
+    box-shadow: 0 4px 14px rgba(244, 63, 94, 0.15) !important;
+}
+.pokemon-card.theme-hundo.caught {
+    border-color: rgba(244, 63, 94, 0.8) !important;
+    box-shadow: 0 0 18px rgba(244, 63, 94, 0.3) !important;
+}
+.pokemon-card.theme-hundo:hover {
+    border-color: #f43f5e !important;
+    box-shadow: 0 0 22px rgba(244, 63, 94, 0.5) !important;
 }
 
 

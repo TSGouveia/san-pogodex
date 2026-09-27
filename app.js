@@ -440,6 +440,25 @@ let currentUser = null;
 let currentTrainerUsername = null;
 let userDocListenerUnsubscribe = null; // Firestore real-time listener cleanup handle
 let currentGenFilter = 'all';
+let currentDexType = 'normal'; // 'normal' | 'shiny' | 'lucky' | 'xxl' | 'xxs' | 'soon' | 'gmax' | 'mega' | 'shadow' | 'purified' | 'hundo'
+const caughtCategoryPokemon = {
+    shiny: new Set(),
+    lucky: new Set(),
+    xxl: new Set(),
+    xxs: new Set(),
+    soon: new Set(),
+    gmax: new Set(),
+    mega: new Set(),
+    shadow: new Set(),
+    purified: new Set(),
+    hundo: new Set()
+};
+
+function getActiveCaughtSet() {
+    if (currentDexType === 'normal') return caughtPokemon;
+    return caughtCategoryPokemon[currentDexType] || caughtPokemon;
+}
+
 let currentSearchQuery = '';
 let currentCollectionFilter = 'all'; // 'all' | 'missing' | 'caught'
 let currentSortOrder = 'num-asc'; // 'num-asc' | 'num-desc' | 'name-asc'
@@ -452,6 +471,8 @@ const emptyState = document.getElementById('empty-state');
 const searchInput = document.getElementById('search-input');
 const sortSelect = document.getElementById('sort-select');
 const genTabsContainer = document.getElementById('gen-tabs');
+const dexTypeTabsContainer = document.getElementById('dex-type-tabs');
+const dexTypesScroll = document.getElementById('dex-types-scroll');
 const collectionFilterButtons = document.querySelectorAll('.radio-filters .filter-btn');
 
 // Bulk Action Buttons
@@ -1497,6 +1518,7 @@ function formatPokemon(p) {
         obtaining: obtaining,
         rawEvolutions: allEvos,
         unreleased: Boolean(p.unreleased),
+        releaseDate: p.releaseDate || null,
         combatPower: p.combatPower || calculateClientSideCombatPower(p.stats),
         quickMoves: p.quickMoves || {},
         cinematicMoves: p.cinematicMoves || {}
@@ -1510,6 +1532,17 @@ function generateObtainingMethods(p, types) {
     const isMythic = p.pokemonClass === "POKEMON_CLASS_MYTHIC";
     const isBaby = babyPokemonIds.has(p.dexNr);
     const isRegional = regionalPokemon[p.dexNr];
+
+    // Release Date / Upcoming Announcement info
+    if (p.releaseDate) {
+        const isFuture = new Date(p.releaseDate) > new Date();
+        list.push({
+            method: isFuture ? "Upcoming Debut ⏳" : "Debut Release",
+            desc: isFuture 
+                ? `This Pokémon will be released on ${p.releaseDate}!` 
+                : `Released in Pokémon GO on ${p.releaseDate}.`
+        });
+    }
 
     // Meltan / Melmetal specific overrides
     if (p.dexNr === 808) {
@@ -1635,6 +1668,20 @@ function loadCaughtState() {
         console.error("Failed to load caught state:", e);
         caughtPokemon = new Set();
     }
+
+    // Load category dex caught states
+    ['shiny', 'lucky', 'xxl', 'xxs', 'soon', 'gmax', 'mega', 'shadow', 'purified', 'hundo'].forEach(cat => {
+        try {
+            const key = `pogo_caught_${cat}`;
+            const st = localStorage.getItem(key);
+            if (st) {
+                const parsed = JSON.parse(st);
+                caughtCategoryPokemon[cat] = new Set(parsed);
+            }
+        } catch (e) {
+            caughtCategoryPokemon[cat] = new Set();
+        }
+    });
 }
 
 function loadTransferredState() {
@@ -1763,7 +1810,14 @@ function filterObtainingMethods() {
 }
 
 function saveCaughtState() {
-    localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon)));
+    if (currentDexType === 'normal') {
+        localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon)));
+    } else {
+        const set = caughtCategoryPokemon[currentDexType];
+        if (set) {
+            localStorage.setItem(`pogo_caught_${currentDexType}`, JSON.stringify(Array.from(set)));
+        }
+    }
     updateDashboardStats();
     updateRegionStatsBadge();
     if (currentUser) {
@@ -1774,7 +1828,8 @@ function saveCaughtState() {
 function syncPokemonCaughtStateUI(id, isNowCaught = null) {
     const strId = String(id);
     const numId = Number(id);
-    const isCaught = caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId));
+    const activeSet = getActiveCaughtSet();
+    const isCaught = activeSet.has(strId) || (!isNaN(numId) && activeSet.has(numId));
 
     // 1. Update the Pokedex Grid Card if it exists
     const pokedexCard = pokedexGrid.querySelector(`.pokemon-card[data-id="${id}"]`);
@@ -1793,11 +1848,14 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
             }
         } else {
             const pokeObj = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
-            const isTransf = pokeObj ? isPokemonTransferred(pokeObj) : false;
-            const readyToEvolve = pokeObj ? isReadyToEvolve(pokeObj) : false;
-            const candyNeeded = pokeObj ? needsCandies(pokeObj) : false;
+            const isTransf = (currentDexType === 'normal' && pokeObj) ? isPokemonTransferred(pokeObj) : false;
+            const readyToEvolve = (currentDexType === 'normal' && pokeObj) ? isReadyToEvolve(pokeObj) : false;
+            const candyNeeded = (currentDexType === 'normal' && pokeObj) ? needsCandies(pokeObj) : false;
             
             let cardClass = 'pokemon-card ';
+            if (currentDexType !== 'normal') {
+                cardClass += `theme-${currentDexType} `;
+            }
             if (isCaught) {
                 cardClass += isTransf ? 'caught transferred' : 'caught';
             } else {
@@ -1887,33 +1945,38 @@ function toggleCaughtState(id, eventSource = null) {
     }
     const strId = String(id);
     const numId = Number(id);
-    const isNowCaught = !(caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId)));
+    const activeSet = getActiveCaughtSet();
+    const isNowCaught = !(activeSet.has(strId) || (!isNaN(numId) && activeSet.has(numId)));
     
     const affectedTransferredAncestors = [];
 
-    if (caughtPokemon.has(strId) || (!isNaN(numId) && caughtPokemon.has(numId))) {
-        caughtPokemon.delete(strId);
-        if (!isNaN(numId)) caughtPokemon.delete(numId);
-        transferredPokemon.delete(strId);
-        if (!isNaN(numId)) transferredPokemon.delete(numId);
+    if (activeSet.has(strId) || (!isNaN(numId) && activeSet.has(numId))) {
+        activeSet.delete(strId);
+        if (!isNaN(numId)) activeSet.delete(numId);
+        if (currentDexType === 'normal') {
+            transferredPokemon.delete(strId);
+            if (!isNaN(numId)) transferredPokemon.delete(numId);
+        }
     } else {
-        caughtPokemon.add(strId);
-        transferredPokemon.delete(strId);
-        if (!isNaN(numId)) transferredPokemon.delete(numId);
-        
-        // If this Pokemon is an evolution, any transferred ancestors should no longer be transferred
-        const poke = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
-        if (poke) {
-            const ancestors = getEvolutionAncestors(poke);
-            ancestors.forEach(anc => {
-                const ancStr = String(anc.id);
-                const ancNum = Number(anc.id);
-                if (transferredPokemon.has(ancStr) || (!isNaN(ancNum) && transferredPokemon.has(ancNum))) {
-                    transferredPokemon.delete(ancStr);
-                    if (!isNaN(ancNum)) transferredPokemon.delete(ancNum);
-                    affectedTransferredAncestors.push(anc.id);
-                }
-            });
+        activeSet.add(strId);
+        if (currentDexType === 'normal') {
+            transferredPokemon.delete(strId);
+            if (!isNaN(numId)) transferredPokemon.delete(numId);
+            
+            // If this Pokemon is an evolution, any transferred ancestors should no longer be transferred
+            const poke = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
+            if (poke) {
+                const ancestors = getEvolutionAncestors(poke);
+                ancestors.forEach(anc => {
+                    const ancStr = String(anc.id);
+                    const ancNum = Number(anc.id);
+                    if (transferredPokemon.has(ancStr) || (!isNaN(ancNum) && transferredPokemon.has(ancNum))) {
+                        transferredPokemon.delete(ancStr);
+                        if (!isNaN(ancNum)) transferredPokemon.delete(ancNum);
+                        affectedTransferredAncestors.push(anc.id);
+                    }
+                });
+            }
         }
 
         if (eventSource) {
@@ -1921,7 +1984,7 @@ function toggleCaughtState(id, eventSource = null) {
         }
     }
     saveCaughtState();
-    saveTransferredState();
+    if (currentDexType === 'normal') saveTransferredState();
     syncPokemonCaughtStateUI(id, isNowCaught);
 
     // Refresh all members of this evolution family on the Pokédex grid
@@ -2218,6 +2281,22 @@ function setupEventListeners() {
         renderPokedex(true);
     });
 
+    if (dexTypeTabsContainer) {
+        dexTypeTabsContainer.addEventListener('click', (e) => {
+            const targetBtn = e.target.closest('.dex-tab-btn');
+            if (!targetBtn) return;
+            
+            dexTypeTabsContainer.querySelectorAll('.dex-tab-btn').forEach(btn => btn.classList.remove('active'));
+            targetBtn.classList.add('active');
+            
+            currentDexType = targetBtn.dataset.dextype || 'normal';
+            pokedexLimit = Infinity;
+            renderPokedex(true);
+            updateDashboardStats();
+            updateRegionStatsBadge();
+        });
+    }
+
     genTabsContainer.addEventListener('click', (e) => {
         const targetBtn = e.target.closest('.tab-btn');
         if (!targetBtn) return;
@@ -2344,15 +2423,51 @@ function getFilteredAndSortedPokemon() {
         result = result.filter(p => !p.unreleased);
     }
 
+    if (currentDexType === 'soon') {
+        result = result.filter(p => {
+            return p.releaseDate || (p.obtaining && p.obtaining.some(o => o.method && (o.method.toLowerCase().includes('soon') || o.method.toLowerCase().includes('upcoming'))));
+        });
+    } else if (currentDexType === 'gmax') {
+        result = result.filter(p => {
+            const nameL = p.name.toLowerCase();
+            const idNameL = (p.idName || '').toLowerCase();
+            return nameL.includes('gmax') || nameL.includes('gigantamax') || idNameL.includes('gmax') || idNameL.includes('gigantamax') || p.gmax;
+        });
+    } else if (currentDexType === 'mega') {
+        result = result.filter(p => {
+            const nameL = p.name.toLowerCase();
+            const idNameL = (p.idName || '').toLowerCase();
+            return nameL.includes('mega') || nameL.includes('primal') || idNameL.includes('mega') || idNameL.includes('primal') || p.mega;
+        });
+    } else if (currentDexType === 'shadow') {
+        result = result.filter(p => {
+            const nameL = p.name.toLowerCase();
+            const idNameL = (p.idName || '').toLowerCase();
+            return nameL.includes('shadow') || idNameL.includes('shadow') || p.shadow;
+        });
+    } else if (currentDexType === 'purified') {
+        result = result.filter(p => {
+            const nameL = p.name.toLowerCase();
+            const idNameL = (p.idName || '').toLowerCase();
+            return nameL.includes('purified') || idNameL.includes('purified') || nameL.includes('shadow') || idNameL.includes('shadow') || p.shadow || p.purified;
+        });
+    }
+
     if (currentGenFilter !== 'all') {
         const genNum = parseFloat(currentGenFilter);
         result = result.filter(p => p.gen === genNum);
     }
 
+    const activeSet = getActiveCaughtSet();
+
     if (currentCollectionFilter === 'caught') {
-        result = result.filter(p => (caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))) && !isPokemonTransferred(p));
+        result = result.filter(p => (activeSet.has(p.id) || activeSet.has(Number(p.id))) && (currentDexType !== 'normal' || !isPokemonTransferred(p)));
     } else if (currentCollectionFilter === 'missing') {
-        result = result.filter(p => isPokemonMissing(p));
+        if (currentDexType === 'normal') {
+            result = result.filter(p => isPokemonMissing(p));
+        } else {
+            result = result.filter(p => !activeSet.has(p.id) && !activeSet.has(Number(p.id)));
+        }
     }
 
     if (currentSearchQuery) {
@@ -2413,12 +2528,16 @@ function renderPokedex(forceClear = false) {
         if (currentRenderedIds.has(poke.id)) return;
         currentRenderedIds.add(poke.id);
 
-        const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
-        const isTransf = isPokemonTransferred(poke);
-        const readyToEvolve = isReadyToEvolve(poke);
-        const candyNeeded = needsCandies(poke);
+        const activeSet = getActiveCaughtSet();
+        const isCaught = activeSet.has(poke.id) || activeSet.has(Number(poke.id));
+        const isTransf = (currentDexType === 'normal') ? isPokemonTransferred(poke) : false;
+        const readyToEvolve = (currentDexType === 'normal') ? isReadyToEvolve(poke) : false;
+        const candyNeeded = (currentDexType === 'normal') ? needsCandies(poke) : false;
         
         let cardClass = 'pokemon-card ';
+        if (currentDexType !== 'normal') {
+            cardClass += `theme-${currentDexType} `;
+        }
         if (isCaught) {
             cardClass += isTransf ? 'caught transferred' : 'caught';
         } else {
@@ -2433,6 +2552,12 @@ function renderPokedex(forceClear = false) {
         }
 
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+
+        let imgSrc = poke.img;
+        if (currentDexType === 'shiny') {
+            const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
+            imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
+        }
 
         const card = document.createElement('div');
         card.className = cardClass;
@@ -2470,7 +2595,7 @@ function renderPokedex(forceClear = false) {
             </div>
             
             <div class="card-img-wrapper">
-                <img src="${poke.img}" alt="${poke.name}" loading="lazy">
+                <img src="${imgSrc}" alt="${poke.name}" loading="lazy" onerror="if(this.src !== '${poke.img}') { this.src='${poke.img}'; }">
             </div>
             
             <h3 class="poke-name">${poke.name}</h3>
@@ -3394,8 +3519,13 @@ function loadEvolutionTab(poke) {
 }
 
 function findEvolutionChain(poke) {
+    if (!poke) return [];
     const branches = getEvolutionBranches(poke);
-    return branches.length > 0 ? branches[0] : [poke];
+    if (!branches || branches.length === 0) return [poke];
+    const matchingBranch = branches.find(branch => 
+        branch.some(p => String(p.id) === String(poke.id))
+    );
+    return matchingBranch || branches[0];
 }
 
 const evolutionBranchesCache = new Map();

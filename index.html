@@ -123,6 +123,45 @@
 
         <!-- Control Center (Filters, Search, Region Tabs) -->
         <section class="control-center">
+            <!-- Pokédex Type Tabs (Standard, Shiny, Lucky, XXL, XXS, G-Max, Mega, Shadow, Purified, 100%) -->
+            <div class="tabs-scroll" id="dex-types-scroll">
+                <nav class="dex-type-tabs" id="dex-type-tabs" aria-label="PokéDex Category Selector">
+                    <button class="dex-tab-btn active" data-dextype="normal">
+                        <i class="fa-solid fa-gamepad"></i> Pokémon
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="shiny">
+                        <i class="fa-solid fa-sparkles"></i> Shiny
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="lucky">
+                        <i class="fa-solid fa-clover"></i> Lucky
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="xxl">
+                        <i class="fa-solid fa-maximize"></i> XXL
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="xxs">
+                        <i class="fa-solid fa-minimize"></i> XXS
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="soon">
+                        <i class="fa-solid fa-hourglass-half"></i> Soon ⏳
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="gmax">
+                        <i class="fa-solid fa-cloud-bolt"></i> G-Max
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="mega">
+                        <i class="fa-solid fa-dna"></i> Mega
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="shadow">
+                        <i class="fa-solid fa-fire-flame-curved"></i> Shadow
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="purified">
+                        <i class="fa-solid fa-certificate"></i> Purified
+                    </button>
+                    <button class="dex-tab-btn" data-dextype="hundo">
+                        <i class="fa-solid fa-star"></i> 100% ★
+                    </button>
+                </nav>
+            </div>
+
             <!-- Generation Selector Tabs (Populated Dynamically) -->
             <div class="tabs-scroll" id="gen-tabs-scroll">
                 <nav class="gen-tabs" id="gen-tabs" aria-label="Generation Selector">
