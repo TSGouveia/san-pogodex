@@ -2556,9 +2556,22 @@ function renderPokedex(forceClear = false) {
         const typeBadges = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
         let imgSrc = poke.img;
+        let subTitleText = '';
+
         if (currentDexType === 'shiny') {
             const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
             imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
+        } else if (currentDexType === 'mega') {
+            const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
+            if (megaSpriteUrl) imgSrc = megaSpriteUrl;
+
+            // Handle Pokémon with multiple Mega forms (e.g., Charizard & Mewtwo)
+            if (['Charizard', 'Mewtwo'].includes(poke.name)) {
+                subTitleText = '<div style="font-size: 0.72rem; color: #f472b6; font-weight: 700; margin-top: 2px;">2 Megas (Mega X / Mega Y)</div>';
+            }
+        } else if (currentDexType === 'gmax') {
+            const gmaxSpriteUrl = getPokemonImageUrl(`Gigantamax ${poke.name}`, poke);
+            if (gmaxSpriteUrl) imgSrc = gmaxSpriteUrl;
         }
 
         const card = document.createElement('div');
@@ -2601,6 +2614,7 @@ function renderPokedex(forceClear = false) {
             </div>
             
             <h3 class="poke-name">${poke.name}</h3>
+            ${subTitleText}
             
             <div class="types-container">
                 ${typeBadges}
