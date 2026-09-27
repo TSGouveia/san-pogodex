@@ -133,7 +133,7 @@
                         <i class="fa-solid fa-gamepad"></i> Pokémon
                     </button>
                     <button class="dex-tab-btn" data-dextype="shiny">
-                        <i class="fa-solid fa-sparkles"></i> Shiny
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color: #fbbf24;"></i> Shiny
                     </button>
                     <button class="dex-tab-btn" data-dextype="lucky">
                         <i class="fa-solid fa-clover"></i> Lucky
@@ -649,7 +649,7 @@
             </p>
 
             <!-- Trainer Card & Friend Code QR Section -->
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;">
+            <div id="trainer-profile-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; transition: background 0.3s, border-color 0.3s;">
                 <!-- QR Code Display Box -->
                 <div style="background: #ffffff; padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 160px; height: 160px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" id="qr-code-box">
                     <img id="trainer-qr-img" src="" alt="Trainer QR Code" style="width: 130px; height: 130px; display: none;">
@@ -662,8 +662,13 @@
                 <!-- Trainer Info & Inputs -->
                 <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 1rem;">
                     <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Trainer Profile</div>
-                        <h3 id="profile-trainer-name" style="color: var(--text-primary); margin: 2px 0 0 0; font-size: 1.4rem;">Guest Trainer</h3>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem;">Trainer Profile & Username</div>
+                        <div style="display: flex; gap: 0.5rem; align-items: center; max-width: 450px;">
+                            <input type="text" id="edit-trainer-name-input" placeholder="Enter Trainer Name" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 1.2rem; font-weight: 800; flex: 1; outline: none;">
+                            <button id="save-trainer-name-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+                                <i class="fa-solid fa-pen-to-square"></i> Save Name
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Team Selection Buttons -->
@@ -735,17 +740,6 @@
                         <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Fully Missing (Grey)</div>
                         <div style="font-size: 1.5rem; font-weight: 800; color: #94a3b8; margin-top: 2px;" id="stat-fully-missing">0</div>
                         <div style="font-size: 0.75rem; color: #64748b;">Not Caught & No Ancestor</div>
-                    </div>
-                </div>
-
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(99, 102, 241, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #818cf8; font-size: 1.5rem;">
-                        <i class="fa-solid fa-clock"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Releasing Soon ⏳</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #818cf8; margin-top: 2px;" id="stat-releasing-soon">0</div>
-                        <div style="font-size: 0.75rem; color: #64748b;">Announced Debut Dates</div>
                     </div>
                 </div>
 

@@ -7459,16 +7459,43 @@ function renderStatsPane() {
     const statsCategoriesList = document.getElementById('stats-categories-list');
     const statsRegionsGrid = document.getElementById('stats-regions-grid');
 
-    // 0. Trainer Profile & QR Code Update
-    const profileTrainerName = document.getElementById('profile-trainer-name');
+    // 0. Trainer Profile & Name Editing
+    const editTrainerNameInput = document.getElementById('edit-trainer-name-input');
+    const saveTrainerNameBtn = document.getElementById('save-trainer-name-btn');
     const friendCodeInput = document.getElementById('friend-code-input');
     const saveFriendCodeBtn = document.getElementById('save-friend-code-btn');
     const friendCodeMsg = document.getElementById('friend-code-msg');
     const qrImg = document.getElementById('trainer-qr-img');
     const qrPlaceholder = document.getElementById('qr-placeholder');
+    const trainerProfileCard = document.getElementById('trainer-profile-card');
 
-    if (profileTrainerName) {
-        profileTrainerName.textContent = currentTrainerUsername ? currentTrainerUsername : (currentUser ? currentUser.email.split('@')[0] : 'Guest Trainer');
+    const defaultName = currentTrainerUsername || (currentUser ? currentUser.email.split('@')[0] : 'Guest Trainer');
+    const savedCustomName = localStorage.getItem('trainer_custom_username') || defaultName;
+
+    if (editTrainerNameInput && !editTrainerNameInput.value) {
+        editTrainerNameInput.value = savedCustomName;
+    }
+
+    if (saveTrainerNameBtn && !saveTrainerNameBtn.dataset.bound) {
+        saveTrainerNameBtn.dataset.bound = 'true';
+        saveTrainerNameBtn.addEventListener('click', () => {
+            const newName = editTrainerNameInput.value.trim();
+            if (!newName) return;
+            localStorage.setItem('trainer_custom_username', newName);
+            currentTrainerUsername = newName;
+
+            if (currentUser) {
+                const userRef = doc(db, 'users', currentUser.uid);
+                setDoc(userRef, { username: newName }, { merge: true }).catch(err => console.error('Failed to save username to Firestore:', err));
+            }
+
+            if (friendCodeMsg) {
+                friendCodeMsg.style.color = '#34d399';
+                friendCodeMsg.textContent = 'Trainer Name updated successfully!';
+                friendCodeMsg.style.display = 'block';
+                setTimeout(() => { friendCodeMsg.style.display = 'none'; }, 2500);
+            }
+        });
     }
 
     const savedFriendCode = localStorage.getItem('trainer_friend_code') || '';
@@ -7521,9 +7548,26 @@ function renderStatsPane() {
             }
         });
     }
+
+    // Team Selection & Dynamic Profile Card Coloring
     const teamBtns = document.querySelectorAll('#team-selector-btns .team-btn');
     const savedTeam = localStorage.getItem('trainer_pogo_team') || 'instinct';
     
+    const teamThemeStyles = {
+        instinct: {
+            bg: 'linear-gradient(135deg, rgba(245, 166, 35, 0.15) 0%, var(--bg-secondary) 100%)',
+            border: 'rgba(245, 166, 35, 0.4)'
+        },
+        mystic: {
+            bg: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, var(--bg-secondary) 100%)',
+            border: 'rgba(59, 130, 246, 0.4)'
+        },
+        valor: {
+            bg: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, var(--bg-secondary) 100%)',
+            border: 'rgba(239, 68, 68, 0.4)'
+        }
+    };
+
     const updateTeamActiveUI = (t) => {
         teamBtns.forEach(btn => {
             if (btn.dataset.team === t) {
@@ -7534,6 +7578,11 @@ function renderStatsPane() {
                 btn.style.transform = 'scale(1)';
             }
         });
+
+        if (trainerProfileCard && teamThemeStyles[t]) {
+            trainerProfileCard.style.background = teamThemeStyles[t].bg;
+            trainerProfileCard.style.borderColor = teamThemeStyles[t].border;
+        }
     };
     updateTeamActiveUI(savedTeam);
 
