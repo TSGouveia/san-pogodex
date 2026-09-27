@@ -5763,7 +5763,7 @@ function getCumulativeCandiesToEvolve(targetPoke, chain) {
 }
 
 function needsCandies(poke) {
-    if (!poke) return false;
+    if (!poke || poke.unreleased) return false;
     // If poke itself is caught, it is NEVER yellow
     const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
     if (isCaught) return false;
@@ -5824,7 +5824,7 @@ function buildStaticEvolutionMaps() {
 }
 
 function isReadyToEvolve(poke) {
-    if (!poke) return false;
+    if (!poke || poke.unreleased) return false;
     // The target pokemon itself must NOT be caught
     const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
     if (isCaught) return false;
