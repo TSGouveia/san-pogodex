@@ -1464,20 +1464,27 @@ function syncUpcomingReleaseDates() {
             }
         }
 
-        // 2. Cross-reference with upcoming liveEvents
-        const upcomingEvent = liveEvents.find(ev => {
-            if (!ev.start) return false;
-            const startDate = new Date(ev.start);
-            if (isNaN(startDate.getTime()) || startDate <= now) return false;
+        // 2. Cross-reference with upcoming liveEvents ONLY if the Pokémon is currently unreleased
+        if (poke.unreleased) {
+            const upcomingEvent = liveEvents.find(ev => {
+                if (!ev.start) return false;
+                const startDate = new Date(ev.start);
+                if (isNaN(startDate.getTime()) || startDate <= now) return false;
 
-            const title = (ev.title || '').toLowerCase();
-            const desc = (ev.desc || '').toLowerCase();
-            return title.includes(pokeNameLower) || desc.includes(pokeNameLower);
-        });
+                const title = (ev.title || '').toLowerCase();
+                const desc = (ev.desc || '').toLowerCase();
+                return title.includes(pokeNameLower) || desc.includes(pokeNameLower);
+            });
 
-        if (upcomingEvent) {
-            poke.releaseDate = upcomingEvent.start;
-            poke.releasingSoon = true;
+            if (upcomingEvent) {
+                try {
+                    const d = new Date(upcomingEvent.start);
+                    poke.releaseDate = isNaN(d.getTime()) ? upcomingEvent.start : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                } catch(e) {
+                    poke.releaseDate = upcomingEvent.start;
+                }
+                poke.releasingSoon = true;
+            }
         }
     });
 }
