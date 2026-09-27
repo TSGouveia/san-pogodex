@@ -7459,7 +7459,39 @@ function renderStatsPane() {
     const statsCategoriesList = document.getElementById('stats-categories-list');
     const statsRegionsGrid = document.getElementById('stats-regions-grid');
 
-    // 0. Trainer Profile & Name Editing
+    // 0. Profile Subnav & Tab Switching
+    const profileSubnav = document.getElementById('profile-subnav');
+    if (profileSubnav && !profileSubnav.dataset.bound) {
+        profileSubnav.dataset.bound = 'true';
+        profileSubnav.addEventListener('click', (e) => {
+            const btn = e.target.closest('.event-tab-btn');
+            if (!btn) return;
+
+            profileSubnav.querySelectorAll('.event-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const targetSubtabId = btn.dataset.subtab;
+            const overviewSub = document.getElementById('stats-overview-subpane');
+            const friendsSub = document.getElementById('friends-subpane');
+
+            if (targetSubtabId === 'friends-subpane') {
+                if (overviewSub) overviewSub.classList.add('hidden');
+                if (friendsSub) friendsSub.classList.remove('hidden');
+                renderFriendsPane();
+            } else {
+                if (friendsSub) friendsSub.classList.add('hidden');
+                if (overviewSub) overviewSub.classList.remove('hidden');
+                renderStatsPane();
+            }
+        });
+    }
+
+    // 1. Trainer Profile & Name Editing Toggle
+    const trainerNameDisplayText = document.getElementById('trainer-name-display-text');
+    const trainerNameDisplayWrapper = document.getElementById('trainer-name-display-wrapper');
+    const trainerNameEditWrapper = document.getElementById('trainer-name-edit-wrapper');
+    const toggleEditNameBtn = document.getElementById('toggle-edit-name-btn');
+    const cancelTrainerNameBtn = document.getElementById('cancel-trainer-name-btn');
     const editTrainerNameInput = document.getElementById('edit-trainer-name-input');
     const saveTrainerNameBtn = document.getElementById('save-trainer-name-btn');
     const friendCodeInput = document.getElementById('friend-code-input');
@@ -7472,8 +7504,32 @@ function renderStatsPane() {
     const defaultName = currentTrainerUsername || (currentUser ? currentUser.email.split('@')[0] : 'Guest Trainer');
     const savedCustomName = localStorage.getItem('trainer_custom_username') || defaultName;
 
+    if (trainerNameDisplayText) {
+        trainerNameDisplayText.textContent = savedCustomName;
+    }
+
     if (editTrainerNameInput && !editTrainerNameInput.value) {
         editTrainerNameInput.value = savedCustomName;
+    }
+
+    if (toggleEditNameBtn && !toggleEditNameBtn.dataset.bound) {
+        toggleEditNameBtn.dataset.bound = 'true';
+        toggleEditNameBtn.addEventListener('click', () => {
+            if (trainerNameDisplayWrapper) trainerNameDisplayWrapper.classList.add('hidden');
+            if (trainerNameEditWrapper) trainerNameEditWrapper.classList.remove('hidden');
+            if (editTrainerNameInput) {
+                editTrainerNameInput.value = localStorage.getItem('trainer_custom_username') || defaultName;
+                editTrainerNameInput.focus();
+            }
+        });
+    }
+
+    if (cancelTrainerNameBtn && !cancelTrainerNameBtn.dataset.bound) {
+        cancelTrainerNameBtn.dataset.bound = 'true';
+        cancelTrainerNameBtn.addEventListener('click', () => {
+            if (trainerNameEditWrapper) trainerNameEditWrapper.classList.add('hidden');
+            if (trainerNameDisplayWrapper) trainerNameDisplayWrapper.classList.remove('hidden');
+        });
     }
 
     if (saveTrainerNameBtn && !saveTrainerNameBtn.dataset.bound) {
@@ -7483,6 +7539,13 @@ function renderStatsPane() {
             if (!newName) return;
             localStorage.setItem('trainer_custom_username', newName);
             currentTrainerUsername = newName;
+
+            if (trainerNameDisplayText) {
+                trainerNameDisplayText.textContent = newName;
+            }
+
+            if (trainerNameEditWrapper) trainerNameEditWrapper.classList.add('hidden');
+            if (trainerNameDisplayWrapper) trainerNameDisplayWrapper.classList.remove('hidden');
 
             if (currentUser) {
                 const userRef = doc(db, 'users', currentUser.uid);

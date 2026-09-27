@@ -108,11 +108,7 @@
                     <i class="fa-solid fa-list-check"></i> To-Do Guide
                 </button>
                 <button class="view-btn" data-view="stats-pane" id="btn-view-stats">
-                    <i class="fa-solid fa-id-card"></i> Profile & Stats
-                </button>
-                <button class="view-btn" data-view="friends-pane" id="btn-view-friends" style="position: relative; overflow: visible !important;">
-                    <i class="fa-solid fa-users"></i> Friends
-                    <span id="friends-badge" class="hidden" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">0</span>
+                    <i class="fa-solid fa-id-card"></i> Profile & Friends
                 </button>
             </div>
 
@@ -551,223 +547,246 @@
 
 
 
-        <!-- PANE 5: Friends Panel -->
-        <section class="view-pane hidden" id="friends-pane">
-            <div class="rotation-section-header">
-                <i class="fa-solid fa-users" style="color: var(--accent-color);"></i>
-                <h2>Trainer Friends & Trades</h2>
-            </div>
-            
-            <div id="friends-auth-warning" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 8px; padding: 1.5rem; text-align: center; margin-bottom: 2rem;">
-                <p style="color: #f87171; font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem;">
-                    You must be logged in to access the Friends & Trade system.
-                </p>
-                <button class="bulk-btn" id="friends-login-btn" style="background: var(--accent-color); color: #fff; padding: 10px 20px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.1s;">
-                    Log In
-                </button>
-            </div>
-
-            <div id="friends-main-content" class="hidden">
-                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                    <!-- Left Side: Friends List -->
-                    <div style="flex: 1; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
-                        <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-user-plus"></i> Add a Friend</h3>
-                        <form id="add-friend-form" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-                            <input type="text" id="friend-username-input" required placeholder="Friend's username" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem; flex-grow: 1;">
-                            <button type="submit" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 15px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Add</button>
-                        </form>
-                        <div id="add-friend-msg" style="font-size: 0.82rem; font-weight: 600; margin-top: -1rem; margin-bottom: 1rem; display: none;"></div>
-
-                        <!-- Pending Friend Requests -->
-                        <div id="pending-requests-section" class="hidden" style="margin-bottom: 1.5rem;">
-                            <h3 style="color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-bell"></i> Pending Requests (<span id="pending-requests-count">0</span>)</h3>
-                            <div id="pending-requests-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                <!-- Dynamically populated -->
-                            </div>
-                        </div>
-
-                        <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-list"></i> Your Friends</h3>
-                        <div id="friends-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                            <!-- Populated dynamically -->
-                            <p style="color: #64748b; font-size: 0.9rem;">No friends added yet.</p>
-                        </div>
-                    </div>
-
-                    <!-- Right Side: Comparison & Trade Matches -->
-                    <div style="flex: 2; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-                        <div id="comparison-empty-state" style="text-align: center; padding: 3rem 1rem; color: #64748b;">
-                            <i class="fa-solid fa-handshake-angle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                            <p style="font-size: 1rem; font-weight: 600; margin: 0;">Select a friend from the list to view potential trades.</p>
-                        </div>
-
-                        <div id="comparison-content" class="hidden">
-                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                                <div>
-                                    <h3 id="comparison-friend-name" style="color: var(--text-primary); margin: 0;">Comparing with Trainer</h3>
-                                    <p style="color: #94a3b8; font-size: 0.8rem; margin: 0; margin-top: 2px;">Find matches for trade opportunities</p>
-                                </div>
-                                <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
-                            </div>
-
-                            <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
-                                <button class="comp-tab-btn active" data-tab="stats-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                    <i class="fa-solid fa-chart-simple"></i> Compare Stats
-                                </button>
-                                <button class="comp-tab-btn" data-tab="give-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                    <i class="fa-solid fa-arrow-up-right-from-square"></i> You can give them
-                                </button>
-                                <button class="comp-tab-btn" data-tab="get-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                    <i class="fa-solid fa-arrow-down-left-from-square"></i> They can give you
-                                </button>
-                            </div>
-
-                            <div class="comp-pane" id="stats-tab-pane">
-                                <div id="friends-stats-container">
-                                    <!-- Populated dynamically via JS -->
-                                </div>
-                            </div>
-                            <div class="comp-pane hidden" id="give-tab-pane">
-                                <div class="rotation-grid-layout" id="friends-give-grid"></div>
-                            </div>
-                            <div class="comp-pane hidden" id="get-tab-pane">
-                                <div class="rotation-grid-layout" id="friends-get-grid"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PANE 6: Trainer Profile & Stats Panel -->
+        <!-- PANE 6: Trainer Profile, Stats & Friends Panel -->
         <section class="view-pane hidden" id="stats-pane">
             <div class="rotation-section-header">
                 <i class="fa-solid fa-user-gear" style="color: var(--accent-color);"></i>
-                <h2>Trainer Profile & PokéDex Analytics</h2>
+                <h2>Trainer Profile & Friends</h2>
             </div>
-            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
-                Manage your Trainer Friend Code, view your QR code for quick adding, and analyze your full PokéDex collection stats.
-            </p>
+            
+            <!-- Profile Sub-Tab Navigation -->
+            <div class="events-tabs" id="profile-subnav" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 4px; border-radius: 8px; max-width: 400px;">
+                <button class="event-tab-btn active" data-subtab="stats-overview-subpane" style="flex: 1; background: none; border: none; padding: 8px 14px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <i class="fa-solid fa-id-card"></i> Profile & Stats
+                </button>
+                <button class="event-tab-btn" data-subtab="friends-subpane" style="flex: 1; background: none; border: none; padding: 8px 14px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; position: relative;">
+                    <i class="fa-solid fa-users"></i> Friends
+                    <span id="friends-badge" class="hidden" style="position: absolute; top: -4px; right: -4px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">0</span>
+                </button>
+            </div>
 
-            <!-- Trainer Card & Friend Code QR Section -->
-            <div id="trainer-profile-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; transition: background 0.3s, border-color 0.3s;">
-                <!-- QR Code Display Box -->
-                <div style="background: #ffffff; padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 220px; height: 220px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" id="qr-code-box">
-                    <img id="trainer-qr-img" src="" alt="Trainer QR Code" style="width: 190px; height: 190px; display: none;">
-                    <div id="qr-placeholder" style="color: #64748b; text-align: center; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fa-solid fa-qrcode" style="font-size: 3rem; margin-bottom: 0.5rem; color: #94a3b8;"></i><br>
-                        Enter Friend Code
-                    </div>
-                </div>
+            <!-- Subpane 1: Stats & Trainer Profile Card Overview -->
+            <div id="stats-overview-subpane">
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Manage your Trainer Friend Code, view your QR code for quick adding, and analyze your full PokéDex collection stats.
+                </p>
 
-                <!-- Trainer Info & Inputs -->
-                <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 1rem;">
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem;">Trainer Profile & Username</div>
-                        <div style="display: flex; gap: 0.5rem; align-items: center; max-width: 450px;">
-                            <input type="text" id="edit-trainer-name-input" placeholder="Enter Trainer Name" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 1.2rem; font-weight: 800; flex: 1; outline: none;">
-                            <button id="save-trainer-name-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
-                                <i class="fa-solid fa-pen-to-square"></i> Save Name
-                            </button>
+                <!-- Trainer Card & Friend Code QR Section -->
+                <div id="trainer-profile-card" style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; transition: background 0.3s, border-color 0.3s;">
+                    <!-- QR Code Display Box -->
+                    <div style="background: #ffffff; padding: 1rem; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 220px; height: 220px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(0,0,0,0.3);" id="qr-code-box">
+                        <img id="trainer-qr-img" src="" alt="Trainer QR Code" style="width: 190px; height: 190px; display: none;">
+                        <div id="qr-placeholder" style="color: #64748b; text-align: center; font-size: 0.85rem; font-weight: 600;">
+                            <i class="fa-solid fa-qrcode" style="font-size: 3rem; margin-bottom: 0.5rem; color: #94a3b8;"></i><br>
+                            Enter Friend Code
                         </div>
                     </div>
 
-                    <!-- Team Selection Buttons -->
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Select Pokémon GO Team</div>
-                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="team-selector-btns">
-                            <button class="team-btn" data-team="instinct" style="background: rgba(245, 166, 35, 0.1); border: 1px solid rgba(245, 166, 35, 0.3); color: #f5a623; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                <i class="fa-solid fa-bolt" style="color: #f5a623;"></i> Instinct
+                    <!-- Trainer Info & Inputs -->
+                    <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem;">Trainer Name</div>
+                            
+                            <!-- Static Display Mode (Name + Edit Icon Button) -->
+                            <div id="trainer-name-display-wrapper" style="display: flex; align-items: center; gap: 0.6rem; max-width: 450px;">
+                                <h2 id="trainer-name-display-text" style="font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin: 0; letter-spacing: -0.3px;">Trainer Name</h2>
+                                <button id="toggle-edit-name-btn" title="Edit Trainer Name" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                                    <i class="fa-solid fa-pen-to-square" style="font-size: 0.9rem;"></i>
+                                </button>
+                            </div>
+
+                            <!-- Edit Mode (Input + Save & Cancel Buttons) -->
+                            <div id="trainer-name-edit-wrapper" class="hidden" style="display: flex; gap: 0.5rem; align-items: center; max-width: 450px; margin-top: 0.3rem;">
+                                <input type="text" id="edit-trainer-name-input" placeholder="Enter Trainer Name" style="background: rgba(17, 27, 46, 0.8); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 1.1rem; font-weight: 800; flex: 1; outline: none;">
+                                <button id="save-trainer-name-btn" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; border-radius: 8px; padding: 8px 14px; font-weight: 700; cursor: pointer; font-size: 0.85rem; display: flex; align-items: center; gap: 4px;">
+                                    <i class="fa-solid fa-check"></i> Save
+                                </button>
+                                <button id="cancel-trainer-name-btn" style="background: rgba(148, 163, 184, 0.1); border: 1px solid rgba(148, 163, 184, 0.2); color: #94a3b8; border-radius: 8px; padding: 8px 12px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Team Selection Buttons -->
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.5rem;">Select Pokémon GO Team</div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;" id="team-selector-btns">
+                                <button class="team-btn" data-team="instinct" style="background: rgba(245, 166, 35, 0.1); border: 1px solid rgba(245, 166, 35, 0.3); color: #f5a623; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-bolt" style="color: #f5a623;"></i> Instinct
+                                </button>
+                                <button class="team-btn" data-team="mystic" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i> Mystic
+                                </button>
+                                <button class="team-btn" data-team="valor" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+                                    <i class="fa-solid fa-fire" style="color: #f87171;"></i> Valor
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 450px;">
+                            <input type="text" id="friend-code-input" placeholder="e.g. 1234 5678 9012" maxlength="14" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; flex: 1; outline: none;">
+                            <button id="save-friend-code-btn" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-floppy-disk"></i> Save Code
                             </button>
-                            <button class="team-btn" data-team="mystic" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                <i class="fa-solid fa-snowflake" style="color: #60a5fa;"></i> Mystic
-                            </button>
-                            <button class="team-btn" data-team="valor" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 6px 14px; font-weight: 700; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-                                <i class="fa-solid fa-fire" style="color: #f87171;"></i> Valor
-                            </button>
+                        </div>
+                        <div id="friend-code-msg" style="font-size: 0.8rem; font-weight: 600; display: none;"></div>
+                    </div>
+                </div>
+
+                <!-- Overall Summary Cards -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Standard PokéDex</div>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 2px;" id="stat-total-caught">0 / 0</div>
+                            <div style="font-size: 0.75rem; color: #34d399; font-weight: 700;" id="stat-total-pct">0% Complete</div>
                         </div>
                     </div>
 
-                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; max-width: 450px;">
-                        <input type="text" id="friend-code-input" placeholder="e.g. 1234 5678 9012" maxlength="14" style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 14px; color: var(--text-primary); font-size: 0.95rem; font-weight: 700; flex: 1; outline: none;">
-                        <button id="save-friend-code-btn" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 18px; font-weight: 700; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; gap: 6px;">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Code
-                        </button>
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(52, 211, 153, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 1.5rem;">
+                            <i class="fa-solid fa-angles-up"></i>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve (Green)</div>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #34d399; margin-top: 2px;" id="stat-ready-evolve">0</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">Sufficient Candies Unlocked</div>
+                        </div>
                     </div>
-                    <div id="friend-code-msg" style="font-size: 0.8rem; font-weight: 600; display: none;"></div>
+
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
+                            <i class="fa-solid fa-candy-cane"></i>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Needs Candies (Yellow)</div>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #f5a623; margin-top: 2px;" id="stat-needs-candy">0</div>
+                            <div style="font-size: 0.75rem; color: #94a3b8;">Missing Evolution Candies</div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(148, 163, 184, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Fully Missing (Grey)</div>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #94a3b8; margin-top: 2px;" id="stat-fully-missing">0</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Not Caught & No Ancestor</div>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.5rem;">
+                            <i class="fa-solid fa-eye-slash"></i>
+                        </div>
+                        <div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Unreleased</div>
+                            <div style="font-size: 1.5rem; font-weight: 800; color: #f87171; margin-top: 2px;" id="stat-unreleased-total">0</div>
+                            <div style="font-size: 0.75rem; color: #64748b;">Not Yet in Pokémon GO</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Categories Breakdown Table -->
+                <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-layer-group" style="color: var(--accent-color);"></i> PokéDex Categories Progress
+                </h3>
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem;">
+                    <div id="stats-categories-list" style="display: flex; flex-direction: column;"></div>
+                </div>
+
+                <!-- Region Stats Breakdown -->
+                <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Regional Distribution & Completion
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="stats-regions-grid"></div>
             </div>
 
-            <!-- Overall Summary Cards -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
-                        <i class="fa-solid fa-gamepad"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Standard PokéDex</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 2px;" id="stat-total-caught">0 / 0</div>
-                        <div style="font-size: 0.75rem; color: #34d399; font-weight: 700;" id="stat-total-pct">0% Complete</div>
-                    </div>
+            <!-- Subpane 2: Friends Section -->
+            <div id="friends-subpane" class="hidden">
+                <div id="friends-auth-warning" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 8px; padding: 1.5rem; text-align: center; margin-bottom: 2rem;">
+                    <p style="color: #f87171; font-size: 0.95rem; font-weight: 600; margin-bottom: 1rem;">
+                        You must be logged in to access the Friends & Trade system.
+                    </p>
+                    <button class="bulk-btn" id="friends-login-btn" style="background: var(--accent-color); color: #fff; padding: 10px 20px; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; transition: transform 0.1s;">
+                        Log In
+                    </button>
                 </div>
 
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(52, 211, 153, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 1.5rem;">
-                        <i class="fa-solid fa-angles-up"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve (Green)</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #34d399; margin-top: 2px;" id="stat-ready-evolve">0</div>
-                        <div style="font-size: 0.75rem; color: #94a3b8;">Sufficient Candies Unlocked</div>
-                    </div>
-                </div>
+                <div id="friends-main-content" class="hidden">
+                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                        <!-- Left Side: Friends List -->
+                        <div style="flex: 1; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
+                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-user-plus"></i> Add a Friend</h3>
+                            <form id="add-friend-form" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+                                <input type="text" id="friend-username-input" required placeholder="Friend's username" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem; flex-grow: 1;">
+                                <button type="submit" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 15px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Add</button>
+                            </form>
+                            <div id="add-friend-msg" style="font-size: 0.82rem; font-weight: 600; margin-top: -1rem; margin-bottom: 1rem; display: none;"></div>
 
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
-                        <i class="fa-solid fa-candy-cane"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Needs Candies (Yellow)</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #f5a623; margin-top: 2px;" id="stat-needs-candy">0</div>
-                        <div style="font-size: 0.75rem; color: #94a3b8;">Missing Evolution Candies</div>
-                    </div>
-                </div>
+                            <!-- Pending Friend Requests -->
+                            <div id="pending-requests-section" class="hidden" style="margin-bottom: 1.5rem;">
+                                <h3 style="color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-bell"></i> Pending Requests (<span id="pending-requests-count">0</span>)</h3>
+                                <div id="pending-requests-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                    <!-- Dynamically populated -->
+                                </div>
+                            </div>
 
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(148, 163, 184, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.5rem;">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Fully Missing (Grey)</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #94a3b8; margin-top: 2px;" id="stat-fully-missing">0</div>
-                        <div style="font-size: 0.75rem; color: #64748b;">Not Caught & No Ancestor</div>
-                    </div>
-                </div>
+                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-list"></i> Your Friends</h3>
+                            <div id="friends-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                <!-- Populated dynamically -->
+                                <p style="color: #64748b; font-size: 0.9rem;">No friends added yet.</p>
+                            </div>
+                        </div>
 
-                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.5rem;">
-                        <i class="fa-solid fa-eye-slash"></i>
-                    </div>
-                    <div>
-                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Unreleased</div>
-                        <div style="font-size: 1.5rem; font-weight: 800; color: #f87171; margin-top: 2px;" id="stat-unreleased-total">0</div>
-                        <div style="font-size: 0.75rem; color: #64748b;">Not Yet in Pokémon GO</div>
+                        <!-- Right Side: Comparison & Trade Matches -->
+                        <div style="flex: 2; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+                            <div id="comparison-empty-state" style="text-align: center; padding: 3rem 1rem; color: #64748b;">
+                                <i class="fa-solid fa-handshake-angle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                                <p style="font-size: 1rem; font-weight: 600; margin: 0;">Select a friend from the list to view potential trades.</p>
+                            </div>
+
+                            <div id="comparison-content" class="hidden">
+                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                    <div>
+                                        <h3 id="comparison-friend-name" style="color: var(--text-primary); margin: 0;">Comparing with Trainer</h3>
+                                        <p style="color: #94a3b8; font-size: 0.8rem; margin: 0; margin-top: 2px;">Find matches for trade opportunities</p>
+                                    </div>
+                                    <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
+                                </div>
+
+                                <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
+                                    <button class="comp-tab-btn active" data-tab="stats-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                        <i class="fa-solid fa-chart-simple"></i> Compare Stats
+                                    </button>
+                                    <button class="comp-tab-btn" data-tab="give-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i> You can give them
+                                    </button>
+                                    <button class="comp-tab-btn" data-tab="get-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                                        <i class="fa-solid fa-arrow-down-left-from-square"></i> They can give you
+                                    </button>
+                                </div>
+
+                                <div class="comp-pane" id="stats-tab-pane">
+                                    <div id="friends-stats-container">
+                                        <!-- Populated dynamically via JS -->
+                                    </div>
+                                </div>
+                                <div class="comp-pane hidden" id="give-tab-pane">
+                                    <div class="rotation-grid-layout" id="friends-give-grid"></div>
+                                </div>
+                                <div class="comp-pane hidden" id="get-tab-pane">
+                                    <div class="rotation-grid-layout" id="friends-get-grid"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Categories Breakdown Table -->
-            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-layer-group" style="color: var(--accent-color);"></i> PokéDex Categories Progress
-            </h3>
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem;">
-                <div id="stats-categories-list" style="display: flex; flex-direction: column;"></div>
-            </div>
-
-            <!-- Region Stats Breakdown -->
-            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Regional Distribution & Completion
-            </h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="stats-regions-grid"></div>
         </section>
 
     </main>
