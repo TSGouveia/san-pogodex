@@ -3084,7 +3084,7 @@ html {
 }
 .event-tab-btn.active {
     background: var(--accent-color) !important;
-    color: #000 !important;
+    color: #ffffff !important;
     box-shadow: 0 2px 8px rgba(245, 166, 35, 0.35);
 }
 
