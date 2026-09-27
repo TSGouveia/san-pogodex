@@ -1,5 +1,6 @@
 import requests
 import json
+import re
 import urllib3
 from bs4 import BeautifulSoup
 
@@ -138,6 +139,30 @@ def scrape_unreleased_names_from_bulbapedia():
     print("  -> Error: Could not retrieve Bulbapedia content from any endpoint.")
     return unreleased_set
 
+def scrape_release_dates_from_bulbapedia():
+    print("Scraping Release Dates for Pokémon from Bulbapedia...")
+    poke_dates = {}
+    for idx, hdr in enumerate(API_HEADERS + [HEADERS]):
+        try:
+            res = requests.get(BULBAPEDIA_RAW_URL, headers=hdr, timeout=15, verify=False)
+            if res.status_code == 200:
+                blocks = res.text.split('|-')
+                for b in blocks:
+                    date_m = re.search(r'([A-Z][a-z]+ \d{1,2}, \d{4})', b)
+                    msps = re.findall(r'\{\{MSP(?:/GO)?\|[^|}]+\|([^}|]+)\}\}', b)
+                    if date_m and msps:
+                        d = date_m.group(1)
+                        for p in msps:
+                            p_clean = p.strip()
+                            if p_clean.lower() not in poke_dates:
+                                poke_dates[p_clean.lower()] = d
+                if poke_dates:
+                    print(f"  -> Successfully extracted release dates for {len(poke_dates)} Pokémon species.")
+                    return poke_dates
+        except Exception as e:
+            print(f"  -> Release dates scraper attempt {idx + 1} failed: {e}")
+    return poke_dates
+
 def scrape_pokedex():
     print("Scraping Raw Pokédex Data...")
     try:
@@ -188,8 +213,9 @@ def scrape_pokedex():
             pokedex_data.append(basculegion_entry)
             print("  -> Injected missing #902 Basculegion into Pokédex dataset.")
 
-        # Scrape Bulbapedia unreleased list
+        # Scrape Bulbapedia unreleased list & release dates
         scraped_unreleased = scrape_unreleased_names_from_bulbapedia()
+        release_dates_map = scrape_release_dates_from_bulbapedia()
 
         # Fallback handling: if Bulbapedia was blocked (e.g. Cloudflare 403 on CI) or returned empty, load from cache/pokedex.json
         import os
@@ -231,17 +257,22 @@ def scrape_pokedex():
 
         unreleased_lower = {name.lower() for name in scraped_unreleased}
 
-        # Tag entries with unreleased boolean and calculate standard CP benchmarks
+        # Tag entries with unreleased boolean, releaseDate, and calculate standard CP benchmarks
         unreleased_flagged_count = 0
         from scrapers.cp_utils import calculate_cp, CPM_MAP
 
         for entry in pokedex_data:
             eng_name = entry.get("names", {}).get("English", "")
-            if eng_name and eng_name.lower() in unreleased_lower:
+            eng_name_lower = eng_name.lower() if eng_name else ""
+
+            if eng_name_lower and eng_name_lower in unreleased_lower:
                 entry["unreleased"] = True
                 unreleased_flagged_count += 1
             else:
                 entry["unreleased"] = False
+
+            if eng_name_lower in release_dates_map:
+                entry["releaseDate"] = release_dates_map[eng_name_lower]
 
             # Calculate standard Combat Power values if stats exist
             stats = entry.get("stats")
