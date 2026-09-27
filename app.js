@@ -1417,6 +1417,8 @@ function buildPokebattlerMaxUrl(bossName) {
                         renderPokedex(false);
                     }, 550);
                     
+                    syncUpcomingReleaseDates();
+
                     // Fetch heavy PokeAPI mappings in the background during idle time
                     triggerBackgroundPokeApiFetch();
                 }, 150);
@@ -1445,6 +1447,39 @@ function buildPokebattlerMaxUrl(bossName) {
         updateDashboardStats();
         updateRegionStatsBadge();
     }
+}
+
+function syncUpcomingReleaseDates() {
+    if (!pokemonDatabase || pokemonDatabase.length === 0 || !liveEvents) return;
+    const now = new Date();
+
+    pokemonDatabase.forEach(poke => {
+        const pokeNameLower = poke.name.toLowerCase();
+
+        // 1. If poke has a releaseDate from data
+        if (poke.releaseDate) {
+            const relDate = new Date(poke.releaseDate);
+            if (!isNaN(relDate.getTime())) {
+                poke.releasingSoon = relDate > now;
+            }
+        }
+
+        // 2. Cross-reference with upcoming liveEvents
+        const upcomingEvent = liveEvents.find(ev => {
+            if (!ev.start) return false;
+            const startDate = new Date(ev.start);
+            if (isNaN(startDate.getTime()) || startDate <= now) return false;
+
+            const title = (ev.title || '').toLowerCase();
+            const desc = (ev.desc || '').toLowerCase();
+            return title.includes(pokeNameLower) || desc.includes(pokeNameLower);
+        });
+
+        if (upcomingEvent) {
+            poke.releaseDate = upcomingEvent.start;
+            poke.releasingSoon = true;
+        }
+    });
 }
 
 function calculateClientSideCombatPower(stats) {
