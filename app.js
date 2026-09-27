@@ -2144,6 +2144,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, false);
                 setVisible(regionStatsBadge, false);
                 setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 
@@ -2161,6 +2162,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, false);
                 setVisible(regionStatsBadge, false);
                 setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 renderCandiesPane();
@@ -2171,6 +2173,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, false);
                 setVisible(regionStatsBadge, false);
                 setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 renderToDoPane();
@@ -2181,6 +2184,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, false);
                 setVisible(regionStatsBadge, false);
                 setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 renderFriendsPane();
@@ -2191,6 +2195,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, false);
                 setVisible(regionStatsBadge, false);
                 setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 renderAttackersPane();
@@ -2201,6 +2206,7 @@ function setupEventListeners() {
                 setVisible(sortWrapper, true);
                 setVisible(regionStatsBadge, true);
                 setVisible(toggleUnreleasedBtn, true);
+                setVisible(dexTypesScroll, true);
                 setVisible(genTabsScroll, true);
                 setVisible(huntTabsScroll, false);
             }
@@ -2512,6 +2518,20 @@ function renderPokedex(forceClear = false) {
     if (list.length === 0) {
         pokedexGrid.innerHTML = '';
         currentRenderedIds.clear();
+        
+        const emptyTitle = emptyState.querySelector('h3');
+        const emptyDesc = emptyState.querySelector('p');
+        if (emptyTitle && emptyDesc) {
+            if (['gmax', 'mega', 'shadow', 'purified'].includes(currentDexType)) {
+                const catNames = { gmax: 'Gigantamax', mega: 'Mega / Primal', shadow: 'Shadow', purified: 'Purified' };
+                emptyTitle.textContent = `No ${catNames[currentDexType]} Pokémon available yet`;
+                emptyDesc.textContent = `Pokémon GO hasn't released any ${catNames[currentDexType]} form matching your filters. Check back soon for future events!`;
+            } else {
+                emptyTitle.textContent = 'No Pokémon found';
+                emptyDesc.textContent = 'Try adjusting your search query or filter selection.';
+            }
+        }
+
         emptyState.classList.remove('hidden');
         pokedexGrid.classList.add('hidden');
         return;
