@@ -6481,25 +6481,27 @@ function renderFriendsPaneFromData(data) {
                 const pct = Math.round((caughtCount / totalPokes) * 100);
 
                 item.innerHTML = `
-                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background-color: ${teamColor};"></div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem; padding-left: 6px;">
-                        <div style="width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; flex-shrink: 0;">
-                            <i class="fa-solid ${teamIcon}"></i>
-                        </div>
-                        <div style="display: flex; flex-direction: column; gap: 2px;">
-                            <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">${friendName}</span>
-                            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.72rem; color: #94a3b8;">
-                                <span style="color: ${teamColor}; font-weight: 700;">${teamName}</span>
-                                <span>•</span>
-                                <span style="color: #cbd5e1; font-weight: 600;">${pct}% PokéDex</span>
+                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background-color: ${teamColor};"></div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; padding-left: 8px;">
+                        <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 0;">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 2px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; font-size: 1.1rem; flex-shrink: 0;">
+                                <i class="fa-solid ${teamIcon}"></i>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
+                                <span style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${friendName}</span>
+                                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #94a3b8;">
+                                    <span style="color: ${teamColor}; font-weight: 700;">${teamName}</span>
+                                    <span style="color: #64748b;">•</span>
+                                    <span style="color: #cbd5e1; font-weight: 700;">${pct}% PokéDex</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 5px 10px; font-size: 0.78rem; border-radius: 6px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-                            <i class="fa-solid fa-border-all"></i> PokéDex
-                        </button>
-                        <i class="fa-solid fa-chevron-right" style="font-size: 0.75rem; color: #64748b;"></i>
+                        <div style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0;">
+                            <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.15); border: 1px solid rgba(245, 166, 35, 0.4); color: var(--accent-color); padding: 6px 14px; font-size: 0.82rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                                PokéDex
+                            </button>
+                            <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #64748b;"></i>
+                        </div>
                     </div>
                 `;
 
@@ -6514,7 +6516,19 @@ function renderFriendsPaneFromData(data) {
                 item.addEventListener('click', () => {
                     activeFriendUid = friend.uid;
                     activeFriendEmail = friend.email;
-                    renderFriendsPaneFromData(data);
+
+                    // Update active highlight locally without re-rendering the whole friends list (prevents page jump to top)
+                    if (friendsListDiv) {
+                        friendsListDiv.querySelectorAll('.rotation-card-item').forEach(el => {
+                            el.classList.remove('active-friend');
+                            el.style.background = 'var(--bg-tertiary)';
+                            el.style.border = '1px solid var(--border-color)';
+                        });
+                    }
+                    item.classList.add('active-friend');
+                    item.style.background = 'rgba(245, 166, 35, 0.08)';
+                    item.style.border = '1px solid var(--accent-color)';
+
                     compareFriendsCollections(friend);
                 });
                 friendsListDiv.appendChild(item);
