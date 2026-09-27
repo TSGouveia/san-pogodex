@@ -1573,12 +1573,12 @@ function generateObtainingMethods(p, types) {
     // Release Date / Upcoming Announcement info
     if (p.releaseDate) {
         const isFuture = new Date(p.releaseDate) > new Date();
-        list.push({
-            method: isFuture ? "Upcoming Debut ⏳" : "Debut Release",
-            desc: isFuture 
-                ? `This Pokémon will be released on ${p.releaseDate}!` 
-                : `Released in Pokémon GO on ${p.releaseDate}.`
-        });
+        if (isFuture) {
+            list.push({
+                method: "Upcoming Debut ⏳",
+                desc: `This Pokémon will be released on ${p.releaseDate}!`
+            });
+        }
     }
 
     // Meltan / Melmetal specific overrides
@@ -2704,7 +2704,7 @@ function renderPokedex(forceClear = false) {
                     <span class="poke-number">#${poke.num}</span>
                     ${readyToEvolve && !poke.unreleased ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
                     ${candyNeeded && !poke.unreleased ? `<span class="candy-indicator-dot" style="width: 7px; height: 7px; background-color: #f5a623; border-radius: 50%; display: inline-block;" title="Needs Candies to Evolve!"></span>` : ''}
-                    ${poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
+                    ${poke.releasingSoon ? `<span class="releasing-soon-badge-tag" style="color: #f5a623; font-size: 0.75rem; opacity: 0.85; margin-left: 2px;" title="Releasing Soon: ${poke.releaseDate}"><i class="fa-solid fa-hourglass-half"></i></span>` : (poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
@@ -3189,27 +3189,29 @@ function loadObtainingTab(poke) {
     const container = document.getElementById('obtaining-methods');
     container.innerHTML = '';
 
-    if (poke.releaseDate) {
+    const isFutureRelease = poke.releaseDate && (new Date(poke.releaseDate) > new Date() || Boolean(poke.releasingSoon));
+
+    if (isFutureRelease) {
         const releaseCard = document.createElement('div');
         releaseCard.className = 'obtain-card';
-        releaseCard.style.border = '1px solid rgba(99, 102, 241, 0.4)';
-        releaseCard.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.08), var(--bg-tertiary))';
+        releaseCard.style.border = '1px solid rgba(245, 166, 35, 0.4)';
+        releaseCard.style.background = 'linear-gradient(135deg, rgba(245, 166, 35, 0.08), var(--bg-tertiary))';
         releaseCard.style.gridColumn = '1 / -1';
         releaseCard.innerHTML = `
-            <div class="obtain-icon-box" style="color: #818cf8; background: rgba(99, 102, 241, 0.2);">
-                <i class="fa-solid fa-calendar-check"></i>
+            <div class="obtain-icon-box" style="color: #f5a623; background: rgba(245, 166, 35, 0.2);">
+                <i class="fa-solid fa-hourglass-half"></i>
             </div>
             <div class="obtain-card-content">
-                <h4 style="color: #818cf8; display: flex; align-items: center; gap: 6px;">
-                    Debut / Release Date
+                <h4 style="color: #f5a623; display: flex; align-items: center; gap: 6px;">
+                    Upcoming Debut ⏳
                 </h4>
-                <p style="color: var(--text-primary);">${poke.unreleased ? 'This Pokémon will be released on: ' : 'Released in Pokémon GO on: '}<strong>${poke.releaseDate}</strong></p>
+                <p style="color: var(--text-primary);">This Pokémon will be released on <strong>${poke.releaseDate}</strong>!</p>
             </div>
         `;
         container.appendChild(releaseCard);
     }
 
-    if (poke.unreleased && !poke.releaseDate) {
+    if (poke.unreleased && !isFutureRelease) {
         const unreleasedCard = document.createElement('div');
         unreleasedCard.className = 'obtain-card unreleased-notice-card';
         unreleasedCard.style.border = '1px solid rgba(239, 68, 68, 0.4)';
