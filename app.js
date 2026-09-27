@@ -1020,29 +1020,7 @@ async function loadPokedex() {
             }
         });
 
-        // Inject missing Basculegion (902) since it's not present in the upstream Pokémon GO API
-        if (!seenDexNrs.has(902)) {
-            seenDexNrs.add(902);
-            processed.push({
-                id: "902",
-                idName: "BASCULEGION",
-                num: "902",
-                name: "Basculegion",
-                gen: 8.5,
-                types: ["water", "ghost"],
-                img: `${POKE_SPRITE_BASE_URL}/902.png`,
-                stats: {
-                    atk: 247,
-                    def: 146,
-                    sta: 260
-                },
-                obtaining: [
-                    { method: "Evolution", desc: "Evolves from White-Striped Basculin." }
-                ],
-                rawEvolutions: [],
-                unreleased: true
-            });
-        }
+
 
         processed.sort((a, b) => Number(a.id) - Number(b.id));
         pokemonDatabase = processed;
