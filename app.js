@@ -1519,6 +1519,8 @@ function formatPokemon(p) {
         rawEvolutions: allEvos,
         unreleased: Boolean(p.unreleased),
         releaseDate: p.releaseDate || null,
+        mega: Boolean(p.hasMegaEvolution || (p.megaEvolutions && (Array.isArray(p.megaEvolutions) ? p.megaEvolutions.length > 0 : Object.keys(p.megaEvolutions).length > 0)) || (p.assetForms && p.assetForms.some(f => f.form === "MEGA"))),
+        gmax: Boolean(p.hasGigantamaxEvolution || (p.assetForms && p.assetForms.some(f => f.form === "GIGANTAMAX"))),
         combatPower: p.combatPower || calculateClientSideCombatPower(p.stats),
         quickMoves: p.quickMoves || {},
         cinematicMoves: p.cinematicMoves || {}
