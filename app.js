@@ -2435,6 +2435,30 @@ function getFilteredAndSortedPokemon() {
         result = result.filter(p => p.gmax || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('gmax') || o.method.toLowerCase().includes('gigantamax'))));
     } else if (currentDexType === 'mega') {
         result = result.filter(p => p.mega || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('mega') || o.method.toLowerCase().includes('primal'))));
+        
+        // Expand Pokemon with multiple Mega forms (Charizard & Mewtwo) into 2 distinct cards
+        const expandedResult = [];
+        result.forEach(p => {
+            if (['Charizard', 'Mewtwo'].includes(p.name)) {
+                expandedResult.push({
+                    ...p,
+                    id: `${p.id}_MEGA_X`,
+                    baseId: p.id,
+                    megaForm: 'X',
+                    displayName: `Mega ${p.name} X`
+                });
+                expandedResult.push({
+                    ...p,
+                    id: `${p.id}_MEGA_Y`,
+                    baseId: p.id,
+                    megaForm: 'Y',
+                    displayName: `Mega ${p.name} Y`
+                });
+            } else {
+                expandedResult.push(p);
+            }
+        });
+        result = expandedResult;
     } else if (currentDexType === 'shadow') {
         result = result.filter(p => p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('shadow'))));
     } else if (currentDexType === 'purified') {
@@ -2562,12 +2586,13 @@ function renderPokedex(forceClear = false) {
             const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
             imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
         } else if (currentDexType === 'mega') {
-            const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
-            if (megaSpriteUrl) imgSrc = megaSpriteUrl;
-
-            // Handle Pokémon with multiple Mega forms (e.g., Charizard & Mewtwo)
-            if (['Charizard', 'Mewtwo'].includes(poke.name)) {
-                subTitleText = '<div style="font-size: 0.72rem; color: #f472b6; font-weight: 700; margin-top: 2px;">2 Megas (Mega X / Mega Y)</div>';
+            if (poke.megaForm) {
+                const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name} ${poke.megaForm}`, poke);
+                if (megaSpriteUrl) imgSrc = megaSpriteUrl;
+                subTitleText = `<div style="font-size: 0.72rem; color: #f472b6; font-weight: 700; margin-top: 2px;">Mega ${poke.megaForm}</div>`;
+            } else {
+                const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
+                if (megaSpriteUrl) imgSrc = megaSpriteUrl;
             }
         } else if (currentDexType === 'gmax') {
             const gmaxSpriteUrl = getPokemonImageUrl(`Gigantamax ${poke.name}`, poke);
