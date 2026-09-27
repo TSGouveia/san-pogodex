@@ -7517,9 +7517,37 @@ function renderStatsPane() {
                 friendCodeMsg.textContent = 'Friend Code & QR Code updated successfully!';
                 friendCodeMsg.style.display = 'block';
                 setTimeout(() => { friendCodeMsg.style.display = 'none'; }, 3000);
+    // Team Selection handling
+    const teamBtns = document.querySelectorAll('#team-selector-btns .team-btn');
+    const savedTeam = localStorage.getItem('trainer_pogo_team') || 'instinct';
+    
+    const updateTeamActiveUI = (t) => {
+        teamBtns.forEach(btn => {
+            if (btn.dataset.team === t) {
+                btn.style.outline = '2px solid currentColor';
+                btn.style.transform = 'scale(1.05)';
+            } else {
+                btn.style.outline = 'none';
+                btn.style.transform = 'scale(1)';
             }
         });
-    }
+    };
+    updateTeamActiveUI(savedTeam);
+
+    teamBtns.forEach(btn => {
+        if (!btn.dataset.bound) {
+            btn.dataset.bound = 'true';
+            btn.addEventListener('click', () => {
+                const team = btn.dataset.team;
+                localStorage.setItem('trainer_pogo_team', team);
+                updateTeamActiveUI(team);
+                if (currentUser) {
+                    const userRef = doc(db, 'users', currentUser.uid);
+                    setDoc(userRef, { team: team }, { merge: true }).catch(err => console.error('Failed to save team to Firestore:', err));
+                }
+            });
+        }
+    });
 
     // 1. Overall Summary Calculations
     const totalAll = pokemonDatabase.length;
@@ -7529,18 +7557,40 @@ function renderStatsPane() {
     let readyCount = 0;
     let candyCount = 0;
     let transfCount = 0;
+    let fullyMissingCount = 0;
+    let releasingSoonCount = 0;
+    let unreleasedCount = 0;
 
     pokemonDatabase.forEach(p => {
-        if (isPokemonTransferred(p)) transfCount++;
-        else if (isReadyToEvolve(p)) readyCount++;
-        else if (needsCandies(p)) candyCount++;
+        if (p.unreleased) unreleasedCount++;
+        if (p.releaseDate) releasingSoonCount++;
+
+        const isCaught = caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id));
+        const isTransf = isPokemonTransferred(p);
+
+        if (isTransf) {
+            transfCount++;
+        } else if (isReadyToEvolve(p)) {
+            readyCount++;
+        } else if (needsCandies(p)) {
+            candyCount++;
+        } else if (!isCaught) {
+            fullyMissingCount++;
+        }
     });
+
+    const statFullyMissingEl = document.getElementById('stat-fully-missing');
+    const statReleasingSoonEl = document.getElementById('stat-releasing-soon');
+    const statUnreleasedTotalEl = document.getElementById('stat-unreleased-total');
 
     if (statsTotalCaughtEl) statsTotalCaughtEl.textContent = `${caughtAll} / ${totalAll}`;
     if (statsTotalPctEl) statsTotalPctEl.textContent = `${pctAll}% Complete`;
     if (statsReadyEvolveEl) statsReadyEvolveEl.textContent = readyCount;
     if (statsNeedsCandyEl) statsNeedsCandyEl.textContent = candyCount;
     if (statsTransferredEl) statsTransferredEl.textContent = transfCount;
+    if (statFullyMissingEl) statFullyMissingEl.textContent = fullyMissingCount;
+    if (statReleasingSoonEl) statReleasingSoonEl.textContent = releasingSoonCount;
+    if (statUnreleasedTotalEl) statUnreleasedTotalEl.textContent = unreleasedCount;
 
     // 2. Categories Breakdown List
     const categoriesMeta = [
