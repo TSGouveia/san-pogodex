@@ -7518,7 +7518,9 @@ function renderStatsPane() {
                 friendCodeMsg.textContent = 'Friend Code & QR Code updated successfully!';
                 friendCodeMsg.style.display = 'block';
                 setTimeout(() => { friendCodeMsg.style.display = 'none'; }, 3000);
-    // Team Selection handling
+            }
+        });
+    }
     const teamBtns = document.querySelectorAll('#team-selector-btns .team-btn');
     const savedTeam = localStorage.getItem('trainer_pogo_team') || 'instinct';
     
