@@ -107,6 +107,9 @@
                 <button class="view-btn" data-view="todo-pane" id="btn-view-todo">
                     <i class="fa-solid fa-list-check"></i> To-Do Guide
                 </button>
+                <button class="view-btn" data-view="stats-pane" id="btn-view-stats">
+                    <i class="fa-solid fa-chart-pie"></i> Detailed Stats
+                </button>
                 <button class="view-btn" data-view="friends-pane" id="btn-view-friends" style="position: relative; overflow: visible !important;">
                     <i class="fa-solid fa-users"></i> Friends
                     <span id="friends-badge" class="hidden" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 10;">0</span>
@@ -154,7 +157,7 @@
                         <i class="fa-solid fa-certificate"></i> Purified
                     </button>
                     <button class="dex-tab-btn" data-dextype="hundo">
-                        <i class="fa-solid fa-star"></i> 100% ★
+                        <i class="fa-solid fa-star"></i> 100%
                     </button>
                 </nav>
             </div>
@@ -236,6 +239,30 @@
 
         <!-- PANE 1: Pokédex Cards Grid View -->
         <section class="view-pane" id="grid-pane">
+            <!-- Dynamic Grid Metrics Summary Bar -->
+            <div id="grid-metrics-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.8rem; font-weight: 600;">
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <span style="color: var(--text-primary); display: flex; align-items: center; gap: 4px;">
+                        <i class="fa-solid fa-gamepad" style="color: var(--accent-color);"></i> Active: <strong id="grid-stat-caught" style="color: #fff;">0 / 0</strong>
+                    </span>
+                    <span style="color: #34d399; display: flex; align-items: center; gap: 4px;" title="Ready to Evolve (Sufficient candies unlocked)">
+                        <span style="width: 8px; height: 8px; background-color: #34d399; border-radius: 50%; display: inline-block;"></span> Ready: <strong id="grid-stat-ready">0</strong>
+                    </span>
+                    <span style="color: #f5a623; display: flex; align-items: center; gap: 4px;" title="Needs candies to evolve">
+                        <span style="width: 8px; height: 8px; background-color: #f5a623; border-radius: 50%; display: inline-block;"></span> Candy Needed: <strong id="grid-stat-candy">0</strong>
+                    </span>
+                    <span style="color: #60a5fa; display: flex; align-items: center; gap: 4px;" title="Transferred ancestor required for evolution">
+                        <i class="fa-solid fa-arrows-spin" style="font-size: 0.75rem;"></i> Transferred: <strong id="grid-stat-transferred">0</strong>
+                    </span>
+                    <span style="color: #f87171; display: flex; align-items: center; gap: 4px;" title="Unreleased Pokémon in Pokémon GO">
+                        <i class="fa-solid fa-eye-slash" style="font-size: 0.75rem;"></i> Unreleased: <strong id="grid-stat-unreleased">0</strong>
+                    </span>
+                </div>
+                <div style="color: #94a3b8; font-size: 0.78rem;" id="grid-stat-pct">
+                    0% Completed
+                </div>
+            </div>
+
             <div class="grid-container" id="pokedex-grid" aria-live="polite">
                 <!-- Dynamically filled with JS -->
             </div>
@@ -633,6 +660,76 @@
                     </div>
                 </div>
             </div>
+        <!-- PANE 6: Detailed Stats Panel -->
+        <section class="view-pane hidden" id="stats-pane">
+            <div class="rotation-section-header">
+                <i class="fa-solid fa-chart-pie" style="color: var(--accent-color);"></i>
+                <h2>Trainer PokéDex Analytics & Breakdown</h2>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                Comprehensive analytics across all PokéDex categories, candy readiness, evolution status, and regional statistics.
+            </p>
+
+            <!-- Overall Summary Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Standard PokéDex</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-top: 2px;" id="stat-total-caught">0 / 0</div>
+                        <div style="font-size: 0.75rem; color: #34d399; font-weight: 700;" id="stat-total-pct">0% Complete</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(52, 211, 153, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #34d399; font-size: 1.5rem;">
+                        <i class="fa-solid fa-angles-up"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve (Green)</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #34d399; margin-top: 2px;" id="stat-ready-evolve">0</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">Sufficient Candies Unlocked</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(245, 166, 35, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.5rem;">
+                        <i class="fa-solid fa-candy-cane"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Needs Candies (Yellow)</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #f5a623; margin-top: 2px;" id="stat-needs-candy">0</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">Missing Evolution Candies</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(96, 165, 250, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #60a5fa; font-size: 1.5rem;">
+                        <i class="fa-solid fa-arrows-spin"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Transferred / Need Ancestors</div>
+                        <div style="font-size: 1.5rem; font-weight: 800; color: #60a5fa; margin-top: 2px;" id="stat-transferred">0</div>
+                        <div style="font-size: 0.75rem; color: #94a3b8;">Transferred for Evolution</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Breakdown Table -->
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-layer-group" style="color: var(--accent-color);"></i> PokéDex Categories Progress
+            </h3>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-bottom: 2.5rem;">
+                <div id="stats-categories-list" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Region Stats Breakdown -->
+            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Regional Distribution & Completion
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="stats-regions-grid"></div>
         </section>
 
     </main>

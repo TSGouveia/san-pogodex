@@ -2067,8 +2067,10 @@ function triggerPremiumParticleBurst(element, isCaught) {
 }
 
 function updateDashboardStats() {
-    const total = pokemonDatabase.length;
-    const caught = pokemonDatabase.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
+    const list = getFilteredAndSortedPokemon();
+    const activeSet = getActiveCaughtSet();
+    const total = list.length;
+    const caught = list.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
     const pct = total > 0 ? Math.round((caught / total) * 100) : 0;
     
     if (caughtCountEl) caughtCountEl.textContent = caught;
@@ -2076,7 +2078,39 @@ function updateDashboardStats() {
     if (progressBarFill) progressBarFill.style.width = `${pct}%`;
     if (progressPctEl) progressPctEl.textContent = `${pct}% Completed`;
     
-    // Update To-Do and Candies pane targets dynamically
+    // Update Grid Metrics Summary Bar
+    const gridCaught = document.getElementById('grid-stat-caught');
+    const gridReady = document.getElementById('grid-stat-ready');
+    const gridCandy = document.getElementById('grid-stat-candy');
+    const gridTransferred = document.getElementById('grid-stat-transferred');
+    const gridUnreleased = document.getElementById('grid-stat-unreleased');
+    const gridPct = document.getElementById('grid-stat-pct');
+
+    if (gridCaught) {
+        gridCaught.textContent = `${caught} / ${total}`;
+        gridPct.textContent = `${pct}% Completed`;
+        
+        let readyCount = 0;
+        let candyCount = 0;
+        let transfCount = 0;
+        let unrelCount = 0;
+
+        list.forEach(p => {
+            if (p.unreleased) unrelCount++;
+            if (currentDexType === 'normal') {
+                if (isPokemonTransferred(p)) transfCount++;
+                else if (isReadyToEvolve(p)) readyCount++;
+                else if (needsCandies(p)) candyCount++;
+            }
+        });
+
+        if (gridReady) gridReady.textContent = readyCount;
+        if (gridCandy) gridCandy.textContent = candyCount;
+        if (gridTransferred) gridTransferred.textContent = transfCount;
+        if (gridUnreleased) gridUnreleased.textContent = unrelCount;
+    }
+
+    // Update To-Do, Candies and Stats pane targets dynamically
     if (typeof renderToDoPane === 'function') {
         renderToDoPane();
     }
@@ -2085,6 +2119,9 @@ function updateDashboardStats() {
     }
     if (typeof renderAttackersPane === 'function') {
         renderAttackersPane();
+    }
+    if (typeof renderStatsPane === 'function') {
+        renderStatsPane();
     }
 }
 
@@ -2179,6 +2216,17 @@ function setupEventListeners() {
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
                 renderToDoPane();
+            } else if (targetPaneId === 'stats-pane') {
+                setVisible(searchWrapper, false);
+                setVisible(radioFilters, false);
+                setVisible(bulkActions, false);
+                setVisible(sortWrapper, false);
+                setVisible(regionStatsBadge, false);
+                setVisible(toggleUnreleasedBtn, false);
+                setVisible(dexTypesScroll, false);
+                setVisible(genTabsScroll, false);
+                setVisible(huntTabsScroll, false);
+                renderStatsPane();
             } else if (targetPaneId === 'friends-pane') {
                 setVisible(searchWrapper, false);
                 setVisible(radioFilters, false);
@@ -7401,6 +7449,153 @@ window.addEventListener('scroll', () => {
     }
     lastScrollY = currentScrollY;
 }, { passive: true });
+
+// Render Detailed Stats & Analytics Pane
+function renderStatsPane() {
+    const statsTotalCaughtEl = document.getElementById('stat-total-caught');
+    const statsTotalPctEl = document.getElementById('stat-total-pct');
+    const statsReadyEvolveEl = document.getElementById('stat-ready-evolve');
+    const statsNeedsCandyEl = document.getElementById('stat-needs-candy');
+    const statsTransferredEl = document.getElementById('stat-transferred');
+    const statsCategoriesList = document.getElementById('stats-categories-list');
+    const statsRegionsGrid = document.getElementById('stats-regions-grid');
+
+    if (!statsCategoriesList || !statsRegionsGrid) return;
+
+    // 1. Overall Summary Calculations
+    const totalAll = pokemonDatabase.length;
+    const caughtAll = pokemonDatabase.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
+    const pctAll = totalAll > 0 ? Math.round((caughtAll / totalAll) * 100) : 0;
+
+    let readyCount = 0;
+    let candyCount = 0;
+    let transfCount = 0;
+
+    pokemonDatabase.forEach(p => {
+        if (isPokemonTransferred(p)) transfCount++;
+        else if (isReadyToEvolve(p)) readyCount++;
+        else if (needsCandies(p)) candyCount++;
+    });
+
+    if (statsTotalCaughtEl) statsTotalCaughtEl.textContent = `${caughtAll} / ${totalAll}`;
+    if (statsTotalPctEl) statsTotalPctEl.textContent = `${pctAll}% Complete`;
+    if (statsReadyEvolveEl) statsReadyEvolveEl.textContent = readyCount;
+    if (statsNeedsCandyEl) statsNeedsCandyEl.textContent = candyCount;
+    if (statsTransferredEl) statsTransferredEl.textContent = transfCount;
+
+    // 2. Categories Breakdown List
+    const categoriesMeta = [
+        { key: 'normal', name: 'Standard PokéDex', icon: 'fa-solid fa-gamepad', color: '#f5a623' },
+        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-solid fa-sparkles', color: '#fbbf24' },
+        { key: 'lucky', name: 'Lucky PokéDex', icon: 'fa-solid fa-clover', color: '#34d399' },
+        { key: 'xxl', name: 'XXL PokéDex', icon: 'fa-solid fa-maximize', color: '#38bdf8' },
+        { key: 'xxs', name: 'XXS PokéDex', icon: 'fa-solid fa-minimize', color: '#818cf8' },
+        { key: 'gmax', name: 'Gigantamax PokéDex', icon: 'fa-solid fa-cloud-bolt', color: '#ef4444' },
+        { key: 'mega', name: 'Mega / Primal PokéDex', icon: 'fa-solid fa-dna', color: '#ec4899' },
+        { key: 'shadow', name: 'Shadow PokéDex', icon: 'fa-solid fa-fire-flame-curved', color: '#a855f7' },
+        { key: 'purified', name: 'Purified PokéDex', icon: 'fa-solid fa-certificate', color: '#2dd4bf' },
+        { key: 'hundo', name: '100% (Hundo) PokéDex', icon: 'fa-solid fa-star', color: '#f43f5e' }
+    ];
+
+    statsCategoriesList.innerHTML = '';
+    categoriesMeta.forEach(cat => {
+        let set = (cat.key === 'normal') ? caughtPokemon : (caughtCategoryPokemon[cat.key] || new Set());
+        
+        let targetTotal = totalAll;
+        if (cat.key === 'gmax') targetTotal = pokemonDatabase.filter(p => p.gmax).length || 0;
+        if (cat.key === 'mega') targetTotal = pokemonDatabase.filter(p => p.mega).length || 0;
+        if (cat.key === 'shadow') targetTotal = pokemonDatabase.filter(p => p.shadow).length || 0;
+        if (cat.key === 'purified') targetTotal = pokemonDatabase.filter(p => p.purified || p.shadow).length || 0;
+
+        const count = targetTotal > 0 ? Array.from(set).filter(id => {
+            const p = pokemonDatabase.find(poke => poke.id === id || Number(poke.id) === Number(id));
+            return p !== undefined;
+        }).length : 0;
+
+        const pct = targetTotal > 0 ? Math.round((count / targetTotal) * 100) : 0;
+
+        const row = document.createElement('div');
+        row.style.display = 'flex';
+        row.style.alignItems = 'center';
+        row.style.justifyContent = 'space-between';
+        row.style.padding = '0.9rem 1.25rem';
+        row.style.borderBottom = '1px solid var(--border-color)';
+        row.style.gap = '1rem';
+
+        row.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 180px;">
+                <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1.1rem; flex-shrink: 0;">
+                    <i class="${cat.icon}"></i>
+                </div>
+                <div>
+                    <div style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem;">${cat.name}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">${count} of ${targetTotal} registered</div>
+                </div>
+            </div>
+
+            <div style="flex: 2; max-width: 300px; display: flex; align-items: center; gap: 0.75rem;">
+                <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: ${pct}%; background: ${cat.color}; border-radius: 4px; transition: width 0.3s;"></div>
+                </div>
+                <div style="font-weight: 800; color: #fff; font-size: 0.85rem; min-width: 40px; text-align: right;">${pct}%</div>
+            </div>
+        `;
+        statsCategoriesList.appendChild(row);
+    });
+
+    // 3. Regional Completion Breakdown Cards
+    statsRegionsGrid.innerHTML = '';
+    const regions = [
+        { gen: 1, name: 'Kanto', color: '#ef4444' },
+        { gen: 2, name: 'Johto', color: '#f5a623' },
+        { gen: 3, name: 'Hoenn', color: '#10b981' },
+        { gen: 4, name: 'Sinnoh', color: '#3b82f6' },
+        { gen: 5, name: 'Unova', color: '#8b5cf6' },
+        { gen: 6, name: 'Kalos', color: '#ec4899' },
+        { gen: 7, name: 'Alola', color: '#06b6d4' },
+        { gen: 8, name: 'Galar', color: '#f97316' },
+        { gen: 8.5, name: 'Hisui', color: '#14b8a6' },
+        { gen: 9, name: 'Paldea', color: '#a855f7' }
+    ];
+
+    regions.forEach(reg => {
+        const regPokes = pokemonDatabase.filter(p => p.gen === reg.gen);
+        const regTotal = regPokes.length;
+        if (regTotal === 0) return;
+
+        const regCaught = regPokes.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
+        const regPct = Math.round((regCaught / regTotal) * 100);
+
+        const card = document.createElement('div');
+        card.style.background = 'var(--bg-secondary)';
+        card.style.border = '1px solid var(--border-color)';
+        card.style.borderRadius = '12px';
+        card.style.padding = '1.1rem 1.25rem';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '0.75rem';
+
+        card.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <div style="width: 10px; height: 10px; border-radius: 50%; background: ${reg.color};"></div>
+                    <span style="font-weight: 800; color: #fff; font-size: 0.95rem;">${reg.name} (Gen ${reg.gen})</span>
+                </div>
+                <span style="font-weight: 800; color: ${reg.color}; font-size: 0.9rem;">${regCaught} / ${regTotal}</span>
+            </div>
+
+            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                <div style="height: 100%; width: ${regPct}%; background: ${reg.color}; border-radius: 4px; transition: width 0.3s;"></div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+                <span>Completion: <strong style="color: #fff;">${regPct}%</strong></span>
+                <span>Remaining: <strong style="color: #f87171;">${regTotal - regCaught}</strong></span>
+            </div>
+        `;
+        statsRegionsGrid.appendChild(card);
+    });
+}
 
 function renderToDoPane() {
     const missingList = document.getElementById('todo-missing-list');
