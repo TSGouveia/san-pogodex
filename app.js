@@ -1621,16 +1621,63 @@ function generateObtainingMethods(p, types) {
     return list;
 }
 
+// Helper to get all Pokemon in the database relevant to a dex type (across all regions)
+function getBaseListForDexType(dexType = currentDexType) {
+    if (!pokemonDatabase || pokemonDatabase.length === 0) return [];
+    let result = [...pokemonDatabase];
+
+    if (hideUnreleased) {
+        result = result.filter(p => !p.unreleased);
+    }
+
+    if (dexType === 'gmax') {
+        result = result.filter(p => p.gmax || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('gmax') || o.method.toLowerCase().includes('gigantamax'))));
+    } else if (dexType === 'mega') {
+        result = result.filter(p => p.mega || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('mega') || o.method.toLowerCase().includes('primal'))));
+        
+        const expandedResult = [];
+        result.forEach(p => {
+            if (['Charizard', 'Mewtwo'].includes(p.name)) {
+                expandedResult.push({
+                    ...p,
+                    id: `${p.id}_MEGA_X`,
+                    baseId: p.id,
+                    megaForm: 'X',
+                    displayName: `Mega ${p.name} X`
+                });
+                expandedResult.push({
+                    ...p,
+                    id: `${p.id}_MEGA_Y`,
+                    baseId: p.id,
+                    megaForm: 'Y',
+                    displayName: `Mega ${p.name} Y`
+                });
+            } else {
+                expandedResult.push(p);
+            }
+        });
+        result = expandedResult;
+    } else if (dexType === 'shadow') {
+        result = result.filter(p => p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('shadow'))));
+    } else if (dexType === 'purified') {
+        result = result.filter(p => p.purified || p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('purified') || o.method.toLowerCase().includes('shadow'))));
+    }
+
+    return result;
+}
+
 // Generate simple region tabs with caught stats
 function generateGenTabs() {
-    if (!pokemonDatabase || pokemonDatabase.length === 0) return;
+    if (!pokemonDatabase || pokemonDatabase.length === 0 || !genTabsContainer) return;
     const gens = Array.from(new Set(pokemonDatabase.map(p => p.gen))).sort((a, b) => a - b);
+    const activeSet = getActiveCaughtSet();
+    const fullList = getBaseListForDexType(currentDexType);
     
     genTabsContainer.innerHTML = '';
     
     // All Regions count
-    const allTotal = pokemonDatabase.length;
-    const allCaught = pokemonDatabase.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
+    const allTotal = fullList.length;
+    const allCaught = fullList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
     
     const allBtn = document.createElement('button');
     allBtn.className = `tab-btn ${currentGenFilter === 'all' ? 'active' : ''}`;
@@ -1640,8 +1687,9 @@ function generateGenTabs() {
     
     gens.forEach(g => {
         const genNum = parseFloat(g);
-        const total = pokemonDatabase.filter(p => p.gen === genNum).length;
-        const caught = pokemonDatabase.filter(p => p.gen === genNum && (caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id)))).length;
+        const genList = fullList.filter(p => p.gen === genNum);
+        const total = genList.length;
+        const caught = genList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
         
         const btn = document.createElement('button');
         btn.className = `tab-btn ${String(currentGenFilter) === String(g) ? 'active' : ''}`;
@@ -1659,14 +1707,17 @@ function updateRegionStatsBadge() {
     let total = 0;
     let caught = 0;
     let name = "All Regions";
+    const activeSet = getActiveCaughtSet();
+    const fullList = getBaseListForDexType(currentDexType);
     
     if (currentGenFilter === 'all') {
-        total = pokemonDatabase.length;
-        caught = pokemonDatabase.filter(p => caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id))).length;
+        total = fullList.length;
+        caught = fullList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
     } else {
         const genNum = parseFloat(currentGenFilter);
-        total = pokemonDatabase.filter(p => p.gen === genNum).length;
-        caught = pokemonDatabase.filter(p => p.gen === genNum && (caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id)))).length;
+        const genList = fullList.filter(p => p.gen === genNum);
+        total = genList.length;
+        caught = genList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
         name = regionNames[genNum] || `Gen ${genNum}`;
     }
     
@@ -2087,10 +2138,10 @@ function triggerPremiumParticleBurst(element, isCaught) {
 }
 
 function updateDashboardStats() {
-    const list = getFilteredAndSortedPokemon();
+    const fullList = getBaseListForDexType(currentDexType);
     const activeSet = getActiveCaughtSet();
-    const total = list.length;
-    const caught = list.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
+    const total = fullList.length;
+    const caught = fullList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
     const pct = total > 0 ? Math.round((caught / total) * 100) : 0;
     
     if (caughtCountEl) caughtCountEl.textContent = caught;
@@ -2107,8 +2158,13 @@ function updateDashboardStats() {
     const gridPct = document.getElementById('grid-stat-pct');
 
     if (gridCaught) {
-        gridCaught.textContent = `${caught} / ${total}`;
-        gridPct.textContent = `${pct}% Completed`;
+        const list = getFilteredAndSortedPokemon();
+        const filteredTotal = list.length;
+        const filteredCaught = list.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
+        const filteredPct = filteredTotal > 0 ? Math.round((filteredCaught / filteredTotal) * 100) : 0;
+
+        gridCaught.textContent = `${filteredCaught} / ${filteredTotal}`;
+        if (gridPct) gridPct.textContent = `${filteredPct}% Completed`;
         
         let readyCount = 0;
         let candyCount = 0;
@@ -2493,45 +2549,7 @@ function setupEventListeners() {
 }
 
 function getFilteredAndSortedPokemon() {
-    let result = [...pokemonDatabase];
-
-    if (hideUnreleased) {
-        result = result.filter(p => !p.unreleased);
-    }
-
-    if (currentDexType === 'gmax') {
-        result = result.filter(p => p.gmax || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('gmax') || o.method.toLowerCase().includes('gigantamax'))));
-    } else if (currentDexType === 'mega') {
-        result = result.filter(p => p.mega || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('mega') || o.method.toLowerCase().includes('primal'))));
-        
-        // Expand Pokemon with multiple Mega forms (Charizard & Mewtwo) into 2 distinct cards
-        const expandedResult = [];
-        result.forEach(p => {
-            if (['Charizard', 'Mewtwo'].includes(p.name)) {
-                expandedResult.push({
-                    ...p,
-                    id: `${p.id}_MEGA_X`,
-                    baseId: p.id,
-                    megaForm: 'X',
-                    displayName: `Mega ${p.name} X`
-                });
-                expandedResult.push({
-                    ...p,
-                    id: `${p.id}_MEGA_Y`,
-                    baseId: p.id,
-                    megaForm: 'Y',
-                    displayName: `Mega ${p.name} Y`
-                });
-            } else {
-                expandedResult.push(p);
-            }
-        });
-        result = expandedResult;
-    } else if (currentDexType === 'shadow') {
-        result = result.filter(p => p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('shadow'))));
-    } else if (currentDexType === 'purified') {
-        result = result.filter(p => p.purified || p.shadow || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('purified') || o.method.toLowerCase().includes('shadow'))));
-    }
+    let result = getBaseListForDexType(currentDexType);
 
     if (currentGenFilter !== 'all') {
         const genNum = parseFloat(currentGenFilter);
