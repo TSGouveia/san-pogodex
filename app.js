@@ -6090,6 +6090,7 @@ function renderCandiesPane() {
         const baseIsCaught = data.baseIsCaught;
         const hasPendingQuest = data.hasPendingQuestEvolution;
         const hasUnreleasedMember = Boolean(family.base.unreleased || family.base.releasingSoon) || family.members.some(m => Boolean(m.unreleased || m.releasingSoon));
+        const hasReleasingSoon = Boolean(family.base.releasingSoon) || family.members.some(m => Boolean(m.releasingSoon));
         
         const buddyDist = data.buddyDist;
         
@@ -6128,7 +6129,7 @@ function renderCandiesPane() {
         });
 
         const card = document.createElement('div');
-        card.className = hasUnreleasedMember ? 'candy-family-card unreleased' : 'candy-family-card';
+        card.className = hasReleasingSoon ? 'candy-family-card releasing-soon' : (hasUnreleasedMember ? 'candy-family-card unreleased' : 'candy-family-card');
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
@@ -6137,7 +6138,7 @@ function renderCandiesPane() {
                     <div class="family-info">
                         <h3 class="family-title">
                             ${displayTitle}
-                            ${hasUnreleasedMember ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : ''}
+                            ${hasReleasingSoon ? `<span class="releasing-soon-badge-tag" style="margin-left: 6px; vertical-align: middle; color: #ff8c66; font-size: 0.85rem;" title="Upcoming Debut: ${family.base.releaseDate || 'Soon'}"><i class="fa-solid fa-hourglass-half"></i></span>` : (hasUnreleasedMember ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
@@ -6158,6 +6159,7 @@ function renderCandiesPane() {
                     const hasQuest = parentInfo && parentInfo.quests && parentInfo.quests.length > 0;
                     const isQuestDone = completedBuddyQuests.has(String(member.id));
                     const questText = hasQuest ? formatQuestName(parentInfo.quests[0]) : '';
+                    const isReleasingSoonMember = Boolean(member.releasingSoon);
                     const isUnreleasedMember = Boolean(member.unreleased || member.releasingSoon);
                     
                     const isBase = member.id === family.base.id;
@@ -6177,10 +6179,13 @@ function renderCandiesPane() {
                     
                     let stageDisplayName = isBase ? displayTitle : member.name;
 
+                    const stageClass = isReleasingSoonMember ? 'releasing-soon-stage' : (isUnreleasedMember ? 'unreleased-stage' : '');
+                    const stageIcon = isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isReleasingSoonMember ? 'fa-hourglass-half' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark')));
+
                     return `
-                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'} ${isUnreleasedMember ? 'unreleased-stage' : ''}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
+                        <div class="family-stage-item ${isCaught ? 'caught' : 'missing'} ${stageClass}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
                             <span class="stage-caught-status">
-                                <i class="fa-solid ${isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark'))}"></i>
+                                <i class="fa-solid ${stageIcon}"></i>
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
                             ${actionButton}
@@ -7559,23 +7564,7 @@ function renderEventsList() {
     });
 }
 
-// Smart Header Show/Hide on Scroll
-let lastScrollY = 0;
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('.app-header');
-    if (!header) return;
-    
-    const currentScrollY = window.scrollY;
-    
-    // Scroll down past 80px -> hide
-    if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        header.classList.add('scroll-hide');
-    } else {
-        // Scroll up -> show
-        header.classList.remove('scroll-hide');
-    }
-    lastScrollY = currentScrollY;
-}, { passive: true });
+
 
 // Render Detailed Stats & Analytics Pane
 function renderStatsPane() {

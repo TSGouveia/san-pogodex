@@ -720,10 +720,16 @@ input, button, select {
     box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
 }
 
-/* Candies Pane Unreleased Styles */
+/* Candies Pane Unreleased & Releasing Soon Styles */
 .candy-family-card.unreleased {
     border: 1px solid rgba(239, 68, 68, 0.4) !important;
     background: linear-gradient(135deg, rgba(239, 68, 68, 0.06) 0%, rgba(17, 27, 46, 0.85) 100%) !important;
+}
+
+.candy-family-card.releasing-soon {
+    border: 1px solid rgba(249, 115, 22, 0.45) !important;
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(17, 27, 46, 0.85) 100%) !important;
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.15) !important;
 }
 
 .family-stage-item.unreleased-stage {
@@ -732,6 +738,14 @@ input, button, select {
 
 .family-stage-item.unreleased-stage .stage-caught-status i {
     color: #f87171;
+}
+
+.family-stage-item.releasing-soon-stage {
+    border-left: 2px solid rgba(249, 115, 22, 0.7);
+}
+
+.family-stage-item.releasing-soon-stage .stage-caught-status i {
+    color: #ff8c66;
 }
 
 /* Hover effects */
