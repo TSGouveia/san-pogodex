@@ -101,16 +101,8 @@ input, button, select {
     background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
     border-bottom: 1px solid var(--border-color);
     padding: 1.5rem 1rem;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.app-header.scroll-hide {
-    transform: translateY(-100%);
+    position: relative;
+    z-index: 10;
 }
 
 .header-container {
