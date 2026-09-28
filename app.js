@@ -5970,7 +5970,7 @@ function renderCandiesPane() {
     // Filter families that MUST have at least one evolution (hasEvolution) and either missing members or unreleased members
     let evolutionFamilies = Object.values(families).filter(f => {
         const hasEvolution = f.members.length > 1;
-        const hasUnreleasedMember = Boolean(f.base.unreleased) || f.members.some(m => Boolean(m.unreleased));
+        const hasUnreleasedMember = Boolean(f.base.unreleased || f.base.releasingSoon) || f.members.some(m => Boolean(m.unreleased || m.releasingSoon));
         const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
         if (!hasEvolution || (!hasUnreleasedMember && !hasMissingMember)) return false;
 
@@ -6089,7 +6089,7 @@ function renderCandiesPane() {
         const remaining = data.remaining;
         const baseIsCaught = data.baseIsCaught;
         const hasPendingQuest = data.hasPendingQuestEvolution;
-        const hasUnreleasedMember = Boolean(family.base.unreleased) || family.members.some(m => Boolean(m.unreleased));
+        const hasUnreleasedMember = Boolean(family.base.unreleased || family.base.releasingSoon) || family.members.some(m => Boolean(m.unreleased || m.releasingSoon));
         
         const buddyDist = data.buddyDist;
         
@@ -6158,7 +6158,7 @@ function renderCandiesPane() {
                     const hasQuest = parentInfo && parentInfo.quests && parentInfo.quests.length > 0;
                     const isQuestDone = completedBuddyQuests.has(String(member.id));
                     const questText = hasQuest ? formatQuestName(parentInfo.quests[0]) : '';
-                    const isUnreleasedMember = Boolean(member.unreleased);
+                    const isUnreleasedMember = Boolean(member.unreleased || member.releasingSoon);
                     
                     const isBase = member.id === family.base.id;
                     const actionButton = (isBase && isCaught) ? `
