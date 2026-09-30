@@ -289,12 +289,25 @@ def get_boss_image_url(name, dex_nr):
         "electrode-hisui": 10232, "typhlosion-hisui": 10233, "qwilfish-hisui": 10234, "sneasel-hisui": 10235,
         "samurott-hisui": 10236, "lilligant-hisui": 10237, "zorua-hisui": 10238, "zoroark-hisui": 10239,
         "braviary-hisui": 10240, "sliggoo-hisui": 10241, "goodra-hisui": 10242, "avalugg-hisui": 10243,
-        "decidueye-hisui": 10244, "tauros-paldea": 10250, "wooper-paldea": 10253
+        "decidueye-hisui": 10244, "tauros-paldea": 10250, "tauros-paldea-combat-breed": 10250,
+        "tauros-paldea-blaze-breed": 10251, "tauros-paldea-aqua-breed": 10252,
+        "wooper-paldea": 10253, "basculin-white-striped": 10247, "farfetch-d-galar": 10166
     }
+    # Direct checks for Tauros breeds and Basculin
+    if "combat breed" in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10250.png"
+    if "blaze breed" in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10251.png"
+    if "aqua breed" in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10252.png"
+    if "white-striped" in clean_lower or "white striped" in clean_lower:
+        return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10247.png"
+
     for prefix, region in [('alolan ', 'alola'), ('alola ', 'alola'), ('galarian ', 'galar'), ('galar ', 'galar'), ('hisuian ', 'hisui'), ('hisui ', 'hisui'), ('paldean ', 'paldea'), ('paldea ', 'paldea')]:
         if prefix in clean_lower:
             base = clean_lower.replace(prefix, '').strip()
             base = re.sub(r'\s*\([^)]*\)', '', base).strip()
+            base = base.replace("'", "").replace("’", "")
             key = f"{base}-{region}".replace(' ', '-')
             if key in regional_ids:
                 return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{regional_ids[key]}.png"

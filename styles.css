@@ -1045,6 +1045,41 @@ input, button, select {
     margin-top: 0.5rem;
 }
 
+.modal-forms-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.modal-form-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e2e8f0;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    user-select: none;
+}
+
+.modal-form-chip:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+}
+
+.modal-form-chip.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #0f172a;
+    box-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+    font-weight: 800;
+}
+
 .modal-pokemon-img-container {
     position: relative;
     width: 140px;

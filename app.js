@@ -105,6 +105,7 @@ const regionalFormPokeApiIds = {
   "slowpoke-galar": "10164",
   "slowbro-galar": "10165",
   "farfetchd-galar": "10166",
+  "farfetch-d-galar": "10166",
   "weezing-galar": "10167",
   "mr-mime-galar": "10168",
   "articuno-galar": "10169",
@@ -117,6 +118,7 @@ const regionalFormPokeApiIds = {
   "darumaka-galar": "10176",
   "darmanitan-galar-standard": "10177",
   "darmanitan-galar-zen": "10178",
+  "darmanitan-galar": "10177",
   "yamask-galar": "10179",
   "stunfisk-galar": "10180",
   "growlithe-hisui": "10229",
@@ -137,11 +139,22 @@ const regionalFormPokeApiIds = {
   "decidueye-hisui": "10244",
   "tauros-paldea": "10250",
   "tauros-paldea-combat-breed": "10250",
+  "tauros-paldea-combat": "10250",
+  "tauros-combat-breed": "10250",
+  "tauros-combat": "10250",
   "tauros-paldea-blaze-breed": "10251",
+  "tauros-paldea-blaze": "10251",
+  "tauros-blaze-breed": "10251",
+  "tauros-blaze": "10251",
   "tauros-paldea-aqua-breed": "10252",
+  "tauros-paldea-aqua": "10252",
+  "tauros-aqua-breed": "10252",
+  "tauros-aqua": "10252",
   "wooper-paldea": "10253",
   "basculin-white-striped": "10247",
-  "darmanitan-galar": "10177"
+  "basculin-white": "10247",
+  "basculin-blue-striped": "10016",
+  "basculin-blue": "10016"
 };
 
 let pokeApiIdMapping = {};
@@ -152,29 +165,68 @@ function getRegionalFormPokeApiId(name) {
     
     // Clean up shadow prefix if present (e.g. "Alola Shadow Sandslash" or "Shadow Alolan Rattata")
     nameLower = nameLower.replace(/\bshadow\b/g, '').replace(/\s+/g, ' ').trim();
-    
+    const nameClean = nameLower.replace(/['’]/g, '').replace(/_/g, ' ');
+
+    // Direct checks for Tauros breeds
+    if (nameClean.includes('combat breed') || nameClean.includes('combat-breed') || nameClean.includes('paldea combat') || nameClean.includes('paldea-combat')) {
+        return '10250';
+    }
+    if (nameClean.includes('blaze breed') || nameClean.includes('blaze-breed') || nameClean.includes('paldea blaze') || nameClean.includes('paldea-blaze')) {
+        return '10251';
+    }
+    if (nameClean.includes('aqua breed') || nameClean.includes('aqua-breed') || nameClean.includes('paldea aqua') || nameClean.includes('paldea-aqua')) {
+        return '10252';
+    }
+
+    // Direct checks for Basculin
+    if (nameClean.includes('white-striped') || nameClean.includes('white striped')) {
+        return '10247';
+    }
+    if (nameClean.includes('blue-striped') || nameClean.includes('blue striped')) {
+        return '10016';
+    }
+
+    // Direct checks for Female gender variations with distinct PokeAPI sprites
+    if (nameClean.includes('basculegion') && (nameClean.includes('female') || nameClean.includes('(f)'))) {
+        return '10248';
+    }
+    if (nameClean.includes('oinkologne') && (nameClean.includes('female') || nameClean.includes('(f)'))) {
+        return '10254';
+    }
+    if (nameClean.includes('indeedee') && (nameClean.includes('female') || nameClean.includes('(f)'))) {
+        return '10186';
+    }
+    if (nameClean.includes('meowstic') && (nameClean.includes('female') || nameClean.includes('(f)'))) {
+        return '10025';
+    }
+
     let key = '';
-    if (/\b(alolan|alola)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(alolan|alola)\b/g, '').replace(/[()]/g, '').trim();
+    if (/\b(alolan|alola)\b/.test(nameClean)) {
+        const base = nameClean.replace(/\b(alolan|alola)\b/g, '').replace(/[()]/g, ' ').trim();
         key = `${base}-alola`;
-    } else if (/\b(galarian|galar)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(galarian|galar)\b/g, '').replace(/[()]/g, '').trim();
+    } else if (/\b(galarian|galar)\b/.test(nameClean)) {
+        const base = nameClean.replace(/\b(galarian|galar)\b/g, '').replace(/[()]/g, ' ').trim();
         key = `${base}-galar`;
-    } else if (/\b(hisuian|hisui)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(hisuian|hisui)\b/g, '').replace(/[()]/g, '').trim();
+    } else if (/\b(hisuian|hisui)\b/.test(nameClean)) {
+        const base = nameClean.replace(/\b(hisuian|hisui)\b/g, '').replace(/[()]/g, ' ').trim();
         key = `${base}-hisui`;
-    } else if (/\b(paldean|paldea)\b/.test(nameLower)) {
-        const base = nameLower.replace(/\b(paldean|paldea)\b/g, '').replace(/[()]/g, '').trim();
+    } else if (/\b(paldean|paldea)\b/.test(nameClean)) {
+        const base = nameClean.replace(/\b(paldean|paldea)\b/g, '').replace(/[()]/g, ' ').trim();
         key = `${base}-paldea`;
-    } else if (nameLower.includes('white-striped') || nameLower.includes('white striped')) {
-        const base = nameLower.replace(/white[- ]striped/g, '').replace(/[()]/g, '').trim();
-        key = `${base}-white-striped`;
     }
     
     if (key) {
         key = key.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        return pokeApiIdMapping[key] || regionalFormPokeApiIds[key] || null;
+        if (pokeApiIdMapping[key] || regionalFormPokeApiIds[key]) {
+            return pokeApiIdMapping[key] || regionalFormPokeApiIds[key];
+        }
     }
+
+    const rawKey = nameClean.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    if (pokeApiIdMapping[rawKey] || regionalFormPokeApiIds[rawKey]) {
+        return pokeApiIdMapping[rawKey] || regionalFormPokeApiIds[rawKey];
+    }
+
     return null;
 }
 
@@ -245,6 +297,59 @@ function getMegaPokeApiIdFallback(key) {
     return fallbacks[key] || null;
 }
 
+const specialFormsMap = {
+    "dialga-origin": "10245",
+    "palkia-origin": "10246",
+    "giratina-origin": "10007",
+    "giratina-altered": "487",
+    "tornadus-therian": "10019",
+    "tornadus-incarnate": "641",
+    "thundurus-therian": "10020",
+    "thundurus-incarnate": "642",
+    "landorus-therian": "10021",
+    "landorus-incarnate": "645",
+    "enamorus-therian": "10249",
+    "enamorus-incarnate": "905",
+    "hoopa-unbound": "10086",
+    "hoopa-confined": "720",
+    "shaymin-sky": "10006",
+    "shaymin-land": "492",
+    "deoxys-attack": "10001",
+    "deoxys-defense": "10002",
+    "deoxys-speed": "10003",
+    "castform-sunny": "10013",
+    "castform-rainy": "10014",
+    "castform-snowy": "10015",
+    "cherrim-sunshine": "10016",
+    "rotom-heat": "10008",
+    "rotom-wash": "10009",
+    "rotom-frost": "10010",
+    "rotom-fan": "10011",
+    "rotom-mow": "10012",
+    "wormadam-sandy": "10004",
+    "wormadam-trash": "10005",
+    "meloetta-pirouette": "10018",
+    "keldeo-resolute": "10024",
+    "oricorio-pom-pom": "10123",
+    "oricorio-pau": "10124",
+    "oricorio-sensu": "10125",
+    "lycanroc-midnight": "10126",
+    "lycanroc-dusk": "10152",
+    "toxtricity-low-key": "10184",
+    "eiscue-noice": "10185",
+    "morpeko-hangry": "10187",
+    "urshifu-rapid-strike": "10191",
+    "calyrex-ice": "10193",
+    "calyrex-shadow": "10194",
+    "gimmighoul-roaming": "10263",
+    "dudunsparce-three-segment": "10255",
+    "palafin-hero": "10256",
+    "maushold-family-of-three": "10257",
+    "tatsugiri-droopy": "10258",
+    "tatsugiri-stretchy": "10259",
+    "ursaluna-bloodmoon": "10272"
+};
+
 const POKE_SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
 const POKE_SPRITE_BACKUP_URL = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
 
@@ -255,10 +360,12 @@ function getPokemonImageUrl(name, matchedPoke) {
     // Check special legend forms
     if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `${POKE_SPRITE_BASE_URL}/10156.png`;
     if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `${POKE_SPRITE_BASE_URL}/10155.png`;
+    if (nameLower.includes('ultra necrozma')) return `${POKE_SPRITE_BASE_URL}/10157.png`;
     if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `${POKE_SPRITE_BASE_URL}/10022.png`;
     if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `${POKE_SPRITE_BASE_URL}/10023.png`;
     if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `${POKE_SPRITE_BASE_URL}/10188.png`;
     if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `${POKE_SPRITE_BASE_URL}/10189.png`;
+    if (nameLower.includes('bloodmoon') || nameLower.includes('ursaluna bloodmoon')) return `${POKE_SPRITE_BASE_URL}/10272.png`;
 
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
@@ -309,7 +416,19 @@ function getPokemonImageUrl(name, matchedPoke) {
         }
     }
     
-    // Check if it has a specific form suffix (e.g. Origin, Altered, Therian, Incarnate)
+    // Check specific special forms map (Origin, Therian, Incarnate, etc.)
+    const cleanForForm = nameLower.replace(/['’]/g, '').replace(/_/g, ' ');
+    for (const [key, id] of Object.entries(specialFormsMap)) {
+        const parts = key.split('-');
+        const base = parts[0];
+        const form = parts.slice(1).join('-');
+        const formSpace = parts.slice(1).join(' ');
+        if (cleanForForm.includes(base) && (cleanForForm.includes(form) || cleanForForm.includes(formSpace))) {
+            return `${POKE_SPRITE_BASE_URL}/${id}.png`;
+        }
+    }
+
+    // Check if it has a specific form suffix in pokeApiIdMapping
     let formKey = nameLower;
     if (nameLower.includes('altered ')) {
         formKey = `${nameLower.replace('altered ', '')}-altered`;
@@ -340,10 +459,16 @@ function getPokemonImageUrl(name, matchedPoke) {
 function getRegionalFormKey(rf) {
     if (!rf || !rf.formId) return '';
     const formId = rf.formId.toUpperCase();
+    
+    // Check Paldean Tauros breeds
+    if (formId.includes('AQUA')) return 'tauros-paldea-aqua-breed';
+    if (formId.includes('BLAZE')) return 'tauros-paldea-blaze-breed';
+    if (formId.includes('COMBAT')) return 'tauros-paldea-combat-breed';
+
     const parts = formId.split('_');
     if (parts.length < 2) return '';
     
-    let species = parts[0].toLowerCase();
+    let species = parts[0].toLowerCase().replace(/['’]/g, '');
     let regionIndex = -1;
     parts.forEach((p, idx) => {
         if (['ALOLA', 'GALAR', 'HISUI', 'PALDEA', 'WHITE_STRIPED'].some(r => p.includes(r))) {
@@ -352,7 +477,7 @@ function getRegionalFormKey(rf) {
     });
     
     if (regionIndex > 0) {
-        species = parts.slice(0, regionIndex).join('-').toLowerCase();
+        species = parts.slice(0, regionIndex).join('-').toLowerCase().replace(/['’]/g, '');
     }
     species = species.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
 
@@ -2569,11 +2694,23 @@ function getFilteredAndSortedPokemon() {
     }
 
     if (currentSearchQuery) {
+        const queryClean = currentSearchQuery.toLowerCase().replace(/['’]/g, '');
         result = result.filter(p => {
-            const matchesName = p.name.toLowerCase().includes(currentSearchQuery);
-            const matchesNum = p.num.includes(currentSearchQuery);
-            const matchesTypes = p.types.some(t => t.includes(currentSearchQuery));
-            return matchesName || matchesNum || matchesTypes;
+            const pNameClean = p.name.toLowerCase().replace(/['’]/g, '');
+            const matchesName = pNameClean.includes(queryClean);
+            const matchesNum = p.num.includes(queryClean);
+            const matchesTypes = p.types.some(t => t.includes(queryClean));
+            let matchesForms = false;
+            if (rawPokedexData) {
+                const rawP = rawPokedexData.find(x => x.dexNr === Number(p.id));
+                if (rawP && rawP.regionForms) {
+                    matchesForms = Object.values(rawP.regionForms).some(rf => {
+                        const rfName = getRegionalFormDisplayName(rf) || (rf.names && rf.names.English) || '';
+                        return rfName.toLowerCase().replace(/['’]/g, '').includes(queryClean);
+                    });
+                }
+            }
+            return matchesName || matchesNum || matchesTypes || matchesForms;
         });
     }
 
@@ -2684,6 +2821,24 @@ function renderPokedex(forceClear = false) {
         } else if (currentDexType === 'gmax') {
             const gmaxSpriteUrl = getPokemonImageUrl(`Gigantamax ${poke.name}`, poke);
             if (gmaxSpriteUrl) imgSrc = gmaxSpriteUrl;
+        } else if (currentSearchQuery && rawPokedexData) {
+            const queryClean = currentSearchQuery.toLowerCase().replace(/['’]/g, '');
+            const rawP = rawPokedexData.find(x => x.dexNr === Number(poke.id));
+            if (rawP && rawP.regionForms) {
+                for (const rf of Object.values(rawP.regionForms)) {
+                    const rfName = getRegionalFormDisplayName(rf) || (rf.names && rf.names.English) || '';
+                    if (rfName.toLowerCase().replace(/['’]/g, '').includes(queryClean) && !poke.name.toLowerCase().replace(/['’]/g, '').includes(queryClean)) {
+                        const rfId = getRegionalFormPokeApiId(rfName) || getRegionalFormPokeApiId(rf.formId);
+                        if (rfId) {
+                            imgSrc = (currentDexType === 'shiny')
+                                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png`
+                                : `${POKE_SPRITE_BASE_URL}/${rfId}.png`;
+                            subTitleText = rfName;
+                            break;
+                        }
+                    }
+                }
+            }
         }
 
         const card = document.createElement('div');
@@ -3014,6 +3169,69 @@ function compileObtainingDetails(poke) {
 // ==========================================================================
 // DETAILS MODAL IMPLEMENTATION
 // ==========================================================================
+function applyModalPokemonForm(basePoke, rf) {
+    if (!basePoke) return;
+
+    if (!rf) {
+        modalPokeName.textContent = basePoke.name;
+        modalPokeImg.src = (currentDexType === 'shiny')
+            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePoke.id}.png`
+            : basePoke.img;
+        modalPokeImg.alt = basePoke.name;
+
+        const primaryType = basePoke.types[0] || 'normal';
+        modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
+        modalPokeTypes.innerHTML = basePoke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+
+        loadCpsTab(basePoke);
+        loadStatsTab(basePoke);
+        loadMovesTab(basePoke);
+        loadTypeMatchupsTab(basePoke);
+        return;
+    }
+
+    const displayName = getRegionalFormDisplayName(rf) || (rf.names && rf.names.English) || basePoke.name;
+    const rKey = getRegionalFormKey(rf);
+    const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName) || getRegionalFormPokeApiId(rf.formId);
+
+    const rfImg = (currentDexType === 'shiny')
+        ? (rfId ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png` : (rf.assets?.shinyImage || basePoke.img))
+        : (rfId ? `${POKE_SPRITE_BASE_URL}/${rfId}.png` : (rf.assets?.image || basePoke.img));
+
+    modalPokeName.textContent = displayName;
+    modalPokeImg.src = rfImg;
+    modalPokeImg.alt = displayName;
+
+    const formTypes = [
+        rf.primaryType ? rf.primaryType.names.English.toLowerCase() : 'normal',
+        rf.secondaryType ? rf.secondaryType.names.English.toLowerCase() : null
+    ].filter(Boolean);
+
+    const primaryType = formTypes[0] || 'normal';
+    modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
+    modalPokeTypes.innerHTML = formTypes.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+
+    const formPoke = {
+        ...basePoke,
+        name: displayName,
+        types: formTypes,
+        img: rfImg,
+        stats: {
+            atk: rf.stats ? rf.stats.attack : basePoke.stats.atk,
+            def: rf.stats ? rf.stats.defense : basePoke.stats.def,
+            sta: rf.stats ? rf.stats.stamina : basePoke.stats.sta
+        },
+        combatPower: rf.combatPower || calculateClientSideCombatPower(rf.stats || basePoke.stats),
+        quickMoves: rf.quickMoves || basePoke.quickMoves,
+        cinematicMoves: rf.cinematicMoves || basePoke.cinematicMoves
+    };
+
+    loadCpsTab(formPoke);
+    loadStatsTab(formPoke);
+    loadMovesTab(formPoke);
+    loadTypeMatchupsTab(formPoke);
+}
+
 function openModal(id) {
     const poke = pokemonDatabase.find(p => p.id === id);
     if (!poke) return;
@@ -3021,20 +3239,54 @@ function openModal(id) {
     activeModalPokemonId = id;
     
     modalPokeNum.textContent = `#${poke.num}`;
-    modalPokeName.textContent = poke.name;
-    modalPokeImg.src = poke.img;
-    modalPokeImg.alt = poke.name;
 
-    const primaryType = poke.types[0];
-    modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
-    modalPokeTypes.innerHTML = poke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+    // Initialize regional/special form switcher chips in modal header
+    const modalFormsContainer = document.getElementById('modal-pokemon-forms');
+    if (modalFormsContainer) {
+        modalFormsContainer.innerHTML = '';
+        modalFormsContainer.style.display = 'none';
 
-    loadCpsTab(poke);
+        const rawP = rawPokedexData ? rawPokedexData.find(x => x.dexNr === Number(poke.id)) : null;
+        if (rawP && rawP.regionForms && Object.keys(rawP.regionForms).length > 0) {
+            const formKeys = Object.keys(rawP.regionForms);
+            if (formKeys.length > 0) {
+                modalFormsContainer.style.display = 'flex';
+
+                const stdChip = document.createElement('button');
+                stdChip.className = 'modal-form-chip active';
+                stdChip.textContent = 'Standard';
+                stdChip.addEventListener('click', () => {
+                    modalFormsContainer.querySelectorAll('.modal-form-chip').forEach(c => c.classList.remove('active'));
+                    stdChip.classList.add('active');
+                    applyModalPokemonForm(poke, null);
+                });
+                modalFormsContainer.appendChild(stdChip);
+
+                formKeys.forEach(fk => {
+                    const rf = rawP.regionForms[fk];
+                    if (!rf) return;
+                    const rfName = getRegionalFormDisplayName(rf) || (rf.names && rf.names.English) || fk;
+                    let label = rfName.replace(poke.name, '').trim();
+                    if (!label) label = rfName;
+
+                    const chip = document.createElement('button');
+                    chip.className = 'modal-form-chip';
+                    chip.textContent = label;
+                    chip.addEventListener('click', () => {
+                        modalFormsContainer.querySelectorAll('.modal-form-chip').forEach(c => c.classList.remove('active'));
+                        chip.classList.add('active');
+                        applyModalPokemonForm(poke, rf);
+                    });
+                    modalFormsContainer.appendChild(chip);
+                });
+            }
+        }
+    }
+
+    applyModalPokemonForm(poke, null);
+
     loadObtainingTab(poke);
     loadEvolutionTab(poke);
-    loadStatsTab(poke);
-    loadMovesTab(poke);
-    loadTypeMatchupsTab(poke);
     updateModalCatchBtn(id);
 
     modalTabButtons.forEach(btn => btn.classList.remove('active'));
@@ -5684,11 +5936,11 @@ function getEvolutionParentInfo(poke) {
                         if (basePoke) {
                             const displayName = getRegionalFormDisplayName(rf) || p.names.English;
                             const rKey = getRegionalFormKey(rf);
-                            const rfId = pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey];
+                            const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName) || getRegionalFormPokeApiId(rf.formId);
                             
                             let img = rfId 
                                 ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
-                                : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`;
+                                : (rf.assets && rf.assets.image ? rf.assets.image : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`);
                             
                             return {
                                 parent: basePoke,
@@ -8034,21 +8286,22 @@ function renderToDoPane() {
     const candyItems = [];
 
     // Helper to add item to lists
-    function addPriority(poke, type, source, detail, sectionTarget, scrollTarget) {
+    function addPriority(poke, type, source, detail, sectionTarget, scrollTarget, formName = null) {
         const item = {
             poke,
             type, // 'Missing', 'Transferred', or 'Candy'
             source, // 'Raid', 'Egg', 'Quest', 'Rocket', 'Party'
             detail,
             sectionTarget,
-            scrollTarget
+            scrollTarget,
+            formName
         };
         if (type === 'Missing' || type === 'Transferred') {
-            if (!missingItems.some(i => i.poke.id === poke.id && i.source === source && i.detail === detail)) {
+            if (!missingItems.some(i => i.poke.id === poke.id && i.source === source && i.detail === detail && i.formName === formName)) {
                 missingItems.push(item);
             }
         } else {
-            if (!candyItems.some(i => i.poke.id === poke.id && i.source === source && i.detail === detail)) {
+            if (!candyItems.some(i => i.poke.id === poke.id && i.source === source && i.detail === detail && i.formName === formName)) {
                 candyItems.push(item);
             }
         }
@@ -8079,11 +8332,11 @@ function renderToDoPane() {
                 const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
-                    addPriority(matched, 'Transferred', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
+                    addPriority(matched, 'Transferred', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 } else if (isMiss) {
-                    addPriority(matched, 'Missing', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
+                    addPriority(matched, 'Missing', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 } else if (isCandy) {
-                    addPriority(matched, 'Candy', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key);
+                    addPriority(matched, 'Candy', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 }
             }
         });
@@ -8114,11 +8367,11 @@ function renderToDoPane() {
                 const key = `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(egg.eggT).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
-                    addPriority(matched, 'Transferred', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
+                    addPriority(matched, 'Transferred', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key, egg.name);
                 } else if (isMiss) {
-                    addPriority(matched, 'Missing', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
+                    addPriority(matched, 'Missing', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key, egg.name);
                 } else if (isCandy) {
-                    addPriority(matched, 'Candy', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key);
+                    addPriority(matched, 'Candy', 'Egg', `Hatching from ${eggDist}`, 'rotations-eggs-section', key, egg.name);
                 }
             }
         });
@@ -8139,11 +8392,11 @@ function renderToDoPane() {
                             const key = `quest-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(task.text).replace(/[^a-z0-9]/g, '')}`;
 
                             if (isTransf) {
-                                addPriority(matched, 'Transferred', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
+                                addPriority(matched, 'Transferred', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key, reward.name);
                             } else if (isMiss) {
-                                addPriority(matched, 'Missing', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
+                                addPriority(matched, 'Missing', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key, reward.name);
                             } else if (isCandy) {
-                                addPriority(matched, 'Candy', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key);
+                                addPriority(matched, 'Candy', 'Quest', `Quest: "${task.text}"`, 'rotations-quests-section', key, reward.name);
                             }
                         }
                     }
@@ -8159,7 +8412,8 @@ function renderToDoPane() {
                 charData.forEach(slot => {
                     if (slot.is_encounter && slot.pokemons) {
                         slot.pokemons.forEach(p => {
-                            const pName = safeLower(p && typeof p === 'object' ? p.name : p);
+                            const rawPokeName = (p && typeof p === 'object' ? p.name : p) || '';
+                            const pName = safeLower(rawPokeName);
                             if (pName) {
                                 const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName) || findPokemonByName(pName);
                                 if (matched) {
@@ -8169,11 +8423,11 @@ function renderToDoPane() {
                                     const key = `rocket-${safeLower(charName).replace(/\s+/g, '-')}`;
 
                                     if (isTransf) {
-                                        addPriority(matched, 'Transferred', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                        addPriority(matched, 'Transferred', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key, rawPokeName);
                                     } else if (isMiss) {
-                                        addPriority(matched, 'Missing', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                        addPriority(matched, 'Missing', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key, rawPokeName);
                                     } else if (isCandy) {
-                                        addPriority(matched, 'Candy', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key);
+                                        addPriority(matched, 'Candy', 'Rocket', `Team GO Rocket ${charName} (Slot ${slot.slot})`, 'rotations-rocket-section', key, rawPokeName);
                                     }
                                 }
                             }
@@ -8196,11 +8450,11 @@ function renderToDoPane() {
                 const key = `party-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(party.task).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
-                    addPriority(matched, 'Transferred', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
+                    addPriority(matched, 'Transferred', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key, party.name);
                 } else if (isMiss) {
-                    addPriority(matched, 'Missing', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
+                    addPriority(matched, 'Missing', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key, party.name);
                 } else if (isCandy) {
-                    addPriority(matched, 'Candy', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key);
+                    addPriority(matched, 'Candy', 'Party', `Party Challenge: "${party.task}"`, 'rotations-party-section', key, party.name);
                 }
             }
         });
@@ -8231,7 +8485,8 @@ function renderToDoPane() {
     };
 
     const buildItemHtml = (item) => {
-        const imgUrl = getPokemonImageUrl(item.poke.name, item.poke) || item.poke.img;
+        const displayName = item.formName || item.poke.name;
+        const imgUrl = getPokemonImageUrl(displayName, item.poke) || item.poke.img;
         const iconClass = icons[item.source] || 'fa-solid fa-star';
         const color = colors[item.source] || 'var(--accent-color)';
         const borderCol = borderColors[item.source] || 'var(--border-color)';
@@ -8261,7 +8516,7 @@ function renderToDoPane() {
                 <img src="${imgUrl}" style="width: 38px; height: 38px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
                 <div>
                     <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 6px;">
-                        ${item.poke.name} <span style="font-size: 0.62rem; background: ${badgeColor}; color: ${badgeTextColor}; padding: 1px 5px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">${badgeIcon} ${badgeText}</span>
+                        ${displayName} <span style="font-size: 0.62rem; background: ${badgeColor}; color: ${badgeTextColor}; padding: 1px 5px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">${badgeIcon} ${badgeText}</span>
                     </h4>
                     <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0; line-height: 1.3;">
                         <i class="${iconClass}" style="color: ${color}; margin-right: 4px;"></i> ${item.detail}
