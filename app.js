@@ -5619,6 +5619,8 @@ onAuthStateChanged(auth, async (user) => {
                     // Reset request badge
                     const badge = document.getElementById('friends-badge');
                     if (badge) badge.classList.add('hidden');
+                    const navStatsBadge = document.getElementById('nav-stats-badge');
+                    if (navStatsBadge) navStatsBadge.style.display = 'none';
                 }).catch((error) => {
                     console.error("Logout failed:", error);
                 });
@@ -5687,6 +5689,8 @@ onAuthStateChanged(auth, async (user) => {
         renderFriendsPane();
         const badge = document.getElementById('friends-badge');
         if (badge) badge.classList.add('hidden');
+        const navStatsBadge = document.getElementById('nav-stats-badge');
+        if (navStatsBadge) navStatsBadge.style.display = 'none';
     }
 });
 
@@ -6608,6 +6612,7 @@ function renderFriendsPaneFromData(data) {
     const pendingCountSpan = document.getElementById('pending-requests-count');
     const pendingListDiv = document.getElementById('pending-requests-list');
     const badge = document.getElementById('friends-badge');
+    const navStatsBadge = document.getElementById('nav-stats-badge');
     
     const friends = data.friends || [];
     const incomingRequests = data.incomingRequests || [];
@@ -6619,6 +6624,15 @@ function renderFriendsPaneFromData(data) {
             badge.classList.remove('hidden');
         } else {
             badge.classList.add('hidden');
+        }
+    }
+    // 1b. Mirror badge on nav button
+    if (navStatsBadge) {
+        if (incomingRequests.length > 0) {
+            navStatsBadge.textContent = incomingRequests.length;
+            navStatsBadge.style.display = 'flex';
+        } else {
+            navStatsBadge.style.display = 'none';
         }
     }
     
@@ -8626,6 +8640,7 @@ async function markPromoCodeClicked(code, redeemed = true) {
 
 function updatePromoCodesBadge() {
     const badge = document.getElementById('promocodes-unseen-badge');
+    const navBadge = document.getElementById('nav-rotations-badge');
     if (!badge) return;
     const list = Array.isArray(rawPromoCodes) ? rawPromoCodes : [];
     const activeList = list.filter(item => {
@@ -8636,10 +8651,16 @@ function updatePromoCodesBadge() {
     if (unseenCount > 0) {
         badge.textContent = unseenCount > 99 ? '99+' : unseenCount;
         badge.style.display = 'flex';
+        if (navBadge) {
+            navBadge.textContent = unseenCount > 99 ? '99+' : unseenCount;
+            navBadge.style.display = 'flex';
+        }
     } else {
         badge.style.display = 'none';
+        if (navBadge) navBadge.style.display = 'none';
     }
 }
+
 
 function loadPromoCodesFallback() {
     fetch('files/promoCodes.min.json')
