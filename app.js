@@ -6063,7 +6063,34 @@ function needsCandies(poke) {
     const requiredCandies = getCumulativeCandiesToEvolve(poke, chain);
     if (requiredCandies <= 0) return false;
 
-    return currentCandies < requiredCandies;
+    if (currentCandies < requiredCandies) return true;
+
+    // Check if any ancestor is caught
+    const targetIdx = chain.findIndex(p => String(p.id) === String(poke.id));
+    if (targetIdx <= 0) return false;
+
+    let caughtAncestorIdx = -1;
+    for (let i = targetIdx - 1; i >= 0; i--) {
+        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+            caughtAncestorIdx = i;
+            break;
+        }
+    }
+    if (caughtAncestorIdx === -1) return false;
+
+    // If we have enough candies and a caught ancestor, but buddy quest is incomplete, show yellow!
+    for (let i = caughtAncestorIdx; i < targetIdx; i++) {
+        const stagePoke = chain[i + 1];
+        const pInfo = getEvolutionParentAndCandies(stagePoke);
+        if (pInfo && pInfo.quests && pInfo.quests.length > 0) {
+            const questKey = String(stagePoke.id);
+            if (!completedBuddyQuests.has(questKey)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 const parentToEvolutionsMap = new Map();
