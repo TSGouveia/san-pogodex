@@ -1751,10 +1751,6 @@ function getBaseListForDexType(dexType = currentDexType) {
     if (!pokemonDatabase || pokemonDatabase.length === 0) return [];
     let result = [...pokemonDatabase];
 
-    if (hideUnreleased) {
-        result = result.filter(p => !p.unreleased);
-    }
-
     if (dexType === 'gmax') {
         result = result.filter(p => p.gmax || (p.obtaining && p.obtaining.some(o => o.method.toLowerCase().includes('gmax') || o.method.toLowerCase().includes('gigantamax'))));
     } else if (dexType === 'mega') {
