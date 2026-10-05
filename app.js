@@ -631,6 +631,7 @@ const modalPokeNum = document.getElementById('modal-pokemon-num');
 const modalPokeName = document.getElementById('modal-pokemon-name');
 const modalPokeTypes = document.getElementById('modal-pokemon-types');
 const modalPokeImg = document.getElementById('modal-pokemon-img');
+const modalPokeImgShiny = document.getElementById('modal-pokemon-img-shiny');
 const modalTabButtons = document.querySelectorAll('.modal-tab-btn');
 const modalPanes = document.querySelectorAll('.tab-pane');
 const modalCatchToggle = document.getElementById('modal-catch-toggle');
@@ -3189,10 +3190,17 @@ function applyModalPokemonForm(basePoke, rf) {
 
     if (!rf) {
         modalPokeName.textContent = basePoke.name;
-        modalPokeImg.src = (currentDexType === 'shiny')
-            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePoke.id}.png`
-            : basePoke.img;
-        modalPokeImg.alt = basePoke.name;
+        const normalImg = basePoke.img;
+        const shinyImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePoke.id}.png`;
+
+        if (modalPokeImg) {
+            modalPokeImg.src = normalImg;
+            modalPokeImg.alt = basePoke.name;
+        }
+        if (modalPokeImgShiny) {
+            modalPokeImgShiny.src = shinyImg;
+            modalPokeImgShiny.alt = `${basePoke.name} Shiny`;
+        }
 
         const primaryType = basePoke.types[0] || 'normal';
         modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
@@ -3209,13 +3217,18 @@ function applyModalPokemonForm(basePoke, rf) {
     const rKey = getRegionalFormKey(rf);
     const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName) || getRegionalFormPokeApiId(rf.formId);
 
-    const rfImg = (currentDexType === 'shiny')
-        ? (rfId ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png` : (rf.assets?.shinyImage || basePoke.img))
-        : (rfId ? `${POKE_SPRITE_BASE_URL}/${rfId}.png` : (rf.assets?.image || basePoke.img));
+    const normalImg = rfId ? `${POKE_SPRITE_BASE_URL}/${rfId}.png` : (rf.assets?.image || basePoke.img);
+    const shinyImg = rfId ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png` : (rf.assets?.shinyImage || normalImg);
 
     modalPokeName.textContent = displayName;
-    modalPokeImg.src = rfImg;
-    modalPokeImg.alt = displayName;
+    if (modalPokeImg) {
+        modalPokeImg.src = normalImg;
+        modalPokeImg.alt = displayName;
+    }
+    if (modalPokeImgShiny) {
+        modalPokeImgShiny.src = shinyImg;
+        modalPokeImgShiny.alt = `${displayName} Shiny`;
+    }
 
     const formTypes = [
         rf.primaryType ? rf.primaryType.names.English.toLowerCase() : 'normal',
@@ -3230,7 +3243,7 @@ function applyModalPokemonForm(basePoke, rf) {
         ...basePoke,
         name: displayName,
         types: formTypes,
-        img: rfImg,
+        img: normalImg,
         stats: {
             atk: rf.stats ? rf.stats.attack : basePoke.stats.atk,
             def: rf.stats ? rf.stats.defense : basePoke.stats.def,

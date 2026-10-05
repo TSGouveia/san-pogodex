@@ -1082,20 +1082,58 @@ input, button, select {
 
 .modal-pokemon-img-container {
     position: relative;
-    width: 140px;
-    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.75rem;
     margin-bottom: -2.5rem;
     z-index: 2;
 }
 
+.modal-sprite-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 110px;
+    height: 110px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 6px;
+    backdrop-filter: blur(4px);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-sprite-box:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
 .modal-pokemon-img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 80px;
     object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(0,0,0,0.3));
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+}
+
+.sprite-tag {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary, #94a3b8);
+    margin-top: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 2px 6px;
+    border-radius: 8px;
+}
+
+.sprite-tag.shiny-tag {
+    color: #f59e0b;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
 }
 
 /* Modal Navigation Tabs */
@@ -2951,12 +2989,21 @@ input, button, select {
             font-size: 1.4rem !important;
         }
         .modal-pokemon-img-container {
-            width: 90px !important;
-            height: 90px !important;
+            width: auto !important;
+            height: auto !important;
+            gap: 0.4rem !important;
+        }
+        .modal-sprite-box {
+            width: 75px !important;
+            height: 75px !important;
+            padding: 3px !important;
         }
         .modal-pokemon-img {
-            width: 90px !important;
-            height: 90px !important;
+            max-height: 52px !important;
+        }
+        .sprite-tag {
+            font-size: 0.55rem !important;
+            padding: 1px 4px !important;
         }
         .modal-close {
             top: 0.6rem !important;
