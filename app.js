@@ -6717,34 +6717,33 @@ function renderFriendsPaneFromData(data) {
         if (friends.length === 0) {
             friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.88rem; padding: 0.5rem 0;">No friends added yet.</p>';
         } else {
-            const sortedFriends = [...friends].sort((a, b) => {
-                const nameA = (a.displayName || a.email.split('@')[0] || '').toLowerCase();
-                const nameB = (b.displayName || b.email.split('@')[0] || '').toLowerCase();
-                return nameA.localeCompare(nameB);
-            });
+            // Show loading placeholder initially
+            friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.88rem; padding: 0.5rem 0;">Loading friends list...</p>';
 
-            sortedFriends.forEach(async (friend) => {
-                const item = document.createElement('div');
-                const isSelected = activeFriendUid === friend.uid;
-                item.className = `friend-chip ${isSelected ? 'active-friend' : ''}`;
-
-                const friendName = friend.displayName || friend.email.split('@')[0];
-
+            // 1. Fetch data for all friends concurrently
+            Promise.all(friends.map(async (friend) => {
+                let friendName = friend.displayName || friend.email.split('@')[0];
                 let teamColor = '#94a3b8';
                 let teamIcon = 'fa-user';
                 let caughtCount = 0;
-                
+
                 try {
                     const friendDocRef = doc(db, "users_data", friend.uid);
                     const friendSnap = await getDoc(friendDocRef);
                     if (friendSnap.exists()) {
                         const fd = friendSnap.data();
+                        if (fd.displayName || fd.username) {
+                            friendName = fd.displayName || fd.username;
+                        }
                         caughtCount = (fd.caught || []).length;
-                        
+
                         const userProfileRef = doc(db, "users", friend.uid);
                         const userProfileSnap = await getDoc(userProfileRef);
                         if (userProfileSnap.exists()) {
                             const up = userProfileSnap.data();
+                            if (up.displayName || up.username) {
+                                friendName = up.displayName || up.username;
+                            }
                             const tm = (up.pogoTeam || up.team || '').toLowerCase();
                             if (tm === 'instinct') { teamColor = '#f5a623'; teamIcon = 'fa-bolt'; }
                             else if (tm === 'mystic') { teamColor = '#60a5fa'; teamIcon = 'fa-snowflake'; }
@@ -6756,25 +6755,46 @@ function renderFriendsPaneFromData(data) {
                 const totalPokes = pokemonDatabase.length || 1024;
                 const pct = Math.round((caughtCount / totalPokes) * 100);
 
-                item.innerHTML = `
-                    <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1.5px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; font-size: 0.85rem; flex-shrink: 0;">
-                        <i class="fa-solid ${teamIcon}"></i>
-                    </div>
-                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); white-space: nowrap;">${friendName}</span>
-                    <span style="font-size: 0.72rem; color: ${teamColor}; font-weight: 800; background: rgba(0,0,0,0.3); padding: 2px 7px; border-radius: 10px;">${pct}%</span>
-                `;
+                return {
+                    friend,
+                    friendName,
+                    teamColor,
+                    teamIcon,
+                    pct
+                };
+            })).then(friendDataArray => {
+                // 2. Sort resolved friends alphabetically by their loaded friendName
+                friendDataArray.sort((a, b) => a.friendName.toLowerCase().localeCompare(b.friendName.toLowerCase()));
 
-                item.addEventListener('click', () => {
-                    activeFriendUid = friend.uid;
-                    activeFriendEmail = friend.email;
+                // 3. Clear placeholder and render sorted chips
+                friendsListDiv.innerHTML = '';
+                friendDataArray.forEach(itemData => {
+                    const { friend, friendName, teamColor, teamIcon, pct } = itemData;
 
-                    if (friendsListDiv) {
-                        friendsListDiv.querySelectorAll('.friend-chip').forEach(el => el.classList.remove('active-friend'));
-                    }
-                    item.classList.add('active-friend');
-                    compareFriendsCollections(friend);
+                    const item = document.createElement('div');
+                    const isSelected = activeFriendUid === friend.uid;
+                    item.className = `friend-chip ${isSelected ? 'active-friend' : ''}`;
+
+                    item.innerHTML = `
+                        <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1.5px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; font-size: 0.85rem; flex-shrink: 0;">
+                            <i class="fa-solid ${teamIcon}"></i>
+                        </div>
+                        <span style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); white-space: nowrap;">${friendName}</span>
+                        <span style="font-size: 0.72rem; color: ${teamColor}; font-weight: 800; background: rgba(0,0,0,0.3); padding: 2px 7px; border-radius: 10px;">${pct}%</span>
+                    `;
+
+                    item.addEventListener('click', () => {
+                        activeFriendUid = friend.uid;
+                        activeFriendEmail = friend.email;
+
+                        if (friendsListDiv) {
+                            friendsListDiv.querySelectorAll('.friend-chip').forEach(el => el.classList.remove('active-friend'));
+                        }
+                        item.classList.add('active-friend');
+                        compareFriendsCollections(friend);
+                    });
+                    friendsListDiv.appendChild(item);
                 });
-                friendsListDiv.appendChild(item);
             });
         }
     }
