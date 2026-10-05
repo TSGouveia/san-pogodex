@@ -740,67 +740,89 @@
                 </div>
 
                 <div id="friends-main-content" class="hidden">
-                    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
-                        <!-- Left Side: Friends List -->
-                        <div style="flex: 1; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem;">
-                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-user-plus"></i> Add a Friend</h3>
-                            <form id="add-friend-form" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
-                                <input type="text" id="friend-username-input" required placeholder="Friend's username" style="background: rgba(17, 27, 46, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 12px; color: var(--text-primary); outline: none; font-size: 0.9rem; flex-grow: 1;">
-                                <button type="submit" style="background: var(--accent-color); color: #fff; border: none; border-radius: 8px; padding: 0 15px; font-weight: 700; cursor: pointer; font-size: 0.85rem;">Add</button>
+                    <!-- Top Bar: Add Friend & Horizontal Friends Selector -->
+                    <div class="friends-top-bar">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                            <!-- Add Friend Form -->
+                            <form id="add-friend-form" style="display: flex; gap: 0.5rem; flex: 1; max-width: 450px;">
+                                <input type="text" id="friend-username-input" required placeholder="Add friend by username..." style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); outline: none; font-size: 0.88rem; flex: 1;">
+                                <button type="submit" style="background: var(--accent-color); color: #0f172a; border: none; border-radius: 8px; padding: 0 16px; font-weight: 800; cursor: pointer; font-size: 0.85rem;">Add</button>
                             </form>
-                            <div id="add-friend-msg" style="font-size: 0.82rem; font-weight: 600; margin-top: -1rem; margin-bottom: 1rem; display: none;"></div>
+                            <div id="add-friend-msg" style="font-size: 0.82rem; font-weight: 600; display: none;"></div>
 
-                            <!-- Pending Friend Requests -->
-                            <div id="pending-requests-section" class="hidden" style="margin-bottom: 1.5rem;">
-                                <h3 style="color: var(--text-primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-bell"></i> Pending Requests (<span id="pending-requests-count">0</span>)</h3>
-                                <div id="pending-requests-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                    <!-- Dynamically populated -->
-                                </div>
-                            </div>
-
-                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><i class="fa-solid fa-list"></i> Your Friends</h3>
-                            <div id="friends-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
-                                <!-- Populated dynamically -->
-                                <p style="color: #64748b; font-size: 0.9rem;">No friends added yet.</p>
+                            <!-- Pending Requests Section -->
+                            <div id="pending-requests-section" class="hidden">
+                                <span style="font-size: 0.85rem; font-weight: 700; color: #f5a623; display: flex; align-items: center; gap: 0.4rem;">
+                                    <i class="fa-solid fa-bell"></i> Pending Requests (<span id="pending-requests-count">0</span>)
+                                </span>
+                                <div id="pending-requests-list" style="display: flex; gap: 0.5rem; margin-top: 0.5rem;"></div>
                             </div>
                         </div>
 
-                        <!-- Right Side: Comparison & Trade Matches -->
-                        <div style="flex: 2; min-width: 300px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-                            <div id="comparison-empty-state" style="text-align: center; padding: 3rem 1rem; color: #64748b;">
-                                <i class="fa-solid fa-handshake-angle" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
-                                <p style="font-size: 1rem; font-weight: 600; margin: 0;">Select a friend from the list to view potential trades.</p>
+                        <!-- Horizontal Friends Selector List -->
+                        <div>
+                            <div style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <i class="fa-solid fa-users"></i> Your Friends List
+                            </div>
+                            <div id="friends-list" class="friends-horizontal-list">
+                                <!-- Dynamically populated chips -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Friend View Container (Full Width) -->
+                    <div id="comparison-empty-state" style="text-align: center; padding: 4rem 1rem; color: #64748b; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px;">
+                        <i class="fa-solid fa-users-viewfinder" style="font-size: 3.5rem; margin-bottom: 1rem; opacity: 0.4; color: var(--accent-color);"></i>
+                        <p style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0;">Select a friend from the list above to view their full profile & stats.</p>
+                    </div>
+
+                    <div id="comparison-content" class="hidden" style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <!-- 1. Friend Profile Card & Summary Stat Cards -->
+                        <div id="friend-profile-card-container"></div>
+
+                        <!-- 2. Subtabs Bar -->
+                        <div class="comparison-tabs" style="display: flex; gap: 0.5rem; background: var(--bg-tertiary); padding: 5px; border-radius: 10px; border: 1px solid var(--border-color); flex-wrap: wrap;">
+                            <button class="comp-tab-btn active" data-tab="friend-overview-tab" style="flex: 1; min-width: 140px; background: none; border: none; padding: 10px; color: #94a3b8; font-weight: 700; font-size: 0.88rem; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-chart-pie"></i> Categories & Regions
+                            </button>
+                            <button class="comp-tab-btn" data-tab="give-tab" style="flex: 1; min-width: 140px; background: none; border: none; padding: 10px; color: #94a3b8; font-weight: 700; font-size: 0.88rem; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> You can give them
+                            </button>
+                            <button class="comp-tab-btn" data-tab="get-tab" style="flex: 1; min-width: 140px; background: none; border: none; padding: 10px; color: #94a3b8; font-weight: 700; font-size: 0.88rem; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-arrow-down-left-from-square"></i> They can give you
+                            </button>
+                            <button class="comp-tab-btn" data-tab="stats-tab" style="flex: 1; min-width: 140px; background: none; border: none; padding: 10px; color: #94a3b8; font-weight: 700; font-size: 0.88rem; border-radius: 7px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-scale-balanced"></i> Head-to-Head Compare
+                            </button>
+                        </div>
+
+                        <!-- Panes -->
+                        <div class="comp-pane" id="friend-overview-tab-pane">
+                            <!-- Friend's Categories Breakdown -->
+                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-layer-group" style="color: var(--accent-color);"></i> PokéDex Categories Progress
+                            </h3>
+                            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; margin-bottom: 2rem;">
+                                <div id="friend-categories-list" style="display: flex; flex-direction: column;"></div>
                             </div>
 
-                            <div id="comparison-content" class="hidden">
-                                <div id="friend-profile-card-container">
-                                    <!-- Dynamic Friend Profile Card populated by JS -->
-                                </div>
+                            <!-- Friend's Regional Breakdown -->
+                            <h3 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Regional Distribution & Completion
+                            </h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;" id="friend-regions-grid"></div>
+                        </div>
 
-                                <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
-                                    <button class="comp-tab-btn active" data-tab="stats-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                        <i class="fa-solid fa-chart-simple"></i> Compare Stats
-                                    </button>
-                                    <button class="comp-tab-btn" data-tab="give-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                        <i class="fa-solid fa-arrow-up-right-from-square"></i> You can give them
-                                    </button>
-                                    <button class="comp-tab-btn" data-tab="get-tab" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                                        <i class="fa-solid fa-arrow-down-left-from-square"></i> They can give you
-                                    </button>
-                                </div>
+                        <div class="comp-pane hidden" id="give-tab-pane">
+                            <div class="rotation-grid-layout" id="friends-give-grid"></div>
+                        </div>
 
-                                <div class="comp-pane" id="stats-tab-pane">
-                                    <div id="friends-stats-container">
-                                        <!-- Populated dynamically via JS -->
-                                    </div>
-                                </div>
-                                <div class="comp-pane hidden" id="give-tab-pane">
-                                    <div class="rotation-grid-layout" id="friends-give-grid"></div>
-                                </div>
-                                <div class="comp-pane hidden" id="get-tab-pane">
-                                    <div class="rotation-grid-layout" id="friends-get-grid"></div>
-                                </div>
-                            </div>
+                        <div class="comp-pane hidden" id="get-tab-pane">
+                            <div class="rotation-grid-layout" id="friends-get-grid"></div>
+                        </div>
+
+                        <div class="comp-pane hidden" id="stats-tab-pane">
+                            <div id="friends-stats-container"></div>
                         </div>
                     </div>
                 </div>

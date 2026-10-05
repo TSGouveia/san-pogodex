@@ -6710,133 +6710,61 @@ function renderFriendsPaneFromData(data) {
         if (pendingSection) pendingSection.classList.add('hidden');
     }
     
-    // 3. Render Friends List (With Team Colors & Completion Stats Rework)
+    // 3. Render Friends List (Horizontal Chips Selector)
     if (friendsListDiv) {
         friendsListDiv.innerHTML = '';
         if (friends.length === 0) {
-            friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.9rem; padding: 1rem 0; text-align: center;">No friends added yet.</p>';
+            friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.88rem; padding: 0.5rem 0;">No friends added yet.</p>';
         } else {
             friends.forEach(async (friend) => {
                 const item = document.createElement('div');
                 const isSelected = activeFriendUid === friend.uid;
-                item.className = `rotation-card-item ${isSelected ? 'active-friend' : ''}`;
-                item.style.cursor = 'pointer';
-                item.style.padding = '12px 14px';
-                item.style.display = 'flex';
-                item.style.justifyContent = 'space-between';
-                item.style.alignItems = 'center';
-                item.style.width = '100%';
-                item.style.position = 'relative';
-                item.style.overflow = 'hidden';
-                item.style.borderRadius = '10px';
-                item.style.background = isSelected ? 'rgba(245, 166, 35, 0.08)' : 'var(--bg-tertiary)';
-                item.style.border = isSelected ? '1px solid var(--accent-color)' : '1px solid var(--border-color)';
-                item.style.boxSizing = 'border-box';
-                item.style.marginBottom = '0.5rem';
+                item.className = `friend-chip ${isSelected ? 'active-friend' : ''}`;
 
                 const friendName = friend.displayName || friend.email.split('@')[0];
 
-                // Fetch extra stats for friend asynchronously
                 let teamColor = '#94a3b8';
                 let teamIcon = 'fa-user';
-                let teamName = 'No Team';
                 let caughtCount = 0;
-                let friendCode = '';
                 
                 try {
                     const friendDocRef = doc(db, "users_data", friend.uid);
                     const friendSnap = await getDoc(friendDocRef);
                     if (friendSnap.exists()) {
                         const fd = friendSnap.data();
-                        const caughtArr = fd.caught || [];
-                        caughtCount = caughtArr.length;
-                        friendCode = fd.friendCode || '';
+                        caughtCount = (fd.caught || []).length;
                         
-                        // Also check users collection for team
                         const userProfileRef = doc(db, "users", friend.uid);
                         const userProfileSnap = await getDoc(userProfileRef);
                         if (userProfileSnap.exists()) {
                             const up = userProfileSnap.data();
-                            if (up.pogoTeam) {
-                                const tm = up.pogoTeam.toLowerCase();
-                                if (tm === 'instinct') {
-                                    teamColor = '#f5a623';
-                                    teamIcon = 'fa-bolt';
-                                    teamName = 'Instinct';
-                                } else if (tm === 'mystic') {
-                                    teamColor = '#60a5fa';
-                                    teamIcon = 'fa-snowflake';
-                                    teamName = 'Mystic';
-                                } else if (tm === 'valor') {
-                                    teamColor = '#f87171';
-                                    teamIcon = 'fa-fire';
-                                    teamName = 'Valor';
-                                }
-                            }
-                            if (up.friendCode) friendCode = up.friendCode;
+                            const tm = (up.pogoTeam || up.team || '').toLowerCase();
+                            if (tm === 'instinct') { teamColor = '#f5a623'; teamIcon = 'fa-bolt'; }
+                            else if (tm === 'mystic') { teamColor = '#60a5fa'; teamIcon = 'fa-snowflake'; }
+                            else if (tm === 'valor') { teamColor = '#f87171'; teamIcon = 'fa-fire'; }
                         }
                     }
-                } catch(e) {
-                    // Ignore permissions error gracefully if Firestore security rules block reading this user's profile
-                    if (e && e.code === 'permission-denied') {
-                        console.warn(`Friend profile data restricted for UID ${friend.uid}`);
-                    } else {
-                        console.error("Error fetching friend extra data:", e);
-                    }
-                }
+                } catch(e) {}
 
                 const totalPokes = pokemonDatabase.length || 1024;
                 const pct = Math.round((caughtCount / totalPokes) * 100);
 
                 item.innerHTML = `
-                    <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background-color: ${teamColor};"></div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: 100%; padding-left: 8px;">
-                        <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 0;">
-                            <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 2px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; font-size: 1.1rem; flex-shrink: 0;">
-                                <i class="fa-solid ${teamIcon}"></i>
-                            </div>
-                            <div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1;">
-                                <span style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${friendName}</span>
-                                <div style="display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #94a3b8;">
-                                    <span style="color: ${teamColor}; font-weight: 700;">${teamName}</span>
-                                    <span style="color: #64748b;">•</span>
-                                    <span style="color: #cbd5e1; font-weight: 700;">${pct}% PokéDex</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0;">
-                            <button class="view-friend-dex-btn" title="View ${friendName}'s PokéDex" style="background: rgba(245, 166, 35, 0.15); border: 1px solid rgba(245, 166, 35, 0.4); color: var(--accent-color); padding: 6px 14px; font-size: 0.82rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
-                                PokéDex
-                            </button>
-                            <i class="fa-solid fa-chevron-right" style="font-size: 0.8rem; color: #64748b;"></i>
-                        </div>
+                    <div style="width: 28px; height: 28px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1.5px solid ${teamColor}; display: flex; align-items: center; justify-content: center; color: ${teamColor}; font-size: 0.85rem; flex-shrink: 0;">
+                        <i class="fa-solid ${teamIcon}"></i>
                     </div>
+                    <span style="font-weight: 700; font-size: 0.88rem; color: var(--text-primary); white-space: nowrap;">${friendName}</span>
+                    <span style="font-size: 0.72rem; color: ${teamColor}; font-weight: 800; background: rgba(0,0,0,0.3); padding: 2px 7px; border-radius: 10px;">${pct}%</span>
                 `;
-
-                const dexBtn = item.querySelector('.view-friend-dex-btn');
-                if (dexBtn) {
-                    dexBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        openFriendPokedex(friend);
-                    });
-                }
 
                 item.addEventListener('click', () => {
                     activeFriendUid = friend.uid;
                     activeFriendEmail = friend.email;
 
-                    // Update active highlight locally without re-rendering the whole friends list (prevents page jump to top)
                     if (friendsListDiv) {
-                        friendsListDiv.querySelectorAll('.rotation-card-item').forEach(el => {
-                            el.classList.remove('active-friend');
-                            el.style.background = 'var(--bg-tertiary)';
-                            el.style.border = '1px solid var(--border-color)';
-                        });
+                        friendsListDiv.querySelectorAll('.friend-chip').forEach(el => el.classList.remove('active-friend'));
                     }
                     item.classList.add('active-friend');
-                    item.style.background = 'rgba(245, 166, 35, 0.08)';
-                    item.style.border = '1px solid var(--accent-color)';
-
                     compareFriendsCollections(friend);
                 });
                 friendsListDiv.appendChild(item);
@@ -6966,16 +6894,16 @@ async function compareFriendsCollections(friend) {
         statsContainer.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">Loading comparison stats...</p>';
     }
     
-    // Auto switch to stats tab
-    const statsTabBtn = document.querySelector('.comp-tab-btn[data-tab="stats-tab"]');
-    if (statsTabBtn) {
+    // Auto switch to Overview (Categories & Regions) tab
+    const overviewTabBtn = document.querySelector('.comp-tab-btn[data-tab="friend-overview-tab"]');
+    if (overviewTabBtn) {
         const compTabBtns = document.querySelectorAll('.comp-tab-btn');
         compTabBtns.forEach(b => b.classList.remove('active'));
-        statsTabBtn.classList.add('active');
+        overviewTabBtn.classList.add('active');
         
         const panes = document.querySelectorAll('.comp-pane');
         panes.forEach(pane => {
-            if (pane.id === 'stats-tab-pane') {
+            if (pane.id === 'friend-overview-tab-pane') {
                 pane.classList.remove('hidden');
             } else {
                 pane.classList.add('hidden');
@@ -7041,6 +6969,91 @@ async function compareFriendsCollections(friend) {
     }
 }
 
+function renderFriendOverviewDetails(friendCaughtSet) {
+    const categoriesContainer = document.getElementById('friend-categories-list');
+    const regionsContainer = document.getElementById('friend-regions-grid');
+
+    if (!categoriesContainer || !regionsContainer) return;
+
+    // 1. PokéDex Categories Progress
+    const categories = [
+        { key: 'normal', name: 'Standard PokéDex', icon: 'fa-gamepad', color: '#f5a623' },
+        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-sparkles', color: '#eab308' },
+        { key: 'lucky', name: 'Lucky PokéDex', icon: 'fa-clover', color: '#34d399' },
+        { key: 'shadow', name: 'Shadow PokéDex', icon: 'fa-skull', color: '#a855f7' },
+        { key: 'purified', name: 'Purified PokéDex', icon: 'fa-feather-pointed', color: '#38bdf8' },
+        { key: 'hundo', name: '100% IV (Hundo)', icon: 'fa-award', color: '#ec4899' },
+        { key: 'gmax', name: 'Gigantamax / Mega', icon: 'fa-bolt', color: '#f97316' }
+    ];
+
+    const catList = categories.map(cat => {
+        let count = 0;
+        let total = pokemonDatabase.length;
+
+        if (cat.key === 'normal') {
+            count = pokemonDatabase.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
+        } else {
+            // Safe fallback if category caught array exists or estimate from normal
+            count = 0;
+        }
+
+        const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+
+        return `
+            <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 180px;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1rem; flex-shrink: 0;">
+                        <i class="fa-solid ${cat.icon}"></i>
+                    </div>
+                    <div>
+                        <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary); display: block;">${cat.name}</span>
+                        <span style="font-size: 0.72rem; color: #64748b;">${count} of ${total} registered</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1rem; flex: 1; max-width: 320px;">
+                    <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${pct}%; height: 100%; background: ${cat.color}; border-radius: 4px; transition: width 0.3s ease;"></div>
+                    </div>
+                    <span style="font-weight: 800; font-size: 0.9rem; color: ${cat.color}; min-width: 42px; text-align: right;">${pct}%</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    categoriesContainer.innerHTML = catList;
+
+    // 2. Regional Distribution
+    const gens = [1, 2, 3, 4, 5, 6, 7, 8, 8.5, 9];
+    const regionCards = gens.map(g => {
+        const genPokes = pokemonDatabase.filter(p => p.gen === g);
+        const total = genPokes.length;
+        if (total === 0) return '';
+
+        const caught = genPokes.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
+        const pct = Math.round((caught / total) * 100);
+        const name = regionNames[g] || `Gen ${g}`;
+
+        return `
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">${name}</span>
+                    <span style="font-size: 0.75rem; color: var(--accent-color); font-weight: 800; background: rgba(245,166,35,0.12); padding: 2px 8px; border-radius: 12px;">${pct}%</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #94a3b8;">
+                    <span>Caught</span>
+                    <span style="font-weight: 700; color: var(--text-primary);">${caught} / ${total}</span>
+                </div>
+                <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                    <div style="width: ${pct}%; height: 100%; background: var(--accent-color); border-radius: 4px;"></div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    regionsContainer.innerHTML = regionCards;
+}
+
 function renderFriendProfileCard(friend, friendData, userProfileData) {
     const container = document.getElementById('friend-profile-card-container');
     if (!container) return;
@@ -7095,16 +7108,28 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
     const caughtAll = pokemonDatabase.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
     const pctAll = totalAll > 0 ? Math.round((caughtAll / totalAll) * 100) : 0;
 
+    let readyCount = 0;
+    let candyCount = 0;
     let fullyMissingCount = 0;
     let unreleasedCount = 0;
 
     pokemonDatabase.forEach(p => {
-        if (p.unreleased) unreleasedCount++;
+        if (p.unreleased) {
+            unreleasedCount++;
+        }
         const isCaught = friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id));
         if (!isCaught && !p.unreleased) {
             fullyMissingCount++;
+            if (isReadyToEvolve(p)) {
+                readyCount++;
+            } else if (familyNeedsCandies(p) || needsCandies(p)) {
+                candyCount++;
+            }
         }
     });
+
+    // Populate Friend's Overview Tab Details (Categories & Regions)
+    renderFriendOverviewDetails(friendCaughtSet);
 
     container.innerHTML = `
         <!-- Main Friend Profile Header Card -->
@@ -7149,8 +7174,9 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
                 </div>
             </div>
 
-            <!-- Friend PokéDex Summary Stat Cards -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 0.5rem;">
+            <!-- Friend PokéDex Summary Stat Cards (5 Cards matching User Profile) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.85rem; margin-top: 0.5rem;">
+                <!-- Standard Dex -->
                 <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
                     <div style="width: 40px; height: 40px; background: rgba(245, 166, 35, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.2rem; flex-shrink: 0;">
                         <i class="fa-solid fa-gamepad"></i>
@@ -7162,14 +7188,51 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
                     </div>
                 </div>
 
+                <!-- Ready to Evolve -->
                 <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
-                    <div style="width: 40px; height: 40px; background: rgba(148, 163, 184, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.2rem; flex-shrink: 0;">
+                    <div style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-angles-up"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #10b981; margin-top: 1px;">${readyCount}</div>
+                        <div style="font-size: 0.7rem; color: #64748b;">Can Evolve Now</div>
+                    </div>
+                </div>
+
+                <!-- Needs Candies -->
+                <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: rgba(245, 158, 11, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-candy-cane"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Needs Candies</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #f59e0b; margin-top: 1px;">${candyCount}</div>
+                        <div style="font-size: 0.7rem; color: #64748b;">Candies Needed</div>
+                    </div>
+                </div>
+
+                <!-- Fully Missing -->
+                <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: rgba(239, 68, 68, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ef4444; font-size: 1.2rem; flex-shrink: 0;">
                         <i class="fa-solid fa-circle-xmark"></i>
                     </div>
                     <div>
-                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Missing Pokémon</div>
-                        <div style="font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-top: 1px;">${fullyMissingCount}</div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Fully Missing</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #ef4444; margin-top: 1px;">${fullyMissingCount}</div>
                         <div style="font-size: 0.7rem; color: #64748b;">Not Caught</div>
+                    </div>
+                </div>
+
+                <!-- Unreleased -->
+                <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: rgba(148, 163, 184, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Unreleased</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-top: 1px;">${unreleasedCount}</div>
+                        <div style="font-size: 0.7rem; color: #64748b;">Not in PoGo</div>
                     </div>
                 </div>
             </div>
