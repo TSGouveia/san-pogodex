@@ -6975,15 +6975,17 @@ function renderFriendOverviewDetails(friendCaughtSet) {
 
     if (!categoriesContainer || !regionsContainer) return;
 
+    const shinyIconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px; color: #f5a623; filter: drop-shadow(0 0 3px rgba(245, 166, 35, 0.6));"><path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/></svg>`;
+
     // 1. PokéDex Categories Progress
     const categories = [
-        { key: 'normal', name: 'Standard PokéDex', icon: 'fa-gamepad', color: '#f5a623' },
-        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-sparkles', color: '#eab308' },
-        { key: 'lucky', name: 'Lucky PokéDex', icon: 'fa-clover', color: '#34d399' },
-        { key: 'shadow', name: 'Shadow PokéDex', icon: 'fa-skull', color: '#a855f7' },
-        { key: 'purified', name: 'Purified PokéDex', icon: 'fa-feather-pointed', color: '#38bdf8' },
-        { key: 'hundo', name: '100% IV (Hundo)', icon: 'fa-award', color: '#ec4899' },
-        { key: 'gmax', name: 'Gigantamax / Mega', icon: 'fa-bolt', color: '#f97316' }
+        { key: 'normal', name: 'Standard PokéDex', iconHtml: '<i class="fa-solid fa-gamepad"></i>', color: '#f5a623' },
+        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinyIconSvg, color: '#eab308' },
+        { key: 'lucky', name: 'Lucky PokéDex', iconHtml: '<i class="fa-solid fa-clover"></i>', color: '#34d399' },
+        { key: 'shadow', name: 'Shadow PokéDex', iconHtml: '<i class="fa-solid fa-skull"></i>', color: '#a855f7' },
+        { key: 'purified', name: 'Purified PokéDex', iconHtml: '<i class="fa-solid fa-feather-pointed"></i>', color: '#38bdf8' },
+        { key: 'hundo', name: '100% IV (Hundo)', iconHtml: '<i class="fa-solid fa-award"></i>', color: '#ec4899' },
+        { key: 'gmax', name: 'Gigantamax / Mega', iconHtml: '<i class="fa-solid fa-bolt"></i>', color: '#f97316' }
     ];
 
     const catList = categories.map(cat => {
@@ -6993,7 +6995,6 @@ function renderFriendOverviewDetails(friendCaughtSet) {
         if (cat.key === 'normal') {
             count = pokemonDatabase.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
         } else {
-            // Safe fallback if category caught array exists or estimate from normal
             count = 0;
         }
 
@@ -7003,7 +7004,7 @@ function renderFriendOverviewDetails(friendCaughtSet) {
             <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 180px;">
                     <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1rem; flex-shrink: 0;">
-                        <i class="fa-solid ${cat.icon}"></i>
+                        ${cat.iconHtml}
                     </div>
                     <div>
                         <span style="font-weight: 700; font-size: 0.92rem; color: var(--text-primary); display: block;">${cat.name}</span>
@@ -7321,17 +7322,17 @@ function renderComparisonStats(friendCaughtArray, friendName) {
         const genLabel = regionNames[g] || `Gen ${g}`;
         
         genHtml += `
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 700; font-size: 0.9rem; color: var(--text-primary);">${genLabel}</span>
-                    <span style="font-size: 0.75rem; color: var(--text-secondary);">Total: ${genTotal}</span>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 6px;">
+                    <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">${genLabel}</span>
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">${genTotal} Total</span>
                 </div>
                 
                 <!-- You Progress -->
                 <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                        <span style="color: #60a5fa; font-weight: 600;">You</span>
-                        <span style="color: var(--text-primary); font-weight: 700;">${myGenCaught}/${genTotal} (${myGenPercent}%)</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem;">
+                        <span style="color: #60a5fa; font-weight: 700;">You</span>
+                        <span style="color: var(--text-primary); font-weight: 700;">${myGenCaught}/${genTotal} <span style="color: #60a5fa; font-size: 0.72rem;">(${myGenPercent}%)</span></span>
                     </div>
                     <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
                         <div style="width: ${myGenPercent}%; height: 100%; background: #60a5fa; border-radius: 3px;"></div>
@@ -7340,9 +7341,9 @@ function renderComparisonStats(friendCaughtArray, friendName) {
                 
                 <!-- Friend Progress -->
                 <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
-                        <span style="color: var(--accent-color); font-weight: 600;">${friendName}</span>
-                        <span style="color: var(--text-primary); font-weight: 700;">${friendGenCaught}/${genTotal} (${friendGenPercent}%)</span>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.78rem;">
+                        <span style="color: var(--accent-color); font-weight: 700;">${friendName}</span>
+                        <span style="color: var(--text-primary); font-weight: 700;">${friendGenCaught}/${genTotal} <span style="color: var(--accent-color); font-size: 0.72rem;">(${friendGenPercent}%)</span></span>
                     </div>
                     <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
                         <div style="width: ${friendGenPercent}%; height: 100%; background: var(--accent-color); border-radius: 3px;"></div>
@@ -7354,32 +7355,44 @@ function renderComparisonStats(friendCaughtArray, friendName) {
 
     container.innerHTML = `
         <!-- Main head-to-head score card -->
-        <div style="background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-secondary) 100%); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; align-items: center; box-shadow: var(--shadow-md);">
-            <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; font-weight: 700; width: 100%; text-align: center;">Global PokéDex Progress</div>
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fa-solid fa-trophy" style="color: #f5a623;"></i> Overall PokéDex Completion
+                </h3>
+            </div>
             
-            <div style="display: flex; align-items: stretch; justify-content: center; gap: 1.5rem; width: 100%; max-width: 400px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; width: 100%;">
                 <!-- You -->
-                <div style="flex: 1; background: rgba(96, 165, 250, 0.05); border: 1px solid rgba(96, 165, 250, 0.2); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;">
-                    <span style="font-weight: 700; font-size: 0.8rem; color: #60a5fa;">You</span>
-                    <span style="font-weight: 800; font-size: 1.4rem; color: #fff;">${myPercent}%</span>
-                    <span style="font-size: 0.72rem; color: #94a3b8;">${myTotalCaught} / ${totalPokes}</span>
+                <div style="background: rgba(96, 165, 250, 0.06); border: 1px solid rgba(96, 165, 250, 0.25); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                    <div>
+                        <span style="font-weight: 800; font-size: 0.95rem; color: #60a5fa; display: block; margin-bottom: 4px;">You</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${myTotalCaught} / ${totalPokes} Caught</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-weight: 900; font-size: 1.8rem; color: #fff; line-height: 1;">${myPercent}%</span>
+                    </div>
                 </div>
                 
                 <!-- Friend -->
-                <div style="flex: 1; background: rgba(245, 166, 35, 0.05); border: 1px solid rgba(245, 166, 35, 0.2); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center;">
-                    <span style="font-weight: 700; font-size: 0.8rem; color: var(--accent-color);">${friendName}</span>
-                    <span style="font-weight: 800; font-size: 1.4rem; color: #fff;">${friendPercent}%</span>
-                    <span style="font-size: 0.72rem; color: #94a3b8;">${friendTotalCaught} / ${totalPokes}</span>
+                <div style="background: rgba(245, 166, 35, 0.06); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: justify-between; gap: 1rem;">
+                    <div>
+                        <span style="font-weight: 800; font-size: 0.95rem; color: var(--accent-color); display: block; margin-bottom: 4px;">${friendName}</span>
+                        <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${friendTotalCaught} / ${totalPokes} Caught</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="font-weight: 900; font-size: 1.8rem; color: #fff; line-height: 1;">${friendPercent}%</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Gen breakdowns -->
-        <div style="margin-top: 0.5rem;">
-            <h4 style="color: var(--text-primary); font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 700;">
-                <i class="fa-solid fa-map" style="color: var(--accent-color);"></i> Completion by Region
+        <div>
+            <h4 style="color: var(--text-primary); font-size: 1.05rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
+                <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Completion by Region
             </h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
                 ${genHtml}
             </div>
         </div>
