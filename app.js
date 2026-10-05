@@ -5289,7 +5289,7 @@ function renderRocketLineups() {
                             highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                         }
 
-                        const isShiny = (poke && (poke.canBeShiny || poke.shiny_available)) || false;
+                        const isShiny = (poke && (poke.shiny === true || poke.canBeShiny === true || poke.shiny_available === true)) || false;
                         const shinyHtml = isShiny ? `
                             <svg class="shiny-icon-inline" viewBox="0 0 24 24" fill="currentColor" title="Shiny Available" style="width: 12px; height: 12px; color: #f5a623; display: inline-block; vertical-align: middle; margin-left: 4px; filter: drop-shadow(0 0 2px rgba(245, 166, 35, 0.6));">
                                 <path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/>
