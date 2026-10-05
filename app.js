@@ -6717,7 +6717,13 @@ function renderFriendsPaneFromData(data) {
         if (friends.length === 0) {
             friendsListDiv.innerHTML = '<p style="color: #64748b; font-size: 0.88rem; padding: 0.5rem 0;">No friends added yet.</p>';
         } else {
-            friends.forEach(async (friend) => {
+            const sortedFriends = [...friends].sort((a, b) => {
+                const nameA = (a.displayName || a.email.split('@')[0] || '').toLowerCase();
+                const nameB = (b.displayName || b.email.split('@')[0] || '').toLowerCase();
+                return nameA.localeCompare(nameB);
+            });
+
+            sortedFriends.forEach(async (friend) => {
                 const item = document.createElement('div');
                 const isSelected = activeFriendUid === friend.uid;
                 item.className = `friend-chip ${isSelected ? 'active-friend' : ''}`;
