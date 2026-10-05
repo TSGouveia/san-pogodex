@@ -4324,9 +4324,8 @@ function renderWildSpawns() {
             imgUrl = `${POKE_SPRITE_BASE_URL}/${s.dexNr}.png`;
         }
 
-        const rateBadge = s.spawnRate > 0 
-            ? `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Spawn Rate: <strong style="color: var(--accent-color);">${s.spawnRate}%</strong></span></div>` 
-            : `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Rarity: <strong style="color: #94a3b8;">Rare / Event</strong></span></div>`;
+        const rateVal = (typeof s.spawnRate === 'number') ? s.spawnRate.toFixed(2) : (parseFloat(s.spawnRate) || 0).toFixed(2);
+        const rateBadge = `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Spawn Rate: <strong style="color: var(--accent-color);">${rateVal}%</strong></span></div>`;
 
         html += `
             <div class="spawn-card rotation-card-item theme-blue ${highlightClass} spawn-animation" data-dex="${s.dexNr}" data-scroll-target="spawn-${s.dexNr}">
