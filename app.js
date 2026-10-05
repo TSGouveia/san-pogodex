@@ -1170,43 +1170,50 @@ async function loadPokedex() {
             }
         }
 
-        // 1. Parse Egg Pool from ScrapedDuck (flat array format)
+        // 1. Parse Egg Pool from ScrapedDuck (flat array or grouped eggType format)
         liveEggs = [];
         if (Array.isArray(rawEggs)) {
-            rawEggs.forEach(egg => {
-                const matchedPoke = findPokemonByName(egg.name);
-                const dexNr = matchedPoke ? matchedPoke.id : null;
-                if (dexNr) {
-                    // eggType: "1 km", "2 km", "5 km", "7 km", "10 km", "12 km"
-                    let eggT = "5km";
-                    const eggTypeLower = (egg.eggType || '').toLowerCase();
-                    if (eggTypeLower.includes("12")) eggT = "12km";
-                    else if (eggTypeLower.includes("10")) {
-                        eggT = egg.isAdventureSync ? "adventure10km" : "10km";
-                    }
-                    else if (eggTypeLower.includes("7")) eggT = "7km";
-                    else if (eggTypeLower.includes("5")) {
-                        eggT = egg.isAdventureSync ? "adventure5km" : "5km";
-                    }
-                    else if (eggTypeLower.includes("2")) eggT = "2km";
-                    else if (eggTypeLower.includes("1")) eggT = "1km";
-                    if (egg.isGiftExchange) eggT = "route"; // Route Gift eggs shown as 7km
+            rawEggs.forEach(eggGroupOrItem => {
+                const groupType = eggGroupOrItem.eggType || eggGroupOrItem.egg_type || "";
+                const pokemonList = Array.isArray(eggGroupOrItem.pokemon) ? eggGroupOrItem.pokemon : [eggGroupOrItem];
+                
+                pokemonList.forEach(egg => {
+                    const matchedPoke = findPokemonByName(egg.name);
+                    const dexNr = matchedPoke ? matchedPoke.id : null;
+                    if (dexNr) {
+                        const rawTypeStr = (egg.eggType || groupType || '').toLowerCase();
+                        let eggT = "5km";
+                        if (rawTypeStr.includes("12")) eggT = "12km";
+                        else if (rawTypeStr.includes("10")) {
+                            eggT = (rawTypeStr.includes("sync") || egg.isAdventureSync) ? "adventure10km" : "10km";
+                        }
+                        else if (rawTypeStr.includes("7")) {
+                            eggT = (rawTypeStr.includes("route") || egg.isGiftExchange) ? "route" : "7km";
+                        }
+                        else if (rawTypeStr.includes("5")) {
+                            eggT = (rawTypeStr.includes("sync") || egg.isAdventureSync) ? "adventure5km" : "5km";
+                        }
+                        else if (rawTypeStr.includes("2")) eggT = "2km";
+                        else if (rawTypeStr.includes("1")) eggT = "1km";
 
-                    let cpObj = egg.combatPower || null;
-                    if (!cpObj && (egg.max_cp || egg.maxCp)) {
-                        cpObj = { normal: { max: egg.max_cp || egg.maxCp, min: egg.min_cp || egg.minCp } };
+                        let cpObj = egg.combatPower || null;
+                        if (!cpObj && (egg.max_cp || egg.maxCp || egg.cp)) {
+                            const cpVal = egg.max_cp || egg.maxCp || egg.cp;
+                            cpObj = { normal: { max: cpVal, min: egg.min_cp || egg.minCp } };
+                        }
+                        liveEggs.push({
+                            dex: Number(dexNr),
+                            name: egg.name,
+                            eggT: eggT,
+                            shiny: egg.shiny || egg.canBeShiny || false,
+                            cp: cpObj,
+                            rarity: egg.rarityTier || egg.rarity || null
+                        });
                     }
-                    liveEggs.push({
-                        dex: Number(dexNr),
-                        name: egg.name,
-                        eggT: eggT,
-                        shiny: egg.canBeShiny || false,
-                        cp: cpObj,
-                        rarity: egg.rarity || null
-                    });
-                }
+                });
             });
         }
+        console.log("🔍 [DEBUG] Parsed liveEggs count:", liveEggs.length);
 
 function buildPokebattlerRaidUrl(bossName, tier = null) {
     if (!bossName) return 'https://www.pokebattler.com/raids';
@@ -1511,6 +1518,7 @@ function buildPokebattlerMaxUrl(bossName) {
         updateDashboardStats();
         updateRegionStatsBadge();
         renderWildSpawns();
+        renderActiveRotations();
         
         // Double requestAnimationFrame (standard technique to guarantee DOM is rendered & painted)
         requestAnimationFrame(() => {
