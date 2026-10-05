@@ -843,6 +843,7 @@ function findPokemonByName(name) {
 }
 
 function normalizeRocketLineups(rawRocket) {
+    console.log("🔍 [DEBUG] Raw Rocket Data received:", rawRocket);
     if (!rawRocket) return {};
     if (!Array.isArray(rawRocket)) {
         return typeof rawRocket === 'object' ? rawRocket : {};
@@ -858,25 +859,28 @@ function normalizeRocketLineups(rawRocket) {
         let second = ensureArray(lineup.secondPokemon);
         let third = ensureArray(lineup.thirdPokemon);
 
-        if (lineup.slots && Array.isArray(lineup.slots)) {
-            lineup.slots.forEach(s => {
-                if (s.slot === 1) first = ensureArray(s.pokemons);
-                if (s.slot === 2) second = ensureArray(s.pokemons);
-                if (s.slot === 3) third = ensureArray(s.pokemons);
+        const slotList = lineup.lineups || lineup.slots;
+        if (slotList && Array.isArray(slotList)) {
+            slotList.forEach(s => {
+                const sNum = s.slot || s.slotNum;
+                const pList = s.pokemons || s.pokemon || [];
+                if (sNum === 1) first = ensureArray(pList);
+                if (sNum === 2) second = ensureArray(pList);
+                if (sNum === 3) third = ensureArray(pList);
             });
         }
 
         const slots = [1, 2, 3].map(slotNum => {
             const pokeArray = slotNum === 1 ? first : (slotNum === 2 ? second : third);
             const safeArray = ensureArray(pokeArray);
-            const isSlotEnc = safeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true));
+            const isSlotEnc = safeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true || p.encounter === true));
 
             return {
                 slot: slotNum,
                 is_encounter: isSlotEnc,
                 pokemons: safeArray.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = obj.isEncounter === true || obj.is_encounter === true;
+                    obj.isEncounter = obj.isEncounter === true || obj.is_encounter === true || obj.encounter === true;
                     return obj;
                 })
             };
@@ -884,6 +888,7 @@ function normalizeRocketLineups(rawRocket) {
 
         map[name] = slots;
     });
+    console.log("🔍 [DEBUG] Normalized Rocket Map:", map);
     return map;
 }
 
@@ -1077,6 +1082,7 @@ async function loadPokedex() {
 
         // Fetch scraped data directly from Firebase Firestore (scraped_data collection)
         const dbScrapedData = await loadScrapedDataFromFirestore();
+        console.log("🔍 [DEBUG] Raw Firestore dbScrapedData:", dbScrapedData);
 
         const isNonEmpty = (val) => {
             if (!val) return false;
@@ -1094,13 +1100,13 @@ async function loadPokedex() {
             throw new Error("Could not connect to Firebase Firestore database. All external API fallbacks are disabled.");
         }
 
-        if (isNonEmpty(dbScrapedData.eggs)) rawEggs = dbScrapedData.eggs;
+        if (isNonEmpty(dbScrapedData.eggs)) { rawEggs = dbScrapedData.eggs; console.log("🔍 [DEBUG] rawEggs loaded:", rawEggs); }
         if (isNonEmpty(dbScrapedData.raids)) rawRaids = dbScrapedData.raids;
         if (isNonEmpty(dbScrapedData.research)) rawResearch = dbScrapedData.research;
-        if (isNonEmpty(dbScrapedData.rocketLineups)) liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups);
+        if (isNonEmpty(dbScrapedData.rocketLineups)) { liveRocket = normalizeRocketLineups(dbScrapedData.rocketLineups); console.log("🔍 [DEBUG] liveRocket loaded:", liveRocket); }
         if (isNonEmpty(dbScrapedData.promoCodes)) { rawPromoCodes = dbScrapedData.promoCodes; updatePromoCodesBadge(); }
         if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
-        if (isNonEmpty(dbScrapedData.partyChallenges)) partyRewardsData = dbScrapedData.partyChallenges;
+        if (isNonEmpty(dbScrapedData.partyChallenges)) { partyRewardsData = dbScrapedData.partyChallenges; console.log("🔍 [DEBUG] partyRewardsData loaded:", partyRewardsData); }
         if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
         if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
         if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
