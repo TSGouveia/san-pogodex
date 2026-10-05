@@ -7056,21 +7056,21 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
             name: 'Instinct',
             icon: 'fa-bolt',
             color: '#f5a623',
-            bg: 'linear-gradient(135deg, rgba(245, 166, 35, 0.15) 0%, var(--bg-tertiary) 100%)',
+            bg: 'linear-gradient(135deg, rgba(245, 166, 35, 0.18) 0%, var(--bg-tertiary) 100%)',
             border: 'rgba(245, 166, 35, 0.4)'
         },
         mystic: {
             name: 'Mystic',
             icon: 'fa-snowflake',
             color: '#60a5fa',
-            bg: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, var(--bg-tertiary) 100%)',
+            bg: 'linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, var(--bg-tertiary) 100%)',
             border: 'rgba(59, 130, 246, 0.4)'
         },
         valor: {
             name: 'Valor',
             icon: 'fa-fire',
             color: '#f87171',
-            bg: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, var(--bg-tertiary) 100%)',
+            bg: 'linear-gradient(135deg, rgba(239, 68, 68, 0.18) 0%, var(--bg-tertiary) 100%)',
             border: 'rgba(239, 68, 68, 0.4)'
         }
     };
@@ -7084,29 +7084,58 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
     };
 
     const qrUrl = cleanCode.length === 12
-        ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`)}`
+        ? `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`)}`
         : null;
 
+    // Friend Caught Calculations
+    const friendCaughtArray = friendData.caught || [];
+    const friendCaughtSet = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+
+    const totalAll = pokemonDatabase.length;
+    const caughtAll = pokemonDatabase.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
+    const pctAll = totalAll > 0 ? Math.round((caughtAll / totalAll) * 100) : 0;
+
+    let fullyMissingCount = 0;
+    let unreleasedCount = 0;
+
+    pokemonDatabase.forEach(p => {
+        if (p.unreleased) unreleasedCount++;
+        const isCaught = friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id));
+        if (!isCaught && !p.unreleased) {
+            fullyMissingCount++;
+        }
+    });
+
     container.innerHTML = `
-        <div style="background: ${teamInfo.bg}; border: 1px solid ${teamInfo.border}; border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow-md); margin-bottom: 1.25rem;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-                <div style="display: flex; gap: 1.25rem; align-items: center; flex: 1; min-width: 250px;">
-                    ${qrUrl ? `<img src="${qrUrl}" alt="Friend QR Code" style="width: 90px; height: 90px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: #fff; padding: 4px; flex-shrink: 0;">` : ''}
+        <!-- Main Friend Profile Header Card -->
+        <div style="background: ${teamInfo.bg}; border: 1px solid ${teamInfo.border}; border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow-md); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.25rem;">
+                <div style="display: flex; gap: 1.25rem; align-items: center; flex: 1; min-width: 260px;">
+                    ${qrUrl ? `
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;">
+                        <img src="${qrUrl}" alt="Friend QR Code" style="width: 110px; height: 110px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.2); background: #fff; padding: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+                        <span style="font-size: 0.68rem; color: #94a3b8; font-weight: 700; text-transform: uppercase;">QR Code</span>
+                    </div>
+                    ` : `
+                    <div style="width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 2px solid ${teamInfo.color}; display: flex; align-items: center; justify-content: center; color: ${teamInfo.color}; font-size: 2rem; flex-shrink: 0;">
+                        <i class="fa-solid ${teamInfo.icon}"></i>
+                    </div>
+                    `}
                     <div style="display: flex; flex-direction: column; gap: 0.4rem; flex: 1;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="background: rgba(0,0,0,0.3); border: 1px solid ${teamInfo.border}; color: ${teamInfo.color}; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                            <span style="background: rgba(0,0,0,0.4); border: 1px solid ${teamInfo.border}; color: ${teamInfo.color}; font-size: 0.78rem; font-weight: 800; padding: 3px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px;">
                                 <i class="fa-solid ${teamInfo.icon}"></i> Team ${teamInfo.name}
                             </span>
                         </div>
-                        <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.3px;">${friendName}</h2>
+                        <h2 style="font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.3px;">${friendName}</h2>
                         ${friendCode ? `
                         <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;">
-                            <div style="font-size: 0.95rem; font-family: monospace; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">${friendCode}</div>
-                            <button class="friend-copy-code-btn" data-code="${cleanCode}" title="Copy Friend Code" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                            <div style="font-size: 1rem; font-family: monospace; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; background: rgba(17, 27, 46, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 12px;">${friendCode}</div>
+                            <button class="friend-copy-code-btn" data-code="${cleanCode}" title="Copy Friend Code" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
                                 <i class="fa-solid fa-copy" style="font-size: 0.85rem;"></i>
                             </button>
                         </div>
-                        ` : ''}
+                        ` : '<div style="font-size: 0.8rem; color: #64748b; font-style: italic;">No Friend Code set</div>'}
                     </div>
                 </div>
 
@@ -7117,6 +7146,31 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
                     <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 10px 16px; font-size: 0.85rem; border-radius: 8px; cursor: pointer; font-weight: 700;">
                         Remove Friend
                     </button>
+                </div>
+            </div>
+
+            <!-- Friend PokéDex Summary Stat Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; margin-top: 0.5rem;">
+                <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: rgba(245, 166, 35, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #f5a623; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Standard PokéDex</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-top: 1px;">${caughtAll} / ${totalAll}</div>
+                        <div style="font-size: 0.7rem; color: #34d399; font-weight: 700;">${pctAll}% Complete</div>
+                    </div>
+                </div>
+
+                <div style="background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="width: 40px; height: 40px; background: rgba(148, 163, 184, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 1.2rem; flex-shrink: 0;">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </div>
+                    <div>
+                        <div style="color: #94a3b8; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;">Missing Pokémon</div>
+                        <div style="font-size: 1.25rem; font-weight: 800; color: #94a3b8; margin-top: 1px;">${fullyMissingCount}</div>
+                        <div style="font-size: 0.7rem; color: #64748b;">Not Caught</div>
+                    </div>
                 </div>
             </div>
         </div>
