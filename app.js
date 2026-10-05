@@ -557,6 +557,7 @@ const shinySparkleSvg = `
         <path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/>
     </svg>
 `;
+const shinyCategoryIconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px; color: #fbbf24; filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.6));"><path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/></svg>`;
 let typesDatabase = [];
 let buddyDistances = {};
 let userCandies = {};
@@ -8515,7 +8516,7 @@ function renderStatsPane() {
     // 2. Categories Breakdown List
     const categoriesMeta = [
         { key: 'normal', name: 'Standard PokéDex', iconHtml: '<i class="fa-solid fa-gamepad"></i>', color: '#f5a623' },
-        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinySparkleSvg, color: '#fbbf24' },
+        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinyCategoryIconSvg, color: '#fbbf24' },
         { key: 'lucky', name: 'Lucky PokéDex', iconHtml: '<i class="fa-solid fa-clover"></i>', color: '#34d399' },
         { key: 'xxl', name: 'XXL PokéDex', iconHtml: '<i class="fa-solid fa-maximize"></i>', color: '#38bdf8' },
         { key: 'xxs', name: 'XXS PokéDex', iconHtml: '<i class="fa-solid fa-minimize"></i>', color: '#818cf8' },
