@@ -5045,53 +5045,11 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
         return;
     }
 
-    // Filter items to pokemon encounters only
-    const pokemonItems = [];
     data.forEach(item => {
-        if (item.rewards && Array.isArray(item.rewards)) {
-            item.rewards.forEach(r => {
-                const matchedPoke = findPokemonByName(r.name);
-                if (matchedPoke) {
-                    pokemonItems.push({
-                        dex: matchedPoke.id,
-                        name: matchedPoke.name,
-                        task: item.task || item.category || "Party Challenge",
-                        shiny: r.canBeShiny || r.shiny || false,
-                        max_cp: r.max_cp || r.maxCp || item.max_cp || item.maxCp || null,
-                        combatPower: r.combatPower || item.combatPower || null
-                    });
-                }
-            });
-        } else if (item.dex || item.name) {
-            const matchedPoke = item.dex ? pokemonDatabase.find(p => p.id == item.dex) : findPokemonByName(item.name);
-            if (matchedPoke) {
-                pokemonItems.push({
-                    dex: matchedPoke.id,
-                    name: matchedPoke.name,
-                    task: item.task || "Party Challenge",
-                    shiny: item.shiny || false,
-                    max_cp: item.max_cp || item.maxCp || null,
-                    combatPower: item.combatPower || null
-                });
-            }
-        }
-    });
+        const taskText = item.task || item.category || "Party Challenge";
+        const rewards = item.rewards || [];
+        if (rewards.length === 0) return;
 
-    if (pokemonItems.length === 0) {
-        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No active Pokémon encounters in Party Play challenges.</p>';
-        return;
-    }
-
-    // Group by task text
-    const encountersByQuest = {};
-    pokemonItems.forEach(item => {
-        if (!encountersByQuest[item.task]) {
-            encountersByQuest[item.task] = [];
-        }
-        encountersByQuest[item.task].push(item);
-    });
-
-    Object.entries(encountersByQuest).forEach(([taskText, encounters]) => {
         const sub = document.createElement('div');
         sub.className = 'rotation-subchapter';
         sub.innerHTML = `
@@ -5103,46 +5061,48 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
         container.appendChild(sub);
 
         const grid = sub.querySelector('.rotation-grid-layout');
-        encounters.forEach(item => {
+        rewards.forEach(r => {
             const card = document.createElement('div');
-            const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
+            const rLabel = r.label || r.name || "Reward";
+            const matchedPoke = findPokemonByName(rLabel);
+            const isEncounter = r.type === 'encounter' || Boolean(matchedPoke);
+
             const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
             const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
             const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
-            card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
-            card.setAttribute('data-scroll-target', `party-${safeLower(item.name).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
 
-            let imgUrl = getPokemonImageUrl(item.name, matchedPoke);
-            if (!imgUrl) {
-                imgUrl = (matchedPoke ? matchedPoke.img : '') || `${POKE_SPRITE_BASE_URL}/${item.dex}.png`;
+            card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
+            card.setAttribute('data-scroll-target', `party-${safeLower(rLabel).replace(/\s+/g, '-')}-${safeLower(taskText).replace(/[^a-z0-9]/g, '')}`);
+
+            let imgUrl = r.image || '';
+            if (!imgUrl && matchedPoke) {
+                imgUrl = matchedPoke.img || `${POKE_SPRITE_BASE_URL}/${matchedPoke.id}.png`;
             }
-            const partyRfId = getRegionalFormPokeApiId(item.name);
-            const partyFallbackDex = partyRfId || (matchedPoke ? matchedPoke.id : item.dex);
-            const imgOnerror = (partyFallbackDex && partyFallbackDex !== 'null')
-                ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${partyFallbackDex}.png';}else{this.style.opacity=0.3;}"`
-                : `onerror="this.style.opacity=0.3;"`;
 
             let cpMeta = '';
-            const partyMaxCp = item.max_cp || (item.combatPower && item.combatPower.normal ? item.combatPower.normal.max : null);
+            const partyMaxCp = r.max_cp || r.maxCp || (r.combatPower && r.combatPower.normal ? r.combatPower.normal.max : null);
             if (partyMaxCp) {
-                cpMeta = `<div class="rotation-cp-details" style="margin-top: 4px;"><div><i class="fa-solid fa-users" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${partyMaxCp}</strong></span></div></div>`;
+                cpMeta = `<div class="rotation-cp-details" style="margin-top: 4px;"><div><i class="fa-solid fa-star" style="font-size:0.65rem; opacity:0.7;"></i> <span>Max CP: <strong>${partyMaxCp}</strong></span></div></div>`;
+            } else if (r.type === 'item' || r.type === 'resource') {
+                cpMeta = `<div class="rotation-cp-details" style="margin-top: 4px;"><div><i class="fa-solid fa-gift" style="font-size:0.65rem; opacity:0.7;"></i> <span>Reward Item</span></div></div>`;
             }
 
             card.innerHTML = `
-                ${item.shiny ? shinySparkleSvg : ''}
+                ${r.shiny ? shinySparkleSvg : ''}
                 <div class="rotation-badges">
                     ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
                     ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                 </div>
-                <img class="rotation-card-img" src="${imgUrl}" alt="${item.name}" ${imgOnerror}>
-                <span class="rotation-card-name">${item.name}</span>
+                <img class="rotation-card-img" src="${imgUrl}" alt="${rLabel}" onerror="this.style.opacity=0.4;">
+                <span class="rotation-card-name">${rLabel}</span>
                 ${cpMeta}
             `;
 
-            card.addEventListener('click', () => {
-                if (matchedPoke) openModal(matchedPoke.id);
-            });
+            if (matchedPoke) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => openModal(matchedPoke.id));
+            }
             grid.appendChild(card);
         });
     });
