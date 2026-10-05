@@ -6955,12 +6955,6 @@ async function compareFriendsCollections(friend) {
     content.classList.remove('hidden');
     
     const friendName = friend.displayName || friend.email.split('@')[0];
-    document.getElementById('comparison-friend-name').textContent = `Comparing with: ${friendName}`;
-
-    const openSelectedDexBtn = document.getElementById('open-selected-friend-dex-btn');
-    if (openSelectedDexBtn) {
-        openSelectedDexBtn.onclick = () => openFriendPokedex(friend);
-    }
     
     const giveGrid = document.getElementById('friends-give-grid');
     const getGrid = document.getElementById('friends-get-grid');
@@ -6993,10 +6987,23 @@ async function compareFriendsCollections(friend) {
         const docRef = doc(db, "users_data", friend.uid);
         const docSnap = await getDoc(docRef);
         
-        let friendCaught = [];
-        if (docSnap.exists()) {
-            friendCaught = docSnap.data().caught || [];
+        let friendData = docSnap.exists() ? docSnap.data() : {};
+        let friendCaught = friendData.caught || [];
+
+        // Also fetch user profile doc if available
+        let userProfileData = {};
+        try {
+            const userRef = doc(db, "users", friend.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                userProfileData = userSnap.data();
+            }
+        } catch (err) {
+            // Ignore permission error
         }
+        
+        // Render Friend's Trainer Profile Card
+        renderFriendProfileCard(friend, friendData, userProfileData);
         
         const friendCaughtSet = new Set(friendCaught.map(x => (isNaN(Number(x)) ? x : Number(x))));
         
@@ -7031,6 +7038,137 @@ async function compareFriendsCollections(friend) {
         if (statsContainer) {
             statsContainer.innerHTML = '<p style="color: #ef4444; font-size: 0.9rem;">Failed to load comparison stats.</p>';
         }
+    }
+}
+
+function renderFriendProfileCard(friend, friendData, userProfileData) {
+    const container = document.getElementById('friend-profile-card-container');
+    if (!container) return;
+
+    const friendName = friend.displayName || friendData.username || friendData.displayName || friend.email.split('@')[0];
+    const friendCode = userProfileData.friendCode || friendData.friendCode || '';
+    const cleanCode = (friendCode || '').replace(/\D/g, '');
+
+    const rawTeam = (userProfileData.pogoTeam || userProfileData.team || friendData.pogoTeam || friendData.team || 'instinct').toLowerCase();
+
+    const teamThemeMap = {
+        instinct: {
+            name: 'Instinct',
+            icon: 'fa-bolt',
+            color: '#f5a623',
+            bg: 'linear-gradient(135deg, rgba(245, 166, 35, 0.15) 0%, var(--bg-tertiary) 100%)',
+            border: 'rgba(245, 166, 35, 0.4)'
+        },
+        mystic: {
+            name: 'Mystic',
+            icon: 'fa-snowflake',
+            color: '#60a5fa',
+            bg: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, var(--bg-tertiary) 100%)',
+            border: 'rgba(59, 130, 246, 0.4)'
+        },
+        valor: {
+            name: 'Valor',
+            icon: 'fa-fire',
+            color: '#f87171',
+            bg: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, var(--bg-tertiary) 100%)',
+            border: 'rgba(239, 68, 68, 0.4)'
+        }
+    };
+
+    const teamInfo = teamThemeMap[rawTeam] || {
+        name: 'Trainer',
+        icon: 'fa-user',
+        color: '#94a3b8',
+        bg: 'var(--bg-tertiary)',
+        border: 'var(--border-color)'
+    };
+
+    const qrUrl = cleanCode.length === 12
+        ? `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`)}`
+        : null;
+
+    container.innerHTML = `
+        <div style="background: ${teamInfo.bg}; border: 1px solid ${teamInfo.border}; border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 1.25rem; box-shadow: var(--shadow-md); margin-bottom: 1.25rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; gap: 1.25rem; align-items: center; flex: 1; min-width: 250px;">
+                    ${qrUrl ? `<img src="${qrUrl}" alt="Friend QR Code" style="width: 90px; height: 90px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: #fff; padding: 4px; flex-shrink: 0;">` : ''}
+                    <div style="display: flex; flex-direction: column; gap: 0.4rem; flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <span style="background: rgba(0,0,0,0.3); border: 1px solid ${teamInfo.border}; color: ${teamInfo.color}; font-size: 0.78rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fa-solid ${teamInfo.icon}"></i> Team ${teamInfo.name}
+                            </span>
+                        </div>
+                        <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin: 0; letter-spacing: -0.3px;">${friendName}</h2>
+                        ${friendCode ? `
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;">
+                            <div style="font-size: 0.95rem; font-family: monospace; font-weight: 800; color: var(--accent-color); letter-spacing: 1px; background: rgba(17, 27, 46, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 10px;">${friendCode}</div>
+                            <button class="friend-copy-code-btn" data-code="${cleanCode}" title="Copy Friend Code" style="background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-color); color: #94a3b8; border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s;">
+                                <i class="fa-solid fa-copy" style="font-size: 0.85rem;"></i>
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <button class="friend-open-dex-btn bulk-btn" style="background: var(--accent-color); color: #0f172a; padding: 10px 18px; font-size: 0.88rem; border-radius: 8px; cursor: pointer; font-weight: 800; display: flex; align-items: center; gap: 8px; border: none; box-shadow: 0 4px 12px rgba(245, 166, 35, 0.3);">
+                        <i class="fa-solid fa-border-all"></i> View PokéDex
+                    </button>
+                    <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; padding: 10px 16px; font-size: 0.85rem; border-radius: 8px; cursor: pointer; font-weight: 700;">
+                        Remove Friend
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    const openDexBtn = container.querySelector('.friend-open-dex-btn');
+    if (openDexBtn) {
+        openDexBtn.onclick = () => openFriendPokedex(friend);
+    }
+
+    const copyBtn = container.querySelector('.friend-copy-code-btn');
+    if (copyBtn) {
+        copyBtn.onclick = () => {
+            const codeToCopy = copyBtn.getAttribute('data-code');
+            if (codeToCopy) {
+                navigator.clipboard.writeText(codeToCopy).then(() => {
+                    copyBtn.innerHTML = '<i class="fa-solid fa-check" style="color: #34d399;"></i>';
+                    setTimeout(() => { copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i>'; }, 2000);
+                });
+            }
+        };
+    }
+
+    const removeBtn = container.querySelector('#remove-friend-btn');
+    if (removeBtn) {
+        removeBtn.onclick = async () => {
+            if (confirm(`Are you sure you want to remove ${friendName} from your friends list?`)) {
+                try {
+                    const userDocRef = doc(db, "users_data", currentUser.uid);
+                    const friendDocRef = doc(db, "users_data", friend.uid);
+                    
+                    const mySnap = await getDoc(userDocRef);
+                    const friendSnap = await getDoc(friendDocRef);
+                    
+                    const batch = writeBatch(db);
+                    if (mySnap.exists()) {
+                        const myFriends = (mySnap.data().friends || []).filter(f => f.uid !== friend.uid);
+                        batch.update(userDocRef, { friends: myFriends });
+                    }
+                    if (friendSnap.exists()) {
+                        const friendFriends = (friendSnap.data().friends || []).filter(f => f.uid !== currentUser.uid);
+                        batch.update(friendDocRef, { friends: friendFriends });
+                    }
+                    await batch.commit();
+                    activeFriendUid = null;
+                    activeFriendEmail = null;
+                    renderFriendsPane();
+                } catch (err) {
+                    console.error("Error removing friend:", err);
+                }
+            }
+        };
     }
 }
 
@@ -8218,7 +8356,7 @@ function renderStatsPane() {
     // 2. Categories Breakdown List
     const categoriesMeta = [
         { key: 'normal', name: 'Standard PokéDex', icon: 'fa-solid fa-gamepad', color: '#f5a623' },
-        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-solid fa-sparkles', color: '#fbbf24' },
+        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-solid fa-wand-magic-sparkles', color: '#fbbf24' },
         { key: 'lucky', name: 'Lucky PokéDex', icon: 'fa-solid fa-clover', color: '#34d399' },
         { key: 'xxl', name: 'XXL PokéDex', icon: 'fa-solid fa-maximize', color: '#38bdf8' },
         { key: 'xxs', name: 'XXS PokéDex', icon: 'fa-solid fa-minimize', color: '#818cf8' },

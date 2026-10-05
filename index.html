@@ -673,7 +673,7 @@
                             <i class="fa-solid fa-angles-up"></i>
                         </div>
                         <div>
-                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve (Green)</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Ready to Evolve</div>
                             <div style="font-size: 1.5rem; font-weight: 800; color: #34d399; margin-top: 2px;" id="stat-ready-evolve">0</div>
                             <div style="font-size: 0.75rem; color: #94a3b8;">Sufficient Candies Unlocked</div>
                         </div>
@@ -684,7 +684,7 @@
                             <i class="fa-solid fa-candy-cane"></i>
                         </div>
                         <div>
-                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Needs Candies (Yellow)</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Needs Candies</div>
                             <div style="font-size: 1.5rem; font-weight: 800; color: #f5a623; margin-top: 2px;" id="stat-needs-candy">0</div>
                             <div style="font-size: 0.75rem; color: #94a3b8;">Missing Evolution Candies</div>
                         </div>
@@ -695,7 +695,7 @@
                             <i class="fa-solid fa-circle-xmark"></i>
                         </div>
                         <div>
-                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Fully Missing (Grey)</div>
+                            <div style="color: #94a3b8; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Fully Missing</div>
                             <div style="font-size: 1.5rem; font-weight: 800; color: #94a3b8; margin-top: 2px;" id="stat-fully-missing">0</div>
                             <div style="font-size: 0.75rem; color: #64748b;">Not Caught & No Ancestor</div>
                         </div>
@@ -773,17 +773,8 @@
                             </div>
 
                             <div id="comparison-content" class="hidden">
-                                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                                    <div>
-                                        <h3 id="comparison-friend-name" style="color: var(--text-primary); margin: 0;">Comparing with Trainer</h3>
-                                        <p style="color: #94a3b8; font-size: 0.8rem; margin: 0; margin-top: 2px;">Find matches for trade opportunities</p>
-                                    </div>
-                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                                        <button id="open-selected-friend-dex-btn" class="bulk-btn" style="background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); color: var(--accent-color); padding: 6px 14px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 6px;">
-                                            <i class="fa-solid fa-border-all"></i> View PokéDex
-                                        </button>
-                                        <button id="remove-friend-btn" class="bulk-btn" style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.15); color: #f87171; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; font-weight: 700;">Remove Friend</button>
-                                    </div>
+                                <div id="friend-profile-card-container">
+                                    <!-- Dynamic Friend Profile Card populated by JS -->
                                 </div>
 
                                 <div class="comparison-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-tertiary); padding: 4px; border-radius: 8px;">
