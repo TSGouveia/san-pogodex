@@ -8485,16 +8485,16 @@ function renderStatsPane() {
 
     // 2. Categories Breakdown List
     const categoriesMeta = [
-        { key: 'normal', name: 'Standard PokéDex', icon: 'fa-solid fa-gamepad', color: '#f5a623' },
-        { key: 'shiny', name: 'Shiny PokéDex', icon: 'fa-solid fa-wand-magic-sparkles', color: '#fbbf24' },
-        { key: 'lucky', name: 'Lucky PokéDex', icon: 'fa-solid fa-clover', color: '#34d399' },
-        { key: 'xxl', name: 'XXL PokéDex', icon: 'fa-solid fa-maximize', color: '#38bdf8' },
-        { key: 'xxs', name: 'XXS PokéDex', icon: 'fa-solid fa-minimize', color: '#818cf8' },
-        { key: 'gmax', name: 'Gigantamax PokéDex', icon: 'fa-solid fa-cloud-bolt', color: '#ef4444' },
-        { key: 'mega', name: 'Mega / Primal PokéDex', icon: 'fa-solid fa-dna', color: '#ec4899' },
-        { key: 'shadow', name: 'Shadow PokéDex', icon: 'fa-solid fa-fire-flame-curved', color: '#a855f7' },
-        { key: 'purified', name: 'Purified PokéDex', icon: 'fa-solid fa-certificate', color: '#2dd4bf' },
-        { key: 'hundo', name: '100% (Hundo) PokéDex', icon: 'fa-solid fa-star', color: '#f43f5e' }
+        { key: 'normal', name: 'Standard PokéDex', iconHtml: '<i class="fa-solid fa-gamepad"></i>', color: '#f5a623' },
+        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinySparkleSvg, color: '#fbbf24' },
+        { key: 'lucky', name: 'Lucky PokéDex', iconHtml: '<i class="fa-solid fa-clover"></i>', color: '#34d399' },
+        { key: 'xxl', name: 'XXL PokéDex', iconHtml: '<i class="fa-solid fa-maximize"></i>', color: '#38bdf8' },
+        { key: 'xxs', name: 'XXS PokéDex', iconHtml: '<i class="fa-solid fa-minimize"></i>', color: '#818cf8' },
+        { key: 'gmax', name: 'Gigantamax PokéDex', iconHtml: '<i class="fa-solid fa-cloud-bolt"></i>', color: '#ef4444' },
+        { key: 'mega', name: 'Mega / Primal PokéDex', iconHtml: '<i class="fa-solid fa-dna"></i>', color: '#ec4899' },
+        { key: 'shadow', name: 'Shadow PokéDex', iconHtml: '<i class="fa-solid fa-fire-flame-curved"></i>', color: '#a855f7' },
+        { key: 'purified', name: 'Purified PokéDex', iconHtml: '<i class="fa-solid fa-certificate"></i>', color: '#2dd4bf' },
+        { key: 'hundo', name: '100% (Hundo) PokéDex', iconHtml: '<i class="fa-solid fa-star"></i>', color: '#f43f5e' }
     ];
 
     statsCategoriesList.innerHTML = '';
@@ -8525,7 +8525,7 @@ function renderStatsPane() {
         row.innerHTML = `
             <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 180px;">
                 <div style="width: 36px; height: 36px; background: rgba(255,255,255,0.05); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1.1rem; flex-shrink: 0;">
-                    <i class="${cat.icon}"></i>
+                    ${cat.iconHtml}
                 </div>
                 <div>
                     <div style="font-weight: 700; color: var(--text-primary); font-size: 0.9rem;">${cat.name}</div>
