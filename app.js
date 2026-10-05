@@ -860,10 +860,15 @@ function normalizeRocketLineups(rawRocket) {
         let third = ensureArray(lineup.thirdPokemon);
 
         const slotList = lineup.lineups || lineup.slots;
+        let encounterSlotsFromRoot = new Set();
+
         if (slotList && Array.isArray(slotList)) {
             slotList.forEach(s => {
                 const sNum = s.slot || s.slotNum;
                 const pList = s.pokemons || s.pokemon || [];
+                const isEnc = Boolean(s.encounter || s.is_encounter || s.isEncounter);
+                if (isEnc) encounterSlotsFromRoot.add(sNum);
+
                 if (sNum === 1) first = ensureArray(pList);
                 if (sNum === 2) second = ensureArray(pList);
                 if (sNum === 3) third = ensureArray(pList);
@@ -873,14 +878,14 @@ function normalizeRocketLineups(rawRocket) {
         const slots = [1, 2, 3].map(slotNum => {
             const pokeArray = slotNum === 1 ? first : (slotNum === 2 ? second : third);
             const safeArray = ensureArray(pokeArray);
-            const isSlotEnc = safeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true || p.encounter === true));
+            const isSlotEnc = encounterSlotsFromRoot.has(slotNum) || safeArray.some(p => p && (p.isEncounter === true || p.is_encounter === true || p.encounter === true));
 
             return {
                 slot: slotNum,
                 is_encounter: isSlotEnc,
                 pokemons: safeArray.map(p => {
                     const obj = typeof p === 'object' ? { ...p } : { name: p };
-                    obj.isEncounter = obj.isEncounter === true || obj.is_encounter === true || obj.encounter === true;
+                    obj.isEncounter = isSlotEnc || obj.isEncounter === true || obj.is_encounter === true || obj.encounter === true;
                     return obj;
                 })
             };
