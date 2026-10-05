@@ -6764,7 +6764,12 @@ function renderFriendsPaneFromData(data) {
                         }
                     }
                 } catch(e) {
-                    console.error("Error fetching friend extra data:", e);
+                    // Ignore permissions error gracefully if Firestore security rules block reading this user's profile
+                    if (e && e.code === 'permission-denied') {
+                        console.warn(`Friend profile data restricted for UID ${friend.uid}`);
+                    } else {
+                        console.error("Error fetching friend extra data:", e);
+                    }
                 }
 
                 const totalPokes = pokemonDatabase.length || 1024;
