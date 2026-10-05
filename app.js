@@ -952,8 +952,8 @@ async function loadScrapedDataFromFirestore() {
         const authData = await authRes.json();
         const headers = { 'Authorization': `Bearer ${authData.idToken}` };
 
-        // 2. If we have valid local cache, check only the 'events' doc to verify updatedAt
-        if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0) {
+        // 2. If we have valid local cache, check if it contains all required new fields
+        if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0 && cachedData.rocketLineups && cachedData.partyChallenges) {
             try {
                 const checkRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/events`, { headers });
                 if (checkRes.ok) {
