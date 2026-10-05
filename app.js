@@ -631,7 +631,9 @@ const modalPokeNum = document.getElementById('modal-pokemon-num');
 const modalPokeName = document.getElementById('modal-pokemon-name');
 const modalPokeTypes = document.getElementById('modal-pokemon-types');
 const modalPokeImg = document.getElementById('modal-pokemon-img');
-const modalPokeImgShiny = document.getElementById('modal-pokemon-img-shiny');
+const modalPokeImgContainer = document.getElementById('modal-pokemon-img-container');
+const modalShinyToggleBtn = document.getElementById('modal-shiny-toggle-btn');
+let isModalShinyActive = false;
 const modalTabButtons = document.querySelectorAll('.modal-tab-btn');
 const modalPanes = document.querySelectorAll('.tab-pane');
 const modalCatchToggle = document.getElementById('modal-catch-toggle');
@@ -2676,6 +2678,19 @@ function setupEventListeners() {
         }
     });
 
+    if (modalPokeImgContainer) {
+        modalPokeImgContainer.addEventListener('click', () => {
+            if (!modalPokeImg) return;
+            isModalShinyActive = !isModalShinyActive;
+            const normal = modalPokeImg.dataset.normal || modalPokeImg.src;
+            const shiny = modalPokeImg.dataset.shiny || normal;
+            modalPokeImg.src = isModalShinyActive ? shiny : normal;
+            if (modalShinyToggleBtn) {
+                modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
+            }
+        });
+    }
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && !detailModal.classList.contains('hidden')) {
             closeModal();
@@ -3194,12 +3209,13 @@ function applyModalPokemonForm(basePoke, rf) {
         const shinyImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePoke.id}.png`;
 
         if (modalPokeImg) {
-            modalPokeImg.src = normalImg;
+            modalPokeImg.dataset.normal = normalImg;
+            modalPokeImg.dataset.shiny = shinyImg;
+            modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
             modalPokeImg.alt = basePoke.name;
         }
-        if (modalPokeImgShiny) {
-            modalPokeImgShiny.src = shinyImg;
-            modalPokeImgShiny.alt = `${basePoke.name} Shiny`;
+        if (modalShinyToggleBtn) {
+            modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
         }
 
         const primaryType = basePoke.types[0] || 'normal';
@@ -3222,12 +3238,13 @@ function applyModalPokemonForm(basePoke, rf) {
 
     modalPokeName.textContent = displayName;
     if (modalPokeImg) {
-        modalPokeImg.src = normalImg;
+        modalPokeImg.dataset.normal = normalImg;
+        modalPokeImg.dataset.shiny = shinyImg;
+        modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
         modalPokeImg.alt = displayName;
     }
-    if (modalPokeImgShiny) {
-        modalPokeImgShiny.src = shinyImg;
-        modalPokeImgShiny.alt = `${displayName} Shiny`;
+    if (modalShinyToggleBtn) {
+        modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
     }
 
     const formTypes = [
@@ -3265,6 +3282,7 @@ function openModal(id) {
     if (!poke) return;
 
     activeModalPokemonId = id;
+    isModalShinyActive = (currentDexType === 'shiny');
     
     modalPokeNum.textContent = `#${poke.num}`;
 
