@@ -6980,7 +6980,7 @@ function renderFriendOverviewDetails(friendCaughtSet) {
     // 1. PokéDex Categories Progress
     const categories = [
         { key: 'normal', name: 'Standard PokéDex', iconHtml: '<i class="fa-solid fa-gamepad"></i>', color: '#f5a623' },
-        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinyIconSvg, color: '#eab308' },
+        { key: 'shiny', name: 'Shiny PokéDex', iconHtml: shinyIconSvg, color: '#fbbf24' },
         { key: 'lucky', name: 'Lucky PokéDex', iconHtml: '<i class="fa-solid fa-clover"></i>', color: '#34d399' },
         { key: 'shadow', name: 'Shadow PokéDex', iconHtml: '<i class="fa-solid fa-skull"></i>', color: '#a855f7' },
         { key: 'purified', name: 'Purified PokéDex', iconHtml: '<i class="fa-solid fa-feather-pointed"></i>', color: '#38bdf8' },
@@ -7003,7 +7003,7 @@ function renderFriendOverviewDetails(friendCaughtSet) {
         return `
             <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.85rem; flex: 1; min-width: 180px;">
-                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1rem; flex-shrink: 0;">
+                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: ${cat.color}; font-size: 1rem; flex-shrink: 0;">
                         ${cat.iconHtml}
                     </div>
                     <div>
@@ -7024,29 +7024,45 @@ function renderFriendOverviewDetails(friendCaughtSet) {
 
     categoriesContainer.innerHTML = catList;
 
-    // 2. Regional Distribution
-    const gens = [1, 2, 3, 4, 5, 6, 7, 8, 8.5, 9];
-    const regionCards = gens.map(g => {
-        const genPokes = pokemonDatabase.filter(p => p.gen === g);
+    // 2. Regional Distribution Cards with Vibrant Distinct Region Colors
+    const regionsMeta = [
+        { gen: 1, name: 'Kanto', color: '#ef4444' },
+        { gen: 2, name: 'Johto', color: '#f5a623' },
+        { gen: 3, name: 'Hoenn', color: '#10b981' },
+        { gen: 4, name: 'Sinnoh', color: '#3b82f6' },
+        { gen: 5, name: 'Unova', color: '#8b5cf6' },
+        { gen: 6, name: 'Kalos', color: '#ec4899' },
+        { gen: 7, name: 'Alola', color: '#06b6d4' },
+        { gen: 8, name: 'Galar', color: '#f97316' },
+        { gen: 8.5, name: 'Hisui', color: '#14b8a6' },
+        { gen: 9, name: 'Paldea', color: '#a855f7' }
+    ];
+
+    const regionCards = regionsMeta.map(reg => {
+        const genPokes = pokemonDatabase.filter(p => p.gen === reg.gen);
         const total = genPokes.length;
         if (total === 0) return '';
 
         const caught = genPokes.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
         const pct = Math.round((caught / total) * 100);
-        const name = regionNames[g] || `Gen ${g}`;
 
         return `
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-weight: 800; font-size: 1rem; color: var(--text-primary);">${name}</span>
-                    <span style="font-size: 0.75rem; color: var(--accent-color); font-weight: 800; background: rgba(245,166,35,0.12); padding: 2px 8px; border-radius: 12px;">${pct}%</span>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem; display: flex; flex-direction: column; gap: 0.75rem; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: ${reg.color};"></div>
+                        <span style="font-weight: 800; color: #fff; font-size: 0.95rem;">${reg.name} (Gen ${reg.gen})</span>
+                    </div>
+                    <span style="font-weight: 800; color: ${reg.color}; font-size: 0.9rem;">${caught} / ${total}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: #94a3b8;">
-                    <span>Caught</span>
-                    <span style="font-weight: 700; color: var(--text-primary);">${caught} / ${total}</span>
+
+                <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: ${pct}%; background: ${reg.color}; border-radius: 4px; transition: width 0.3s;"></div>
                 </div>
-                <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
-                    <div style="width: ${pct}%; height: 100%; background: var(--accent-color); border-radius: 4px;"></div>
+
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8;">
+                    <span>Completion: <strong style="color: #fff;">${pct}%</strong></span>
+                    <span>Remaining: <strong style="color: #f87171;">${total - caught}</strong></span>
                 </div>
             </div>
         `;
@@ -7305,11 +7321,23 @@ function renderComparisonStats(friendCaughtArray, friendName) {
     const myPercent = totalPokes > 0 ? ((myTotalCaught / totalPokes) * 100).toFixed(1) : 0;
     const friendPercent = totalPokes > 0 ? ((friendTotalCaught / totalPokes) * 100).toFixed(1) : 0;
     
-    // Gen breakdown
-    const gens = Array.from(new Set(pokemonDatabase.map(p => p.gen))).sort((a, b) => a - b);
+    // Regional breakdown with distinct colors matching user profile
+    const regionsMeta = [
+        { gen: 1, name: 'Kanto', color: '#ef4444' },
+        { gen: 2, name: 'Johto', color: '#f5a623' },
+        { gen: 3, name: 'Hoenn', color: '#10b981' },
+        { gen: 4, name: 'Sinnoh', color: '#3b82f6' },
+        { gen: 5, name: 'Unova', color: '#8b5cf6' },
+        { gen: 6, name: 'Kalos', color: '#ec4899' },
+        { gen: 7, name: 'Alola', color: '#06b6d4' },
+        { gen: 8, name: 'Galar', color: '#f97316' },
+        { gen: 8.5, name: 'Hisui', color: '#14b8a6' },
+        { gen: 9, name: 'Paldea', color: '#a855f7' }
+    ];
+
     let genHtml = "";
-    gens.forEach(g => {
-        const genPokes = pokemonDatabase.filter(p => p.gen === g);
+    regionsMeta.forEach(reg => {
+        const genPokes = pokemonDatabase.filter(p => p.gen === reg.gen);
         const genTotal = genPokes.length;
         if (genTotal === 0) return;
         
@@ -7319,13 +7347,14 @@ function renderComparisonStats(friendCaughtArray, friendName) {
         const myGenPercent = ((myGenCaught / genTotal) * 100).toFixed(0);
         const friendGenPercent = ((friendGenCaught / genTotal) * 100).toFixed(0);
         
-        const genLabel = regionNames[g] || `Gen ${g}`;
-        
         genHtml += `
-            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 6px;">
-                    <span style="font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">${genLabel}</span>
-                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">${genTotal} Total</span>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="width: 10px; height: 10px; border-radius: 50%; background: ${reg.color};"></div>
+                        <span style="font-weight: 800; font-size: 0.95rem; color: #fff;">${reg.name} (Gen ${reg.gen})</span>
+                    </div>
+                    <span style="font-size: 0.75rem; color: #64748b; font-weight: 700;">${genTotal} Total</span>
                 </div>
                 
                 <!-- You Progress -->
@@ -7334,19 +7363,19 @@ function renderComparisonStats(friendCaughtArray, friendName) {
                         <span style="color: #60a5fa; font-weight: 700;">You</span>
                         <span style="color: var(--text-primary); font-weight: 700;">${myGenCaught}/${genTotal} <span style="color: #60a5fa; font-size: 0.72rem;">(${myGenPercent}%)</span></span>
                     </div>
-                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
-                        <div style="width: ${myGenPercent}%; height: 100%; background: #60a5fa; border-radius: 3px;"></div>
+                    <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${myGenPercent}%; height: 100%; background: #60a5fa; border-radius: 4px;"></div>
                     </div>
                 </div>
                 
                 <!-- Friend Progress -->
                 <div style="display: flex; flex-direction: column; gap: 4px;">
                     <div style="display: flex; justify-content: space-between; font-size: 0.78rem;">
-                        <span style="color: var(--accent-color); font-weight: 700;">${friendName}</span>
-                        <span style="color: var(--text-primary); font-weight: 700;">${friendGenCaught}/${genTotal} <span style="color: var(--accent-color); font-size: 0.72rem;">(${friendGenPercent}%)</span></span>
+                        <span style="color: ${reg.color}; font-weight: 700;">${friendName}</span>
+                        <span style="color: var(--text-primary); font-weight: 700;">${friendGenCaught}/${genTotal} <span style="color: ${reg.color}; font-size: 0.72rem;">(${friendGenPercent}%)</span></span>
                     </div>
-                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden;">
-                        <div style="width: ${friendGenPercent}%; height: 100%; background: var(--accent-color); border-radius: 3px;"></div>
+                    <div style="width: 100%; height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden;">
+                        <div style="width: ${friendGenPercent}%; height: 100%; background: ${reg.color}; border-radius: 4px;"></div>
                     </div>
                 </div>
             </div>
@@ -7364,7 +7393,7 @@ function renderComparisonStats(friendCaughtArray, friendName) {
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; width: 100%;">
                 <!-- You -->
-                <div style="background: rgba(96, 165, 250, 0.06); border: 1px solid rgba(96, 165, 250, 0.25); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+                <div style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
                     <div>
                         <span style="font-weight: 800; font-size: 0.95rem; color: #60a5fa; display: block; margin-bottom: 4px;">You</span>
                         <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${myTotalCaught} / ${totalPokes} Caught</span>
@@ -7375,7 +7404,7 @@ function renderComparisonStats(friendCaughtArray, friendName) {
                 </div>
                 
                 <!-- Friend -->
-                <div style="background: rgba(245, 166, 35, 0.06); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: justify-between; gap: 1rem;">
+                <div style="background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.3); border-radius: 10px; padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
                     <div>
                         <span style="font-weight: 800; font-size: 0.95rem; color: var(--accent-color); display: block; margin-bottom: 4px;">${friendName}</span>
                         <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 600;">${friendTotalCaught} / ${totalPokes} Caught</span>
