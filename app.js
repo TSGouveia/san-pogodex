@@ -157,6 +157,28 @@ const regionalFormPokeApiIds = {
   "basculin-blue": "10016"
 };
 
+const shinySpriteScaleCompensation = {"710":1.249,"711":1.266,"721":1.102,"808":0.739,"809":0.931,"849":0.731,"890":0.964,"899":0.958,"900":0.874,"901":0.903,"902":0.945,"903":0.895,"904":0.882,"905":0.846,"906":0.836,"907":0.866,"909":0.933,"910":0.74,"911":0.914,"912":0.84,"913":0.926,"914":0.927,"915":0.705,"916":0.844,"917":0.754,"918":0.867,"919":0.703,"920":0.943,"921":0.941,"922":0.949,"923":0.956,"924":0.851,"925":0.882,"927":0.954,"928":0.768,"929":0.878,"931":1.14,"932":0.847,"933":0.904,"934":0.915,"935":1.121,"936":0.945,"937":0.958,"938":0.877,"939":0.655,"942":0.85,"943":0.841,"944":0.852,"945":0.838,"946":1.164,"948":0.704,"949":0.904,"950":0.853,"951":1.158,"952":0.917,"953":0.945,"954":1.031,"955":1.099,"957":1.088,"958":1.036,"960":0.611,"961":0.779,"962":0.913,"963":0.842,"964":0.842,"965":0.929,"966":0.908,"967":0.872,"969":0.97,"971":0.914,"972":0.953,"976":0.946,"977":0.964,"978":0.874,"979":0.906,"981":0.891,"982":0.779,"984":0.943,"985":0.864,"986":0.837,"987":0.946,"988":0.897,"989":0.899,"990":0.962,"991":0.83,"992":1.04,"993":0.909,"995":0.901,"996":0.942,"997":0.942,"998":0.971,"999":0.886,"1000":0.903,"1001":0.866,"1003":0.933,"1007":0.834,"1008":0.909,"1009":0.957,"1010":0.944,"1011":1.177,"1012":1.313,"1013":1.106,"1015":0.968,"1017":0.949,"1018":1.054,"1019":0.949,"1020":0.947,"1022":0.947,"1024":0.823,"1025":0.952,"10091":0.798,"10092":0.802,"10093":0.802,"10100":0.804,"10101":0.804,"10102":0.851,"10103":0.8,"10104":0.916,"10105":0.752,"10106":0.891,"10107":0.798,"10108":0.802,"10109":0.891,"10110":0.928,"10111":0.834,"10112":0.886,"10113":0.952,"10114":0.912,"10115":0.876,"10118":0.804,"10120":0.924,"10123":0.846,"10124":0.796,"10125":0.8,"10126":0.8,"10127":0.863,"10136":0.798,"10140":0.971,"10149":0.876,"10152":0.954,"10161":0.771,"10162":0.655,"10163":0.796,"10164":0.848,"10165":0.855,"10166":0.834,"10167":0.851,"10168":0.884,"10169":0.914,"10170":0.808,"10171":0.928,"10173":0.64,"10174":0.827,"10175":0.872,"10176":0.651,"10177":0.84,"10179":0.823,"10180":0.808,"10181":0.804,"10182":0.867,"10184":0.804,"10185":0.888,"10186":0.764,"10187":0.823,"10188":0.952,"10189":0.941,"10190":0.962,"10191":0.848,"10193":0.874,"10194":0.928,"10195":0.918,"10196":0.861,"10197":0.891,"10198":0.882,"10199":0.884,"10200":0.884,"10201":0.817,"10202":0.926,"10203":0.768,"10204":0.903,"10205":0.888,"10206":0.863,"10207":0.924,"10208":0.916,"10209":0.903,"10210":0.754,"10211":0.958,"10213":0.893,"10214":0.749,"10215":0.758,"10216":0.76,"10217":0.76,"10218":0.825,"10219":0.971,"10220":0.861,"10221":0.739,"10222":0.935,"10223":0.804,"10224":0.783,"10225":0.924,"10226":0.817,"10227":0.796,"10228":0.971,"10229":0.823,"10230":0.964,"10233":1.031,"10234":0.781,"10235":0.756,"10237":0.848,"10238":0.823,"10239":0.855,"10240":0.897,"10241":0.863,"10242":0.851,"10243":0.794,"10245":0.931,"10246":0.937,"10247":0.752,"10248":0.933,"10249":0.848,"10251":0.953,"10252":1.056,"10254":0.859,"10259":0.946,"10260":1.042,"10261":1.047,"10262":1.037,"10263":0.96,"10272":1.172,"10273":0.947,"10274":0.947,"10275":0.949};
+
+function updateModalPokemonImageDisplay(artworkId) {
+    if (!modalPokeImg) return;
+    const normal = modalPokeImg.dataset.normal || modalPokeImg.src;
+    const shiny = modalPokeImg.dataset.shiny || normal;
+    modalPokeImg.src = isModalShinyActive ? shiny : normal;
+    if (modalPokeImgContainer) {
+        modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
+    }
+    if (modalShinyToggleBtn) {
+        modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
+    }
+    const targetId = String(artworkId || modalPokeImg.dataset.artworkId || '');
+    if (isModalShinyActive && targetId && shinySpriteScaleCompensation[targetId]) {
+        const scaleVal = shinySpriteScaleCompensation[targetId];
+        modalPokeImg.style.setProperty('--shiny-scale', scaleVal);
+    } else {
+        modalPokeImg.style.removeProperty('--shiny-scale');
+    }
+}
+
 let pokeApiIdMapping = {};
 
 function getRegionalFormPokeApiId(name) {
@@ -2683,13 +2705,7 @@ function setupEventListeners() {
         modalPokeImgContainer.addEventListener('click', () => {
             if (!modalPokeImg) return;
             isModalShinyActive = !isModalShinyActive;
-            const normal = modalPokeImg.dataset.normal || modalPokeImg.src;
-            const shiny = modalPokeImg.dataset.shiny || normal;
-            modalPokeImg.src = isModalShinyActive ? shiny : normal;
-            modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
-            if (modalShinyToggleBtn) {
-                modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
-            }
+            updateModalPokemonImageDisplay();
         });
     }
 
@@ -3213,15 +3229,10 @@ function applyModalPokemonForm(basePoke, rf) {
         if (modalPokeImg) {
             modalPokeImg.dataset.normal = normalImg;
             modalPokeImg.dataset.shiny = shinyImg;
-            modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
+            modalPokeImg.dataset.artworkId = String(basePoke.id);
             modalPokeImg.alt = basePoke.name;
         }
-        if (modalPokeImgContainer) {
-            modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
-        }
-        if (modalShinyToggleBtn) {
-            modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
-        }
+        updateModalPokemonImageDisplay(String(basePoke.id));
 
         const primaryType = basePoke.types[0] || 'normal';
         modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
@@ -3245,15 +3256,10 @@ function applyModalPokemonForm(basePoke, rf) {
     if (modalPokeImg) {
         modalPokeImg.dataset.normal = normalImg;
         modalPokeImg.dataset.shiny = shinyImg;
-        modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
+        modalPokeImg.dataset.artworkId = String(rfId || basePoke.id);
         modalPokeImg.alt = displayName;
     }
-    if (modalPokeImgContainer) {
-        modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
-    }
-    if (modalShinyToggleBtn) {
-        modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
-    }
+    updateModalPokemonImageDisplay(String(rfId || basePoke.id));
 
     const formTypes = [
         rf.primaryType ? rf.primaryType.names.English.toLowerCase() : 'normal',
