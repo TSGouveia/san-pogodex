@@ -2686,6 +2686,7 @@ function setupEventListeners() {
             const normal = modalPokeImg.dataset.normal || modalPokeImg.src;
             const shiny = modalPokeImg.dataset.shiny || normal;
             modalPokeImg.src = isModalShinyActive ? shiny : normal;
+            modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
             if (modalShinyToggleBtn) {
                 modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
             }
@@ -3215,6 +3216,9 @@ function applyModalPokemonForm(basePoke, rf) {
             modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
             modalPokeImg.alt = basePoke.name;
         }
+        if (modalPokeImgContainer) {
+            modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
+        }
         if (modalShinyToggleBtn) {
             modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
         }
@@ -3234,8 +3238,8 @@ function applyModalPokemonForm(basePoke, rf) {
     const rKey = getRegionalFormKey(rf);
     const rfId = (rKey ? (pokeApiIdMapping[rKey] || regionalFormPokeApiIds[rKey]) : null) || getRegionalFormPokeApiId(displayName) || getRegionalFormPokeApiId(rf.formId);
 
-    const normalImg = rfId ? `${POKE_SPRITE_BASE_URL}/${rfId}.png` : (rf.assets?.image || basePoke.img);
-    const shinyImg = rfId ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png` : (rf.assets?.shinyImage || normalImg);
+    const normalImg = rfId ? `${POKE_SPRITE_BASE_URL}/${rfId}.png` : basePoke.img;
+    const shinyImg = rfId ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${rfId}.png` : normalImg;
 
     modalPokeName.textContent = displayName;
     if (modalPokeImg) {
@@ -3243,6 +3247,9 @@ function applyModalPokemonForm(basePoke, rf) {
         modalPokeImg.dataset.shiny = shinyImg;
         modalPokeImg.src = isModalShinyActive ? shinyImg : normalImg;
         modalPokeImg.alt = displayName;
+    }
+    if (modalPokeImgContainer) {
+        modalPokeImgContainer.classList.toggle('is-shiny', isModalShinyActive);
     }
     if (modalShinyToggleBtn) {
         modalShinyToggleBtn.classList.toggle('active', isModalShinyActive);
@@ -5954,7 +5961,7 @@ function getEvolutionParentInfo(poke) {
                             
                             let img = rfId 
                                 ? `${POKE_SPRITE_BASE_URL}/${rfId}.png`
-                                : (rf.assets && rf.assets.image ? rf.assets.image : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`);
+                                : `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`;
                             
                             return {
                                 parent: basePoke,
