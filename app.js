@@ -8323,14 +8323,20 @@ function getEventFeaturedPokemonList(ev) {
                 if (f && f.image) { sprite = f.image; displayName = 'Primal ' + displayName; }
             }
 
+            const matchIdx = cleanTitle.indexOf(' ' + pNameLower + ' ');
+
             seenPokeIds.add(p.id);
             found.push({
                 name: displayName,
                 id: p.id,
-                img: sprite
+                img: sprite,
+                matchIndex: matchIdx !== -1 ? matchIdx : 9999
             });
         }
     }
+
+    // Sort found Pokemon by their appearance order in the event title
+    found.sort((a, b) => a.matchIndex - b.matchIndex);
 
     return found;
 }
@@ -8534,29 +8540,42 @@ function renderEventsCalendar(listContainer, now) {
                     openEventModal(ev);
                 });
 
-                // Line 1: Header with Event Type badge and Time range
-                const topBar = document.createElement('div');
-                topBar.style.cssText = `
+                // Line 1: Centered Event Type Badge
+                const typeRow = document.createElement('div');
+                typeRow.style.cssText = `
                     display: flex;
                     align-items: center;
-                    justify-content: space-between;
-                    gap: 4px;
+                    justify-content: center;
                     width: 100%;
-                    overflow: hidden;
                 `;
-
-                topBar.innerHTML = `
-                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 2px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;">
+                typeRow.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.65rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 2px 8px; border-radius: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
                         <i class="fa-solid ${ctx.icon}" style="font-size: 0.58rem; flex-shrink: 0;"></i>
                         <span style="overflow: hidden; text-overflow: ellipsis;">${ctx.typeLabel}</span>
                     </span>
-                    <span style="font-size: 0.62rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap; flex-shrink: 0;">
-                        ${ctx.timeStr}
-                    </span>
                 `;
-                evItem.appendChild(topBar);
+                evItem.appendChild(typeRow);
 
-                // Line 2: Centered Pokémon sprites (larger, clear display)
+                // Line 2: Centered Schedule / Time Range
+                const timeRow = document.createElement('div');
+                timeRow.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 4px;
+                    width: 100%;
+                    font-size: 0.64rem;
+                    color: var(--text-secondary);
+                    font-weight: 600;
+                    letter-spacing: 0.2px;
+                `;
+                timeRow.innerHTML = `
+                    <i class="fa-regular fa-clock" style="font-size: 0.58rem; opacity: 0.7;"></i>
+                    <span>${ctx.timeStr}</span>
+                `;
+                evItem.appendChild(timeRow);
+
+                // Line 3: Centered Pokémon sprites (larger, clear display)
                 const spriteRow = document.createElement('div');
                 spriteRow.style.cssText = `
                     display: flex;
@@ -8601,7 +8620,7 @@ function renderEventsCalendar(listContainer, now) {
                 }
                 evItem.appendChild(spriteRow);
 
-                // Line 3: Bottom line with Pokémon names (or fallback event title)
+                // Line 4: Centered Pokémon names (or fallback event title)
                 const nameRow = document.createElement('div');
                 nameRow.style.cssText = `
                     text-align: center;
