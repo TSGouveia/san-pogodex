@@ -8186,10 +8186,63 @@ function createEventCardElement(ev, now) {
     return card;
 }
 
-function getEventFeaturedPokemon(ev) {
-    if (!pokemonDatabase || pokemonDatabase.length === 0) return null;
-    
-    // 1. Check if event details already have spawns or features
+function getEventContext(ev) {
+    const t = (ev.title || '').toLowerCase();
+    let typeLabel = 'Event';
+    let badgeColor = '#60a5fa';
+    let badgeBg = 'rgba(59, 130, 246, 0.2)';
+    let icon = 'fa-calendar-check';
+
+    if (t.includes('spotlight hour')) {
+        typeLabel = 'Spotlight Hour';
+        badgeColor = '#fcd34d';
+        badgeBg = 'rgba(245, 166, 35, 0.25)';
+        icon = 'fa-star';
+    } else if (t.includes('raid hour')) {
+        typeLabel = 'Raid Hour';
+        badgeColor = '#f87171';
+        badgeBg = 'rgba(239, 68, 68, 0.25)';
+        icon = 'fa-shield-halved';
+    } else if (t.includes('community day')) {
+        typeLabel = 'Community Day';
+        badgeColor = '#34d399';
+        badgeBg = 'rgba(16, 185, 129, 0.25)';
+        icon = 'fa-people-group';
+    } else if (t.includes('max monday')) {
+        typeLabel = 'Max Monday';
+        badgeColor = '#fb923c';
+        badgeBg = 'rgba(251, 146, 60, 0.25)';
+        icon = 'fa-bolt';
+    } else if (t.includes('hatch day')) {
+        typeLabel = 'Hatch Day';
+        badgeColor = '#38bdf8';
+        badgeBg = 'rgba(56, 189, 248, 0.25)';
+        icon = 'fa-egg';
+    } else if (t.includes('max battle day')) {
+        typeLabel = 'Max Battle Day';
+        badgeColor = '#f97316';
+        badgeBg = 'rgba(249, 115, 22, 0.25)';
+        icon = 'fa-bolt-lightning';
+    } else if (t.includes('raid day')) {
+        typeLabel = 'Raid Day';
+        badgeColor = '#e11d48';
+        badgeBg = 'rgba(225, 29, 72, 0.25)';
+        icon = 'fa-hand-fist';
+    }
+
+    const s = new Date(ev.start);
+    const e = new Date(ev.end);
+    const timeStr = s.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + e.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    return { typeLabel, badgeColor, badgeBg, icon, timeStr };
+}
+
+function getEventFeaturedPokemonList(ev) {
+    if (!pokemonDatabase || pokemonDatabase.length === 0) return [];
+    const found = [];
+    const seenPokeIds = new Set();
+
+    // 1. Check if event details explicitly contain spawns or features
     if (ev.details) {
         const candidateList = [];
         if (Array.isArray(ev.details.spawns)) candidateList.push(...ev.details.spawns);
@@ -8198,33 +8251,88 @@ function getEventFeaturedPokemon(ev) {
             if (!cand || !cand.name) continue;
             const candName = cand.name.toLowerCase();
             const matched = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === candName);
-            if (matched) {
-                return {
+            if (matched && !seenPokeIds.has(matched.id)) {
+                seenPokeIds.add(matched.id);
+                found.push({
                     name: matched.name,
                     id: matched.id,
-                    img: matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`
-                };
+                    img: cand.asset_url || matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`
+                });
             }
         }
     }
 
-    // 2. Extract Pokemon name from event title
+    // 2. Extract Pokemon name(s) and specific Form(s) from event title
     const cleanTitle = ' ' + (ev.title || '').toLowerCase().replace(/[^a-z0-9]/g, ' ') + ' ';
-    // Match against pokemonDatabase sorted by name length descending to avoid partial matches
     const sortedDb = [...pokemonDatabase].sort((a, b) => (b.name ? b.name.length : 0) - (a.name ? a.name.length : 0));
+
     for (const p of sortedDb) {
         if (!p.name || p.name.length < 3) continue;
+        if (seenPokeIds.has(p.id)) continue;
+
         const pNameLower = p.name.toLowerCase().replace(/[^a-z0-9]/g, ' ');
         if (cleanTitle.includes(' ' + pNameLower + ' ')) {
-            return {
-                name: p.name,
+            let sprite = p.img || `${POKE_SPRITE_BASE_URL}/${p.id}.png`;
+            let displayName = p.name;
+
+            // Check raw forms in rawPokedexData if available
+            let rawAssetForms = [];
+            if (rawPokedexData && Array.isArray(rawPokedexData)) {
+                const rawEntry = rawPokedexData.find(raw => String(raw.dexNr) === String(p.id));
+                if (rawEntry && Array.isArray(rawEntry.assetForms)) {
+                    rawAssetForms = rawEntry.assetForms;
+                }
+            }
+
+            // Specific form detection and sprite matching
+            if (cleanTitle.includes('origin') && rawAssetForms.some(a => a.form === 'ORIGIN')) {
+                const f = rawAssetForms.find(a => a.form === 'ORIGIN');
+                if (f && f.image) { sprite = f.image; displayName += ' (Origin)'; }
+            } else if (cleanTitle.includes('altered') && rawAssetForms.some(a => a.form === 'ALTERED')) {
+                const f = rawAssetForms.find(a => a.form === 'ALTERED');
+                if (f && f.image) { sprite = f.image; displayName += ' (Altered)'; }
+            } else if (cleanTitle.includes('dawn wings') && rawAssetForms.some(a => a.form === 'DAWN_WINGS')) {
+                const f = rawAssetForms.find(a => a.form === 'DAWN_WINGS');
+                if (f && f.image) { sprite = f.image; displayName += ' (Dawn Wings)'; }
+            } else if (cleanTitle.includes('dusk mane') && rawAssetForms.some(a => a.form === 'DUSK_MANE')) {
+                const f = rawAssetForms.find(a => a.form === 'DUSK_MANE');
+                if (f && f.image) { sprite = f.image; displayName += ' (Dusk Mane)'; }
+            } else if (cleanTitle.includes('alolan') && rawAssetForms.some(a => a.form === 'ALOLA')) {
+                const f = rawAssetForms.find(a => a.form === 'ALOLA');
+                if (f && f.image) { sprite = f.image; displayName += ' (Alolan)'; }
+            } else if (cleanTitle.includes('galarian') && rawAssetForms.some(a => a.form === 'GALARIAN')) {
+                const f = rawAssetForms.find(a => a.form === 'GALARIAN');
+                if (f && f.image) { sprite = f.image; displayName += ' (Galarian)'; }
+            } else if (cleanTitle.includes('hisuian') && rawAssetForms.some(a => a.form === 'HISUIAN')) {
+                const f = rawAssetForms.find(a => a.form === 'HISUIAN');
+                if (f && f.image) { sprite = f.image; displayName += ' (Hisuian)'; }
+            } else if (cleanTitle.includes('paldean') && rawAssetForms.some(a => a.form && a.form.startsWith('PALDEA'))) {
+                const f = rawAssetForms.find(a => a.form && a.form.startsWith('PALDEA'));
+                if (f && f.image) { sprite = f.image; displayName += ' (Paldean)'; }
+            } else if (cleanTitle.includes('therian') && rawAssetForms.some(a => a.form === 'THERIAN')) {
+                const f = rawAssetForms.find(a => a.form === 'THERIAN');
+                if (f && f.image) { sprite = f.image; displayName += ' (Therian)'; }
+            } else if (cleanTitle.includes('incarnate') && rawAssetForms.some(a => a.form === 'INCARNATE')) {
+                const f = rawAssetForms.find(a => a.form === 'INCARNATE');
+                if (f && f.image) { sprite = f.image; displayName += ' (Incarnate)'; }
+            } else if (cleanTitle.includes('mega') && rawAssetForms.some(a => a.form === 'MEGA')) {
+                const f = rawAssetForms.find(a => a.form === 'MEGA');
+                if (f && f.image) { sprite = f.image; displayName = 'Mega ' + displayName; }
+            } else if (cleanTitle.includes('primal') && rawAssetForms.some(a => a.form === 'PRIMAL')) {
+                const f = rawAssetForms.find(a => a.form === 'PRIMAL');
+                if (f && f.image) { sprite = f.image; displayName = 'Primal ' + displayName; }
+            }
+
+            seenPokeIds.add(p.id);
+            found.push({
+                name: displayName,
                 id: p.id,
-                img: p.img || `${POKE_SPRITE_BASE_URL}/${p.id}.png`
-            };
+                img: sprite
+            });
         }
     }
 
-    return null;
+    return found;
 }
 
 function renderEventsCalendar(listContainer, now) {
@@ -8389,24 +8497,26 @@ function renderEventsCalendar(listContainer, now) {
             `;
 
             dayEvents.forEach(ev => {
-                const poke = getEventFeaturedPokemon(ev);
+                const pokeList = getEventFeaturedPokemonList(ev);
+                const ctx = getEventContext(ev);
+
                 const evItem = document.createElement('div');
-                evItem.title = `${ev.title} (Click to open event details)`;
+                evItem.title = `${ev.title} (${ctx.timeStr}) - Click for details`;
                 evItem.style.cssText = `
                     display: flex;
-                    align-items: center;
-                    gap: 6px;
+                    flex-direction: column;
+                    gap: 3px;
                     background: rgba(255, 255, 255, 0.04);
                     border: 1px solid rgba(255, 255, 255, 0.08);
-                    border-radius: 6px;
-                    padding: 3px 5px;
+                    border-radius: 8px;
+                    padding: 5px 6px;
                     cursor: pointer;
                     transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
                 `;
 
                 evItem.addEventListener('mouseenter', () => {
-                    evItem.style.transform = 'translateY(-1px) scale(1.02)';
-                    evItem.style.background = 'rgba(245, 166, 35, 0.15)';
+                    evItem.style.transform = 'translateY(-2px) scale(1.01)';
+                    evItem.style.background = 'rgba(245, 166, 35, 0.12)';
                     evItem.style.borderColor = 'var(--accent-color)';
                 });
                 evItem.addEventListener('mouseleave', () => {
@@ -8420,43 +8530,90 @@ function renderEventsCalendar(listContainer, now) {
                     openEventModal(ev);
                 });
 
-                if (poke && poke.img) {
-                    const imgEl = document.createElement('img');
-                    imgEl.src = poke.img;
-                    imgEl.alt = poke.name;
-                    imgEl.style.cssText = `
-                        width: 24px;
-                        height: 24px;
-                        object-fit: contain;
-                        filter: drop-shadow(0 2px 3px rgba(0,0,0,0.4));
+                // Top: Context pill (Type + Time)
+                const topBar = document.createElement('div');
+                topBar.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    gap: 4px;
+                    width: 100%;
+                `;
+
+                topBar.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 0.62rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 1px 5px; border-radius: 4px; white-space: nowrap;">
+                        <i class="fa-solid ${ctx.icon}" style="font-size: 0.55rem;"></i>
+                        ${ctx.typeLabel}
+                    </span>
+                    <span style="font-size: 0.6rem; color: var(--text-secondary); font-weight: 500; white-space: nowrap;">
+                        ${ctx.timeStr}
+                    </span>
+                `;
+                evItem.appendChild(topBar);
+
+                // Middle: Sprites + Names container
+                const contentRow = document.createElement('div');
+                contentRow.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    margin-top: 2px;
+                `;
+
+                if (pokeList.length > 0) {
+                    const spritesContainer = document.createElement('div');
+                    spritesContainer.style.cssText = `
+                        display: flex;
+                        align-items: center;
+                        gap: 2px;
                         flex-shrink: 0;
                     `;
-                    imgEl.onerror = () => { imgEl.style.display = 'none'; };
-                    evItem.appendChild(imgEl);
+
+                    pokeList.forEach(poke => {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = poke.img;
+                        imgEl.alt = poke.name;
+                        imgEl.title = poke.name;
+                        imgEl.style.cssText = `
+                            width: 26px;
+                            height: 26px;
+                            object-fit: contain;
+                            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+                            transition: transform 0.15s ease;
+                        `;
+                        imgEl.onerror = () => { imgEl.style.display = 'none'; };
+                        spritesContainer.appendChild(imgEl);
+                    });
+                    contentRow.appendChild(spritesContainer);
+
+                    const namesSpan = document.createElement('span');
+                    namesSpan.style.cssText = `
+                        font-size: 0.68rem;
+                        font-weight: 600;
+                        color: var(--text-primary);
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        flex: 1;
+                    `;
+                    namesSpan.textContent = pokeList.map(p => p.name).join(', ');
+                    contentRow.appendChild(namesSpan);
                 } else {
-                    const iconEl = document.createElement('i');
-                    iconEl.className = 'fa-solid fa-calendar-check';
-                    iconEl.style.cssText = `
-                        font-size: 0.7rem;
-                        color: var(--accent-color);
-                        flex-shrink: 0;
+                    const fallbackTitle = document.createElement('span');
+                    fallbackTitle.style.cssText = `
+                        font-size: 0.68rem;
+                        font-weight: 600;
+                        color: var(--text-primary);
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        flex: 1;
                     `;
-                    evItem.appendChild(iconEl);
+                    fallbackTitle.textContent = ev.title;
+                    contentRow.appendChild(fallbackTitle);
                 }
 
-                const titleSpan = document.createElement('span');
-                titleSpan.style.cssText = `
-                    font-size: 0.68rem;
-                    font-weight: 600;
-                    color: var(--text-primary);
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    max-width: 100%;
-                `;
-                titleSpan.textContent = poke ? poke.name : ev.title;
-                evItem.appendChild(titleSpan);
-
+                evItem.appendChild(contentRow);
                 eventsListWrapper.appendChild(evItem);
             });
 
