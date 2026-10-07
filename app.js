@@ -8390,9 +8390,6 @@ function renderEventsCalendar(listContainer, now) {
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <i class="fa-regular fa-calendar-days" style="color: var(--accent-color); font-size: 1.2rem;"></i>
             <h3 style="margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--text-primary);">${monthName}</h3>
-            <span style="font-size: 0.75rem; font-weight: 700; background: rgba(245, 166, 35, 0.15); color: var(--accent-color); padding: 3px 10px; border-radius: 12px; border: 1px solid rgba(245, 166, 35, 0.3);">
-                ${singleDayEvents.length} Single-Day Events
-            </span>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
             <button id="cal-prev-month-btn" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: background 0.2s ease;">
