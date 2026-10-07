@@ -571,7 +571,7 @@ let liveEvents = [];
 let liveSpawns = [];
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
-let currentEventTab = 'active';
+let currentEventTab = 'this-week';
 let pokedexLimit = 60;
 let currentRenderedIds = new Set();
 const shinySparkleSvg = `
@@ -8069,19 +8069,233 @@ function openEventModal(ev) {
     modal.classList.remove('hidden');
 }
 
+function createEventCardElement(ev, now) {
+    const card = document.createElement('div');
+    card.className = 'event-card-item';
+    card.style.cssText = `
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 15px -3px rgba(0,0,0,0.2);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        cursor: pointer;
+    `;
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'translateY(-3px)';
+        card.style.boxShadow = '0 10px 25px -5px rgba(0,0,0,0.3)';
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'translateY(0)';
+        card.style.boxShadow = '0 4px 15px -3px rgba(0,0,0,0.2)';
+    });
+
+    const startD = new Date(ev.start);
+    const endD = new Date(ev.end);
+    const dateStr = startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + 
+        " - " + endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    let timeLabel = '';
+    if (now >= startD && now <= endD) {
+        const diff = endD - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-clock"></i> Ends in ${timeText}</span>`;
+    } else if (now < startD) {
+        const diff = startD - now;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-calendar"></i> Starts in ${timeText}</span>`;
+    } else {
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(148, 163, 184, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-check"></i> Concluded</span>`;
+    }
+
+    let categoryColor = '#60a5fa';
+    let categoryBg = 'rgba(59, 130, 246, 0.15)';
+    let categoryIcon = 'fa-calendar-days';
+    const catLower = (ev.category || '').toLowerCase();
+    if (catLower.includes('spotlight')) {
+        categoryColor = '#fcd34d';
+        categoryBg = 'rgba(245, 166, 35, 0.15)';
+        categoryIcon = 'fa-star';
+    } else if (catLower.includes('community')) {
+        categoryColor = '#34d399';
+        categoryBg = 'rgba(16, 185, 129, 0.15)';
+        categoryIcon = 'fa-people-group';
+    } else if (catLower.includes('raid')) {
+        categoryColor = '#f87171';
+        categoryBg = 'rgba(239, 68, 68, 0.15)';
+        categoryIcon = 'fa-hand-fist';
+    } else if (catLower.includes('battle league') || catLower.includes('gbl')) {
+        categoryColor = '#818cf8';
+        categoryBg = 'rgba(129, 140, 248, 0.15)';
+        categoryIcon = 'fa-shield-halved';
+    } else if (catLower.includes('season')) {
+        categoryColor = '#38bdf8';
+        categoryBg = 'rgba(56, 189, 248, 0.15)';
+        categoryIcon = 'fa-sun';
+    } else if (catLower.includes('max')) {
+        categoryColor = '#fb923c';
+        categoryBg = 'rgba(251, 146, 60, 0.15)';
+        categoryIcon = 'fa-bolt';
+    }
+
+    const categoryBadge = `<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 700; color: ${categoryColor}; background: rgba(11, 19, 34, 0.85); border: 1px solid ${categoryColor}55; padding: 3px 8px; border-radius: 6px; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.5);"><i class="fa-solid ${categoryIcon}" style="font-size:0.58rem;"></i>${ev.category}</span>`;
+
+    const bannerHtml = ev.banner ? `
+        <div style="width: 100%; height: 130px; position: relative; overflow: hidden; background: #0b1322;">
+            <img src="${ev.banner}" alt="${ev.title}" style="width: 100%; height: 100%; object-fit: cover;">
+            <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2;">
+                ${categoryBadge}
+            </div>
+        </div>
+    ` : `
+        <div style="width: 100%; height: 50px; background: linear-gradient(135deg, #1e293b, #0f172a); position: relative; display: flex; align-items: center; padding-left: 8px;">
+            ${categoryBadge}
+        </div>
+    `;
+    card.innerHTML = `
+        ${bannerHtml}
+        <div style="padding: 1rem; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; justify-content: space-between;">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
+                    <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 4px;">
+                        <i class="fa-regular fa-calendar-days"></i> ${dateStr}
+                    </span>
+                    ${timeLabel}
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 2px;">
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0; line-height: 1.25;">
+                        ${ev.title}
+                    </h3>
+                    <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.7;"></i>
+                </div>
+            </div>
+        </div>
+    `;
+
+    card.addEventListener('click', () => {
+        openEventModal(ev);
+    });
+
+    return card;
+}
+
 function renderEventsList() {
     const listContainer = document.getElementById('events-list-container');
     if (!listContainer) return;
     listContainer.innerHTML = '';
 
     const now = new Date();
-    
+
+    if (currentEventTab === 'this-week') {
+        const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+
+        let totalThisWeekEvents = 0;
+
+        for (let i = 0; i < 7; i++) {
+            const currentDay = new Date(todayStart.getTime() + i * 86400000);
+            const isToday = i === 0;
+
+            const dayEvents = liveEvents.filter(ev => {
+                if (!ev.start || !ev.end) return false;
+                const s = new Date(ev.start);
+                const e = new Date(ev.end);
+                const isSingleDay = s.getFullYear() === e.getFullYear() &&
+                                    s.getMonth() === e.getMonth() &&
+                                    s.getDate() === e.getDate();
+                if (!isSingleDay) return false;
+                return s.getFullYear() === currentDay.getFullYear() &&
+                       s.getMonth() === currentDay.getMonth() &&
+                       s.getDate() === currentDay.getDate();
+            });
+
+            totalThisWeekEvents += dayEvents.length;
+
+            const daySection = document.createElement('div');
+            daySection.style.cssText = `
+                grid-column: 1 / -1;
+                margin-bottom: 0.75rem;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            `;
+
+            const dayTitle = currentDay.toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric'
+            });
+
+            const dayHeader = document.createElement('div');
+            dayHeader.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                padding-bottom: 0.5rem;
+                border-bottom: 1px solid var(--border-color);
+            `;
+
+            dayHeader.innerHTML = `
+                <div style="font-size: 1.05rem; font-weight: 700; color: ${isToday ? 'var(--accent-color)' : 'var(--text-primary)'}; display: flex; align-items: center; gap: 0.5rem; text-transform: capitalize;">
+                    <i class="fa-regular fa-calendar"></i>
+                    ${dayTitle}
+                    ${isToday ? '<span style="font-size: 0.72rem; font-weight: 800; background: var(--accent-color); color: #000; padding: 2px 8px; border-radius: 12px; text-transform: uppercase;">Today</span>' : ''}
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-secondary); margin-left: auto;">
+                    ${dayEvents.length} ${dayEvents.length === 1 ? 'event' : 'events'}
+                </span>
+            `;
+            daySection.appendChild(dayHeader);
+
+            if (dayEvents.length === 0) {
+                const emptyDay = document.createElement('div');
+                emptyDay.style.cssText = `
+                    color: var(--text-secondary);
+                    font-size: 0.85rem;
+                    padding: 0.75rem 1rem;
+                    background: rgba(255, 255, 255, 0.02);
+                    border: 1px dashed var(--border-color);
+                    border-radius: 8px;
+                `;
+                emptyDay.textContent = 'No single-day events scheduled for this day.';
+                daySection.appendChild(emptyDay);
+            } else {
+                const cardsGrid = document.createElement('div');
+                cardsGrid.style.cssText = `
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                    gap: 20px;
+                `;
+                dayEvents.forEach(ev => {
+                    cardsGrid.appendChild(createEventCardElement(ev, now));
+                });
+                daySection.appendChild(cardsGrid);
+            }
+
+            listContainer.appendChild(daySection);
+        }
+
+        return;
+    }
+
     // Filter active or upcoming events
     const filtered = liveEvents.filter(ev => {
         const start = new Date(ev.start);
         const end = new Date(ev.end);
         
+        // Check if single day event (starts and ends on the same day)
+        const isSingleDay = start.getFullYear() === end.getFullYear() &&
+                            start.getMonth() === end.getMonth() &&
+                            start.getDate() === end.getDate();
+
         if (currentEventTab === 'active') {
+            // Exclude single-day events (they belong in "This Week")
+            if (isSingleDay) return false;
             return now >= start && now <= end;
         } else {
             return now < start;
@@ -8094,117 +8308,7 @@ function renderEventsList() {
     }
 
     filtered.forEach(ev => {
-        const card = document.createElement('div');
-        card.className = 'event-card-item';
-        card.style.cssText = `
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 4px 15px -3px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-        `;
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-3px)';
-            card.style.boxShadow = '0 10px 25px -5px rgba(0,0,0,0.3)';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-            card.style.boxShadow = '0 4px 15px -3px rgba(0,0,0,0.2)';
-        });
-
-        const startD = new Date(ev.start);
-        const endD = new Date(ev.end);
-        const dateStr = startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + 
-            " - " + endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
-        let timeLabel = '';
-        if (currentEventTab === 'active') {
-            const diff = endD - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
-            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-clock"></i> Ends in ${timeText}</span>`;
-        } else {
-            const diff = startD - now;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-            const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
-            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-calendar"></i> Starts in ${timeText}</span>`;
-        }
-
-        let categoryColor = '#60a5fa';
-        let categoryBg = 'rgba(59, 130, 246, 0.15)';
-        let categoryIcon = 'fa-calendar-days';
-        const catLower = (ev.category || '').toLowerCase();
-        if (catLower.includes('spotlight')) {
-            categoryColor = '#fcd34d';
-            categoryBg = 'rgba(245, 166, 35, 0.15)';
-            categoryIcon = 'fa-star';
-        } else if (catLower.includes('community')) {
-            categoryColor = '#34d399';
-            categoryBg = 'rgba(16, 185, 129, 0.15)';
-            categoryIcon = 'fa-people-group';
-        } else if (catLower.includes('raid')) {
-            categoryColor = '#f87171';
-            categoryBg = 'rgba(239, 68, 68, 0.15)';
-            categoryIcon = 'fa-hand-fist';
-        } else if (catLower.includes('battle league') || catLower.includes('gbl')) {
-            categoryColor = '#818cf8';
-            categoryBg = 'rgba(129, 140, 248, 0.15)';
-            categoryIcon = 'fa-shield-halved';
-        } else if (catLower.includes('season')) {
-            categoryColor = '#38bdf8';
-            categoryBg = 'rgba(56, 189, 248, 0.15)';
-            categoryIcon = 'fa-sun';
-        } else if (catLower.includes('max')) {
-            categoryColor = '#fb923c';
-            categoryBg = 'rgba(251, 146, 60, 0.15)';
-            categoryIcon = 'fa-bolt';
-        }
-
-        const categoryBadge = `<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 700; color: ${categoryColor}; background: rgba(11, 19, 34, 0.85); border: 1px solid ${categoryColor}55; padding: 3px 8px; border-radius: 6px; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.5);"><i class="fa-solid ${categoryIcon}" style="font-size:0.58rem;"></i>${ev.category}</span>`;
-
-        const bannerHtml = ev.banner ? `
-            <div style="width: 100%; height: 130px; position: relative; overflow: hidden; background: #0b1322;">
-                <img src="${ev.banner}" alt="${ev.title}" style="width: 100%; height: 100%; object-fit: cover;">
-                <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2;">
-                    ${categoryBadge}
-                </div>
-            </div>
-        ` : `
-            <div style="width: 100%; height: 50px; background: linear-gradient(135deg, #1e293b, #0f172a); position: relative; display: flex; align-items: center; padding-left: 8px;">
-                ${categoryBadge}
-            </div>
-        `;
-        card.innerHTML = `
-            ${bannerHtml}
-            <div style="padding: 1rem; display: flex; flex-direction: column; gap: 4px; flex-grow: 1; justify-content: space-between;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 4px;">
-                        <span style="font-size: 0.75rem; color: var(--text-secondary); font-weight: 500; display: flex; align-items: center; gap: 4px;">
-                            <i class="fa-regular fa-calendar-days"></i> ${dateStr}
-                        </span>
-                        ${timeLabel}
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 2px;">
-                        <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0; line-height: 1.25;">
-                            ${ev.title}
-                        </h3>
-                        <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.7;"></i>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        card.addEventListener('click', () => {
-            openEventModal(ev);
-        });
-
-        listContainer.appendChild(card);
+        listContainer.appendChild(createEventCardElement(ev, now));
     });
 }
 
