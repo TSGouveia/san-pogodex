@@ -8438,14 +8438,14 @@ function renderEventsCalendar(listContainer, now) {
         const padDayNum = daysInPrevMonth - firstDayIndex + p + 1;
         const padCell = document.createElement('div');
         padCell.style.cssText = `
-            min-height: 90px;
+            min-height: 125px;
             background: rgba(0, 0, 0, 0.1);
             border: 1px dashed rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 6px;
+            border-radius: 10px;
+            padding: 8px;
             opacity: 0.35;
         `;
-        padCell.innerHTML = `<span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">${padDayNum}</span>`;
+        padCell.innerHTML = `<span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">${padDayNum}</span>`;
         gridEl.appendChild(padCell);
     }
 
@@ -8461,14 +8461,15 @@ function renderEventsCalendar(listContainer, now) {
 
         const dayCell = document.createElement('div');
         dayCell.style.cssText = `
-            min-height: 95px;
+            min-height: 125px;
             background: ${isToday ? 'rgba(245, 166, 35, 0.07)' : 'rgba(255, 255, 255, 0.02)'};
             border: 1px solid ${isToday ? 'var(--accent-color)' : 'var(--border-color)'};
-            border-radius: 8px;
-            padding: 6px;
+            border-radius: 10px;
+            padding: 8px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 6px;
+            overflow: hidden;
             transition: border-color 0.2s ease, background 0.2s ease;
         `;
 
@@ -8477,13 +8478,13 @@ function renderEventsCalendar(listContainer, now) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.78rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: ${isToday ? 'var(--accent-color)' : 'var(--text-primary)'};
         `;
         dayNumberEl.innerHTML = `
             <span>${day}</span>
-            ${isToday ? '<span style="font-size: 0.62rem; font-weight: 800; background: var(--accent-color); color: #000; padding: 1px 6px; border-radius: 10px; text-transform: uppercase;">Today</span>' : ''}
+            ${isToday ? '<span style="font-size: 0.62rem; font-weight: 800; background: var(--accent-color); color: #000; padding: 2px 7px; border-radius: 10px; text-transform: uppercase;">Today</span>' : ''}
         `;
         dayCell.appendChild(dayNumberEl);
 
@@ -8492,7 +8493,7 @@ function renderEventsCalendar(listContainer, now) {
             eventsListWrapper.style.cssText = `
                 display: flex;
                 flex-direction: column;
-                gap: 4px;
+                gap: 6px;
                 flex: 1;
             `;
 
@@ -8505,24 +8506,27 @@ function renderEventsCalendar(listContainer, now) {
                 evItem.style.cssText = `
                     display: flex;
                     flex-direction: column;
-                    gap: 3px;
+                    gap: 6px;
                     background: rgba(255, 255, 255, 0.04);
                     border: 1px solid rgba(255, 255, 255, 0.08);
                     border-radius: 8px;
-                    padding: 5px 6px;
+                    padding: 6px 8px;
                     cursor: pointer;
-                    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+                    overflow: hidden;
+                    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
                 `;
 
                 evItem.addEventListener('mouseenter', () => {
                     evItem.style.transform = 'translateY(-2px) scale(1.01)';
                     evItem.style.background = 'rgba(245, 166, 35, 0.12)';
                     evItem.style.borderColor = 'var(--accent-color)';
+                    evItem.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
                 });
                 evItem.addEventListener('mouseleave', () => {
                     evItem.style.transform = 'none';
                     evItem.style.background = 'rgba(255, 255, 255, 0.04)';
                     evItem.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    evItem.style.boxShadow = 'none';
                 });
 
                 evItem.addEventListener('click', (e) => {
@@ -8530,7 +8534,7 @@ function renderEventsCalendar(listContainer, now) {
                     openEventModal(ev);
                 });
 
-                // Top: Context pill (Type + Time)
+                // Line 1: Header with Event Type badge and Time range
                 const topBar = document.createElement('div');
                 topBar.style.cssText = `
                     display: flex;
@@ -8538,82 +8542,81 @@ function renderEventsCalendar(listContainer, now) {
                     justify-content: space-between;
                     gap: 4px;
                     width: 100%;
+                    overflow: hidden;
                 `;
 
                 topBar.innerHTML = `
-                    <span style="display: inline-flex; align-items: center; gap: 3px; font-size: 0.62rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 1px 5px; border-radius: 4px; white-space: nowrap;">
-                        <i class="fa-solid ${ctx.icon}" style="font-size: 0.55rem;"></i>
-                        ${ctx.typeLabel}
+                    <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 2px 6px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;">
+                        <i class="fa-solid ${ctx.icon}" style="font-size: 0.58rem; flex-shrink: 0;"></i>
+                        <span style="overflow: hidden; text-overflow: ellipsis;">${ctx.typeLabel}</span>
                     </span>
-                    <span style="font-size: 0.6rem; color: var(--text-secondary); font-weight: 500; white-space: nowrap;">
+                    <span style="font-size: 0.62rem; color: var(--text-secondary); font-weight: 600; white-space: nowrap; flex-shrink: 0;">
                         ${ctx.timeStr}
                     </span>
                 `;
                 evItem.appendChild(topBar);
 
-                // Middle: Sprites + Names container
-                const contentRow = document.createElement('div');
-                contentRow.style.cssText = `
+                // Line 2: Centered Pokémon sprites (larger, clear display)
+                const spriteRow = document.createElement('div');
+                spriteRow.style.cssText = `
                     display: flex;
                     align-items: center;
+                    justify-content: center;
                     gap: 6px;
-                    margin-top: 2px;
+                    width: 100%;
+                    padding: 4px 0;
                 `;
 
                 if (pokeList.length > 0) {
-                    const spritesContainer = document.createElement('div');
-                    spritesContainer.style.cssText = `
-                        display: flex;
-                        align-items: center;
-                        gap: 2px;
-                        flex-shrink: 0;
-                    `;
-
                     pokeList.forEach(poke => {
                         const imgEl = document.createElement('img');
                         imgEl.src = poke.img;
                         imgEl.alt = poke.name;
                         imgEl.title = poke.name;
                         imgEl.style.cssText = `
-                            width: 26px;
-                            height: 26px;
+                            width: 38px;
+                            height: 38px;
                             object-fit: contain;
-                            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+                            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55));
                             transition: transform 0.15s ease;
                         `;
                         imgEl.onerror = () => { imgEl.style.display = 'none'; };
-                        spritesContainer.appendChild(imgEl);
+                        spriteRow.appendChild(imgEl);
                     });
-                    contentRow.appendChild(spritesContainer);
-
-                    const namesSpan = document.createElement('span');
-                    namesSpan.style.cssText = `
-                        font-size: 0.68rem;
-                        font-weight: 600;
-                        color: var(--text-primary);
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        flex: 1;
-                    `;
-                    namesSpan.textContent = pokeList.map(p => p.name).join(', ');
-                    contentRow.appendChild(namesSpan);
                 } else {
-                    const fallbackTitle = document.createElement('span');
-                    fallbackTitle.style.cssText = `
-                        font-size: 0.68rem;
-                        font-weight: 600;
-                        color: var(--text-primary);
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
-                        flex: 1;
+                    const fallbackIcon = document.createElement('div');
+                    fallbackIcon.style.cssText = `
+                        width: 32px;
+                        height: 32px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        background: rgba(255, 255, 255, 0.05);
+                        border-radius: 50%;
+                        color: var(--accent-color);
+                        font-size: 0.9rem;
                     `;
-                    fallbackTitle.textContent = ev.title;
-                    contentRow.appendChild(fallbackTitle);
+                    fallbackIcon.innerHTML = `<i class="fa-solid ${ctx.icon}"></i>`;
+                    spriteRow.appendChild(fallbackIcon);
                 }
+                evItem.appendChild(spriteRow);
 
-                evItem.appendChild(contentRow);
+                // Line 3: Bottom line with Pokémon names (or fallback event title)
+                const nameRow = document.createElement('div');
+                nameRow.style.cssText = `
+                    text-align: center;
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
+                    line-height: 1.2;
+                `;
+                nameRow.textContent = pokeList.length > 0 ? pokeList.map(p => p.name).join(', ') : ev.title;
+                evItem.appendChild(nameRow);
+
                 eventsListWrapper.appendChild(evItem);
             });
 
@@ -8629,14 +8632,14 @@ function renderEventsCalendar(listContainer, now) {
     for (let r = 1; r <= remainingCells; r++) {
         const nextPadCell = document.createElement('div');
         nextPadCell.style.cssText = `
-            min-height: 90px;
+            min-height: 125px;
             background: rgba(0, 0, 0, 0.1);
             border: 1px dashed rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            padding: 6px;
+            border-radius: 10px;
+            padding: 8px;
             opacity: 0.35;
         `;
-        nextPadCell.innerHTML = `<span style="font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);">${r}</span>`;
+        nextPadCell.innerHTML = `<span style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">${r}</span>`;
         gridEl.appendChild(nextPadCell);
     }
 
