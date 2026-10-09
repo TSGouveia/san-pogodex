@@ -3671,6 +3671,8 @@ function loadObtainingTab(poke) {
             if (rotationsTabBtn) rotationsTabBtn.click();
             const maxSubnavBtn = document.querySelector('.subnav-btn[data-target="rotations-maxbattles-section"]');
             if (maxSubnavBtn) maxSubnavBtn.click();
+            const targetKey = `maxbattle-${safeLower(activeMaxBattle.name).replace(/\s+/g, '-')}-${safeLower(activeMaxBattle.tier || 'max battles').replace(/[^a-z0-9]/g, '')}`;
+            jumpToRotationTarget(targetKey);
         });
         container.appendChild(maxCard);
     }
@@ -4672,6 +4674,7 @@ function renderActiveRotations() {
                     const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
 
                     card.className = `rotation-card-item theme-mega ${highlightClass} spawn-animation`;
+                    card.setAttribute('data-scroll-target', `maxbattle-${safeLower(boss.name).replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`);
 
                     let imgUrl = getPokemonImageUrl(boss.name, matchedPoke);
                     if (!imgUrl) {
@@ -9413,28 +9416,82 @@ function renderToDoPane() {
         });
     }
 
+    // 6. Check Max Battles / Max Raids
+    if (typeof liveMaxBattles !== 'undefined' && Array.isArray(liveMaxBattles)) {
+        liveMaxBattles.forEach(boss => {
+            const baseName = boss.name ? boss.name.replace(/^Dynamax\s+/i, '').replace(/^Gigantamax\s+/i, '').trim() : '';
+            const matched = findPokemonByName(baseName) || (boss.idName ? pokemonDatabase.find(p => p.idName && safeLower(p.idName) === safeLower(boss.idName)) : null);
+            if (matched) {
+                const tier = boss.tier || 'Max Battles';
+                const isTransf = isPokemonTransferred(matched);
+                const isMiss = isPokemonMissing(matched) && !isTransf;
+                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                const key = `maxbattle-${safeLower(boss.name).replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`;
+
+                if (isTransf) {
+                    addPriority(matched, 'Transferred', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
+                } else if (isMiss) {
+                    addPriority(matched, 'Missing', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
+                } else if (isCandy) {
+                    addPriority(matched, 'Candy', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
+                }
+            }
+        });
+    }
+
+    // 7. Check Wild Spawns (spawnRate >= 0.5%)
+    if (typeof liveSpawns !== 'undefined' && Array.isArray(liveSpawns)) {
+        liveSpawns.forEach(s => {
+            const rate = parseFloat(s.spawnRate) || 0;
+            if (rate >= 0.5) {
+                const matched = s.pokemon || pokemonDatabase.find(p => Number(p.id) === Number(s.dexNr));
+                if (matched) {
+                    const isTransf = isPokemonTransferred(matched);
+                    const isMiss = isPokemonMissing(matched) && !isTransf;
+                    const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                    const key = `spawn-${s.dexNr}`;
+                    const formattedRate = rate.toFixed(1) + '%';
+
+                    if (isTransf) {
+                        addPriority(matched, 'Transferred', 'Wild', `Wild Spawn (${formattedRate} rate)`, 'rotations-spawns-section', key, s.name);
+                    } else if (isMiss) {
+                        addPriority(matched, 'Missing', 'Wild', `Wild Spawn (${formattedRate} rate)`, 'rotations-spawns-section', key, s.name);
+                    } else if (isCandy) {
+                        addPriority(matched, 'Candy', 'Wild', `Wild Spawn (${formattedRate} rate)`, 'rotations-spawns-section', key, s.name);
+                    }
+                }
+            }
+        });
+    }
+
     const icons = {
         Raid: 'fa-solid fa-hand-fist',
+        'Max Battle': 'fa-solid fa-bolt',
         Egg: 'fa-solid fa-egg',
         Quest: 'fa-solid fa-scroll',
         Rocket: 'fa-solid fa-user-ninja',
-        Party: 'fa-solid fa-users'
+        Party: 'fa-solid fa-users',
+        Wild: 'fa-solid fa-location-dot'
     };
 
     const colors = {
         Raid: '#a78bfa',
+        'Max Battle': '#f5a623',
         Egg: '#34d399',
         Quest: '#60a5fa',
         Rocket: '#f87171',
-        Party: '#3b82f6'
+        Party: '#3b82f6',
+        Wild: '#10b981'
     };
 
     const borderColors = {
         Raid: 'rgba(167, 139, 250, 0.25)',
+        'Max Battle': 'rgba(245, 166, 35, 0.25)',
         Egg: 'rgba(52, 211, 153, 0.25)',
         Quest: 'rgba(96, 165, 250, 0.25)',
         Rocket: 'rgba(248, 113, 113, 0.25)',
-        Party: 'rgba(59, 130, 246, 0.25)'
+        Party: 'rgba(59, 130, 246, 0.25)',
+        Wild: 'rgba(16, 185, 129, 0.25)'
     };
 
     const buildItemHtml = (item) => {
