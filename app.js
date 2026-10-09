@@ -2623,17 +2623,16 @@ function setupEventListeners() {
 
     const toggleUnreleasedBtn = document.getElementById('toggle-unreleased-btn');
     if (toggleUnreleasedBtn) {
+        toggleUnreleasedBtn.classList.toggle('active', !hideUnreleased);
+        toggleUnreleasedBtn.title = hideUnreleased ? "Click to show unreleased Pokémon" : "Click to hide unreleased Pokémon";
+
         toggleUnreleasedBtn.addEventListener('click', () => {
             hideUnreleased = !hideUnreleased;
-            if (hideUnreleased) {
-                toggleUnreleasedBtn.classList.add('hide-active');
-                toggleUnreleasedBtn.title = "Show unreleased Pokémon";
-            } else {
-                toggleUnreleasedBtn.classList.remove('hide-active');
-                toggleUnreleasedBtn.title = "Hide unreleased Pokémon";
-            }
+            toggleUnreleasedBtn.classList.toggle('active', !hideUnreleased);
+            toggleUnreleasedBtn.title = hideUnreleased ? "Click to show unreleased Pokémon" : "Click to hide unreleased Pokémon";
             pokedexLimit = Infinity;
             renderPokedex(true);
+            updateCatchCounts();
             renderMissingSummary();
         });
     }
@@ -2730,6 +2729,10 @@ function getFilteredAndSortedPokemon() {
     if (currentGenFilter !== 'all') {
         const genNum = parseFloat(currentGenFilter);
         result = result.filter(p => p.gen === genNum);
+    }
+
+    if (hideUnreleased) {
+        result = result.filter(p => !p.unreleased);
     }
 
     const activeSet = getActiveCaughtSet();
@@ -3037,6 +3040,7 @@ function renderMissingSummary() {
     
     // 1. Get all missing Pokémon (including transferred ones)
     let missingList = pokemonDatabase.filter(p => {
+        if (hideUnreleased && p.unreleased) return false;
         const isCaught = caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id));
         const isTransf = transferredPokemon.has(p.id) || transferredPokemon.has(Number(p.id)) || transferredPokemon.has(String(p.id));
         return !isCaught || isTransf;

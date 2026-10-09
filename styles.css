@@ -697,19 +697,22 @@ input, button, select {
     border-radius: var(--border-radius-md);
     cursor: pointer;
     transition: all 0.2s ease;
+    opacity: 0.55;
 }
 
 .toggle-unreleased-btn:hover {
     color: var(--text-primary);
-    border-color: rgba(239, 68, 68, 0.4);
+    border-color: rgba(148, 163, 184, 0.4);
     background: var(--bg-tertiary);
+    opacity: 0.85;
 }
 
-.toggle-unreleased-btn.hide-active {
-    background: rgba(239, 68, 68, 0.15);
-    border-color: rgba(239, 68, 68, 0.6);
-    color: #f87171;
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+.toggle-unreleased-btn.active {
+    opacity: 1;
+    background: rgba(148, 163, 184, 0.15);
+    border-color: rgba(148, 163, 184, 0.55);
+    color: var(--text-primary);
+    box-shadow: 0 0 10px rgba(148, 163, 184, 0.2);
 }
 
 /* Candies Pane Unreleased & Releasing Soon Styles */
