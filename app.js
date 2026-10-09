@@ -261,6 +261,8 @@ function getMegaPokeApiIdFallback(key) {
         "blastoise-mega": "10036",
         "beedrill-mega": "10090",
         "pidgeot-mega": "10073",
+        "raichu-mega-x": "26",
+        "raichu-mega-y": "26",
         "alakazam-mega": "10037",
         "slowbro-mega": "10071",
         "gengar-mega": "10038",
@@ -1805,7 +1807,40 @@ function getBaseListForDexType(dexType = currentDexType) {
         
         const expandedResult = [];
         result.forEach(p => {
-            if (['Charizard', 'Mewtwo'].includes(p.name)) {
+            const rawP = rawPokedexData ? rawPokedexData.find(x => x.dexNr === Number(p.id)) : null;
+            const rawMegas = (rawP && rawP.megaEvolutions && typeof rawP.megaEvolutions === 'object' && !Array.isArray(rawP.megaEvolutions))
+                ? rawP.megaEvolutions
+                : null;
+            const megaKeys = rawMegas ? Object.keys(rawMegas) : [];
+
+            if (megaKeys.length > 1) {
+                megaKeys.forEach(mKey => {
+                    const megaData = rawMegas[mKey] || {};
+                    const sufMatch = mKey.match(/_([A-Z])$/i);
+                    const suffix = sufMatch ? sufMatch[1].toUpperCase() : mKey.replace(/^.*_MEGA_?/, '');
+                    const mName = (megaData.names && megaData.names.English) || `Mega ${p.name}${suffix ? ' ' + suffix : ''}`;
+                    const formTypes = [
+                        megaData.primaryType && megaData.primaryType.names ? megaData.primaryType.names.English.toLowerCase() : null,
+                        megaData.secondaryType && megaData.secondaryType.names ? megaData.secondaryType.names.English.toLowerCase() : null
+                    ].filter(Boolean);
+
+                    expandedResult.push({
+                        ...p,
+                        id: `${p.id}_MEGA_${suffix || mKey}`,
+                        baseId: p.id,
+                        megaForm: suffix || mKey,
+                        displayName: mName,
+                        types: formTypes.length > 0 ? formTypes : p.types,
+                        stats: megaData.stats ? {
+                            atk: megaData.stats.attack || p.stats.atk,
+                            def: megaData.stats.defense || p.stats.def,
+                            sta: megaData.stats.stamina || p.stats.sta
+                        } : p.stats,
+                        megaData: megaData
+                    });
+                });
+            } else if (['Charizard', 'Mewtwo', 'Raichu'].includes(p.name)) {
+                // Safe fallback in case rawPokedexData is not loaded yet
                 expandedResult.push({
                     ...p,
                     id: `${p.id}_MEGA_X`,
@@ -2868,10 +2903,18 @@ function renderPokedex(forceClear = false) {
         } else if (currentDexType === 'mega') {
             if (poke.megaForm) {
                 const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name} ${poke.megaForm}`, poke);
-                if (megaSpriteUrl) imgSrc = megaSpriteUrl;
+                if (megaSpriteUrl) {
+                    imgSrc = megaSpriteUrl;
+                } else if (poke.megaData && poke.megaData.assets && poke.megaData.assets.image) {
+                    imgSrc = poke.megaData.assets.image;
+                }
             } else {
                 const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
-                if (megaSpriteUrl) imgSrc = megaSpriteUrl;
+                if (megaSpriteUrl) {
+                    imgSrc = megaSpriteUrl;
+                } else if (poke.megaData && poke.megaData.assets && poke.megaData.assets.image) {
+                    imgSrc = poke.megaData.assets.image;
+                }
             }
         } else if (currentDexType === 'gmax') {
             const gmaxSpriteUrl = getPokemonImageUrl(`Gigantamax ${poke.name}`, poke);
