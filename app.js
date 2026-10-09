@@ -2632,7 +2632,8 @@ function setupEventListeners() {
             toggleUnreleasedBtn.title = hideUnreleased ? "Click to show unreleased Pokémon" : "Click to hide unreleased Pokémon";
             pokedexLimit = Infinity;
             renderPokedex(true);
-            updateCatchCounts();
+            updateDashboardStats();
+            updateRegionStatsBadge();
             renderMissingSummary();
         });
     }
