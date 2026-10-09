@@ -2915,7 +2915,7 @@ function renderPokedex(forceClear = false) {
                     <span class="poke-number">#${poke.num}</span>
                     ${readyToEvolve && !poke.unreleased ? `<span class="evolve-indicator-dot" style="width: 7px; height: 7px; background-color: #34d399; border-radius: 50%; display: inline-block;" title="Ready to Evolve (Almost Unlocked!)"></span>` : ''}
                     ${candyNeeded && !poke.unreleased ? `<span class="candy-indicator-dot" style="width: 7px; height: 7px; background-color: #f5a623; border-radius: 50%; display: inline-block;" title="Needs Candies to Evolve!"></span>` : ''}
-                    ${poke.releasingSoon ? `<span class="releasing-soon-badge-tag" style="color: #ff8c66; font-size: 0.75rem; opacity: 0.9; margin-left: 2px;" title="Releasing Soon: ${poke.releaseDate}"><i class="fa-solid fa-hourglass-half"></i></span>` : (poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
+                    ${poke.releasingSoon ? `<span class="releasing-soon-badge-tag" style="color: #ff8c66; font-size: 0.75rem; opacity: 0.9; margin-left: 2px;" title="Releasing Soon: ${poke.releaseDate}"><i class="fa-solid fa-hourglass-half"></i></span>` : (poke.unreleased ? `<span class="unreleased-badge-tag" title="Unreleased in Pokémon GO"><i class="fa-solid fa-lock"></i></span>` : '')}
                 </div>
                 <button class="catch-indicator-btn" aria-label="Toggle catch status" title="${isCaught ? 'Remove from Collection' : 'Mark as Caught'}">
                     <svg viewBox="0 0 100 100" class="pokeball-svg" style="width: 22px; height: 22px;">
@@ -3539,7 +3539,7 @@ function loadObtainingTab(poke) {
         unreleasedCard.style.gridColumn = '1 / -1';
         unreleasedCard.innerHTML = `
             <div class="obtain-icon-box" style="color: #ef4444; background: rgba(239, 68, 68, 0.2);">
-                <i class="fa-solid fa-eye-slash"></i>
+                <i class="fa-solid fa-lock"></i>
             </div>
             <div class="obtain-card-content">
                 <h4 style="color: #f87171; display: flex; align-items: center; gap: 6px;">
@@ -6464,7 +6464,7 @@ function renderCandiesPane() {
                     <div class="family-info">
                         <h3 class="family-title">
                             ${displayTitle}
-                            ${hasReleasingSoon ? `<span class="releasing-soon-badge-tag" style="margin-left: 6px; vertical-align: middle; color: #ff8c66; font-size: 0.85rem;" title="Upcoming Debut: ${family.base.releaseDate || 'Soon'}"><i class="fa-solid fa-hourglass-half"></i></span>` : (hasUnreleasedMember ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-eye-slash"></i></span>` : '')}
+                            ${hasReleasingSoon ? `<span class="releasing-soon-badge-tag" style="margin-left: 6px; vertical-align: middle; color: #ff8c66; font-size: 0.85rem;" title="Upcoming Debut: ${family.base.releaseDate || 'Soon'}"><i class="fa-solid fa-hourglass-half"></i></span>` : (hasUnreleasedMember ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : '')}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
@@ -6506,7 +6506,7 @@ function renderCandiesPane() {
                     let stageDisplayName = isBase ? displayTitle : member.name;
 
                     const stageClass = isReleasingSoonMember ? 'releasing-soon-stage' : (isUnreleasedMember ? 'unreleased-stage' : '');
-                    const stageIcon = isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isReleasingSoonMember ? 'fa-hourglass-half' : (isUnreleasedMember ? 'fa-eye-slash' : 'fa-circle-xmark')));
+                    const stageIcon = isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isReleasingSoonMember ? 'fa-hourglass-half' : (isUnreleasedMember ? 'fa-lock' : 'fa-circle-xmark')));
 
                     return `
                         <div class="family-stage-item ${isCaught ? 'caught' : 'missing'} ${stageClass}" data-poke-id="${member.id}" style="${isMemberTransf ? 'opacity: 0.45; filter: grayscale(40%); text-decoration: none !important;' : ''}" title="View ${member.name} details">
