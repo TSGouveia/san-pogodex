@@ -5478,6 +5478,7 @@ function saveBuddyQuestState() {
 
 let saveCandiesCloudTimeout = null;
 function saveCandyState(debounceCloud = false) {
+    if (friendViewModeActive) return;
     localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
     if (currentUser) {
         if (debounceCloud) {
@@ -6570,6 +6571,10 @@ function renderCandiesPane() {
         });
 
         const input = card.querySelector('.candy-count-input');
+        if (friendViewModeActive && input) {
+            input.disabled = true;
+            input.title = "Read-Only in Friend View Mode";
+        }
         
         input.addEventListener('input', (e) => {
             const val = parseInt(e.target.value) || 0;
@@ -9760,6 +9765,8 @@ function renderPromoCodes() {
 let friendViewModeActive = false;
 let friendViewBackupCaught = null;
 let friendViewBackupTransferred = null;
+let friendViewBackupCandies = null;
+let friendViewBackupQuests = null;
 let friendViewFriendName = '';
 
 async function openFriendPokedex(friend) {
@@ -9777,19 +9784,25 @@ async function openFriendPokedex(friend) {
         const data = friendSnap.data();
         const friendCaughtArray = data.caught || [];
         const friendTransferredArray = data.transferred || [];
+        const friendCandiesObj = data.candies || {};
+        const friendQuestsArray = data.completedQuests || [];
 
         // Save backup of current user's local state
         if (!friendViewModeActive) {
             friendViewBackupCaught = new Set(caughtPokemon);
             friendViewBackupTransferred = new Set(transferredPokemon);
+            friendViewBackupCandies = { ...userCandies };
+            friendViewBackupQuests = new Set(completedBuddyQuests);
         }
 
         friendViewModeActive = true;
         friendViewFriendName = friendName;
 
-        // Temporarily swap caught and transferred sets with friend's data
+        // Temporarily swap caught, transferred, candies and quests with friend's data
         caughtPokemon = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
         transferredPokemon = new Set(friendTransferredArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+        userCandies = { ...friendCandiesObj };
+        completedBuddyQuests = new Set(friendQuestsArray.map(x => String(x)));
 
         // Update Banner UI
         const banner = document.getElementById('friend-mode-banner');
@@ -9818,13 +9831,17 @@ async function openFriendPokedex(friend) {
 function exitFriendPokedexMode() {
     if (!friendViewModeActive) return;
 
-    // Restore user's caught state
+    // Restore user's caught, transferred, candies and quest state
     if (friendViewBackupCaught) caughtPokemon = new Set(friendViewBackupCaught);
     if (friendViewBackupTransferred) transferredPokemon = new Set(friendViewBackupTransferred);
+    if (friendViewBackupCandies) userCandies = { ...friendViewBackupCandies };
+    if (friendViewBackupQuests) completedBuddyQuests = new Set(friendViewBackupQuests);
 
     friendViewModeActive = false;
     friendViewBackupCaught = null;
     friendViewBackupTransferred = null;
+    friendViewBackupCandies = null;
+    friendViewBackupQuests = null;
     friendViewFriendName = '';
 
     // Hide Banner
