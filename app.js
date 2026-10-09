@@ -549,11 +549,12 @@ function getRegionalFormDisplayName(rf) {
 let caughtPokemon = new Set();
 let transferredPokemon = new Set();
 
-function isPokemonTransferred(poke) {
+function isPokemonTransferred(poke, transferredSet = null) {
     if (!poke) return false;
     const strId = String(poke.id);
     const numId = Number(poke.id);
-    return transferredPokemon.has(strId) || (!isNaN(numId) && transferredPokemon.has(numId));
+    const set = transferredSet || transferredPokemon;
+    return set.has(strId) || (!isNaN(numId) && set.has(numId));
 }
 
 function isPokemonMissing(poke) {
@@ -6000,14 +6001,16 @@ function getEvolutionParentAndCandies(poke) {
     return null;
 }
 
-function getCandyCount(baseId) {
-    if (userCandies[baseId] !== undefined) return Number(userCandies[baseId]);
-    if (userCandies[Number(baseId)] !== undefined) return Number(userCandies[Number(baseId)]);
-    if (userCandies[String(baseId)] !== undefined) return Number(userCandies[String(baseId)]);
+function getCandyCount(baseId, candiesMap = null) {
+    const candies = candiesMap || userCandies;
+    if (!candies) return 0;
+    if (candies[baseId] !== undefined) return Number(candies[baseId]);
+    if (candies[Number(baseId)] !== undefined) return Number(candies[Number(baseId)]);
+    if (candies[String(baseId)] !== undefined) return Number(candies[String(baseId)]);
     return 0;
 }
 
-function familyNeedsCandies(poke) {
+function familyNeedsCandies(poke, ctx = null) {
     if (!poke) return false;
     const chain = findEvolutionChain(poke);
     if (!chain || chain.length <= 1) return false;
@@ -6015,12 +6018,15 @@ function familyNeedsCandies(poke) {
     const basePoke = chain[0];
     const baseId = basePoke.id;
 
+    const caught = (ctx && ctx.caught) || caughtPokemon;
+    const candies = (ctx && ctx.candies) || userCandies;
+
     // Check if any member in the family is missing and needs evolution candies
     let totalNeeded = 0;
     let hasMissingEvolution = false;
 
     chain.forEach(member => {
-        const isMemberCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+        const isMemberCaught = caught.has(member.id) || caught.has(Number(member.id));
         if (!isMemberCaught) {
             const parentInfo = getEvolutionParentAndCandies(member);
             if (parentInfo) {
@@ -6032,19 +6038,21 @@ function familyNeedsCandies(poke) {
 
     if (!hasMissingEvolution) return false;
 
-    const currentCandies = getCandyCount(baseId);
+    const currentCandies = getCandyCount(baseId, candies);
     return currentCandies < totalNeeded;
 }
 
-function getCumulativeCandiesToEvolve(targetPoke, chain) {
+function getCumulativeCandiesToEvolve(targetPoke, chain, caughtSet = null) {
     if (!targetPoke || !chain || chain.length <= 1) return 0;
     const targetIdx = chain.findIndex(p => String(p.id) === String(targetPoke.id));
     if (targetIdx <= 0) return 0;
 
+    const caught = caughtSet || caughtPokemon;
+
     // Find the closest ancestor in the chain that is currently caught
     let caughtAncestorIdx = -1;
     for (let i = targetIdx - 1; i >= 0; i--) {
-        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+        if (caught.has(chain[i].id) || caught.has(Number(chain[i].id))) {
             caughtAncestorIdx = i;
             break;
         }
@@ -6061,14 +6069,19 @@ function getCumulativeCandiesToEvolve(targetPoke, chain) {
     return total;
 }
 
-function needsCandies(poke) {
+function needsCandies(poke, ctx = null) {
     if (!poke || poke.unreleased) return false;
+    const caught = (ctx && ctx.caught) || caughtPokemon;
+    const transferred = (ctx && ctx.transferred) || transferredPokemon;
+    const candies = (ctx && ctx.candies) || userCandies;
+    const quests = (ctx && ctx.quests) || completedBuddyQuests;
+
     // If poke itself is caught, it is NEVER yellow
-    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
+    const isCaught = caught.has(poke.id) || caught.has(Number(poke.id));
     if (isCaught) return false;
 
     // Green has priority! If it is ready to evolve, it's green, not yellow
-    if (isReadyToEvolve(poke)) return false;
+    if (isReadyToEvolve(poke, ctx)) return false;
 
     const chain = findEvolutionChain(poke);
     if (!chain || chain.length <= 1) return false;
@@ -6078,14 +6091,14 @@ function needsCandies(poke) {
     // If poke is the base pokemon itself, it's just a missing base
     if (String(poke.id) === String(baseId)) return false;
 
-    const isBaseCaught = caughtPokemon.has(basePoke.id) || caughtPokemon.has(Number(basePoke.id));
+    const isBaseCaught = caught.has(basePoke.id) || caught.has(Number(basePoke.id));
     if (!isBaseCaught) return false;
 
     // If the base pokemon is transferred, evolutions do NOT show yellow
-    if (isPokemonTransferred(basePoke)) return false;
+    if (isPokemonTransferred(basePoke, transferred)) return false;
 
-    const currentCandies = getCandyCount(baseId);
-    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain);
+    const currentCandies = getCandyCount(baseId, candies);
+    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain, caught);
     if (requiredCandies <= 0) return false;
 
     if (currentCandies < requiredCandies) return true;
@@ -6096,7 +6109,7 @@ function needsCandies(poke) {
 
     let caughtAncestorIdx = -1;
     for (let i = targetIdx - 1; i >= 0; i--) {
-        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+        if (caught.has(chain[i].id) || caught.has(Number(chain[i].id))) {
             caughtAncestorIdx = i;
             break;
         }
@@ -6109,7 +6122,7 @@ function needsCandies(poke) {
         const pInfo = getEvolutionParentAndCandies(stagePoke);
         if (pInfo && pInfo.quests && pInfo.quests.length > 0) {
             const questKey = String(stagePoke.id);
-            if (!completedBuddyQuests.has(questKey)) {
+            if (!quests.has(questKey)) {
                 return true;
             }
         }
@@ -6149,10 +6162,15 @@ function buildStaticEvolutionMaps() {
     });
 }
 
-function isReadyToEvolve(poke) {
+function isReadyToEvolve(poke, ctx = null) {
     if (!poke || poke.unreleased) return false;
+    const caught = (ctx && ctx.caught) || caughtPokemon;
+    const transferred = (ctx && ctx.transferred) || transferredPokemon;
+    const candies = (ctx && ctx.candies) || userCandies;
+    const quests = (ctx && ctx.quests) || completedBuddyQuests;
+
     // The target pokemon itself must NOT be caught
-    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
+    const isCaught = caught.has(poke.id) || caught.has(Number(poke.id));
     if (isCaught) return false;
 
     const chain = findEvolutionChain(poke);
@@ -6164,7 +6182,7 @@ function isReadyToEvolve(poke) {
 
     let caughtAncestorIdx = -1;
     for (let i = targetIdx - 1; i >= 0; i--) {
-        if (caughtPokemon.has(chain[i].id) || caughtPokemon.has(Number(chain[i].id))) {
+        if (caught.has(chain[i].id) || caught.has(Number(chain[i].id))) {
             caughtAncestorIdx = i;
             break;
         }
@@ -6174,15 +6192,15 @@ function isReadyToEvolve(poke) {
 
     // Base pokemon of the family must not be transferred
     const basePoke = chain[0];
-    if (isPokemonTransferred(basePoke)) return false;
+    if (isPokemonTransferred(basePoke, transferred)) return false;
 
     // Get family base ID and current candies
     const baseId = basePoke.id || pokeToFamilyBaseIdMap.get(poke.id);
     if (!baseId) return false;
-    const currentCandies = getCandyCount(baseId);
+    const currentCandies = getCandyCount(baseId, candies);
 
     // Calculate cumulative candies needed from closest caught ancestor up to poke
-    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain);
+    const requiredCandies = getCumulativeCandiesToEvolve(poke, chain, caught);
     if (requiredCandies <= 0) return false;
 
     if (currentCandies < requiredCandies) return false;
@@ -6193,7 +6211,7 @@ function isReadyToEvolve(poke) {
         const pInfo = getEvolutionParentAndCandies(stagePoke);
         if (pInfo && pInfo.quests && pInfo.quests.length > 0) {
             const questKey = String(stagePoke.id);
-            if (!completedBuddyQuests.has(questKey)) {
+            if (!quests.has(questKey)) {
                 return false;
             }
         }
@@ -7163,9 +7181,21 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
         ? `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(`https://pokemon-go.onelink.me/nBRb?af_dp=pokemongo://&deep_link_value=dl_action%3DAddFriend%2CDlId%3D${cleanCode}`)}`
         : null;
 
-    // Friend Caught Calculations
+    // Friend Calculations
     const friendCaughtArray = friendData.caught || [];
     const friendCaughtSet = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+    const friendTransferredArray = friendData.transferred || [];
+    const friendTransferredSet = new Set(friendTransferredArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+    const friendCandiesObj = friendData.candies || {};
+    const friendQuestsArray = friendData.completedQuests || [];
+    const friendQuestsSet = new Set(friendQuestsArray.map(x => String(x)));
+
+    const friendCtx = {
+        caught: friendCaughtSet,
+        transferred: friendTransferredSet,
+        candies: friendCandiesObj,
+        quests: friendQuestsSet
+    };
 
     const totalAll = pokemonDatabase.length;
     const caughtAll = pokemonDatabase.filter(p => friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id))).length;
@@ -7177,17 +7207,17 @@ function renderFriendProfileCard(friend, friendData, userProfileData) {
     let unreleasedCount = 0;
 
     pokemonDatabase.forEach(p => {
+        const isCaught = friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id));
         if (p.unreleased) {
             unreleasedCount++;
-        }
-        const isCaught = friendCaughtSet.has(p.id) || friendCaughtSet.has(Number(p.id));
-        if (!isCaught && !p.unreleased) {
+        } else if (isCaught) {
+            // Already caught by friend
+        } else if (isReadyToEvolve(p, friendCtx)) {
+            readyCount++;
+        } else if (needsCandies(p, friendCtx)) {
+            candyCount++;
+        } else {
             fullyMissingCount++;
-            if (isReadyToEvolve(p)) {
-                readyCount++;
-            } else if (familyNeedsCandies(p) || needsCandies(p)) {
-                candyCount++;
-            }
         }
     });
 
