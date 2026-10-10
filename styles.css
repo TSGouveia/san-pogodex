@@ -1710,6 +1710,113 @@ input, button, select {
     margin-bottom: 1.5rem;
 }
 
+/* Global Active Grid Filter Banner */
+.grid-filter-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+    border: 1px solid rgba(245, 166, 35, 0.35);
+    border-radius: 12px;
+    padding: 0.65rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.25s ease-out;
+}
+
+.grid-filter-indicator.hidden {
+    display: none !important;
+}
+
+.grid-filter-indicator .filter-indicator-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.grid-filter-indicator .indicator-icon {
+    font-size: 1.15rem;
+    color: var(--accent-color);
+    filter: drop-shadow(0 0 6px var(--accent-glow));
+}
+
+.grid-filter-indicator .indicator-text-group {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.grid-filter-indicator .indicator-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.grid-filter-indicator .indicator-value {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.grid-filter-indicator .indicator-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.08);
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.grid-filter-indicator .indicator-reset-btn {
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 5px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.grid-filter-indicator .indicator-reset-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: #fff;
+    border-color: rgba(239, 68, 68, 0.5);
+    transform: translateY(-1px);
+}
+
+.no-shiny-available-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
 .view-switcher {
     display: flex;
     background: rgba(18, 30, 54, 0.6);

@@ -680,6 +680,142 @@ const regionNames = {
     99: "Undiscovered"
 };
 
+const dexCategoryNames = {
+    normal: "Pokémon",
+    shiny: "Shiny",
+    lucky: "Lucky",
+    xxl: "XXL",
+    xxs: "XXS",
+    gmax: "G-Max",
+    mega: "Mega",
+    shadow: "Shadow",
+    purified: "Purified",
+    hundo: "100%"
+};
+
+// Global indicator DOM elements
+const gridFilterIndicatorEl = document.getElementById('grid-filter-indicator');
+const gridFilterLabelEl = document.getElementById('grid-filter-label');
+const gridFilterCountBadgeEl = document.getElementById('grid-filter-count-badge');
+const gridFilterClearBtnEl = document.getElementById('grid-filter-clear-btn');
+
+function canPokemonBeShiny(poke) {
+    if (!poke) return false;
+    if (poke.shiny === true || poke.canBeShiny === true || poke.shiny_available === true) return true;
+    if (rawPokedexData && rawPokedexData.length > 0) {
+        const rawP = rawPokedexData.find(x => x.dexNr === Number(poke.id));
+        if (rawP) {
+            if (rawP.assets && rawP.assets.shinyImage) return true;
+            if (rawP.assetForms && Array.isArray(rawP.assetForms) && rawP.assetForms.some(a => a && a.shinyImage)) return true;
+            if (rawP.shinyReleased || rawP.canBeShiny) return true;
+        }
+    }
+    return false;
+}
+
+function updateGlobalActiveFilterIndicator() {
+    if (!gridFilterIndicatorEl || !gridFilterLabelEl) return;
+    
+    // Active filters:
+    const dexCatName = dexCategoryNames[currentDexType] || currentDexType;
+    const isCategorySpecial = (currentDexType !== 'normal');
+    
+    let genName = 'Todas as Regiões';
+    if (currentGenFilter !== 'all') {
+        const gNum = parseFloat(currentGenFilter);
+        genName = regionNames[gNum] || `Gen ${gNum}`;
+    }
+    const isGenSpecial = (currentGenFilter !== 'all');
+    
+    let collFilterName = '';
+    if (currentCollectionFilter === 'missing') collFilterName = 'Faltam';
+    else if (currentCollectionFilter === 'caught') collFilterName = 'Apanhados';
+    const isCollSpecial = (currentCollectionFilter !== 'all');
+    
+    const isSearchSpecial = Boolean(currentSearchQuery && currentSearchQuery.trim());
+    
+    const isFiltered = isCategorySpecial || isGenSpecial || isCollSpecial || isSearchSpecial;
+    
+    if (!isFiltered) {
+        gridFilterIndicatorEl.classList.add('hidden');
+        return;
+    }
+    
+    gridFilterIndicatorEl.classList.remove('hidden');
+    
+    // Build human-friendly label
+    const parts = [];
+    if (isCategorySpecial) {
+        parts.push(`<span style="color: var(--accent-color); font-weight: 800;">${dexCatName}</span>`);
+    }
+    if (isGenSpecial) {
+        parts.push(`<span style="color: #60a5fa; font-weight: 700;">${genName}</span>`);
+    }
+    if (isCollSpecial) {
+        parts.push(`<span style="color: ${currentCollectionFilter === 'missing' ? '#f87171' : '#34d399'}; font-weight: 700;">${collFilterName}</span>`);
+    }
+    if (isSearchSpecial) {
+        parts.push(`<span style="color: #cbd5e1; font-weight: 600;">"${currentSearchQuery}"</span>`);
+    }
+    
+    gridFilterLabelEl.innerHTML = parts.join(' <span style="opacity: 0.4;">•</span> ');
+    
+    // Compute total count of pokemon matching this filter in grid
+    const fullList = getBaseListForDexType(currentDexType);
+    let matchedCount = fullList.length;
+    if (currentGenFilter !== 'all') {
+        const genNum = parseFloat(currentGenFilter);
+        matchedCount = fullList.filter(p => p.gen === genNum).length;
+    }
+    if (gridFilterCountBadgeEl) {
+        gridFilterCountBadgeEl.textContent = `${matchedCount} Pokémon no filtro`;
+    }
+}
+
+function resetAllGridFilters() {
+    currentDexType = 'normal';
+    currentGenFilter = 'all';
+    currentCollectionFilter = 'all';
+    currentSearchQuery = '';
+    
+    if (searchInput) searchInput.value = '';
+    
+    if (dexTypeTabsContainer) {
+        dexTypeTabsContainer.querySelectorAll('.dex-tab-btn').forEach(btn => {
+            btn.classList.toggle('active', (btn.dataset.dextype || 'normal') === 'normal');
+        });
+    }
+    
+    if (genTabsContainer) {
+        genTabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.gen === 'all');
+        });
+    }
+    
+    if (collectionFilterButtons) {
+        collectionFilterButtons.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === 'all');
+        });
+    }
+    
+    pokedexLimit = Infinity;
+    renderPokedex(true);
+    renderMissingSummary();
+    renderCandiesPane();
+    renderToDoPane();
+    updateDashboardStats();
+    updateRegionStatsBadge();
+    updateGlobalActiveFilterIndicator();
+}
+
+if (gridFilterClearBtnEl) {
+    gridFilterClearBtnEl.addEventListener('click', (e) => {
+        e.preventDefault();
+        resetAllGridFilters();
+    });
+}
+
+
 // Permanent lists of special Pokémon GO categories
 const babyPokemonIds = new Set([
     172, 173, 174, 175, 236, 238, 239, 240, 298, 360, 406, 433, 438, 439, 440, 446, 458, 848
@@ -2401,6 +2537,9 @@ function updateDashboardStats() {
     }
     if (typeof renderStatsPane === 'function') {
         renderStatsPane();
+    }
+    if (typeof updateGlobalActiveFilterIndicator === 'function') {
+        updateGlobalActiveFilterIndicator();
     }
 }
 
@@ -6327,6 +6466,12 @@ function renderCandiesPane() {
     gridTransferred.innerHTML = '';
 
     const sortOrder = candiesSortSelect ? candiesSortSelect.value : 'num-asc';
+    
+    // For categories that apply to full pokedex (normal, shiny, lucky, hundo, xxl, xxs, shadow, purified), use their activeSet.
+    // For specialized/incomplete dex categories (mega, gmax), fall back to normal dex for Candies evolution tracking.
+    const isSpecializedDex = ['mega', 'gmax'].includes(currentDexType);
+    const effectiveDexType = isSpecializedDex ? 'normal' : currentDexType;
+    const activeSet = (effectiveDexType === 'normal') ? caughtPokemon : (caughtCategoryPokemon[effectiveDexType] || caughtPokemon);
 
     // Group database by family
     const families = {};
@@ -6348,13 +6493,13 @@ function renderCandiesPane() {
     let evolutionFamilies = Object.values(families).filter(f => {
         const hasEvolution = f.members.length > 1;
         const hasUnreleasedMember = Boolean(f.base.unreleased || f.base.releasingSoon) || f.members.some(m => Boolean(m.unreleased || m.releasingSoon));
-        const hasMissingMember = f.members.some(member => !caughtPokemon.has(member.id) && !caughtPokemon.has(Number(member.id)) && !caughtPokemon.has(String(member.id)));
+        const hasMissingMember = f.members.some(member => !activeSet.has(member.id) && !activeSet.has(Number(member.id)) && !activeSet.has(String(member.id)));
         if (!hasEvolution || (!hasUnreleasedMember && !hasMissingMember)) return false;
 
-        // If all evolutions (non-base stages) are already caught, do not include in Candies pane even if base is missing
+        // If all evolutions (non-base stages) are already caught in activeSet, do not include in Candies pane even if base is missing
         const nonBaseMembers = f.members.filter(m => String(m.id) !== String(f.base.id));
         if (nonBaseMembers.length > 0) {
-            const hasMissingEvolution = nonBaseMembers.some(m => !caughtPokemon.has(m.id) && !caughtPokemon.has(Number(m.id)) && !caughtPokemon.has(String(m.id)));
+            const hasMissingEvolution = nonBaseMembers.some(m => !activeSet.has(m.id) && !activeSet.has(Number(m.id)) && !activeSet.has(String(m.id)));
             if (!hasMissingEvolution) {
                 return false;
             }
@@ -6362,6 +6507,14 @@ function renderCandiesPane() {
 
         return true;
     });
+
+    // Filter by Region (currentGenFilter) if active
+    if (currentGenFilter !== 'all') {
+        const genNum = parseFloat(currentGenFilter);
+        evolutionFamilies = evolutionFamilies.filter(f => {
+            return f.base.gen === genNum || f.members.some(m => m.gen === genNum);
+        });
+    }
 
     // Filter by search query if active
     if (currentSearchQuery) {
@@ -6384,7 +6537,7 @@ function renderCandiesPane() {
         let pendingQuestCount = 0;
 
         family.members.forEach(member => {
-            const isMemberCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+            const isMemberCaught = activeSet.has(member.id) || activeSet.has(Number(member.id)) || activeSet.has(String(member.id));
             if (!isMemberCaught) {
                 const parentInfo = getEvolutionParentAndCandies(member);
                 if (parentInfo) {
@@ -6401,7 +6554,7 @@ function renderCandiesPane() {
         });
         
         const remaining = Math.max(0, totalNeeded - currentCandies);
-        const baseIsCaught = caughtPokemon.has(baseId) || caughtPokemon.has(Number(baseId));
+        const baseIsCaught = activeSet.has(baseId) || activeSet.has(Number(baseId)) || activeSet.has(String(baseId));
         const buddyDist = getBuddyDistanceForFamily(family);
         const km = (buddyDist !== undefined) ? remaining * buddyDist : 0;
         
@@ -6505,17 +6658,24 @@ function renderCandiesPane() {
             }
         });
 
+        const isShinyView = (currentDexType === 'shiny');
+        if (isShinyView) {
+            const basePokeApiId = getRegionalFormPokeApiId(displayTitle) || family.base.id;
+            displayImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePokeApiId}.png`;
+        }
+
         const card = document.createElement('div');
         card.className = hasReleasingSoon ? 'candy-family-card releasing-soon' : (hasUnreleasedMember ? 'candy-family-card unreleased' : 'candy-family-card');
         const isTransf = transferredPokemon.has(baseId) || transferredPokemon.has(Number(baseId)) || transferredPokemon.has(String(baseId));
         card.innerHTML = `
             <div class="family-header">
                 <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View ${displayTitle} details">
-                    <img src="${displayImg}" alt="${displayTitle}" class="family-base-img">
+                    <img src="${displayImg}" alt="${displayTitle}" class="family-base-img" onerror="this.src='${family.base.img}'">
                     <div class="family-info">
                         <h3 class="family-title">
                             ${displayTitle}
                             ${hasReleasingSoon ? `<span class="releasing-soon-badge-tag" style="margin-left: 6px; vertical-align: middle; color: #ff8c66; font-size: 0.85rem;" title="Upcoming Debut: ${family.base.releaseDate || 'Soon'}"><i class="fa-solid fa-hourglass-half"></i></span>` : (hasUnreleasedMember ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : '')}
+                            ${isShinyView && !canPokemonBeShiny(family.base) ? `<span class="no-shiny-available-badge" title="Shiny não disponível no Pokémon GO"><i class="fa-solid fa-lock"></i> Sem Shiny</span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">${buddyDist !== undefined ? `Buddy: ${buddyDist} km/candy` : 'Buddy distance: Unknown'}</div>
@@ -6529,7 +6689,7 @@ function renderCandiesPane() {
             
             <div class="family-stages">
                 ${family.members.map(member => {
-                    const isCaught = caughtPokemon.has(member.id) || caughtPokemon.has(Number(member.id));
+                    const isCaught = activeSet.has(member.id) || activeSet.has(Number(member.id)) || activeSet.has(String(member.id));
                     const isMemberTransf = transferredPokemon.has(member.id) || transferredPokemon.has(Number(member.id)) || transferredPokemon.has(String(member.id));
                     const parentInfo = getEvolutionParentAndCandies(member);
                     const candyCost = parentInfo ? parentInfo.candies : 0;
@@ -6555,6 +6715,8 @@ function renderCandiesPane() {
                     ` : '';
                     
                     let stageDisplayName = isBase ? displayTitle : member.name;
+                    const stageCanShiny = canPokemonBeShiny(member);
+                    const shinyWarningTag = (isShinyView && !stageCanShiny) ? `<span class="no-shiny-available-badge" style="margin-left: 4px; font-size: 0.58rem; padding: 1px 4px;" title="Shiny não disponível no Pokémon GO"><i class="fa-solid fa-lock"></i> Sem Shiny</span>` : '';
 
                     const stageClass = isReleasingSoonMember ? 'releasing-soon-stage' : (isUnreleasedMember ? 'unreleased-stage' : '');
                     const stageIcon = isMemberTransf ? 'fa-right-left' : (isCaught ? 'fa-circle-check' : (isReleasingSoonMember ? 'fa-hourglass-half' : (isUnreleasedMember ? 'fa-lock' : 'fa-circle-xmark')));
@@ -6565,6 +6727,7 @@ function renderCandiesPane() {
                                 <i class="fa-solid ${stageIcon}"></i>
                             </span>
                             <span class="stage-name" style="${isBase && isCaught ? 'flex-grow: 0;' : ''}">${stageDisplayName}</span>
+                            ${shinyWarningTag}
                             ${actionButton}
                             ${questButton}
                             ${candyCost > 0 ? `<span class="stage-cost" style="${actionButton || questButton ? '' : 'margin-left: auto;'}"><i class="fa-solid fa-candy-cane"></i> ${candyCost}</span>` : ''}
@@ -9285,12 +9448,36 @@ function renderToDoPane() {
     const missingItems = [];
     const candyItems = [];
 
+    // For categories that apply to full pokedex (normal, shiny, lucky, hundo, xxl, xxs, shadow, purified), use their activeSet.
+    // For specialized/incomplete dex categories (mega, gmax), fall back to normal dex for To-Do priorities.
+    const isSpecializedDex = ['mega', 'gmax'].includes(currentDexType);
+    const effectiveDexType = isSpecializedDex ? 'normal' : currentDexType;
+    const activeSet = (effectiveDexType === 'normal') ? caughtPokemon : (caughtCategoryPokemon[effectiveDexType] || caughtPokemon);
+    const isShinyView = (effectiveDexType === 'shiny');
+    const selectedGen = (currentGenFilter !== 'all') ? parseFloat(currentGenFilter) : null;
+
+    // Helper to test if a Pokemon matches current grid filters (region)
+    function matchesGridFilter(poke) {
+        if (!poke) return false;
+        if (selectedGen !== null && poke.gen !== selectedGen) return false;
+        return true;
+    }
+
+    // Helper to test if caught in active grid dex category
+    function isMissingInActiveCategory(poke) {
+        if (!poke) return false;
+        const isCaught = activeSet.has(poke.id) || activeSet.has(Number(poke.id)) || activeSet.has(String(poke.id));
+        const isTransf = (effectiveDexType === 'normal') && isPokemonTransferred(poke);
+        return !isCaught || isTransf;
+    }
+
     // Helper to add item to lists
     function addPriority(poke, type, source, detail, sectionTarget, scrollTarget, formName = null) {
+        if (!matchesGridFilter(poke)) return;
         const item = {
             poke,
             type, // 'Missing', 'Transferred', or 'Candy'
-            source, // 'Raid', 'Egg', 'Quest', 'Rocket', 'Party'
+            source, // 'Raid', 'Egg', 'Quest', 'Rocket', 'Party', 'Max Battle', 'Wild'
             detail,
             sectionTarget,
             scrollTarget,
@@ -9326,9 +9513,9 @@ function renderToDoPane() {
                     tierLabel = 'Shadow ' + tierLabel.replace('shadow_', '').replace('lvl', 'Tier ');
                 }
                 
-                const isTransf = isPokemonTransferred(matched);
-                const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -9361,9 +9548,9 @@ function renderToDoPane() {
             const matched = pokemonDatabase.find(p => p.id == egg.dex);
             if (matched) {
                 const eggDist = getEggFriendlyName(egg.eggT);
-                const isTransf = isPokemonTransferred(matched);
-                const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `egg-${safeLower(egg.name).replace(/\s+/g, '-')}-${safeLower(egg.eggT).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -9386,9 +9573,9 @@ function renderToDoPane() {
                         const rName = safeLower(reward.name);
                         const matched = pokemonDatabase.find(p => safeLower(p.name) === rName) || pokemonDatabase.find(p => p.id == reward.dex);
                         if (matched) {
-                            const isTransf = isPokemonTransferred(matched);
-                            const isMiss = isPokemonMissing(matched) && !isTransf;
-                            const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                            const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                            const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                            const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                             const key = `quest-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(task.text).replace(/[^a-z0-9]/g, '')}`;
 
                             if (isTransf) {
@@ -9417,9 +9604,9 @@ function renderToDoPane() {
                             if (pName) {
                                 const matched = pokemonDatabase.find(poke => safeLower(poke.name) === pName) || findPokemonByName(pName);
                                 if (matched) {
-                                    const isTransf = isPokemonTransferred(matched);
-                                    const isMiss = isPokemonMissing(matched) && !isTransf;
-                                    const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                                    const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                                    const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                                    const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                                     const key = `rocket-${safeLower(charName).replace(/\s+/g, '-')}`;
 
                                     if (isTransf) {
@@ -9444,9 +9631,9 @@ function renderToDoPane() {
             const pName = safeLower(party.name);
             const matched = pokemonDatabase.find(p => p.id == party.dex) || pokemonDatabase.find(p => safeLower(p.name) === pName);
             if (matched) {
-                const isTransf = isPokemonTransferred(matched);
-                const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `party-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(party.task).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -9467,9 +9654,9 @@ function renderToDoPane() {
             const matched = findPokemonByName(baseName) || (boss.idName ? pokemonDatabase.find(p => p.idName && safeLower(p.idName) === safeLower(boss.idName)) : null);
             if (matched) {
                 const tier = boss.tier || 'Max Battles';
-                const isTransf = isPokemonTransferred(matched);
-                const isMiss = isPokemonMissing(matched) && !isTransf;
-                const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `maxbattle-${safeLower(boss.name).replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`;
 
                 if (isTransf) {
@@ -9490,9 +9677,9 @@ function renderToDoPane() {
             if (rate >= 0.5) {
                 const matched = s.pokemon || pokemonDatabase.find(p => Number(p.id) === Number(s.dexNr));
                 if (matched) {
-                    const isTransf = isPokemonTransferred(matched);
-                    const isMiss = isPokemonMissing(matched) && !isTransf;
-                    const isCandy = familyNeedsCandies(matched) || needsCandies(matched);
+                    const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                    const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                    const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                     const key = `spawn-${s.dexNr}`;
                     const formattedRate = rate.toFixed(1) + '%';
 
@@ -9540,7 +9727,11 @@ function renderToDoPane() {
 
     const buildItemHtml = (item) => {
         const displayName = item.formName || item.poke.name;
-        const imgUrl = getPokemonImageUrl(displayName, item.poke) || item.poke.img;
+        let imgUrl = getPokemonImageUrl(displayName, item.poke) || item.poke.img;
+        if (isShinyView) {
+            const pokeApiId = getRegionalFormPokeApiId(displayName) || item.poke.id;
+            imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
+        }
         const iconClass = icons[item.source] || 'fa-solid fa-star';
         const color = colors[item.source] || 'var(--accent-color)';
         const borderCol = borderColors[item.source] || 'var(--border-color)';
@@ -9561,16 +9752,21 @@ function renderToDoPane() {
             badgeTextColor = '#1e1b4b';
         }
 
+        const canShiny = canPokemonBeShiny(item.poke);
+        const shinyBadgeHtml = (isShinyView && !canShiny) 
+            ? `<span class="no-shiny-available-badge" style="font-size: 0.58rem; padding: 1px 4px;" title="Shiny não disponível no Pokémon GO"><i class="fa-solid fa-lock"></i> Sem Shiny</span>` 
+            : '';
+
         const div = document.createElement('div');
         div.className = 'todo-item active-rotation-link';
         div.style.borderColor = borderCol;
         
         div.innerHTML = `
             <div style="display: flex; align-items: center; gap: 10px;">
-                <img src="${imgUrl}" style="width: 38px; height: 38px; object-fit: contain;" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'">
+                <img src="${imgUrl}" style="width: 38px; height: 38px; object-fit: contain;" onerror="this.src='${item.poke.img || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22 opacity=%220.25%22><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22none%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/><line x1=%2210%22 y1=%2250%22 x2=%2290%22 y2=%2250%22 stroke=%22%23cbd5e1%22 stroke-width=%228%22/></svg>'}'">
                 <div>
                     <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--text-primary); margin: 0; display: flex; align-items: center; gap: 6px;">
-                        ${displayName} <span style="font-size: 0.62rem; background: ${badgeColor}; color: ${badgeTextColor}; padding: 1px 5px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">${badgeIcon} ${badgeText}</span>
+                        ${displayName} ${shinyBadgeHtml} <span style="font-size: 0.62rem; background: ${badgeColor}; color: ${badgeTextColor}; padding: 1px 5px; border-radius: 4px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;">${badgeIcon} ${badgeText}</span>
                     </h4>
                     <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0; line-height: 1.3;">
                         <i class="${iconClass}" style="color: ${color}; margin-right: 4px;"></i> ${item.detail}
