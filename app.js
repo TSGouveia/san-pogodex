@@ -8500,8 +8500,8 @@ function renderEventsCalendar(listContainer, now) {
         gap: 8px;
     `;
 
-    // Weekday headers (Sun to Sat or Mon to Sun)
-    const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    // Weekday headers (Mon to Sun)
+    const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     weekDays.forEach(dayName => {
         const dayHeader = document.createElement('div');
         dayHeader.style.cssText = `
@@ -8517,8 +8517,9 @@ function renderEventsCalendar(listContainer, now) {
         gridEl.appendChild(dayHeader);
     });
 
-    // Calendar Days Calculation
-    const firstDayIndex = new Date(targetYear, targetMonth, 1).getDay(); // 0 is Sunday
+    // Calendar Days Calculation (Monday as first day of week: 0 = Mon, 6 = Sun)
+    const rawFirstDay = new Date(targetYear, targetMonth, 1).getDay(); // 0 is Sunday, 1 is Monday, ...
+    const firstDayIndex = (rawFirstDay + 6) % 7; // 0 is Monday, 6 is Sunday
     const daysInMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
     const daysInPrevMonth = new Date(targetYear, targetMonth, 0).getDate();
 
