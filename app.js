@@ -731,15 +731,15 @@ function updateGlobalActiveFilterIndicator() {
     
     // Format: Category • Region (e.g. "Pokémon • All Regions", "Shiny • Kanto")
     const parts = [];
-    parts.push(`<span style="color: var(--accent-color); font-weight: 800;">${dexCatName}</span>`);
+    parts.push(`<span style="color: #f1f5f9; font-weight: 600;">${dexCatName}</span>`);
 
     if (isGenSpecial) {
-        parts.push(`<span style="color: #60a5fa; font-weight: 700;">${genName}</span>`);
+        parts.push(`<span style="color: #cbd5e1; font-weight: 500;">${genName}</span>`);
     } else {
-        parts.push(`<span style="color: #94a3b8; font-weight: 600;">All Regions</span>`);
+        parts.push(`<span style="color: #94a3b8; font-weight: 500;">All Regions</span>`);
     }
     
-    gridFilterLabelEl.innerHTML = parts.join(' <span style="opacity: 0.4;">•</span> ');
+    gridFilterLabelEl.innerHTML = parts.join(' <span style="opacity: 0.35; margin: 0 1px;">•</span> ');
     
     // Compute total count of pokemon matching this filter in grid
     const fullList = getBaseListForDexType(currentDexType);
