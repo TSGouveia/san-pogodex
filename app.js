@@ -8593,6 +8593,22 @@ function renderEventsCalendar(listContainer, now) {
         return s.getFullYear() === targetYear && s.getMonth() === targetMonth;
     });
 
+    // Debut Pokémon for this month
+    const monthDebuts = [];
+    if (Array.isArray(pokemonDatabase)) {
+        pokemonDatabase.forEach(p => {
+            if (!p.releaseDate) return;
+            const d = new Date(p.releaseDate);
+            if (isNaN(d.getTime())) return;
+            if (d.getFullYear() === targetYear && d.getMonth() === targetMonth) {
+                monthDebuts.push({
+                    day: d.getDate(),
+                    pokemon: p
+                });
+            }
+        });
+    }
+
     const calendarWrapper = document.createElement('div');
     calendarWrapper.style.cssText = `
         grid-column: 1 / -1;
@@ -8695,6 +8711,9 @@ function renderEventsCalendar(listContainer, now) {
             return s.getDate() === day;
         });
 
+        // Find debuts on this day
+        const dayDebuts = monthDebuts.filter(d => d.day === day).map(d => d.pokemon);
+
         const dayCell = document.createElement('div');
         dayCell.style.cssText = `
             min-height: 125px;
@@ -8724,7 +8743,7 @@ function renderEventsCalendar(listContainer, now) {
         `;
         dayCell.appendChild(dayNumberEl);
 
-        if (dayEvents.length > 0) {
+        if (dayEvents.length > 0 || dayDebuts.length > 0) {
             const eventsListWrapper = document.createElement('div');
             eventsListWrapper.style.cssText = `
                 display: flex;
@@ -8732,6 +8751,101 @@ function renderEventsCalendar(listContainer, now) {
                 gap: 6px;
                 flex: 1;
             `;
+
+            // Render Debuts first or alongside events
+            dayDebuts.forEach(poke => {
+                const debutItem = document.createElement('div');
+                debutItem.title = `${poke.name} Debut - Click to open details`;
+                debutItem.style.cssText = `
+                    display: flex;
+                    flex-direction: column;
+                    gap: 6px;
+                    background: rgba(249, 115, 22, 0.08);
+                    border: 1px solid rgba(249, 115, 22, 0.25);
+                    border-radius: 8px;
+                    padding: 6px 8px;
+                    cursor: pointer;
+                    overflow: hidden;
+                    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+                `;
+
+                debutItem.addEventListener('mouseenter', () => {
+                    debutItem.style.transform = 'translateY(-2px) scale(1.01)';
+                    debutItem.style.background = 'rgba(249, 115, 22, 0.18)';
+                    debutItem.style.borderColor = '#ff8c66';
+                    debutItem.style.boxShadow = '0 4px 12px rgba(249, 115, 22, 0.25)';
+                });
+                debutItem.addEventListener('mouseleave', () => {
+                    debutItem.style.transform = 'none';
+                    debutItem.style.background = 'rgba(249, 115, 22, 0.08)';
+                    debutItem.style.borderColor = 'rgba(249, 115, 22, 0.25)';
+                    debutItem.style.boxShadow = 'none';
+                });
+
+                debutItem.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openModal(poke.id);
+                });
+
+                // Line 1: Centered Debut Badge
+                const badgeRow = document.createElement('div');
+                badgeRow.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                `;
+                badgeRow.innerHTML = `
+                    <span style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.65rem; font-weight: 800; color: #ff8c66; background: rgba(249, 115, 22, 0.25); border: 1px solid rgba(249, 115, 22, 0.4); padding: 2px 8px; border-radius: 5px; white-space: nowrap;">
+                        <i class="fa-solid fa-sparkles" style="font-size: 0.58rem; flex-shrink: 0;"></i>
+                        <span>Debut</span>
+                    </span>
+                `;
+                debutItem.appendChild(badgeRow);
+
+                // Line 2: Pokémon Sprite
+                const spriteRow = document.createElement('div');
+                spriteRow.style.cssText = `
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 6px;
+                    width: 100%;
+                    padding: 4px 0;
+                `;
+                const imgEl = document.createElement('img');
+                imgEl.src = poke.img || `${POKE_SPRITE_BASE_URL}/${poke.id}.png`;
+                imgEl.alt = poke.name;
+                imgEl.title = poke.name;
+                imgEl.style.cssText = `
+                    width: 38px;
+                    height: 38px;
+                    object-fit: contain;
+                    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55));
+                    transition: transform 0.15s ease;
+                `;
+                imgEl.onerror = () => { imgEl.style.display = 'none'; };
+                spriteRow.appendChild(imgEl);
+                debutItem.appendChild(spriteRow);
+
+                // Line 3: Pokémon Name
+                const nameRow = document.createElement('div');
+                nameRow.style.cssText = `
+                    text-align: center;
+                    font-size: 0.72rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    width: 100%;
+                    line-height: 1.2;
+                `;
+                nameRow.textContent = poke.name;
+                debutItem.appendChild(nameRow);
+
+                eventsListWrapper.appendChild(debutItem);
+            });
 
             dayEvents.forEach(ev => {
                 const pokeList = getEventFeaturedPokemonList(ev);
