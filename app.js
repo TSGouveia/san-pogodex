@@ -734,23 +734,19 @@ function updateGlobalActiveFilterIndicator() {
     
     const isSearchSpecial = Boolean(currentSearchQuery && currentSearchQuery.trim());
     
-    const isFiltered = isCategorySpecial || isGenSpecial || isCollSpecial || isSearchSpecial;
-    
-    if (!isFiltered) {
-        gridFilterIndicatorEl.classList.add('hidden');
-        return;
-    }
-    
+    // Always visible indicator between logo and stats panel
     gridFilterIndicatorEl.classList.remove('hidden');
     
     // Build human-friendly label
     const parts = [];
-    if (isCategorySpecial) {
-        parts.push(`<span style="color: var(--accent-color); font-weight: 800;">${dexCatName}</span>`);
-    }
+    parts.push(`<span style="color: var(--accent-color); font-weight: 800;">${dexCatName}</span>`);
+
     if (isGenSpecial) {
         parts.push(`<span style="color: #60a5fa; font-weight: 700;">${genName}</span>`);
+    } else {
+        parts.push(`<span style="color: #94a3b8; font-weight: 600;">Todas</span>`);
     }
+
     if (isCollSpecial) {
         parts.push(`<span style="color: ${currentCollectionFilter === 'missing' ? '#f87171' : '#34d399'}; font-weight: 700;">${collFilterName}</span>`);
     }
@@ -768,7 +764,7 @@ function updateGlobalActiveFilterIndicator() {
         matchedCount = fullList.filter(p => p.gen === genNum).length;
     }
     if (gridFilterCountBadgeEl) {
-        gridFilterCountBadgeEl.textContent = `${matchedCount} Pokémon no filtro`;
+        gridFilterCountBadgeEl.textContent = `${matchedCount} Pokémon`;
     }
 }
 
@@ -2773,16 +2769,18 @@ function setupEventListeners() {
 
     genTabsContainer.addEventListener('click', (e) => {
         const targetBtn = e.target.closest('.tab-btn');
-        if (!targetBtn) return;
-        
-        genTabsContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        targetBtn.classList.add('active');
+        if (!targetBtn || targetBtn.dataset.gen === undefined) return;
         
         currentGenFilter = targetBtn.dataset.gen;
+        genTabsContainer.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', String(btn.dataset.gen) === String(currentGenFilter));
+        });
+        
         pokedexLimit = Infinity; // Load full region immediately
         renderPokedex(true);
         renderMissingSummary();
         updateRegionStatsBadge();
+        updateDashboardStats();
     });
 
     collectionFilterButtons.forEach(btn => {

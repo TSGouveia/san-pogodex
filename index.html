@@ -68,6 +68,21 @@
 
 
 
+            <!-- Global Active Grid Filter Banner (Placed between Logo and Caught stats) -->
+            <div id="grid-filter-indicator" class="grid-filter-indicator" aria-live="polite">
+                <div class="filter-indicator-content">
+                    <i class="fa-solid fa-filter indicator-icon" id="grid-filter-icon"></i>
+                    <div class="indicator-text-group">
+                        <span class="indicator-label">Filtros:</span>
+                        <span class="indicator-value" id="grid-filter-label">PokéDex Normal</span>
+                    </div>
+                    <span class="indicator-badge" id="grid-filter-count-badge"></span>
+                </div>
+                <button id="grid-filter-clear-btn" class="indicator-reset-btn" title="Limpar filtros e repor Todos">
+                    <i class="fa-solid fa-rotate-left"></i> Repor
+                </button>
+            </div>
+
             <!-- Statistics Card -->
             <div class="stats-panel" id="stats-panel">
                 <div class="stats-info">
@@ -120,21 +135,6 @@
                     <i class="fa-solid fa-user"></i> Login / Register
                 </button>
             </div>
-        </div>
-
-        <!-- Global Active Grid Filter Banner -->
-        <div id="grid-filter-indicator" class="grid-filter-indicator hidden" aria-live="polite">
-            <div class="filter-indicator-content">
-                <i class="fa-solid fa-filter-circle-dollar indicator-icon" id="grid-filter-icon"></i>
-                <div class="indicator-text-group">
-                    <span class="indicator-label">Filtro Ativo da Grid:</span>
-                    <span class="indicator-value" id="grid-filter-label">Todos</span>
-                </div>
-                <span class="indicator-badge" id="grid-filter-count-badge"></span>
-            </div>
-            <button id="grid-filter-clear-btn" class="indicator-reset-btn" title="Limpar filtros e repor Todos">
-                <i class="fa-solid fa-rotate-left"></i> Repor Tudo
-            </button>
         </div>
 
         <!-- Control Center (Filters, Search, Region Tabs) -->
