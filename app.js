@@ -716,42 +716,27 @@ function canPokemonBeShiny(poke) {
 function updateGlobalActiveFilterIndicator() {
     if (!gridFilterIndicatorEl || !gridFilterLabelEl) return;
     
-    // Active filters:
+    // Active category & region:
     const dexCatName = dexCategoryNames[currentDexType] || currentDexType;
-    const isCategorySpecial = (currentDexType !== 'normal');
     
-    let genName = 'Todas as Regiões';
+    let genName = 'All Regions';
     if (currentGenFilter !== 'all') {
         const gNum = parseFloat(currentGenFilter);
         genName = regionNames[gNum] || `Gen ${gNum}`;
     }
     const isGenSpecial = (currentGenFilter !== 'all');
     
-    let collFilterName = '';
-    if (currentCollectionFilter === 'missing') collFilterName = 'Faltam';
-    else if (currentCollectionFilter === 'caught') collFilterName = 'Apanhados';
-    const isCollSpecial = (currentCollectionFilter !== 'all');
-    
-    const isSearchSpecial = Boolean(currentSearchQuery && currentSearchQuery.trim());
-    
     // Always visible indicator between logo and stats panel
     gridFilterIndicatorEl.classList.remove('hidden');
     
-    // Build human-friendly label
+    // Format: Category • Region (e.g. "Pokémon • All Regions", "Shiny • Kanto")
     const parts = [];
     parts.push(`<span style="color: var(--accent-color); font-weight: 800;">${dexCatName}</span>`);
 
     if (isGenSpecial) {
         parts.push(`<span style="color: #60a5fa; font-weight: 700;">${genName}</span>`);
     } else {
-        parts.push(`<span style="color: #94a3b8; font-weight: 600;">Todas</span>`);
-    }
-
-    if (isCollSpecial) {
-        parts.push(`<span style="color: ${currentCollectionFilter === 'missing' ? '#f87171' : '#34d399'}; font-weight: 700;">${collFilterName}</span>`);
-    }
-    if (isSearchSpecial) {
-        parts.push(`<span style="color: #cbd5e1; font-weight: 600;">"${currentSearchQuery}"</span>`);
+        parts.push(`<span style="color: #94a3b8; font-weight: 600;">All Regions</span>`);
     }
     
     gridFilterLabelEl.innerHTML = parts.join(' <span style="opacity: 0.4;">•</span> ');
