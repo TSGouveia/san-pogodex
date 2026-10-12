@@ -68,30 +68,33 @@
 
 
 
-            <!-- Global Active Grid Filter Banner (Placed between Logo and Caught stats) -->
-            <div id="grid-filter-indicator" class="grid-filter-indicator" aria-live="polite">
-                <div class="filter-indicator-content">
-                    <i class="fa-solid fa-filter indicator-icon" id="grid-filter-icon"></i>
-                    <div class="indicator-text-group">
-                        <span class="indicator-label">View:</span>
-                        <span class="indicator-value" id="grid-filter-label">Pokémon • All Regions</span>
+            <!-- Centered Header Indicators Column (Filter & Friend Mode) -->
+            <div class="header-center-indicators">
+                <!-- Global Active Grid Filter Banner -->
+                <div id="grid-filter-indicator" class="grid-filter-indicator" aria-live="polite">
+                    <div class="filter-indicator-content">
+                        <i class="fa-solid fa-filter indicator-icon" id="grid-filter-icon"></i>
+                        <div class="indicator-text-group">
+                            <span class="indicator-label">View:</span>
+                            <span class="indicator-value" id="grid-filter-label">Pokémon • All Regions</span>
+                        </div>
+                        <span class="indicator-badge" id="grid-filter-count-badge"></span>
                     </div>
-                    <span class="indicator-badge" id="grid-filter-count-badge"></span>
+                    <button id="grid-filter-clear-btn" class="indicator-reset-btn" title="Reset filters to All">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
                 </div>
-                <button id="grid-filter-clear-btn" class="indicator-reset-btn" title="Reset filters to All">
-                    <i class="fa-solid fa-rotate-left"></i> Reset
-                </button>
-            </div>
 
-            <!-- Friend Read-Only Mode Banner -->
-            <div id="friend-mode-banner" class="friend-mode-indicator hidden" aria-live="polite">
-                <div class="friend-indicator-content">
-                    <i class="fa-solid fa-eye indicator-icon"></i>
-                    <span id="friend-mode-title" class="friend-mode-title">Viewing Friend's PokéDex</span>
+                <!-- Friend Read-Only Mode Banner (Stacked directly below the filter) -->
+                <div id="friend-mode-banner" class="friend-mode-indicator hidden" aria-live="polite">
+                    <div class="friend-indicator-content">
+                        <i class="fa-solid fa-eye indicator-icon"></i>
+                        <span id="friend-mode-title" class="friend-mode-title">Viewing Friend's PokéDex</span>
+                    </div>
+                    <button id="exit-friend-mode-btn" class="indicator-exit-btn" title="Exit Friend View">
+                        <i class="fa-solid fa-xmark"></i> Exit
+                    </button>
                 </div>
-                <button id="exit-friend-mode-btn" class="indicator-exit-btn" title="Exit Friend View">
-                    <i class="fa-solid fa-xmark"></i> Exit
-                </button>
             </div>
 
             <!-- Statistics Card -->
