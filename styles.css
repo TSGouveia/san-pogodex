@@ -1805,6 +1805,74 @@ input, button, select {
     background: rgba(239, 68, 68, 0.08);
 }
 
+/* Friend Mode Indicator - Center of Header */
+.friend-mode-indicator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    background: linear-gradient(135deg, rgba(245, 166, 35, 0.12) 0%, rgba(30, 41, 59, 0.7) 100%);
+    border: 1px solid rgba(245, 166, 35, 0.35);
+    border-radius: 9999px;
+    padding: 0.35rem 0.85rem;
+    margin: 0;
+    box-shadow: 0 2px 10px rgba(245, 166, 35, 0.1);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: all 0.25s ease;
+}
+
+@media (min-width: 768px) {
+    .friend-mode-indicator {
+        margin: 0 auto;
+        max-width: fit-content;
+    }
+}
+
+.friend-mode-indicator.hidden {
+    display: none !important;
+}
+
+.friend-mode-indicator .friend-indicator-content {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.friend-mode-indicator .indicator-icon {
+    font-size: 0.8rem;
+    color: #f5a623;
+}
+
+.friend-mode-indicator .friend-mode-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #f8fafc;
+    letter-spacing: 0.01em;
+}
+
+.friend-mode-indicator .indicator-exit-btn {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 9999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.friend-mode-indicator .indicator-exit-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.6);
+    transform: scale(1.02);
+}
+
 .no-shiny-available-badge {
     display: inline-flex;
     align-items: center;

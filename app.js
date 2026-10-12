@@ -2203,6 +2203,7 @@ function filterObtainingMethods() {
 }
 
 function saveCaughtState() {
+    if (friendViewModeActive) return;
     if (currentDexType === 'normal') {
         localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon)));
     } else {
@@ -2796,11 +2797,15 @@ function setupEventListeners() {
     }
 
     catchAllBtn.addEventListener('click', () => {
+        if (friendViewModeActive) return;
         const visible = getFilteredAndSortedPokemon();
         if (visible.length === 0) return;
         
-        visible.forEach(p => caughtPokemon.add(p.id));
-        cleanTransferredWhenEvolutionCaught(visible.map(p => p.id));
+        const activeSet = getActiveCaughtSet();
+        visible.forEach(p => activeSet.add(p.id));
+        if (currentDexType === 'normal') {
+            cleanTransferredWhenEvolutionCaught(visible.map(p => p.id));
+        }
         saveCaughtState();
         renderPokedex(true);
         renderMissingSummary();
@@ -2808,6 +2813,7 @@ function setupEventListeners() {
     });
 
     resetAllBtn.addEventListener('click', () => {
+        if (friendViewModeActive) return;
         // Reset ignores the collection filter so it always acts on current gen/search subset
         const prevFilter = currentCollectionFilter;
         const savedFilter = currentCollectionFilter;
@@ -2819,10 +2825,11 @@ function setupEventListeners() {
 
         if (!confirm(`Reset caught status for ${visible.length} Pokémon in current view?`)) return;
 
+        const activeSet = getActiveCaughtSet();
         visible.forEach(p => {
-            caughtPokemon.delete(p.id);
-            caughtPokemon.delete(Number(p.id));
-            caughtPokemon.delete(String(p.id));
+            activeSet.delete(p.id);
+            activeSet.delete(Number(p.id));
+            activeSet.delete(String(p.id));
         });
         saveCaughtState();
         renderPokedex(true);
@@ -4579,7 +4586,19 @@ function renderWildSpawns() {
 }
 
 function updateModalCatchBtn(id) {
-    const isCaught = caughtPokemon.has(id) || caughtPokemon.has(Number(id));
+    const activeSet = getActiveCaughtSet();
+    const isCaught = activeSet.has(id) || activeSet.has(String(id)) || activeSet.has(Number(id));
+    if (friendViewModeActive) {
+        modalCatchToggle.className = isCaught ? 'catch-action-btn is-caught' : 'catch-action-btn uncaught';
+        modalCatchToggle.style.opacity = '0.75';
+        modalCatchToggle.style.cursor = 'default';
+        modalCatchToggle.innerHTML = isCaught
+            ? `<i class="fa-solid fa-circle-check" style="color: #34d399;"></i> <span>Friend Caught</span>`
+            : `<i class="fa-solid fa-circle-xmark" style="color: #94a3b8;"></i> <span>Friend Missing</span>`;
+        return;
+    }
+    modalCatchToggle.style.opacity = '';
+    modalCatchToggle.style.cursor = '';
     if (isCaught) {
         modalCatchToggle.className = 'catch-action-btn is-caught';
         modalCatchToggle.innerHTML = `
@@ -5671,12 +5690,23 @@ function saveCandyState(debounceCloud = false) {
 // CLOUD DATABASE INTEGRATION (FIREBASE)
 // ==========================================================================
 async function saveUserDataToFirestore() {
-    if (!currentUser) return;
+    if (!currentUser || friendViewModeActive) return;
     try {
+        const categoriesData = {};
+        Object.keys(caughtCategoryPokemon).forEach(cat => {
+            const set = caughtCategoryPokemon[cat];
+            if (set && set.size > 0) {
+                categoriesData[cat] = Array.from(set).map(x => (isNaN(Number(x)) ? x : Number(x)));
+            } else {
+                categoriesData[cat] = [];
+            }
+        });
+
         const dataToSave = {
             email: currentUser.email,
             displayName: currentUser.displayName || '',
             caught: Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
+            categories: categoriesData,
             candies: userCandies,
             transferred: Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
             completedQuests: Array.from(completedBuddyQuests).map(x => String(x)),
@@ -5733,6 +5763,16 @@ async function loadUserDataFromFirestore(user) {
             userCandies = mergedCandies;
             transferredPokemon = mergedTransferred;
             completedBuddyQuests = mergedQuests;
+
+            // Merge category dex data (shiny, lucky, xxl, xxs, soon, gmax, mega, shadow, purified, hundo)
+            const cloudCategories = data.categories || {};
+            Object.keys(caughtCategoryPokemon).forEach(cat => {
+                const cloudCatArray = cloudCategories[cat] || [];
+                const localSet = caughtCategoryPokemon[cat] || new Set();
+                const mergedCatSet = new Set([...localSet, ...cloudCatArray.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
+                caughtCategoryPokemon[cat] = mergedCatSet;
+                localStorage.setItem(`pogo_caught_${cat}`, JSON.stringify(Array.from(mergedCatSet)));
+            });
             
             // Sync with local storage
             localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
@@ -5841,19 +5881,30 @@ onAuthStateChanged(auth, async (user) => {
                     }
                 }
                 
-                // Keep local state updated from cloud database in real-time
-                const cloudCaught = data.caught || [];
-                const cloudCandies = data.candies || {};
-                const cloudTransferred = data.transferred || [];
-                const cloudQuests = data.completedQuests || [];
-                caughtPokemon = new Set(cloudCaught.map(x => (isNaN(Number(x)) ? x : Number(x))));
-                userCandies = cloudCandies;
-                transferredPokemon = new Set(cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x))));
-                completedBuddyQuests = new Set(cloudQuests.map(x => String(x)));
-                localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
-                localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
-                localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
-                localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
+                // Keep local state updated from cloud database in real-time (ignore if inspecting friend's pokedex)
+                if (!friendViewModeActive) {
+                    const cloudCaught = data.caught || [];
+                    const cloudCandies = data.candies || {};
+                    const cloudTransferred = data.transferred || [];
+                    const cloudQuests = data.completedQuests || [];
+                    caughtPokemon = new Set(cloudCaught.map(x => (isNaN(Number(x)) ? x : Number(x))));
+                    userCandies = cloudCandies;
+                    transferredPokemon = new Set(cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x))));
+                    completedBuddyQuests = new Set(cloudQuests.map(x => String(x)));
+
+                    const cloudCategories = data.categories || {};
+                    Object.keys(caughtCategoryPokemon).forEach(cat => {
+                        const cloudCatArray = cloudCategories[cat] || [];
+                        const set = new Set(cloudCatArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+                        caughtCategoryPokemon[cat] = set;
+                        localStorage.setItem(`pogo_caught_${cat}`, JSON.stringify(Array.from(set)));
+                    });
+
+                    localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
+                    localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
+                    localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
+                    localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
+                }
 
                 // Sync redeemed promo codes from cloud in real-time
                 const cloudRedeemed = data.redeemedPromoCodes || [];
@@ -10193,6 +10244,7 @@ function renderPromoCodes() {
 // ==========================================================================
 let friendViewModeActive = false;
 let friendViewBackupCaught = null;
+let friendViewBackupCategories = null;
 let friendViewBackupTransferred = null;
 let friendViewBackupCandies = null;
 let friendViewBackupQuests = null;
@@ -10206,12 +10258,13 @@ async function openFriendPokedex(friend) {
         const friendDocRef = doc(db, "users_data", friend.uid);
         const friendSnap = await getDoc(friendDocRef);
         if (!friendSnap.exists()) {
-            alert(`Could not load Pokédex data for ${friendName}.`);
+            alert(`Could not load PokéDex data for ${friendName}.`);
             return;
         }
 
         const data = friendSnap.data();
         const friendCaughtArray = data.caught || [];
+        const friendCategoriesObj = data.categories || {};
         const friendTransferredArray = data.transferred || [];
         const friendCandiesObj = data.candies || {};
         const friendQuestsArray = data.completedQuests || [];
@@ -10219,6 +10272,10 @@ async function openFriendPokedex(friend) {
         // Save backup of current user's local state
         if (!friendViewModeActive) {
             friendViewBackupCaught = new Set(caughtPokemon);
+            friendViewBackupCategories = {};
+            Object.keys(caughtCategoryPokemon).forEach(cat => {
+                friendViewBackupCategories[cat] = new Set(caughtCategoryPokemon[cat]);
+            });
             friendViewBackupTransferred = new Set(transferredPokemon);
             friendViewBackupCandies = { ...userCandies };
             friendViewBackupQuests = new Set(completedBuddyQuests);
@@ -10227,8 +10284,12 @@ async function openFriendPokedex(friend) {
         friendViewModeActive = true;
         friendViewFriendName = friendName;
 
-        // Temporarily swap caught, transferred, candies and quests with friend's data
+        // Temporarily swap standard caught, category dexes, transferred, candies and quests with friend's data
         caughtPokemon = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
+        Object.keys(caughtCategoryPokemon).forEach(cat => {
+            const arr = friendCategoriesObj[cat] || [];
+            caughtCategoryPokemon[cat] = new Set(arr.map(x => (isNaN(Number(x)) ? x : Number(x))));
+        });
         transferredPokemon = new Set(friendTransferredArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
         userCandies = { ...friendCandiesObj };
         completedBuddyQuests = new Set(friendQuestsArray.map(x => String(x)));
@@ -10237,7 +10298,7 @@ async function openFriendPokedex(friend) {
         const banner = document.getElementById('friend-mode-banner');
         const titleEl = document.getElementById('friend-mode-title');
         if (banner && titleEl) {
-            titleEl.textContent = `Viewing ${friendName}'s PokéDex (Read-Only Mode)`;
+            titleEl.textContent = `Viewing ${friendName}'s PokéDex`;
             banner.classList.remove('hidden');
         }
 
@@ -10260,14 +10321,20 @@ async function openFriendPokedex(friend) {
 function exitFriendPokedexMode() {
     if (!friendViewModeActive) return;
 
-    // Restore user's caught, transferred, candies and quest state
+    // Restore user's caught, categories, transferred, candies and quest state
     if (friendViewBackupCaught) caughtPokemon = new Set(friendViewBackupCaught);
+    if (friendViewBackupCategories) {
+        Object.keys(friendViewBackupCategories).forEach(cat => {
+            caughtCategoryPokemon[cat] = new Set(friendViewBackupCategories[cat]);
+        });
+    }
     if (friendViewBackupTransferred) transferredPokemon = new Set(friendViewBackupTransferred);
     if (friendViewBackupCandies) userCandies = { ...friendViewBackupCandies };
     if (friendViewBackupQuests) completedBuddyQuests = new Set(friendViewBackupQuests);
 
     friendViewModeActive = false;
     friendViewBackupCaught = null;
+    friendViewBackupCategories = null;
     friendViewBackupTransferred = null;
     friendViewBackupCandies = null;
     friendViewBackupQuests = null;
