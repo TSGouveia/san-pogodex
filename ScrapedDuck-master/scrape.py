@@ -187,6 +187,12 @@ def main():
     spawns = scrape_spawns()
     save_json("spawns.json", spawns)
 
+    # Save metadata with timestamp so the client knows when data was updated
+    metadata = {
+        "updatedAt": datetime.datetime.now(datetime.timezone.utc).isoformat()
+    }
+    save_json("metadata.json", metadata)
+
     # 11. Upload all modules to Firestore
     upload_to_firestore(events, raids, max_battles, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns)
     print("=== SCRAPE COMPLETE ===")

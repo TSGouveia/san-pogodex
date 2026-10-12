@@ -16,7 +16,7 @@ jobs:
   scrape-and-sync-firebase:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -32,6 +32,13 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f ScrapedDuck-master/requirements.txt ]; then pip install -r ScrapedDuck-master/requirements.txt; fi
 
-      - name: Run Scraper & Sync to Firebase Firestore
+      - name: Run Scraper & Sync
         run: |
           python ScrapedDuck-master/scrape.py
+
+      - name: Commit and Push Updated Scraped Files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action [Scraper]"
+          git add files/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update scraped files [skip ci]" && git push)

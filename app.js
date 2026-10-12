@@ -1093,85 +1093,52 @@ async function setPogoLocalCache(key, value) {
 }
 
 async function loadScrapedDataFromFirestore() {
-    const api_key = "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU";
-    const project_id = "pogo-website-14a46";
-
     // 1. Check local IndexedDB cache first
     const cachedData = await getPogoLocalCache('scraped_data_cache');
 
     try {
-        const authRes = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: 'scraper@pogowebsite.local', password: 'ScraperPassword123!', returnSecureToken: true })
-        });
-        if (!authRes.ok) throw new Error('Database auth failed');
-        const authData = await authRes.json();
-        const headers = { 'Authorization': `Bearer ${authData.idToken}` };
+        // 2. Fetch metadata.json to check updatedAt timestamp
+        let latestUpdatedAt = null;
+        try {
+            const metaRes = await fetch('files/metadata.json');
+            if (metaRes.ok) {
+                const meta = await metaRes.json();
+                latestUpdatedAt = meta?.updatedAt;
+            }
+        } catch (e) {
+            console.warn("Could not fetch metadata.json timestamp:", e);
+        }
 
-        // 2. If we have valid local cache, check if it contains all required new fields
+        // 3. If cache is valid and up to date, reuse it!
         if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0 && cachedData.rocketLineups && cachedData.partyChallenges) {
-            try {
-                const checkRes = await fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/events`, { headers });
-                if (checkRes.ok) {
-                    const checkDoc = await checkRes.json();
-                    const latestUpdatedAt = checkDoc?.fields?.updatedAt?.stringValue;
-                    if (latestUpdatedAt && latestUpdatedAt === cachedData.updatedAt) {
-                        console.log("Serving cached Pokémon data from browser IndexedDB storage (saved 21 Firestore reads).");
-                        return cachedData;
-                    }
-                }
-            } catch (e) {
-                console.warn("Could not check latest timestamp, serving from local cache:", e);
+            if (latestUpdatedAt && latestUpdatedAt === cachedData.updatedAt) {
+                console.log("Serving cached Pokémon data from browser IndexedDB storage (instant & 0 network requests).");
                 return cachedData;
             }
         }
 
-        // 3. Otherwise fetch all modules from Firestore
-        const baseModules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns'];
-        const pokedexParts = Array.from({ length: 11 }, (_, i) => `pokedex_part${i + 1}`);
-        const modules = [...baseModules, ...pokedexParts];
-
-        const fetchPromises = modules.map(m => 
-            fetch(`https://firestore.googleapis.com/v1/projects/${project_id}/databases/(default)/documents/scraped_data/${m}`, { headers })
-                .then(r => r.ok ? r.json() : null)
+        // 4. Load static JSON files
+        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
+        const fetchPromises = modules.map(m =>
+            fetch(`files/${m}.min.json`)
+                .then(r => {
+                    if (!r.ok) return fetch(`files/${m}.json`).then(res => res.ok ? res.json() : null);
+                    return r.json();
+                })
                 .catch(err => {
-                    if (window.sendNtfyNotification) window.sendNtfyNotification(`Erro ao carregar documento ${m} do Firestore: ${err}`);
+                    console.warn(`Erro ao carregar ficheiro ${m}:`, err);
                     return null;
                 })
         );
 
         const results = await Promise.all(fetchPromises);
         const parsed = {};
-        let assembledPokedex = [];
-
         modules.forEach((mod, idx) => {
-            const doc = results[idx];
-            const fields = doc ? doc.fields : null;
-            if (fields) {
-                let modContent = null;
-                if (fields.data?.stringValue) {
-                    try { modContent = JSON.parse(fields.data.stringValue); } catch (e) {}
-                } else if (fields[mod]?.stringValue) {
-                    try { modContent = JSON.parse(fields[mod].stringValue); } catch (e) {}
-                }
-
-                if (mod.startsWith('pokedex_part')) {
-                    if (Array.isArray(modContent)) {
-                        assembledPokedex.push(...modContent);
-                    }
-                } else {
-                    parsed[mod] = modContent;
-                }
-                if (fields.updatedAt?.stringValue) parsed.updatedAt = fields.updatedAt.stringValue;
-            }
+            parsed[mod] = results[idx];
         });
+        parsed.updatedAt = latestUpdatedAt || new Date().toISOString();
 
-        if (assembledPokedex.length > 0) {
-            parsed.pokedex = assembledPokedex;
-        }
-
-        // 4. Save freshly fetched data to local cache
+        // 5. Save freshly fetched data to local cache
         if (parsed.pokedex && parsed.pokedex.length > 0) {
             await setPogoLocalCache('scraped_data_cache', parsed);
         }
@@ -1179,11 +1146,10 @@ async function loadScrapedDataFromFirestore() {
         return parsed;
     } catch (err) {
         if (cachedData && cachedData.pokedex && cachedData.pokedex.length > 0) {
-            console.warn("Firestore error, serving from local cache:", err);
+            console.warn("Network error loading static data, serving from local cache:", err);
             return cachedData;
         }
-        if (window.sendNtfyNotification) window.sendNtfyNotification(`Erro crítico de autenticação Firestore: ${err}`);
-        console.warn("Could not fetch scraped data from Firestore database, falling back to network endpoints:", err);
+        console.warn("Could not fetch scraped static data:", err);
         return null;
     }
 }

@@ -2,7 +2,6 @@ node_modules
 dist
 .vercel
 .env*
-files/
 __pycache__/
 *.pyc
 *.pyo

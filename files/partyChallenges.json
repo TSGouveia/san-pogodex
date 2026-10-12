@@ -1,0 +1,728 @@
+[
+    {
+        "task": "Make 10 Nice Curveball Throws",
+        "rewards": [
+            {
+                "type": "encounter",
+                "label": "Diglett",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm50.icon.png",
+                "shiny": true,
+                "min_cp": "262",
+                "max_cp": "289",
+                "combatPower": {
+                    "normal": {
+                        "min": 262,
+                        "max": 289
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Magnemite",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm81.icon.png",
+                "shiny": true,
+                "min_cp": "544",
+                "max_cp": "583",
+                "combatPower": {
+                    "normal": {
+                        "min": 544,
+                        "max": 583
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Koffing",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm109.icon.png",
+                "shiny": true,
+                "min_cp": "483",
+                "max_cp": "520",
+                "combatPower": {
+                    "normal": {
+                        "min": 483,
+                        "max": 520
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Tandemaus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm924.icon.png",
+                "shiny": true,
+                "min_cp": "350",
+                "max_cp": "382",
+                "combatPower": {
+                    "normal": {
+                        "min": 350,
+                        "max": 382
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "task": "Make 20 Great Curveball Throws",
+        "rewards": [
+            {
+                "type": "encounter",
+                "label": "Nosepass",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm299.icon.png",
+                "shiny": true,
+                "min_cp": "390",
+                "max_cp": "425",
+                "combatPower": {
+                    "normal": {
+                        "min": 390,
+                        "max": 425
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Combee",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm415.icon.png",
+                "shiny": true,
+                "min_cp": "188",
+                "max_cp": "212",
+                "combatPower": {
+                    "normal": {
+                        "min": 188,
+                        "max": 212
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Cherubi",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm420.icon.png",
+                "shiny": true,
+                "min_cp": "374",
+                "max_cp": "407",
+                "combatPower": {
+                    "normal": {
+                        "min": 374,
+                        "max": 407
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Binacle",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm688.icon.png",
+                "shiny": true,
+                "min_cp": "373",
+                "max_cp": "405",
+                "combatPower": {
+                    "normal": {
+                        "min": 373,
+                        "max": 405
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Tandemaus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm924.icon.png",
+                "shiny": true,
+                "min_cp": "350",
+                "max_cp": "382",
+                "combatPower": {
+                    "normal": {
+                        "min": 350,
+                        "max": 382
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "task": "Make 10 Excellent Curveball Throws",
+        "rewards": [
+            {
+                "type": "encounter",
+                "label": "Galarian Weezing",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm110.fGALARIAN.icon.png",
+                "shiny": true,
+                "min_cp": "932",
+                "max_cp": "982",
+                "combatPower": {
+                    "normal": {
+                        "min": 932,
+                        "max": 982
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Chansey",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm113.icon.png",
+                "shiny": true,
+                "min_cp": "490",
+                "max_cp": "537",
+                "combatPower": {
+                    "normal": {
+                        "min": 490,
+                        "max": 537
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Lapras",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm131.icon.png",
+                "shiny": true,
+                "min_cp": "1076",
+                "max_cp": "1131",
+                "combatPower": {
+                    "normal": {
+                        "min": 1076,
+                        "max": 1131
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Klink",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm599.icon.png",
+                "shiny": true,
+                "min_cp": "377",
+                "max_cp": "409",
+                "combatPower": {
+                    "normal": {
+                        "min": 377,
+                        "max": 409
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Tandemaus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm924.icon.png",
+                "shiny": true,
+                "min_cp": "350",
+                "max_cp": "382",
+                "combatPower": {
+                    "normal": {
+                        "min": 350,
+                        "max": 382
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "task": "Catch 20 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "encounter",
+                "label": "Vaporeon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm134.icon.png",
+                "shiny": true,
+                "min_cp": "1275",
+                "max_cp": "1335",
+                "combatPower": {
+                    "normal": {
+                        "min": 1275,
+                        "max": 1335
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Jolteon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm135.icon.png",
+                "shiny": true,
+                "min_cp": "1180",
+                "max_cp": "1238",
+                "combatPower": {
+                    "normal": {
+                        "min": 1180,
+                        "max": 1238
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Flareon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm136.icon.png",
+                "shiny": true,
+                "min_cp": "1239",
+                "max_cp": "1298",
+                "combatPower": {
+                    "normal": {
+                        "min": 1239,
+                        "max": 1298
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Tandemaus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm924.icon.png",
+                "shiny": true,
+                "min_cp": "350",
+                "max_cp": "382",
+                "combatPower": {
+                    "normal": {
+                        "min": 350,
+                        "max": 382
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "task": "Walk 2 km",
+        "rewards": [
+            {
+                "type": "encounter",
+                "label": "Eevee",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm133.icon.png",
+                "shiny": true,
+                "min_cp": "424",
+                "max_cp": "459",
+                "combatPower": {
+                    "normal": {
+                        "min": 424,
+                        "max": 459
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Beldum",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm374.icon.png",
+                "shiny": true,
+                "min_cp": "385",
+                "max_cp": "418",
+                "combatPower": {
+                    "normal": {
+                        "min": 385,
+                        "max": 418
+                    }
+                }
+            },
+            {
+                "type": "encounter",
+                "label": "Tandemaus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm924.icon.png",
+                "shiny": true,
+                "min_cp": "350",
+                "max_cp": "382",
+                "combatPower": {
+                    "normal": {
+                        "min": 350,
+                        "max": 382
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "task": "Spin 20 PokéStops or Gyms",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Poké Ball ×8",
+                "image": "https://cdn.leekduck.com/assets/img/items/Poke Ball.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Razz Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Razz Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Pinap Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Pinap Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Stardust ×600",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 25 Pokémon",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Poké Ball ×8",
+                "image": "https://cdn.leekduck.com/assets/img/items/Poke Ball.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Razz Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Razz Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Pinap Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Pinap Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Stardust ×600",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 20 different species of Pokémon",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Stardust ×500",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Max Revive ×2",
+                "image": "https://cdn.leekduck.com/assets/img/items/Max Revive.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Max Potion ×2",
+                "image": "https://cdn.leekduck.com/assets/img/items/Max Potion.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Make 25 Nice Throws",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Poké Ball ×8",
+                "image": "https://cdn.leekduck.com/assets/img/items/Poke Ball.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Razz Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Razz Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Pinap Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Pinap Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Stardust ×600",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Use 20 Berries to help catch Pokémon",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Poké Ball ×8",
+                "image": "https://cdn.leekduck.com/assets/img/items/Poke Ball.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Razz Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Razz Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Pinap Berry ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Pinap Berry.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Stardust ×600",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Make 30 Great Throws",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Great Ball ×6",
+                "image": "https://cdn.leekduck.com/assets/img/items/Great Ball.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Revive ×4",
+                "image": "https://cdn.leekduck.com/assets/img/items/Revive.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Hyper Potion ×4",
+                "image": "https://cdn.leekduck.com/assets/img/items/Hyper Potion.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Stardust ×800",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Make 20 Excellent Throws",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Stardust ×500",
+                "image": "https://cdn.leekduck.com/assets/img/items/Stardust.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Max Revive ×2",
+                "image": "https://cdn.leekduck.com/assets/img/items/Max Revive.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "item",
+                "label": "Max Potion ×2",
+                "image": "https://cdn.leekduck.com/assets/img/items/Max Potion.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Win 2 raids",
+        "rewards": [
+            {
+                "type": "resource",
+                "label": "Charizard Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Charizard Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Blastoise Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Blastoise Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Beedrill Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Beedrill Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Pidgeot Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Pidgeot Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Absol Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Absol Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Pinsir Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Pinsir Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            },
+            {
+                "type": "resource",
+                "label": "Sableye Mega Energy ×20",
+                "image": "https://cdn.leekduck.com/assets/img/mega_energy/Sableye Mega Energy.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 50 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Espeon T-shirt",
+                "image": "https://cdn.leekduck.com/assets/img/avatar_items/n_shirt_eeveestshirt_4_icon.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 50 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Umbreon T-shirt",
+                "image": "https://cdn.leekduck.com/assets/img/avatar_items/n_shirt_eeveestshirt_5_icon.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 50 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Leafeon T-shirt",
+                "image": "https://cdn.leekduck.com/assets/img/avatar_items/n_shirt_eeveestshirt_6_icon.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 50 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Glaceon T-shirt",
+                "image": "https://cdn.leekduck.com/assets/img/avatar_items/n_shirt_eeveestshirt_7_icon.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "task": "Catch 50 Pokémon in Ultra Balls",
+        "rewards": [
+            {
+                "type": "item",
+                "label": "Sylveon T-shirt",
+                "image": "https://cdn.leekduck.com/assets/img/avatar_items/n_shirt_eeveestshirt_8_icon.png",
+                "shiny": false,
+                "min_cp": null,
+                "max_cp": null,
+                "combatPower": null
+            }
+        ]
+    }
+]
