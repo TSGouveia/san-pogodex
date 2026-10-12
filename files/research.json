@@ -1,82 +1,76 @@
 [
     {
-        "category": "Harvest Festival 2026: Applin Picking Tasks",
-        "task": "Catch 5 Grass-type Pokémon",
+        "category": "Fall Marathon: Buddy Trek Tasks",
+        "task": "Earn a Candy exploring with your buddy",
         "rewards": [
             {
-                "name": "Foongus",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm590.icon.png",
+                "name": "Electrike",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm309.icon.png",
                 "shiny": true,
-                "min_cp": "386",
-                "max_cp": "419",
+                "min_cp": "380",
+                "max_cp": "413",
                 "combatPower": {
                     "normal": {
-                        "min": 386,
-                        "max": 419
+                        "min": 380,
+                        "max": 413
                     }
                 }
             },
             {
-                "name": "Skwovet",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm819.icon.png",
-                "shiny": true,
-                "min_cp": "371",
-                "max_cp": "404",
+                "name": "Bramblin",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm946.icon.png",
+                "shiny": false,
+                "min_cp": "343",
+                "max_cp": "375",
                 "combatPower": {
                     "normal": {
-                        "min": 371,
-                        "max": 404
-                    }
-                }
-            },
-            {
-                "name": "Smoliv",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm928.icon.png",
-                "shiny": true,
-                "min_cp": "335",
-                "max_cp": "366",
-                "combatPower": {
-                    "normal": {
-                        "min": 335,
-                        "max": 366
+                        "min": 343,
+                        "max": 375
                     }
                 }
             }
         ]
     },
     {
-        "category": "Harvest Festival 2026: Applin Picking Tasks",
-        "task": "Catch 15 Grass-type Pokémon",
+        "category": "Fall Marathon: Buddy Trek Tasks",
+        "task": "Explore 1 km",
         "rewards": [
             {
-                "name": "Applin",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm840.icon.png",
+                "name": "Doduo",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm84.icon.png",
                 "shiny": true,
-                "min_cp": "277",
-                "max_cp": "306",
+                "min_cp": "477",
+                "max_cp": "514",
                 "combatPower": {
                     "normal": {
-                        "min": 277,
-                        "max": 306
+                        "min": 477,
+                        "max": 514
                     }
                 }
-            }
-        ]
-    },
-    {
-        "category": "Harvest Festival 2026: Applin Picking Tasks",
-        "task": "Use 10 Berries to help catch Pokémon",
-        "rewards": [
+            },
             {
-                "name": "Smoliv",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm928.icon.png",
+                "name": "Electrike",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm309.icon.png",
                 "shiny": true,
-                "min_cp": "335",
-                "max_cp": "366",
+                "min_cp": "380",
+                "max_cp": "413",
                 "combatPower": {
                     "normal": {
-                        "min": 335,
-                        "max": 366
+                        "min": 380,
+                        "max": 413
+                    }
+                }
+            },
+            {
+                "name": "Cacnea",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm331.icon.png",
+                "shiny": true,
+                "min_cp": "493",
+                "max_cp": "532",
+                "combatPower": {
+                    "normal": {
+                        "min": 493,
+                        "max": 532
                     }
                 }
             }
