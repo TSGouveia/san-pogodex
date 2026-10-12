@@ -19,10 +19,16 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout main (code & scrapers)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Checkout data branch (storage)
         uses: actions/checkout@v4
         with:
           ref: data
+          path: data-branch
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -34,13 +40,21 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f ScrapedDuck-master/requirements.txt ]; then pip install -r ScrapedDuck-master/requirements.txt; fi
 
-      - name: Run Scraper & Sync
+      - name: Prepare initial data for scrapers
+        run: |
+          mkdir -p files
+          cp -r data-branch/files/* files/ 2>/dev/null || true
+
+      - name: Run Scraper
         run: |
           python ScrapedDuck-master/scrape.py
 
       - name: Commit and Push Updated Scraped Files to data branch
         run: |
+          cd data-branch
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action [Scraper]"
+          mkdir -p files
+          cp -r ../files/* files/
           git add files/
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update scraped files [skip ci]" && git push origin data)
