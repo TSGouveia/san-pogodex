@@ -79,66 +79,7 @@ def scrape_spawns():
         print(f"Error scraping spawns: {e}")
         return []
 
-def upload_to_firestore(events, raids, max_battles, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns):
-    print("Uploading scraped data to Firebase Firestore (scraped_data collection)...")
-    api_key = os.environ.get("FIREBASE_API_KEY", "AIzaSyAHsUktWNFdK8IiOYSAchnFxR-pqVQZJbU")
-    project_id = "pogo-website-14a46"
 
-    try:
-        auth_url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={api_key}"
-        res = requests.post(auth_url, json={'email': 'scraper@pogowebsite.local', 'password': 'ScraperPassword123!', 'returnSecureToken': True})
-        if res.status_code != 200:
-            print(f"Failed to authenticate with Firebase: {res.text}")
-            return False
-        auth_json = res.json()
-        id_token = auth_json.get("idToken")
-        headers = {"Authorization": f"Bearer {id_token}"}
-
-        # Upload individual modules to scraped_data collection
-        modules = {
-            "events": events,
-            "raids": raids,
-            "maxBattles": max_battles,
-            "research": research,
-            "eggs": eggs,
-            "rocketLineups": rocket,
-            "promoCodes": promo_codes,
-            "partyChallenges": party_challenges,
-            "buddyDistances": buddy_distances,
-            "types": types,
-            "spawns": spawns
-        }
-
-        # Chunk pokedex array (100 items per chunk) to stay under 1MB Firestore limit
-        if isinstance(pokedex, list):
-            chunk_size = 100
-            for idx, i in enumerate(range(0, len(pokedex), chunk_size)):
-                chunk = pokedex[i:i + chunk_size]
-                modules[f"pokedex_part{idx + 1}"] = chunk
-
-        success_count = 0
-        for doc_name, doc_data in modules.items():
-            try:
-                mod_url = f"https://firestore.googleapis.com/v1/projects/{project_id}/databases/(default)/documents/scraped_data/{doc_name}?updateMask.fieldPaths=data&updateMask.fieldPaths=updatedAt"
-                mod_payload = {
-                    "fields": {
-                        "data": {"stringValue": json.dumps(doc_data, ensure_ascii=False)},
-                        "updatedAt": {"stringValue": datetime.datetime.now(datetime.timezone.utc).isoformat()}
-                    }
-                }
-                r = requests.patch(mod_url, headers=headers, json=mod_payload)
-                if r.status_code == 200:
-                    success_count += 1
-                else:
-                    print(f"  [scraped_data/{doc_name}] upload warning: {r.status_code} - {r.text}")
-            except Exception as ex:
-                print(f"  [scraped_data/{doc_name}] upload exception: {ex}")
-
-        print(f"Successfully uploaded {success_count}/{len(modules)} scraped_data documents to Firestore!")
-        return True
-    except Exception as e:
-        print(f"Exception during Firestore upload: {e}")
-        return False
 
 def main():
     print("=== STARTING SCRAPEDDUCK MAIN ORCHESTRATOR ===")
@@ -193,8 +134,6 @@ def main():
     }
     save_json("metadata.json", metadata)
 
-    # 11. Upload all modules to Firestore
-    upload_to_firestore(events, raids, max_battles, research, eggs, rocket, promo_codes, party_challenges, buddy_distances, pokedex, types, spawns)
     print("=== SCRAPE COMPLETE ===")
 
 if __name__ == "__main__":
