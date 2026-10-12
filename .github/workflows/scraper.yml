@@ -57,4 +57,8 @@ jobs:
           mkdir -p files
           cp -r ../files/* files/
           git add files/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update scraped files [skip ci]" && git push origin data)
+          if ! git diff --quiet || ! git diff --staged --quiet; then
+            git commit -m "Auto-update scraped files [skip ci]"
+            git pull --rebase origin data
+            git push origin data
+          fi
