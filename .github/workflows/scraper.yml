@@ -61,4 +61,6 @@ jobs:
             git commit -m "Auto-update scraped files [skip ci]"
             git pull --rebase origin data
             git push origin data
+            # Purge jsDelivr cache so the website gets the new data immediately
+            curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/metadata.json" || true
           fi

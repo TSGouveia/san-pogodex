@@ -1092,16 +1092,16 @@ async function setPogoLocalCache(key, value) {
     }
 }
 
-async function loadScrapedDataFromFirestore() {
+async function loadScrapedDataFromCdn() {
     // 1. Check local IndexedDB cache first
     const cachedData = await getPogoLocalCache('scraped_data_cache');
 
     try {
-        // 2. Fetch metadata.json to check updatedAt timestamp from data branch CDN
+        // 2. Fetch metadata.json to check updatedAt timestamp from data branch CDN (with cache busting)
         const DATA_BRANCH_CDN = 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files';
         let latestUpdatedAt = null;
         try {
-            const metaRes = await fetch(`${DATA_BRANCH_CDN}/metadata.json`).catch(() => fetch('files/metadata.json'));
+            const metaRes = await fetch(`${DATA_BRANCH_CDN}/metadata.json?t=${Date.now()}`);
             if (metaRes && metaRes.ok) {
                 const meta = await metaRes.json();
                 latestUpdatedAt = meta?.updatedAt;
@@ -1122,13 +1122,10 @@ async function loadScrapedDataFromFirestore() {
         const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
         const fetchPromises = modules.map(m =>
             fetch(`${DATA_BRANCH_CDN}/${m}.min.json`)
-                .then(r => {
-                    if (!r.ok) return fetch(`files/${m}.min.json`).then(res => res.ok ? res.json() : null);
-                    return r.json();
-                })
+                .then(r => r.ok ? r.json() : null)
                 .catch(err => {
                     console.warn(`Erro ao carregar ficheiro ${m}:`, err);
-                    return fetch(`files/${m}.min.json`).then(res => res.ok ? res.json() : null).catch(() => null);
+                    return null;
                 })
         );
 
@@ -1150,7 +1147,7 @@ async function loadScrapedDataFromFirestore() {
             console.warn("Network error loading static data, serving from local cache:", err);
             return cachedData;
         }
-        console.warn("Could not fetch scraped static data:", err);
+        console.warn("Could not fetch scraped static data from CDN:", err);
         return null;
     }
 }
@@ -1199,9 +1196,9 @@ async function loadPokedex() {
         let rawResearch = {};
         let rawEvents = {};
 
-        // Fetch scraped data directly from Firebase Firestore (scraped_data collection)
-        const dbScrapedData = await loadScrapedDataFromFirestore();
-        console.log("🔍 [DEBUG] Raw Firestore dbScrapedData:", dbScrapedData);
+        // Fetch scraped data directly from GitHub CDN (data branch)
+        const dbScrapedData = await loadScrapedDataFromCdn();
+        console.log("🔍 [DEBUG] Scraped data from GitHub CDN:", dbScrapedData);
 
         const isNonEmpty = (val) => {
             if (!val) return false;
@@ -1215,8 +1212,8 @@ async function loadPokedex() {
         let rawSpawns = null;
 
         if (!dbScrapedData) {
-            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Falha ao carregar base de dados Firestore");
-            throw new Error("Could not connect to Firebase Firestore database. All external API fallbacks are disabled.");
+            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Falha ao carregar dados do CDN");
+            throw new Error("Could not connect to CDN data storage.");
         }
 
         if (isNonEmpty(dbScrapedData.eggs)) { rawEggs = dbScrapedData.eggs; console.log("🔍 [DEBUG] rawEggs loaded:", rawEggs); }
@@ -1236,8 +1233,8 @@ async function loadPokedex() {
         if (dbScrapedData.updatedAt) displayLastUpdatedTime(dbScrapedData.updatedAt);
 
         if (!data) {
-            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Dados da Pokédex em falta no Firestore");
-            throw new Error("Pokédex data is missing or empty in Firebase Firestore database.");
+            if (window.sendNtfyNotification) window.sendNtfyNotification("Erro crítico: Dados da Pokédex em falta no CDN");
+            throw new Error("Pokédex data is missing or empty in CDN storage.");
         }
         
         const processed = [];
