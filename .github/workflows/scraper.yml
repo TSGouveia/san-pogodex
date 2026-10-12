@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: data
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,9 +38,9 @@ jobs:
         run: |
           python ScrapedDuck-master/scrape.py
 
-      - name: Commit and Push Updated Scraped Files
+      - name: Commit and Push Updated Scraped Files to data branch
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action [Scraper]"
           git add files/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update scraped files [skip ci]" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update scraped files [skip ci]" && git push origin data)

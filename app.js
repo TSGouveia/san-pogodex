@@ -1097,11 +1097,12 @@ async function loadScrapedDataFromFirestore() {
     const cachedData = await getPogoLocalCache('scraped_data_cache');
 
     try {
-        // 2. Fetch metadata.json to check updatedAt timestamp
+        // 2. Fetch metadata.json to check updatedAt timestamp from data branch CDN
+        const DATA_BRANCH_CDN = 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files';
         let latestUpdatedAt = null;
         try {
-            const metaRes = await fetch('files/metadata.json');
-            if (metaRes.ok) {
+            const metaRes = await fetch(`${DATA_BRANCH_CDN}/metadata.json`).catch(() => fetch('files/metadata.json'));
+            if (metaRes && metaRes.ok) {
                 const meta = await metaRes.json();
                 latestUpdatedAt = meta?.updatedAt;
             }
@@ -1117,17 +1118,17 @@ async function loadScrapedDataFromFirestore() {
             }
         }
 
-        // 4. Load static JSON files
+        // 4. Load static JSON files from data branch CDN
         const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
         const fetchPromises = modules.map(m =>
-            fetch(`files/${m}.min.json`)
+            fetch(`${DATA_BRANCH_CDN}/${m}.min.json`)
                 .then(r => {
-                    if (!r.ok) return fetch(`files/${m}.json`).then(res => res.ok ? res.json() : null);
+                    if (!r.ok) return fetch(`files/${m}.min.json`).then(res => res.ok ? res.json() : null);
                     return r.json();
                 })
                 .catch(err => {
                     console.warn(`Erro ao carregar ficheiro ${m}:`, err);
-                    return null;
+                    return fetch(`files/${m}.min.json`).then(res => res.ok ? res.json() : null).catch(() => null);
                 })
         );
 
