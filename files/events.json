@@ -1,125 +1,5 @@
 [
     {
-        "eventID": "harvest-festival-2026",
-        "title": "Harvest Festival 2026: Applin Picking",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-29-harvest-festival-2026/harvest-festival-2026.jpg",
-        "link": "https://leekduck.com/events/harvest-festival-2026/",
-        "start": "2026-09-29T10:00:00.000",
-        "end": "2026-10-05T20:00:00.000"
-    },
-    {
-        "eventID": "harvest-festival-taken-over-2026",
-        "title": "Harvest Festival: Taken Over",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-02-harvest-festival-taken-over-2026/harvest-festival-taken-over-2026.jpg",
-        "link": "https://leekduck.com/events/harvest-festival-taken-over-2026/",
-        "start": "2026-10-02T00:00:00.000",
-        "end": "2026-10-05T20:00:00.000"
-    },
-    {
-        "eventID": "max-mondays-2026-10-05",
-        "title": "Dynamax Sizzlipede during Max Monday",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
-        "link": "https://leekduck.com/events/max-mondays-2026-10-05/",
-        "start": "2026-10-05T06:00:00.000",
-        "end": "2026-10-05T21:00:00.000"
-    },
-    {
-        "eventID": "go-pass-september-2026",
-        "title": "GO Pass: September",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-go-pass-september-2026/go-pass-september-2026.jpg",
-        "link": "https://leekduck.com/events/go-pass-september-2026/",
-        "start": "2026-09-08T10:00:00.000",
-        "end": "2026-10-06T10:00:00.000"
-    },
-    {
-        "eventID": "gbl-twilight-trails_master-league_mega-color-cup-great-league-edition",
-        "title": "Master League and Mega Color Cup: Great League Edition | Twilight Trails",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/gobattleleague-master-key.jpg",
-        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-color-cup-great-league-edition/",
-        "start": "2026-09-29T13:00:00.000-0700",
-        "end": "2026-10-06T13:00:00.000-0700"
-    },
-    {
-        "eventID": "shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026",
-        "title": "Shadow Thundurus (Incarnate Forme) in Shadow Raids",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
-        "link": "https://leekduck.com/events/shadow-thundurus-incarnate-forme-in-shadow-raids-september-2026/",
-        "start": "2026-09-09T06:00:00.000",
-        "end": "2026-10-06T22:00:00.000"
-    },
-    {
-        "eventID": "mega-victreebel-in-mega-raids-september-2026",
-        "title": "Mega Victreebel in Mega Raids",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
-        "link": "https://leekduck.com/events/mega-victreebel-in-mega-raids-september-2026/",
-        "start": "2026-09-30T06:00:00.000",
-        "end": "2026-10-06T22:00:00.000"
-    },
-    {
-        "eventID": "xerneas-in-5-star-raid-battles-september-2026",
-        "title": "Xerneas in 5-star Raid Battles",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/xerneas-woods.jpg",
-        "link": "https://leekduck.com/events/xerneas-in-5-star-raid-battles-september-2026/",
-        "start": "2026-09-30T06:00:00.000",
-        "end": "2026-10-06T22:00:00.000"
-    },
-    {
-        "eventID": "raidhour20261007",
-        "title": "Yveltal Raid Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
-        "link": "https://leekduck.com/events/raidhour20261007/",
-        "start": "2026-10-07T18:00:00.000",
-        "end": "2026-10-07T19:00:00.000"
-    },
-    {
-        "eventID": "pokemonspotlighthour2026-10-08",
-        "title": "Elgyem Spotlight Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
-        "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-08/",
-        "start": "2026-10-08T18:00:00.000",
-        "end": "2026-10-08T19:00:00.000"
-    },
-    {
-        "eventID": "october-communityday2026",
-        "title": "Zorua Community Day",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-10-october-communityday2026/zorua-october-cd-2026.png",
-        "link": "https://leekduck.com/events/october-communityday2026/",
-        "start": "2026-10-10T14:00:00.000",
-        "end": "2026-10-10T17:00:00.000"
-    },
-    {
-        "eventID": "world-space-week-2026",
-        "title": "World Space Week 2026",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-04-world-space-week-2026/world-space-week-2026.jpg",
-        "link": "https://leekduck.com/events/world-space-week-2026/",
-        "start": "2026-10-04T00:00:00.000",
-        "end": "2026-10-10T23:59:00.000"
-    },
-    {
         "eventID": "max-mondays-2026-10-12",
         "title": "Dynamax Rookidee during Max Monday",
         "type": "",
@@ -431,10 +311,10 @@
     },
     {
         "eventID": "halloween-2026-part-2",
-        "title": "Halloween 2026 Part II",
+        "title": "Pokémon GO Halloween 2026 Part II",
         "type": "",
         "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-11-01-halloween-2026-part-2/halloween-2026-part-2.jpg",
         "link": "https://leekduck.com/events/halloween-2026-part-2/",
         "start": "2026-11-01T10:00:00.000",
         "end": "2026-11-05T20:00:00.000"

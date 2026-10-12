@@ -1536,35 +1536,6 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/831.png"
     },
     {
-        "name": "Gigantamax Cinderace",
-        "tier": "Max Battles (6 Max)",
-        "canBeShiny": false,
-        "pokebattlerUrl": "https://www.pokebattler.com/max/CINDERACE_GIGANTAMAX",
-        "types": [
-            {
-                "name": "fire",
-                "image": "https://leekduck.com/assets/img/types/fire.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1646,
-                "max": 1724
-            },
-            "boosted": {
-                "min": 2058,
-                "max": 2156
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "sunny",
-                "image": "https://leekduck.com/assets/img/weather/sunny.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10210.png"
-    },
-    {
         "name": "Dynamax Duraludon",
         "tier": "Max Battles (4 Max)",
         "canBeShiny": true,

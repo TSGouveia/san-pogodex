@@ -70341,7 +70341,317 @@
             "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm169.icon.png",
             "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm169.s.icon.png"
         },
-        "regionForms": [],
+        "regionForms": {
+            "CROBAT_HALLOWEEN_2026_01": {
+                "id": "CROBAT",
+                "formId": "CROBAT_HALLOWEEN_2026_01",
+                "dexNr": 169,
+                "generation": 2,
+                "names": {
+                    "English": "Crobat",
+                    "German": "Iksbat",
+                    "French": "Nostenfer",
+                    "Italian": "Crobat",
+                    "Japanese": "クロバット",
+                    "Korean": "크로뱃",
+                    "Spanish": "Crobat"
+                },
+                "stats": {
+                    "stamina": 198,
+                    "attack": 194,
+                    "defense": 178
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_POISON",
+                    "names": {
+                        "English": "Poison",
+                        "German": "Gift",
+                        "French": "Poison",
+                        "Italian": "Veleno",
+                        "Japanese": "どく",
+                        "Korean": "독",
+                        "Spanish": "Veneno"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "AIR_SLASH_FAST": {
+                        "id": "AIR_SLASH_FAST",
+                        "power": 12,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Air Slash",
+                            "German": "Luftschnitt",
+                            "French": "Lame d’Air",
+                            "Italian": "Eterelama",
+                            "Japanese": "エアスラッシュ",
+                            "Korean": "에어슬래시",
+                            "Spanish": "Tajo Aéreo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 9,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "BITE_FAST": {
+                        "id": "BITE_FAST",
+                        "power": 6,
+                        "energy": 4,
+                        "durationMs": 500,
+                        "type": {
+                            "type": "POKEMON_TYPE_DARK",
+                            "names": {
+                                "English": "Dark",
+                                "German": "Unlicht",
+                                "French": "Ténèbres",
+                                "Italian": "Buio",
+                                "Japanese": "あく",
+                                "Korean": "악",
+                                "Spanish": "Siniestro"
+                            }
+                        },
+                        "names": {
+                            "English": "Bite",
+                            "German": "Biss",
+                            "French": "Morsure",
+                            "Italian": "Morso",
+                            "Japanese": "かみつく",
+                            "Korean": "물기",
+                            "Spanish": "Mordisco"
+                        },
+                        "combat": {
+                            "energy": 4,
+                            "power": 2,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "SHADOW_BALL": {
+                        "id": "SHADOW_BALL",
+                        "power": 100,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Shadow Ball",
+                            "German": "Spukball",
+                            "French": "Ball’Ombre",
+                            "Italian": "Palla Ombra",
+                            "Japanese": "シャドーボール",
+                            "Korean": "섀도볼",
+                            "Spanish": "Bola Sombra"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 90,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "AIR_CUTTER": {
+                        "id": "AIR_CUTTER",
+                        "power": 55,
+                        "energy": -50,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Air Cutter",
+                            "German": "Windschnitt",
+                            "French": "Tranch’Air",
+                            "Italian": "Aerasoio",
+                            "Japanese": "エアカッター",
+                            "Korean": "에어커터",
+                            "Spanish": "Aire Afilado"
+                        },
+                        "combat": {
+                            "energy": -40,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 12,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": null,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "SLUDGE_BOMB": {
+                        "id": "SLUDGE_BOMB",
+                        "power": 85,
+                        "energy": -50,
+                        "durationMs": 2500,
+                        "type": {
+                            "type": "POKEMON_TYPE_POISON",
+                            "names": {
+                                "English": "Poison",
+                                "German": "Gift",
+                                "French": "Poison",
+                                "Italian": "Veleno",
+                                "Japanese": "どく",
+                                "Korean": "독",
+                                "Spanish": "Veneno"
+                            }
+                        },
+                        "names": {
+                            "English": "Sludge Bomb",
+                            "German": "Matschbombe",
+                            "French": "Bombe Beurk",
+                            "Italian": "Fangobomba",
+                            "Japanese": "ヘドロばくだん",
+                            "Korean": "오물폭탄",
+                            "Spanish": "Bomba Lodo"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 80,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "POISON_FANG": {
+                        "id": "POISON_FANG",
+                        "power": 30,
+                        "energy": -33,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_POISON",
+                            "names": {
+                                "English": "Poison",
+                                "German": "Gift",
+                                "French": "Poison",
+                                "Italian": "Veleno",
+                                "Japanese": "どく",
+                                "Korean": "독",
+                                "Spanish": "Veneno"
+                            }
+                        },
+                        "names": {
+                            "English": "Poison Fang",
+                            "German": "Giftzahn",
+                            "French": "Crochet Venin",
+                            "Italian": "Velenodenti",
+                            "Japanese": "どくどくのキバ",
+                            "Korean": "맹독엄니",
+                            "Spanish": "Colmillo Veneno"
+                        },
+                        "combat": {
+                            "energy": -40,
+                            "power": 50,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 100,
+                                "attackerAttackStatsChange": null,
+                                "attackerDefenseStatsChange": null,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": -1
+                            }
+                        }
+                    },
+                    "CROSS_POISON": {
+                        "id": "CROSS_POISON",
+                        "power": 40,
+                        "energy": -33,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_POISON",
+                            "names": {
+                                "English": "Poison",
+                                "German": "Gift",
+                                "French": "Poison",
+                                "Italian": "Veleno",
+                                "Japanese": "どく",
+                                "Korean": "독",
+                                "Spanish": "Veneno"
+                            }
+                        },
+                        "names": {
+                            "English": "Cross Poison",
+                            "German": "Giftstreich",
+                            "French": "Poison Croix",
+                            "Italian": "Velenocroce",
+                            "Japanese": "クロスポイズン",
+                            "Korean": "크로스포이즌",
+                            "Spanish": "Veneno X"
+                        },
+                        "combat": {
+                            "energy": -35,
+                            "power": 50,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 12,
+                                "attackerAttackStatsChange": 2,
+                                "attackerDefenseStatsChange": null,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm169.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm169.s.icon.png"
+                },
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            }
+        },
         "evolutions": [],
         "hasMegaEvolution": false,
         "megaEvolutions": [],
@@ -219523,7 +219833,41 @@
                 }
             }
         },
-        "eliteQuickMoves": [],
+        "eliteQuickMoves": {
+            "SUCKER_PUNCH_FAST": {
+                "id": "SUCKER_PUNCH_FAST",
+                "power": 5,
+                "energy": 6,
+                "durationMs": 500,
+                "type": {
+                    "type": "POKEMON_TYPE_DARK",
+                    "names": {
+                        "English": "Dark",
+                        "German": "Unlicht",
+                        "French": "Ténèbres",
+                        "Italian": "Buio",
+                        "Japanese": "あく",
+                        "Korean": "악",
+                        "Spanish": "Siniestro"
+                    }
+                },
+                "names": {
+                    "English": "Sucker Punch",
+                    "German": "Tiefschlag",
+                    "French": "Coup Bas",
+                    "Italian": "Sbigoattacco",
+                    "Japanese": "ふいうち",
+                    "Korean": "기습",
+                    "Spanish": "Golpe Bajo"
+                },
+                "combat": {
+                    "energy": 7,
+                    "power": 8,
+                    "turns": 2,
+                    "buffs": null
+                }
+            }
+        },
         "eliteCinematicMoves": [],
         "assets": {
             "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm571.icon.png",
@@ -320982,8 +321326,8 @@
         },
         "stats": {
             "stamina": 155,
-            "attack": 116,
-            "defense": 194
+            "attack": 218,
+            "defense": 131
         },
         "primaryType": {
             "type": "POKEMON_TYPE_ROCK",
@@ -321663,6 +322007,1830 @@
                     "stamina": 155,
                     "attack": 218,
                     "defense": 131
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior (Meteor Form)",
+                    "German": "Meteno (Meteorform)",
+                    "French": "Météno (Meteor Form)",
+                    "Italian": "Minior (Forma Meteora)",
+                    "Japanese": "メテノ (りゅうせいのすがた)",
+                    "Korean": "메테노 (Meteor Form)",
+                    "Spanish": "Minior (Forma Meteorito)"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_BLUE": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_BLUE",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_GREEN": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_GREEN",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_INDIGO": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_INDIGO",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_ORANGE": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_ORANGE",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_RED": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_RED",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_VIOLET": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_VIOLET",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_ROCK",
+                    "names": {
+                        "English": "Rock",
+                        "German": "Gestein",
+                        "French": "Roche",
+                        "Italian": "Roccia",
+                        "Japanese": "いわ",
+                        "Korean": "바위",
+                        "Spanish": "Roca"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ROLLOUT_FAST": {
+                        "id": "ROLLOUT_FAST",
+                        "power": 15,
+                        "energy": 19,
+                        "durationMs": 1500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Rollout",
+                            "German": "Walzer",
+                            "French": "Roulade",
+                            "Italian": "Rotolamento",
+                            "Japanese": "ころがる",
+                            "Korean": "구르기",
+                            "Spanish": "Desenrollar"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "TAKE_DOWN_FAST": {
+                        "id": "TAKE_DOWN_FAST",
+                        "power": 7,
+                        "energy": 8,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_NORMAL",
+                            "names": {
+                                "English": "Normal",
+                                "German": "Normal",
+                                "French": "Normal",
+                                "Italian": "Normale",
+                                "Japanese": "ノーマル",
+                                "Korean": "노말",
+                                "Spanish": "Normal"
+                            }
+                        },
+                        "names": {
+                            "English": "Take Down",
+                            "German": "Bodycheck",
+                            "French": "Bélier",
+                            "Italian": "Riduttore",
+                            "Japanese": "とっしん",
+                            "Korean": "돌진",
+                            "Spanish": "Derribo"
+                        },
+                        "combat": {
+                            "energy": 9,
+                            "power": 14,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "POWER_GEM": {
+                        "id": "POWER_GEM",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Power Gem",
+                            "German": "Juwelenkraft",
+                            "French": "Rayon Gemme",
+                            "Italian": "Gemmoforza",
+                            "Japanese": "パワージェム",
+                            "Korean": "파워젬",
+                            "Spanish": "Joya de Luz"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 85,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "ANCIENT_POWER": {
+                        "id": "ANCIENT_POWER",
+                        "power": 70,
+                        "energy": -33,
+                        "durationMs": 3500,
+                        "type": {
+                            "type": "POKEMON_TYPE_ROCK",
+                            "names": {
+                                "English": "Rock",
+                                "German": "Gestein",
+                                "French": "Roche",
+                                "Italian": "Roccia",
+                                "Japanese": "いわ",
+                                "Korean": "바위",
+                                "Spanish": "Roca"
+                            }
+                        },
+                        "names": {
+                            "English": "Ancient Power",
+                            "German": "Antik-Kraft",
+                            "French": "Pouvoir Antique",
+                            "Italian": "Forzantica",
+                            "Japanese": "げんしのちから",
+                            "Korean": "원시의힘",
+                            "Spanish": "Poder Pasado"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 60,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": 1,
+                                "attackerDefenseStatsChange": 1,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": null
+                            }
+                        }
+                    },
+                    "ACROBATICS": {
+                        "id": "ACROBATICS",
+                        "power": 100,
+                        "energy": -100,
+                        "durationMs": 2000,
+                        "type": {
+                            "type": "POKEMON_TYPE_FLYING",
+                            "names": {
+                                "English": "Flying",
+                                "German": "Flug",
+                                "French": "Vol",
+                                "Italian": "Volante",
+                                "Japanese": "ひこう",
+                                "Korean": "비행",
+                                "Spanish": "Volador"
+                            }
+                        },
+                        "names": {
+                            "English": "Acrobatics",
+                            "German": "Akrobatik",
+                            "French": "Acrobatie",
+                            "Italian": "Acrobazia",
+                            "Japanese": "アクロバット",
+                            "Korean": "애크러뱃",
+                            "Spanish": "Acróbata"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 110,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": null,
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "MINIOR_METEOR_YELLOW": {
+                "id": "MINIOR",
+                "formId": "MINIOR_METEOR_YELLOW",
+                "dexNr": 774,
+                "generation": 7,
+                "names": {
+                    "English": "Minior",
+                    "German": "Meteno",
+                    "French": "Météno",
+                    "Italian": "Minior",
+                    "Japanese": "メテノ",
+                    "Korean": "메테노",
+                    "Spanish": "Minior"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 116,
+                    "defense": 194
                 },
                 "primaryType": {
                     "type": "POKEMON_TYPE_ROCK",
@@ -322794,22 +324962,22 @@
         "unreleased": false,
         "releaseDate": "Oct 19, 2026",
         "combatPower": {
-            "maxL50": 1743,
+            "maxL50": 2591,
             "researchL15": {
-                "min": 618,
-                "max": 661
+                "min": 930,
+                "max": 982
             },
             "eggsL20": {
-                "min": 825,
-                "max": 881
+                "min": 1241,
+                "max": 1310
             },
             "raidsL20": {
-                "min": 825,
-                "max": 881
+                "min": 1241,
+                "max": 1310
             },
             "raidsWbL25": {
-                "min": 1031,
-                "max": 1101
+                "min": 1551,
+                "max": 1637
             }
         }
     },
@@ -348541,6 +350709,259 @@
                 "megaEvolutions": [],
                 "hasGigantamaxEvolution": false
             },
+            "POLTEAGEIST_A_HALLOWEEN_2026_01": {
+                "id": "POLTEAGEIST",
+                "formId": "POLTEAGEIST_A_HALLOWEEN_2026_01",
+                "dexNr": 855,
+                "generation": 8,
+                "names": {
+                    "English": "Polteageist",
+                    "German": "Mortipot",
+                    "French": "Polthégeist",
+                    "Italian": "Polteageist",
+                    "Japanese": "ポットデス",
+                    "Korean": "포트데스",
+                    "Spanish": "Polteageist"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 248,
+                    "defense": 189
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_GHOST",
+                    "names": {
+                        "English": "Ghost",
+                        "German": "Geist",
+                        "French": "Spectre",
+                        "Italian": "Spettro",
+                        "Japanese": "ゴースト",
+                        "Korean": "고스트",
+                        "Spanish": "Fantasma"
+                    }
+                },
+                "secondaryType": null,
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ASTONISH_FAST": {
+                        "id": "ASTONISH_FAST",
+                        "power": 7,
+                        "energy": 13,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Astonish",
+                            "German": "Erstauner",
+                            "French": "Étonnement",
+                            "Italian": "Sgomento",
+                            "Japanese": "おどろかす",
+                            "Korean": "놀래키기",
+                            "Spanish": "Impresionar"
+                        },
+                        "combat": {
+                            "energy": 10,
+                            "power": 12,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "SUCKER_PUNCH_FAST": {
+                        "id": "SUCKER_PUNCH_FAST",
+                        "power": 5,
+                        "energy": 6,
+                        "durationMs": 500,
+                        "type": {
+                            "type": "POKEMON_TYPE_DARK",
+                            "names": {
+                                "English": "Dark",
+                                "German": "Unlicht",
+                                "French": "Ténèbres",
+                                "Italian": "Buio",
+                                "Japanese": "あく",
+                                "Korean": "악",
+                                "Spanish": "Siniestro"
+                            }
+                        },
+                        "names": {
+                            "English": "Sucker Punch",
+                            "German": "Tiefschlag",
+                            "French": "Coup Bas",
+                            "Italian": "Sbigoattacco",
+                            "Japanese": "ふいうち",
+                            "Korean": "기습",
+                            "Spanish": "Golpe Bajo"
+                        },
+                        "combat": {
+                            "energy": 7,
+                            "power": 8,
+                            "turns": 2,
+                            "buffs": null
+                        }
+                    },
+                    "HEX_FAST": {
+                        "id": "HEX_FAST",
+                        "power": 8,
+                        "energy": 13,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Hex",
+                            "German": "Bürde",
+                            "French": "Châtiment",
+                            "Italian": "Sciagura",
+                            "Japanese": "たたりめ",
+                            "Korean": "병상첨병",
+                            "Spanish": "Infortunio"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "SHADOW_BALL": {
+                        "id": "SHADOW_BALL",
+                        "power": 100,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Shadow Ball",
+                            "German": "Spukball",
+                            "French": "Ball’Ombre",
+                            "Italian": "Palla Ombra",
+                            "Japanese": "シャドーボール",
+                            "Korean": "섀도볼",
+                            "Spanish": "Bola Sombra"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 90,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "DARK_PULSE": {
+                        "id": "DARK_PULSE",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_DARK",
+                            "names": {
+                                "English": "Dark",
+                                "German": "Unlicht",
+                                "French": "Ténèbres",
+                                "Italian": "Buio",
+                                "Japanese": "あく",
+                                "Korean": "악",
+                                "Spanish": "Siniestro"
+                            }
+                        },
+                        "names": {
+                            "English": "Dark Pulse",
+                            "German": "Finsteraura",
+                            "French": "Vibrobscur",
+                            "Italian": "Neropulsar",
+                            "Japanese": "あくのはどう",
+                            "Korean": "악의파동",
+                            "Spanish": "Pulso Umbrío"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 80,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "PSYCHIC": {
+                        "id": "PSYCHIC",
+                        "power": 95,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_PSYCHIC",
+                            "names": {
+                                "English": "Psychic",
+                                "German": "Psycho",
+                                "French": "Psy",
+                                "Italian": "Psico",
+                                "Japanese": "エスパー",
+                                "Korean": "에스퍼",
+                                "Spanish": "Psíquico"
+                            }
+                        },
+                        "names": {
+                            "English": "Psychic",
+                            "German": "Psychokinese",
+                            "French": "Psyko",
+                            "Italian": "Psichico",
+                            "Japanese": "サイコキネシス",
+                            "Korean": "사이코키네시스",
+                            "Spanish": "Psíquico"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 75,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": null,
+                                "attackerDefenseStatsChange": null,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": -1
+                            }
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.s.icon.png"
+                },
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
             "POLTEAGEIST_PHONY": {
                 "id": "POLTEAGEIST",
                 "formId": "POLTEAGEIST_PHONY",
@@ -348787,6 +351208,259 @@
                 "assets": {
                     "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.fPHONY.icon.png",
                     "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.fPHONY.s.icon.png"
+                },
+                "regionForms": [],
+                "evolutions": [],
+                "hasMegaEvolution": false,
+                "megaEvolutions": [],
+                "hasGigantamaxEvolution": false
+            },
+            "POLTEAGEIST_P_HALLOWEEN_2026_01": {
+                "id": "POLTEAGEIST",
+                "formId": "POLTEAGEIST_P_HALLOWEEN_2026_01",
+                "dexNr": 855,
+                "generation": 8,
+                "names": {
+                    "English": "Polteageist",
+                    "German": "Mortipot",
+                    "French": "Polthégeist",
+                    "Italian": "Polteageist",
+                    "Japanese": "ポットデス",
+                    "Korean": "포트데스",
+                    "Spanish": "Polteageist"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 248,
+                    "defense": 189
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_GHOST",
+                    "names": {
+                        "English": "Ghost",
+                        "German": "Geist",
+                        "French": "Spectre",
+                        "Italian": "Spettro",
+                        "Japanese": "ゴースト",
+                        "Korean": "고스트",
+                        "Spanish": "Fantasma"
+                    }
+                },
+                "secondaryType": null,
+                "pokemonClass": null,
+                "quickMoves": {
+                    "ASTONISH_FAST": {
+                        "id": "ASTONISH_FAST",
+                        "power": 7,
+                        "energy": 13,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Astonish",
+                            "German": "Erstauner",
+                            "French": "Étonnement",
+                            "Italian": "Sgomento",
+                            "Japanese": "おどろかす",
+                            "Korean": "놀래키기",
+                            "Spanish": "Impresionar"
+                        },
+                        "combat": {
+                            "energy": 10,
+                            "power": 12,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    },
+                    "SUCKER_PUNCH_FAST": {
+                        "id": "SUCKER_PUNCH_FAST",
+                        "power": 5,
+                        "energy": 6,
+                        "durationMs": 500,
+                        "type": {
+                            "type": "POKEMON_TYPE_DARK",
+                            "names": {
+                                "English": "Dark",
+                                "German": "Unlicht",
+                                "French": "Ténèbres",
+                                "Italian": "Buio",
+                                "Japanese": "あく",
+                                "Korean": "악",
+                                "Spanish": "Siniestro"
+                            }
+                        },
+                        "names": {
+                            "English": "Sucker Punch",
+                            "German": "Tiefschlag",
+                            "French": "Coup Bas",
+                            "Italian": "Sbigoattacco",
+                            "Japanese": "ふいうち",
+                            "Korean": "기습",
+                            "Spanish": "Golpe Bajo"
+                        },
+                        "combat": {
+                            "energy": 7,
+                            "power": 8,
+                            "turns": 2,
+                            "buffs": null
+                        }
+                    },
+                    "HEX_FAST": {
+                        "id": "HEX_FAST",
+                        "power": 8,
+                        "energy": 13,
+                        "durationMs": 1000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Hex",
+                            "German": "Bürde",
+                            "French": "Châtiment",
+                            "Italian": "Sciagura",
+                            "Japanese": "たたりめ",
+                            "Korean": "병상첨병",
+                            "Spanish": "Infortunio"
+                        },
+                        "combat": {
+                            "energy": 13,
+                            "power": 7,
+                            "turns": 3,
+                            "buffs": null
+                        }
+                    }
+                },
+                "cinematicMoves": {
+                    "SHADOW_BALL": {
+                        "id": "SHADOW_BALL",
+                        "power": 100,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_GHOST",
+                            "names": {
+                                "English": "Ghost",
+                                "German": "Geist",
+                                "French": "Spectre",
+                                "Italian": "Spettro",
+                                "Japanese": "ゴースト",
+                                "Korean": "고스트",
+                                "Spanish": "Fantasma"
+                            }
+                        },
+                        "names": {
+                            "English": "Shadow Ball",
+                            "German": "Spukball",
+                            "French": "Ball’Ombre",
+                            "Italian": "Palla Ombra",
+                            "Japanese": "シャドーボール",
+                            "Korean": "섀도볼",
+                            "Spanish": "Bola Sombra"
+                        },
+                        "combat": {
+                            "energy": -50,
+                            "power": 90,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "DARK_PULSE": {
+                        "id": "DARK_PULSE",
+                        "power": 80,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_DARK",
+                            "names": {
+                                "English": "Dark",
+                                "German": "Unlicht",
+                                "French": "Ténèbres",
+                                "Italian": "Buio",
+                                "Japanese": "あく",
+                                "Korean": "악",
+                                "Spanish": "Siniestro"
+                            }
+                        },
+                        "names": {
+                            "English": "Dark Pulse",
+                            "German": "Finsteraura",
+                            "French": "Vibrobscur",
+                            "Italian": "Neropulsar",
+                            "Japanese": "あくのはどう",
+                            "Korean": "악의파동",
+                            "Spanish": "Pulso Umbrío"
+                        },
+                        "combat": {
+                            "energy": -45,
+                            "power": 80,
+                            "turns": 1,
+                            "buffs": null
+                        }
+                    },
+                    "PSYCHIC": {
+                        "id": "PSYCHIC",
+                        "power": 95,
+                        "energy": -50,
+                        "durationMs": 3000,
+                        "type": {
+                            "type": "POKEMON_TYPE_PSYCHIC",
+                            "names": {
+                                "English": "Psychic",
+                                "German": "Psycho",
+                                "French": "Psy",
+                                "Italian": "Psico",
+                                "Japanese": "エスパー",
+                                "Korean": "에스퍼",
+                                "Spanish": "Psíquico"
+                            }
+                        },
+                        "names": {
+                            "English": "Psychic",
+                            "German": "Psychokinese",
+                            "French": "Psyko",
+                            "Italian": "Psichico",
+                            "Japanese": "サイコキネシス",
+                            "Korean": "사이코키네시스",
+                            "Spanish": "Psíquico"
+                        },
+                        "combat": {
+                            "energy": -55,
+                            "power": 75,
+                            "turns": 1,
+                            "buffs": {
+                                "activationChance": 10,
+                                "attackerAttackStatsChange": null,
+                                "attackerDefenseStatsChange": null,
+                                "targetAttackStatsChange": null,
+                                "targetDefenseStatsChange": -1
+                            }
+                        }
+                    }
+                },
+                "eliteQuickMoves": [],
+                "eliteCinematicMoves": [],
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm855.s.icon.png"
                 },
                 "regionForms": [],
                 "evolutions": [],
