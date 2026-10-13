@@ -60,7 +60,8 @@ jobs:
           git add files/
           git status
           if ! git diff --quiet || ! git diff --staged --quiet; then
-            git commit -m "Auto-update scraped files [skip ci]"
+            TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
+            git commit -m "Auto-update scraped files - ${TIMESTAMP}"
             git pull --rebase origin data
             git push origin data
             # Purge jsDelivr cache so the website gets the new data immediately
