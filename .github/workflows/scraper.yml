@@ -55,8 +55,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action [Scraper]"
           mkdir -p files
-          cp -r ../files/* files/
+          cp -r ../files/* files/ 2>/dev/null || true
+          cp -r ../ScrapedDuck-master/files/* files/ 2>/dev/null || true
           git add files/
+          git status
           if ! git diff --quiet || ! git diff --staged --quiet; then
             git commit -m "Auto-update scraped files [skip ci]"
             git pull --rebase origin data
