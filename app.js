@@ -611,6 +611,45 @@ function getActiveCaughtSet() {
     return caughtCategoryPokemon[currentDexType] || caughtPokemon;
 }
 
+// Checks if a raid or max battle boss represents a Mega/Primal or Gigantamax form that is missing from the player's Mega/GMax Pokédex
+function isMegaOrGmaxFormMissing(name, matchedPoke) {
+    if (!name) return false;
+    const nameLower = safeLower(name);
+    const isMega = nameLower.startsWith('mega ') || nameLower.startsWith('primal ') || nameLower.includes(' mega ') || nameLower.includes(' primal ');
+    const isGmax = nameLower.startsWith('gigantamax ') || nameLower.includes('gigantamax') || nameLower.includes('gmax');
+    if (!isMega && !isGmax) return false;
+
+    const basePoke = matchedPoke || findPokemonByName(
+        nameLower.replace(/^mega\s+/i, '').replace(/^primal\s+/i, '').replace(/^gigantamax\s+/i, '').replace(/\s+mega(\s+[xy])?$/i, '').trim()
+    );
+    if (!basePoke) return false;
+
+    const baseId = basePoke.id;
+    if (isMega) {
+        const megaSet = caughtCategoryPokemon.mega || new Set();
+        // Check specific mega form IDs if known (e.g. 6_MEGA_X, 6_MEGA_Y)
+        if (nameLower.endsWith(' x')) {
+            const idX = `${baseId}_MEGA_X`;
+            return !megaSet.has(idX);
+        } else if (nameLower.endsWith(' y')) {
+            const idY = `${baseId}_MEGA_Y`;
+            return !megaSet.has(idY);
+        }
+        // General check: if base id or any form of base id is in mega set
+        const hasAnyMegaCaught = megaSet.has(baseId) || megaSet.has(Number(baseId)) || megaSet.has(String(baseId)) ||
+            Array.from(megaSet).some(id => String(id).startsWith(`${baseId}_MEGA`));
+        return !hasAnyMegaCaught;
+    }
+
+    if (isGmax) {
+        const gmaxSet = caughtCategoryPokemon.gmax || new Set();
+        const hasGmaxCaught = gmaxSet.has(baseId) || gmaxSet.has(Number(baseId)) || gmaxSet.has(String(baseId));
+        return !hasGmaxCaught;
+    }
+
+    return false;
+}
+
 let currentSearchQuery = '';
 let currentCollectionFilter = 'all'; // 'all' | 'missing' | 'caught'
 let currentSortOrder = 'num-asc'; // 'num-asc' | 'num-desc' | 'name-asc'
@@ -4683,9 +4722,11 @@ function renderActiveRotations() {
                 })();
                 const targetPoke = matchedPoke || baseFormPoke;
                 const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
-                const isMissing = targetPoke && !isTransferred && (!caughtPokemon.has(targetPoke.id) && !caughtPokemon.has(Number(targetPoke.id)));
+                const isMissingSpecies = targetPoke && !isTransferred && (!caughtPokemon.has(targetPoke.id) && !caughtPokemon.has(Number(targetPoke.id)));
+                const isMissingForm = isMegaOrGmaxFormMissing(raid.name, targetPoke);
+                const isMissing = isMissingSpecies;
                 const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
-                const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
+                const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isMissingForm ? 'missing-form-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : '')));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
                 card.setAttribute('data-scroll-target', `raid-${raidName.replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`);
                 
@@ -4764,10 +4805,18 @@ function renderActiveRotations() {
                     countersHtml = `<div class="raid-counters-list" style="display: flex; gap: 6px; align-items: center; justify-content: flex-start; flex-wrap: wrap; margin-top: 0.3rem;"><span>Top Counters:</span> ${badges}</div>`;
                 }
 
+                const statusBadgeHtml = isTransferred 
+                    ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' 
+                    : (isMissing 
+                        ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' 
+                        : (isMissingForm 
+                            ? '<span class="missing-form-rotation-badge"><i class="fa-solid fa-dna"></i> Missing Form</span>' 
+                            : ''));
+
                 card.innerHTML = `
                     ${raid.shiny ? shinySparkleSvg : ''}
                     <div class="rotation-badges">
-                        ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
+                        ${statusBadgeHtml}
                         ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                     </div>
                     <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
@@ -4824,9 +4873,11 @@ function renderActiveRotations() {
                     const matchedPoke = findPokemonByName(baseName);
                     
                     const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                    const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                    const isMissingSpecies = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                    const isMissingForm = isMegaOrGmaxFormMissing(boss.name, matchedPoke);
+                    const isMissing = isMissingSpecies;
                     const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
-                    const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
+                    const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isMissingForm ? 'missing-form-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : '')));
 
                     card.className = `rotation-card-item theme-mega ${highlightClass} spawn-animation`;
                     card.setAttribute('data-scroll-target', `maxbattle-${safeLower(boss.name).replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`);
@@ -4891,10 +4942,18 @@ function renderActiveRotations() {
                         weatherHtml = `<div class="raid-weather-boosts" style="margin-top: 0.3rem; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span>Weather Boost:</span> ${badges}</div>`;
                     }
 
+                    const statusBadgeHtml = isTransferred 
+                        ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' 
+                        : (isMissing 
+                            ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' 
+                            : (isMissingForm 
+                                ? '<span class="missing-form-rotation-badge"><i class="fa-solid fa-dna"></i> Missing Form</span>' 
+                                : ''));
+
                     card.innerHTML = `
                         ${boss.shiny ? shinySparkleSvg : ''}
                         <div class="rotation-badges">
-                            ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
+                            ${statusBadgeHtml}
                             ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
                         </div>
                         <img class="rotation-card-img" src="${imgUrl}" alt="${boss.name}">
@@ -9739,7 +9798,9 @@ function renderToDoPane() {
                 }
                 
                 const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
-                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isMissSpecies = isMissingInActiveCategory(matched) && !isTransf;
+                const isMissForm = isMegaOrGmaxFormMissing(raid.name, matched);
+                const isMiss = isMissSpecies;
                 const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `raid-${safeLower(matched.name).replace(/\s+/g, '-')}-${safeLower(raid.tier).replace(/[^a-z0-9]/g, '')}`;
 
@@ -9747,6 +9808,8 @@ function renderToDoPane() {
                     addPriority(matched, 'Transferred', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 } else if (isMiss) {
                     addPriority(matched, 'Missing', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
+                } else if (isMissForm) {
+                    addPriority(matched, 'Missing Form', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 } else if (isCandy) {
                     addPriority(matched, 'Candy', 'Raid', `Raid Boss (${tierLabel})`, 'rotations-raids-section', key, raid.name);
                 }
@@ -9880,7 +9943,9 @@ function renderToDoPane() {
             if (matched) {
                 const tier = boss.tier || 'Max Battles';
                 const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
-                const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                const isMissSpecies = isMissingInActiveCategory(matched) && !isTransf;
+                const isMissForm = isMegaOrGmaxFormMissing(boss.name, matched);
+                const isMiss = isMissSpecies;
                 const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
                 const key = `maxbattle-${safeLower(boss.name).replace(/\s+/g, '-')}-${safeLower(tier).replace(/[^a-z0-9]/g, '')}`;
 
@@ -9888,6 +9953,8 @@ function renderToDoPane() {
                     addPriority(matched, 'Transferred', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
                 } else if (isMiss) {
                     addPriority(matched, 'Missing', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
+                } else if (isMissForm) {
+                    addPriority(matched, 'Missing Form', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
                 } else if (isCandy) {
                     addPriority(matched, 'Candy', 'Max Battle', `Max Battle Boss (${tier})`, 'rotations-maxbattles-section', key, boss.name);
                 }
@@ -9975,6 +10042,11 @@ function renderToDoPane() {
             badgeText = 'CANDY';
             badgeColor = 'var(--accent-color)';
             badgeTextColor = '#1e1b4b';
+        } else if (item.type === 'Missing Form') {
+            badgeText = 'MISSING FORM';
+            badgeColor = '#a855f7';
+            badgeTextColor = '#ffffff';
+            badgeIcon = '<i class="fa-solid fa-dna"></i>';
         }
 
         const canShiny = canPokemonBeShiny(item.poke);
