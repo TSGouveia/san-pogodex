@@ -459,7 +459,7 @@
         <section class="view-pane hidden" id="candies-pane">
             <!-- Buddy Walk Sub-Navigation tabs -->
             <div class="buddy-walk-subnav-container" style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
-                <nav class="rotations-subnav" id="buddy-walk-subnav" aria-label="Buddy Walk Selector" style="max-width: 480px; width: 100%;">
+                <nav class="rotations-subnav" id="buddy-walk-subnav" aria-label="Buddy Walk Selector" style="width: auto;">
                     <button class="subnav-btn active" data-buddy-tab="candies" id="btn-buddy-subnav-candies">
                         <i class="fa-solid fa-candy-cane"></i> Candies & Evolution
                     </button>
@@ -576,7 +576,7 @@
                     </div>
                     <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
                         <div>
-                            <span style="color: #94a3b8; font-weight: 600;">Energy Needed (Goal 5k):</span>
+                            <span style="color: #94a3b8; font-weight: 600;">Energy Needed:</span>
                             <strong id="mega-total-energy-needed" style="color: #ec4899; font-size: 0.95rem;">0</strong>
                         </div>
                         <div>
@@ -587,12 +587,20 @@
                 </div>
 
                 <div class="candies-sections-container">
-                    <!-- Ready to Unlock (Reached 5000 energy, not yet marked as Level 4) -->
+                    <!-- Ready to Unlock (Reached 5000 energy, has level 3, not yet marked as Level 4) -->
                     <div class="candies-category-section" id="cat-mega-ready-unlock">
                         <h3 class="candies-category-title" style="color: var(--accent-green); border-bottom: 2px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                            <i class="fa-solid fa-circle-check"></i> Ready to Unlock (5,000 Energy Ready)
+                            <i class="fa-solid fa-circle-check"></i> Ready to Unlock
                         </h3>
                         <div class="candies-grid" id="grid-mega-ready-unlock"></div>
+                    </div>
+
+                    <!-- Ready Energy (Needs level 3) -->
+                    <div class="candies-category-section" id="cat-mega-need-level3" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #a855f7; border-bottom: 2px solid rgba(168, 85, 247, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-scroll"></i> Ready Energy (Needs Level 3)
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-need-level3"></div>
                     </div>
 
                     <!-- Needs Mega Energy (Active Mega species in progress) -->

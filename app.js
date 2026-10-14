@@ -7284,7 +7284,11 @@ function renderMegaEnergyPane() {
     });
 
     // 6. Distribute into Categories
+    const gridNeedLevel3 = document.getElementById('grid-mega-need-level3');
+    if (gridNeedLevel3) gridNeedLevel3.innerHTML = '';
+
     let readyCount = 0;
+    let needLevel3Count = 0;
     let needCount = 0;
     let missingCount = 0;
     let completedSectionCount = 0;
@@ -7301,8 +7305,13 @@ function renderMegaEnergyPane() {
             kmText = '🏆 Mega Level 4 Complete (Goal Mastered!)';
             kmClass = 'km-complete';
         } else if (data.energyNeeded === 0) {
-            kmText = 'Enough Mega Energy to unlock Level 4!';
-            kmClass = 'km-success';
+            if (!data.hasLevel3) {
+                kmText = 'Energy ready! Reach Mega Level 3 to proceed.';
+                kmClass = 'km-quest';
+            } else {
+                kmText = 'Enough Mega Energy to unlock Level 4!';
+                kmClass = 'km-success';
+            }
         } else {
             kmText = `Walk ${data.kmNeeded.toFixed(1)} km (${data.energyNeeded} energy needed, +${data.energyPerWalk} per ${data.buddyDist} km)`;
             kmClass = 'km-walk';
@@ -7320,7 +7329,7 @@ function renderMegaEnergyPane() {
                             ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
-                        <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy/walk)</div>
+                        <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</div>
                     </div>
                 </div>
                 <div class="candy-input-wrapper">
@@ -7338,7 +7347,7 @@ function renderMegaEnergyPane() {
                     </span>
                     <span class="stage-name">${data.isCaughtMega ? 'Mega Form Caught' : 'Missing in Mega Dex'}</span>
                     <span class="stage-cost" style="margin-left: auto; background: rgba(236, 72, 153, 0.12); color: #ec4899;">
-                        <i class="fa-solid fa-dna"></i> 5,000 Goal
+                        <i class="fa-solid fa-dna"></i> 5000
                     </span>
                 </div>
 
@@ -7454,8 +7463,13 @@ function renderMegaEnergyPane() {
             gridMissing.appendChild(card);
             missingCount++;
         } else if (data.energyNeeded === 0) {
-            gridReady.appendChild(card);
-            readyCount++;
+            if (!data.hasLevel3 && gridNeedLevel3) {
+                gridNeedLevel3.appendChild(card);
+                needLevel3Count++;
+            } else {
+                gridReady.appendChild(card);
+                readyCount++;
+            }
         } else {
             gridNeed.appendChild(card);
             needCount++;
@@ -7464,6 +7478,8 @@ function renderMegaEnergyPane() {
 
     // Hide/Show category sections based on count
     document.getElementById('cat-mega-ready-unlock').style.display = readyCount > 0 ? 'block' : 'none';
+    const catNeedLevel3 = document.getElementById('cat-mega-need-level3');
+    if (catNeedLevel3) catNeedLevel3.style.display = needLevel3Count > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-need-energy').style.display = needCount > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-missing').style.display = missingCount > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-completed').style.display = completedSectionCount > 0 ? 'block' : 'none';
