@@ -1131,19 +1131,46 @@ async function setPogoLocalCache(key, value) {
     }
 }
 
+async function fetchCdnFile(fileName, query) {
+    const jsdelivrUrl = `https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/${fileName}${query}`;
+    const rawGithubUrl = `https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/${fileName}`;
+    
+    // Try jsDelivr first with a 4s timeout
+    try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(jsdelivrUrl, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        if (res && res.ok) {
+            return await res.json();
+        }
+    } catch (e) {
+        // Fallback to raw.githubusercontent below
+    }
+
+    // Direct fallback to raw.githubusercontent
+    try {
+        const res2 = await fetch(rawGithubUrl);
+        if (res2 && res2.ok) {
+            return await res2.json();
+        }
+    } catch (err) {
+        console.warn(`Erro ao carregar ficheiro ${fileName}:`, err);
+    }
+    return null;
+}
+
 async function loadScrapedDataFromCdn() {
     // 1. Check local IndexedDB cache first
     const cachedData = await getPogoLocalCache('scraped_data_cache');
 
     try {
-        // 2. Fetch metadata.json to check updatedAt timestamp from data branch CDN (with cache busting)
-        const DATA_BRANCH_CDN = 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files';
+        // 2. Fetch metadata.json to check updatedAt timestamp
         let latestUpdatedAt = null;
         try {
-            const metaRes = await fetch(`${DATA_BRANCH_CDN}/metadata.json?t=${Date.now()}`);
-            if (metaRes && metaRes.ok) {
-                const meta = await metaRes.json();
-                latestUpdatedAt = meta?.updatedAt;
+            const meta = await fetchCdnFile('metadata.json', `?t=${Date.now()}`);
+            if (meta && meta.updatedAt) {
+                latestUpdatedAt = meta.updatedAt;
             }
         } catch (e) {
             console.warn("Could not fetch metadata.json timestamp:", e);
@@ -1157,17 +1184,10 @@ async function loadScrapedDataFromCdn() {
             }
         }
 
-        // 4. Load static JSON files from data branch CDN
+        // 4. Load static JSON files with automatic fallback
         const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
         const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
-        const fetchPromises = modules.map(m =>
-            fetch(`${DATA_BRANCH_CDN}/${m}.min.json${cacheBustQuery}`)
-                .then(r => r.ok ? r.json() : null)
-                .catch(err => {
-                    console.warn(`Erro ao carregar ficheiro ${m}:`, err);
-                    return null;
-                })
-        );
+        const fetchPromises = modules.map(m => fetchCdnFile(`${m}.min.json`, cacheBustQuery));
 
         const results = await Promise.all(fetchPromises);
         const parsed = {};
