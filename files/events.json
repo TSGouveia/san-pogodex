@@ -16,8 +16,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/go-battle-league-season-28-twilight-trails.png",
         "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2/",
-        "start": "2026-10-06T13:00:00.000-0700",
-        "end": "2026-10-13T13:00:00.000-0700"
+        "start": "",
+        "end": ""
     },
     {
         "eventID": "mega-blastoise-in-mega-raids-october-2026",
@@ -178,6 +178,16 @@
         "link": "https://leekduck.com/events/minior-showers-orionids-2026/",
         "start": "2026-10-19T17:00:00.000",
         "end": "2026-10-24T23:59:00.000"
+    },
+    {
+        "eventID": "pokemon-go-city-safari-boston-2026-rescheduled",
+        "title": "Pokémon GO City Safari: Boston (Rescheduled)",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/city-safari-boston-2026.jpg",
+        "link": "https://leekduck.com/events/pokemon-go-city-safari-boston-2026-rescheduled/",
+        "start": "2026-10-24T10:00:00.000",
+        "end": "2026-10-25T18:00:00.000"
     },
     {
         "eventID": "max-mondays-2026-10-26",
