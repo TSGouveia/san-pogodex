@@ -7347,9 +7347,6 @@ function renderMegaEnergyPane() {
                         <i class="fa-solid ${data.isCaughtMega ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
                     </span>
                     <span class="stage-name">${data.isCaughtMega ? `${formNoun} Form Caught` : `Missing in ${formNoun} Dex`}</span>
-                    <span class="stage-cost" style="margin-left: auto; background: rgba(236, 72, 153, 0.12); color: #ec4899;">
-                        <i class="fa-solid fa-dna"></i> 5000
-                    </span>
                 </div>
 
                 <!-- Stage 2: Level 3 Milestone -->
@@ -7370,9 +7367,16 @@ function renderMegaEnergyPane() {
                         <i class="fa-solid ${data.hasLevel4 ? 'fa-award' : 'fa-circle'}"></i>
                     </span>
                     <span class="stage-name" style="font-weight: 700;">${formNoun} Level 4 (Max)</span>
-                    <button class="transferred-inline-toggle mega-l4-btn" style="margin-left: auto; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.2)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.5)' : 'rgba(255,255,255,0.1)'}; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" data-form-id="${data.formStateId}">
+                    <span class="stage-cost" style="margin-left: auto; background: rgba(236, 72, 153, 0.15); color: #ec4899; font-weight: 700; border: 1px solid rgba(236, 72, 153, 0.3);">
+                        <i class="fa-solid fa-dna"></i> 5000
+                    </span>
+                </div>
+
+                <!-- Stage 4: Set Level 4 Full Width Button -->
+                <div style="margin-top: 2px;">
+                    <button class="transferred-inline-toggle mega-l4-btn" style="width: 100%; justify-content: center; padding: 6px 10px; font-size: 0.72rem; font-weight: 700; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s ease; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.22)' : 'rgba(255,255,255,0.05)'}; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.6)' : 'rgba(255,255,255,0.12)'}; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'};" data-form-id="${data.formStateId}">
                         <i class="fa-solid ${data.hasLevel4 ? 'fa-trophy' : 'fa-flag-checkered'}"></i>
-                        <span>${data.hasLevel4 ? 'Level 4 Done' : 'Set Level 4'}</span>
+                        <span>${data.hasLevel4 ? 'Level 4 Completed' : 'Set Level 4'}</span>
                     </button>
                 </div>
             </div>
