@@ -1120,8 +1120,9 @@ async function loadScrapedDataFromCdn() {
 
         // 4. Load static JSON files from data branch CDN
         const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
+        const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
         const fetchPromises = modules.map(m =>
-            fetch(`${DATA_BRANCH_CDN}/${m}.min.json`)
+            fetch(`${DATA_BRANCH_CDN}/${m}.min.json${cacheBustQuery}`)
                 .then(r => r.ok ? r.json() : null)
                 .catch(err => {
                     console.warn(`Erro ao carregar ficheiro ${m}:`, err);
@@ -1575,7 +1576,13 @@ function buildPokebattlerMaxUrl(bossName) {
                 });
             });
         }
-        liveEvents.sort((a, b) => new Date(a.start) - new Date(b.start));
+        liveEvents.sort((a, b) => {
+            const da = a.start ? new Date(a.start).getTime() : 0;
+            const db = b.start ? new Date(b.start).getTime() : 0;
+            if (isNaN(da)) return 1;
+            if (isNaN(db)) return -1;
+            return da - db;
+        });
 
         // 5. Parse Wild Spawns strictly from Firestore database
         liveSpawns = [];
@@ -8123,6 +8130,59 @@ function renderEventsPane() {
     renderEventsList();
 }
 
+function isTbaDate(dateVal) {
+    if (!dateVal) return true;
+    if (typeof dateVal === 'string') {
+        const trimmed = dateVal.trim();
+        if (!trimmed || trimmed.toLowerCase() === 'tba' || trimmed.toLowerCase() === 'null') return true;
+        // LeekDuck placeholder where end date is set to 23:59 PDT/PST because official end hour was not announced
+        if (trimmed.includes('23:59:00.000-0700') || trimmed.includes('23:59:00.000-0800')) return true;
+    }
+    const d = new Date(dateVal);
+    return isNaN(d.getTime());
+}
+
+function formatEventDateRange(startVal, endVal) {
+    const isStartTba = isTbaDate(startVal);
+    const isEndTba = isTbaDate(endVal);
+
+    if (isStartTba && isEndTba) return "TBA";
+
+    const startD = isStartTba ? null : new Date(startVal);
+    const endD = isEndTba ? null : new Date(endVal);
+
+    if (isEndTba) {
+        const startStr = startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        return `${startStr} - TBA`;
+    }
+    if (isStartTba) {
+        const endStr = endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        return `TBA - ${endStr}`;
+    }
+
+    return startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + 
+        " - " + endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+function formatEventTimeRange(startVal, endVal) {
+    const isStartTba = isTbaDate(startVal);
+    const isEndTba = isTbaDate(endVal);
+
+    if (isStartTba && isEndTba) return "TBA";
+    if (isEndTba) {
+        const s = new Date(startVal);
+        return s.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - TBA';
+    }
+    if (isStartTba) {
+        const e = new Date(endVal);
+        return 'TBA - ' + e.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    const s = new Date(startVal);
+    const e = new Date(endVal);
+    return s.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + e.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 function openEventModal(ev) {
     const modal = document.getElementById('event-modal');
     if (!modal) return;
@@ -8166,27 +8226,40 @@ function openEventModal(ev) {
     }
 
     // Dates
-    const startD = new Date(ev.start);
-    const endD = new Date(ev.end);
-    const dateStr = startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + 
-        " - " + endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const startD = isTbaDate(ev.start) ? null : new Date(ev.start);
+    const endD = isTbaDate(ev.end) ? null : new Date(ev.end);
+    const dateStr = formatEventDateRange(ev.start, ev.end);
     if (dateEl) dateEl.textContent = dateStr;
 
     // Countdown / Status
     const now = new Date();
     let timeLabel = '';
-    if (now >= startD && now <= endD) {
+    if (!startD) {
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(148, 163, 184, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-clock"></i> Date TBA</span>`;
+    } else if (!endD) {
+        if (now >= startD) {
+            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-bolt"></i> Ongoing (End TBA)</span>`;
+        } else {
+            const diff = startD - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
+            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-calendar"></i> Starts in ${timeText}</span>`;
+        }
+    } else if (now >= startD && now <= endD) {
         const diff = endD - now;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
         timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #ef4444; background: rgba(239, 68, 68, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-clock"></i> Ends in ${timeText}</span>`;
-    } else {
+    } else if (now < startD) {
         const diff = startD - now;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
         const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
         timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-calendar"></i> Starts in ${timeText}</span>`;
+    } else {
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(148, 163, 184, 0.15); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-check"></i> Concluded</span>`;
     }
     if (countdownEl) countdownEl.innerHTML = timeLabel;
 
@@ -8340,13 +8413,24 @@ function createEventCardElement(ev, now) {
         card.style.boxShadow = '0 4px 15px -3px rgba(0,0,0,0.2)';
     });
 
-    const startD = new Date(ev.start);
-    const endD = new Date(ev.end);
-    const dateStr = startD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) + 
-        " - " + endD.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const startD = isTbaDate(ev.start) ? null : new Date(ev.start);
+    const endD = isTbaDate(ev.end) ? null : new Date(ev.end);
+    const dateStr = formatEventDateRange(ev.start, ev.end);
 
     let timeLabel = '';
-    if (now >= startD && now <= endD) {
+    if (!startD) {
+        timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #94a3b8; background: rgba(148, 163, 184, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-clock"></i> Date TBA</span>`;
+    } else if (!endD) {
+        if (now >= startD) {
+            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-bolt"></i> Ongoing (End TBA)</span>`;
+        } else {
+            const diff = startD - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const timeText = days > 0 ? `${days}d ${hours}h` : `${hours}h`;
+            timeLabel = `<span style="font-size: 0.72rem; font-weight: 700; color: #34d399; background: rgba(52, 211, 153, 0.15); padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-calendar"></i> Starts in ${timeText}</span>`;
+        }
+    } else if (now >= startD && now <= endD) {
         const diff = endD - now;
         const days = Math.floor(diff / (1000 * 60 * 60 * 24));
         const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -8477,9 +8561,7 @@ function getEventContext(ev) {
         icon = 'fa-hand-fist';
     }
 
-    const s = new Date(ev.start);
-    const e = new Date(ev.end);
-    const timeStr = s.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' - ' + e.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeStr = formatEventTimeRange(ev.start, ev.end);
 
     return { typeLabel, badgeColor, badgeBg, icon, timeStr };
 }
@@ -8598,14 +8680,22 @@ function renderEventsCalendar(listContainer, now) {
 
     // Single-day events for this month
     const singleDayEvents = liveEvents.filter(ev => {
-        if (!ev.start || !ev.end) return false;
-        const s = new Date(ev.start);
+        if (!ev.start) return false;
+        const s = isTbaDate(ev.start) ? null : new Date(ev.start);
+        if (!s || isNaN(s.getTime())) return false;
+        if (s.getFullYear() !== targetYear || s.getMonth() !== targetMonth) return false;
+
+        const isEndTba = isTbaDate(ev.end);
+        if (isEndTba) {
+            return true;
+        }
         const e = new Date(ev.end);
+        if (isNaN(e.getTime())) return true;
         const isSingleDay = s.getFullYear() === e.getFullYear() &&
                             s.getMonth() === e.getMonth() &&
                             s.getDate() === e.getDate();
         if (!isSingleDay) return false;
-        return s.getFullYear() === targetYear && s.getMonth() === targetMonth;
+        return true;
     });
 
     // Debut Pokémon for this month
@@ -9064,19 +9154,23 @@ function renderEventsList() {
 
     // Filter active or upcoming events
     const filtered = liveEvents.filter(ev => {
-        const start = new Date(ev.start);
-        const end = new Date(ev.end);
+        const start = isTbaDate(ev.start) ? null : new Date(ev.start);
+        const end = isTbaDate(ev.end) ? null : new Date(ev.end);
         
         // Check if single day event (starts and ends on the same day)
-        const isSingleDay = start.getFullYear() === end.getFullYear() &&
+        const isSingleDay = start && end &&
+                            start.getFullYear() === end.getFullYear() &&
                             start.getMonth() === end.getMonth() &&
                             start.getDate() === end.getDate();
 
         if (currentEventTab === 'active') {
             // Exclude single-day events (they belong in "Calendar")
             if (isSingleDay) return false;
+            if (!start) return false;
+            if (!end) return now >= start; // Ongoing event with end TBA
             return now >= start && now <= end;
         } else {
+            if (!start) return true; // If start date is TBA, treat as upcoming
             return now < start;
         }
     });

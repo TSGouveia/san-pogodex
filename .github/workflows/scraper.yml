@@ -66,4 +66,6 @@ jobs:
             git push origin data
             # Purge jsDelivr cache so the website gets the new data immediately
             curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/metadata.json" || true
+            curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/events.min.json" || true
+            curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/events.json" || true
           fi
