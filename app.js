@@ -1976,22 +1976,29 @@ function getBaseListForDexType(dexType = currentDexType) {
                 : null;
             const megaKeys = rawMegas ? Object.keys(rawMegas) : [];
 
-            if (megaKeys.length > 1) {
+            if (megaKeys.length > 0) {
                 megaKeys.forEach(mKey => {
                     const megaData = rawMegas[mKey] || {};
                     const sufMatch = mKey.match(/_([A-Z])$/i);
-                    const suffix = sufMatch ? sufMatch[1].toUpperCase() : mKey.replace(/^.*_MEGA_?/, '');
-                    const mName = (megaData.names && megaData.names.English) || `Mega ${p.name}${suffix ? ' ' + suffix : ''}`;
+                    const suffix = sufMatch ? sufMatch[1].toUpperCase() : '';
+                    const isPrimal = mKey.includes('PRIMAL');
+                    const defaultName = isPrimal
+                        ? `Primal ${p.name}`
+                        : `Mega ${p.name}${megaKeys.length > 1 && suffix ? ' ' + suffix : ''}`;
+                    const mName = (megaData.names && megaData.names.English) || defaultName;
                     const formTypes = [
                         megaData.primaryType && megaData.primaryType.names ? megaData.primaryType.names.English.toLowerCase() : null,
                         megaData.secondaryType && megaData.secondaryType.names ? megaData.secondaryType.names.English.toLowerCase() : null
                     ].filter(Boolean);
 
+                    // Form state ID matches across dex grid and Mega Energy Tracker
+                    const formId = suffix ? `${p.id}_MEGA_${suffix}` : String(p.id);
+
                     expandedResult.push({
                         ...p,
-                        id: `${p.id}_MEGA_${suffix || mKey}`,
+                        id: formId,
                         baseId: p.id,
-                        megaForm: suffix || mKey,
+                        megaForm: suffix || (isPrimal ? 'PRIMAL' : 'MEGA'),
                         displayName: mName,
                         types: formTypes.length > 0 ? formTypes : p.types,
                         stats: megaData.stats ? {
@@ -1999,7 +2006,8 @@ function getBaseListForDexType(dexType = currentDexType) {
                             def: megaData.stats.defense || p.stats.def,
                             sta: megaData.stats.stamina || p.stats.sta
                         } : p.stats,
-                        megaData: megaData
+                        megaData: megaData,
+                        isPrimal: isPrimal
                     });
                 });
             } else if (['Charizard', 'Mewtwo', 'Raichu'].includes(p.name)) {
@@ -2019,7 +2027,10 @@ function getBaseListForDexType(dexType = currentDexType) {
                     displayName: `Mega ${p.name} Y`
                 });
             } else {
-                expandedResult.push(p);
+                expandedResult.push({
+                    ...p,
+                    displayName: p.name.toLowerCase().includes('kyogre') || p.name.toLowerCase().includes('groudon') ? `Primal ${p.name}` : `Mega ${p.name}`
+                });
             }
         });
         result = expandedResult;
@@ -3083,20 +3094,12 @@ function renderPokedex(forceClear = false) {
             const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
             imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
         } else if (currentDexType === 'mega') {
-            if (poke.megaForm) {
-                const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name} ${poke.megaForm}`, poke);
-                if (megaSpriteUrl) {
-                    imgSrc = megaSpriteUrl;
-                } else if (poke.megaData && poke.megaData.assets && poke.megaData.assets.image) {
-                    imgSrc = poke.megaData.assets.image;
-                }
-            } else {
-                const megaSpriteUrl = getPokemonImageUrl(`Mega ${poke.name}`, poke);
-                if (megaSpriteUrl) {
-                    imgSrc = megaSpriteUrl;
-                } else if (poke.megaData && poke.megaData.assets && poke.megaData.assets.image) {
-                    imgSrc = poke.megaData.assets.image;
-                }
+            const formLookupName = poke.displayName || (poke.isPrimal ? `Primal ${poke.name}` : (poke.megaForm && poke.megaForm !== 'MEGA' ? `Mega ${poke.name} ${poke.megaForm}` : `Mega ${poke.name}`));
+            const megaSpriteUrl = getPokemonImageUrl(formLookupName, poke);
+            if (megaSpriteUrl) {
+                imgSrc = megaSpriteUrl;
+            } else if (poke.megaData && poke.megaData.assets && poke.megaData.assets.image) {
+                imgSrc = poke.megaData.assets.image;
             }
         } else if (currentDexType === 'gmax') {
             const gmaxSpriteUrl = getPokemonImageUrl(`Gigantamax ${poke.name}`, poke);
@@ -3132,6 +3135,8 @@ function renderPokedex(forceClear = false) {
             card.style.animationDelay = '0ms';
         }
 
+        const cardTitle = (currentDexType === 'mega' && poke.displayName) ? poke.displayName : poke.name;
+
         card.innerHTML = `
             <svg class="card-watermark" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
@@ -3157,10 +3162,10 @@ function renderPokedex(forceClear = false) {
             </div>
             
             <div class="card-img-wrapper">
-                <img src="${imgSrc}" alt="${poke.name}" loading="lazy" onerror="if(this.src !== '${poke.img}') { this.src='${poke.img}'; }">
+                <img src="${imgSrc}" alt="${cardTitle}" loading="lazy" onerror="if(this.src !== '${poke.img}') { this.src='${poke.img}'; }">
             </div>
             
-            <h3 class="poke-name">${poke.name}</h3>
+            <h3 class="poke-name">${cardTitle}</h3>
             ${subTitleText}
             
             <div class="types-container">
@@ -7105,8 +7110,8 @@ function renderMegaEnergyPane() {
                     const defaultName = isPrimal ? `Primal ${baseDbPoke.name}` : `Mega ${baseDbPoke.name}${suffix ? ' ' + suffix : ''}`;
                     const displayName = (mData.names && mData.names.English) || defaultName;
 
-                    // Form state ID: e.g. "6_X", "6_Y", "150_X", "150_Y", "26_X", "26_Y", "3_MEGA", "382_PRIMAL"
-                    const formStateId = `${baseDbPoke.id}_${suffix || megaKey.replace(/^[A-Z0-9]+_/, '')}`;
+                    // Form state ID: e.g. "6_MEGA_X", "6_MEGA_Y", "150_MEGA_X", "150_MEGA_Y", "26_MEGA_X", "26_MEGA_Y", "3", "382", etc.
+                    const formStateId = suffix ? `${baseDbPoke.id}_MEGA_${suffix}` : String(baseDbPoke.id);
 
                     // Lookup PokeAPI official artwork ID
                     const lookupKey = isPrimal
@@ -7170,24 +7175,25 @@ function renderMegaEnergyPane() {
             const buddyDist = buddyDistances[p.id] ?? 3;
             const energyPerWalk = buddyDist * 5;
             const isShinyView = (currentDexType === 'shiny');
-            const lookupKey = `${safeLower(p.name)}-mega`;
+            const isPrimal = p.name.toLowerCase().includes('kyogre') || p.name.toLowerCase().includes('groudon');
+            const lookupKey = isPrimal ? `${safeLower(p.name)}-primal` : `${safeLower(p.name)}-mega`;
             const mappedId = getMegaPokeApiIdFallback(lookupKey) || p.id;
             const formImg = isShinyView
                 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${mappedId}.png`
                 : `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
 
             megaForms.push({
-                formStateId: `${p.id}_MEGA`,
+                formStateId: String(p.id),
                 megaKey: `${p.name.toUpperCase()}_MEGA`,
                 suffix: '',
                 basePoke: p,
                 dexNr: Number(p.id),
-                name: `Mega ${p.name}`,
+                name: isPrimal ? `Primal ${p.name}` : `Mega ${p.name}`,
                 img: formImg,
                 buddyDist,
                 energyPerWalk,
                 energyCost: 200,
-                isPrimal: false,
+                isPrimal: isPrimal,
                 isUnreleased: Boolean(p.unreleased)
             });
         });
@@ -7214,17 +7220,11 @@ function renderMegaEnergyPane() {
         const hasLevel4 = userMegaLevel4.has(item.formStateId) || userMegaLevel4.has(String(item.basePoke.id));
 
         // Is caught in Mega Dex? Check specific form ID, baseId, or generic mega prefix
-        let isCaughtMega = megaCaughtSet.has(item.formStateId) || megaCaughtSet.has(item.megaKey);
-        if (!isCaughtMega) {
-            if (item.suffix) {
-                // If species has variants like X or Y
-                const formVariantId = `${item.basePoke.id}_MEGA_${item.suffix}`;
-                isCaughtMega = megaCaughtSet.has(formVariantId);
-            } else {
-                isCaughtMega = megaCaughtSet.has(item.basePoke.id) || megaCaughtSet.has(Number(item.basePoke.id)) ||
-                    megaCaughtSet.has(String(item.basePoke.id)) ||
-                    Array.from(megaCaughtSet).some(id => String(id).startsWith(`${item.basePoke.id}_MEGA`));
-            }
+        let isCaughtMega = megaCaughtSet.has(item.formStateId) || megaCaughtSet.has(Number(item.formStateId)) ||
+            megaCaughtSet.has(item.basePoke.id) || megaCaughtSet.has(Number(item.basePoke.id)) ||
+            megaCaughtSet.has(String(item.basePoke.id)) || megaCaughtSet.has(item.megaKey);
+        if (!isCaughtMega && item.suffix) {
+            isCaughtMega = megaCaughtSet.has(`${item.basePoke.id}_MEGA_${item.suffix}`);
         }
 
         const energyNeeded = Math.max(0, GOAL_ENERGY - currentEnergy);
@@ -7301,15 +7301,16 @@ function renderMegaEnergyPane() {
         // Calculation message
         let kmText = '';
         let kmClass = 'km-walk';
+        const formNoun = data.isPrimal ? 'Primal' : 'Mega';
         if (data.hasLevel4) {
-            kmText = '🏆 Mega Level 4 Complete (Goal Mastered!)';
+            kmText = `🏆 ${formNoun} Level 4 Complete (Goal Mastered!)`;
             kmClass = 'km-complete';
         } else if (data.energyNeeded === 0) {
             if (!data.hasLevel3) {
-                kmText = 'Energy ready! Reach Mega Level 3 to proceed.';
+                kmText = `Energy ready! Reach ${formNoun} Level 3 to proceed.`;
                 kmClass = 'km-quest';
             } else {
-                kmText = 'Enough Mega Energy to unlock Level 4!';
+                kmText = `Enough ${formNoun} Energy to unlock Level 4!`;
                 kmClass = 'km-success';
             }
         } else {
@@ -7333,19 +7334,19 @@ function renderMegaEnergyPane() {
                     </div>
                 </div>
                 <div class="candy-input-wrapper">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="Mega Energy">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
                     <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
                 </div>
             </div>
 
             <!-- Stages list styled exactly like Candies Calculator -->
             <div class="family-stages">
-                <!-- Stage 1: Mega Form Caught Status in Mega Dex -->
-                <div class="family-stage-item ${data.isCaughtMega ? 'caught' : 'missing'}" style="cursor: pointer;" title="Mega Dex Registration">
+                <!-- Stage 1: Mega/Primal Form Caught Status in Mega Dex -->
+                <div class="family-stage-item ${data.isCaughtMega ? 'caught' : 'missing'}" style="cursor: pointer;" title="${formNoun} Dex Registration">
                     <span class="stage-caught-status">
                         <i class="fa-solid ${data.isCaughtMega ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
                     </span>
-                    <span class="stage-name">${data.isCaughtMega ? 'Mega Form Caught' : 'Missing in Mega Dex'}</span>
+                    <span class="stage-name">${data.isCaughtMega ? `${formNoun} Form Caught` : `Missing in ${formNoun} Dex`}</span>
                     <span class="stage-cost" style="margin-left: auto; background: rgba(236, 72, 153, 0.12); color: #ec4899;">
                         <i class="fa-solid fa-dna"></i> 5000
                     </span>
@@ -7356,7 +7357,7 @@ function renderMegaEnergyPane() {
                     <span class="stage-caught-status">
                         <i class="fa-solid ${data.hasLevel3 ? 'fa-circle-check' : 'fa-circle'}"></i>
                     </span>
-                    <span class="stage-name">Mega Level 3 Achieved</span>
+                    <span class="stage-name">${formNoun} Level 3 Achieved</span>
                     <button class="quest-inline-toggle mega-l3-btn ${data.hasLevel3 ? 'done' : 'pending'}" style="margin-left: auto; background: ${data.hasLevel3 ? 'rgba(16, 185, 129, 0.18)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${data.hasLevel3 ? 'rgba(16, 185, 129, 0.5)' : 'rgba(255,255,255,0.12)'}; color: ${data.hasLevel3 ? 'var(--accent-green)' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" data-form-id="${data.formStateId}">
                         <i class="fa-solid ${data.hasLevel3 ? 'fa-check' : 'fa-circle-up'}"></i>
                         <span>${data.hasLevel3 ? 'Has Level 3' : 'Level 3'}</span>
@@ -7368,7 +7369,7 @@ function renderMegaEnergyPane() {
                     <span class="stage-caught-status">
                         <i class="fa-solid ${data.hasLevel4 ? 'fa-award' : 'fa-circle'}"></i>
                     </span>
-                    <span class="stage-name" style="font-weight: 700;">Mega Level 4 (Max)</span>
+                    <span class="stage-name" style="font-weight: 700;">${formNoun} Level 4 (Max)</span>
                     <button class="transferred-inline-toggle mega-l4-btn" style="margin-left: auto; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.2)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.5)' : 'rgba(255,255,255,0.1)'}; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" data-form-id="${data.formStateId}">
                         <i class="fa-solid ${data.hasLevel4 ? 'fa-trophy' : 'fa-flag-checkered'}"></i>
                         <span>${data.hasLevel4 ? 'Level 4 Done' : 'Set Level 4'}</span>
