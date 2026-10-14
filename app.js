@@ -8555,7 +8555,7 @@ function getEventContext(ev) {
         badgeBg = 'rgba(249, 115, 22, 0.25)';
         icon = 'fa-bolt-lightning';
     } else if (t.includes('raid day')) {
-        typeLabel = 'Raid Day';
+        typeLabel = 'Super Mega Raid Day';
         badgeColor = '#e11d48';
         badgeBg = 'rgba(225, 29, 72, 0.25)';
         icon = 'fa-hand-fist';
@@ -8570,6 +8570,7 @@ function getEventFeaturedPokemonList(ev) {
     if (!pokemonDatabase || pokemonDatabase.length === 0) return [];
     const found = [];
     const seenPokeIds = new Set();
+    const isRaidDay = (ev.title || '').toLowerCase().includes('raid day') || (ev.category || '').toLowerCase().includes('raid day');
 
     // 1. Check if event details explicitly contain spawns or features
     if (ev.details) {
@@ -8581,11 +8582,20 @@ function getEventFeaturedPokemonList(ev) {
             const candName = cand.name.toLowerCase();
             const matched = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === candName);
             if (matched && !seenPokeIds.has(matched.id)) {
+                let img = cand.asset_url || matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`;
+                let name = matched.name;
+                if (isRaidDay) {
+                    const megaImg = getPokemonImageUrl(`Mega ${matched.name}`, matched);
+                    if (megaImg && megaImg !== matched.img) {
+                        img = megaImg;
+                        name = `Mega ${matched.name}`;
+                    }
+                }
                 seenPokeIds.add(matched.id);
                 found.push({
-                    name: matched.name,
+                    name: name,
                     id: matched.id,
-                    img: cand.asset_url || matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`
+                    img: img
                 });
             }
         }
@@ -8650,6 +8660,19 @@ function getEventFeaturedPokemonList(ev) {
             } else if (cleanTitle.includes('primal') && rawAssetForms.some(a => a.form === 'PRIMAL')) {
                 const f = rawAssetForms.find(a => a.form === 'PRIMAL');
                 if (f && f.image) { sprite = f.image; displayName = 'Primal ' + displayName; }
+            } else if (isRaidDay) {
+                // If event is a Raid Day, prioritize Mega/Primal sprite if available
+                const megaImg = getPokemonImageUrl(`Mega ${p.name}`, p);
+                if (megaImg && megaImg !== p.img) {
+                    sprite = megaImg;
+                    displayName = 'Mega ' + displayName;
+                } else {
+                    const primalImg = getPokemonImageUrl(`Primal ${p.name}`, p);
+                    if (primalImg && primalImg !== p.img) {
+                        sprite = primalImg;
+                        displayName = 'Primal ' + displayName;
+                    }
+                }
             }
 
             const matchIdx = cleanTitle.indexOf(' ' + pNameLower + ' ');
