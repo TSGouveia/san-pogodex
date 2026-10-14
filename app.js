@@ -8678,24 +8678,19 @@ function renderEventsCalendar(listContainer, now) {
 
     const monthName = targetDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-    // Single-day events for this month
+    // Single-day events for this month (excluding events with TBA dates)
     const singleDayEvents = liveEvents.filter(ev => {
-        if (!ev.start) return false;
-        const s = isTbaDate(ev.start) ? null : new Date(ev.start);
-        if (!s || isNaN(s.getTime())) return false;
+        if (!ev.start || !ev.end) return false;
+        if (isTbaDate(ev.start) || isTbaDate(ev.end)) return false;
+        const s = new Date(ev.start);
+        const e = new Date(ev.end);
+        if (isNaN(s.getTime()) || isNaN(e.getTime())) return false;
         if (s.getFullYear() !== targetYear || s.getMonth() !== targetMonth) return false;
 
-        const isEndTba = isTbaDate(ev.end);
-        if (isEndTba) {
-            return true;
-        }
-        const e = new Date(ev.end);
-        if (isNaN(e.getTime())) return true;
         const isSingleDay = s.getFullYear() === e.getFullYear() &&
                             s.getMonth() === e.getMonth() &&
                             s.getDate() === e.getDate();
-        if (!isSingleDay) return false;
-        return true;
+        return isSingleDay;
     });
 
     // Debut Pokémon for this month
@@ -8703,6 +8698,7 @@ function renderEventsCalendar(listContainer, now) {
     if (Array.isArray(pokemonDatabase)) {
         pokemonDatabase.forEach(p => {
             if (!p.releaseDate) return;
+            if (typeof p.releaseDate === 'string' && p.releaseDate.toLowerCase().includes('tba')) return;
             const d = new Date(p.releaseDate);
             if (isNaN(d.getTime())) return;
             if (d.getFullYear() === targetYear && d.getMonth() === targetMonth) {
