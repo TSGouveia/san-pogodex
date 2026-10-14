@@ -1,15 +1,5 @@
 [
     {
-        "eventID": "max-mondays-2026-10-12",
-        "title": "Dynamax Rookidee during Max Monday",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
-        "link": "https://leekduck.com/events/max-mondays-2026-10-12/",
-        "start": "",
-        "end": ""
-    },
-    {
         "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-2",
         "title": "Great League: Mega Edition, Ultra League: Mega Edition, and Master League: Mega Edition | Twilight Trails",
         "type": "",
@@ -26,8 +16,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
         "link": "https://leekduck.com/events/mega-blastoise-in-mega-raids-october-2026/",
-        "start": "2026-10-07T06:00:00.000",
-        "end": "2026-10-13T22:00:00.000"
+        "start": "",
+        "end": ""
     },
     {
         "eventID": "yveltal-in-5-star-raid-battles-october-2026",
@@ -36,8 +26,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/yveltal-2.jpg",
         "link": "https://leekduck.com/events/yveltal-in-5-star-raid-battles-october-2026/",
-        "start": "2026-10-07T06:00:00.000",
-        "end": "2026-10-13T22:00:00.000"
+        "start": "",
+        "end": ""
     },
     {
         "eventID": "raidhour20261014",
@@ -358,6 +348,16 @@
         "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/",
         "start": "2026-11-03T13:00:00.000-0800",
         "end": "2026-11-10T13:00:00.000-0800"
+    },
+    {
+        "eventID": "into-the-wild-2026",
+        "title": "Into the Wild",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-11-09-into-the-wild-2026/into-the-wild-2026.jpg",
+        "link": "https://leekduck.com/events/into-the-wild-2026/",
+        "start": "2026-11-09T10:00:00.000",
+        "end": "2026-11-13T20:00:00.000"
     },
     {
         "eventID": "pokemon-go-wild-area-2026-global",
