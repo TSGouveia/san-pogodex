@@ -128,7 +128,7 @@
                     <i class="fa-solid fa-border-all"></i> PokéDex Grid
                 </button>
                 <button class="view-btn" data-view="candies-pane" id="btn-view-candies">
-                    <i class="fa-solid fa-candy-cane"></i> Candies
+                    <i class="fa-solid fa-person-walking"></i> Buddy Walk
                 </button>
                 <button class="view-btn" data-view="rotations-pane" id="btn-view-rotations" style="position: relative;">
                     <i class="fa-solid fa-circle-info"></i> Active Rotations
@@ -455,76 +455,177 @@
             </div>
         </section>
 
-        <!-- PANE 4: Candies Calculator Panel -->
+        <!-- PANE 4: Buddy Walk (Candies & Mega Energy) Panel -->
         <section class="view-pane hidden" id="candies-pane">
-            <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-                <i class="fa-solid fa-candy-cane" style="color: var(--accent-color);"></i>
-                <h2>Candies & Evolving Calculator</h2>
-                <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
-                    <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
-                    <span class="last-updated-text"></span>
+            <!-- Buddy Walk Sub-Navigation tabs -->
+            <div class="buddy-walk-subnav-container" style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+                <nav class="rotations-subnav" id="buddy-walk-subnav" aria-label="Buddy Walk Selector" style="max-width: 480px; width: 100%;">
+                    <button class="subnav-btn active" data-buddy-tab="candies" id="btn-buddy-subnav-candies">
+                        <i class="fa-solid fa-candy-cane"></i> Candies & Evolution
+                    </button>
+                    <button class="subnav-btn" data-buddy-tab="mega-energy" id="btn-buddy-subnav-mega">
+                        <i class="fa-solid fa-dna"></i> Mega Energy
+                    </button>
+                </nav>
+            </div>
+
+            <!-- SUB-VIEW 1: CANDIES & EVOLUTION -->
+            <div id="buddy-subview-candies">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <i class="fa-solid fa-candy-cane" style="color: var(--accent-color);"></i>
+                    <h2>Candies & Evolving Calculator</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
+                </div>
+
+                <div class="candies-controls-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
+                    <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; max-width: 600px;">
+                        Set your current candy count for each evolution family to see how many kilometers you need to walk with your buddy to evolve the remaining Pokémon.
+                    </p>
+                    <div class="candies-sort-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label for="candies-sort" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Sort by:</label>
+                        <select id="candies-sort" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
+                            <option value="num-asc">Dex Number</option>
+                            <option value="name-asc">Name</option>
+                            <option value="needed-desc">Candies Needed</option>
+                            <option value="needed-asc">Candies Needed (Least)</option>
+                            <option value="km-desc">Kilometers to Walk</option>
+                            <option value="km-asc">Kilometers to Walk (Least)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Candies Summary Cards -->
+                <div class="candies-summary-bar" style="background: rgba(245, 166, 35, 0.04); border: 1px solid rgba(245, 166, 35, 0.1); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-person-walking" style="font-size: 1.1rem; color: var(--accent-color);"></i>
+                        <span style="color: #94a3b8; font-weight: 600;">Total Buddy Distance:</span>
+                        <strong id="candies-total-km" style="color: var(--text-primary); font-size: 0.95rem;">0.0 km</strong>
+                    </div>
+                    <div>
+                        <span style="color: #94a3b8; font-weight: 600;">Total Candies Needed:</span>
+                        <strong id="candies-total-candies" style="color: var(--accent-color); font-size: 0.95rem;">0</strong>
+                    </div>
+                </div>
+
+                <div class="candies-sections-container">
+                    <div class="candies-category-section" id="cat-ready-evolve">
+                        <h3 class="candies-category-title" style="color: var(--accent-green); border-bottom: 2px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Ready to Evolve</h3>
+                        <div class="candies-grid" id="grid-ready-evolve"></div>
+                    </div>
+
+                    <div class="candies-category-section" id="cat-need-quest" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #a855f7; border-bottom: 2px solid rgba(168, 85, 247, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-scroll"></i> Ready Candies (Needs Buddy Quest)</h3>
+                        <div class="candies-grid" id="grid-need-quest"></div>
+                    </div>
+                    
+                    <div class="candies-category-section" id="cat-need-candies" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: var(--accent-color); border-bottom: 2px solid rgba(245, 166, 35, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-person-walking"></i> Needs Candies</h3>
+                        <div class="candies-grid" id="grid-need-candies"></div>
+                    </div>
+                    
+                    <div class="candies-category-section" id="cat-transferred-base" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #60a5fa; border-bottom: 2px solid rgba(96, 165, 250, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-arrows-spin"></i> Transferred Base Pokémon</h3>
+                        <div class="candies-grid" id="grid-transferred-base"></div>
+                    </div>
+
+                    <div class="candies-category-section" id="cat-missing-base" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #ef4444; border-bottom: 2px solid rgba(239, 68, 68, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-question"></i> Missing Base Pokémon</h3>
+                        <div class="candies-grid" id="grid-missing-base"></div>
+                    </div>
+
+                    <div class="candies-category-section" id="cat-unreleased-base" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #f87171; border-bottom: 2px solid rgba(239, 68, 68, 0.3); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-lock"></i> Unreleased Pokémon</h3>
+                        <div class="candies-grid" id="grid-unreleased-base"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="candies-controls-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
-                <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; max-width: 600px;">
-                    Set your current candy count for each evolution family to see how many kilometers you need to walk with your buddy to evolve the remaining Pokémon.
-                </p>
-                <div class="candies-sort-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
-                    <label for="candies-sort" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Sort by:</label>
-                    <select id="candies-sort" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
-                        <option value="num-asc">Dex Number</option>
-                        <option value="name-asc">Name</option>
-                        <option value="needed-desc">Candies Needed</option>
-                        <option value="needed-asc">Candies Needed (Least)</option>
-                        <option value="km-desc">Kilometers to Walk</option>
-                        <option value="km-asc">Kilometers to Walk (Least)</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Candies Summary Cards -->
-            <div class="candies-summary-bar" style="background: rgba(245, 166, 35, 0.04); border: 1px solid rgba(245, 166, 35, 0.1); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fa-solid fa-person-walking" style="font-size: 1.1rem; color: var(--accent-color);"></i>
-                    <span style="color: #94a3b8; font-weight: 600;">Total Buddy Distance:</span>
-                    <strong id="candies-total-km" style="color: var(--text-primary); font-size: 0.95rem;">0.0 km</strong>
-                </div>
-                <div>
-                    <span style="color: #94a3b8; font-weight: 600;">Total Candies Needed:</span>
-                    <strong id="candies-total-candies" style="color: var(--accent-color); font-size: 0.95rem;">0</strong>
-                </div>
-            </div>
-
-            <div class="candies-sections-container">
-                <div class="candies-category-section" id="cat-ready-evolve">
-                    <h3 class="candies-category-title" style="color: var(--accent-green); border-bottom: 2px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Ready to Evolve</h3>
-                    <div class="candies-grid" id="grid-ready-evolve"></div>
+            <!-- SUB-VIEW 2: MEGA ENERGY & LEVEL 4 CALCULATOR -->
+            <div id="buddy-subview-mega" style="display: none;">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <i class="fa-solid fa-dna" style="color: #ec4899;"></i>
+                    <h2>Mega Energy &amp; Mega Level 4 Tracker</h2>
                 </div>
 
-                <div class="candies-category-section" id="cat-need-quest" style="margin-top: 2rem;">
-                    <h3 class="candies-category-title" style="color: #a855f7; border-bottom: 2px solid rgba(168, 85, 247, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-scroll"></i> Ready Candies (Needs Buddy Quest)</h3>
-                    <div class="candies-grid" id="grid-need-quest"></div>
-                </div>
-                
-                <div class="candies-category-section" id="cat-need-candies" style="margin-top: 2rem;">
-                    <h3 class="candies-category-title" style="color: var(--accent-color); border-bottom: 2px solid rgba(245, 166, 35, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-person-walking"></i> Needs Candies</h3>
-                    <div class="candies-grid" id="grid-need-candies"></div>
-                </div>
-                
-                <div class="candies-category-section" id="cat-transferred-base" style="margin-top: 2rem;">
-                    <h3 class="candies-category-title" style="color: #60a5fa; border-bottom: 2px solid rgba(96, 165, 250, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-arrows-spin"></i> Transferred Base Pokémon</h3>
-                    <div class="candies-grid" id="grid-transferred-base"></div>
-                </div>
-
-                <div class="candies-category-section" id="cat-missing-base" style="margin-top: 2rem;">
-                    <h3 class="candies-category-title" style="color: #ef4444; border-bottom: 2px solid rgba(239, 68, 68, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-circle-question"></i> Missing Base Pokémon</h3>
-                    <div class="candies-grid" id="grid-missing-base"></div>
+                <div class="candies-controls-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
+                    <p style="color: #94a3b8; font-size: 0.9rem; margin: 0; max-width: 600px;">
+                        Track your Mega Energy and walk distance towards reaching the <strong>5,000 Mega Energy</strong> milestone for Mega Level 4. Walk with your Buddy to earn <strong>(Buddy km × 5)</strong> Mega Energy per candy distance!
+                    </p>
+                    <div class="candies-sort-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label for="mega-sort" style="color: #94a3b8; font-size: 0.85rem; font-weight: 600;">Sort by:</label>
+                        <select id="mega-sort" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 8px; padding: 6px 12px; font-size: 0.85rem; font-weight: 600; cursor: pointer; outline: none;">
+                            <option value="num-asc">Dex Number</option>
+                            <option value="name-asc">Name</option>
+                            <option value="energy-needed-desc">Energy Needed (Most)</option>
+                            <option value="energy-needed-asc">Energy Needed (Least)</option>
+                            <option value="km-desc">Kilometers to Walk (Most)</option>
+                            <option value="km-asc">Kilometers to Walk (Least)</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="candies-category-section" id="cat-unreleased-base" style="margin-top: 2rem;">
-                    <h3 class="candies-category-title" style="color: #f87171; border-bottom: 2px solid rgba(239, 68, 68, 0.3); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;"><i class="fa-solid fa-lock"></i> Unreleased Pokémon</h3>
-                    <div class="candies-grid" id="grid-unreleased-base"></div>
+                <!-- Mega Energy Summary Bar -->
+                <div class="candies-summary-bar" style="background: rgba(236, 72, 153, 0.05); border: 1px solid rgba(236, 72, 153, 0.15); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fa-solid fa-person-walking" style="font-size: 1.1rem; color: #ec4899;"></i>
+                        <span style="color: #94a3b8; font-weight: 600;">Total Mega Walk Distance:</span>
+                        <strong id="mega-total-km" style="color: var(--text-primary); font-size: 0.95rem;">0.0 km</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                        <div>
+                            <span style="color: #94a3b8; font-weight: 600;">Energy Needed (Goal 5k):</span>
+                            <strong id="mega-total-energy-needed" style="color: #ec4899; font-size: 0.95rem;">0</strong>
+                        </div>
+                        <div>
+                            <span style="color: #94a3b8; font-weight: 600;">Mega Level 4 Completed:</span>
+                            <strong id="mega-total-completed" style="color: var(--accent-green); font-size: 0.95rem;">0 / 0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="candies-sections-container">
+                    <!-- Ready to Unlock (Reached 5000 energy, not yet marked as Level 4) -->
+                    <div class="candies-category-section" id="cat-mega-ready-unlock">
+                        <h3 class="candies-category-title" style="color: var(--accent-green); border-bottom: 2px solid rgba(16, 185, 129, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-circle-check"></i> Ready to Unlock (5,000 Energy Ready)
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-ready-unlock"></div>
+                    </div>
+
+                    <!-- Needs Mega Energy (Active Mega species in progress) -->
+                    <div class="candies-category-section" id="cat-mega-need-energy" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #ec4899; border-bottom: 2px solid rgba(236, 72, 153, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-dna"></i> Needs Mega Energy
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-need-energy"></div>
+                    </div>
+
+                    <!-- Missing Mega (Not yet caught in Mega Dex) -->
+                    <div class="candies-category-section" id="cat-mega-missing" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #ef4444; border-bottom: 2px solid rgba(239, 68, 68, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-circle-question"></i> Missing Mega Form
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-missing"></div>
+                    </div>
+
+                    <!-- Mega Level 4 Completed / Mastered -->
+                    <div class="candies-category-section" id="cat-mega-completed" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #60a5fa; border-bottom: 2px solid rgba(96, 165, 250, 0.2); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-award"></i> Mega Level 4 Completed
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-completed"></div>
+                    </div>
+
+                    <!-- Unreleased Megas -->
+                    <div class="candies-category-section" id="cat-mega-unreleased" style="margin-top: 2rem;">
+                        <h3 class="candies-category-title" style="color: #f87171; border-bottom: 2px solid rgba(239, 68, 68, 0.3); padding-bottom: 0.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-lock"></i> Unreleased Megas
+                        </h3>
+                        <div class="candies-grid" id="grid-mega-unreleased"></div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -587,7 +587,11 @@ const shinyCategoryIconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style
 let typesDatabase = [];
 let buddyDistances = {};
 let userCandies = {};
+let userMegaEnergy = {};
+let userMegaLevel3 = new Set();
+let userMegaLevel4 = new Set();
 let completedBuddyQuests = new Set();
+let currentBuddyWalkSubTab = 'candies'; // 'candies' | 'mega-energy'
 let currentUser = null;
 let currentTrainerUsername = null;
 let userDocListenerUnsubscribe = null; // Firestore real-time listener cleanup handle
@@ -2544,6 +2548,9 @@ function updateDashboardStats() {
     if (typeof renderCandiesPane === 'function') {
         renderCandiesPane();
     }
+    if (typeof renderMegaEnergyPane === 'function') {
+        renderMegaEnergyPane();
+    }
     if (typeof renderAttackersPane === 'function') {
         renderAttackersPane();
     }
@@ -2634,7 +2641,11 @@ function setupEventListeners() {
                 setVisible(dexTypesScroll, false);
                 setVisible(genTabsScroll, false);
                 setVisible(huntTabsScroll, false);
-                renderCandiesPane();
+                if (currentBuddyWalkSubTab === 'mega-energy') {
+                    renderMegaEnergyPane();
+                } else {
+                    renderCandiesPane();
+                }
             } else if (targetPaneId === 'todo-pane') {
                 setVisible(searchWrapper, false);
                 setVisible(radioFilters, false);
@@ -5736,6 +5747,70 @@ function saveCandyState(debounceCloud = false) {
     }
 }
 
+function loadMegaEnergyState() {
+    try {
+        const storedEnergy = localStorage.getItem('pogo_user_mega_energy');
+        if (storedEnergy) {
+            userMegaEnergy = JSON.parse(storedEnergy);
+        } else {
+            userMegaEnergy = {};
+        }
+    } catch (e) {
+        console.error("Failed to load mega energy state:", e);
+        userMegaEnergy = {};
+    }
+
+    try {
+        const storedL3 = localStorage.getItem('pogo_user_mega_level3');
+        if (storedL3) {
+            userMegaLevel3 = new Set(JSON.parse(storedL3).map(String));
+        } else {
+            userMegaLevel3 = new Set();
+        }
+    } catch (e) {
+        console.error("Failed to load mega level 3 state:", e);
+        userMegaLevel3 = new Set();
+    }
+
+    try {
+        const storedL4 = localStorage.getItem('pogo_user_mega_level4');
+        if (storedL4) {
+            userMegaLevel4 = new Set(JSON.parse(storedL4).map(String));
+        } else {
+            userMegaLevel4 = new Set();
+        }
+    } catch (e) {
+        console.error("Failed to load mega level 4 state:", e);
+        userMegaLevel4 = new Set();
+    }
+}
+
+let saveMegaCloudTimeout = null;
+function saveMegaEnergyState(debounceCloud = false) {
+    if (friendViewModeActive) return;
+    localStorage.setItem('pogo_user_mega_energy', JSON.stringify(userMegaEnergy));
+    if (currentUser) {
+        if (debounceCloud) {
+            clearTimeout(saveMegaCloudTimeout);
+            saveMegaCloudTimeout = setTimeout(() => {
+                saveUserDataToFirestore();
+            }, 1000);
+        } else {
+            clearTimeout(saveMegaCloudTimeout);
+            saveUserDataToFirestore();
+        }
+    }
+}
+
+function saveMegaLevelState() {
+    if (friendViewModeActive) return;
+    localStorage.setItem('pogo_user_mega_level3', JSON.stringify(Array.from(userMegaLevel3).map(String)));
+    localStorage.setItem('pogo_user_mega_level4', JSON.stringify(Array.from(userMegaLevel4).map(String)));
+    if (currentUser) {
+        saveUserDataToFirestore();
+    }
+}
+
 // ==========================================================================
 // CLOUD DATABASE INTEGRATION (FIREBASE)
 // ==========================================================================
@@ -5758,6 +5833,9 @@ async function saveUserDataToFirestore() {
             caught: Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
             categories: categoriesData,
             candies: userCandies,
+            megaEnergy: userMegaEnergy,
+            megaLevel3: Array.from(userMegaLevel3).map(x => String(x)),
+            megaLevel4: Array.from(userMegaLevel4).map(x => String(x)),
             transferred: Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
             completedQuests: Array.from(completedBuddyQuests).map(x => String(x)),
             updatedAt: new Date().toISOString()
@@ -5788,14 +5866,20 @@ async function loadUserDataFromFirestore(user) {
             // Merge local and cloud data to prevent data loss on initial login
             const cloudCaught = data.caught || [];
             const cloudCandies = data.candies || {};
+            const cloudMegaEnergy = data.megaEnergy || {};
+            const cloudMegaL3 = data.megaLevel3 || [];
+            const cloudMegaL4 = data.megaLevel4 || [];
             const cloudTransferred = data.transferred || [];
             const cloudQuests = data.completedQuests || [];
             
             // Union of local and cloud caught Pokemon
             const mergedCaught = new Set([...caughtPokemon, ...cloudCaught.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
             
-            // Merge candies
+            // Merge candies & mega energy
             const mergedCandies = { ...userCandies, ...cloudCandies };
+            const mergedMegaEnergy = { ...userMegaEnergy, ...cloudMegaEnergy };
+            const mergedMegaL3 = new Set([...userMegaLevel3, ...cloudMegaL3.map(x => String(x))]);
+            const mergedMegaL4 = new Set([...userMegaLevel4, ...cloudMegaL4.map(x => String(x))]);
 
             // Union of local and cloud transferred Pokemon
             const mergedTransferred = new Set([...transferredPokemon, ...cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
@@ -5811,6 +5895,9 @@ async function loadUserDataFromFirestore(user) {
 
             caughtPokemon = mergedCaught;
             userCandies = mergedCandies;
+            userMegaEnergy = mergedMegaEnergy;
+            userMegaLevel3 = mergedMegaL3;
+            userMegaLevel4 = mergedMegaL4;
             transferredPokemon = mergedTransferred;
             completedBuddyQuests = mergedQuests;
 
@@ -5827,6 +5914,9 @@ async function loadUserDataFromFirestore(user) {
             // Sync with local storage
             localStorage.setItem('pogo_caught_pokemon', JSON.stringify(Array.from(caughtPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
             localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
+            localStorage.setItem('pogo_user_mega_energy', JSON.stringify(userMegaEnergy));
+            localStorage.setItem('pogo_user_mega_level3', JSON.stringify(Array.from(userMegaLevel3).map(String)));
+            localStorage.setItem('pogo_user_mega_level4', JSON.stringify(Array.from(userMegaLevel4).map(String)));
             localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
             localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
             
@@ -5845,6 +5935,7 @@ async function loadUserDataFromFirestore(user) {
         renderPokedex();
         renderMissingSummary();
         renderCandiesPane();
+        renderMegaEnergyPane();
         updateDashboardStats();
         updateRegionStatsBadge();
     } catch (e) {
@@ -5893,14 +5984,19 @@ onAuthStateChanged(auth, async (user) => {
                     caughtPokemon = new Set();
                     transferredPokemon = new Set();
                     userCandies = {};
+                    userMegaEnergy = {};
+                    userMegaLevel3 = new Set();
+                    userMegaLevel4 = new Set();
                     loadCaughtState();
                     loadCandyState();
+                    loadMegaEnergyState();
                     loadBuddyQuestState();
                     loadTransferredState();
                     
                     renderPokedex();
                     renderMissingSummary();
                     renderCandiesPane();
+                    renderMegaEnergyPane();
                     renderFriendsPane();
                     updateDashboardStats();
                     updateRegionStatsBadge();
@@ -6948,6 +7044,417 @@ function renderCandiesPane() {
     const catUnreleased = document.getElementById('cat-unreleased-base');
     if (catUnreleased) catUnreleased.style.display = unreleasedCount > 0 ? 'block' : 'none';
     document.getElementById('cat-transferred-base').style.display = transferredCount > 0 ? 'block' : 'none';
+}
+
+// ==========================================================================
+// MEGA ENERGY & MEGA LEVEL 4 CALCULATOR
+// ==========================================================================
+function renderMegaEnergyPane() {
+    const gridReady = document.getElementById('grid-mega-ready-unlock');
+    const gridNeed = document.getElementById('grid-mega-need-energy');
+    const gridMissing = document.getElementById('grid-mega-missing');
+    const gridCompleted = document.getElementById('grid-mega-completed');
+    const gridUnreleased = document.getElementById('grid-mega-unreleased');
+    const megaSortSelect = document.getElementById('mega-sort');
+
+    if (!gridReady || !gridNeed || !gridMissing || !gridCompleted) return;
+
+    gridReady.innerHTML = '';
+    gridNeed.innerHTML = '';
+    gridMissing.innerHTML = '';
+    gridCompleted.innerHTML = '';
+    if (gridUnreleased) gridUnreleased.innerHTML = '';
+
+    const sortOrder = megaSortSelect ? megaSortSelect.value : 'num-asc';
+
+    // 1. Gather all Mega / Primal forms from rawPokedexData or pokemonDatabase fallback
+    const megaForms = [];
+    const processedKeys = new Set();
+
+    if (rawPokedexData && Array.isArray(rawPokedexData)) {
+        rawPokedexData.forEach(rawP => {
+            if (rawP.megaEvolutions && typeof rawP.megaEvolutions === 'object' && !Array.isArray(rawP.megaEvolutions)) {
+                const baseDbPoke = pokemonDatabase.find(p => Number(p.id) === Number(rawP.dexNr)) || {
+                    id: String(rawP.dexNr),
+                    num: String(rawP.dexNr).padStart(3, '0'),
+                    name: rawP.names?.English || `Pokemon #${rawP.dexNr}`,
+                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${rawP.dexNr}.png`,
+                    gen: rawP.generation || 1
+                };
+
+                Object.keys(rawP.megaEvolutions).forEach(megaKey => {
+                    if (processedKeys.has(megaKey)) return;
+                    processedKeys.add(megaKey);
+
+                    const mData = rawP.megaEvolutions[megaKey] || {};
+                    const sufMatch = megaKey.match(/_([A-Z])$/i);
+                    const suffix = sufMatch ? sufMatch[1].toUpperCase() : megaKey.replace(/^.*_MEGA_?/, '');
+                    const isPrimal = megaKey.includes('PRIMAL');
+                    const defaultName = isPrimal ? `Primal ${baseDbPoke.name}` : `Mega ${baseDbPoke.name}${suffix ? ' ' + suffix : ''}`;
+                    const displayName = (mData.names && mData.names.English) || defaultName;
+
+                    let formImg = (mData.assets && mData.assets.image) || baseDbPoke.img;
+
+                    // Fallback PokeAPI sprite if needed
+                    const isShinyView = (currentDexType === 'shiny');
+                    if (isShinyView && mData.assets && mData.assets.shinyImage) {
+                        formImg = mData.assets.shinyImage;
+                    }
+
+                    // Buddy distance for base pokemon
+                    let buddyDist = buddyDistances[baseDbPoke.id] ?? buddyDistances[Number(baseDbPoke.id)] ?? buddyDistances[String(baseDbPoke.id)] ?? buddyDistances[safeLower(baseDbPoke.name)];
+                    if (buddyDist === undefined) {
+                        // Check family
+                        const chain = findEvolutionChain(baseDbPoke);
+                        if (chain && chain[0]) {
+                            const baseF = chain[0];
+                            buddyDist = buddyDistances[baseF.id] ?? buddyDistances[Number(baseF.id)] ?? buddyDistances[safeLower(baseF.name)];
+                        }
+                    }
+                    if (buddyDist === undefined) {
+                        buddyDist = 3; // Default reasonable fallback
+                    }
+
+                    // Energy gained per candy = Buddy km * 5
+                    const energyPerWalk = Math.max(5, buddyDist * 5);
+
+                    // Form ID for state tracking: e.g. "6_MEGA_X", "6_MEGA_Y", "3_MEGA", "382_PRIMAL"
+                    const formStateId = `${baseDbPoke.id}_${suffix || megaKey.replace(/^[A-Z0-9]+_/, '')}`;
+
+                    megaForms.push({
+                        formStateId,
+                        megaKey,
+                        basePoke: baseDbPoke,
+                        dexNr: Number(rawP.dexNr),
+                        name: displayName,
+                        img: formImg,
+                        buddyDist,
+                        energyPerWalk,
+                        energyCost: mData.energyCost || 200,
+                        isPrimal,
+                        isUnreleased: Boolean(baseDbPoke.unreleased || baseDbPoke.releasingSoon)
+                    });
+                });
+            }
+        });
+    }
+
+    // Fallback if rawPokedexData not yet ready
+    if (megaForms.length === 0 && pokemonDatabase) {
+        pokemonDatabase.filter(p => p.mega).forEach(p => {
+            const buddyDist = buddyDistances[p.id] ?? 3;
+            const energyPerWalk = buddyDist * 5;
+            megaForms.push({
+                formStateId: `${p.id}_MEGA`,
+                megaKey: `${p.name.toUpperCase()}_MEGA`,
+                basePoke: p,
+                dexNr: Number(p.id),
+                name: `Mega ${p.name}`,
+                img: p.img,
+                buddyDist,
+                energyPerWalk,
+                energyCost: 200,
+                isPrimal: false,
+                isUnreleased: Boolean(p.unreleased)
+            });
+        });
+    }
+
+    // 2. Filter by Search Query
+    let filteredList = megaForms;
+    if (currentSearchQuery) {
+        filteredList = filteredList.filter(m =>
+            m.name.toLowerCase().includes(currentSearchQuery) ||
+            m.basePoke.name.toLowerCase().includes(currentSearchQuery) ||
+            String(m.dexNr).includes(currentSearchQuery)
+        );
+    }
+
+    // 3. Compute Metrics for each Mega Form
+    const GOAL_ENERGY = 5000;
+    const megaCaughtSet = caughtCategoryPokemon.mega || new Set();
+
+    const megaDataList = filteredList.map(item => {
+        // Current Energy: keyed by baseId or formStateId
+        const currentEnergy = userMegaEnergy[item.formStateId] ?? userMegaEnergy[item.basePoke.id] ?? 0;
+        const hasLevel3 = userMegaLevel3.has(item.formStateId) || userMegaLevel3.has(String(item.basePoke.id));
+        const hasLevel4 = userMegaLevel4.has(item.formStateId) || userMegaLevel4.has(String(item.basePoke.id));
+
+        // Is caught in Mega Dex? Check both formStateId and baseId
+        const isCaughtMega = megaCaughtSet.has(item.formStateId) || megaCaughtSet.has(item.basePoke.id) ||
+            megaCaughtSet.has(Number(item.basePoke.id)) || megaCaughtSet.has(String(item.basePoke.id));
+
+        const energyNeeded = Math.max(0, GOAL_ENERGY - currentEnergy);
+        // Distance in km needed: (energyNeeded / energyPerWalk) * buddyDist = energyNeeded / 5 km
+        const walksNeeded = Math.ceil(energyNeeded / item.energyPerWalk);
+        const kmNeeded = energyNeeded > 0 ? (walksNeeded * item.buddyDist) : 0;
+
+        return {
+            ...item,
+            currentEnergy,
+            hasLevel3,
+            hasLevel4,
+            isCaughtMega,
+            energyNeeded,
+            walksNeeded,
+            kmNeeded
+        };
+    });
+
+    // 4. Calculate Totals for Summary Bar
+    let totalMegaKm = 0;
+    let totalMegaEnergyNeeded = 0;
+    let completedCount = 0;
+
+    megaDataList.forEach(d => {
+        if (d.hasLevel4) {
+            completedCount++;
+        } else {
+            totalMegaKm += d.kmNeeded;
+            totalMegaEnergyNeeded += d.energyNeeded;
+        }
+    });
+
+    const totalKmEl = document.getElementById('mega-total-km');
+    const totalEnergyNeededEl = document.getElementById('mega-total-energy-needed');
+    const totalCompletedEl = document.getElementById('mega-total-completed');
+
+    if (totalKmEl) totalKmEl.textContent = `${totalMegaKm.toFixed(1)} km`;
+    if (totalEnergyNeededEl) totalEnergyNeededEl.textContent = totalMegaEnergyNeeded.toLocaleString();
+    if (totalCompletedEl) totalCompletedEl.textContent = `${completedCount} / ${megaDataList.length}`;
+
+    // 5. Apply Sorting
+    megaDataList.sort((a, b) => {
+        if (sortOrder === 'num-asc') {
+            return a.dexNr - b.dexNr;
+        } else if (sortOrder === 'name-asc') {
+            return a.name.localeCompare(b.name);
+        } else if (sortOrder === 'energy-needed-desc') {
+            return b.energyNeeded - a.energyNeeded;
+        } else if (sortOrder === 'energy-needed-asc') {
+            return a.energyNeeded - b.energyNeeded;
+        } else if (sortOrder === 'km-desc') {
+            return b.kmNeeded - a.kmNeeded;
+        } else if (sortOrder === 'km-asc') {
+            return a.kmNeeded - b.kmNeeded;
+        }
+        return 0;
+    });
+
+    // 6. Distribute into Categories
+    let readyCount = 0;
+    let needCount = 0;
+    let missingCount = 0;
+    let completedSectionCount = 0;
+    let unreleasedCount = 0;
+
+    megaDataList.forEach(data => {
+        const card = document.createElement('div');
+        card.className = data.isUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
+
+        // Calculation badge / text
+        let kmText = '';
+        let kmClass = 'km-walk';
+        if (data.hasLevel4) {
+            kmText = '🏆 Mega Level 4 Complete (Goal Mastered!)';
+            kmClass = 'km-complete';
+        } else if (data.energyNeeded === 0) {
+            kmText = '🎉 5,000 Energy ready! Ready to unlock Mega Level 4.';
+            kmClass = 'km-success';
+        } else {
+            kmText = `Walk ${data.kmNeeded.toFixed(1)} km (${data.energyNeeded} energy needed, +${data.energyPerWalk} per ${data.buddyDist} km)`;
+            kmClass = 'km-walk';
+        }
+
+        const isShinyView = (currentDexType === 'shiny');
+
+        card.innerHTML = `
+            <div class="family-header" style="margin-bottom: 0.75rem;">
+                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View details">
+                    <img src="${data.img}" alt="${data.name}" class="family-base-img" onerror="this.src='${data.basePoke.img}'">
+                    <div class="family-info">
+                        <h3 class="family-title" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                            ${data.name}
+                            ${!data.isCaughtMega ? `<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; border-radius: 4px; padding: 1px 6px; font-size: 0.65rem; font-weight: 700;">Missing Mega</span>` : `<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: var(--accent-green); border-radius: 4px; padding: 1px 6px; font-size: 0.65rem; font-weight: 700;">Mega Caught</span>`}
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4;"></i>
+                        </h3>
+                        <div class="family-buddy-dist" style="display: flex; align-items: center; gap: 8px; margin-top: 0.25rem;">
+                            <span>Buddy: <strong>${data.buddyDist} km</strong></span>
+                            <span style="color: #ec4899; font-weight: 700;">+${data.energyPerWalk} Mega Energy / walk</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="candy-input-wrapper" style="border-color: rgba(236, 72, 153, 0.3);" title="Current Mega Energy (Goal: 5000)">
+                    <i class="fa-solid fa-dna" style="color: #ec4899; font-size: 0.95rem;"></i>
+                    <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
+                </div>
+            </div>
+
+            <!-- Mega Level Progress Controls -->
+            <div class="family-stages" style="padding: 0.6rem 0.75rem; background: rgba(17, 27, 46, 0.35); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; margin-bottom: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
+                        <span>Mega Milestone:</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <!-- Level 3 Checkbox -->
+                        <label style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: ${data.hasLevel3 ? 'var(--accent-green)' : '#94a3b8'}; cursor: pointer; font-weight: 600;">
+                            <input type="checkbox" class="mega-level3-toggle" data-form-id="${data.formStateId}" ${data.hasLevel3 ? 'checked' : ''} style="cursor: pointer; accent-color: var(--accent-green);">
+                            <span>Has Level 3</span>
+                        </label>
+
+                        <!-- Level 4 Goal Checkbox -->
+                        <label style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'}; cursor: pointer; font-weight: 700; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.12)' : 'transparent'}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.4)' : 'transparent'};">
+                            <input type="checkbox" class="mega-level4-toggle" data-form-id="${data.formStateId}" ${data.hasLevel4 ? 'checked' : ''} style="cursor: pointer; accent-color: #60a5fa;">
+                            <span>🏆 Has Mega Level 4</span>
+                        </label>
+                    </div>
+                </div>
+
+                ${data.hasLevel3 && !data.hasLevel4 ? `
+                    <div style="margin-top: 0.4rem; font-size: 0.7rem; color: var(--accent-green); display: flex; align-items: center; gap: 4px;">
+                        <i class="fa-solid fa-arrow-trend-up"></i>
+                        <span>Mega Level 3 achieved — Ready / in progress to reach Mega Level 4!</span>
+                    </div>
+                ` : ''}
+            </div>
+
+            <!-- Energy & Walk status badge -->
+            <div class="family-footer" style="margin-top: auto;">
+                <div class="family-km-badge ${kmClass}" style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; width: 100%;">
+                    <span>${kmText}</span>
+                    <span style="font-weight: 800; font-size: 0.72rem; opacity: 0.85;">${data.currentEnergy} / ${GOAL_ENERGY}</span>
+                </div>
+            </div>
+        `;
+
+        // Click header image/name to open details modal
+        const headerInteractive = card.querySelector('.family-header-interactive');
+        if (headerInteractive) {
+            headerInteractive.addEventListener('click', () => {
+                openModal(data.basePoke.id);
+            });
+        }
+
+        // Mega Energy input listener
+        const energyInput = card.querySelector('.mega-energy-count-input');
+        if (friendViewModeActive && energyInput) {
+            energyInput.disabled = true;
+            energyInput.title = "Read-Only in Friend View Mode";
+        }
+        if (energyInput) {
+            energyInput.addEventListener('input', (e) => {
+                const val = parseInt(e.target.value) || 0;
+                userMegaEnergy[data.formStateId] = val;
+                saveMegaEnergyState(true);
+            });
+            energyInput.addEventListener('blur', () => {
+                saveMegaEnergyState(false);
+                renderMegaEnergyPane();
+            });
+            energyInput.addEventListener('change', () => {
+                saveMegaEnergyState(false);
+                renderMegaEnergyPane();
+            });
+        }
+
+        // Level 3 checkbox listener
+        const l3Checkbox = card.querySelector('.mega-level3-toggle');
+        if (friendViewModeActive && l3Checkbox) l3Checkbox.disabled = true;
+        if (l3Checkbox) {
+            l3Checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    userMegaLevel3.add(data.formStateId);
+                } else {
+                    userMegaLevel3.delete(data.formStateId);
+                }
+                saveMegaLevelState();
+                renderMegaEnergyPane();
+            });
+        }
+
+        // Level 4 checkbox listener
+        const l4Checkbox = card.querySelector('.mega-level4-toggle');
+        if (friendViewModeActive && l4Checkbox) l4Checkbox.disabled = true;
+        if (l4Checkbox) {
+            l4Checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    userMegaLevel4.add(data.formStateId);
+                    userMegaLevel3.add(data.formStateId); // Level 4 implies level 3
+                } else {
+                    userMegaLevel4.delete(data.formStateId);
+                }
+                saveMegaLevelState();
+                renderMegaEnergyPane();
+            });
+        }
+
+        // Append to appropriate grid section
+        if (data.isUnreleased) {
+            if (gridUnreleased) {
+                gridUnreleased.appendChild(card);
+                unreleasedCount++;
+            } else {
+                gridMissing.appendChild(card);
+                missingCount++;
+            }
+        } else if (data.hasLevel4) {
+            gridCompleted.appendChild(card);
+            completedSectionCount++;
+        } else if (!data.isCaughtMega) {
+            gridMissing.appendChild(card);
+            missingCount++;
+        } else if (data.energyNeeded === 0) {
+            gridReady.appendChild(card);
+            readyCount++;
+        } else {
+            gridNeed.appendChild(card);
+            needCount++;
+        }
+    });
+
+    // Hide/Show category sections based on count
+    document.getElementById('cat-mega-ready-unlock').style.display = readyCount > 0 ? 'block' : 'none';
+    document.getElementById('cat-mega-need-energy').style.display = needCount > 0 ? 'block' : 'none';
+    document.getElementById('cat-mega-missing').style.display = missingCount > 0 ? 'block' : 'none';
+    document.getElementById('cat-mega-completed').style.display = completedSectionCount > 0 ? 'block' : 'none';
+    const catMegaUnreleased = document.getElementById('cat-mega-unreleased');
+    if (catMegaUnreleased) catMegaUnreleased.style.display = unreleasedCount > 0 ? 'block' : 'none';
+}
+
+// Setup Buddy Walk subnavigation listeners
+function setupBuddyWalkSubnav() {
+    const subnavCandiesBtn = document.getElementById('btn-buddy-subnav-candies');
+    const subnavMegaBtn = document.getElementById('btn-buddy-subnav-mega');
+    const subviewCandies = document.getElementById('buddy-subview-candies');
+    const subviewMega = document.getElementById('buddy-subview-mega');
+    const megaSortSelect = document.getElementById('mega-sort');
+
+    if (!subnavCandiesBtn || !subnavMegaBtn || !subviewCandies || !subviewMega) return;
+
+    subnavCandiesBtn.addEventListener('click', () => {
+        currentBuddyWalkSubTab = 'candies';
+        subnavCandiesBtn.classList.add('active');
+        subnavMegaBtn.classList.remove('active');
+        subviewCandies.style.display = 'block';
+        subviewMega.style.display = 'none';
+        renderCandiesPane();
+    });
+
+    subnavMegaBtn.addEventListener('click', () => {
+        currentBuddyWalkSubTab = 'mega-energy';
+        subnavMegaBtn.classList.add('active');
+        subnavCandiesBtn.classList.remove('active');
+        subviewCandies.style.display = 'none';
+        subviewMega.style.display = 'block';
+        renderMegaEnergyPane();
+    });
+
+    if (megaSortSelect) {
+        megaSortSelect.addEventListener('change', () => {
+            renderMegaEnergyPane();
+        });
+    }
 }
 
 // Friends system state variables
@@ -8147,9 +8654,11 @@ function setupFriendsListeners() {
 window.addEventListener('DOMContentLoaded', () => {
     loadCaughtState();
     loadCandyState();
+    loadMegaEnergyState();
     loadBuddyQuestState();
     loadTransferredState();
     setupEventListeners();
+    setupBuddyWalkSubnav();
     setupEventsTabListener();
     setupFriendsListeners();
     setupUsernameSetupListener();
@@ -10416,6 +10925,9 @@ let friendViewBackupCaught = null;
 let friendViewBackupCategories = null;
 let friendViewBackupTransferred = null;
 let friendViewBackupCandies = null;
+let friendViewBackupMegaEnergy = null;
+let friendViewBackupMegaL3 = null;
+let friendViewBackupMegaL4 = null;
 let friendViewBackupQuests = null;
 let friendViewFriendName = '';
 
@@ -10436,6 +10948,9 @@ async function openFriendPokedex(friend) {
         const friendCategoriesObj = data.categories || {};
         const friendTransferredArray = data.transferred || [];
         const friendCandiesObj = data.candies || {};
+        const friendMegaEnergyObj = data.megaEnergy || {};
+        const friendMegaL3Array = data.megaLevel3 || [];
+        const friendMegaL4Array = data.megaLevel4 || [];
         const friendQuestsArray = data.completedQuests || [];
 
         // Save backup of current user's local state
@@ -10447,13 +10962,16 @@ async function openFriendPokedex(friend) {
             });
             friendViewBackupTransferred = new Set(transferredPokemon);
             friendViewBackupCandies = { ...userCandies };
+            friendViewBackupMegaEnergy = { ...userMegaEnergy };
+            friendViewBackupMegaL3 = new Set(userMegaLevel3);
+            friendViewBackupMegaL4 = new Set(userMegaLevel4);
             friendViewBackupQuests = new Set(completedBuddyQuests);
         }
 
         friendViewModeActive = true;
         friendViewFriendName = friendName;
 
-        // Temporarily swap standard caught, category dexes, transferred, candies and quests with friend's data
+        // Temporarily swap standard caught, category dexes, transferred, candies, mega and quests with friend's data
         caughtPokemon = new Set(friendCaughtArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
         Object.keys(caughtCategoryPokemon).forEach(cat => {
             const arr = friendCategoriesObj[cat] || [];
@@ -10461,6 +10979,9 @@ async function openFriendPokedex(friend) {
         });
         transferredPokemon = new Set(friendTransferredArray.map(x => (isNaN(Number(x)) ? x : Number(x))));
         userCandies = { ...friendCandiesObj };
+        userMegaEnergy = { ...friendMegaEnergyObj };
+        userMegaLevel3 = new Set(friendMegaL3Array.map(String));
+        userMegaLevel4 = new Set(friendMegaL4Array.map(String));
         completedBuddyQuests = new Set(friendQuestsArray.map(x => String(x)));
 
         // Update Banner UI
@@ -10499,6 +11020,9 @@ function exitFriendPokedexMode() {
     }
     if (friendViewBackupTransferred) transferredPokemon = new Set(friendViewBackupTransferred);
     if (friendViewBackupCandies) userCandies = { ...friendViewBackupCandies };
+    if (friendViewBackupMegaEnergy) userMegaEnergy = { ...friendViewBackupMegaEnergy };
+    if (friendViewBackupMegaL3) userMegaLevel3 = new Set(friendViewBackupMegaL3);
+    if (friendViewBackupMegaL4) userMegaLevel4 = new Set(friendViewBackupMegaL4);
     if (friendViewBackupQuests) completedBuddyQuests = new Set(friendViewBackupQuests);
 
     friendViewModeActive = false;
@@ -10506,6 +11030,9 @@ function exitFriendPokedexMode() {
     friendViewBackupCategories = null;
     friendViewBackupTransferred = null;
     friendViewBackupCandies = null;
+    friendViewBackupMegaEnergy = null;
+    friendViewBackupMegaL3 = null;
+    friendViewBackupMegaL4 = null;
     friendViewBackupQuests = null;
     friendViewFriendName = '';
 
