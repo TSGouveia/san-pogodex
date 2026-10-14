@@ -233962,8 +233962,55 @@
         },
         "regionForms": [],
         "evolutions": [],
-        "hasMegaEvolution": false,
-        "megaEvolutions": [],
+        "hasMegaEvolution": true,
+        "megaEvolutions": {
+            "CHANDELURE_MEGA": {
+                "id": "CHANDELURE_MEGA",
+                "names": {
+                    "English": "Mega Chandelure",
+                    "German": "Mega-Skelabra",
+                    "French": "Méga-Lugulabre",
+                    "Italian": "MegaChandelure",
+                    "Japanese": "メガシャンデラ",
+                    "Korean": "메가샹델라",
+                    "Spanish": "Mega-Chandelure"
+                },
+                "stats": {
+                    "stamina": 155,
+                    "attack": 335,
+                    "defense": 227
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_GHOST",
+                    "names": {
+                        "English": "Ghost",
+                        "German": "Geist",
+                        "French": "Spectre",
+                        "Italian": "Spettro",
+                        "Japanese": "ゴースト",
+                        "Korean": "고스트",
+                        "Spanish": "Fantasma"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FIRE",
+                    "names": {
+                        "English": "Fire",
+                        "German": "Feuer",
+                        "French": "Feu",
+                        "Italian": "Fuoco",
+                        "Japanese": "ほのお",
+                        "Korean": "불꽃",
+                        "Spanish": "Fuego"
+                    }
+                },
+                "energyCost": 300,
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm609.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm609.s.icon.png"
+                }
+            }
+        },
         "hasGigantamaxEvolution": false,
         "assetForms": [
             {
