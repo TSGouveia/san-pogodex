@@ -261,15 +261,18 @@ function getMegaPokeApiIdFallback(key) {
         "blastoise-mega": "10036",
         "beedrill-mega": "10090",
         "pidgeot-mega": "10073",
-        "raichu-mega-x": "26",
-        "raichu-mega-y": "26",
+        "raichu-mega-x": "10304",
+        "raichu-mega-y": "10305",
         "alakazam-mega": "10037",
+        "victreebel-mega": "10279",
         "slowbro-mega": "10071",
         "gengar-mega": "10038",
         "kangaskhan-mega": "10039",
+        "starmie-mega": "10280",
         "pinsir-mega": "10040",
         "gyarados-mega": "10041",
         "aerodactyl-mega": "10042",
+        "dragonite-mega": "10281",
         "mewtwo-mega-x": "10043",
         "mewtwo-mega-y": "10044",
 
@@ -278,6 +281,7 @@ function getMegaPokeApiIdFallback(key) {
         "steelix-mega": "10072",
         "scizor-mega": "10046",
         "heracross-mega": "10047",
+        "skarmory-mega": "10284",
         "houndoom-mega": "10048",
         "tyranitar-mega": "10049",
 
@@ -306,6 +310,7 @@ function getMegaPokeApiIdFallback(key) {
         "rayquaza-mega": "10079",
 
         // Gen 4
+        "staraptor-mega": "10308",
         "lopunny-mega": "10088",
         "garchomp-mega": "10058",
         "lucario-mega": "10059",
@@ -316,7 +321,14 @@ function getMegaPokeApiIdFallback(key) {
         "audino-mega": "10069",
 
         // Gen 6
-        "diancie-mega": "10075"
+        "chesnaught-mega": "10292",
+        "delphox-mega": "10293",
+        "greninja-mega": "10294",
+        "malamar-mega": "10297",
+        "diancie-mega": "10075",
+
+        // Gen 8
+        "falinks-mega": "10303"
     };
     return fallbacks[key] || null;
 }
@@ -7078,7 +7090,7 @@ function renderMegaEnergyPane() {
                     id: String(rawP.dexNr),
                     num: String(rawP.dexNr).padStart(3, '0'),
                     name: rawP.names?.English || `Pokemon #${rawP.dexNr}`,
-                    img: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${rawP.dexNr}.png`,
+                    img: `${POKE_SPRITE_BASE_URL}/${rawP.dexNr}.png`,
                     gen: rawP.generation || 1
                 };
 
@@ -7093,18 +7105,33 @@ function renderMegaEnergyPane() {
                     const defaultName = isPrimal ? `Primal ${baseDbPoke.name}` : `Mega ${baseDbPoke.name}${suffix ? ' ' + suffix : ''}`;
                     const displayName = (mData.names && mData.names.English) || defaultName;
 
-                    let formImg = (mData.assets && mData.assets.image) || baseDbPoke.img;
+                    // Form state ID: e.g. "6_X", "6_Y", "150_X", "150_Y", "26_X", "26_Y", "3_MEGA", "382_PRIMAL"
+                    const formStateId = `${baseDbPoke.id}_${suffix || megaKey.replace(/^[A-Z0-9]+_/, '')}`;
 
-                    // Fallback PokeAPI sprite if needed
+                    // Lookup PokeAPI official artwork ID
+                    const lookupKey = isPrimal
+                        ? `${safeLower(baseDbPoke.name)}-primal`
+                        : `${safeLower(baseDbPoke.name)}-mega${suffix ? '-' + suffix.toLowerCase() : ''}`;
+                    
+                    const mappedPokeApiId = getMegaPokeApiIdFallback(lookupKey) || getMegaPokeApiIdFallback(`${safeLower(baseDbPoke.name)}-mega`);
                     const isShinyView = (currentDexType === 'shiny');
-                    if (isShinyView && mData.assets && mData.assets.shinyImage) {
-                        formImg = mData.assets.shinyImage;
+
+                    let formImg = '';
+                    if (mappedPokeApiId) {
+                        formImg = isShinyView
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${mappedPokeApiId}.png`
+                            : `${POKE_SPRITE_BASE_URL}/${mappedPokeApiId}.png`;
+                    } else if (mData.assets && mData.assets.image) {
+                        formImg = (isShinyView && mData.assets.shinyImage) ? mData.assets.shinyImage : mData.assets.image;
+                    } else {
+                        formImg = isShinyView
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${baseDbPoke.id}.png`
+                            : `${POKE_SPRITE_BASE_URL}/${baseDbPoke.id}.png`;
                     }
 
                     // Buddy distance for base pokemon
                     let buddyDist = buddyDistances[baseDbPoke.id] ?? buddyDistances[Number(baseDbPoke.id)] ?? buddyDistances[String(baseDbPoke.id)] ?? buddyDistances[safeLower(baseDbPoke.name)];
                     if (buddyDist === undefined) {
-                        // Check family
                         const chain = findEvolutionChain(baseDbPoke);
                         if (chain && chain[0]) {
                             const baseF = chain[0];
@@ -7112,18 +7139,16 @@ function renderMegaEnergyPane() {
                         }
                     }
                     if (buddyDist === undefined) {
-                        buddyDist = 3; // Default reasonable fallback
+                        buddyDist = 3;
                     }
 
                     // Energy gained per candy = Buddy km * 5
                     const energyPerWalk = Math.max(5, buddyDist * 5);
 
-                    // Form ID for state tracking: e.g. "6_MEGA_X", "6_MEGA_Y", "3_MEGA", "382_PRIMAL"
-                    const formStateId = `${baseDbPoke.id}_${suffix || megaKey.replace(/^[A-Z0-9]+_/, '')}`;
-
                     megaForms.push({
                         formStateId,
                         megaKey,
+                        suffix,
                         basePoke: baseDbPoke,
                         dexNr: Number(rawP.dexNr),
                         name: displayName,
@@ -7144,13 +7169,21 @@ function renderMegaEnergyPane() {
         pokemonDatabase.filter(p => p.mega).forEach(p => {
             const buddyDist = buddyDistances[p.id] ?? 3;
             const energyPerWalk = buddyDist * 5;
+            const isShinyView = (currentDexType === 'shiny');
+            const lookupKey = `${safeLower(p.name)}-mega`;
+            const mappedId = getMegaPokeApiIdFallback(lookupKey) || p.id;
+            const formImg = isShinyView
+                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${mappedId}.png`
+                : `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
+
             megaForms.push({
                 formStateId: `${p.id}_MEGA`,
                 megaKey: `${p.name.toUpperCase()}_MEGA`,
+                suffix: '',
                 basePoke: p,
                 dexNr: Number(p.id),
                 name: `Mega ${p.name}`,
-                img: p.img,
+                img: formImg,
                 buddyDist,
                 energyPerWalk,
                 energyCost: 200,
@@ -7175,17 +7208,26 @@ function renderMegaEnergyPane() {
     const megaCaughtSet = caughtCategoryPokemon.mega || new Set();
 
     const megaDataList = filteredList.map(item => {
-        // Current Energy: keyed by baseId or formStateId
+        // Current Energy: keyed by formStateId or baseId
         const currentEnergy = userMegaEnergy[item.formStateId] ?? userMegaEnergy[item.basePoke.id] ?? 0;
         const hasLevel3 = userMegaLevel3.has(item.formStateId) || userMegaLevel3.has(String(item.basePoke.id));
         const hasLevel4 = userMegaLevel4.has(item.formStateId) || userMegaLevel4.has(String(item.basePoke.id));
 
-        // Is caught in Mega Dex? Check both formStateId and baseId
-        const isCaughtMega = megaCaughtSet.has(item.formStateId) || megaCaughtSet.has(item.basePoke.id) ||
-            megaCaughtSet.has(Number(item.basePoke.id)) || megaCaughtSet.has(String(item.basePoke.id));
+        // Is caught in Mega Dex? Check specific form ID, baseId, or generic mega prefix
+        let isCaughtMega = megaCaughtSet.has(item.formStateId) || megaCaughtSet.has(item.megaKey);
+        if (!isCaughtMega) {
+            if (item.suffix) {
+                // If species has variants like X or Y
+                const formVariantId = `${item.basePoke.id}_MEGA_${item.suffix}`;
+                isCaughtMega = megaCaughtSet.has(formVariantId);
+            } else {
+                isCaughtMega = megaCaughtSet.has(item.basePoke.id) || megaCaughtSet.has(Number(item.basePoke.id)) ||
+                    megaCaughtSet.has(String(item.basePoke.id)) ||
+                    Array.from(megaCaughtSet).some(id => String(id).startsWith(`${item.basePoke.id}_MEGA`));
+            }
+        }
 
         const energyNeeded = Math.max(0, GOAL_ENERGY - currentEnergy);
-        // Distance in km needed: (energyNeeded / energyPerWalk) * buddyDist = energyNeeded / 5 km
         const walksNeeded = Math.ceil(energyNeeded / item.energyPerWalk);
         const kmNeeded = energyNeeded > 0 ? (walksNeeded * item.buddyDist) : 0;
 
@@ -7252,14 +7294,14 @@ function renderMegaEnergyPane() {
         const card = document.createElement('div');
         card.className = data.isUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
 
-        // Calculation badge / text
+        // Calculation message
         let kmText = '';
         let kmClass = 'km-walk';
         if (data.hasLevel4) {
             kmText = '🏆 Mega Level 4 Complete (Goal Mastered!)';
             kmClass = 'km-complete';
         } else if (data.energyNeeded === 0) {
-            kmText = '🎉 5,000 Energy ready! Ready to unlock Mega Level 4.';
+            kmText = 'Enough Mega Energy to unlock Level 4!';
             kmClass = 'km-success';
         } else {
             kmText = `Walk ${data.kmNeeded.toFixed(1)} km (${data.energyNeeded} energy needed, +${data.energyPerWalk} per ${data.buddyDist} km)`;
@@ -7269,66 +7311,69 @@ function renderMegaEnergyPane() {
         const isShinyView = (currentDexType === 'shiny');
 
         card.innerHTML = `
-            <div class="family-header" style="margin-bottom: 0.75rem;">
-                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View details">
-                    <img src="${data.img}" alt="${data.name}" class="family-base-img" onerror="this.src='${data.basePoke.img}'">
+            <div class="family-header">
+                <div class="family-header-interactive" style="display: flex; align-items: center; gap: 0.75rem; flex-grow: 1; cursor: pointer;" title="View details for ${data.name}">
+                    <img src="${data.img}" alt="${data.name}" class="family-base-img" onerror="this.src='${POKE_SPRITE_BASE_URL}/${data.basePoke.id}.png'">
                     <div class="family-info">
-                        <h3 class="family-title" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                        <h3 class="family-title">
                             ${data.name}
-                            ${!data.isCaughtMega ? `<span style="background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; border-radius: 4px; padding: 1px 6px; font-size: 0.65rem; font-weight: 700;">Missing Mega</span>` : `<span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: var(--accent-green); border-radius: 4px; padding: 1px 6px; font-size: 0.65rem; font-weight: 700;">Mega Caught</span>`}
-                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4;"></i>
+                            ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
+                            <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
-                        <div class="family-buddy-dist" style="display: flex; align-items: center; gap: 8px; margin-top: 0.25rem;">
-                            <span>Buddy: <strong>${data.buddyDist} km</strong></span>
-                            <span style="color: #ec4899; font-weight: 700;">+${data.energyPerWalk} Mega Energy / walk</span>
-                        </div>
+                        <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy/walk)</div>
                     </div>
                 </div>
-                <div class="candy-input-wrapper" style="border-color: rgba(236, 72, 153, 0.3);" title="Current Mega Energy (Goal: 5000)">
-                    <i class="fa-solid fa-dna" style="color: #ec4899; font-size: 0.95rem;"></i>
+                <div class="candy-input-wrapper">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="Mega Energy">
                     <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
                 </div>
             </div>
 
-            <!-- Mega Level Progress Controls -->
-            <div class="family-stages" style="padding: 0.6rem 0.75rem; background: rgba(17, 27, 46, 0.35); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; margin-bottom: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <div style="font-size: 0.8rem; font-weight: 700; color: #cbd5e1; display: flex; align-items: center; gap: 6px;">
-                        <span>Mega Milestone:</span>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <!-- Level 3 Checkbox -->
-                        <label style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: ${data.hasLevel3 ? 'var(--accent-green)' : '#94a3b8'}; cursor: pointer; font-weight: 600;">
-                            <input type="checkbox" class="mega-level3-toggle" data-form-id="${data.formStateId}" ${data.hasLevel3 ? 'checked' : ''} style="cursor: pointer; accent-color: var(--accent-green);">
-                            <span>Has Level 3</span>
-                        </label>
-
-                        <!-- Level 4 Goal Checkbox -->
-                        <label style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.75rem; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'}; cursor: pointer; font-weight: 700; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.12)' : 'transparent'}; padding: 2px 6px; border-radius: 4px; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.4)' : 'transparent'};">
-                            <input type="checkbox" class="mega-level4-toggle" data-form-id="${data.formStateId}" ${data.hasLevel4 ? 'checked' : ''} style="cursor: pointer; accent-color: #60a5fa;">
-                            <span>🏆 Has Mega Level 4</span>
-                        </label>
-                    </div>
+            <!-- Stages list styled exactly like Candies Calculator -->
+            <div class="family-stages">
+                <!-- Stage 1: Mega Form Caught Status in Mega Dex -->
+                <div class="family-stage-item ${data.isCaughtMega ? 'caught' : 'missing'}" style="cursor: pointer;" title="Mega Dex Registration">
+                    <span class="stage-caught-status">
+                        <i class="fa-solid ${data.isCaughtMega ? 'fa-circle-check' : 'fa-circle-xmark'}"></i>
+                    </span>
+                    <span class="stage-name">${data.isCaughtMega ? 'Mega Form Caught' : 'Missing in Mega Dex'}</span>
+                    <span class="stage-cost" style="margin-left: auto; background: rgba(236, 72, 153, 0.12); color: #ec4899;">
+                        <i class="fa-solid fa-dna"></i> 5,000 Goal
+                    </span>
                 </div>
 
-                ${data.hasLevel3 && !data.hasLevel4 ? `
-                    <div style="margin-top: 0.4rem; font-size: 0.7rem; color: var(--accent-green); display: flex; align-items: center; gap: 4px;">
-                        <i class="fa-solid fa-arrow-trend-up"></i>
-                        <span>Mega Level 3 achieved — Ready / in progress to reach Mega Level 4!</span>
-                    </div>
-                ` : ''}
+                <!-- Stage 2: Level 3 Milestone -->
+                <div class="family-stage-item ${data.hasLevel3 ? 'caught' : 'missing'}" style="cursor: default;">
+                    <span class="stage-caught-status">
+                        <i class="fa-solid ${data.hasLevel3 ? 'fa-circle-check' : 'fa-circle'}"></i>
+                    </span>
+                    <span class="stage-name">Mega Level 3 Achieved</span>
+                    <button class="quest-inline-toggle mega-l3-btn ${data.hasLevel3 ? 'done' : 'pending'}" style="margin-left: auto; background: ${data.hasLevel3 ? 'rgba(16, 185, 129, 0.18)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${data.hasLevel3 ? 'rgba(16, 185, 129, 0.5)' : 'rgba(255,255,255,0.12)'}; color: ${data.hasLevel3 ? 'var(--accent-green)' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" data-form-id="${data.formStateId}">
+                        <i class="fa-solid ${data.hasLevel3 ? 'fa-check' : 'fa-circle-up'}"></i>
+                        <span>${data.hasLevel3 ? 'Has Level 3' : 'Level 3'}</span>
+                    </button>
+                </div>
+
+                <!-- Stage 3: Level 4 Milestone (Ultimate Goal) -->
+                <div class="family-stage-item ${data.hasLevel4 ? 'caught' : 'missing'}" style="cursor: default;">
+                    <span class="stage-caught-status">
+                        <i class="fa-solid ${data.hasLevel4 ? 'fa-award' : 'fa-circle'}"></i>
+                    </span>
+                    <span class="stage-name" style="font-weight: 700;">Mega Level 4 (Max)</span>
+                    <button class="transferred-inline-toggle mega-l4-btn" style="margin-left: auto; background: ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.2)' : 'rgba(255,255,255,0.04)'}; border: 1px solid ${data.hasLevel4 ? 'rgba(96, 165, 250, 0.5)' : 'rgba(255,255,255,0.1)'}; color: ${data.hasLevel4 ? '#60a5fa' : '#94a3b8'}; border-radius: 4px; padding: 2px 6px; font-size: 0.62rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" data-form-id="${data.formStateId}">
+                        <i class="fa-solid ${data.hasLevel4 ? 'fa-trophy' : 'fa-flag-checkered'}"></i>
+                        <span>${data.hasLevel4 ? 'Level 4 Done' : 'Set Level 4'}</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Energy & Walk status badge -->
-            <div class="family-footer" style="margin-top: auto;">
-                <div class="family-km-badge ${kmClass}" style="display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; padding: 6px 10px; border-radius: 6px; width: 100%;">
-                    <span>${kmText}</span>
-                    <span style="font-weight: 800; font-size: 0.72rem; opacity: 0.85;">${data.currentEnergy} / ${GOAL_ENERGY}</span>
-                </div>
+            <!-- Calculation result box styled exactly like Candies Calculator -->
+            <div class="family-calculation-result ${kmClass}">
+                ${kmText}
             </div>
         `;
 
-        // Click header image/name to open details modal
+        // Click header image/name to open base Pokemon modal
         const headerInteractive = card.querySelector('.family-header-interactive');
         if (headerInteractive) {
             headerInteractive.addEventListener('click', () => {
@@ -7358,31 +7403,35 @@ function renderMegaEnergyPane() {
             });
         }
 
-        // Level 3 checkbox listener
-        const l3Checkbox = card.querySelector('.mega-level3-toggle');
-        if (friendViewModeActive && l3Checkbox) l3Checkbox.disabled = true;
-        if (l3Checkbox) {
-            l3Checkbox.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    userMegaLevel3.add(data.formStateId);
-                } else {
+        // Level 3 button toggle
+        const l3Btn = card.querySelector('.mega-l3-btn');
+        if (friendViewModeActive && l3Btn) l3Btn.disabled = true;
+        if (l3Btn) {
+            l3Btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (userMegaLevel3.has(data.formStateId)) {
                     userMegaLevel3.delete(data.formStateId);
+                } else {
+                    userMegaLevel3.add(data.formStateId);
                 }
                 saveMegaLevelState();
                 renderMegaEnergyPane();
             });
         }
 
-        // Level 4 checkbox listener
-        const l4Checkbox = card.querySelector('.mega-level4-toggle');
-        if (friendViewModeActive && l4Checkbox) l4Checkbox.disabled = true;
-        if (l4Checkbox) {
-            l4Checkbox.addEventListener('change', (e) => {
-                if (e.target.checked) {
-                    userMegaLevel4.add(data.formStateId);
-                    userMegaLevel3.add(data.formStateId); // Level 4 implies level 3
-                } else {
+        // Level 4 button toggle
+        const l4Btn = card.querySelector('.mega-l4-btn');
+        if (friendViewModeActive && l4Btn) l4Btn.disabled = true;
+        if (l4Btn) {
+            l4Btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (userMegaLevel4.has(data.formStateId)) {
                     userMegaLevel4.delete(data.formStateId);
+                } else {
+                    userMegaLevel4.add(data.formStateId);
+                    userMegaLevel3.add(data.formStateId); // Level 4 implies Level 3
                 }
                 saveMegaLevelState();
                 renderMegaEnergyPane();
