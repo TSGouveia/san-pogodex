@@ -1,43 +1,13 @@
 [
     {
-        "eventID": "mega-blastoise-in-mega-raids-october-2026",
-        "title": "Mega Blastoise in Mega Raids",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
-        "link": "https://leekduck.com/events/mega-blastoise-in-mega-raids-october-2026/",
-        "start": "",
-        "end": ""
-    },
-    {
-        "eventID": "yveltal-in-5-star-raid-battles-october-2026",
-        "title": "Yveltal in 5-star Raid Battles",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/yveltal-2.jpg",
-        "link": "https://leekduck.com/events/yveltal-in-5-star-raid-battles-october-2026/",
-        "start": "",
-        "end": ""
-    },
-    {
-        "eventID": "raidhour20261014",
-        "title": "Dialga Raid Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
-        "link": "https://leekduck.com/events/raidhour20261014/",
-        "start": "",
-        "end": ""
-    },
-    {
         "eventID": "pokemonspotlighthour2026-10-15",
         "title": "Stufful Spotlight Hour",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
         "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-15/",
-        "start": "2026-10-15T18:00:00.000",
-        "end": "2026-10-15T19:00:00.000"
+        "start": "",
+        "end": ""
     },
     {
         "eventID": "sandile-hatch-day-2026",
