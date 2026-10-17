@@ -9451,12 +9451,10 @@ function renderEventsCalendar(listContainer, now) {
         const e = new Date(ev.end);
         if (isNaN(s.getTime()) || isNaN(e.getTime())) return false;
 
-        const startCalDay = new Date(s.getFullYear(), s.getMonth(), s.getDate());
-        const endCalDay = new Date(e.getFullYear(), e.getMonth(), e.getDate());
-        const durationDays = Math.round((endCalDay - startCalDay) / (1000 * 60 * 60 * 24)) + 1;
+        const diffHours = (e.getTime() - s.getTime()) / (1000 * 60 * 60);
 
-        // Allow single-day and 2-day events
-        if (durationDays < 1 || durationDays > 2) return false;
+        // Maximum 48 hours for calendar events
+        if (diffHours <= 0 || diffHours > 48.05) return false;
 
         // Apply location / regional filter
         if (!isEventMatchingLocation(ev)) return false;
@@ -9940,13 +9938,11 @@ function renderEventsList() {
         // If both start and end are TBA, do not show the event anywhere
         if (!start && !end) return false;
 
-        // Check if event is short (1 or 2 days) - these belong in "Calendar"
+        // Check if event duration is <= 48 hours - these belong in "Calendar"
         let isCalendarEvent = false;
         if (start && end) {
-            const startCalDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-            const endCalDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-            const durationDays = Math.round((endCalDay - startCalDay) / (1000 * 60 * 60 * 24)) + 1;
-            isCalendarEvent = durationDays >= 1 && durationDays <= 2;
+            const diffHours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+            isCalendarEvent = diffHours > 0 && diffHours <= 48.05;
         }
 
         // Apply location / regional filter
