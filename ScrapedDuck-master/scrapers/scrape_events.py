@@ -57,6 +57,16 @@ def scrape_events():
                 start_date = dates.get("start", "")
                 end_date = dates.get("end", "")
 
+                # Fallback to HTML data attributes if dates are missing from feeds/events.json
+                if not start_date:
+                    reveal_el = ev.select_one("[data-reveal-countdown]")
+                    if reveal_el and reveal_el.get("data-reveal-countdown"):
+                        start_date = reveal_el.get("data-reveal-countdown")
+                if not end_date:
+                    countdown_el = ev.select_one("[data-countdown]")
+                    if countdown_el and countdown_el.get("data-countdown"):
+                        end_date = countdown_el.get("data-countdown")
+
                 event_data = {
                     "eventID": event_id,
                     "title": title,

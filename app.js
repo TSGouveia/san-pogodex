@@ -1637,6 +1637,11 @@ function buildPokebattlerMaxUrl(bossName) {
                 if (!eventKey || seenEventKeys.has(eventKey)) return;
                 seenEventKeys.add(eventKey);
 
+                const isStartTba = isTbaDate(ev.start);
+                const isEndTba = isTbaDate(ev.end);
+                // If both start and end dates are TBA, do not include the event
+                if (isStartTba && isEndTba) return;
+
                 const rawImg = ev.image || ev.banner || '';
                 const hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
                 liveEvents.push({
@@ -9357,21 +9362,25 @@ function renderEventsCalendar(listContainer, now) {
     const targetYear = targetDate.getFullYear();
     const targetMonth = targetDate.getMonth();
 
-    const monthName = targetDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-    // Single-day events for this month (excluding events with TBA dates)
-    const singleDayEvents = liveEvents.filter(ev => {
+    // Calendar events (1 or 2 day events) for this month (excluding events with TBA dates)
+    const calendarEvents = liveEvents.filter(ev => {
         if (!ev.start || !ev.end) return false;
         if (isTbaDate(ev.start) || isTbaDate(ev.end)) return false;
         const s = new Date(ev.start);
         const e = new Date(ev.end);
         if (isNaN(s.getTime()) || isNaN(e.getTime())) return false;
-        if (s.getFullYear() !== targetYear || s.getMonth() !== targetMonth) return false;
 
-        const isSingleDay = s.getFullYear() === e.getFullYear() &&
-                            s.getMonth() === e.getMonth() &&
-                            s.getDate() === e.getDate();
-        return isSingleDay;
+        const startCalDay = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+        const endCalDay = new Date(e.getFullYear(), e.getMonth(), e.getDate());
+        const durationDays = Math.round((endCalDay - startCalDay) / (1000 * 60 * 60 * 24)) + 1;
+
+        // Allow single-day and 2-day events
+        if (durationDays < 1 || durationDays > 2) return false;
+
+        // Check if event overlaps the target month
+        const monthStart = new Date(targetYear, targetMonth, 1);
+        const monthEnd = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59, 999);
+        return e >= monthStart && s <= monthEnd;
     });
 
     // Debut Pokémon for this month
@@ -9487,10 +9496,14 @@ function renderEventsCalendar(listContainer, now) {
     for (let day = 1; day <= daysInMonth; day++) {
         const isToday = now.getFullYear() === targetYear && now.getMonth() === targetMonth && now.getDate() === day;
         
-        // Find events on this day
-        const dayEvents = singleDayEvents.filter(ev => {
+        // Find events that are active on this specific day (handles 1-day and 2-day events)
+        const dayEvents = calendarEvents.filter(ev => {
             const s = new Date(ev.start);
-            return s.getDate() === day;
+            const e = new Date(ev.end);
+            const currentDayDate = new Date(targetYear, targetMonth, day);
+            const startDayDate = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+            const endDayDate = new Date(e.getFullYear(), e.getMonth(), e.getDate());
+            return currentDayDate >= startDayDate && currentDayDate <= endDayDate;
         });
 
         // Find debuts on this day
@@ -9834,20 +9847,28 @@ function renderEventsList() {
         const start = isTbaDate(ev.start) ? null : new Date(ev.start);
         const end = isTbaDate(ev.end) ? null : new Date(ev.end);
         
-        // Check if single day event (starts and ends on the same day)
-        const isSingleDay = start && end &&
-                            start.getFullYear() === end.getFullYear() &&
-                            start.getMonth() === end.getMonth() &&
-                            start.getDate() === end.getDate();
+        // If both start and end are TBA, do not show the event anywhere
+        if (!start && !end) return false;
+
+        // Check if event is short (1 or 2 days) - these belong in "Calendar"
+        let isCalendarEvent = false;
+        if (start && end) {
+            const startCalDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+            const endCalDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+            const durationDays = Math.round((endCalDay - startCalDay) / (1000 * 60 * 60 * 24)) + 1;
+            isCalendarEvent = durationDays >= 1 && durationDays <= 2;
+        }
 
         if (currentEventTab === 'active') {
-            // Exclude single-day events (they belong in "Calendar")
-            if (isSingleDay) return false;
+            // Exclude 1-2 day events (they belong in "Calendar")
+            if (isCalendarEvent) return false;
             if (!start) return false;
             if (!end) return now >= start; // Ongoing event with end TBA
             return now >= start && now <= end;
         } else {
-            if (!start) return true; // If start date is TBA, treat as upcoming
+            // Upcoming tab
+            if (isCalendarEvent) return false;
+            if (!start) return true; // If start date is TBA, treat as upcoming (since end is not TBA)
             return now < start;
         }
     });
