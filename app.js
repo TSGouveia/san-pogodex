@@ -587,7 +587,7 @@ let liveSpawns = [];
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
 let currentEventTab = 'calendar';
-let currentEventLocation = 'all';
+let currentEventLocation = localStorage.getItem('pogo_events_scope') || 'all';
 let calendarMonthOffset = 0;
 let pokedexLimit = 60;
 let currentRenderedIds = new Set();
@@ -8793,6 +8793,7 @@ function setupEventsTabListener() {
             locSelect.dataset.bound = 'true';
             locSelect.addEventListener('change', () => {
                 currentEventLocation = locSelect.value;
+                localStorage.setItem('pogo_events_scope', currentEventLocation);
                 renderEventsList();
             });
         }
@@ -8839,7 +8840,7 @@ function updateEventsLocationDropdown() {
         if (loc) locations.add(loc);
     });
 
-    const currentVal = locSelect.value;
+    const savedVal = localStorage.getItem('pogo_events_scope') || currentEventLocation || 'all';
     locSelect.innerHTML = `
         <option value="all">🌍 All Events</option>
         <option value="global">🌐 Global Only</option>
@@ -8853,11 +8854,13 @@ function updateEventsLocationDropdown() {
     });
 
     // Restore selected value if still valid
-    if (Array.from(locSelect.options).some(o => o.value === currentVal)) {
-        locSelect.value = currentVal;
+    if (Array.from(locSelect.options).some(o => o.value === savedVal)) {
+        locSelect.value = savedVal;
+        currentEventLocation = savedVal;
     } else {
         locSelect.value = 'all';
         currentEventLocation = 'all';
+        localStorage.setItem('pogo_events_scope', 'all');
     }
 }
 
