@@ -1,5 +1,92 @@
 [
     {
+        "name": "Dynamax Azelf",
+        "tier": "Max Battles (5 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_AZELF",
+        "types": [
+            {
+                "name": "psychic",
+                "image": "https://leekduck.com/assets/img/types/psychic.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1752,
+                "max": 1834
+            },
+            "boosted": {
+                "min": 2190,
+                "max": 2293
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/482.png"
+    },
+    {
+        "name": "Dynamax Mesprit",
+        "tier": "Max Battles (5 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_MESPRIT",
+        "types": [
+            {
+                "name": "psychic",
+                "image": "https://leekduck.com/assets/img/types/psychic.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1669,
+                "max": 1747
+            },
+            "boosted": {
+                "min": 2086,
+                "max": 2184
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/481.png"
+    },
+    {
+        "name": "Dynamax Uxie",
+        "tier": "Max Battles (5 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_UXIE",
+        "types": [
+            {
+                "name": "psychic",
+                "image": "https://leekduck.com/assets/img/types/psychic.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1370,
+                "max": 1442
+            },
+            "boosted": {
+                "min": 1712,
+                "max": 1803
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/480.png"
+    },
+    {
         "name": "Dynamax Beldum",
         "tier": "Max Battles (3 Max)",
         "canBeShiny": true,
