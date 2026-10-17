@@ -9361,6 +9361,7 @@ function renderEventsCalendar(listContainer, now) {
     const targetDate = new Date(now.getFullYear(), now.getMonth() + calendarMonthOffset, 1);
     const targetYear = targetDate.getFullYear();
     const targetMonth = targetDate.getMonth();
+    const monthName = targetDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
     // Calendar events (1 or 2 day events) for this month (excluding events with TBA dates)
     const calendarEvents = liveEvents.filter(ev => {
