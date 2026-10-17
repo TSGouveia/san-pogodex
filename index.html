@@ -315,16 +315,30 @@
                         <span class="last-updated-text"></span>
                     </div>
                 </div>
-                <div class="events-tabs" style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 4px; border-radius: 8px; max-width: 520px;">
-                    <button class="event-tab-btn active" data-tab="calendar" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                        <i class="fa-solid fa-calendar-days"></i> Calendar
-                    </button>
-                    <button class="event-tab-btn" data-tab="active" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                        <i class="fa-solid fa-play"></i> Active
-                    </button>
-                    <button class="event-tab-btn" data-tab="upcoming" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                        <i class="fa-solid fa-forward"></i> Upcoming
-                    </button>
+                <div class="events-controls-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="events-tabs" style="display: flex; gap: 0.5rem; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 4px; border-radius: 8px; max-width: 420px; flex: 1; min-width: 260px;">
+                        <button class="event-tab-btn active" data-tab="calendar" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-calendar-days"></i> Calendar
+                        </button>
+                        <button class="event-tab-btn" data-tab="active" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-play"></i> Active
+                        </button>
+                        <button class="event-tab-btn" data-tab="upcoming" style="flex: 1; background: none; border: none; padding: 8px; color: #94a3b8; font-weight: 700; font-size: 0.85rem; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                            <i class="fa-solid fa-forward"></i> Upcoming
+                        </button>
+                    </div>
+
+                    <!-- Location / Regional Filter -->
+                    <div class="events-location-filter-wrapper" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <label for="events-location-select" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); display: flex; align-items: center; gap: 5px; white-space: nowrap;">
+                            <i class="fa-solid fa-earth-americas" style="color: var(--accent-color);"></i> Scope:
+                        </label>
+                        <select id="events-location-select" style="background: var(--bg-secondary); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.82rem; font-weight: 600; padding: 7px 12px; border-radius: 8px; outline: none; cursor: pointer; transition: border-color 0.2s ease;">
+                            <option value="all">🌍 All Events</option>
+                            <option value="global">🌐 Global Only</option>
+                            <!-- Dynamically populated with cities -->
+                        </select>
+                    </div>
                 </div>
                 <div id="events-list-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px;">
                     <!-- Dynamic events populated here -->

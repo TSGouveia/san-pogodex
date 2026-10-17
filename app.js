@@ -587,6 +587,7 @@ let liveSpawns = [];
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
 let currentEventTab = 'calendar';
+let currentEventLocation = 'all';
 let calendarMonthOffset = 0;
 let pokedexLimit = 60;
 let currentRenderedIds = new Set();
@@ -8785,11 +8786,83 @@ function setupEventsTabListener() {
             activeTab.style.background = 'var(--accent-color)';
             activeTab.style.color = '#000';
         }
+
+        // Location / Scope filter listener
+        const locSelect = document.getElementById('events-location-select');
+        if (locSelect && !locSelect.dataset.bound) {
+            locSelect.dataset.bound = 'true';
+            locSelect.addEventListener('change', () => {
+                currentEventLocation = locSelect.value;
+                renderEventsList();
+            });
+        }
     }
     // Note: event modal close listeners are now set in DOMContentLoaded for reliability
 }
 
+function getEventLocation(ev) {
+    const title = ev.title || '';
+    if (title.toLowerCase().includes('global')) return null;
+
+    // Pattern matching in-person / city headers
+    // Examples:
+    // "Pokémon GO City Safari: Boston (Rescheduled)" -> "Boston"
+    // "Pokémon GO Wild Area 2026: Sendai • Tohoku" -> "Sendai • Tohoku"
+    // "Pokémon GO Wild Area 2026: Mexico City" -> "Mexico City"
+    // "Pokémon GO Tour: Alola - Kaohsiung 2027" -> "Kaohsiung"
+    // "Pokémon GO Tour: Alola - Los Angeles 2027" -> "Los Angeles"
+    const match = title.match(/(?:city safari|safari zone|wild area(?:\s+\d{4})?|go fest(?:\s+\d{4})?|go tour(?::\s*[^:\-]+)?)\s*[:\-–—]\s*([^(\d]+?)(?:\s+\d{4}|\s*\(|$)/i);
+    if (match && match[1]) {
+        let loc = match[1].trim().replace(/^[\-–—:\s]+|[\-–—:\s]+$/g, '');
+        if (loc && loc.toLowerCase() !== 'global') {
+            return loc;
+        }
+    }
+    return null;
+}
+
+function isEventMatchingLocation(ev) {
+    const loc = getEventLocation(ev);
+    if (currentEventLocation === 'all') return true;
+    if (currentEventLocation === 'global') return loc === null;
+    return loc === currentEventLocation;
+}
+
+function updateEventsLocationDropdown() {
+    const locSelect = document.getElementById('events-location-select');
+    if (!locSelect || !Array.isArray(liveEvents)) return;
+
+    // Collect all unique locations from active/upcoming events
+    const locations = new Set();
+    liveEvents.forEach(ev => {
+        const loc = getEventLocation(ev);
+        if (loc) locations.add(loc);
+    });
+
+    const currentVal = locSelect.value;
+    locSelect.innerHTML = `
+        <option value="all">🌍 All Events</option>
+        <option value="global">🌐 Global Only</option>
+    `;
+
+    Array.from(locations).sort().forEach(loc => {
+        const opt = document.createElement('option');
+        opt.value = loc;
+        opt.textContent = `📍 ${loc}`;
+        locSelect.appendChild(opt);
+    });
+
+    // Restore selected value if still valid
+    if (Array.from(locSelect.options).some(o => o.value === currentVal)) {
+        locSelect.value = currentVal;
+    } else {
+        locSelect.value = 'all';
+        currentEventLocation = 'all';
+    }
+}
+
 function renderEventsPane() {
+    updateEventsLocationDropdown();
     renderEventsList();
 }
 
@@ -8885,7 +8958,9 @@ function openEventModal(ev) {
         categoryBg = 'rgba(239, 68, 68, 0.2)';
     }
     if (categoryEl) {
-        categoryEl.innerHTML = `<span style="font-size: 0.65rem; font-weight: 800; color: ${categoryColor}; background: ${categoryBg}; border: 1px solid ${categoryColor}40; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${ev.category}</span>`;
+        const modalLoc = getEventLocation(ev);
+        const modalLocBadge = modalLoc ? `<span style="font-size: 0.65rem; font-weight: 800; color: #f43f5e; background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.5); padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-location-dot"></i>${modalLoc}</span>` : '';
+        categoryEl.innerHTML = `<span style="font-size: 0.65rem; font-weight: 800; color: ${categoryColor}; background: ${categoryBg}; border: 1px solid ${categoryColor}40; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${ev.category}</span> ${modalLocBadge}`;
     }
 
     // Dates
@@ -9141,16 +9216,21 @@ function createEventCardElement(ev, now) {
 
     const categoryBadge = `<span style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.65rem; font-weight: 700; color: ${categoryColor}; background: rgba(11, 19, 34, 0.85); border: 1px solid ${categoryColor}55; padding: 3px 8px; border-radius: 6px; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.5);"><i class="fa-solid ${categoryIcon}" style="font-size:0.58rem;"></i>${ev.category}</span>`;
 
+    const evLocation = getEventLocation(ev);
+    const locationBadge = evLocation ? `<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 800; color: #f43f5e; background: rgba(11, 19, 34, 0.88); border: 1px solid rgba(244, 63, 94, 0.5); padding: 3px 8px; border-radius: 6px; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.5);"><i class="fa-solid fa-location-dot" style="font-size:0.58rem;"></i>${evLocation}</span>` : '';
+
     const bannerHtml = ev.banner ? `
         <div style="width: 100%; height: 130px; position: relative; overflow: hidden; background: #0b1322;">
             <img src="${ev.banner}" alt="${ev.title}" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2;">
+            <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2; display: flex; gap: 6px; flex-wrap: wrap;">
                 ${categoryBadge}
+                ${locationBadge}
             </div>
         </div>
     ` : `
-        <div style="width: 100%; height: 50px; background: linear-gradient(135deg, #1e293b, #0f172a); position: relative; display: flex; align-items: center; padding-left: 8px;">
+        <div style="width: 100%; height: 50px; background: linear-gradient(135deg, #1e293b, #0f172a); position: relative; display: flex; align-items: center; padding-left: 8px; gap: 6px;">
             ${categoryBadge}
+            ${locationBadge}
         </div>
     `;
     card.innerHTML = `
@@ -9377,6 +9457,9 @@ function renderEventsCalendar(listContainer, now) {
 
         // Allow single-day and 2-day events
         if (durationDays < 1 || durationDays > 2) return false;
+
+        // Apply location / regional filter
+        if (!isEventMatchingLocation(ev)) return false;
 
         // Check if event overlaps the target month
         const monthStart = new Date(targetYear, targetMonth, 1);
@@ -9680,19 +9763,25 @@ function renderEventsCalendar(listContainer, now) {
                     openEventModal(ev);
                 });
 
-                // Line 1: Centered Event Type Badge
+                // Line 1: Centered Event Type & Location Badges
                 const typeRow = document.createElement('div');
                 typeRow.style.cssText = `
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    gap: 4px;
                     width: 100%;
+                    flex-wrap: wrap;
                 `;
+                const calLoc = getEventLocation(ev);
+                const calLocBadge = calLoc ? `<span style="display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-size: 0.62rem; font-weight: 800; color: #f43f5e; background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.4); padding: 2px 6px; border-radius: 5px; white-space: nowrap;"><i class="fa-solid fa-location-dot" style="font-size: 0.55rem;"></i><span>${calLoc}</span></span>` : '';
+
                 typeRow.innerHTML = `
                     <span style="display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.65rem; font-weight: 700; color: ${ctx.badgeColor}; background: ${ctx.badgeBg}; padding: 2px 8px; border-radius: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;">
                         <i class="fa-solid ${ctx.icon}" style="font-size: 0.58rem; flex-shrink: 0;"></i>
                         <span style="overflow: hidden; text-overflow: ellipsis;">${ctx.typeLabel}</span>
                     </span>
+                    ${calLocBadge}
                 `;
                 evItem.appendChild(typeRow);
 
@@ -9859,6 +9948,9 @@ function renderEventsList() {
             const durationDays = Math.round((endCalDay - startCalDay) / (1000 * 60 * 60 * 24)) + 1;
             isCalendarEvent = durationDays >= 1 && durationDays <= 2;
         }
+
+        // Apply location / regional filter
+        if (!isEventMatchingLocation(ev)) return false;
 
         if (currentEventTab === 'active') {
             // Exclude 1-2 day events (they belong in "Calendar")
