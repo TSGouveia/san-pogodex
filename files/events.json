@@ -1,23 +1,13 @@
 [
     {
-        "eventID": "pokemonspotlighthour2026-10-15",
-        "title": "Stufful Spotlight Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
-        "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-15/",
-        "start": "2026-10-15T18:00:00",
-        "end": "2026-10-15T19:00:00"
-    },
-    {
         "eventID": "sandile-hatch-day-2026",
         "title": "Sandile Hatch Day",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-17-sandile-hatch-day-2026/sandile-hatch-day-2026.jpg",
         "link": "https://leekduck.com/events/sandile-hatch-day-2026/",
-        "start": "2026-10-17T11:00:00.000",
-        "end": "2026-10-17T17:00:00.000"
+        "start": "2026-10-17T11:00:00",
+        "end": "2026-10-17T17:00:00"
     },
     {
         "eventID": "fall-marathon-buddy-trek-2026",
