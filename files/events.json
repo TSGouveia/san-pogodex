@@ -210,6 +210,16 @@
         "end": "2026-11-01T10:00:00.000"
     },
     {
+        "eventID": "max-mondays-2026-11-02",
+        "title": "Dynamax Machop during Max Monday",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
+        "link": "https://leekduck.com/events/max-mondays-2026-11-02/",
+        "start": "2026-11-02T06:00:00.000",
+        "end": "2026-11-02T21:00:00.000"
+    },
+    {
         "eventID": "go-pass-october-2026",
         "title": "GO Pass: October",
         "type": "",
@@ -250,14 +260,24 @@
         "end": "2026-11-03T22:00:00.000"
     },
     {
-        "eventID": "mega-sableye-in-mega-raids-october-2026",
-        "title": "Mega Sableye in Mega Raids",
+        "eventID": "raidhour20261104",
+        "title": "Giratina (Altered Forme) Raid Hour",
         "type": "",
         "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
-        "link": "https://leekduck.com/events/mega-sableye-in-mega-raids-october-2026/",
-        "start": "2026-10-28T06:00:00.000",
-        "end": "2026-11-03T22:00:00.000"
+        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
+        "link": "https://leekduck.com/events/raidhour20261104/",
+        "start": "2026-11-04T18:00:00.000",
+        "end": "2026-11-04T19:00:00.000"
+    },
+    {
+        "eventID": "pokemonspotlighthour2026-11-05",
+        "title": "Teddiursa wearing a witch hat Spotlight Hour",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
+        "link": "https://leekduck.com/events/pokemonspotlighthour2026-11-05/",
+        "start": "2026-11-05T18:00:00.000",
+        "end": "2026-11-05T19:00:00.000"
     },
     {
         "eventID": "halloween-2026-part-2",
@@ -288,6 +308,36 @@
         "link": "https://leekduck.com/events/pokemon-go-wild-area-2026-mexico-city/",
         "start": "2026-11-06T10:00:00.000-0600",
         "end": "2026-11-08T18:00:00.000-0600"
+    },
+    {
+        "eventID": "mega-sableye-in-mega-raids-october-2026",
+        "title": "Mega Sableye in Mega Raids",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
+        "link": "https://leekduck.com/events/mega-sableye-in-mega-raids-october-2026/",
+        "start": "2026-10-28T06:00:00.000",
+        "end": "2026-11-08T22:00:00.000"
+    },
+    {
+        "eventID": "giratina-altered-forme-in-5-star-raid-battles-november-2026",
+        "title": "Giratina (Altered Forme) in 5-star Raid Battles",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/giratina-altered-forme-in-5-star-raid-battles-november-2026/",
+        "start": "2026-11-04T06:00:00.000",
+        "end": "2026-11-08T22:00:00.000"
+    },
+    {
+        "eventID": "shadow-tornadus-incarnate-forme-in-shadow-raids-november-4-2026",
+        "title": "Shadow Tornadus (Incarnate Forme) in Shadow Raids",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/shadow-tornadus-incarnate-forme-in-shadow-raids-november-4-2026/",
+        "start": "2026-11-04T06:00:00.000",
+        "end": "2026-11-08T22:00:00.000"
     },
     {
         "eventID": "gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3",
@@ -330,6 +380,16 @@
         "end": "2026-11-15T18:00:00.000"
     },
     {
+        "eventID": "max-mondays-2026-11-16",
+        "title": "Max Monday: Pokémon to be announced",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
+        "link": "https://leekduck.com/events/max-mondays-2026-11-16/",
+        "start": "2026-11-16T06:00:00.000",
+        "end": "2026-11-16T21:00:00.000"
+    },
+    {
         "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup",
         "title": "Great League, Ultra League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
         "type": "",
@@ -338,6 +398,16 @@
         "link": "https://leekduck.com/events/gbl-twilight-trails_great-league_ultra-league-mega-edition_2026-go-laic-cup/",
         "start": "2026-11-10T13:00:00.000-0800",
         "end": "2026-11-17T13:00:00.000-0800"
+    },
+    {
+        "eventID": "raidhour20261118",
+        "title": "Cresselia and Darkrai Raid Hour",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
+        "link": "https://leekduck.com/events/raidhour20261118/",
+        "start": "2026-11-18T18:00:00.000",
+        "end": "2026-11-18T19:00:00.000"
     },
     {
         "eventID": "minior-showers-leonids-2026",
@@ -360,6 +430,46 @@
         "end": "2026-11-21T17:00:00.000"
     },
     {
+        "eventID": "dynamax-trails-2026",
+        "title": "Dynamax Trails",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/dynamax-trails-2026/",
+        "start": "2026-11-16T10:00:00.000",
+        "end": "2026-11-23T20:00:00.000"
+    },
+    {
+        "eventID": "max-mondays-2026-11-23",
+        "title": "Dynamax Espurr during Max Monday",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
+        "link": "https://leekduck.com/events/max-mondays-2026-11-23/",
+        "start": "2026-11-23T06:00:00.000",
+        "end": "2026-11-23T21:00:00.000"
+    },
+    {
+        "eventID": "cresselia-darkrai-in-5-star-raid-battles-november-2026",
+        "title": "Cresselia and Darkrai in 5-star Raid Battles",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/cresselia-darkrai-in-5-star-raid-battles-november-2026/",
+        "start": "2026-11-16T06:00:00.000",
+        "end": "2026-11-24T22:00:00.000"
+    },
+    {
+        "eventID": "mega-banette-in-mega-raids-november-2026",
+        "title": "Mega Banette in Mega Raids",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
+        "link": "https://leekduck.com/events/mega-banette-in-mega-raids-november-2026/",
+        "start": "2026-11-16T06:00:00.000",
+        "end": "2026-11-24T22:00:00.000"
+    },
+    {
         "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_2026-go-laic-cup",
         "title": "Ultra League, Master League: Mega Edition, and 2026 GO LAIC Cup | Twilight Trails",
         "type": "",
@@ -370,6 +480,26 @@
         "end": "2026-11-25T13:00:00.000-0800"
     },
     {
+        "eventID": "raidhour20261125",
+        "title": "Deoxys (Normal, Defense, Attack, and Speed Formes) Raid Hour",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
+        "link": "https://leekduck.com/events/raidhour20261125/",
+        "start": "2026-11-25T18:00:00.000",
+        "end": "2026-11-25T19:00:00.000"
+    },
+    {
+        "eventID": "pokemonspotlighthour2026-11-26",
+        "title": "Noibat Spotlight Hour",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
+        "link": "https://leekduck.com/events/pokemonspotlighthour2026-11-26/",
+        "start": "2026-11-26T18:00:00.000",
+        "end": "2026-11-26T19:00:00.000"
+    },
+    {
         "eventID": "super-mega-raid-day-november-2026",
         "title": "Super Mega Raid Day",
         "type": "",
@@ -378,6 +508,26 @@
         "link": "https://leekduck.com/events/super-mega-raid-day-november-2026/",
         "start": "2026-11-28T14:00:00.000",
         "end": "2026-11-28T17:00:00.000"
+    },
+    {
+        "eventID": "twilight-wishes-2026",
+        "title": "Twilight Wishes",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/twilight-wishes-2026/",
+        "start": "2026-11-24T10:00:00.000",
+        "end": "2026-11-30T20:00:00.000"
+    },
+    {
+        "eventID": "max-mondays-2026-11-30",
+        "title": "Dynamax Cryogonal during Max Monday",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
+        "link": "https://leekduck.com/events/max-mondays-2026-11-30/",
+        "start": "2026-11-30T06:00:00.000",
+        "end": "2026-11-30T21:00:00.000"
     },
     {
         "eventID": "season-24-twilight-trails",
@@ -398,6 +548,36 @@
         "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-catch-cup-great-league-edition/",
         "start": "2026-11-24T13:00:00.000-0800",
         "end": "2026-12-01T13:00:00.000-0800"
+    },
+    {
+        "eventID": "shadow-tornadus-incarnate-forme-in-shadow-raids-november-16-2026",
+        "title": "Shadow Tornadus (Incarnate Forme) in Shadow Raids",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/shadow-tornadus-incarnate-forme-in-shadow-raids-november-16-2026/",
+        "start": "2026-11-16T06:00:00.000",
+        "end": "2026-12-01T22:00:00.000"
+    },
+    {
+        "eventID": "deoxys-normal-defense-attack-speed-formes-in-5-star-raid-battles-november-2026",
+        "title": "Deoxys (Normal, Defense, Attack, and Speed Formes) in 5-star Raid Battles",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/deoxys-normal-defense-attack-speed-formes-in-5-star-raid-battles-november-2026/",
+        "start": "2026-11-25T06:00:00.000",
+        "end": "2026-12-01T22:00:00.000"
+    },
+    {
+        "eventID": "mega-metagross-in-mega-raids-november-2026",
+        "title": "Mega Metagross in Mega Raids",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
+        "link": "https://leekduck.com/events/mega-metagross-in-mega-raids-november-2026/",
+        "start": "2026-11-25T06:00:00.000",
+        "end": "2026-12-01T22:00:00.000"
     },
     {
         "eventID": "minior-showers-geminids-2026",
