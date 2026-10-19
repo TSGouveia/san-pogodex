@@ -100,6 +100,16 @@
         "end": "2026-10-24T23:59:00.000-0700"
     },
     {
+        "eventID": "pokemon-night-out-los-angeles-2026",
+        "title": "Pokémon Night Out 2026 - Los Angeles",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/pokemon-night-out-2026.jpg",
+        "link": "https://leekduck.com/events/pokemon-night-out-los-angeles-2026/",
+        "start": "2026-10-24T19:30:00.000-0700",
+        "end": "2026-10-24T23:59:59.000-0700"
+    },
+    {
         "eventID": "minior-showers-orionids-2026",
         "title": "Minior Showers: Orionids 2026",
         "type": "",
@@ -288,6 +298,16 @@
         "link": "https://leekduck.com/events/gbl-twilight-trails_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3/",
         "start": "2026-11-03T13:00:00.000-0800",
         "end": "2026-11-10T13:00:00.000-0800"
+    },
+    {
+        "eventID": "pokemon-night-out-london-2026",
+        "title": "Pokémon Night Out 2026 - London",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/pokemon-night-out-2026.jpg",
+        "link": "https://leekduck.com/events/pokemon-night-out-london-2026/",
+        "start": "2026-11-10T18:00:00.000+0000",
+        "end": "2026-11-10T22:30:00.000+0000"
     },
     {
         "eventID": "into-the-wild-2026",
