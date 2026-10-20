@@ -748,6 +748,35 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/529.png"
     },
     {
+        "name": "Dynamax Espurr",
+        "tier": "Max Battles (1 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ESPURR",
+        "types": [
+            {
+                "name": "psychic",
+                "image": "https://leekduck.com/assets/img/types/psychic.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 669,
+                "max": 719
+            },
+            "boosted": {
+                "min": 837,
+                "max": 899
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/677.png"
+    },
+    {
         "name": "Dynamax Gastly",
         "tier": "Max Battles (1 Max)",
         "canBeShiny": true,

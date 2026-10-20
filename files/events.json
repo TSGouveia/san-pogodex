@@ -6,8 +6,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-13-fall-marathon-buddy-trek-2026/fall-marathon-buddy-trek-2026.jpg",
         "link": "https://leekduck.com/events/fall-marathon-buddy-trek-2026/",
-        "start": "2026-10-13T10:00:00.000",
-        "end": "2026-10-19T20:00:00.000"
+        "start": "2026-10-13T10:00:00",
+        "end": "2026-10-19T20:00:00"
     },
     {
         "eventID": "max-mondays-2026-10-19",
@@ -16,8 +16,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
         "link": "https://leekduck.com/events/max-mondays-2026-10-19/",
-        "start": "2026-10-19T06:00:00.000",
-        "end": "2026-10-19T21:00:00.000"
+        "start": "2026-10-19T06:00:00",
+        "end": "2026-10-19T21:00:00"
     },
     {
         "eventID": "gbl-twilight-trails_great-league_ultra-league-mega-edition_little-cup",
@@ -537,6 +537,16 @@
         "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-09-08-season-24-twilight-trails/season-24-twilight-trails.jpg",
         "link": "https://leekduck.com/events/season-24-twilight-trails/",
         "start": "2026-09-08T10:00:00.000",
+        "end": "2026-12-01T10:00:00.000"
+    },
+    {
+        "eventID": "go-pass-november-2026",
+        "title": "GO Pass: November",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-11-03-go-pass-november-2026/go-pass-november-2026.jpg",
+        "link": "https://leekduck.com/events/go-pass-november-2026/",
+        "start": "2026-11-03T10:00:00.000",
         "end": "2026-12-01T10:00:00.000"
     },
     {
