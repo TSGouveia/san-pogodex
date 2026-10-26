@@ -1,5 +1,108 @@
 [
     {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Win 3 raids",
+        "rewards": [
+            {
+                "name": "Pikachu wearing a hat and capelet",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm25.fHALLOWEEN_2026.icon.png",
+                "shiny": true,
+                "min_cp": "369",
+                "max_cp": "402",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Catch 13 Ghost-type Pokémon",
+        "rewards": [
+            {
+                "name": "Zubat wearing a top hat",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm41.fHALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": null
+            },
+            {
+                "name": "Noibat wearing a headband",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/Headband Noibat.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Win a raid",
+        "rewards": [
+            {
+                "name": "Zubat wearing a top hat",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm41.fHALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": null
+            },
+            {
+                "name": "Sinistea",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.icon.png",
+                "shiny": true,
+                "min_cp": "452",
+                "max_cp": "488",
+                "combatPower": {
+                    "normal": {
+                        "min": 452,
+                        "max": 488
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Make 6 Nice Throws",
+        "rewards": [
+            {
+                "name": "Misdreavus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm200.icon.png",
+                "shiny": true,
+                "min_cp": "779",
+                "max_cp": "825",
+                "combatPower": {
+                    "normal": {
+                        "min": 779,
+                        "max": 825
+                    }
+                }
+            },
+            {
+                "name": "Duskull",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm355.icon.png",
+                "shiny": true,
+                "min_cp": "273",
+                "max_cp": "302",
+                "combatPower": {
+                    "normal": {
+                        "min": 273,
+                        "max": 302
+                    }
+                }
+            },
+            {
+                "name": "Pumpkaboo (Average)",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm710.fAVERAGE.icon.png",
+                "shiny": true,
+                "min_cp": "486",
+                "max_cp": "523",
+                "combatPower": null
+            }
+        ]
+    },
+    {
         "category": "Pokémon GO City Safari: Boston (Rescheduled) Tasks",
         "task": "Catch 15 Pokémon",
         "rewards": [

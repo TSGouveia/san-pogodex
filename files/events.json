@@ -1,23 +1,13 @@
 [
     {
-        "eventID": "minior-showers-orionids-2026",
-        "title": "Minior Showers: Orionids 2026",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/minior-showers-2026.jpg",
-        "link": "https://leekduck.com/events/minior-showers-orionids-2026/",
-        "start": "2026-10-19T17:00:00",
-        "end": "2026-10-24T23:59:00"
-    },
-    {
         "eventID": "pokemon-go-city-safari-boston-2026-rescheduled",
         "title": "Pokémon GO City Safari: Boston (Rescheduled)",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/city-safari-boston-2026.jpg",
         "link": "https://leekduck.com/events/pokemon-go-city-safari-boston-2026-rescheduled/",
-        "start": "2026-10-24T10:00:00.000",
-        "end": "2026-10-25T18:00:00.000"
+        "start": "2026-10-24T10:00:00",
+        "end": "2026-10-25T18:00:00"
     },
     {
         "eventID": "max-mondays-2026-10-26",
