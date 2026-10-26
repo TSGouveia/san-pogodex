@@ -1177,25 +1177,25 @@ async function setPogoLocalCache(key, value) {
 }
 
 async function fetchCdnFile(fileName, query) {
+    const rawGithubUrl = `https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/${fileName}${query}`;
     const jsdelivrUrl = `https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/${fileName}${query}`;
-    const rawGithubUrl = `https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/${fileName}`;
     
-    // Try jsDelivr first with a 4s timeout
+    // Always fetch directly from raw.githubusercontent first to ensure instant, un-cached fresh data
     try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 4000);
-        const res = await fetch(jsdelivrUrl, { signal: controller.signal });
+        const res = await fetch(rawGithubUrl, { signal: controller.signal, cache: 'no-store' });
         clearTimeout(timeoutId);
         if (res && res.ok) {
             return await res.json();
         }
     } catch (e) {
-        // Fallback to raw.githubusercontent below
+        // Fallback to jsDelivr below
     }
 
-    // Direct fallback to raw.githubusercontent
+    // Fallback to jsDelivr
     try {
-        const res2 = await fetch(rawGithubUrl);
+        const res2 = await fetch(jsdelivrUrl);
         if (res2 && res2.ok) {
             return await res2.json();
         }
@@ -1222,7 +1222,7 @@ async function loadScrapedDataFromCdn() {
         }
 
         // 3. If cache is valid and up to date, reuse it!
-        if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0 && cachedData.rocketLineups && cachedData.partyChallenges) {
+        if (cachedData && cachedData.updatedAt && cachedData.pokedex && cachedData.pokedex.length > 0 && cachedData.rocketLineups && cachedData.partyChallenges && cachedData.megaAttacks && Object.keys(cachedData.megaAttacks).length > 0) {
             if (latestUpdatedAt && latestUpdatedAt === cachedData.updatedAt) {
                 console.log("Serving cached Pokémon data from browser IndexedDB storage (instant & 0 network requests).");
                 return cachedData;
