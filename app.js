@@ -4935,40 +4935,40 @@ function renderActiveRotations() {
 
                     const boxesHtml = boxesData.map(b => {
                         let bCol = '#22c55e';
-                        let bBg = 'rgba(34, 197, 94, 0.18)';
+                        let bBg = 'rgba(34, 197, 94, 0.16)';
                         let bBorder = 'rgba(34, 197, 94, 0.4)';
                         if (b.status === 'TIGHT') {
                             bCol = '#eab308';
-                            bBg = 'rgba(234, 179, 8, 0.2)';
+                            bBg = 'rgba(234, 179, 8, 0.18)';
                             bBorder = 'rgba(234, 179, 8, 0.45)';
                         } else if (b.status === 'HARD') {
                             bCol = '#f97316';
-                            bBg = 'rgba(249, 115, 22, 0.2)';
+                            bBg = 'rgba(249, 115, 22, 0.18)';
                             bBorder = 'rgba(249, 115, 22, 0.45)';
                         } else if (b.status === 'EXTREME') {
                             bCol = '#ef4444';
-                            bBg = 'rgba(239, 68, 68, 0.2)';
+                            bBg = 'rgba(239, 68, 68, 0.18)';
                             bBorder = 'rgba(239, 68, 68, 0.45)';
                         }
                         return `
-                            <div style="flex: 1; min-width: 0; background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 4px; padding: 2px 1px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px; overflow: hidden;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff; line-height: 1;">${b.trainers}</span>
-                                <span style="font-size: 0.44rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: clip; line-height: 1.1;">${b.status}</span>
+                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 4px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.68rem; font-weight: 800; color: #ffffff;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
+                                <span style="font-size: 0.62rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
                             </div>
                         `;
                     }).join('');
 
                     diffSectionHtml = `
-                        <div class="raid-difficulty-container" style="margin-top: 0.4rem; width: 100%; background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 6px; padding: 4px 5px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 4px;">
-                                <span style="font-size: 0.65rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
-                                    <i class="fa-solid fa-calculator" style="font-size: 0.58rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
+                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 6px;">
+                                <span style="font-size: 0.68rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
+                                    <i class="fa-solid fa-calculator" style="font-size: 0.6rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
                                 </span>
-                                <span style="font-size: 0.62rem; font-weight: 700; color: #94a3b8;">
-                                    <i class="fa-solid fa-users" style="font-size: 0.58rem;"></i> ${trainersNeeded} Needed
+                                <span style="font-size: 0.65rem; font-weight: 700; color: #94a3b8;">
+                                    <i class="fa-solid fa-users" style="font-size: 0.6rem;"></i> ${trainersNeeded} Needed
                                 </span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 2px; width: 100%;">
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%;">
                                 ${boxesHtml}
                             </div>
                         </div>
@@ -7521,7 +7521,6 @@ function renderMegaEnergyPane() {
                         <h3 class="family-title">
                             ${data.name}
                             ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
-                            ${data.isLevel4Locked ? `<span style="font-size: 0.6rem; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 4px; padding: 1px 5px; margin-left: 6px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;" title="Mega Attack: N/A - Mega Level 4 Locked"><i class="fa-solid fa-lock"></i> Lvl 4 Locked</span>` : (data.megaAttack && data.megaAttack !== 'N/A' ? `<span style="font-size: 0.6rem; background: rgba(16, 185, 129, 0.18); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 4px; padding: 1px 5px; margin-left: 6px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;" title="Mega Evolution Attack"><i class="fa-solid fa-bolt"></i> ${data.megaAttack}</span>` : '')}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</div>
@@ -7555,6 +7554,17 @@ function renderMegaEnergyPane() {
                     </button>
                 </div>
 
+                ${data.isLevel4Locked ? `
+                    <div style="margin-bottom: 4px; padding: 3px 6px; border-radius: 4px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: #f59e0b;">
+                        <span><i class="fa-solid fa-lock"></i> Mega Level 4 Locked (Attack N/A)</span>
+                        <span style="opacity: 0.8; font-size: 0.6rem; font-weight: 600;">Not Released</span>
+                    </div>
+                ` : (data.megaAttack && data.megaAttack !== 'N/A' ? `
+                    <div style="margin-bottom: 4px; padding: 3px 6px; border-radius: 4px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; font-weight: 800; color: #10b981;">
+                        <span><i class="fa-solid fa-bolt"></i> Mega Attack: ${data.megaAttack}</span>
+                        <span style="opacity: 0.8; font-size: 0.6rem; font-weight: 600;">Unlocked</span>
+                    </div>
+                ` : '')}
                 <!-- Stage 3: Level 4 Milestone (Ultimate Goal) -->
                 <div class="family-stage-item ${data.hasLevel4 ? 'caught' : 'missing'}" style="cursor: default;">
                     <span class="stage-caught-status">
