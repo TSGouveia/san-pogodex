@@ -3497,15 +3497,18 @@ html {
 }
 
 .pokemon-card .card-img-wrapper {
-    /* Keep image completely sharp with high-quality bilinear scaling */
-    image-rendering: auto;
+    /* Keep image completely sharp with high-quality contrast scaling */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .pokemon-card .card-img-wrapper img {
-    image-rendering: auto;
-    /* Hardware acceleration without blur */
-    transform: translateZ(0);
-    filter: none;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    /* Evita rasterizacao desfocada em sub-pixel */
+    transform: none;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 /* Glow Radial Card Overlay on Hover */
