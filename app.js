@@ -626,6 +626,7 @@ const shinySparkleSvg = `
 const shinyCategoryIconSvg = `<svg viewBox="0 0 24 24" fill="currentColor" style="width: 18px; height: 18px; color: #fbbf24; filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.6));"><path d="M12 2l1.6 3.9 3.9 1.6-3.9 1.6-1.6 3.9-1.6-3.9-3.9-1.6 3.9-1.6zM6 14l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5-2.5-1 2.5-1zM18 13l0.8 2 2 0.8-2 0.8-0.8 2-0.8-2-2-0.8 2-0.8z"/></svg>`;
 let typesDatabase = [];
 let buddyDistances = {};
+let megaAttacksDatabase = {};
 let userCandies = {};
 let userMegaEnergy = {};
 let userMegaLevel3 = new Set();
@@ -1229,7 +1230,7 @@ async function loadScrapedDataFromCdn() {
         }
 
         // 4. Load static JSON files with automatic fallback
-        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex'];
+        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks'];
         const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
         const fetchPromises = modules.map(m => fetchCdnFile(`${m}.min.json`, cacheBustQuery));
 
@@ -1328,6 +1329,7 @@ async function loadPokedex() {
         if (isNonEmpty(dbScrapedData.events)) rawEvents = dbScrapedData.events;
         if (isNonEmpty(dbScrapedData.partyChallenges)) { partyRewardsData = dbScrapedData.partyChallenges; console.log("🔍 [DEBUG] partyRewardsData loaded:", partyRewardsData); }
         if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
+        if (isNonEmpty(dbScrapedData.megaAttacks)) megaAttacksDatabase = dbScrapedData.megaAttacks;
         if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
         if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
         if (isNonEmpty(dbScrapedData.pokedex)) {
@@ -1440,37 +1442,60 @@ function buildPokebattlerRaidUrl(bossName, tier = null) {
     const n = bossName.trim();
     const nl = n.toLowerCase();
     const isShadow = nl.includes('shadow') || (tier && safeLower(tier).includes('shadow'));
-    const isMega = nl.startsWith('mega ');
+
+    let suffix = null;
+    const mSuf1 = nl.match(/\bmega\s+([xy])\s+(.*)/i);
+    let workNl = nl;
+    if (mSuf1) {
+        suffix = mSuf1[1].toUpperCase();
+        workNl = `mega ${mSuf1[2]} ${suffix}`;
+    } else {
+        const mSuf2 = nl.match(/\b(?:mega\s+)?(.*?)(?:_|\s+)mega(?:_|\s+)?([xy])\b/i);
+        if (mSuf2) {
+            suffix = mSuf2[2].toUpperCase();
+            workNl = `mega ${mSuf2[1]} ${suffix}`;
+        } else {
+            const mSuf3 = nl.match(/\bmega\s+(.*?)\s+([xy])\b/i);
+            if (mSuf3) {
+                suffix = mSuf3[2].toUpperCase();
+                workNl = `mega ${mSuf3[1]} ${suffix}`;
+            }
+        }
+    }
+
+    const isMega = workNl.includes('mega') || (tier && safeLower(tier).includes('mega'));
 
     let region = null;
-    if (nl.includes('alola') || nl.includes('alolan')) region = 'ALOLA';
-    else if (nl.includes('galar') || nl.includes('galarian')) region = 'GALAR';
-    else if (nl.includes('hisui') || nl.includes('hisuian')) region = 'HISUI';
-    else if (nl.includes('paldea') || nl.includes('paldean')) region = 'PALDEA';
+    if (workNl.includes('alola') || workNl.includes('alolan')) region = 'ALOLA';
+    else if (workNl.includes('galar') || workNl.includes('galarian')) region = 'GALAR';
+    else if (workNl.includes('hisui') || workNl.includes('hisuian')) region = 'HISUI';
+    else if (workNl.includes('paldea') || workNl.includes('paldean')) region = 'PALDEA';
 
     let form = null;
-    if (nl.includes('hero')) form = 'HERO';
-    else if (nl.includes('incarnate')) form = 'INCARNATE';
-    else if (nl.includes('therian')) form = 'THERIAN';
-    else if (nl.includes('origin')) form = 'ORIGIN';
-    else if (nl.includes('altered')) form = 'ALTERED';
+    if (workNl.includes('hero')) form = 'HERO';
+    else if (workNl.includes('incarnate')) form = 'INCARNATE';
+    else if (workNl.includes('therian')) form = 'THERIAN';
+    else if (workNl.includes('origin')) form = 'ORIGIN';
+    else if (workNl.includes('altered')) form = 'ALTERED';
 
-    let base = nl
-        .replace(/\b(shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered)\b/gi, '')
+    let base = workNl
+        .replace(/\b(shadow|mega|[xy]|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered|forme|form)\b/gi, '')
         .trim()
         .toUpperCase()
         .replace(/[^A-Z0-9]+/g, '_')
         .replace(/^_+|_+$/g, '');
 
     let slug = base;
-    if (isMega) {
+    if (isMega && suffix) {
+        slug = `${base}_MEGA_${suffix}`;
+    } else if (isMega) {
         slug = `${base}_MEGA`;
     } else if (region && isShadow) {
         slug = `${base}_${region}_SHADOW_FORM`;
     } else if (region) {
         slug = `${base}_${region}_FORM`;
     } else if (form && isShadow) {
-        slug = `${base}_SHADOW_FORM`;
+        slug = `${base}_${form}_SHADOW_FORM`;
     } else if (form) {
         slug = `${base}_${form}_FORM`;
     } else if (isShadow) {
@@ -1505,11 +1530,13 @@ function buildPokebattlerMaxUrl(bossName) {
                     .replace(/\bHisui\b/gi, 'Hisuian')
                     .replace(/\bGalar\b/gi, 'Galarian')
                     .replace(/\bPaldea\b/gi, 'Paldean')
+                    .replace(/^Mega\s+([XY])\s+(.+)$/i, 'Mega $2 $1')
                     .replace(/\bShadow\b/gi, '')
                     .replace(/\s+/g, ' ')
                     .trim();
 
                 const matchedPoke = findPokemonByName(cleanName) || findPokemonByName(boss.name);
+                const estValue = (boss.estimator != null) ? Number(boss.estimator) : ((boss.estimatedPlayers != null) ? Number(boss.estimatedPlayers) : null);
 
                 liveRaids.push({
                     idName: matchedPoke ? matchedPoke.idName : cleanName,
@@ -1521,7 +1548,11 @@ function buildPokebattlerMaxUrl(bossName) {
                     types: boss.types || [],
                     weatherBoosts: boss.boostedWeather || [],
                     trainersText: boss.trainersText || null,
-                    estimatedPlayers: boss.estimatedPlayers || null,
+                    estimatedPlayers: estValue,
+                    estimator: estValue,
+                    verdict: boss.verdict || null,
+                    trainersNeeded: boss.trainersNeeded || null,
+                    trainerBoxes: boss.trainerBoxes || null,
                     pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(cleanName, tier),
                     counters: {},
                     battleResult: null
@@ -4845,12 +4876,121 @@ function renderActiveRotations() {
                 }
 
                 let pokebattlerBtn = '';
-                if (raid.pokebattlerUrl) {
+                const estNum = (raid.estimator != null) ? Number(raid.estimator) : ((raid.estimatedPlayers != null) ? Number(raid.estimatedPlayers) : null);
+                let diffSectionHtml = '';
+
+                if (estNum != null && !isNaN(estNum) && estNum > 0) {
+                    const roundedEst = estNum < 10 ? estNum.toFixed(2) : estNum.toFixed(0);
+                    
+                    // Difficulty verdict based on PokeBattler specs
+                    let verdict = raid.verdict;
+                    let vColor = '#22c55e';
+                    let vBg = 'rgba(34, 197, 94, 0.15)';
+                    let vBorder = 'rgba(34, 197, 94, 0.35)';
+
+                    if (estNum <= 1.0) {
+                        verdict = verdict || 'SOLOABLE';
+                        vColor = '#22c55e';
+                        vBg = 'rgba(34, 197, 94, 0.15)';
+                        vBorder = 'rgba(34, 197, 94, 0.35)';
+                    } else if (estNum <= 1.5) {
+                        verdict = verdict || 'EASY DUO';
+                        vColor = '#3b82f6';
+                        vBg = 'rgba(59, 130, 246, 0.15)';
+                        vBorder = 'rgba(59, 130, 246, 0.35)';
+                    } else if (estNum <= 2.0) {
+                        verdict = verdict || 'EASY TRIO';
+                        vColor = '#60a5fa';
+                        vBg = 'rgba(96, 165, 250, 0.15)';
+                        vBorder = 'rgba(96, 165, 250, 0.35)';
+                    } else if (estNum <= 3.0) {
+                        verdict = verdict || 'MODERATE';
+                        vColor = '#eab308';
+                        vBg = 'rgba(234, 179, 8, 0.15)';
+                        vBorder = 'rgba(234, 179, 8, 0.35)';
+                    } else if (estNum <= 5.0) {
+                        verdict = verdict || 'HARD';
+                        vColor = '#f97316';
+                        vBg = 'rgba(249, 115, 22, 0.15)';
+                        vBorder = 'rgba(249, 115, 22, 0.35)';
+                    } else {
+                        verdict = verdict || 'EXTREME';
+                        vColor = '#ef4444';
+                        vBg = 'rgba(239, 68, 68, 0.15)';
+                        vBorder = 'rgba(239, 68, 68, 0.35)';
+                    }
+
+                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum));
+
+                    // Build the 6 boxes: 1, 2, 3, 4, 5, 6+
+                    const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
+                        const ratio = estNum / n;
+                        let st = 'EASY';
+                        if (ratio <= (2.0 / 3.0)) st = 'EASY';
+                        else if (ratio <= 1.0) st = 'TIGHT';
+                        else if (ratio <= 1.5) st = 'HARD';
+                        else st = 'EXTREME';
+                        return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
+                    });
+
+                    const boxesHtml = boxesData.map(b => {
+                        let bCol = '#22c55e';
+                        let bBg = 'rgba(34, 197, 94, 0.18)';
+                        let bBorder = 'rgba(34, 197, 94, 0.4)';
+                        if (b.status === 'TIGHT') {
+                            bCol = '#eab308';
+                            bBg = 'rgba(234, 179, 8, 0.2)';
+                            bBorder = 'rgba(234, 179, 8, 0.45)';
+                        } else if (b.status === 'HARD') {
+                            bCol = '#f97316';
+                            bBg = 'rgba(249, 115, 22, 0.2)';
+                            bBorder = 'rgba(249, 115, 22, 0.45)';
+                        } else if (b.status === 'EXTREME') {
+                            bCol = '#ef4444';
+                            bBg = 'rgba(239, 68, 68, 0.2)';
+                            bBorder = 'rgba(239, 68, 68, 0.45)';
+                        }
+                        return `
+                            <div style="flex: 1; min-width: 32px; background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 4px; padding: 2px 3px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff;">${b.trainers}</span>
+                                <span style="font-size: 0.52rem; font-weight: 700; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    diffSectionHtml = `
+                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 5px 6px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 4px;">
+                                <div style="display: flex; align-items: center; gap: 4px;">
+                                    <span style="font-size: 0.65rem; font-weight: 800; color: ${vColor}; background: ${vBg}; border: 1px solid ${vBorder}; padding: 1px 5px; border-radius: 4px;">
+                                        ${verdict}
+                                    </span>
+                                    <span style="font-size: 0.62rem; color: var(--text-secondary); opacity: 0.85;" title="PokeBattler Estimator: ${roundedEst}">
+                                        ⚔️ ${roundedEst}
+                                    </span>
+                                </div>
+                                <span style="font-size: 0.62rem; font-weight: 700; color: #94a3b8;">
+                                    <i class="fa-solid fa-users" style="font-size: 0.58rem;"></i> ${trainersNeeded} Needed
+                                </span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 3px; width: 100%;">
+                                ${boxesHtml}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (raid.pokebattlerUrl || diffSectionHtml) {
                     pokebattlerBtn = `
-                        <div style="margin-top: 0.4rem; display: flex; align-items: center;">
-                            <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
-                                <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
-                            </a>
+                        <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
+                            ${raid.pokebattlerUrl ? `
+                                <div style="display: flex; align-items: center;">
+                                    <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
+                                        <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                    </a>
+                                </div>
+                            ` : ''}
+                            ${diffSectionHtml}
                         </div>
                     `;
                 }
@@ -7082,6 +7222,9 @@ function renderCandiesPane() {
                 gridReady.appendChild(card);
                 readyCount++;
             }
+        } else if (data.isLevel4Locked && gridLevel4Locked) {
+            gridLevel4Locked.appendChild(card);
+            level4LockedCount++;
         } else {
             gridNeed.appendChild(card);
             needCount++;
@@ -7105,6 +7248,7 @@ function renderCandiesPane() {
 function renderMegaEnergyPane() {
     const gridReady = document.getElementById('grid-mega-ready-unlock');
     const gridNeed = document.getElementById('grid-mega-need-energy');
+    const gridLevel4Locked = document.getElementById('grid-mega-level4-locked');
     const gridMissing = document.getElementById('grid-mega-missing');
     const gridCompleted = document.getElementById('grid-mega-completed');
     const gridUnreleased = document.getElementById('grid-mega-unreleased');
@@ -7114,6 +7258,7 @@ function renderMegaEnergyPane() {
 
     gridReady.innerHTML = '';
     gridNeed.innerHTML = '';
+    if (gridLevel4Locked) gridLevel4Locked.innerHTML = '';
     gridMissing.innerHTML = '';
     gridCompleted.innerHTML = '';
     if (gridUnreleased) gridUnreleased.innerHTML = '';
@@ -7186,6 +7331,12 @@ function renderMegaEnergyPane() {
                     // Energy gained per candy = Buddy km * 5
                     const energyPerWalk = Math.max(5, buddyDist * 5);
 
+                    // Check Mega Evolution Attack info from Bulbapedia mapping
+                    const cleanKey = displayName.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+                    const attackInfo = megaAttacksDatabase[formStateId] || megaAttacksDatabase[cleanKey] || megaAttacksDatabase[String(baseDbPoke.id)] || null;
+                    const megaAttackName = attackInfo ? attackInfo.attack : null;
+                    const isLevel4Locked = attackInfo ? Boolean(attackInfo.isAttackNA) : false;
+
                     megaForms.push({
                         formStateId,
                         megaKey,
@@ -7198,6 +7349,8 @@ function renderMegaEnergyPane() {
                         energyPerWalk,
                         energyCost: mData.energyCost || 200,
                         isPrimal,
+                        megaAttack: megaAttackName,
+                        isLevel4Locked,
                         isUnreleased: Boolean(baseDbPoke.unreleased || baseDbPoke.releasingSoon)
                     });
                 });
@@ -7218,18 +7371,26 @@ function renderMegaEnergyPane() {
                 ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${mappedId}.png`
                 : `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
 
+            const fallbackName = isPrimal ? `Primal ${p.name}` : `Mega ${p.name}`;
+            const cleanKeyFallback = fallbackName.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+            const attackInfoFallback = megaAttacksDatabase[String(p.id)] || megaAttacksDatabase[cleanKeyFallback] || null;
+            const fallbackAttack = attackInfoFallback ? attackInfoFallback.attack : null;
+            const fallbackL4Locked = attackInfoFallback ? Boolean(attackInfoFallback.isAttackNA) : false;
+
             megaForms.push({
                 formStateId: String(p.id),
                 megaKey: `${p.name.toUpperCase()}_MEGA`,
                 suffix: '',
                 basePoke: p,
                 dexNr: Number(p.id),
-                name: isPrimal ? `Primal ${p.name}` : `Mega ${p.name}`,
+                name: fallbackName,
                 img: formImg,
                 buddyDist,
                 energyPerWalk,
                 energyCost: 200,
                 isPrimal: isPrimal,
+                megaAttack: fallbackAttack,
+                isLevel4Locked: fallbackL4Locked,
                 isUnreleased: Boolean(p.unreleased)
             });
         });
@@ -7326,6 +7487,7 @@ function renderMegaEnergyPane() {
     let readyCount = 0;
     let needLevel3Count = 0;
     let needCount = 0;
+    let level4LockedCount = 0;
     let missingCount = 0;
     let completedSectionCount = 0;
     let unreleasedCount = 0;
@@ -7364,6 +7526,7 @@ function renderMegaEnergyPane() {
                         <h3 class="family-title">
                             ${data.name}
                             ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
+                            ${data.isLevel4Locked ? `<span style="font-size: 0.6rem; background: rgba(245, 158, 11, 0.18); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 4px; padding: 1px 5px; margin-left: 6px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;" title="Mega Attack: N/A - Mega Level 4 Locked"><i class="fa-solid fa-lock"></i> Lvl 4 Locked</span>` : (data.megaAttack && data.megaAttack !== 'N/A' ? `<span style="font-size: 0.6rem; background: rgba(16, 185, 129, 0.18); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); border-radius: 4px; padding: 1px 5px; margin-left: 6px; font-weight: 800; display: inline-flex; align-items: center; gap: 3px;" title="Mega Evolution Attack"><i class="fa-solid fa-bolt"></i> ${data.megaAttack}</span>` : '')}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</div>
@@ -7522,6 +7685,8 @@ function renderMegaEnergyPane() {
     const catNeedLevel3 = document.getElementById('cat-mega-need-level3');
     if (catNeedLevel3) catNeedLevel3.style.display = needLevel3Count > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-need-energy').style.display = needCount > 0 ? 'block' : 'none';
+    const catLevel4Locked = document.getElementById('cat-mega-level4-locked');
+    if (catLevel4Locked) catLevel4Locked.style.display = level4LockedCount > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-missing').style.display = missingCount > 0 ? 'block' : 'none';
     document.getElementById('cat-mega-completed').style.display = completedSectionCount > 0 ? 'block' : 'none';
     const catMegaUnreleased = document.getElementById('cat-mega-unreleased');

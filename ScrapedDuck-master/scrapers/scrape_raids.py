@@ -1,3 +1,4 @@
+import concurrent.futures
 import os
 import json
 import math
@@ -109,6 +110,11 @@ def canonicalize_boss_name(name):
     n = re.sub(r'\bHisui\b', 'Hisuian', n, flags=re.IGNORECASE)
     n = re.sub(r'\bGalar\b', 'Galarian', n, flags=re.IGNORECASE)
     n = re.sub(r'\bPaldea\b', 'Paldean', n, flags=re.IGNORECASE)
+
+    # Standardize Mega naming: 'Mega X Charizard' -> 'Mega Charizard X', 'Mega Y Charizard' -> 'Mega Charizard Y'
+    m_mega = re.match(r'^Mega\s+([XY])\s+(.+)$', n, flags=re.IGNORECASE)
+    if m_mega:
+        n = f"Mega {m_mega.group(2)} {m_mega.group(1).upper()}"
     
     # Remove redundant word 'Shadow' from boss name (tier / badge already specifies Shadow)
     n = re.sub(r'\bShadow\b', '', n, flags=re.IGNORECASE)
@@ -169,20 +175,80 @@ def load_pokebattler_ids():
     _POKEBATTLER_IDS = set()
     return _POKEBATTLER_IDS
 
-def build_pokebattler_raid_url(boss_name, tier=None):
+def compute_trainer_boxes(estimator):
+    if estimator is None or estimator <= 0:
+        return None
+    E = float(estimator)
+    trainers_needed = max(1, int(-(-E // 1)))
+    
+    if E <= 1.0:
+        verdict = "SOLOABLE"
+    elif E <= 1.5:
+        verdict = "EASY DUO"
+    elif E <= 2.0:
+        verdict = "EASY TRIO"
+    elif E <= 3.0:
+        verdict = "MODERATE"
+    elif E <= 5.0:
+        verdict = "HARD"
+    else:
+        verdict = "EXTREME"
+        
+    boxes = []
+    for N in [1, 2, 3, 4, 5, 6]:
+        ratio = E / float(N)
+        label_n = f"{N}+" if N == 6 else str(N)
+        if ratio <= (2.0 / 3.0):
+            status = "EASY"
+        elif ratio <= 1.0:
+            status = "TIGHT"
+        elif ratio <= 1.5:
+            status = "HARD"
+        else:
+            status = "EXTREME"
+        boxes.append({
+            "trainers": label_n,
+            "status": status,
+            "ratio": round(ratio, 2)
+        })
+        
+    return {
+        "verdict": verdict,
+        "trainersNeeded": trainers_needed,
+        "boxes": boxes
+    }
+
+def build_pokebattler_slug(boss_name, tier=None):
+    if not boss_name:
+        return ""
     n = boss_name.strip()
     nl = n.lower()
-    is_shadow = "shadow" in nl or (tier and "shadow" in tier.lower())
-    is_mega = nl.startswith("mega ")
+    is_shadow = "shadow" in nl or (tier and "shadow" in str(tier).lower())
     
-    # Region
+    suffix = None
+    m_suf = re.search(r'\bmega\s+([xy])\s+(.*)', nl)
+    if m_suf:
+        suffix = m_suf.group(1).upper()
+        nl = f"mega {m_suf.group(2)} {suffix}"
+    else:
+        m_suf2 = re.search(r'\b(?:mega\s+)?(.*?)(?:_|\s+)mega(?:_|\s+)?([xy])\b', nl)
+        if m_suf2:
+            suffix = m_suf2.group(2).upper()
+            nl = f"mega {m_suf2.group(1)} {suffix}"
+        else:
+            m_suf3 = re.search(r'\bmega\s+(.*?)\s+([xy])\b', nl)
+            if m_suf3:
+                suffix = m_suf3.group(2).upper()
+                nl = f"mega {m_suf3.group(1)} {suffix}"
+
+    is_mega = "mega" in nl or (tier and "mega" in str(tier).lower())
+
     region = None
     if "alola" in nl or "alolan" in nl: region = "ALOLA"
     elif "galar" in nl or "galarian" in nl: region = "GALAR"
     elif "hisui" in nl or "hisuian" in nl: region = "HISUI"
     elif "paldea" in nl or "paldean" in nl: region = "PALDEA"
 
-    # Special forms
     form = None
     if "hero" in nl: form = "HERO"
     elif "incarnate" in nl: form = "INCARNATE"
@@ -190,11 +256,13 @@ def build_pokebattler_raid_url(boss_name, tier=None):
     elif "origin" in nl: form = "ORIGIN"
     elif "altered" in nl: form = "ALTERED"
 
-    base = re.sub(r'\b(shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered)\b', '', nl, flags=re.IGNORECASE).strip().upper()
+    base = re.sub(r'\b(shadow|mega|[xy]|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean|hero|incarnate|therian|origin|altered|forme|form)\b', '', nl, flags=re.IGNORECASE).strip().upper()
     base = re.sub(r'[^A-Z0-9]+', '_', base).strip('_')
 
     candidates = []
-    if is_mega:
+    if is_mega and suffix:
+        candidates.append(f"{base}_MEGA_{suffix}")
+    elif is_mega:
         candidates.append(f"{base}_MEGA")
     if region and is_shadow:
         candidates.append(f"{base}_{region}_SHADOW_FORM")
@@ -217,9 +285,35 @@ def build_pokebattler_raid_url(boss_name, tier=None):
     if pids:
         for c in candidates:
             if c in pids:
-                return f"https://www.pokebattler.com/raids/{c}"
+                return c
 
-    return f"https://www.pokebattler.com/raids/{candidates[0]}"
+    return candidates[0]
+
+def build_pokebattler_raid_url(boss_name, tier=None):
+    slug = build_pokebattler_slug(boss_name, tier)
+    return f"https://www.pokebattler.com/raids/{slug}" if slug else "https://www.pokebattler.com/raids"
+
+def scrape_pokebattler_estimator(slug):
+    if not slug:
+        return None
+    url = f"https://www.pokebattler.com/raids/{slug}"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=8)
+        if res.status_code == 200:
+            soup = bs4.BeautifulSoup(res.text, "html.parser")
+            table = soup.find("table")
+            if table:
+                rows = table.find_all("tr")[1:]
+                for r in rows:
+                    tds = [td.get_text(strip=True) for td in r.find_all(["th", "td"])]
+                    if len(tds) >= 5:
+                        try:
+                            return float(tds[4])
+                        except Exception:
+                            pass
+    except Exception as e:
+        print(f"  Warning scraping estimator for {slug}: {e}")
+    return None
 
 def build_pokebattler_max_url(boss_name):
     name = boss_name.replace("Dynamax", "").replace("Gigantamax", "").strip().upper().replace(" ", "_")
@@ -570,6 +664,7 @@ def scrape_raids():
                                 can_be_shiny = bool(has_shiny_class or (dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
                                 pb_url = build_pokebattler_raid_url(clean_name, current_tier)
 
+                                pb_slug = build_pokebattler_slug(clean_name, current_tier)
                                 bosses.append({
                                     "name": clean_name,
                                     "tier": current_tier,
@@ -578,7 +673,9 @@ def scrape_raids():
                                     "combatPower": cp_dict,
                                     "boostedWeather": weather_boosts,
                                     "image": img_url,
-                                    "pokebattlerUrl": pb_url
+                                    "pokebattlerUrl": pb_url,
+                                    "pokebattlerSlug": pb_slug,
+                                    "estimator": None
                                 })
 
                         curr = curr.find_next_sibling()
@@ -691,6 +788,33 @@ def scrape_raids():
                         })
     except Exception as e:
         print(f"Error fetching Pokebattler max battles: {e}")
+
+    # Fetch Pokebattler estimators in parallel for standard raid bosses
+    print(f"  -> Fetching Pokebattler estimators for {len(bosses)} raid bosses...")
+    unique_slugs = list({b.get("pokebattlerSlug") for b in bosses if b.get("pokebattlerSlug")})
+    slug_to_estimator = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+        future_to_slug = {executor.submit(scrape_pokebattler_estimator, s): s for s in unique_slugs}
+        for future in concurrent.futures.as_completed(future_to_slug):
+            slug = future_to_slug[future]
+            try:
+                est = future.result()
+                if est is not None:
+                    slug_to_estimator[slug] = est
+            except Exception as e:
+                print(f"  Error fetching estimator for {slug}: {e}")
+
+    for b in bosses:
+        s = b.get("pokebattlerSlug")
+        if s and s in slug_to_estimator:
+            est_val = slug_to_estimator[s]
+            b["estimator"] = est_val
+            b["estimatedPlayers"] = est_val
+            diff_info = compute_trainer_boxes(est_val)
+            if diff_info:
+                b["verdict"] = diff_info["verdict"]
+                b["trainersNeeded"] = diff_info["trainersNeeded"]
+                b["trainerBoxes"] = diff_info["boxes"]
 
     print(f"  -> Saved {len(bosses)} standard raid bosses from Pokémon GO Hub and {len(max_battles)} max battle bosses.")
     return bosses, max_battles

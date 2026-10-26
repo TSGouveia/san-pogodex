@@ -16,6 +16,7 @@ from scrapers.scrape_promos import scrape_promo_codes
 from scrapers.scrape_party import scrape_party
 from scrapers.scrape_pokedex import scrape_pokedex, scrape_types
 from scrapers.scrape_buddy import scrape_buddy_distances
+from scrapers.scrape_mega_attacks import scrape_mega_attacks
 from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
@@ -127,6 +128,10 @@ def main():
     # 10. Scrape Wild Spawns
     spawns = scrape_spawns()
     save_json("spawns.json", spawns)
+
+    # 11. Scrape Mega Attacks
+    mega_attacks = scrape_mega_attacks()
+    save_json("megaAttacks.json", mega_attacks)
 
     # Save metadata with timestamp so the client knows when data was updated
     metadata = {
