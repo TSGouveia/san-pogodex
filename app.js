@@ -388,25 +388,40 @@ const specialFormsMap = {
 
 const POKE_SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
 const POKE_SPRITE_BACKUP_URL = 'https://cdn.jsdelivr.net/gh/PokeAPI/sprites@master/sprites/pokemon/other/official-artwork';
+const POKE_SPRITE_SHINY_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny';
 
-function getPokemonImageUrl(name, matchedPoke) {
-    if (!name) return matchedPoke ? matchedPoke.img : '';
+function getActivePokemonImageUrl(pokeOrId, isShiny = null) {
+    if (!pokeOrId) return '';
+    const poke = (typeof pokeOrId === 'object') ? pokeOrId : pokemonDatabase.find(p => String(p.id) === String(pokeOrId) || Number(p.id) === Number(pokeOrId));
+    if (!poke) return '';
+    const isShinyReq = (isShiny === true || (isShiny === null && currentDexType === 'shiny'));
+    if (isShinyReq) {
+        const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
+        return `${POKE_SPRITE_SHINY_BASE_URL}/${pokeApiId}.png`;
+    }
+    return poke.img || `${POKE_SPRITE_BASE_URL}/${poke.id}.png`;
+}
+
+function getPokemonImageUrl(name, matchedPoke, isShiny = null) {
+    const isShinyReq = (isShiny === true || (isShiny === null && currentDexType === 'shiny'));
+    const baseUrl = isShinyReq ? POKE_SPRITE_SHINY_BASE_URL : POKE_SPRITE_BASE_URL;
+    if (!name) return matchedPoke ? (isShinyReq ? getActivePokemonImageUrl(matchedPoke) : matchedPoke.img) : '';
     const nameLower = name.toLowerCase().trim();
     
     // Check special legend forms
-    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `${POKE_SPRITE_BASE_URL}/10156.png`;
-    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `${POKE_SPRITE_BASE_URL}/10155.png`;
-    if (nameLower.includes('ultra necrozma')) return `${POKE_SPRITE_BASE_URL}/10157.png`;
-    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `${POKE_SPRITE_BASE_URL}/10022.png`;
-    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `${POKE_SPRITE_BASE_URL}/10023.png`;
-    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `${POKE_SPRITE_BASE_URL}/10188.png`;
-    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `${POKE_SPRITE_BASE_URL}/10189.png`;
-    if (nameLower.includes('bloodmoon') || nameLower.includes('ursaluna bloodmoon')) return `${POKE_SPRITE_BASE_URL}/10272.png`;
+    if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `${baseUrl}/10156.png`;
+    if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `${baseUrl}/10155.png`;
+    if (nameLower.includes('ultra necrozma')) return `${baseUrl}/10157.png`;
+    if (nameLower.includes('black kyurem') || nameLower.includes('kyurem black')) return `${baseUrl}/10022.png`;
+    if (nameLower.includes('white kyurem') || nameLower.includes('kyurem white')) return `${baseUrl}/10023.png`;
+    if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `${baseUrl}/10188.png`;
+    if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `${baseUrl}/10189.png`;
+    if (nameLower.includes('bloodmoon') || nameLower.includes('ursaluna bloodmoon')) return `${baseUrl}/10272.png`;
 
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
     if (rfId) {
-        return `${POKE_SPRITE_BASE_URL}/${rfId}.png`;
+        return `${baseUrl}/${rfId}.png`;
     }
     
     // Check if it's a Gigantamax form
@@ -423,7 +438,7 @@ function getPokemonImageUrl(name, matchedPoke) {
             "alcremie": "10223", "copperajah": "10224", "duraludon": "10225", "urshifu": "10226"
         };
         if (gmaxIds[baseName]) {
-            return `${POKE_SPRITE_BASE_URL}/${gmaxIds[baseName]}.png`;
+            return `${baseUrl}/${gmaxIds[baseName]}.png`;
         }
     }
 
@@ -438,7 +453,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         }
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
+            return `${baseUrl}/${mappedId}.png`;
         }
     }
 
@@ -448,7 +463,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         let key = `${baseName}-primal`;
         const mappedId = pokeApiIdMapping[key] || getMegaPokeApiIdFallback(key);
         if (mappedId) {
-            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
+            return `${baseUrl}/${mappedId}.png`;
         }
     }
     
@@ -460,7 +475,7 @@ function getPokemonImageUrl(name, matchedPoke) {
         const form = parts.slice(1).join('-');
         const formSpace = parts.slice(1).join(' ');
         if (cleanForForm.includes(base) && (cleanForForm.includes(form) || cleanForForm.includes(formSpace))) {
-            return `${POKE_SPRITE_BASE_URL}/${id}.png`;
+            return `${baseUrl}/${id}.png`;
         }
     }
 
@@ -480,12 +495,12 @@ function getPokemonImageUrl(name, matchedPoke) {
         formKey = formKey.replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-');
         const mappedId = pokeApiIdMapping[formKey];
         if (mappedId) {
-            return `${POKE_SPRITE_BASE_URL}/${mappedId}.png`;
+            return `${baseUrl}/${mappedId}.png`;
         }
     }
 
     if (matchedPoke) {
-        return matchedPoke.img;
+        return isShinyReq ? getActivePokemonImageUrl(matchedPoke) : matchedPoke.img;
     }
     
     return '';
@@ -571,10 +586,22 @@ function isPokemonTransferred(poke, transferredSet = null) {
     return set.has(strId) || (!isNaN(numId) && set.has(numId));
 }
 
-function isPokemonMissing(poke) {
+function isPokemonCaught(pokeOrId, dexType = currentDexType) {
+    if (!pokeOrId) return false;
+    const poke = (typeof pokeOrId === 'object') ? pokeOrId : pokemonDatabase.find(p => String(p.id) === String(pokeOrId) || Number(p.id) === Number(pokeOrId));
+    const id = poke ? poke.id : pokeOrId;
+    const strId = String(id);
+    const numId = Number(id);
+    const set = (dexType === 'normal') ? caughtPokemon : (caughtCategoryPokemon[dexType] || caughtPokemon);
+    return set.has(strId) || (!isNaN(numId) && set.has(numId));
+}
+
+function isPokemonMissing(pokeOrId, dexType = currentDexType) {
+    if (!pokeOrId) return false;
+    const poke = (typeof pokeOrId === 'object') ? pokeOrId : pokemonDatabase.find(p => String(p.id) === String(pokeOrId) || Number(p.id) === Number(pokeOrId));
     if (!poke) return false;
-    const isCaught = caughtPokemon.has(poke.id) || caughtPokemon.has(Number(poke.id));
-    const isTransf = isPokemonTransferred(poke);
+    const isCaught = isPokemonCaught(poke, dexType);
+    const isTransf = (dexType === 'normal') && isPokemonTransferred(poke);
     return !isCaught || isTransf;
 }
 let liveEggs = [];
@@ -2458,8 +2485,12 @@ function toggleCaughtState(id, eventSource = null) {
         }
     }
 
-    // Refresh Pokédex cards so family evolution states (ready/needs candies) update immediately
+    // Refresh Pokédex cards and active panes so family evolution states & missing targets update immediately
     renderPokedex(true);
+    renderMissingSummary();
+    renderCandiesPane();
+    renderActiveRotations();
+    renderToDoPane();
 
     if (affectedTransferredAncestors.length > 0) {
         affectedTransferredAncestors.forEach(ancId => {
@@ -2818,6 +2849,10 @@ function setupEventListeners() {
             currentDexType = targetBtn.dataset.dextype || 'normal';
             pokedexLimit = Infinity;
             renderPokedex(true);
+            renderMissingSummary();
+            renderCandiesPane();
+            renderActiveRotations();
+            renderToDoPane();
             updateDashboardStats();
             updateRegionStatsBadge();
         });
@@ -3276,11 +3311,10 @@ function renderMissingSummary() {
     huntGrid.innerHTML = '';
     
     // 1. Get all missing Pokémon (including transferred ones)
-    let missingList = pokemonDatabase.filter(p => {
+    const activeDexList = getBaseListForDexType(currentDexType);
+    let missingList = activeDexList.filter(p => {
         if (hideUnreleased && p.unreleased) return false;
-        const isCaught = caughtPokemon.has(p.id) || caughtPokemon.has(Number(p.id));
-        const isTransf = transferredPokemon.has(p.id) || transferredPokemon.has(Number(p.id)) || transferredPokemon.has(String(p.id));
-        return !isCaught || isTransf;
+        return isPokemonMissing(p);
     });
     
     // 2. Filter by search query
@@ -3387,7 +3421,7 @@ function renderMissingSummary() {
             </div>
             
             <div class="card-img-wrapper">
-                <img src="${poke.img}" alt="${poke.name}" loading="lazy">
+                <img src="${getActivePokemonImageUrl(poke)}" alt="${poke.name}" loading="lazy">
             </div>
             
             <h3 class="poke-name">${poke.name}</h3>
@@ -4608,11 +4642,7 @@ function renderWildSpawns() {
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
 
         let imgUrl = '';
-        if (poke && poke.img) {
-            imgUrl = poke.img;
-        } else {
-            imgUrl = `${POKE_SPRITE_BASE_URL}/${s.dexNr}.png`;
-        }
+        imgUrl = poke ? getActivePokemonImageUrl(poke) : ((currentDexType === "shiny") ? `${POKE_SPRITE_SHINY_BASE_URL}/${s.dexNr}.png` : `${POKE_SPRITE_BASE_URL}/${s.dexNr}.png`);
 
         const rateVal = (typeof s.spawnRate === 'number') ? s.spawnRate.toFixed(2) : (parseFloat(s.spawnRate) || 0).toFixed(2);
         const rateBadge = `<div><i class="fa-solid fa-location-dot" style="font-size:0.65rem; opacity:0.7;"></i> <span>Spawn Rate: <strong style="color: var(--accent-color);">${rateVal}%</strong></span></div>`;
@@ -4776,7 +4806,7 @@ function renderActiveRotations() {
                 })();
                 const targetPoke = matchedPoke || baseFormPoke;
                 const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
-                const isMissingSpecies = targetPoke && !isTransferred && (!caughtPokemon.has(targetPoke.id) && !caughtPokemon.has(Number(targetPoke.id)));
+                const isMissingSpecies = targetPoke && !isTransferred && isPokemonMissing(targetPoke);
                 const isMissingForm = isMegaOrGmaxFormMissing(raid.name, targetPoke);
                 const isMissing = isMissingSpecies;
                 const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
@@ -4927,7 +4957,7 @@ function renderActiveRotations() {
                     const matchedPoke = findPokemonByName(baseName);
                     
                     const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                    const isMissingSpecies = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                    const isMissingSpecies = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
                     const isMissingForm = isMegaOrGmaxFormMissing(boss.name, matchedPoke);
                     const isMissing = isMissingSpecies;
                     const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
@@ -5085,7 +5115,7 @@ function renderActiveRotations() {
                 const card = document.createElement('div');
                 const matchedPoke = pokemonDatabase.find(p => p.id == egg.dex);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                const isMissing = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
                 const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
@@ -5223,7 +5253,7 @@ function renderActiveRotations() {
                 const card = document.createElement('div');
                 const matchedPoke = pokemonDatabase.find(p => p.id == encounter.dex) || findPokemonByName(encounter.fullPokeName);
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-                const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+                const isMissing = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
                 const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
                 const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
                 card.className = `rotation-card-item theme-blue ${highlightClass} spawn-animation`;
@@ -5406,7 +5436,7 @@ function renderPartyRewardsByQuest(container, data, cardTheme = 'theme-blue') {
             if (!matchedPoke) return;
 
             const isTransferred = isPokemonTransferred(matchedPoke);
-            const isMissing = !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+            const isMissing = !isTransferred && isPokemonMissing(matchedPoke);
             const isCandyNeeded = familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke);
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
 
@@ -5446,7 +5476,7 @@ function renderRewardsListHelper(container, data, cardTheme) {
         const card = document.createElement('div');
         const matchedPoke = pokemonDatabase.find(p => p.id == item.dex);
         const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-        const isMissing = matchedPoke && !isTransferred && (!caughtPokemon.has(matchedPoke.id) && !caughtPokemon.has(Number(matchedPoke.id)));
+        const isMissing = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
         const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
         const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
         card.className = `rotation-card-item ${cardTheme} ${highlightClass}`;
@@ -9094,7 +9124,7 @@ function openEventModal(ev) {
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
                 if (matchedPoke) {
-                    pokeImgUrl = matchedPoke.img || `${POKE_SPRITE_BASE_URL}/${matchedPoke.id}.png`;
+                    pokeImgUrl = getActivePokemonImageUrl(matchedPoke);
                 } else {
                     // asset_url from the API has the correct sprite for Megas and alternate forms
                     pokeImgUrl = spawn.asset_url || '';
@@ -9704,7 +9734,7 @@ function renderEventsCalendar(listContainer, now) {
                     padding: 4px 0;
                 `;
                 const imgEl = document.createElement('img');
-                imgEl.src = poke.img || `${POKE_SPRITE_BASE_URL}/${poke.id}.png`;
+                imgEl.src = getActivePokemonImageUrl(poke);
                 imgEl.alt = poke.name;
                 imgEl.title = poke.name;
                 imgEl.style.cssText = `
@@ -9829,7 +9859,7 @@ function renderEventsCalendar(listContainer, now) {
                 if (pokeList.length > 0) {
                     pokeList.forEach(poke => {
                         const imgEl = document.createElement('img');
-                        imgEl.src = poke.img;
+                        imgEl.src = getActivePokemonImageUrl(poke);
                         imgEl.alt = poke.name;
                         imgEl.title = poke.name;
                         imgEl.style.cssText = `
