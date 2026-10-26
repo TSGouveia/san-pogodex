@@ -3497,15 +3497,14 @@ html {
 }
 
 .pokemon-card .card-img-wrapper {
-    /* Keep image completely sharp with high-quality contrast scaling */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pokemon-card .card-img-wrapper img {
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    /* Evita rasterizacao desfocada em sub-pixel */
+    image-rendering: auto;
+    /* Evita desfoque por rasterizacao 3D sem forcar pixel-art */
     transform: none;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
