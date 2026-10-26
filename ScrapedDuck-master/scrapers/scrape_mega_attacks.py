@@ -4,23 +4,41 @@ import json
 import requests
 
 HEADERS = {
-    "User-Agent": "SanPogodexBot/1.0 (contact@sanpogodex.com)"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
 }
+
+def load_fallback_mega_attacks():
+    paths = [
+        os.path.join(os.path.dirname(__file__), "mega_attacks_fallback.json"),
+        os.path.join(os.path.dirname(__file__), "..", "files", "megaAttacks.json"),
+        os.path.join(os.path.dirname(__file__), "..", "..", "files", "megaAttacks.json")
+    ]
+    for p in paths:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    if data and len(data) > 0:
+                        print(f"  -> Loaded {len(data)} Mega Evolution Attack entries from fallback: {os.path.basename(p)}")
+                        return data
+            except Exception as e:
+                print(f"  Warning reading fallback {p}: {e}")
+    return {}
 
 def scrape_mega_attacks():
     print("Scraping Mega Evolution Attacks from Bulbapedia MediaWiki API...")
     url = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=Mega_Evolution_(GO)&prop=wikitext&format=json"
     try:
-        res = requests.get(url, headers=HEADERS, timeout=20)
+        res = requests.get(url, headers=HEADERS, timeout=15)
         if res.status_code != 200:
-            print(f"  Warning: Bulbapedia API returned status {res.status_code}")
-            return {}
+            print(f"  Warning: Bulbapedia API returned status {res.status_code}. Using fallback database...")
+            return load_fallback_mega_attacks()
         
         data = res.json()
         text = data.get("parse", {}).get("wikitext", {}).get("*", "")
         if not text:
-            print("  Warning: Empty wikitext returned from Bulbapedia API.")
-            return {}
+            print("  Warning: Empty wikitext returned from Bulbapedia API. Using fallback database...")
+            return load_fallback_mega_attacks()
         
         idx_start = text.find("==List of Mega Evolutions==")
         if idx_start == -1:
@@ -80,11 +98,14 @@ def scrape_mega_attacks():
                 clean_key = re.sub(r'[^A-Z0-9]+', '_', full_name.upper()).strip('_')
                 results[clean_key] = entry
 
+        if not results:
+            return load_fallback_mega_attacks()
+
         print(f"  -> Successfully scraped {len(results)} Mega Evolution Attack mappings from Bulbapedia.")
         return results
     except Exception as e:
-        print(f"Error scraping Mega Evolution attacks: {e}")
-        return {}
+        print(f"Error scraping Mega Evolution attacks: {e}. Using fallback database...")
+        return load_fallback_mega_attacks()
 
 if __name__ == "__main__":
     res = scrape_mega_attacks()

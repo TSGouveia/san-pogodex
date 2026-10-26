@@ -1,0 +1,1100 @@
+{
+    "3": {
+        "dex": 3,
+        "name": "Mega Venusaur",
+        "suffix": null,
+        "formStateId": "3",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_VENUSAUR": {
+        "dex": 3,
+        "name": "Mega Venusaur",
+        "suffix": null,
+        "formStateId": "3",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "6_MEGA_X": {
+        "dex": 6,
+        "name": "Mega Charizard X",
+        "suffix": "X",
+        "formStateId": "6_MEGA_X",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_CHARIZARD_X": {
+        "dex": 6,
+        "name": "Mega Charizard X",
+        "suffix": "X",
+        "formStateId": "6_MEGA_X",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "6_MEGA_Y": {
+        "dex": 6,
+        "name": "Mega Charizard Y",
+        "suffix": "Y",
+        "formStateId": "6_MEGA_Y",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_CHARIZARD_Y": {
+        "dex": 6,
+        "name": "Mega Charizard Y",
+        "suffix": "Y",
+        "formStateId": "6_MEGA_Y",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "9": {
+        "dex": 9,
+        "name": "Mega Blastoise",
+        "suffix": null,
+        "formStateId": "9",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_BLASTOISE": {
+        "dex": 9,
+        "name": "Mega Blastoise",
+        "suffix": null,
+        "formStateId": "9",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "15": {
+        "dex": 15,
+        "name": "Mega Beedrill",
+        "suffix": null,
+        "formStateId": "15",
+        "attack": "Fell Stinger+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_BEEDRILL": {
+        "dex": 15,
+        "name": "Mega Beedrill",
+        "suffix": null,
+        "formStateId": "15",
+        "attack": "Fell Stinger+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "18": {
+        "dex": 18,
+        "name": "Mega Pidgeot",
+        "suffix": null,
+        "formStateId": "18",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_PIDGEOT": {
+        "dex": 18,
+        "name": "Mega Pidgeot",
+        "suffix": null,
+        "formStateId": "18",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "26_MEGA_X": {
+        "dex": 26,
+        "name": "Mega Raichu X",
+        "suffix": "X",
+        "formStateId": "26_MEGA_X",
+        "attack": "Volt Tackle+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_RAICHU_X": {
+        "dex": 26,
+        "name": "Mega Raichu X",
+        "suffix": "X",
+        "formStateId": "26_MEGA_X",
+        "attack": "Volt Tackle+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "26_MEGA_Y": {
+        "dex": 26,
+        "name": "Mega Raichu Y",
+        "suffix": "Y",
+        "formStateId": "26_MEGA_Y",
+        "attack": "Zap Cannon+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_RAICHU_Y": {
+        "dex": 26,
+        "name": "Mega Raichu Y",
+        "suffix": "Y",
+        "formStateId": "26_MEGA_Y",
+        "attack": "Zap Cannon+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "65": {
+        "dex": 65,
+        "name": "Mega Alakazam",
+        "suffix": null,
+        "formStateId": "65",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_ALAKAZAM": {
+        "dex": 65,
+        "name": "Mega Alakazam",
+        "suffix": null,
+        "formStateId": "65",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "71": {
+        "dex": 71,
+        "name": "Mega Victreebel",
+        "suffix": null,
+        "formStateId": "71",
+        "attack": "Acid Spray+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_VICTREEBEL": {
+        "dex": 71,
+        "name": "Mega Victreebel",
+        "suffix": null,
+        "formStateId": "71",
+        "attack": "Acid Spray+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "80": {
+        "dex": 80,
+        "name": "Mega Slowbro",
+        "suffix": null,
+        "formStateId": "80",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SLOWBRO": {
+        "dex": 80,
+        "name": "Mega Slowbro",
+        "suffix": null,
+        "formStateId": "80",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "94": {
+        "dex": 94,
+        "name": "Mega Gengar",
+        "suffix": null,
+        "formStateId": "94",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GENGAR": {
+        "dex": 94,
+        "name": "Mega Gengar",
+        "suffix": null,
+        "formStateId": "94",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "115": {
+        "dex": 115,
+        "name": "Mega Kangaskhan",
+        "suffix": null,
+        "formStateId": "115",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_KANGASKHAN": {
+        "dex": 115,
+        "name": "Mega Kangaskhan",
+        "suffix": null,
+        "formStateId": "115",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "121": {
+        "dex": 121,
+        "name": "Mega Starmie",
+        "suffix": null,
+        "formStateId": "121",
+        "attack": "Liquidation+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_STARMIE": {
+        "dex": 121,
+        "name": "Mega Starmie",
+        "suffix": null,
+        "formStateId": "121",
+        "attack": "Liquidation+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "127": {
+        "dex": 127,
+        "name": "Mega Pinsir",
+        "suffix": null,
+        "formStateId": "127",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_PINSIR": {
+        "dex": 127,
+        "name": "Mega Pinsir",
+        "suffix": null,
+        "formStateId": "127",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "130": {
+        "dex": 130,
+        "name": "Mega Gyarados",
+        "suffix": null,
+        "formStateId": "130",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GYARADOS": {
+        "dex": 130,
+        "name": "Mega Gyarados",
+        "suffix": null,
+        "formStateId": "130",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "142": {
+        "dex": 142,
+        "name": "Mega Aerodactyl",
+        "suffix": null,
+        "formStateId": "142",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_AERODACTYL": {
+        "dex": 142,
+        "name": "Mega Aerodactyl",
+        "suffix": null,
+        "formStateId": "142",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "149": {
+        "dex": 149,
+        "name": "Mega Dragonite",
+        "suffix": null,
+        "formStateId": "149",
+        "attack": "Outrage+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_DRAGONITE": {
+        "dex": 149,
+        "name": "Mega Dragonite",
+        "suffix": null,
+        "formStateId": "149",
+        "attack": "Outrage+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "150_MEGA_X": {
+        "dex": 150,
+        "name": "Mega Mewtwo X",
+        "suffix": "X",
+        "formStateId": "150_MEGA_X",
+        "attack": "Dynamic Punch+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_MEWTWO_X": {
+        "dex": 150,
+        "name": "Mega Mewtwo X",
+        "suffix": "X",
+        "formStateId": "150_MEGA_X",
+        "attack": "Dynamic Punch+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "150_MEGA_Y": {
+        "dex": 150,
+        "name": "Mega Mewtwo Y",
+        "suffix": "Y",
+        "formStateId": "150_MEGA_Y",
+        "attack": "Future Sight+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_MEWTWO_Y": {
+        "dex": 150,
+        "name": "Mega Mewtwo Y",
+        "suffix": "Y",
+        "formStateId": "150_MEGA_Y",
+        "attack": "Future Sight+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "181": {
+        "dex": 181,
+        "name": "Mega Ampharos",
+        "suffix": null,
+        "formStateId": "181",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_AMPHAROS": {
+        "dex": 181,
+        "name": "Mega Ampharos",
+        "suffix": null,
+        "formStateId": "181",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "208": {
+        "dex": 208,
+        "name": "Mega Steelix",
+        "suffix": null,
+        "formStateId": "208",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_STEELIX": {
+        "dex": 208,
+        "name": "Mega Steelix",
+        "suffix": null,
+        "formStateId": "208",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "212": {
+        "dex": 212,
+        "name": "Mega Scizor",
+        "suffix": null,
+        "formStateId": "212",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SCIZOR": {
+        "dex": 212,
+        "name": "Mega Scizor",
+        "suffix": null,
+        "formStateId": "212",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "214": {
+        "dex": 214,
+        "name": "Mega Heracross",
+        "suffix": null,
+        "formStateId": "214",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_HERACROSS": {
+        "dex": 214,
+        "name": "Mega Heracross",
+        "suffix": null,
+        "formStateId": "214",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "227": {
+        "dex": 227,
+        "name": "Mega Skarmory",
+        "suffix": null,
+        "formStateId": "227",
+        "attack": "Drill Peck+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_SKARMORY": {
+        "dex": 227,
+        "name": "Mega Skarmory",
+        "suffix": null,
+        "formStateId": "227",
+        "attack": "Drill Peck+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "229": {
+        "dex": 229,
+        "name": "Mega Houndoom",
+        "suffix": null,
+        "formStateId": "229",
+        "attack": "Dark Pulse+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_HOUNDOOM": {
+        "dex": 229,
+        "name": "Mega Houndoom",
+        "suffix": null,
+        "formStateId": "229",
+        "attack": "Dark Pulse+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "248": {
+        "dex": 248,
+        "name": "Mega Tyranitar",
+        "suffix": null,
+        "formStateId": "248",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_TYRANITAR": {
+        "dex": 248,
+        "name": "Mega Tyranitar",
+        "suffix": null,
+        "formStateId": "248",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "254": {
+        "dex": 254,
+        "name": "Mega Sceptile",
+        "suffix": null,
+        "formStateId": "254",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SCEPTILE": {
+        "dex": 254,
+        "name": "Mega Sceptile",
+        "suffix": null,
+        "formStateId": "254",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "257": {
+        "dex": 257,
+        "name": "Mega Blaziken",
+        "suffix": null,
+        "formStateId": "257",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_BLAZIKEN": {
+        "dex": 257,
+        "name": "Mega Blaziken",
+        "suffix": null,
+        "formStateId": "257",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "260": {
+        "dex": 260,
+        "name": "Mega Swampert",
+        "suffix": null,
+        "formStateId": "260",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SWAMPERT": {
+        "dex": 260,
+        "name": "Mega Swampert",
+        "suffix": null,
+        "formStateId": "260",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "282": {
+        "dex": 282,
+        "name": "Mega Gardevoir",
+        "suffix": null,
+        "formStateId": "282",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GARDEVOIR": {
+        "dex": 282,
+        "name": "Mega Gardevoir",
+        "suffix": null,
+        "formStateId": "282",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "302": {
+        "dex": 302,
+        "name": "Mega Sableye",
+        "suffix": null,
+        "formStateId": "302",
+        "attack": "Night Shade+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_SABLEYE": {
+        "dex": 302,
+        "name": "Mega Sableye",
+        "suffix": null,
+        "formStateId": "302",
+        "attack": "Night Shade+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "303": {
+        "dex": 303,
+        "name": "Mega Mawile",
+        "suffix": null,
+        "formStateId": "303",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_MAWILE": {
+        "dex": 303,
+        "name": "Mega Mawile",
+        "suffix": null,
+        "formStateId": "303",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "306": {
+        "dex": 306,
+        "name": "Mega Aggron",
+        "suffix": null,
+        "formStateId": "306",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_AGGRON": {
+        "dex": 306,
+        "name": "Mega Aggron",
+        "suffix": null,
+        "formStateId": "306",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "308": {
+        "dex": 308,
+        "name": "Mega Medicham",
+        "suffix": null,
+        "formStateId": "308",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_MEDICHAM": {
+        "dex": 308,
+        "name": "Mega Medicham",
+        "suffix": null,
+        "formStateId": "308",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "310": {
+        "dex": 310,
+        "name": "Mega Manectric",
+        "suffix": null,
+        "formStateId": "310",
+        "attack": "Discharge+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_MANECTRIC": {
+        "dex": 310,
+        "name": "Mega Manectric",
+        "suffix": null,
+        "formStateId": "310",
+        "attack": "Discharge+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "319": {
+        "dex": 319,
+        "name": "Mega Sharpedo",
+        "suffix": null,
+        "formStateId": "319",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SHARPEDO": {
+        "dex": 319,
+        "name": "Mega Sharpedo",
+        "suffix": null,
+        "formStateId": "319",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "323": {
+        "dex": 323,
+        "name": "Mega Camerupt",
+        "suffix": null,
+        "formStateId": "323",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_CAMERUPT": {
+        "dex": 323,
+        "name": "Mega Camerupt",
+        "suffix": null,
+        "formStateId": "323",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "334": {
+        "dex": 334,
+        "name": "Mega Altaria",
+        "suffix": null,
+        "formStateId": "334",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_ALTARIA": {
+        "dex": 334,
+        "name": "Mega Altaria",
+        "suffix": null,
+        "formStateId": "334",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "354": {
+        "dex": 354,
+        "name": "Mega Banette",
+        "suffix": null,
+        "formStateId": "354",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_BANETTE": {
+        "dex": 354,
+        "name": "Mega Banette",
+        "suffix": null,
+        "formStateId": "354",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "359": {
+        "dex": 359,
+        "name": "Mega Absol",
+        "suffix": null,
+        "formStateId": "359",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_ABSOL": {
+        "dex": 359,
+        "name": "Mega Absol",
+        "suffix": null,
+        "formStateId": "359",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "362": {
+        "dex": 362,
+        "name": "Mega Glalie",
+        "suffix": null,
+        "formStateId": "362",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GLALIE": {
+        "dex": 362,
+        "name": "Mega Glalie",
+        "suffix": null,
+        "formStateId": "362",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "373": {
+        "dex": 373,
+        "name": "Mega Salamence",
+        "suffix": null,
+        "formStateId": "373",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_SALAMENCE": {
+        "dex": 373,
+        "name": "Mega Salamence",
+        "suffix": null,
+        "formStateId": "373",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "376": {
+        "dex": 376,
+        "name": "Mega Metagross",
+        "suffix": null,
+        "formStateId": "376",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_METAGROSS": {
+        "dex": 376,
+        "name": "Mega Metagross",
+        "suffix": null,
+        "formStateId": "376",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "380": {
+        "dex": 380,
+        "name": "Mega Latias",
+        "suffix": null,
+        "formStateId": "380",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_LATIAS": {
+        "dex": 380,
+        "name": "Mega Latias",
+        "suffix": null,
+        "formStateId": "380",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "381": {
+        "dex": 381,
+        "name": "Mega Latios",
+        "suffix": null,
+        "formStateId": "381",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_LATIOS": {
+        "dex": 381,
+        "name": "Mega Latios",
+        "suffix": null,
+        "formStateId": "381",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "384": {
+        "dex": 384,
+        "name": "Mega Rayquaza",
+        "suffix": null,
+        "formStateId": "384",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_RAYQUAZA": {
+        "dex": 384,
+        "name": "Mega Rayquaza",
+        "suffix": null,
+        "formStateId": "384",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "398": {
+        "dex": 398,
+        "name": "Mega Staraptor",
+        "suffix": null,
+        "formStateId": "398",
+        "attack": "Brave Bird+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_STARAPTOR": {
+        "dex": 398,
+        "name": "Mega Staraptor",
+        "suffix": null,
+        "formStateId": "398",
+        "attack": "Brave Bird+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "428": {
+        "dex": 428,
+        "name": "Mega Lopunny",
+        "suffix": null,
+        "formStateId": "428",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_LOPUNNY": {
+        "dex": 428,
+        "name": "Mega Lopunny",
+        "suffix": null,
+        "formStateId": "428",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "445": {
+        "dex": 445,
+        "name": "Mega Garchomp",
+        "suffix": null,
+        "formStateId": "445",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GARCHOMP": {
+        "dex": 445,
+        "name": "Mega Garchomp",
+        "suffix": null,
+        "formStateId": "445",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "448": {
+        "dex": 448,
+        "name": "Mega Lucario",
+        "suffix": null,
+        "formStateId": "448",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_LUCARIO": {
+        "dex": 448,
+        "name": "Mega Lucario",
+        "suffix": null,
+        "formStateId": "448",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "460": {
+        "dex": 460,
+        "name": "Mega Abomasnow",
+        "suffix": null,
+        "formStateId": "460",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_ABOMASNOW": {
+        "dex": 460,
+        "name": "Mega Abomasnow",
+        "suffix": null,
+        "formStateId": "460",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "475": {
+        "dex": 475,
+        "name": "Mega Gallade",
+        "suffix": null,
+        "formStateId": "475",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_GALLADE": {
+        "dex": 475,
+        "name": "Mega Gallade",
+        "suffix": null,
+        "formStateId": "475",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "531": {
+        "dex": 531,
+        "name": "Mega Audino",
+        "suffix": null,
+        "formStateId": "531",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_AUDINO": {
+        "dex": 531,
+        "name": "Mega Audino",
+        "suffix": null,
+        "formStateId": "531",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "609": {
+        "dex": 609,
+        "name": "Mega Chandelure",
+        "suffix": null,
+        "formStateId": "609",
+        "attack": "Ominous Wind+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_CHANDELURE": {
+        "dex": 609,
+        "name": "Mega Chandelure",
+        "suffix": null,
+        "formStateId": "609",
+        "attack": "Ominous Wind+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "652": {
+        "dex": 652,
+        "name": "Mega Chesnaught",
+        "suffix": null,
+        "formStateId": "652",
+        "attack": "Seed Bomb+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_CHESNAUGHT": {
+        "dex": 652,
+        "name": "Mega Chesnaught",
+        "suffix": null,
+        "formStateId": "652",
+        "attack": "Seed Bomb+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "655": {
+        "dex": 655,
+        "name": "Mega Delphox",
+        "suffix": null,
+        "formStateId": "655",
+        "attack": "Mystical Fire+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_DELPHOX": {
+        "dex": 655,
+        "name": "Mega Delphox",
+        "suffix": null,
+        "formStateId": "655",
+        "attack": "Mystical Fire+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "658": {
+        "dex": 658,
+        "name": "Mega Greninja",
+        "suffix": null,
+        "formStateId": "658",
+        "attack": "Surf+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_GRENINJA": {
+        "dex": 658,
+        "name": "Mega Greninja",
+        "suffix": null,
+        "formStateId": "658",
+        "attack": "Surf+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "687": {
+        "dex": 687,
+        "name": "Mega Malamar",
+        "suffix": null,
+        "formStateId": "687",
+        "attack": "Psybeam+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_MALAMAR": {
+        "dex": 687,
+        "name": "Mega Malamar",
+        "suffix": null,
+        "formStateId": "687",
+        "attack": "Psybeam+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "719": {
+        "dex": 719,
+        "name": "Mega Diancie",
+        "suffix": null,
+        "formStateId": "719",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "MEGA_DIANCIE": {
+        "dex": 719,
+        "name": "Mega Diancie",
+        "suffix": null,
+        "formStateId": "719",
+        "attack": "N/A",
+        "hasAttack": false,
+        "isAttackNA": true
+    },
+    "870": {
+        "dex": 870,
+        "name": "Mega Falinks",
+        "suffix": null,
+        "formStateId": "870",
+        "attack": "Brick Break+",
+        "hasAttack": true,
+        "isAttackNA": false
+    },
+    "MEGA_FALINKS": {
+        "dex": 870,
+        "name": "Mega Falinks",
+        "suffix": null,
+        "formStateId": "870",
+        "attack": "Brick Break+",
+        "hasAttack": true,
+        "isAttackNA": false
+    }
+}
