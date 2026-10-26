@@ -4951,29 +4951,24 @@ function renderActiveRotations() {
                             bBorder = 'rgba(239, 68, 68, 0.45)';
                         }
                         return `
-                            <div style="flex: 1; min-width: 32px; background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 4px; padding: 2px 3px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff;">${b.trainers}</span>
-                                <span style="font-size: 0.52rem; font-weight: 700; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+                            <div style="flex: 1; min-width: 0; background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 4px; padding: 2px 1px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 1px; overflow: hidden;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff; line-height: 1;">${b.trainers}</span>
+                                <span style="font-size: 0.44rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: clip; line-height: 1.1;">${b.status}</span>
                             </div>
                         `;
                     }).join('');
 
                     diffSectionHtml = `
-                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 5px 6px;">
+                        <div class="raid-difficulty-container" style="margin-top: 0.4rem; width: 100%; background: rgba(0, 0, 0, 0.22); border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 6px; padding: 4px 5px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 4px;">
-                                <div style="display: flex; align-items: center; gap: 4px;">
-                                    <span style="font-size: 0.65rem; font-weight: 800; color: ${vColor}; background: ${vBg}; border: 1px solid ${vBorder}; padding: 1px 5px; border-radius: 4px;">
-                                        ${verdict}
-                                    </span>
-                                    <span style="font-size: 0.62rem; color: var(--text-secondary); opacity: 0.85;" title="PokeBattler Estimator: ${roundedEst}">
-                                        ⚔️ ${roundedEst}
-                                    </span>
-                                </div>
+                                <span style="font-size: 0.65rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
+                                    <i class="fa-solid fa-calculator" style="font-size: 0.58rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
+                                </span>
                                 <span style="font-size: 0.62rem; font-weight: 700; color: #94a3b8;">
                                     <i class="fa-solid fa-users" style="font-size: 0.58rem;"></i> ${trainersNeeded} Needed
                                 </span>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 3px; width: 100%;">
+                            <div style="display: flex; align-items: center; gap: 2px; width: 100%;">
                                 ${boxesHtml}
                             </div>
                         </div>
