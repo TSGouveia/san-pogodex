@@ -8812,10 +8812,13 @@ function getEventLocation(ev) {
     // "Pokémon GO Wild Area 2026: Mexico City" -> "Mexico City"
     // "Pokémon GO Tour: Alola - Kaohsiung 2027" -> "Kaohsiung"
     // "Pokémon GO Tour: Alola - Los Angeles 2027" -> "Los Angeles"
-    const match = title.match(/(?:city safari|safari zone|wild area(?:\s+\d{4})?|go fest(?:\s+\d{4})?|go tour(?::\s*[^:\-]+)?)\s*[:\-–—]\s*([^(\d]+?)(?:\s+\d{4}|\s*\(|$)/i);
+    // "Pokémon Night Out 2026 - Los Angeles" -> "Los Angeles"
+    // "Pokémon Night Out 2026 - London" -> "London"
+    const match = title.match(/(?:city safari|safari zone|wild area(?:\s+\d{4})?|go fest(?:\s+\d{4})?|go tour(?::\s*[^:\-]+)?|night out(?:\s+\d{4})?)\s*[:\-–—]\s*([^(\d]+?)(?:\s+\d{4}|\s*\(|$)/i);
     if (match && match[1]) {
         let loc = match[1].trim().replace(/^[\-–—:\s]+|[\-–—:\s]+$/g, '');
         if (loc && loc.toLowerCase() !== 'global') {
+            if (loc.toLowerCase() === 'la') loc = 'Los Angeles';
             return loc;
         }
     }
@@ -8826,7 +8829,14 @@ function isEventMatchingLocation(ev) {
     const loc = getEventLocation(ev);
     if (currentEventLocation === 'all') return true;
     if (currentEventLocation === 'global') return loc === null;
-    return loc === currentEventLocation;
+    if (loc === currentEventLocation) return true;
+    if (loc && currentEventLocation) {
+        const normLoc = loc.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const normFilter = currentEventLocation.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (normLoc === normFilter) return true;
+        if ((normLoc === 'losangeles' || normLoc === 'la') && (normFilter === 'losangeles' || normFilter === 'la')) return true;
+    }
+    return false;
 }
 
 function updateEventsLocationDropdown() {
