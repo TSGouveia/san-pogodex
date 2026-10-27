@@ -48,17 +48,12 @@
                 "combatPower": null
             },
             {
-                "name": "Sinistea",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.icon.png",
+                "name": "Sinistea wearing a bow",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.fP_HALLOWEEN_2026_01.icon.png",
                 "shiny": true,
                 "min_cp": "452",
                 "max_cp": "488",
-                "combatPower": {
-                    "normal": {
-                        "min": 452,
-                        "max": 488
-                    }
-                }
+                "combatPower": null
             }
         ]
     },

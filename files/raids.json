@@ -332,7 +332,42 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10100.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/RAICHU_ALOLA_FORM",
         "pokebattlerSlug": "RAICHU_ALOLA_FORM",
-        "estimator": null
+        "estimator": 0.42,
+        "estimatedPlayers": 0.42,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.42
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.21
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.14
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.1
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.08
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.07
+            }
+        ]
     },
     {
         "name": "Alolan Muk",
@@ -643,7 +678,42 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/996.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/FRIGIBAX",
         "pokebattlerSlug": "FRIGIBAX",
-        "estimator": null
+        "estimator": 0.04,
+        "estimatedPlayers": 0.04,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.04
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.02
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.01
+            }
+        ]
     },
     {
         "name": "Incarnate Landorus",
