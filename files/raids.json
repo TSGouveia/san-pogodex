@@ -444,34 +444,34 @@
         ]
     },
     {
-        "name": "Axew",
+        "name": "Pikachu",
         "tier": "1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
+                "name": "electric",
+                "image": "https://leekduck.com/assets/img/types/electric.png"
             }
         ],
         "combatPower": {
             "normal": {
-                "min": 0,
-                "max": 782
+                "min": 493,
+                "max": 536
             },
             "boosted": {
-                "min": 0,
-                "max": 977
+                "min": 616,
+                "max": 670
             }
         },
         "boostedWeather": [
             {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
+                "name": "rainy",
+                "image": "https://leekduck.com/assets/img/weather/rainy.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/610.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/AXEW",
-        "pokebattlerSlug": "AXEW",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/PIKACHU",
+        "pokebattlerSlug": "PIKACHU",
         "estimator": 0.04,
         "estimatedPlayers": 0.04,
         "verdict": "SOLOABLE",
@@ -510,210 +510,35 @@
         ]
     },
     {
-        "name": "Goomy",
+        "name": "Antique Sinistea",
         "tier": "1-Star Raids",
         "canBeShiny": true,
         "types": [
             {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
             }
         ],
         "combatPower": {
             "normal": {
-                "min": 0,
-                "max": 557
+                "min": 603,
+                "max": 650
             },
             "boosted": {
-                "min": 0,
-                "max": 697
+                "min": 754,
+                "max": 813
             }
         },
         "boostedWeather": [
             {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/704.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/GOOMY",
-        "pokebattlerSlug": "GOOMY",
-        "estimator": 0.08,
-        "estimatedPlayers": 0.08,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.08
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.04
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.03
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.01
-            }
-        ]
-    },
-    {
-        "name": "Jangmo-o",
-        "tier": "1-Star Raids",
-        "canBeShiny": true,
-        "types": [
-            {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 0,
-                "max": 553
-            },
-            "boosted": {
-                "min": 0,
-                "max": 692
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/782.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/JANGMO_O",
-        "pokebattlerSlug": "JANGMO_O",
-        "estimator": 0.04,
-        "estimatedPlayers": 0.04,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.04
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.01
-            }
-        ]
-    },
-    {
-        "name": "Frigibax",
-        "tier": "1-Star Raids",
-        "canBeShiny": true,
-        "types": [
-            {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
-            },
-            {
-                "name": "ice",
-                "image": "https://leekduck.com/assets/img/types/ice.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 0,
-                "max": 712
-            },
-            "boosted": {
-                "min": 0,
-                "max": 891
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
-            },
-            {
-                "name": "snow",
-                "image": "https://leekduck.com/assets/img/weather/snow.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/996.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/FRIGIBAX",
-        "pokebattlerSlug": "FRIGIBAX",
-        "estimator": 0.04,
-        "estimatedPlayers": 0.04,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.04
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.01
-            }
-        ]
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/854.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/ANTIQUE_SINISTEA",
+        "pokebattlerSlug": "ANTIQUE_SINISTEA",
+        "estimator": null
     },
     {
         "name": "Incarnate Landorus",
