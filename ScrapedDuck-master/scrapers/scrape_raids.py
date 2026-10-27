@@ -105,6 +105,14 @@ def canonicalize_boss_name(name):
         return "Giratina (Altered Forme)"
     n = re.sub(r'\s+Raid Guide.*$', '', n, flags=re.IGNORECASE).strip()
     
+    # Normalize Antique / Phony Sinistea and Polteageist
+    n = re.sub(r'\bAntique\s+Sinistea\b', 'Sinistea', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bPhony\s+Sinistea\b', 'Sinistea', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bSinistea\s*\(?(Antique|Phony)(\s*Forme?)?\)?', 'Sinistea', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bAntique\s+Polteageist\b', 'Polteageist', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bPhony\s+Polteageist\b', 'Polteageist', n, flags=re.IGNORECASE)
+    n = re.sub(r'\bPolteageist\s*\(?(Antique|Phony)(\s*Forme?)?\)?', 'Polteageist', n, flags=re.IGNORECASE)
+
     # Standardize regional names to proper adjectives
     n = re.sub(r'\bAlola\b', 'Alolan', n, flags=re.IGNORECASE)
     n = re.sub(r'\bHisui\b', 'Hisuian', n, flags=re.IGNORECASE)
