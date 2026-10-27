@@ -293,7 +293,7 @@ def build_pokebattler_raid_url(boss_name, tier=None):
     slug = build_pokebattler_slug(boss_name, tier)
     return f"https://www.pokebattler.com/raids/{slug}" if slug else "https://www.pokebattler.com/raids"
 
-def scrape_pokebattler_estimator(slug):
+def scrape_pokebattler_estimator(slug, tier=None):
     if not slug:
         return None
     url = f"https://www.pokebattler.com/raids/{slug}"
@@ -312,7 +312,49 @@ def scrape_pokebattler_estimator(slug):
                         except Exception:
                             pass
     except Exception as e:
-        print(f"  Warning scraping estimator for {slug}: {e}")
+        print(f"  Warning scraping HTML estimator for {slug}: {e}")
+
+    # Fallback to PokeBattler Fight API if HTML has no table (e.g. single-page app render)
+    tier_map = {
+        "1-Star Raids": "RAID_LEVEL_1",
+        "3-Star Raids": "RAID_LEVEL_3",
+        "5-Star Raids": "RAID_LEVEL_5",
+        "Mega Raids": "RAID_LEVEL_MEGA",
+        "Shadow 1-Star Raids": "RAID_LEVEL_1_SHADOW",
+        "Shadow 3-Star Raids": "RAID_LEVEL_3_SHADOW",
+        "Shadow 5-Star Raids": "RAID_LEVEL_5_SHADOW",
+    }
+    tier_code = tier_map.get(tier)
+    if not tier_code:
+        if "MEGA" in slug:
+            tier_code = "RAID_LEVEL_MEGA"
+        else:
+            tier_code = "RAID_LEVEL_5"
+
+    try:
+        api_url = f"https://fight.pokebattler.com/raids/defenders/{slug}/levels/{tier_code}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM"
+        api_res = requests.get(api_url, headers=HEADERS, timeout=8)
+        if api_res.status_code == 200:
+            api_data = api_res.json()
+            attackers = api_data.get("attackers", [])
+            if attackers:
+                first = attackers[0]
+                by_move = first.get("byMove", [])
+                from collections import defaultdict
+                poke_ests = defaultdict(list)
+                for m in by_move:
+                    for d_entry in m.get("defenders", []):
+                        pid = d_entry.get("pokemonId")
+                        est = d_entry.get("total", {}).get("estimator")
+                        if est:
+                            poke_ests[pid].append(est)
+                if poke_ests:
+                    avg_ests = {pid: sum(ests) / len(ests) for pid, ests in poke_ests.items()}
+                    best_poke, best_val = min(avg_ests.items(), key=lambda x: x[1])
+                    return round(float(best_val), 2)
+    except Exception as e:
+        print(f"  Warning fetching API estimator for {slug} ({tier_code}): {e}")
+
     return None
 
 def build_pokebattler_max_url(boss_name):
@@ -791,23 +833,25 @@ def scrape_raids():
 
     # Fetch Pokebattler estimators in parallel for standard raid bosses
     print(f"  -> Fetching Pokebattler estimators for {len(bosses)} raid bosses...")
-    unique_slugs = list({b.get("pokebattlerSlug") for b in bosses if b.get("pokebattlerSlug")})
-    slug_to_estimator = {}
+    # Map (slug, tier) pairs so the API fallback has the exact tier
+    unique_boss_keys = list({(b.get("pokebattlerSlug"), b.get("tier")) for b in bosses if b.get("pokebattlerSlug")})
+    slug_tier_to_estimator = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-        future_to_slug = {executor.submit(scrape_pokebattler_estimator, s): s for s in unique_slugs}
-        for future in concurrent.futures.as_completed(future_to_slug):
-            slug = future_to_slug[future]
+        future_to_key = {executor.submit(scrape_pokebattler_estimator, s, t): (s, t) for s, t in unique_boss_keys}
+        for future in concurrent.futures.as_completed(future_to_key):
+            s, t = future_to_key[future]
             try:
                 est = future.result()
                 if est is not None:
-                    slug_to_estimator[slug] = est
+                    slug_tier_to_estimator[(s, t)] = est
             except Exception as e:
-                print(f"  Error fetching estimator for {slug}: {e}")
+                print(f"  Error fetching estimator for {s}: {e}")
 
     for b in bosses:
         s = b.get("pokebattlerSlug")
-        if s and s in slug_to_estimator:
-            est_val = slug_to_estimator[s]
+        t = b.get("tier")
+        if s and (s, t) in slug_tier_to_estimator:
+            est_val = slug_tier_to_estimator[(s, t)]
             b["estimator"] = est_val
             b["estimatedPlayers"] = est_val
             diff_info = compute_trainer_boxes(est_val)
