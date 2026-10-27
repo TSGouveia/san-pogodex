@@ -510,7 +510,7 @@
         ]
     },
     {
-        "name": "Antique Sinistea",
+        "name": "Sinistea",
         "tier": "1-Star Raids",
         "canBeShiny": true,
         "types": [
@@ -536,9 +536,44 @@
             }
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/854.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/ANTIQUE_SINISTEA",
-        "pokebattlerSlug": "ANTIQUE_SINISTEA",
-        "estimator": null
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/SINISTEA",
+        "pokebattlerSlug": "SINISTEA",
+        "estimator": 0.06,
+        "estimatedPlayers": 0.06,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.06
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.03
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.02
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.01
+            }
+        ]
     },
     {
         "name": "Incarnate Landorus",
