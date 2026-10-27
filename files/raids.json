@@ -1,12 +1,12 @@
 [
     {
-        "name": "Palkia",
+        "name": "Giratina (Origin Forme)",
         "tier": "5-Star Raids",
         "canBeShiny": true,
         "types": [
             {
-                "name": "water",
-                "image": "https://leekduck.com/assets/img/types/water.png"
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
             },
             {
                 "name": "dragon",
@@ -15,175 +15,311 @@
         ],
         "combatPower": {
             "normal": {
-                "min": 2190,
-                "max": 2280
+                "min": 2018,
+                "max": 2105
             },
             "boosted": {
-                "min": 2737,
-                "max": 2850
+                "min": 2523,
+                "max": 2631
             }
         },
         "boostedWeather": [
             {
-                "name": "rainy",
-                "image": "https://leekduck.com/assets/img/weather/rainy.png"
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
             },
             {
                 "name": "windy",
                 "image": "https://leekduck.com/assets/img/weather/windy.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/PALKIA",
-        "pokebattlerSlug": "PALKIA",
-        "estimator": 1.7,
-        "estimatedPlayers": 1.7,
-        "verdict": "EASY TRIO",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/GIRATINA_ORIGIN_FORM",
+        "pokebattlerSlug": "GIRATINA_ORIGIN_FORM",
+        "estimator": 1.4,
+        "estimatedPlayers": 1.4,
+        "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "EXTREME",
-                "ratio": 1.7
+                "status": "HARD",
+                "ratio": 1.4
             },
             {
                 "trainers": "2",
                 "status": "TIGHT",
-                "ratio": 0.85
+                "ratio": 0.7
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.57
+                "ratio": 0.47
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.42
+                "ratio": 0.35
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.34
+                "ratio": 0.28
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.28
+                "ratio": 0.23
             }
         ]
     },
     {
-        "name": "Mega Charizard X",
+        "name": "Mega Sableye",
         "tier": "Mega Raids",
         "canBeShiny": true,
         "types": [
             {
-                "name": "fire",
-                "image": "https://leekduck.com/assets/img/types/fire.png"
+                "name": "dark",
+                "image": "https://leekduck.com/assets/img/types/dark.png"
             },
             {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
             }
         ],
         "combatPower": {
             "normal": {
-                "min": 1574,
-                "max": 1651
+                "min": 789,
+                "max": 843
             },
             "boosted": {
-                "min": 1968,
-                "max": 2064
+                "min": 986,
+                "max": 1054
             }
         },
         "boostedWeather": [
             {
-                "name": "sunny",
-                "image": "https://leekduck.com/assets/img/weather/sunny.png"
-            },
-            {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10034.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/CHARIZARD_MEGA_X",
-        "pokebattlerSlug": "CHARIZARD_MEGA_X",
-        "estimator": 0.89,
-        "estimatedPlayers": 0.89,
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10066.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/SABLEYE_MEGA",
+        "pokebattlerSlug": "SABLEYE_MEGA",
+        "estimator": 1.21,
+        "estimatedPlayers": 1.21,
+        "verdict": "EASY DUO",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "HARD",
+                "ratio": 1.21
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.6
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.4
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.3
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.24
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.2
+            }
+        ]
+    },
+    {
+        "name": "Cofagrigus",
+        "tier": "3-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1231,
+                "max": 1299
+            },
+            "boosted": {
+                "min": 1539,
+                "max": 1624
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/563.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/COFAGRIGUS",
+        "pokebattlerSlug": "COFAGRIGUS",
+        "estimator": 0.62,
+        "estimatedPlayers": 0.62,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "TIGHT",
-                "ratio": 0.89
+                "status": "EASY",
+                "ratio": 0.62
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.45
+                "ratio": 0.31
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.3
+                "ratio": 0.21
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.22
+                "ratio": 0.15
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.18
+                "ratio": 0.12
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.15
+                "ratio": 0.1
             }
         ]
     },
     {
-        "name": "Mega Charizard Y",
-        "tier": "Mega Raids",
+        "name": "Trevenant",
+        "tier": "3-Star Raids",
         "canBeShiny": true,
         "types": [
             {
-                "name": "fire",
-                "image": "https://leekduck.com/assets/img/types/fire.png"
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
             },
             {
-                "name": "flying",
-                "image": "https://leekduck.com/assets/img/types/flying.png"
+                "name": "grass",
+                "image": "https://leekduck.com/assets/img/types/grass.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1390,
+                "max": 1462
+            },
+            "boosted": {
+                "min": 1738,
+                "max": 1828
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
+            },
+            {
+                "name": "sunny",
+                "image": "https://leekduck.com/assets/img/weather/sunny.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/709.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/TREVENANT",
+        "pokebattlerSlug": "TREVENANT",
+        "estimator": 0.38,
+        "estimatedPlayers": 0.38,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.38
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.19
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.13
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.1
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.08
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.06
+            }
+        ]
+    },
+    {
+        "name": "Dhelmise",
+        "tier": "3-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
+            },
+            {
+                "name": "grass",
+                "image": "https://leekduck.com/assets/img/types/grass.png"
             }
         ],
         "combatPower": {
             "normal": {
                 "min": 0,
-                "max": 1651
+                "max": 1685
             },
             "boosted": {
                 "min": 0,
-                "max": 2064
+                "max": 2107
             }
         },
         "boostedWeather": [
             {
-                "name": "sunny",
-                "image": "https://leekduck.com/assets/img/weather/sunny.png"
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
             },
             {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
+                "name": "sunny",
+                "image": "https://leekduck.com/assets/img/weather/sunny.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10035.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/CHARIZARD_MEGA_Y",
-        "pokebattlerSlug": "CHARIZARD_MEGA_Y",
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/781.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/DHELMISE",
+        "pokebattlerSlug": "DHELMISE",
         "estimator": 0.77,
         "estimatedPlayers": 0.77,
         "verdict": "SOLOABLE",
@@ -218,228 +354,6 @@
                 "trainers": "6+",
                 "status": "EASY",
                 "ratio": 0.13
-            }
-        ]
-    },
-    {
-        "name": "Alolan Ninetales",
-        "tier": "3-Star Raids",
-        "canBeShiny": true,
-        "types": [
-            {
-                "name": "ice",
-                "image": "https://leekduck.com/assets/img/types/ice.png"
-            },
-            {
-                "name": "fairy",
-                "image": "https://leekduck.com/assets/img/types/fairy.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1251,
-                "max": 1319
-            },
-            "boosted": {
-                "min": 1564,
-                "max": 1649
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "snow",
-                "image": "https://leekduck.com/assets/img/weather/snow.png"
-            },
-            {
-                "name": "cloudy",
-                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10104.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/NINETALES_ALOLA_FORM",
-        "pokebattlerSlug": "NINETALES_ALOLA_FORM",
-        "estimator": 0.07,
-        "estimatedPlayers": 0.07,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.07
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.04
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.02
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.01
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.01
-            }
-        ]
-    },
-    {
-        "name": "Alolan Raichu",
-        "tier": "3-Star Raids",
-        "canBeShiny": true,
-        "types": [
-            {
-                "name": "electric",
-                "image": "https://leekduck.com/assets/img/types/electric.png"
-            },
-            {
-                "name": "psychic",
-                "image": "https://leekduck.com/assets/img/types/psychic.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1238,
-                "max": 1306
-            },
-            "boosted": {
-                "min": 1548,
-                "max": 1633
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "rainy",
-                "image": "https://leekduck.com/assets/img/weather/rainy.png"
-            },
-            {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10100.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/RAICHU_ALOLA_FORM",
-        "pokebattlerSlug": "RAICHU_ALOLA_FORM",
-        "estimator": 0.42,
-        "estimatedPlayers": 0.42,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.42
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.21
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.14
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.1
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.08
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.07
-            }
-        ]
-    },
-    {
-        "name": "Alolan Muk",
-        "tier": "3-Star Raids",
-        "canBeShiny": true,
-        "types": [
-            {
-                "name": "poison",
-                "image": "https://leekduck.com/assets/img/types/poison.png"
-            },
-            {
-                "name": "dark",
-                "image": "https://leekduck.com/assets/img/types/dark.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1501,
-                "max": 1575
-            },
-            "boosted": {
-                "min": 1876,
-                "max": 1969
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "cloudy",
-                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-            },
-            {
-                "name": "fog",
-                "image": "https://leekduck.com/assets/img/weather/fog.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10113.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/MUK_ALOLA_FORM",
-        "pokebattlerSlug": "MUK_ALOLA_FORM",
-        "estimator": 0.51,
-        "estimatedPlayers": 0.51,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.51
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.26
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.17
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.13
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.1
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.09
             }
         ]
     },
