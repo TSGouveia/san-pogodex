@@ -98,44 +98,6 @@
         ]
     },
     {
-        "category": "Pokémon GO City Safari: Boston (Rescheduled) Tasks",
-        "task": "Catch 15 Pokémon",
-        "rewards": [
-            {
-                "name": "Mudbray",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm749.icon.png",
-                "shiny": true,
-                "min_cp": "764",
-                "max_cp": "811",
-                "combatPower": {
-                    "normal": {
-                        "min": 764,
-                        "max": 811
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO City Safari: Boston (Rescheduled) Tasks",
-        "task": "Catch 5 different species of Pokémon",
-        "rewards": [
-            {
-                "name": "Mudbray",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm749.icon.png",
-                "shiny": true,
-                "min_cp": "764",
-                "max_cp": "811",
-                "combatPower": {
-                    "normal": {
-                        "min": 764,
-                        "max": 811
-                    }
-                }
-            }
-        ]
-    },
-    {
         "category": "Catching Tasks",
         "task": "Catch 7 Pokémon",
         "rewards": [
