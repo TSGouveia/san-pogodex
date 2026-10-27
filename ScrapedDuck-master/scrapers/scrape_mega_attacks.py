@@ -3,9 +3,12 @@ import re
 import json
 import requests
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-}
+API_HEADERS = [
+    {"User-Agent": "SanPogodexBot/1.0 (https://github.com/TSGouveia/san-pogodex; contact@sanpogodex.com)"},
+    {"User-Agent": "MediaWiki/1.39.0 (https://bulbapedia.bulbagarden.net)"},
+    {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0"}
+]
+HEADERS = API_HEADERS[0]
 
 def load_fallback_mega_attacks():
     paths = [
@@ -28,10 +31,20 @@ def load_fallback_mega_attacks():
 def scrape_mega_attacks():
     print("Scraping Mega Evolution Attacks from Bulbapedia MediaWiki API...")
     url = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=Mega_Evolution_(GO)&prop=wikitext&format=json"
+    res = None
     try:
-        res = requests.get(url, headers=HEADERS, timeout=15)
-        if res.status_code != 200:
-            print(f"  Warning: Bulbapedia API returned status {res.status_code}. Using fallback database...")
+        for hdr in API_HEADERS:
+            try:
+                r = requests.get(url, headers=hdr, timeout=15)
+                if r.status_code == 200:
+                    res = r
+                    break
+            except Exception:
+                continue
+
+        if not res or res.status_code != 200:
+            status_desc = res.status_code if res else "connection failed"
+            print(f"  Warning: Bulbapedia API returned status {status_desc}. Using fallback database...")
             return load_fallback_mega_attacks()
         
         data = res.json()
