@@ -1,23 +1,13 @@
 [
     {
-        "eventID": "pokemon-go-city-safari-boston-2026-rescheduled",
-        "title": "Pokémon GO City Safari: Boston (Rescheduled)",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/city-safari-boston-2026.jpg",
-        "link": "https://leekduck.com/events/pokemon-go-city-safari-boston-2026-rescheduled/",
-        "start": "2026-10-24T10:00:00",
-        "end": "2026-10-25T18:00:00"
-    },
-    {
         "eventID": "max-mondays-2026-10-26",
         "title": "Dynamax Sableye during Max Monday",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
         "link": "https://leekduck.com/events/max-mondays-2026-10-26/",
-        "start": "2026-10-26T06:00:00.000",
-        "end": "2026-10-26T21:00:00.000"
+        "start": "2026-10-26T06:00:00",
+        "end": "2026-10-26T21:00:00"
     },
     {
         "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition",
