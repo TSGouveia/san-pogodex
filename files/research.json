@@ -1,20 +1,6 @@
 [
     {
         "category": "Pokémon GO Halloween 2026 Part I Tasks",
-        "task": "Win 3 raids",
-        "rewards": [
-            {
-                "name": "Pikachu wearing a hat and capelet",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm25.fHALLOWEEN_2026.icon.png",
-                "shiny": true,
-                "min_cp": "369",
-                "max_cp": "402",
-                "combatPower": null
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Halloween 2026 Part I Tasks",
         "task": "Catch 13 Ghost-type Pokémon",
         "rewards": [
             {
@@ -26,33 +12,19 @@
                 "combatPower": null
             },
             {
+                "name": "Piplup wearing a Halloween Mischief costume",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm393.cHALLOWEEN_2021_NOEVOLVE.icon.png",
+                "shiny": true,
+                "min_cp": "426",
+                "max_cp": "460",
+                "combatPower": null
+            },
+            {
                 "name": "Noibat wearing a headband",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/Headband Noibat.png",
                 "shiny": true,
                 "min_cp": "258",
                 "max_cp": "285",
-                "combatPower": null
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Halloween 2026 Part I Tasks",
-        "task": "Win a raid",
-        "rewards": [
-            {
-                "name": "Zubat wearing a top hat",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm41.fHALLOWEEN_2026_01.icon.png",
-                "shiny": true,
-                "min_cp": "258",
-                "max_cp": "285",
-                "combatPower": null
-            },
-            {
-                "name": "Sinistea wearing a bow",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.fP_HALLOWEEN_2026_01.icon.png",
-                "shiny": true,
-                "min_cp": "452",
-                "max_cp": "488",
                 "combatPower": null
             }
         ]
@@ -88,11 +60,71 @@
                 }
             },
             {
+                "name": "Pumpkaboo (Small)",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm710.fSMALL.icon.png",
+                "shiny": true,
+                "min_cp": "478",
+                "max_cp": "515",
+                "combatPower": null
+            },
+            {
                 "name": "Pumpkaboo (Average)",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm710.fAVERAGE.icon.png",
                 "shiny": true,
                 "min_cp": "486",
                 "max_cp": "523",
+                "combatPower": null
+            },
+            {
+                "name": "Pumpkaboo (Large)",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm710.fLARGE.icon.png",
+                "shiny": true,
+                "min_cp": "496",
+                "max_cp": "533",
+                "combatPower": null
+            },
+            {
+                "name": "Pumpkaboo (Super)",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm710.fSUPER.icon.png",
+                "shiny": true,
+                "min_cp": "498",
+                "max_cp": "536",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Win a raid",
+        "rewards": [
+            {
+                "name": "Zubat wearing a top hat",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm41.fHALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": null
+            },
+            {
+                "name": "Sinistea wearing a bow",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.fP_HALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "452",
+                "max_cp": "488",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part I Tasks",
+        "task": "Win 3 raids",
+        "rewards": [
+            {
+                "name": "Pikachu wearing a hat and capelet",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm25.fHALLOWEEN_2026.icon.png",
+                "shiny": true,
+                "min_cp": "369",
+                "max_cp": "402",
                 "combatPower": null
             }
         ]
