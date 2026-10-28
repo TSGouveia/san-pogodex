@@ -1,15 +1,5 @@
 [
     {
-        "eventID": "max-mondays-2026-10-26",
-        "title": "Dynamax Sableye during Max Monday",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
-        "link": "https://leekduck.com/events/max-mondays-2026-10-26/",
-        "start": "2026-10-26T06:00:00",
-        "end": "2026-10-26T21:00:00"
-    },
-    {
         "eventID": "gbl-twilight-trails_ultra-league_master-league-mega-edition_fantasy-cup-great-league-edition",
         "title": "Ultra League, Master League: Mega Edition, and Fantasy Cup: Great League Edition | Twilight Trails",
         "type": "",
@@ -26,8 +16,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
         "link": "https://leekduck.com/events/mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026/",
-        "start": "2026-10-21T06:00:00.000",
-        "end": "2026-10-27T22:00:00.000"
+        "start": "2026-10-21T06:00:00",
+        "end": "2026-10-27T22:00:00"
     },
     {
         "eventID": "palkia-in-5-star-raid-battles-october-2026",
@@ -36,8 +26,8 @@
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/palkiaraid.jpg",
         "link": "https://leekduck.com/events/palkia-in-5-star-raid-battles-october-2026/",
-        "start": "2026-10-21T06:00:00.000",
-        "end": "2026-10-27T22:00:00.000"
+        "start": "2026-10-21T06:00:00",
+        "end": "2026-10-27T22:00:00"
     },
     {
         "eventID": "raidhour20261028",
@@ -280,6 +270,16 @@
         "end": "2026-11-18T19:00:00.000"
     },
     {
+        "eventID": "pokemonspotlighthour2026-11-19",
+        "title": "Grookey, Scorbunny, and Sobble Spotlight Hour",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
+        "link": "https://leekduck.com/events/pokemonspotlighthour2026-11-19/",
+        "start": "2026-11-19T18:00:00.000",
+        "end": "2026-11-19T19:00:00.000"
+    },
+    {
         "eventID": "minior-showers-leonids-2026",
         "title": "Minior Showers: Leonids 2026",
         "type": "",
@@ -288,6 +288,16 @@
         "link": "https://leekduck.com/events/minior-showers-leonids-2026/",
         "start": "2026-11-14T17:00:00.000",
         "end": "2026-11-19T23:59:00.000"
+    },
+    {
+        "eventID": "eternamax-eternatus-max-battles-2026",
+        "title": "Eternamax Eternatus Returns",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-11-16-dynamax-trails-2026/dynamax-trails-2026.jpg",
+        "link": "https://leekduck.com/events/eternamax-eternatus-max-battles-2026/",
+        "start": "2026-11-21T11:00:00.000",
+        "end": "2026-11-21T14:00:00.000"
     },
     {
         "eventID": "november-communityday2026",
@@ -304,7 +314,7 @@
         "title": "Dynamax Trails",
         "type": "",
         "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-11-16-dynamax-trails-2026/dynamax-trails-2026.jpg",
         "link": "https://leekduck.com/events/dynamax-trails-2026/",
         "start": "2026-11-16T10:00:00.000",
         "end": "2026-11-23T20:00:00.000"
