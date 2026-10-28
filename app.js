@@ -7330,7 +7330,7 @@ function renderMegaEnergyPane() {
                     const cleanKey = displayName.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
                     const attackInfo = megaAttacksDatabase[formStateId] || megaAttacksDatabase[cleanKey] || megaAttacksDatabase[String(baseDbPoke.id)] || null;
                     const megaAttackName = attackInfo ? attackInfo.attack : null;
-                    const isLevel4Locked = attackInfo ? Boolean(attackInfo.isAttackNA) : false;
+                    const isLevel4Locked = isPrimal ? true : (attackInfo ? Boolean(attackInfo.isAttackNA) : false);
 
                     // Mega Types
                     const formTypes = [
@@ -7377,7 +7377,7 @@ function renderMegaEnergyPane() {
             const cleanKeyFallback = fallbackName.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_+|_+$/g, '');
             const attackInfoFallback = megaAttacksDatabase[String(p.id)] || megaAttacksDatabase[cleanKeyFallback] || null;
             const fallbackAttack = attackInfoFallback ? attackInfoFallback.attack : null;
-            const fallbackL4Locked = attackInfoFallback ? Boolean(attackInfoFallback.isAttackNA) : false;
+            const fallbackL4Locked = isPrimal ? true : (attackInfoFallback ? Boolean(attackInfoFallback.isAttackNA) : false);
 
             megaForms.push({
                 formStateId: String(p.id),
@@ -7569,10 +7569,10 @@ function renderMegaEnergyPane() {
                 </div>
 
                 ${data.isLevel4Locked ? `
-                    <!-- Mega Level 4 Not Released: Do not show Level 4 goal row -->
+                    <!-- Level 4 Not Released / Not Applicable -->
                     <div style="margin-top: 4px; padding: 5px 8px; border-radius: 6px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); display: flex; align-items: center; justify-content: space-between; font-size: 0.68rem; font-weight: 800; color: #f59e0b;">
-                        <span><i class="fa-solid fa-lock"></i> Mega Level 4 Not Released</span>
-                        <span style="opacity: 0.8; font-size: 0.62rem; font-weight: 600;">Attack N/A</span>
+                        <span><i class="fa-solid fa-lock"></i> ${data.isPrimal ? 'Primal Level 4 Not Applicable' : 'Mega Level 4 Not Released'}</span>
+                        <span style="opacity: 0.8; font-size: 0.62rem; font-weight: 600;">${data.isPrimal ? 'No Plus Move' : 'Attack N/A'}</span>
                     </div>
                 ` : `
                     <!-- Stage 3: Level 4 Milestone (Ultimate Goal) -->
