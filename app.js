@@ -7332,6 +7332,12 @@ function renderMegaEnergyPane() {
                     const megaAttackName = attackInfo ? attackInfo.attack : null;
                     const isLevel4Locked = attackInfo ? Boolean(attackInfo.isAttackNA) : false;
 
+                    // Mega Types
+                    const formTypes = [
+                        mData.primaryType && mData.primaryType.names ? mData.primaryType.names.English.toLowerCase() : (mData.primaryType && mData.primaryType.type ? mData.primaryType.type.replace('POKEMON_TYPE_', '').toLowerCase() : null),
+                        mData.secondaryType && mData.secondaryType.names ? mData.secondaryType.names.English.toLowerCase() : (mData.secondaryType && mData.secondaryType.type ? mData.secondaryType.type.replace('POKEMON_TYPE_', '').toLowerCase() : null)
+                    ].filter(Boolean);
+
                     megaForms.push({
                         formStateId,
                         megaKey,
@@ -7339,6 +7345,7 @@ function renderMegaEnergyPane() {
                         basePoke: baseDbPoke,
                         dexNr: Number(rawP.dexNr),
                         name: displayName,
+                        types: formTypes.length > 0 ? formTypes : (baseDbPoke.types || []),
                         img: formImg,
                         buddyDist,
                         energyPerWalk,
@@ -7379,6 +7386,7 @@ function renderMegaEnergyPane() {
                 basePoke: p,
                 dexNr: Number(p.id),
                 name: fallbackName,
+                types: p.types || [],
                 img: formImg,
                 buddyDist,
                 energyPerWalk,
@@ -7397,7 +7405,8 @@ function renderMegaEnergyPane() {
         filteredList = filteredList.filter(m =>
             m.name.toLowerCase().includes(currentSearchQuery) ||
             m.basePoke.name.toLowerCase().includes(currentSearchQuery) ||
-            String(m.dexNr).includes(currentSearchQuery)
+            String(m.dexNr).includes(currentSearchQuery) ||
+            (m.types && m.types.some(t => t.toLowerCase().includes(currentSearchQuery)))
         );
     }
 
@@ -7523,7 +7532,12 @@ function renderMegaEnergyPane() {
                             ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
-                        <div class="family-buddy-dist">Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</div>
+                        <div class="family-buddy-dist" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 3px;">
+                            <span>Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</span>
+                            <div class="types-container" style="display: inline-flex; gap: 4px; width: auto; justify-content: flex-start;">
+                                ${(data.types || []).map(t => `<span class="type-badge type-${t}" style="font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">${t}</span>`).join('')}
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="candy-input-wrapper">
