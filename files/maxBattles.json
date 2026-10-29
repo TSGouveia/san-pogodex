@@ -1,5 +1,79 @@
 [
     {
+        "name": "Dynamax Dialga",
+        "tier": "Max Battles (5 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_DIALGA",
+        "types": [
+            {
+                "name": "steel",
+                "image": "https://leekduck.com/assets/img/types/steel.png"
+            },
+            {
+                "name": "dragon",
+                "image": "https://leekduck.com/assets/img/types/dragon.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 2217,
+                "max": 2307
+            },
+            "boosted": {
+                "min": 2771,
+                "max": 2884
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "snow",
+                "image": "https://leekduck.com/assets/img/weather/snow.png"
+            },
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/483.png"
+    },
+    {
+        "name": "Dynamax Palkia",
+        "tier": "Max Battles (5 Max)",
+        "canBeShiny": true,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_PALKIA",
+        "types": [
+            {
+                "name": "water",
+                "image": "https://leekduck.com/assets/img/types/water.png"
+            },
+            {
+                "name": "dragon",
+                "image": "https://leekduck.com/assets/img/types/dragon.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 2190,
+                "max": 2280
+            },
+            "boosted": {
+                "min": 2737,
+                "max": 2850
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "rainy",
+                "image": "https://leekduck.com/assets/img/weather/rainy.png"
+            },
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png"
+    },
+    {
         "name": "Dynamax Beldum",
         "tier": "Max Battles (3 Max)",
         "canBeShiny": true,
@@ -1563,6 +1637,43 @@
             }
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/831.png"
+    },
+    {
+        "name": "Gigantamax Duraludon",
+        "tier": "Max Battles (6 Max)",
+        "canBeShiny": false,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DURALUDON_GIGANTAMAX",
+        "types": [
+            {
+                "name": "steel",
+                "image": "https://leekduck.com/assets/img/types/steel.png"
+            },
+            {
+                "name": "dragon",
+                "image": "https://leekduck.com/assets/img/types/dragon.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1674,
+                "max": 1753
+            },
+            "boosted": {
+                "min": 2092,
+                "max": 2191
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "snow",
+                "image": "https://leekduck.com/assets/img/weather/snow.png"
+            },
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10225.png"
     },
     {
         "name": "Dynamax Duraludon",
