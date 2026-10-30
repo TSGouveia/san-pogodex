@@ -172,42 +172,7 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/563.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/COFAGRIGUS",
         "pokebattlerSlug": "COFAGRIGUS",
-        "estimator": 0.62,
-        "estimatedPlayers": 0.62,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.62
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.31
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.21
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.15
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.12
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.1
-            }
-        ]
+        "estimator": null
     },
     {
         "name": "Trevenant",
@@ -246,42 +211,7 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/709.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/TREVENANT",
         "pokebattlerSlug": "TREVENANT",
-        "estimator": 0.38,
-        "estimatedPlayers": 0.38,
-        "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
-        "trainerBoxes": [
-            {
-                "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.38
-            },
-            {
-                "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.19
-            },
-            {
-                "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.13
-            },
-            {
-                "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.1
-            },
-            {
-                "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.08
-            },
-            {
-                "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.06
-            }
-        ]
+        "estimator": null
     },
     {
         "name": "Dhelmise",
@@ -505,11 +435,11 @@
         ],
         "combatPower": {
             "normal": {
-                "min": 1861,
+                "min": 1897,
                 "max": 2050
             },
             "boosted": {
-                "min": 2326,
+                "min": 2372,
                 "max": 2563
             }
         },
