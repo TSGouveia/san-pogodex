@@ -581,6 +581,46 @@
                     </div>
                 </div>
 
+                <!-- Mega Type Coverage / Favorite Tracker -->
+                <div class="mega-type-coverage-card" id="mega-type-coverage-card" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(30, 41, 59, 0.4) 100%); border: 1px solid rgba(236, 72, 153, 0.25); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.6rem;">
+                            <i class="fa-solid fa-shield-halved" style="color: #ec4899; font-size: 1.15rem;"></i>
+                            <div>
+                                <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                                    Mega Type Coverage
+                                    <span id="mega-coverage-badge" style="background: rgba(236, 72, 153, 0.2); color: #ec4899; font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; font-weight: 800;">0 / 18</span>
+                                </h3>
+                                <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: #94a3b8;">
+                                    Favorite Megas (click &#9733;) to cover Pokémon catch bonus types.
+                                </p>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <button id="btn-filter-mega-favorites" class="subnav-btn" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fa-solid fa-star" style="color: #fbbf24;"></i>
+                                <span>Favorites Only</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Missing Types Section -->
+                    <div style="margin-bottom: 0.6rem;">
+                        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: #ef4444; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-circle-exclamation"></i> Uncovered Types (<span id="mega-uncovered-count">18</span>):
+                        </div>
+                        <div id="mega-uncovered-types-list" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; align-items: center;"></div>
+                    </div>
+
+                    <!-- Covered Types Section -->
+                    <div>
+                        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: #10b981; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 4px;">
+                            <i class="fa-solid fa-circle-check"></i> Covered Types (<span id="mega-covered-count">0</span>):
+                        </div>
+                        <div id="mega-covered-types-list" style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; align-items: center;"></div>
+                    </div>
+                </div>
+
                 <!-- Mega Energy Summary Bar -->
                 <div class="candies-summary-bar" style="background: rgba(236, 72, 153, 0.05); border: 1px solid rgba(236, 72, 153, 0.15); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; font-size: 0.85rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">

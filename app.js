@@ -631,6 +631,9 @@ let userCandies = {};
 let userMegaEnergy = {};
 let userMegaLevel3 = new Set();
 let userMegaLevel4 = new Set();
+let userMegaFavorites = new Set();
+let megaFavoritesOnly = false;
+const ALL_POKEMON_TYPES = ['normal', 'fire', 'water', 'grass', 'electric', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'steel', 'dark', 'fairy'];
 let completedBuddyQuests = new Set();
 let currentBuddyWalkSubTab = 'candies'; // 'candies' | 'mega-energy'
 let currentUser = null;
@@ -5971,6 +5974,18 @@ function loadMegaEnergyState() {
         console.error("Failed to load mega level 4 state:", e);
         userMegaLevel4 = new Set();
     }
+
+    try {
+        const storedFavs = localStorage.getItem('pogo_user_mega_favorites');
+        if (storedFavs) {
+            userMegaFavorites = new Set(JSON.parse(storedFavs).map(String));
+        } else {
+            userMegaFavorites = new Set();
+        }
+    } catch (e) {
+        console.error("Failed to load mega favorites state:", e);
+        userMegaFavorites = new Set();
+    }
 }
 
 let saveMegaCloudTimeout = null;
@@ -5994,6 +6009,14 @@ function saveMegaLevelState() {
     if (friendViewModeActive) return;
     localStorage.setItem('pogo_user_mega_level3', JSON.stringify(Array.from(userMegaLevel3).map(String)));
     localStorage.setItem('pogo_user_mega_level4', JSON.stringify(Array.from(userMegaLevel4).map(String)));
+    if (currentUser) {
+        saveUserDataToFirestore();
+    }
+}
+
+function saveMegaFavoritesState() {
+    if (friendViewModeActive) return;
+    localStorage.setItem('pogo_user_mega_favorites', JSON.stringify(Array.from(userMegaFavorites).map(String)));
     if (currentUser) {
         saveUserDataToFirestore();
     }
@@ -6024,6 +6047,7 @@ async function saveUserDataToFirestore() {
             megaEnergy: userMegaEnergy,
             megaLevel3: Array.from(userMegaLevel3).map(x => String(x)),
             megaLevel4: Array.from(userMegaLevel4).map(x => String(x)),
+            megaFavorites: Array.from(userMegaFavorites).map(x => String(x)),
             transferred: Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x))),
             completedQuests: Array.from(completedBuddyQuests).map(x => String(x)),
             updatedAt: new Date().toISOString()
@@ -6057,6 +6081,7 @@ async function loadUserDataFromFirestore(user) {
             const cloudMegaEnergy = data.megaEnergy || {};
             const cloudMegaL3 = data.megaLevel3 || [];
             const cloudMegaL4 = data.megaLevel4 || [];
+            const cloudMegaFavs = data.megaFavorites || [];
             const cloudTransferred = data.transferred || [];
             const cloudQuests = data.completedQuests || [];
             
@@ -6068,6 +6093,7 @@ async function loadUserDataFromFirestore(user) {
             const mergedMegaEnergy = { ...userMegaEnergy, ...cloudMegaEnergy };
             const mergedMegaL3 = new Set([...userMegaLevel3, ...cloudMegaL3.map(x => String(x))]);
             const mergedMegaL4 = new Set([...userMegaLevel4, ...cloudMegaL4.map(x => String(x))]);
+            const mergedMegaFavs = new Set([...userMegaFavorites, ...cloudMegaFavs.map(x => String(x))]);
 
             // Union of local and cloud transferred Pokemon
             const mergedTransferred = new Set([...transferredPokemon, ...cloudTransferred.map(x => (isNaN(Number(x)) ? x : Number(x)))]);
@@ -6086,6 +6112,7 @@ async function loadUserDataFromFirestore(user) {
             userMegaEnergy = mergedMegaEnergy;
             userMegaLevel3 = mergedMegaL3;
             userMegaLevel4 = mergedMegaL4;
+            userMegaFavorites = mergedMegaFavs;
             transferredPokemon = mergedTransferred;
             completedBuddyQuests = mergedQuests;
 
@@ -6105,6 +6132,7 @@ async function loadUserDataFromFirestore(user) {
             localStorage.setItem('pogo_user_mega_energy', JSON.stringify(userMegaEnergy));
             localStorage.setItem('pogo_user_mega_level3', JSON.stringify(Array.from(userMegaLevel3).map(String)));
             localStorage.setItem('pogo_user_mega_level4', JSON.stringify(Array.from(userMegaLevel4).map(String)));
+            localStorage.setItem('pogo_user_mega_favorites', JSON.stringify(Array.from(userMegaFavorites).map(String)));
             localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
             localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
             
@@ -6175,6 +6203,7 @@ onAuthStateChanged(auth, async (user) => {
                     userMegaEnergy = {};
                     userMegaLevel3 = new Set();
                     userMegaLevel4 = new Set();
+                    userMegaFavorites = new Set();
                     loadCaughtState();
                     loadCandyState();
                     loadMegaEnergyState();
@@ -7238,6 +7267,95 @@ function renderCandiesPane() {
 }
 
 // ==========================================================================
+
+// ==========================================================================
+// MEGA TYPE COVERAGE HELPER
+// ==========================================================================
+function updateMegaTypeCoverage(allMegaForms) {
+    const badgeEl = document.getElementById('mega-coverage-badge');
+    const uncoveredCountEl = document.getElementById('mega-uncovered-count');
+    const coveredCountEl = document.getElementById('mega-covered-count');
+    const uncoveredListEl = document.getElementById('mega-uncovered-types-list');
+    const coveredListEl = document.getElementById('mega-covered-types-list');
+    const filterFavsBtn = document.getElementById('btn-filter-mega-favorites');
+
+    if (filterFavsBtn) {
+        if (megaFavoritesOnly) {
+            filterFavsBtn.classList.add('active');
+            filterFavsBtn.style.background = 'rgba(251, 191, 36, 0.25)';
+            filterFavsBtn.style.borderColor = 'rgba(251, 191, 36, 0.6)';
+            filterFavsBtn.style.color = '#fbbf24';
+        } else {
+            filterFavsBtn.classList.remove('active');
+            filterFavsBtn.style.background = '';
+            filterFavsBtn.style.borderColor = '';
+            filterFavsBtn.style.color = '';
+        }
+    }
+
+    if (!badgeEl || !uncoveredListEl || !coveredListEl) return;
+
+    // Find all types covered by favorited Megas
+    // Map of type -> array of favorite mega forms that cover it
+    const coveredTypeMap = {};
+    ALL_POKEMON_TYPES.forEach(t => { coveredTypeMap[t] = []; });
+
+    allMegaForms.forEach(form => {
+        const isFav = userMegaFavorites.has(form.formStateId) || userMegaFavorites.has(String(form.basePoke.id));
+        if (isFav) {
+            (form.types || []).forEach(t => {
+                const lower = t.toLowerCase();
+                if (coveredTypeMap[lower]) {
+                    coveredTypeMap[lower].push(form);
+                }
+            });
+        }
+    });
+
+    const coveredTypes = ALL_POKEMON_TYPES.filter(t => coveredTypeMap[t].length > 0);
+    const uncoveredTypes = ALL_POKEMON_TYPES.filter(t => coveredTypeMap[t].length === 0);
+
+    badgeEl.textContent = `${coveredTypes.length} / ${ALL_POKEMON_TYPES.length}`;
+    if (coveredTypes.length === ALL_POKEMON_TYPES.length) {
+        badgeEl.style.background = 'rgba(16, 185, 129, 0.25)';
+        badgeEl.style.color = 'var(--accent-green)';
+    } else {
+        badgeEl.style.background = 'rgba(236, 72, 153, 0.2)';
+        badgeEl.style.color = '#ec4899';
+    }
+
+    if (uncoveredCountEl) uncoveredCountEl.textContent = uncoveredTypes.length;
+    if (coveredCountEl) coveredCountEl.textContent = coveredTypes.length;
+
+    // Render Uncovered Badges
+    if (uncoveredTypes.length === 0) {
+        uncoveredListEl.innerHTML = '<span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 600;"><i class="fa-solid fa-trophy"></i> Perfect! All 18 Types are Covered by your Favorites!</span>';
+    } else {
+        uncoveredListEl.innerHTML = uncoveredTypes.map(t => `
+            <span class="type-badge type-${t}" style="font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: capitalize; opacity: 0.95; border: 1px solid rgba(255,255,255,0.2);">
+                <i class="fa-solid fa-xmark" style="font-size: 0.65rem; margin-right: 4px; opacity: 0.7;"></i>${t}
+            </span>
+        `).join('');
+    }
+
+    // Render Covered Badges
+    if (coveredTypes.length === 0) {
+        coveredListEl.innerHTML = '<span style="color: #64748b; font-size: 0.8rem; font-style: italic;">No types covered yet. Click ★ on your favorite Megas below to start tracking coverage.</span>';
+    } else {
+        coveredListEl.innerHTML = coveredTypes.map(t => {
+            const megas = coveredTypeMap[t];
+            const tooltipNames = megas.map(m => m.name).join(', ');
+            return `
+                <span class="type-badge type-${t}" title="Covered by: ${tooltipNames}" style="font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); text-transform: capitalize; display: inline-flex; align-items: center; gap: 5px; border: 1px solid rgba(16, 185, 129, 0.7);">
+                    <i class="fa-solid fa-check" style="font-size: 0.65rem; color: #10b981;"></i>
+                    <strong>${t}</strong>
+                    <span style="background: rgba(0,0,0,0.35); font-size: 0.65rem; padding: 1px 5px; border-radius: 10px; opacity: 0.9;">${megas.length}</span>
+                </span>
+            `;
+        }).join('');
+    }
+}
+
 // MEGA ENERGY & MEGA LEVEL 4 CALCULATOR
 // ==========================================================================
 function renderMegaEnergyPane() {
@@ -7428,12 +7546,14 @@ function renderMegaEnergyPane() {
             isCaughtMega = megaCaughtSet.has(`${item.basePoke.id}_MEGA_${item.suffix}`);
         }
 
+        const isFavorite = userMegaFavorites.has(item.formStateId) || userMegaFavorites.has(String(item.basePoke.id));
         const energyNeeded = Math.max(0, GOAL_ENERGY - currentEnergy);
         const walksNeeded = Math.ceil(energyNeeded / item.energyPerWalk);
         const kmNeeded = energyNeeded > 0 ? (walksNeeded * item.buddyDist) : 0;
 
         return {
             ...item,
+            isFavorite,
             currentEnergy,
             hasLevel3,
             hasLevel4,
@@ -7443,6 +7563,12 @@ function renderMegaEnergyPane() {
             kmNeeded
         };
     });
+
+    // Update Mega Type Coverage UI (computed across all mega forms)
+    updateMegaTypeCoverage(megaForms);
+
+    // Filter by Favorites Only if toggled
+    const displayMegaList = megaFavoritesOnly ? megaDataList.filter(m => m.isFavorite) : megaDataList;
 
     // 4. Calculate Totals for Summary Bar
     let totalMegaKm = 0;
@@ -7467,7 +7593,7 @@ function renderMegaEnergyPane() {
     if (totalCompletedEl) totalCompletedEl.textContent = `${completedCount} / ${megaDataList.length}`;
 
     // 5. Apply Sorting
-    megaDataList.sort((a, b) => {
+    displayMegaList.sort((a, b) => {
         if (sortOrder === 'num-asc') {
             return a.dexNr - b.dexNr;
         } else if (sortOrder === 'name-asc') {
@@ -7496,7 +7622,7 @@ function renderMegaEnergyPane() {
     let completedSectionCount = 0;
     let unreleasedCount = 0;
 
-    megaDataList.forEach(data => {
+    displayMegaList.forEach(data => {
         const card = document.createElement('div');
         card.className = data.isUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
 
@@ -7540,9 +7666,14 @@ function renderMegaEnergyPane() {
                         </div>
                     </div>
                 </div>
-                <div class="candy-input-wrapper">
-                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
-                    <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Unfavorite Mega (Click to remove from Type Coverage)' : 'Favorite Mega (Click to cover its Types!)'}" style="background: ${data.isFavorite ? 'rgba(251, 191, 36, 0.2)' : 'rgba(255, 255, 255, 0.05)'}; border: 1px solid ${data.isFavorite ? 'rgba(251, 191, 36, 0.7)' : 'rgba(255, 255, 255, 0.15)'}; color: ${data.isFavorite ? '#fbbf24' : '#64748b'}; border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem;">
+                        <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
+                    </button>
+                    <div class="candy-input-wrapper">
+                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
+                        <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
+                    </div>
                 </div>
             </div>
 
@@ -7628,6 +7759,24 @@ function renderMegaEnergyPane() {
             });
             energyInput.addEventListener('change', () => {
                 saveMegaEnergyState(false);
+                renderMegaEnergyPane();
+            });
+        }
+
+        // Favorite star button toggle
+        const favBtn = card.querySelector('.mega-favorite-btn');
+        if (friendViewModeActive && favBtn) favBtn.disabled = true;
+        if (favBtn) {
+            favBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (userMegaFavorites.has(data.formStateId)) {
+                    userMegaFavorites.delete(data.formStateId);
+                    userMegaFavorites.delete(String(data.basePoke.id));
+                } else {
+                    userMegaFavorites.add(data.formStateId);
+                }
+                saveMegaFavoritesState();
                 renderMegaEnergyPane();
             });
         }
@@ -7742,6 +7891,14 @@ function setupBuddyWalkSubnav() {
 
     if (megaSortSelect) {
         megaSortSelect.addEventListener('change', () => {
+            renderMegaEnergyPane();
+        });
+    }
+
+    const filterFavsBtn = document.getElementById('btn-filter-mega-favorites');
+    if (filterFavsBtn) {
+        filterFavsBtn.addEventListener('click', () => {
+            megaFavoritesOnly = !megaFavoritesOnly;
             renderMegaEnergyPane();
         });
     }
@@ -11335,6 +11492,7 @@ let friendViewBackupCandies = null;
 let friendViewBackupMegaEnergy = null;
 let friendViewBackupMegaL3 = null;
 let friendViewBackupMegaL4 = null;
+let friendViewBackupMegaFavs = null;
 let friendViewBackupQuests = null;
 let friendViewFriendName = '';
 
@@ -11358,6 +11516,7 @@ async function openFriendPokedex(friend) {
         const friendMegaEnergyObj = data.megaEnergy || {};
         const friendMegaL3Array = data.megaLevel3 || [];
         const friendMegaL4Array = data.megaLevel4 || [];
+        const friendMegaFavsArray = data.megaFavorites || [];
         const friendQuestsArray = data.completedQuests || [];
 
         // Save backup of current user's local state
@@ -11372,6 +11531,7 @@ async function openFriendPokedex(friend) {
             friendViewBackupMegaEnergy = { ...userMegaEnergy };
             friendViewBackupMegaL3 = new Set(userMegaLevel3);
             friendViewBackupMegaL4 = new Set(userMegaLevel4);
+            friendViewBackupMegaFavs = new Set(userMegaFavorites);
             friendViewBackupQuests = new Set(completedBuddyQuests);
         }
 
@@ -11389,6 +11549,7 @@ async function openFriendPokedex(friend) {
         userMegaEnergy = { ...friendMegaEnergyObj };
         userMegaLevel3 = new Set(friendMegaL3Array.map(String));
         userMegaLevel4 = new Set(friendMegaL4Array.map(String));
+        userMegaFavorites = new Set(friendMegaFavsArray.map(String));
         completedBuddyQuests = new Set(friendQuestsArray.map(x => String(x)));
 
         // Update Banner UI
@@ -11430,6 +11591,7 @@ function exitFriendPokedexMode() {
     if (friendViewBackupMegaEnergy) userMegaEnergy = { ...friendViewBackupMegaEnergy };
     if (friendViewBackupMegaL3) userMegaLevel3 = new Set(friendViewBackupMegaL3);
     if (friendViewBackupMegaL4) userMegaLevel4 = new Set(friendViewBackupMegaL4);
+    if (typeof friendViewBackupMegaFavs !== 'undefined' && friendViewBackupMegaFavs) userMegaFavorites = new Set(friendViewBackupMegaFavs);
     if (friendViewBackupQuests) completedBuddyQuests = new Set(friendViewBackupQuests);
 
     friendViewModeActive = false;
