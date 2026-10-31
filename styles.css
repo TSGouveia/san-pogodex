@@ -4223,9 +4223,19 @@ img[src*="sprites/pokemon"] {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
-/* Ensure the header and card have enough top padding so nothing collides */
-.candy-family-card {
-    padding-top: 1.5rem !important;
+/* Mega card specific header & candy input layout */
+.mega-family-card {
+    padding-top: 1.1rem !important;
+}
+
+.mega-family-card .family-header {
+    align-items: flex-start !important;
+    padding-right: 0.25rem;
+}
+
+.mega-family-card .mega-energy-input-wrapper {
+    margin-top: 14px !important;
+    align-self: flex-start !important;
 }
 
 .mega-favorite-btn:hover {

@@ -7624,7 +7624,7 @@ function renderMegaEnergyPane() {
 
     displayMegaList.forEach(data => {
         const card = document.createElement('div');
-        card.className = data.isUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
+        card.className = data.isUnreleased ? 'candy-family-card mega-family-card unreleased' : 'candy-family-card mega-family-card';
         card.style.position = 'relative';
 
         // Calculation message
@@ -7672,7 +7672,7 @@ function renderMegaEnergyPane() {
                     <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
                 </button>
 
-                <div class="candy-input-wrapper">
+                <div class="candy-input-wrapper mega-energy-input-wrapper">
                     <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
                     <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
                 </div>
