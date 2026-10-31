@@ -4200,3 +4200,43 @@ img[src*="sprites/pokemon"] {
 
 
 
+
+/* Mega Favorite Button */
+.mega-favorite-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 0.75rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.mega-favorite-btn:hover {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.45);
+    color: #fbbf24;
+    transform: scale(1.08);
+}
+
+.mega-favorite-btn:active {
+    transform: scale(0.95);
+}
+
+.mega-favorite-btn.favorited {
+    background: rgba(251, 191, 36, 0.18);
+    border-color: rgba(251, 191, 36, 0.65);
+    color: #fbbf24;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.25);
+}

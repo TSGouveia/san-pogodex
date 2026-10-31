@@ -7668,7 +7668,7 @@ function renderMegaEnergyPane() {
                     </div>
                 </div>
                 <!-- Discreet Top-Right Favorite Star Button -->
-                <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Unfavorite Mega' : 'Favorite Mega (cover types)'}" style="position: absolute; top: 8px; right: 8px; background: transparent; border: none; color: ${data.isFavorite ? '#fbbf24' : 'rgba(148, 163, 184, 0.35)'}; cursor: pointer; padding: 4px; font-size: 0.82rem; transition: all 0.15s ease; z-index: 2; line-height: 1;">
+                <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Favorited Mega (click to unfavorite)' : 'Favorite Mega (click to cover types)'}">
                     <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
                 </button>
 
