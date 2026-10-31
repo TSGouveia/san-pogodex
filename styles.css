@@ -4201,13 +4201,14 @@ img[src*="sprites/pokemon"] {
 
 
 
-/* Mega Favorite Button */
+/* Mega Favorite Button - Clean Top-Right Placement */
 .mega-favorite-btn {
-    position: static;
-    flex-shrink: 0;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.12);
     color: #64748b;
@@ -4216,10 +4217,15 @@ img[src*="sprites/pokemon"] {
     justify-content: center;
     cursor: pointer;
     padding: 0;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 2;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    z-index: 3;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure the header and card have enough top padding so nothing collides */
+.candy-family-card {
+    padding-top: 1.5rem !important;
 }
 
 .mega-favorite-btn:hover {

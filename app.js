@@ -7667,15 +7667,14 @@ function renderMegaEnergyPane() {
                         </div>
                     </div>
                 </div>
-                <div class="family-header-controls" style="display: flex; align-items: center; gap: 0.45rem; flex-shrink: 0;">
-                    <!-- Discreet Favorite Star Button -->
-                    <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Favorited Mega (click to unfavorite)' : 'Favorite Mega (click to cover types)'}">
-                        <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
-                    </button>
-                    <div class="candy-input-wrapper">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
-                        <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
-                    </div>
+                <!-- Discreet Top-Right Corner Favorite Star Button -->
+                <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Favorited Mega (click to unfavorite)' : 'Favorite Mega (click to cover types)'}">
+                    <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
+                </button>
+
+                <div class="candy-input-wrapper">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
+                    <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
                 </div>
             </div>
 
