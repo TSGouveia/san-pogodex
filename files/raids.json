@@ -36,25 +36,25 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/GIRATINA_ORIGIN_FORM",
         "pokebattlerSlug": "GIRATINA_ORIGIN_FORM",
-        "estimator": 1.4,
-        "estimatedPlayers": 1.4,
+        "estimator": 1.39,
+        "estimatedPlayers": 1.39,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.4
+                "ratio": 1.39
             },
             {
                 "trainers": "2",
                 "status": "TIGHT",
-                "ratio": 0.7
+                "ratio": 0.69
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.47
+                "ratio": 0.46
             },
             {
                 "trainers": "4",
@@ -106,15 +106,15 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10066.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/SABLEYE_MEGA",
         "pokebattlerSlug": "SABLEYE_MEGA",
-        "estimator": 1.21,
-        "estimatedPlayers": 1.21,
+        "estimator": 1.2,
+        "estimatedPlayers": 1.2,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.21
+                "ratio": 1.2
             },
             {
                 "trainers": "2",
@@ -382,25 +382,25 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/854.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/SINISTEA",
         "pokebattlerSlug": "SINISTEA",
-        "estimator": 0.06,
-        "estimatedPlayers": 0.06,
+        "estimator": 0.04,
+        "estimatedPlayers": 0.04,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EASY",
-                "ratio": 0.06
+                "ratio": 0.04
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.03
+                "ratio": 0.02
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.02
+                "ratio": 0.01
             },
             {
                 "trainers": "4",
@@ -456,20 +456,20 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/645.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/LANDORUS",
         "pokebattlerSlug": "LANDORUS",
-        "estimator": 1.1,
-        "estimatedPlayers": 1.1,
+        "estimator": 1.11,
+        "estimatedPlayers": 1.11,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.1
+                "ratio": 1.11
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.55
+                "ratio": 0.56
             },
             {
                 "trainers": "3",
@@ -489,7 +489,7 @@
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.18
+                "ratio": 0.19
             }
         ]
     },
@@ -522,20 +522,20 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/57.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/PRIMEAPE_SHADOW_FORM",
         "pokebattlerSlug": "PRIMEAPE_SHADOW_FORM",
-        "estimator": 0.5,
-        "estimatedPlayers": 0.5,
+        "estimator": 0.51,
+        "estimatedPlayers": 0.51,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EASY",
-                "ratio": 0.5
+                "ratio": 0.51
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.25
+                "ratio": 0.26
             },
             {
                 "trainers": "3",
@@ -545,7 +545,7 @@
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.12
+                "ratio": 0.13
             },
             {
                 "trainers": "5",
@@ -555,7 +555,7 @@
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.08
+                "ratio": 0.09
             }
         ]
     },
