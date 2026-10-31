@@ -2726,7 +2726,7 @@ function setupEventListeners() {
                     renderActiveRotations();
                 }
             } else if (targetPaneId === 'candies-pane') {
-                setVisible(searchWrapper, true);
+                setVisible(searchWrapper, false);
                 setVisible(radioFilters, false);
                 setVisible(bulkActions, false);
                 setVisible(sortWrapper, false);
