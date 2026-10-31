@@ -1,45 +1,5 @@
 [
     {
-        "eventID": "mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026",
-        "title": "Mega Charizard X and Mega Charizard Y in Mega Raids",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/mega-default.jpg",
-        "link": "https://leekduck.com/events/mega-charizard-x-mega-charizard-y-in-mega-raids-october-2026/",
-        "start": "2026-10-21T06:00:00",
-        "end": "2026-10-27T22:00:00"
-    },
-    {
-        "eventID": "palkia-in-5-star-raid-battles-october-2026",
-        "title": "Palkia in 5-star Raid Battles",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/palkiaraid.jpg",
-        "link": "https://leekduck.com/events/palkia-in-5-star-raid-battles-october-2026/",
-        "start": "2026-10-21T06:00:00",
-        "end": "2026-10-27T22:00:00"
-    },
-    {
-        "eventID": "raidhour20261028",
-        "title": "Giratina (Origin Forme) Raid Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
-        "link": "https://leekduck.com/events/raidhour20261028/",
-        "start": "2026-10-28T18:00:00.000",
-        "end": "2026-10-28T19:00:00.000"
-    },
-    {
-        "eventID": "pokemonspotlighthour2026-10-29",
-        "title": "Gastly Spotlight Hour",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/pokemonspotlighthour.jpg",
-        "link": "https://leekduck.com/events/pokemonspotlighthour2026-10-29/",
-        "start": "2026-10-29T18:00:00.000",
-        "end": "2026-10-29T19:00:00.000"
-    },
-    {
         "eventID": "chandelure-super-mega-raid-day-2026",
         "title": "Chandelure Super Mega Raid Day",
         "type": "",
