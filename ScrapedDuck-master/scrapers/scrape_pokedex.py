@@ -34,8 +34,9 @@ def parse_unreleased_from_wikitext(text):
     tables = part.split('{|')
     if len(tables) > 1:
         species_table = tables[1]
-        names = re.findall(r'\{\{MSP(?:/GO)?\|[^|}]+\|([^}|]+)', species_table)
-        return {n.strip() for n in names if n.strip()}
+        raw_names = re.findall(r'\{\{(?:MSP(?:/GO)?|MS)\|[^|}]+\|([^}|]+)', species_table)
+        names = {re.sub(r'\s*\([^)]*\)', '', n).strip() for n in raw_names}
+        return {n for n in names if n}
     return set()
 
 def parse_unreleased_from_html(html_content):
