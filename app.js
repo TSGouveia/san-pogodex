@@ -7655,12 +7655,12 @@ function renderMegaEnergyPane() {
                     <img src="${data.img}" alt="${data.name}" class="family-base-img" onerror="this.src='${POKE_SPRITE_BASE_URL}/${data.basePoke.id}.png'">
                     <div class="family-info">
                         <h3 class="family-title">
-                            ${data.name}
+                            ${data.name.replace(/^Mega\s+/i, '')}
                             ${data.isUnreleased ? `<span class="unreleased-badge-tag" style="margin-left: 6px; vertical-align: middle;" title="Unreleased"><i class="fa-solid fa-lock"></i></span>` : ''}
                             <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.65rem; opacity: 0.4; margin-left: 3px;"></i>
                         </h3>
                         <div class="family-buddy-dist" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 3px;">
-                            <span>Buddy: ${data.buddyDist} km (+${data.energyPerWalk} Energy)</span>
+                            <span>Buddy: ${data.buddyDist} km</span>
                             <div class="types-container" style="display: inline-flex; gap: 4px; width: auto; justify-content: flex-start;">
                                 ${(data.types || []).map(t => `<span class="type-badge type-${t}" style="font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">${t}</span>`).join('')}
                             </div>
