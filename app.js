@@ -7327,29 +7327,29 @@ function updateMegaTypeCoverage(allMegaForms) {
     if (uncoveredCountEl) uncoveredCountEl.textContent = uncoveredTypes.length;
     if (coveredCountEl) coveredCountEl.textContent = coveredTypes.length;
 
-    // Render Uncovered Badges
+    // Render Uncovered Badges (compact)
     if (uncoveredTypes.length === 0) {
-        uncoveredListEl.innerHTML = '<span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 600;"><i class="fa-solid fa-trophy"></i> Perfect! All 18 Types are Covered by your Favorites!</span>';
+        uncoveredListEl.innerHTML = '<span style="color: var(--accent-green); font-size: 0.72rem; font-weight: 600;"><i class="fa-solid fa-trophy"></i> All 18 Types Covered!</span>';
     } else {
         uncoveredListEl.innerHTML = uncoveredTypes.map(t => `
-            <span class="type-badge type-${t}" style="font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); text-transform: capitalize; opacity: 0.95; border: 1px solid rgba(255,255,255,0.2);">
-                <i class="fa-solid fa-xmark" style="font-size: 0.65rem; margin-right: 4px; opacity: 0.7;"></i>${t}
+            <span class="type-badge type-${t}" style="font-size: 0.62rem; padding: 2px 6px; border-radius: 4px; text-transform: capitalize; opacity: 0.9; line-height: 1.1;">
+                ${t}
             </span>
         `).join('');
     }
 
-    // Render Covered Badges
+    // Render Covered Badges (compact)
     if (coveredTypes.length === 0) {
-        coveredListEl.innerHTML = '<span style="color: #64748b; font-size: 0.8rem; font-style: italic;">No types covered yet. Click ★ on your favorite Megas below to start tracking coverage.</span>';
+        coveredListEl.innerHTML = '<span style="color: #64748b; font-size: 0.72rem; font-style: italic;">None yet (click ★ on Megas)</span>';
     } else {
         coveredListEl.innerHTML = coveredTypes.map(t => {
             const megas = coveredTypeMap[t];
             const tooltipNames = megas.map(m => m.name).join(', ');
             return `
-                <span class="type-badge type-${t}" title="Covered by: ${tooltipNames}" style="font-size: 0.72rem; padding: 4px 10px; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); text-transform: capitalize; display: inline-flex; align-items: center; gap: 5px; border: 1px solid rgba(16, 185, 129, 0.7);">
-                    <i class="fa-solid fa-check" style="font-size: 0.65rem; color: #10b981;"></i>
-                    <strong>${t}</strong>
-                    <span style="background: rgba(0,0,0,0.35); font-size: 0.65rem; padding: 1px 5px; border-radius: 10px; opacity: 0.9;">${megas.length}</span>
+                <span class="type-badge type-${t}" title="Covered by: ${tooltipNames}" style="font-size: 0.62rem; padding: 2px 6px; border-radius: 4px; text-transform: capitalize; display: inline-flex; align-items: center; gap: 3px; line-height: 1.1; border: 1px solid rgba(16, 185, 129, 0.8);">
+                    <i class="fa-solid fa-check" style="font-size: 0.55rem; color: #10b981;"></i>
+                    <span>${t}</span>
+                    ${megas.length > 1 ? `<span style="background: rgba(0,0,0,0.35); font-size: 0.55rem; padding: 0 3px; border-radius: 6px;">${megas.length}</span>` : ''}
                 </span>
             `;
         }).join('');
@@ -7625,6 +7625,7 @@ function renderMegaEnergyPane() {
     displayMegaList.forEach(data => {
         const card = document.createElement('div');
         card.className = data.isUnreleased ? 'candy-family-card unreleased' : 'candy-family-card';
+        card.style.position = 'relative';
 
         // Calculation message
         let kmText = '';
@@ -7666,14 +7667,14 @@ function renderMegaEnergyPane() {
                         </div>
                     </div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Unfavorite Mega (Click to remove from Type Coverage)' : 'Favorite Mega (Click to cover its Types!)'}" style="background: ${data.isFavorite ? 'rgba(251, 191, 36, 0.2)' : 'rgba(255, 255, 255, 0.05)'}; border: 1px solid ${data.isFavorite ? 'rgba(251, 191, 36, 0.7)' : 'rgba(255, 255, 255, 0.15)'}; color: ${data.isFavorite ? '#fbbf24' : '#64748b'}; border-radius: 8px; width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; font-size: 0.95rem;">
-                        <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
-                    </button>
-                    <div class="candy-input-wrapper">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
-                        <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
-                    </div>
+                <!-- Discreet Top-Right Favorite Star Button -->
+                <button class="mega-favorite-btn ${data.isFavorite ? 'favorited' : ''}" data-form-id="${data.formStateId}" title="${data.isFavorite ? 'Unfavorite Mega' : 'Favorite Mega (cover types)'}" style="position: absolute; top: 8px; right: 8px; background: transparent; border: none; color: ${data.isFavorite ? '#fbbf24' : 'rgba(148, 163, 184, 0.35)'}; cursor: pointer; padding: 4px; font-size: 0.82rem; transition: all 0.15s ease; z-index: 2; line-height: 1;">
+                    <i class="fa-${data.isFavorite ? 'solid' : 'regular'} fa-star"></i>
+                </button>
+
+                <div class="candy-input-wrapper" style="margin-right: 1.1rem;">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rare-candy.png" class="candy-icon" style="filter: hue-rotate(290deg);" title="${formNoun} Energy">
+                    <input type="number" min="0" max="9999" value="${data.currentEnergy}" class="candy-count-input mega-energy-count-input" data-form-id="${data.formStateId}" placeholder="0" style="color: #ec4899;">
                 </div>
             </div>
 
