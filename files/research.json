@@ -1,5 +1,121 @@
 [
     {
+        "category": "Pokémon GO Halloween 2026 Part II Tasks",
+        "task": "Catch 13 Ghost-type Pokémon",
+        "rewards": [
+            {
+                "name": "Froakie wearing a Pokémon Halloween costume",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm656.cFALL_2024.icon.png",
+                "shiny": true,
+                "min_cp": "392",
+                "max_cp": "425",
+                "combatPower": null
+            },
+            {
+                "name": "Rowlet wearing a Pokémon Halloween costume",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm722.cFALL_2024.icon.png",
+                "shiny": true,
+                "min_cp": "418",
+                "max_cp": "453",
+                "combatPower": null
+            },
+            {
+                "name": "Greavard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
+                "shiny": false,
+                "min_cp": "402",
+                "max_cp": "435",
+                "combatPower": {
+                    "normal": {
+                        "min": 402,
+                        "max": 435
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part II Tasks",
+        "task": "Make 6 Nice Throws",
+        "rewards": [
+            {
+                "name": "Litwick",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm607.icon.png",
+                "shiny": true,
+                "min_cp": "398",
+                "max_cp": "431",
+                "combatPower": {
+                    "normal": {
+                        "min": 398,
+                        "max": 431
+                    }
+                }
+            },
+            {
+                "name": "Sandygast",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm769.icon.png",
+                "shiny": true,
+                "min_cp": "491",
+                "max_cp": "528",
+                "combatPower": {
+                    "normal": {
+                        "min": 491,
+                        "max": 528
+                    }
+                }
+            },
+            {
+                "name": "Greavard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
+                "shiny": false,
+                "min_cp": "402",
+                "max_cp": "435",
+                "combatPower": {
+                    "normal": {
+                        "min": 402,
+                        "max": 435
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part II Tasks",
+        "task": "Win a raid",
+        "rewards": [
+            {
+                "name": "Zubat wearing a top hat",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm41.fHALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": null
+            },
+            {
+                "name": "Sinistea wearing a bow",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm854.fP_HALLOWEEN_2026_01.icon.png",
+                "shiny": true,
+                "min_cp": "452",
+                "max_cp": "488",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Halloween 2026 Part II Tasks",
+        "task": "Win 3 raids",
+        "rewards": [
+            {
+                "name": "Pikachu wearing a hat and capelet",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm25.fHALLOWEEN_2026.icon.png",
+                "shiny": true,
+                "min_cp": "369",
+                "max_cp": "402",
+                "combatPower": null
+            }
+        ]
+    },
+    {
         "category": "Pokémon GO Halloween 2026 Part I Tasks",
         "task": "Catch 13 Ghost-type Pokémon",
         "rewards": [
