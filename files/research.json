@@ -22,7 +22,7 @@
             {
                 "name": "Greavard",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
-                "shiny": false,
+                "shiny": true,
                 "min_cp": "402",
                 "max_cp": "435",
                 "combatPower": {
@@ -67,7 +67,7 @@
             {
                 "name": "Greavard",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
-                "shiny": false,
+                "shiny": true,
                 "min_cp": "402",
                 "max_cp": "435",
                 "combatPower": {
