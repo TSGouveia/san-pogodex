@@ -490,7 +490,7 @@
         ]
     },
     {
-        "name": "Incarnate Landorus",
+        "name": "Incarnate Tornadus",
         "tier": "Shadow 5-Star Raids",
         "canBeShiny": true,
         "types": [
@@ -505,11 +505,11 @@
         ],
         "combatPower": {
             "normal": {
-                "min": 1897,
+                "min": 1762,
                 "max": 2050
             },
             "boosted": {
-                "min": 2372,
+                "min": 2203,
                 "max": 2563
             }
         },
@@ -523,43 +523,43 @@
                 "image": "https://leekduck.com/assets/img/weather/windy.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/645.png",
-        "pokebattlerUrl": "https://www.pokebattler.com/raids/LANDORUS",
-        "pokebattlerSlug": "LANDORUS",
-        "estimator": 1.11,
-        "estimatedPlayers": 1.11,
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/641.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS",
+        "pokebattlerSlug": "TORNADUS",
+        "estimator": 1.45,
+        "estimatedPlayers": 1.45,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.11
+                "ratio": 1.45
             },
             {
                 "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.56
+                "status": "TIGHT",
+                "ratio": 0.72
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.37
+                "ratio": 0.48
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.28
+                "ratio": 0.36
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.22
+                "ratio": 0.29
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.19
+                "ratio": 0.24
             }
         ]
     },
