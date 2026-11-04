@@ -2110,13 +2110,34 @@ function getBaseListForDexType(dexType = currentDexType) {
     return result;
 }
 
-// Generate simple region tabs with caught stats
+// Generate simple region tabs with caught stats (optimized in-place update)
 function generateGenTabs() {
     if (!pokemonDatabase || pokemonDatabase.length === 0 || !genTabsContainer) return;
     const gens = Array.from(new Set(pokemonDatabase.map(p => p.gen))).sort((a, b) => a - b);
     const activeSet = getActiveCaughtSet();
     const fullList = getBaseListForDexType(currentDexType);
     
+    // In-place update if buttons already exist to prevent layout recalculations & DOM tearing
+    const existingButtons = genTabsContainer.querySelectorAll('.tab-btn');
+    if (existingButtons.length > 0) {
+        existingButtons.forEach(btn => {
+            const g = btn.dataset.gen;
+            const countSpan = btn.querySelector('.tab-count');
+            if (!countSpan) return;
+            if (g === 'all') {
+                const allTotal = fullList.length;
+                const allCaught = fullList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
+                countSpan.textContent = `${allCaught}/${allTotal}`;
+            } else {
+                const genNum = parseFloat(g);
+                const genList = fullList.filter(p => p.gen === genNum);
+                const caught = genList.filter(p => activeSet.has(p.id) || activeSet.has(Number(p.id))).length;
+                countSpan.textContent = `${caught}/${genList.length}`;
+            }
+        });
+        return;
+    }
+
     genTabsContainer.innerHTML = '';
     
     // All Regions count
@@ -2217,7 +2238,7 @@ function loadTransferredState() {
 function saveTransferredState() {
     localStorage.setItem('pogo_transferred_pokemon', JSON.stringify(Array.from(transferredPokemon).map(x => (isNaN(Number(x)) ? x : Number(x)))));
     if (currentUser) {
-        saveUserDataToFirestore();
+        saveUserDataToFirestoreDebounced();
     }
 }
 
@@ -2339,7 +2360,7 @@ function saveCaughtState() {
     updateDashboardStats();
     updateRegionStatsBadge();
     if (currentUser) {
-        saveUserDataToFirestore();
+        saveUserDataToFirestoreDebounced();
     }
 }
 
@@ -2406,13 +2427,19 @@ function syncPokemonCaughtStateUI(id, isNowCaught = null) {
                 }
             }
             
-            // Add temporary 3D animation class
+            // Add instant responsive animation classes for UI/UX
             if (isNowCaught !== null && !isNowCaught) {
                 const animClass = 'remove-card-fade';
                 pokedexCard.classList.add(animClass);
                 setTimeout(() => {
                     pokedexCard.classList.remove(animClass);
                 }, 420);
+            } else if (isNowCaught !== null && isNowCaught) {
+                const animClass = 'card-catch-pop';
+                pokedexCard.classList.add(animClass);
+                setTimeout(() => {
+                    pokedexCard.classList.remove(animClass);
+                }, 350);
             }
             
             const svgBall = pokedexCard.querySelector('.pokeball-svg');
@@ -2505,7 +2532,7 @@ function toggleCaughtState(id, eventSource = null) {
     if (currentDexType === 'normal') saveTransferredState();
     syncPokemonCaughtStateUI(id, isNowCaught);
 
-    // Refresh all members of this evolution family on the Pokédex grid
+    // Refresh all members of this evolution family on the Pokédex grid in-place
     const targetPoke = pokemonDatabase.find(p => String(p.id) === strId || Number(p.id) === numId);
     if (targetPoke) {
         const familyChain = findEvolutionChain(targetPoke);
@@ -2519,20 +2546,34 @@ function toggleCaughtState(id, eventSource = null) {
         }
     }
 
-    // Refresh Pokédex cards and active panes so family evolution states & missing targets update immediately
-    renderPokedex(true);
-    renderMissingSummary();
-    renderCandiesPane();
-    renderActiveRotations();
-    renderToDoPane();
-
     if (affectedTransferredAncestors.length > 0) {
         affectedTransferredAncestors.forEach(ancId => {
             const ancIsCaught = caughtPokemon.has(String(ancId)) || caughtPokemon.has(Number(ancId));
             syncPokemonCaughtStateUI(ancId, ancIsCaught);
         });
+    }
+
+    // Keep modal sync updated if currently open
+    if (typeof activeModalPokemonId !== 'undefined' && activeModalPokemonId !== null && 
+        (String(activeModalPokemonId) === strId || Number(activeModalPokemonId) === numId) && 
+        typeof updateModalCatchBtn === 'function') {
+        updateModalCatchBtn(activeModalPokemonId);
+    }
+
+    // Only update auxiliary panes if they are currently visible to avoid UI freezing
+    const isVisible = (paneId) => {
+        const el = document.getElementById(paneId);
+        return el && !el.classList.contains('hidden');
+    };
+
+    if (isVisible('hunt-grid') && typeof renderMissingSummary === 'function') {
         renderMissingSummary();
+    }
+    if (isVisible('candies-pane') && typeof renderCandiesPane === 'function') {
         renderCandiesPane();
+    }
+    if (isVisible('todo-pane') && typeof renderToDoPane === 'function') {
+        renderToDoPane();
     }
 }
 
@@ -2635,21 +2676,27 @@ function updateDashboardStats() {
         if (gridUnreleased) gridUnreleased.textContent = unrelCount;
     }
 
-    // Update To-Do, Candies and Stats pane targets dynamically
-    if (typeof renderToDoPane === 'function') {
+    // Only update auxiliary panes if they are currently visible to avoid blocking the main UI thread
+    const isVisible = (id) => {
+        const el = document.getElementById(id);
+        return el && !el.classList.contains('hidden');
+    };
+
+    if (isVisible('todo-pane') && typeof renderToDoPane === 'function') {
         renderToDoPane();
     }
-    if (typeof renderCandiesPane === 'function') {
-        renderCandiesPane();
+    if (isVisible('candies-pane')) {
+        if (typeof currentBuddyWalkSubTab !== 'undefined' && currentBuddyWalkSubTab === 'mega-energy' && typeof renderMegaEnergyPane === 'function') {
+            renderMegaEnergyPane();
+        } else if (typeof renderCandiesPane === 'function') {
+            renderCandiesPane();
+        }
     }
-    if (typeof renderMegaEnergyPane === 'function') {
-        renderMegaEnergyPane();
-    }
-    if (typeof renderAttackersPane === 'function') {
-        renderAttackersPane();
-    }
-    if (typeof renderStatsPane === 'function') {
+    if (isVisible('stats-pane') && typeof renderStatsPane === 'function') {
         renderStatsPane();
+    }
+    if (isVisible('attackers-pane') && typeof renderAttackersPane === 'function') {
+        renderAttackersPane();
     }
     if (typeof updateGlobalActiveFilterIndicator === 'function') {
         updateGlobalActiveFilterIndicator();
@@ -4923,7 +4970,7 @@ function renderActiveRotations() {
                         vBorder = 'rgba(239, 68, 68, 0.35)';
                     }
 
-                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum));
+                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum * 1.5));
 
                     // Build the 6 boxes: 1, 2, 3, 4, 5, 6+
                     const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
@@ -5917,24 +5964,15 @@ function loadBuddyQuestState() {
 function saveBuddyQuestState() {
     localStorage.setItem('pogo_completed_buddy_quests', JSON.stringify(Array.from(completedBuddyQuests).map(x => String(x))));
     if (currentUser) {
-        saveUserDataToFirestore();
+        saveUserDataToFirestoreDebounced();
     }
 }
 
-let saveCandiesCloudTimeout = null;
-function saveCandyState(debounceCloud = false) {
+function saveCandyState(debounceCloud = true) {
     if (friendViewModeActive) return;
     localStorage.setItem('pogo_user_candies', JSON.stringify(userCandies));
     if (currentUser) {
-        if (debounceCloud) {
-            clearTimeout(saveCandiesCloudTimeout);
-            saveCandiesCloudTimeout = setTimeout(() => {
-                saveUserDataToFirestore();
-            }, 1000);
-        } else {
-            clearTimeout(saveCandiesCloudTimeout);
-            saveUserDataToFirestore();
-        }
+        saveUserDataToFirestoreDebounced(!debounceCloud);
     }
 }
 
@@ -5988,20 +6026,11 @@ function loadMegaEnergyState() {
     }
 }
 
-let saveMegaCloudTimeout = null;
-function saveMegaEnergyState(debounceCloud = false) {
+function saveMegaEnergyState(debounceCloud = true) {
     if (friendViewModeActive) return;
     localStorage.setItem('pogo_user_mega_energy', JSON.stringify(userMegaEnergy));
     if (currentUser) {
-        if (debounceCloud) {
-            clearTimeout(saveMegaCloudTimeout);
-            saveMegaCloudTimeout = setTimeout(() => {
-                saveUserDataToFirestore();
-            }, 1000);
-        } else {
-            clearTimeout(saveMegaCloudTimeout);
-            saveUserDataToFirestore();
-        }
+        saveUserDataToFirestoreDebounced(!debounceCloud);
     }
 }
 
@@ -6010,7 +6039,7 @@ function saveMegaLevelState() {
     localStorage.setItem('pogo_user_mega_level3', JSON.stringify(Array.from(userMegaLevel3).map(String)));
     localStorage.setItem('pogo_user_mega_level4', JSON.stringify(Array.from(userMegaLevel4).map(String)));
     if (currentUser) {
-        saveUserDataToFirestore();
+        saveUserDataToFirestoreDebounced();
     }
 }
 
@@ -6018,16 +6047,52 @@ function saveMegaFavoritesState() {
     if (friendViewModeActive) return;
     localStorage.setItem('pogo_user_mega_favorites', JSON.stringify(Array.from(userMegaFavorites).map(String)));
     if (currentUser) {
-        saveUserDataToFirestore();
+        saveUserDataToFirestoreDebounced();
     }
 }
 
 // ==========================================================================
 // CLOUD DATABASE INTEGRATION (FIREBASE)
 // ==========================================================================
+let saveUserDataCloudTimeout = null;
+let lastCloudSaveTimestamp = 0;
+let isSavingToFirestore = false;
+
+function saveUserDataToFirestoreDebounced(immediate = false) {
+    if (!currentUser || friendViewModeActive) return;
+    clearTimeout(saveUserDataCloudTimeout);
+    saveUserDataCloudTimeout = null;
+    if (immediate) {
+        saveUserDataToFirestore();
+    } else {
+        saveUserDataCloudTimeout = setTimeout(() => {
+            saveUserDataCloudTimeout = null;
+            saveUserDataToFirestore();
+        }, 1200); // 1.2s debounce allows fast, stutter-free tapping
+    }
+}
+
+// Flush pending cloud data on page unload / navigation
+window.addEventListener('beforeunload', () => {
+    if (saveUserDataCloudTimeout) {
+        clearTimeout(saveUserDataCloudTimeout);
+        saveUserDataCloudTimeout = null;
+        saveUserDataToFirestore();
+    }
+});
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && saveUserDataCloudTimeout) {
+        clearTimeout(saveUserDataCloudTimeout);
+        saveUserDataCloudTimeout = null;
+        saveUserDataToFirestore();
+    }
+});
+
 async function saveUserDataToFirestore() {
     if (!currentUser || friendViewModeActive) return;
     try {
+        isSavingToFirestore = true;
+        lastCloudSaveTimestamp = Date.now();
         const categoriesData = {};
         Object.keys(caughtCategoryPokemon).forEach(cat => {
             const set = caughtCategoryPokemon[cat];
@@ -6059,8 +6124,13 @@ async function saveUserDataToFirestore() {
         await setDoc(doc(db, "users_data", currentUser.uid), dataToSave, { merge: true });
     } catch (e) {
         console.error("Error saving data to Firestore:", e);
+    } finally {
+        setTimeout(() => {
+            isSavingToFirestore = false;
+        }, 2000);
     }
 }
+
 
 async function loadUserDataFromFirestore(user) {
     try {
@@ -6234,6 +6304,25 @@ onAuthStateChanged(auth, async (user) => {
         
         // Bind real-time Firestore sync listener
         userDocListenerUnsubscribe = onSnapshot(doc(db, "users_data", user.uid), (snapshot) => {
+            // Ignore optimistic local writes by this client
+            if (snapshot.metadata && snapshot.metadata.hasPendingWrites) {
+                return;
+            }
+            // If this snapshot was triggered by our own recent write acknowledgment, do not re-render the whole UI
+            if (isSavingToFirestore || (Date.now() - lastCloudSaveTimestamp < 2500)) {
+                if (snapshot.exists()) {
+                    const data = snapshot.data();
+                    if (data.username && data.username !== currentTrainerUsername) {
+                        currentTrainerUsername = data.username;
+                        const span = authStatusContainer ? authStatusContainer.querySelector('span') : null;
+                        if (span) {
+                            span.textContent = `Trainer: ${data.username}`;
+                        }
+                    }
+                }
+                return;
+            }
+
             if (snapshot.exists()) {
                 const data = snapshot.data();
                 if (data.username) {
@@ -6276,8 +6365,12 @@ onAuthStateChanged(auth, async (user) => {
                 updatePromoCodesBadge();
                 
                 renderPokedex();
-                renderMissingSummary();
-                renderCandiesPane();
+                const isVisible = (paneId) => {
+                    const el = document.getElementById(paneId);
+                    return el && !el.classList.contains('hidden');
+                };
+                if (isVisible('hunt-grid') && typeof renderMissingSummary === 'function') renderMissingSummary();
+                if (isVisible('candies-pane') && typeof renderCandiesPane === 'function') renderCandiesPane();
                 updateDashboardStats();
                 updateRegionStatsBadge();
                 

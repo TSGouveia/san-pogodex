@@ -187,7 +187,8 @@ def compute_trainer_boxes(estimator):
     if estimator is None or estimator <= 0:
         return None
     E = float(estimator)
-    trainers_needed = max(1, int(-(-E // 1)))
+    # First number of trainers where status is EASY (ratio <= 2/3, i.e. N >= 1.5 * E)
+    trainers_needed = max(1, int(-(- (E * 1.5) // 1)))
     
     if E <= 1.0:
         verdict = "SOLOABLE"
