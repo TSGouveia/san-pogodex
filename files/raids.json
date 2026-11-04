@@ -39,7 +39,7 @@
         "estimator": 1.51,
         "estimatedPlayers": 1.51,
         "verdict": "EASY TRIO",
-        "trainersNeeded": 2,
+        "trainersNeeded": 3,
         "trainerBoxes": [
             {
                 "trainers": "1",
@@ -323,7 +323,7 @@
         "estimator": 0.77,
         "estimatedPlayers": 0.77,
         "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
+        "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
@@ -529,7 +529,7 @@
         "estimator": 1.45,
         "estimatedPlayers": 1.45,
         "verdict": "EASY DUO",
-        "trainersNeeded": 2,
+        "trainersNeeded": 3,
         "trainerBoxes": [
             {
                 "trainers": "1",
@@ -595,7 +595,7 @@
         "estimator": 0.7,
         "estimatedPlayers": 0.7,
         "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
+        "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
