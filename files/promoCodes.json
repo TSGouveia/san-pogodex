@@ -13,16 +13,6 @@
         ]
     },
     {
-        "title": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item",
-        "code": "FENDIxFRGMTxPOKEMON",
-        "description": "Trainers can redeem this code to get an exclusive FENDI x FRGMT x POKÉMON hoodie avatar item. (This code should have expired on January 4, 2025 but it appears to still work.)",
-        "status": "Active",
-        "expires": "Expires: ???",
-        "rewards": [
-            "FENDI x FRGMT x POKÉMON hoodie"
-        ]
-    },
-    {
         "title": "adidas Shoes Avatar Item",
         "code": "ADIDASxPOKEMON",
         "description": "Complete your outfit with a pair of adidas shoes for your avatar! Redeem this promo code in the Pokémon GO Web Store by Friday, January 15, 2027.",
@@ -30,6 +20,16 @@
         "expires": "Expires: January 15, 2027 at 11:59 PM",
         "rewards": [
             "adidas shoes"
+        ]
+    },
+    {
+        "title": "FENDI x FRGMT x POKÉMON Hoodie Avatar Item",
+        "code": "FENDIxFRGMTxPOKEMON",
+        "description": "This code rewarded an exclusive FENDI x FRGMT x POKÉMON hoodie avatar item. It has expired; the exact expiration date is unknown.",
+        "status": "Expired",
+        "expires": "Expired",
+        "rewards": [
+            "FENDI x FRGMT x POKÉMON hoodie"
         ]
     },
     {

@@ -1,63 +1,13 @@
 [
     {
-        "eventID": "max-mondays-2026-11-02",
-        "title": "Dynamax Machop during Max Monday",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/max-battles-kanto.jpg",
-        "link": "https://leekduck.com/events/max-mondays-2026-11-02/",
-        "start": "2026-11-02T06:00:00.000",
-        "end": "2026-11-02T21:00:00.000"
-    },
-    {
-        "eventID": "go-pass-october-2026",
-        "title": "GO Pass: October",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-10-06-go-pass-october-2026/go-pass-october-2026.jpg",
-        "link": "https://leekduck.com/events/go-pass-october-2026/",
-        "start": "2026-10-06T10:00:00.000",
-        "end": "2026-11-03T10:00:00.000"
-    },
-    {
-        "eventID": "gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition",
-        "title": "Master League and Mega Halloween Cup: Great League Edition | Twilight Trails",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/gobattleleague-master-key.jpg",
-        "link": "https://leekduck.com/events/gbl-twilight-trails_master-league_mega-halloween-cup-great-league-edition/",
-        "start": "2026-10-27T13:00:00.000-0800",
-        "end": "2026-11-03T13:00:00.000-0800"
-    },
-    {
-        "eventID": "shadow-landorus-incarnate-forme-in-shadow-raids-october-2026",
-        "title": "Shadow Landorus (Incarnate Forme) in Shadow Raids",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
-        "link": "https://leekduck.com/events/shadow-landorus-incarnate-forme-in-shadow-raids-october-2026/",
-        "start": "2026-10-07T06:00:00.000",
-        "end": "2026-11-03T22:00:00.000"
-    },
-    {
-        "eventID": "giratina-origin-forme-in-5-star-raid-battles-october-2026",
-        "title": "Giratina (Origin Forme) in 5-star Raid Battles",
-        "type": "",
-        "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/giratinaoriginforme.jpg",
-        "link": "https://leekduck.com/events/giratina-origin-forme-in-5-star-raid-battles-october-2026/",
-        "start": "2026-10-28T06:00:00.000",
-        "end": "2026-11-03T22:00:00.000"
-    },
-    {
         "eventID": "raidhour20261104",
         "title": "Giratina (Altered Forme) Raid Hour",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/raidhour.jpg",
         "link": "https://leekduck.com/events/raidhour20261104/",
-        "start": "2026-11-04T18:00:00.000",
-        "end": "2026-11-04T19:00:00.000"
+        "start": "2026-11-04T18:00:00",
+        "end": "2026-11-04T19:00:00"
     },
     {
         "eventID": "pokemonspotlighthour2026-11-05",
