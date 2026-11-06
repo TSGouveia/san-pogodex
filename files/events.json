@@ -120,6 +120,16 @@
         "end": "2026-11-15T18:00:00.000"
     },
     {
+        "eventID": "go-wild-area-gigantamax-machamp-power-up-timed-research",
+        "title": "GO Wild Area: Gigantamax Machamp Power Up! Timed Research",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2025/2025-05-25-gigantamax-machamp-max-battle-day-may-2025/gigantamax-machamp-max-battles.jpg",
+        "link": "https://leekduck.com/events/go-wild-area-gigantamax-machamp-power-up-timed-research/",
+        "start": "2026-11-06T10:00:00.000",
+        "end": "2026-11-15T23:59:00.000"
+    },
+    {
         "eventID": "max-mondays-2026-11-16",
         "title": "Max Monday: Pokémon to be announced",
         "type": "",
