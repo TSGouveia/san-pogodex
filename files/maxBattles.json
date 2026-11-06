@@ -1765,7 +1765,7 @@
     {
         "name": "Gigantamax Duraludon",
         "tier": "Max Battles (6 Max)",
-        "canBeShiny": true,
+        "canBeShiny": false,
         "pokebattlerUrl": "https://www.pokebattler.com/max/DURALUDON_GIGANTAMAX",
         "types": [
             {
