@@ -1,158 +1,5 @@
 [
     {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Catch 10 Dragon-type Pokémon",
-        "rewards": [
-            {
-                "name": "Trapinch",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm328.icon.png",
-                "shiny": true,
-                "min_cp": "507",
-                "max_cp": "546",
-                "combatPower": {
-                    "normal": {
-                        "min": 507,
-                        "max": 546
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Power up Dragon-type Pokémon 5 times",
-        "rewards": [
-            {
-                "name": "Frigibax",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm996.icon.png",
-                "shiny": true,
-                "min_cp": "496",
-                "max_cp": "534",
-                "combatPower": {
-                    "normal": {
-                        "min": 496,
-                        "max": 534
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Catch 10 Steel-type Pokémon",
-        "rewards": [
-            {
-                "name": "Rookidee",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm821.icon.png",
-                "shiny": true,
-                "min_cp": "258",
-                "max_cp": "285",
-                "combatPower": {
-                    "normal": {
-                        "min": 258,
-                        "max": 285
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Hatch an Egg",
-        "rewards": [
-            {
-                "name": "Honedge",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm679.icon.png",
-                "shiny": true,
-                "min_cp": "556",
-                "max_cp": "595",
-                "combatPower": {
-                    "normal": {
-                        "min": 556,
-                        "max": 595
-                    }
-                }
-            },
-            {
-                "name": "Drampa",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm780.icon.png",
-                "shiny": true,
-                "min_cp": "1191",
-                "max_cp": "1249",
-                "combatPower": {
-                    "normal": {
-                        "min": 1191,
-                        "max": 1249
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Power up Steel-type Pokémon 5 times",
-        "rewards": [
-            {
-                "name": "Onix",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm95.icon.png",
-                "shiny": true,
-                "min_cp": "435",
-                "max_cp": "472",
-                "combatPower": {
-                    "normal": {
-                        "min": 435,
-                        "max": 472
-                    }
-                }
-            },
-            {
-                "name": "Skarmory",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm227.icon.png",
-                "shiny": true,
-                "min_cp": "854",
-                "max_cp": "903",
-                "combatPower": {
-                    "normal": {
-                        "min": 854,
-                        "max": 903
-                    }
-                }
-            },
-            {
-                "name": "Bronzor",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm436.icon.png",
-                "shiny": true,
-                "min_cp": "229",
-                "max_cp": "258",
-                "combatPower": {
-                    "normal": {
-                        "min": 229,
-                        "max": 258
-                    }
-                }
-            }
-        ]
-    },
-    {
-        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
-        "task": "Use a Steel-type Charged Attack in a battle",
-        "rewards": [
-            {
-                "name": "Shieldon",
-                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm410.icon.png",
-                "shiny": true,
-                "min_cp": "348",
-                "max_cp": "381",
-                "combatPower": {
-                    "normal": {
-                        "min": 348,
-                        "max": 381
-                    }
-                }
-            }
-        ]
-    },
-    {
         "category": "Pokémon GO Wild Area 2026: Mexico City Tasks",
         "task": "Catch 10 Dragon-type Pokémon",
         "rewards": [
@@ -314,6 +161,159 @@
     },
     {
         "category": "Pokémon GO Wild Area 2026: Mexico City Tasks",
+        "task": "Use a Steel-type Charged Attack in a battle",
+        "rewards": [
+            {
+                "name": "Shieldon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm410.icon.png",
+                "shiny": true,
+                "min_cp": "348",
+                "max_cp": "381",
+                "combatPower": {
+                    "normal": {
+                        "min": 348,
+                        "max": 381
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
+        "task": "Catch 10 Dragon-type Pokémon",
+        "rewards": [
+            {
+                "name": "Trapinch",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm328.icon.png",
+                "shiny": true,
+                "min_cp": "507",
+                "max_cp": "546",
+                "combatPower": {
+                    "normal": {
+                        "min": 507,
+                        "max": 546
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
+        "task": "Power up Dragon-type Pokémon 5 times",
+        "rewards": [
+            {
+                "name": "Frigibax",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm996.icon.png",
+                "shiny": true,
+                "min_cp": "496",
+                "max_cp": "534",
+                "combatPower": {
+                    "normal": {
+                        "min": 496,
+                        "max": 534
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
+        "task": "Catch 10 Steel-type Pokémon",
+        "rewards": [
+            {
+                "name": "Rookidee",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm821.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": {
+                    "normal": {
+                        "min": 258,
+                        "max": 285
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
+        "task": "Hatch an Egg",
+        "rewards": [
+            {
+                "name": "Honedge",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm679.icon.png",
+                "shiny": true,
+                "min_cp": "556",
+                "max_cp": "595",
+                "combatPower": {
+                    "normal": {
+                        "min": 556,
+                        "max": 595
+                    }
+                }
+            },
+            {
+                "name": "Drampa",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm780.icon.png",
+                "shiny": true,
+                "min_cp": "1191",
+                "max_cp": "1249",
+                "combatPower": {
+                    "normal": {
+                        "min": 1191,
+                        "max": 1249
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
+        "task": "Power up Steel-type Pokémon 5 times",
+        "rewards": [
+            {
+                "name": "Onix",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm95.icon.png",
+                "shiny": true,
+                "min_cp": "435",
+                "max_cp": "472",
+                "combatPower": {
+                    "normal": {
+                        "min": 435,
+                        "max": 472
+                    }
+                }
+            },
+            {
+                "name": "Skarmory",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm227.icon.png",
+                "shiny": true,
+                "min_cp": "854",
+                "max_cp": "903",
+                "combatPower": {
+                    "normal": {
+                        "min": 854,
+                        "max": 903
+                    }
+                }
+            },
+            {
+                "name": "Bronzor",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm436.icon.png",
+                "shiny": true,
+                "min_cp": "229",
+                "max_cp": "258",
+                "combatPower": {
+                    "normal": {
+                        "min": 229,
+                        "max": 258
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Sendai • Tohoku Tasks",
         "task": "Use a Steel-type Charged Attack in a battle",
         "rewards": [
             {
