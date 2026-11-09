@@ -5029,15 +5029,15 @@ function renderActiveRotations() {
                             bBorder = 'rgba(239, 68, 68, 0.45)';
                         }
                         return `
-                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 4px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.68rem; font-weight: 800; color: #ffffff;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                                <span style="font-size: 0.62rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 3px 4px; display: flex; align-items: center; justify-content: space-between; gap: 2px; min-width: 0; overflow: hidden;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.5rem; opacity: 0.6;"></i> ${b.trainers}</span>
+                                <span style="font-size: 0.58rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: clip;">${b.status}</span>
                             </div>
                         `;
                     }).join('');
 
                     diffSectionHtml = `
-                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 8px;">
+                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 6px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 6px;">
                                 <span style="font-size: 0.68rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
                                     <i class="fa-solid fa-calculator" style="font-size: 0.6rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
@@ -5046,7 +5046,7 @@ function renderActiveRotations() {
                                     <i class="fa-solid fa-users" style="font-size: 0.6rem;"></i> ${trainersNeeded} Needed
                                 </span>
                             </div>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%;">
+                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; width: 100%;">
                                 ${boxesHtml}
                             </div>
                         </div>
@@ -5915,15 +5915,15 @@ function renderRaidSchedule() {
                             bBorder = 'rgba(239, 68, 68, 0.45)';
                         }
                         return `
-                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 4px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.68rem; font-weight: 800; color: #ffffff;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                                <span style="font-size: 0.62rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 3px 4px; display: flex; align-items: center; justify-content: space-between; gap: 2px; min-width: 0; overflow: hidden;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.65rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.5rem; opacity: 0.6;"></i> ${b.trainers}</span>
+                                <span style="font-size: 0.58rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: -0.2px; white-space: nowrap; overflow: hidden; text-overflow: clip;">${b.status}</span>
                             </div>
                         `;
                     }).join('');
 
                     diffSectionHtml = `
-                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 8px;">
+                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 6px;">
                             <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 6px;">
                                 <span style="font-size: 0.68rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
                                     <i class="fa-solid fa-calculator" style="font-size: 0.6rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
@@ -5932,7 +5932,7 @@ function renderRaidSchedule() {
                                     <i class="fa-solid fa-users" style="font-size: 0.6rem;"></i> ${trainersNeeded} Needed
                                 </span>
                             </div>
-                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%;">
+                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; width: 100%;">
                                 ${boxesHtml}
                             </div>
                         </div>
