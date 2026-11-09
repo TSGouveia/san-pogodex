@@ -279,6 +279,9 @@
                     <button class="subnav-btn" data-target="rotations-raids-section">
                         <i class="fa-solid fa-shield-halved"></i> Raid Bosses
                     </button>
+                    <button class="subnav-btn" data-target="rotations-raid-schedule-section">
+                        <i class="fa-solid fa-calendar-check"></i> Raid Schedule
+                    </button>
                     <button class="subnav-btn" data-target="rotations-maxbattles-section">
                         <i class="fa-solid fa-bolt"></i> Max Battles
                     </button>
@@ -371,6 +374,21 @@
                 </div>
                 <div id="raids-tiers-container">
                     <!-- Dynamic Tier Sub-sections with grids inside -->
+                </div>
+            </div>
+
+            <!-- Scheduled / Upcoming Raids -->
+            <div class="rotation-section hidden" id="rotations-raid-schedule-section">
+                <div class="rotation-section-header" style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                    <i class="fa-solid fa-calendar-check" style="color: var(--accent-color);"></i>
+                    <h2>Scheduled & Upcoming Raids</h2>
+                    <div class="last-updated-badge" style="display: none; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 500; color: #cbd5e1; background: rgba(245, 166, 35, 0.08); border: 1px solid rgba(245, 166, 35, 0.25); padding: 4px 12px; border-radius: 20px; margin-left: auto;">
+                        <i class="fa-solid fa-clock-rotate-left" style="font-size: 0.8rem; color: #f5a623;"></i>
+                        <span class="last-updated-text"></span>
+                    </div>
+                </div>
+                <div id="raid-schedule-container">
+                    <!-- Dynamic Scheduled Raids populated here by JS -->
                 </div>
             </div>
 

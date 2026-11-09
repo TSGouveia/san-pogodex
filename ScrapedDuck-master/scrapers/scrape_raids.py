@@ -462,540 +462,163 @@ def get_boss_image_url(name, dex_nr):
     return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else ""
 
 def scrape_raids():
-    print("Scraping Raids from Pokémon GO Hub...")
-    # Initialize schedule list
+    print("Scraping Raids directly from PokéBattler API...")
     bosses = []
     schedule_entries = []
     max_battles = []
     poke_map = load_pokedex_map()
     shiny_dexes, shiny_names = load_shiny_set()
 
-    REGIONAL_TYPES = {
-        "rattata-alola": ["dark", "normal"],
-        "raticate-alola": ["dark", "normal"],
-        "raichu-alola": ["electric", "psychic"],
-        "sandshrew-alola": ["ice", "steel"],
-        "sandslash-alola": ["ice", "steel"],
-        "vulpix-alola": ["ice"],
-        "ninetales-alola": ["ice", "fairy"],
-        "diglett-alola": ["ground", "steel"],
-        "dugtrio-alola": ["ground", "steel"],
-        "meowth-alola": ["dark"],
-        "persian-alola": ["dark"],
-        "geodude-alola": ["rock", "electric"],
-        "graveler-alola": ["rock", "electric"],
-        "golem-alola": ["rock", "electric"],
-        "grimer-alola": ["poison", "dark"],
-        "muk-alola": ["poison", "dark"],
-        "exeggutor-alola": ["grass", "dragon"],
-        "marowak-alola": ["fire", "ghost"],
-        "meowth-galar": ["steel"],
-        "ponyta-galar": ["psychic"],
-        "rapidash-galar": ["psychic", "fairy"],
-        "slowpoke-galar": ["psychic"],
-        "slowbro-galar": ["poison", "psychic"],
-        "farfetchd-galar": ["fighting"],
-        "weezing-galar": ["poison", "fairy"],
-        "mr-mime-galar": ["ice", "psychic"],
-        "articuno-galar": ["psychic", "flying"],
-        "zapdos-galar": ["fighting", "flying"],
-        "moltres-galar": ["dark", "flying"],
-        "slowking-galar": ["poison", "psychic"],
-        "corsola-galar": ["ghost"],
-        "zigzagoon-galar": ["dark", "normal"],
-        "linoone-galar": ["dark", "normal"],
-        "darumaka-galar": ["ice"],
-        "darmanitan-galar": ["ice"],
-        "yamask-galar": ["ground", "ghost"],
-        "stunfisk-galar": ["ground", "steel"],
-        "growlithe-hisui": ["fire", "rock"],
-        "arcanine-hisui": ["fire", "rock"],
-        "voltorb-hisui": ["electric", "grass"],
-        "electrode-hisui": ["electric", "grass"],
-        "typhlosion-hisui": ["fire", "ghost"],
-        "qwilfish-hisui": ["dark", "poison"],
-        "sneasel-hisui": ["fighting", "poison"],
-        "samurott-hisui": ["water", "dark"],
-        "lilligant-hisui": ["grass", "fighting"],
-        "zorua-hisui": ["normal", "ghost"],
-        "zoroark-hisui": ["normal", "ghost"],
-        "braviary-hisui": ["psychic", "flying"],
-        "sliggoo-hisui": ["steel", "dragon"],
-        "goodra-hisui": ["steel", "dragon"],
-        "avalugg-hisui": ["ice", "rock"],
-        "decidueye-hisui": ["grass", "fighting"],
-        "tauros-paldea": ["fighting"],
-        "wooper-paldea": ["poison", "ground"]
+    id_name_map = {
+        'ZACIAN_CROWNED_SWORD_FORM': 'Crowned Sword Zacian',
+        'ZAMAZENTA_CROWNED_SHIELD_FORM': 'Crowned Shield Zamazenta',
+        'KYUREM_BLACK_FORM': 'Black Kyurem',
+        'KYUREM_WHITE_FORM': 'White Kyurem',
+        'BANETTE_MEGA': 'Mega Banette',
+        'TORNADUS_SHADOW_FORM': 'Shadow Incarnate Tornadus',
+        'PILOSWINE_SHADOW_FORM': 'Shadow Piloswine',
+        'POLIWHIRL_SHADOW_FORM': 'Shadow Poliwhirl',
+        'PRINPLUP_SHADOW_FORM': 'Shadow Prinplup',
+        'CRANIDOS_SHADOW_FORM': 'Shadow Cranidos',
+        'LARVITAR_SHADOW_FORM': 'Shadow Larvitar',
+        'MAKUHITA_SHADOW_FORM': 'Shadow Makuhita',
+        'MUDKIP_SHADOW_FORM': 'Shadow Mudkip'
     }
 
-    try:
-        url = "https://pokemongohub.net/post/guide/current-go-raids/"
-        res = requests.get(url, headers=HEADERS, timeout=15)
-        if res.status_code == 200:
-            soup = bs4.BeautifulSoup(res.text, "html.parser")
-            post_body = soup.find("div", class_="td-post-content")
-            
-            if post_body:
-                # 1. Collect all guide links in the post to attach to boss cards
-                guide_map = {}
-                for p_tag in post_body.find_all("p"):
-                    for a_tag in p_tag.find_all("a"):
-                        href = a_tag.get("href", "")
-                        if "pokemongohub.net/post/guide/" in href:
-                            txt = a_tag.get_text(strip=True).lower()
-                            if txt not in ["shadow raids", "raid guides", "guides", "related guides"]:
-                                guide_map[txt] = href
+    def format_boss_name(pid, p_name):
+        if pid in id_name_map: return id_name_map[pid]
+        clean = (p_name or pid).replace('_FORM', '').replace('_', ' ').title()
+        if 'Mega' in clean and not clean.startswith('Mega '): clean = 'Mega ' + clean.replace(' Mega', '')
+        if 'Shadow' in clean and not clean.startswith('Shadow '): clean = 'Shadow ' + clean.replace(' Shadow', '')
+        return clean
 
-                def extract_key_words(s):
-                    s = re.sub(r'\b(raid|raids|counter|counters|guide|guides|boss|bosses|shadow|mega|alola|alolan|galar|galarian|hisui|hisuian|paldea|paldean)\b', '', s, flags=re.IGNORECASE)
-                    return set(re.findall(r'[a-zA-Z]+', s.lower()))
-
-                def match_guide_url(boss_name):
-                    b_keys = extract_key_words(boss_name)
-                    if not b_keys:
-                        return None
-                    best_match = None
-                    best_score = 0
-                    for g_title, g_url in guide_map.items():
-                        g_keys = extract_key_words(g_title)
-                        common = b_keys.intersection(g_keys)
-                        if len(common) > best_score:
-                            best_score = len(common)
-                            best_match = g_url
-                    return best_match if best_score > 0 else None
-
-                current_tier = None
-                seen_bosses = set()
-
-                for h in post_body.find_all(['h2', 'h3', 'h4']):
-                    htxt = h.get_text(strip=True)
-                    htxt_lower = htxt.lower()
-
-                    if "upcoming" in htxt_lower or "faq" in htxt_lower or "schedule" in htxt_lower:
-                        break
-
-                    if "5-star shadow" in htxt_lower: current_tier = "Shadow 5-Star Raids"
-                    elif "3-star shadow" in htxt_lower: current_tier = "Shadow 3-Star Raids"
-                    elif "1-star shadow" in htxt_lower: current_tier = "Shadow 1-Star Raids"
-                    elif "super mega" in htxt_lower: current_tier = "Super Mega Raids"
-                    elif "mega" in htxt_lower: current_tier = "Mega Raids"
-                    elif "5-star" in htxt_lower: current_tier = "5-Star Raids"
-                    elif "3-star" in htxt_lower: current_tier = "3-Star Raids"
-                    elif "1-star" in htxt_lower: current_tier = "1-Star Raids"
-
-                    if not current_tier:
-                        continue
-
-                    curr = h.find_next_sibling()
-                    while curr and curr.name not in ['h2', 'h3', 'h4']:
-                        # Only look inside actual Pokemon cards containers, never <p> raid guides lists
-                        containers = []
-                        if curr.name == 'div' and any(cls in curr.get('class', []) for cls in ['hub-pokemon-list', 'hub-pokemon-grid', 'hub-flex-list']):
-                            containers.append(curr)
-                        containers.extend(curr.find_all('div', class_=lambda c: c and any(k in c for k in ['hub-pokemon-list', 'hub-pokemon-grid', 'hub-flex-list'])))
-
-                        for container in containers:
-                            for a in container.find_all('a'):
-                                name_span = a.find('span', class_='name')
-                                raw_name = name_span.get_text(strip=True) if name_span else a.get_text(strip=True)
-                                lbl_span = a.find('span', class_='label')
-                                lbl = lbl_span.get_text(strip=True) if lbl_span else ''
-                                href = a.get('href', '')
-
-                                if not raw_name or raw_name.lower() in ['shadow raids', 'raid guides', 'related guides', 'current pokémon go raid bosses', 'guides']:
-                                    continue
-
-                                clean_name = canonicalize_boss_name(raw_name)
-                                if not clean_name:
-                                    continue
-
-                                boss_key = (current_tier, clean_name.lower())
-                                if boss_key in seen_bosses:
-                                    continue
-                                seen_bosses.add(boss_key)
-
-                                db_dex = None
-                                db_m = re.search(r'/pokemon/(\d+)', href)
-                                if db_m:
-                                    db_dex = int(db_m.group(1))
-
-                                classes = a.get('class', [])
-                                has_shiny_class = 'shiny' in classes
-
-                                # Extract types directly from card type icon images
-                                card_types = []
-                                for img in a.find_all('img', class_='pokemon-type-icon'):
-                                    alt = img.get('alt', '')
-                                    tm = re.search(r'([A-Za-z]+)\s+type\s+icon', alt, re.I)
-                                    if tm:
-                                        card_types.append(tm.group(1).lower())
-
-                                guide_url = match_guide_url(clean_name)
-                                guide_info = fetch_guide_details(guide_url, current_tier) if guide_url else {
-                                    "cp_normal_min": None, "cp_normal_max": None,
-                                    "cp_boosted_min": None, "cp_boosted_max": None,
-                                    "canBeShiny": False
-                                }
-
-                                print(f"  -> Scraping [{current_tier}] {clean_name}")
-
-                                # Parse CP from card label first (e.g., '2188 CP / 2735 CP' or '1054 CP/1318 CP')
-                                cp_dict = None
-                                lbl_m = re.search(r'(\d{3,4})\s*CP\s*(?:/|to|-)\s*(\d{3,4})\s*CP', lbl, re.IGNORECASE)
-                                if lbl_m:
-                                    norm_max = int(lbl_m.group(1))
-                                    boost_max = int(lbl_m.group(2))
-                                    norm_min = guide_info.get("cp_normal_min") or 0
-                                    boost_min = guide_info.get("cp_boosted_min") or 0
-                                    cp_dict = {
-                                        "normal": {"min": norm_min, "max": norm_max},
-                                        "boosted": {"min": boost_min, "max": boost_max}
-                                    }
-                                elif guide_info.get("cp_normal_max") or guide_info.get("cp_boosted_max"):
-                                    cp_dict = {
-                                        "normal": {
-                                            "min": guide_info.get("cp_normal_min") or 0,
-                                            "max": guide_info.get("cp_normal_max") or 0
-                                        },
-                                        "boosted": {
-                                            "min": guide_info.get("cp_boosted_min") or 0,
-                                            "max": guide_info.get("cp_boosted_max") or 0
-                                        }
-                                    }
-
-                                base_species = re.sub(r'^(Hisuian|Alolan|Galarian|Paldean|Shadow|Mega|Hero|Incarnate|Therian)\s+', '', clean_name, flags=re.IGNORECASE)
-                                base_species = re.sub(r'\s*\([^\)]*\)', '', base_species).strip().upper()
-
-                                dex_entry = (poke_map.get(db_dex) if db_dex else None) or poke_map.get(clean_name.upper()) or poke_map.get(base_species) or {}
-                                dex_nr = dex_entry.get("dexNr") or db_dex
-
-                                # Fallback CP calculation from base stats
-                                if not cp_dict and dex_entry.get("stats"):
-                                    stats = dex_entry["stats"]
-                                    b_atk = stats.get("attack") or stats.get("baseAttack") or stats.get("atk", 0)
-                                    b_def = stats.get("defense") or stats.get("baseDefense") or stats.get("def", 0)
-                                    b_sta = stats.get("stamina") or stats.get("baseStamina") or stats.get("sta", 0)
-                                    if b_atk and b_def and b_sta:
-                                        cp_dict = get_cp_from_stats(b_atk, b_def, b_sta)
-
-                                # Resolve Types
-                                type_names = list(card_types)
-                                if not type_names:
-                                    # Check Regional Types mapping
-                                    reg_key = None
-                                    c_low = clean_name.lower()
-                                    for prefix, reg in [('alolan ', 'alola'), ('alola ', 'alola'), ('galarian ', 'galar'), ('galar ', 'galar'), ('hisuian ', 'hisui'), ('hisui ', 'hisui'), ('paldean ', 'paldea'), ('paldea ', 'paldea')]:
-                                        if prefix in c_low:
-                                            b = c_low.replace(prefix, '').strip()
-                                            b = re.sub(r'^(shadow|hero|incarnate|therian)\s+', '', b).strip()
-                                            b = re.sub(r'\s*\([^)]*\)', '', b).strip()
-                                            reg_key = f"{b}-{reg}".replace(' ', '-')
-                                            break
-                                    if reg_key and reg_key in REGIONAL_TYPES:
-                                        type_names = list(REGIONAL_TYPES[reg_key])
-
-                                if not type_names:
-                                    if dex_entry.get("primaryType"):
-                                        t_name = dex_entry["primaryType"].get("names", {}).get("English", "").lower()
-                                        if t_name:
-                                            type_names.append(t_name)
-                                    if dex_entry.get("secondaryType"):
-                                        t_name = dex_entry["secondaryType"].get("names", {}).get("English", "").lower()
-                                        if t_name:
-                                            type_names.append(t_name)
-
-                                types = [{"name": t, "image": f"https://leekduck.com/assets/img/types/{t}.png"} for t in type_names]
-
-                                weather_boosts = []
-                                seen_weathers = set()
-                                for t in type_names:
-                                    w_name = TYPE_WEATHER_MAP.get(t)
-                                    if w_name and w_name not in seen_weathers:
-                                        seen_weathers.add(w_name)
-                                        w_img = w_name.replace(" ", "_")
-                                        weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
-
-                                img_url = get_boss_image_url(clean_name, dex_nr)
-                                can_be_shiny = bool(has_shiny_class or (dex_nr and dex_nr in shiny_dexes) or (base_species and base_species.upper() in shiny_names) or (clean_name.upper() in shiny_names) or guide_info.get("canBeShiny", False))
-                                pb_url = build_pokebattler_raid_url(clean_name, current_tier)
-
-                                pb_slug = build_pokebattler_slug(clean_name, current_tier)
-                                bosses.append({
-                                    "name": clean_name,
-                                    "tier": current_tier,
-                                    "canBeShiny": can_be_shiny,
-                                    "types": types,
-                                    "combatPower": cp_dict,
-                                    "boostedWeather": weather_boosts,
-                                    "image": img_url,
-                                    "pokebattlerUrl": pb_url,
-                                    "pokebattlerSlug": pb_slug,
-                                    "estimator": None
-                                })
-
-                        curr = curr.find_next_sibling()
-
-                # --- 2. Extract Scheduled & Future Raid Bosses from Schedule Tables ---
-                print("  -> Scraping Raid Schedule & Future Rotations from Pokémon GO Hub...")
-                MONTHS = {
-                    'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
-                    'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12
-                }
-
-                def parse_date_range(text, default_year=2026, default_month=11):
-                    text = text.replace('–', '-').replace('—', '-').strip()
-                    cleaned_date = re.split(r'(?:Into the Wild|GO Wild Area|Final day|Subsequent)', text, flags=re.I)[0].strip()
-                    m1 = re.search(r'([A-Za-z]+)\s+(\d{1,2})\s*-\s*([A-Za-z]+)\s+(\d{1,2})', cleaned_date)
-                    if m1:
-                        m_start = MONTHS.get(m1.group(1).lower(), default_month)
-                        d_start = int(m1.group(2))
-                        m_end = MONTHS.get(m1.group(3).lower(), default_month)
-                        d_end = int(m1.group(4))
-                        y_start = default_year
-                        y_end = default_year + (1 if m_end < m_start else 0)
-                        return (f'{y_start:04d}-{m_start:02d}-{d_start:02d}', f'{y_end:04d}-{m_end:02d}-{d_end:02d}')
-                    m2 = re.search(r'([A-Za-z]+)\s+(\d{1,2})\s*-\s*(\d{1,2})', cleaned_date)
-                    if m2:
-                        m_start = MONTHS.get(m2.group(1).lower(), default_month)
-                        d_start = int(m2.group(2))
-                        d_end = int(m2.group(3))
-                        return (f'{default_year:04d}-{m_start:02d}-{d_start:02d}', f'{default_year:04d}-{m_start:02d}-{d_end:02d}')
-                    m3 = re.search(r'([A-Za-z]+)\s+(\d{1,2})', cleaned_date)
-                    if m3:
-                        m_start = MONTHS.get(m3.group(1).lower(), default_month)
-                        d_start = int(m3.group(2))
-                        return (f'{default_year:04d}-{m_start:02d}-{d_start:02d}', f'{default_year:04d}-{m_start:02d}-{d_start:02d}')
-                    return (None, None)
-
-                m_year = datetime.date.today().year
-                m_month = datetime.date.today().month
-                tm = re.search(r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})', soup.title.string if soup.title else '')
-                if tm:
-                    m_month = MONTHS.get(tm.group(1).lower(), m_month)
-                    m_year = int(tm.group(2))
-
-                seen_sched = set()
-                schedule_entries = []
-                for t in post_body.find_all('table'):
-                    prev = t.find_previous(['h1', 'h2', 'h3', 'h4'])
-                    h_text = prev.get_text(strip=True) if prev else ''
-                    sched_tier = '5-Star Raids'
-                    if '5-star shadow' in h_text.lower(): sched_tier = 'Shadow 5-Star Raids'
-                    elif 'mega' in h_text.lower(): sched_tier = 'Mega Raids'
-                    elif '5-star' in h_text.lower(): sched_tier = '5-Star Raids'
-                    elif '3-star' in h_text.lower(): sched_tier = '3-Star Raids'
-                    elif '1-star' in h_text.lower(): sched_tier = '1-Star Raids'
-
-                    for row in t.find_all('tr'):
-                        cells = row.find_all(['th', 'td'])
-                        if len(cells) < 2: continue
-                        date_str = cells[0].get_text(' ', strip=True)
-                        if any(h in date_str.lower() for h in ['date', 'availability']): continue
-                        start_d, end_d = parse_date_range(date_str, m_year, m_month)
-
-                        db_links = [a for a in cells[1].find_all('a') if 'event' not in a.get('href', '')]
-                        boss_items = []
-                        if db_links:
-                            for a in db_links:
-                                txt = a.get_text(strip=True)
-                                href = a.get('href', '')
-                                dex = None
-                                dm = re.search(r'/pokemon/(\d+)', href)
-                                if dm: dex = int(dm.group(1))
-                                if txt and not any(b['name'] == txt for b in boss_items):
-                                    boss_items.append({'name': txt, 'dex': dex})
-                        else:
-                            txt = cells[1].get_text(strip=True)
-                            if txt:
-                                boss_items.append({'name': txt, 'dex': None})
-
-                        guide_urls = {}
-                        if len(cells) >= 3:
-                            for a in cells[2].find_all('a'):
-                                guide_urls[a.get_text(strip=True).lower()] = a.get('href', '')
-
-                        for bi in boss_items:
-                            b_name = bi['name']
-                            clean_name = canonicalize_boss_name(b_name)
-                            dex_nr = bi['dex']
-                            if not dex_nr:
-                                for val in poke_map.values():
-                                    if isinstance(val, dict) and val.get('names', {}).get('English', '').lower() == clean_name.lower():
-                                        dex_nr = val.get('dexNr')
-                                        break
-
-                            key = (sched_tier, clean_name, start_d, end_d)
-                            if key in seen_sched:
-                                continue
-                            seen_sched.add(key)
-
-                            matched_guide = match_guide_url(clean_name)
-                            for g_name, g_url in guide_urls.items():
-                                if clean_name.lower() in g_name or g_name in clean_name.lower():
-                                    matched_guide = g_url
-                                    break
-
-                            guide_info = fetch_guide_details(matched_guide, sched_tier) if matched_guide else {
-                                'cp_normal_min': None, 'cp_normal_max': None,
-                                'cp_boosted_min': None, 'cp_boosted_max': None,
-                                'canBeShiny': False
-                            }
-
-                            cp_dict = None
-                            if guide_info.get('cp_normal_max'):
-                                cp_dict = {
-                                    'normal': {'min': guide_info.get('cp_normal_min'), 'max': guide_info.get('cp_normal_max')},
-                                    'boosted': {'min': guide_info.get('cp_boosted_min'), 'max': guide_info.get('cp_boosted_max')}
-                                }
-                            else:
-                                stats = get_pokedex_stats(poke_map, clean_name)
-                                if stats:
-                                    cp_norm = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=20, min_iv=10)
-                                    cp_boost = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=25, min_iv=10)
-                                    cp_dict = {'normal': cp_norm, 'boosted': cp_boost}
-
-                            # Types and weather boosts
-                            type_names = []
-                            p_val = None
-                            for v in poke_map.values():
-                                if isinstance(v, dict) and (v.get('dexNr') == dex_nr or v.get('names', {}).get('English', '').lower() == clean_name.lower()):
-                                    p_val = v
-                                    break
-                            if p_val:
-                                t1 = (p_val.get('primaryType') or {}).get('names', {}).get('English', '').lower()
-                                t2 = (p_val.get('secondaryType') or {}).get('names', {}).get('English', '').lower()
-                                if t1: type_names.append(t1)
-                                if t2: type_names.append(t2)
-
-                            types = [{'name': t, 'image': f'https://leekduck.com/assets/img/types/{t}.png'} for t in type_names]
-                            weather_boosts = []
-                            seen_weathers = set()
-                            for t in type_names:
-                                w_name = TYPE_WEATHER_MAP.get(t)
-                                if w_name and w_name not in seen_weathers:
-                                    seen_weathers.add(w_name)
-                                    w_img = w_name.replace(' ', '_')
-                                    weather_boosts.append({'name': w_name, 'image': f'https://leekduck.com/assets/img/weather/{w_img}.png'})
-
-                            img_url = get_boss_image_url(clean_name, dex_nr)
-                            can_be_shiny = bool((dex_nr and dex_nr in shiny_dexes) or (clean_name.upper() in shiny_names) or guide_info.get('canBeShiny', False))
-                            pb_url = build_pokebattler_raid_url(clean_name, sched_tier)
-                            pb_slug = build_pokebattler_slug(clean_name, sched_tier)
-
-                            schedule_entries.append({
-                                'name': clean_name,
-                                'tier': sched_tier,
-                                'canBeShiny': can_be_shiny,
-                                'types': types,
-                                'combatPower': cp_dict,
-                                'boostedWeather': weather_boosts,
-                                'image': img_url,
-                                'pokebattlerUrl': pb_url,
-                                'pokebattlerSlug': pb_slug,
-                                'startDate': start_d,
-                                'endDate': end_d,
-                                'rawDate': date_str,
-                                'guideUrl': matched_guide
-                            })
-
-                # --- 3. Dynamic Rotation Alignment: Schedule vs Outdated Active Section ---
-                today_iso = datetime.date.today().isoformat()
-                active_from_schedule = [
-                    s for s in schedule_entries
-                    if s.get("startDate") and s.get("endDate") and s["startDate"] <= today_iso <= s["endDate"]
-                ]
-                past_schedule_boss_names = {
-                    s["name"].lower() for s in schedule_entries
-                    if s.get("endDate") and s["endDate"] < today_iso
-                }
-
-                if active_from_schedule:
-                    print(f"  -> Found {len(active_from_schedule)} confirmed active bosses for today ({today_iso}) from schedule.")
-                    # Remove bosses that have officially ended per schedule (e.g. Altered Giratina, Mega Sableye)
-                    before_count = len(bosses)
-                    bosses = [b for b in bosses if b["name"].lower() not in past_schedule_boss_names]
-                    if len(bosses) < before_count:
-                        print(f"  -> Filtered out {before_count - len(bosses)} expired boss(es) from active pool: {past_schedule_boss_names}")
-
-                    # Ensure currently active schedule bosses are included in active bosses list
-                    current_active_keys = {(b["tier"], b["name"].lower()) for b in bosses}
-                    for act in active_from_schedule:
-                        act_key = (act["tier"], act["name"].lower())
-                        if act_key not in current_active_keys:
-                            boss_copy = dict(act)
-                            boss_copy["isFromSchedule"] = True
-                            bosses.append(boss_copy)
-                            current_active_keys.add(act_key)
-                            print(f"  -> Promoted scheduled boss to active pool: [{act['tier']}] {act['name']}")
-
-    except Exception as e:
-        print(f"Error scraping Pokémon GO Hub raids: {e}")
-
+    # 1. Fetch live Raids and Upcoming Schedule directly from PokéBattler API
     try:
         pb_url = "https://fight.pokebattler.com/raids"
         res = requests.get(pb_url, headers=HEADERS, timeout=15)
         if res.status_code == 200:
             pb_data = res.json()
-            for t in pb_data.get("tiers", []):
-                tier_name = t.get("tier", "")
-                if "MAX" in tier_name and not ("FUTURE" in tier_name or "LEGACY" in tier_name):
-                    tier_clean = tier_name.replace("RAID_LEVEL_", "").replace("_MAX", "").replace("_", " ").title()
-                    tier_label = f"Max Battles ({tier_clean} Max)" if tier_clean else "Max Battles"
-                    
-                    for r in t.get("raids", []):
-                        raw_id = r.get("pokemonId") or r.get("pokemon", "")
-                        raw_id_upper = raw_id.upper()
-                        is_gigantamax = "GIGANTAMAX" in raw_id_upper or "GMAX" in raw_id_upper
-                        clean_id = re.sub(r'^(DYNAMAX_|GIGANTAMAX_|MEGA_|SHADOW_)', '', raw_id_upper)
-                        clean_id = re.sub(r'(_GIGANTAMAX|_DYNAMAX|_GMAX)$', '', clean_id).strip()
-                        p_info = poke_map.get(clean_id) or poke_map.get(raw_id_upper) or {}
-                        name_eng = p_info.get("names", {}).get("English") or clean_id.capitalize()
-                        if not p_info:
-                            p_info = poke_map.get(name_eng.upper()) or {}
-                        dex_nr = p_info.get("dexNr")
-                        
-                        gmax_ids = {
-                            "venusaur": 10195, "charizard": 10196, "blastoise": 10197, "butterfree": 10198,
-                            "pikachu": 10199, "meowth": 10200, "machamp": 10201, "gengar": 10202,
-                            "kingler": 10203, "lapras": 10204, "eevee": 10205, "snorlax": 10206,
-                            "garbodor": 10207, "melmetal": 10208, "rillaboom": 10209, "cinderace": 10210,
-                            "inteleon": 10211, "corviknight": 10212, "orbeetle": 10213, "drednaw": 10214,
-                            "coalossal": 10215, "flapple": 10216, "appletun": 10217, "sandaconda": 10218,
-                            "toxtricity": 10219, "centiskorch": 10220, "hatterene": 10221, "grimmsnarl": 10222,
-                            "alcremie": 10223, "copperajah": 10224, "duraludon": 10225, "urshifu": 10226
-                        }
-                        
-                        if is_gigantamax and clean_id.lower() in gmax_ids:
-                            img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{gmax_ids[clean_id.lower()]}.png"
-                        elif dex_nr:
-                            img_url = f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png"
+            target_tiers = {
+                'RAID_LEVEL_1': '1-Star Raids',
+                'RAID_LEVEL_3': '3-Star Raids',
+                'RAID_LEVEL_5': '5-Star Raids',
+                'RAID_LEVEL_MEGA': 'Mega Raids',
+                'RAID_LEVEL_1_SHADOW': 'Shadow 1-Star Raids',
+                'RAID_LEVEL_3_SHADOW': 'Shadow 3-Star Raids',
+                'RAID_LEVEL_5_SHADOW': 'Shadow 5-Star Raids'
+            }
+
+            for t in pb_data.get('tiers', []):
+                t_key = t.get('tier', '')
+                if t_key in target_tiers:
+                    tier_label = target_tiers[t_key]
+                    for r in t.get('raids', []):
+                        pid = r.get('pokemonId') or r.get('pokemon', '')
+                        clean_name = format_boss_name(pid, r.get('pokemon', ''))
+
+                        # Dex lookup
+                        dex_nr = None
+                        stats = get_pokedex_stats(poke_map, clean_name)
+                        if stats and stats.get('dexNr'):
+                            dex_nr = stats.get('dexNr')
                         else:
-                            img_url = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png"
-                        
-                        types = []
+                            base_s = clean_name.replace('Shadow ', '').replace('Mega ', '').strip()
+                            stats_base = get_pokedex_stats(poke_map, base_s)
+                            if stats_base: dex_nr = stats_base.get('dexNr')
+
+                        # CP calculation
+                        cp_dict = None
+                        if stats:
+                            cp_norm = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=20, min_iv=10)
+                            cp_boost = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=25, min_iv=10)
+                            cp_dict = {'normal': cp_norm, 'boosted': cp_boost}
+
+                        # Types and weather
+                        type_names = []
+                        p_val = None
+                        for v in poke_map.values():
+                            if isinstance(v, dict) and (v.get('dexNr') == dex_nr or v.get('names', {}).get('English', '').lower() == clean_name.lower()):
+                                p_val = v
+                                break
+                        if p_val:
+                            t1 = (p_val.get('primaryType') or {}).get('names', {}).get('English', '').lower()
+                            t2 = (p_val.get('secondaryType') or {}).get('names', {}).get('English', '').lower()
+                            if t1: type_names.append(t1)
+                            if t2: type_names.append(t2)
+
+                        types = [{'name': type_n, 'image': f'https://leekduck.com/assets/img/types/{type_n}.png'} for type_n in type_names]
                         weather_boosts = []
                         seen_weathers = set()
+                        for type_n in type_names:
+                            w_name = TYPE_WEATHER_MAP.get(type_n)
+                            if w_name and w_name not in seen_weathers:
+                                seen_weathers.add(w_name)
+                                w_img = w_name.replace(' ', '_')
+                                weather_boosts.append({'name': w_name, 'image': f'https://leekduck.com/assets/img/weather/{w_img}.png'})
 
+                        img_url = get_boss_image_url(clean_name, dex_nr)
+                        can_be_shiny = bool(r.get('shiny', False) or (dex_nr and dex_nr in shiny_dexes) or (clean_name.upper() in shiny_names))
+                        pb_slug = pid
+                        pb_url_item = f'https://www.pokebattler.com/raids/{pb_slug}'
+
+                        start_ms = r.get('startDate')
+                        start_iso = datetime.datetime.fromtimestamp(start_ms/1000.0, datetime.timezone.utc).isoformat() if start_ms else None
+                        article_url = r.get('article', {}).get('articleURL') if r.get('article') else None
+
+                        boss_item = {
+                            'name': clean_name,
+                            'tier': tier_label,
+                            'canBeShiny': can_be_shiny,
+                            'types': types,
+                            'combatPower': cp_dict,
+                            'boostedWeather': weather_boosts,
+                            'image': img_url,
+                            'pokebattlerUrl': pb_url_item,
+                            'pokebattlerSlug': pb_slug,
+                            'startDate': start_iso,
+                            'guideUrl': article_url,
+                            'estimator': None
+                        }
+
+                        if r.get('upcoming'):
+                            schedule_entries.append(boss_item)
+                        else:
+                            bosses.append(boss_item)
+                
+                # Max Battles extraction
+                elif "MAX" in t_key and not ("FUTURE" in t_key or "LEGACY" in t_key):
+                    tier_clean = t_key.replace("RAID_LEVEL_", "").replace("_MAX", "").replace("_", " ").title()
+                    tier_label = f"Max Battles ({tier_clean} Max)" if tier_clean else "Max Battles"
+                    for r in t.get("raids", []):
+                        pid = r.get("pokemonId") or r.get("pokemon", "")
+                        clean_id = pid.replace("_MAX", "").replace("_FORM", "").replace("_GIGANTAMAX", "")
+                        is_gigantamax = "_GIGANTAMAX" in pid or (r.get("pokemon") and "_GIGANTAMAX" in r.get("pokemon"))
+
+                        p_info = poke_map.get(clean_id) or {}
+                        dex_nr = p_info.get("dexNr") if p_info else None
+                        name_eng = p_info.get("names", {}).get("English", clean_id.title()) if p_info else clean_id.title()
+
+                        type_names = []
                         if p_info.get("primaryType"):
-                            t_name = p_info["primaryType"].get("names", {}).get("English", "").lower()
-                            if t_name:
-                                types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
-                                w_name = TYPE_WEATHER_MAP.get(t_name)
-                                if w_name and w_name not in seen_weathers:
-                                    seen_weathers.add(w_name)
-                                    w_img = w_name.replace(" ", "_")
-                                    weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
-
+                            t1 = p_info["primaryType"].get("names", {}).get("English", "").lower()
+                            if t1: type_names.append(t1)
                         if p_info.get("secondaryType"):
-                            t_name = p_info["secondaryType"].get("names", {}).get("English", "").lower()
-                            if t_name:
-                                types.append({"name": t_name, "image": f"https://leekduck.com/assets/img/types/{t_name}.png"})
-                                w_name = TYPE_WEATHER_MAP.get(t_name)
-                                if w_name and w_name not in seen_weathers:
-                                    seen_weathers.add(w_name)
-                                    w_img = w_name.replace(" ", "_")
-                                    weather_boosts.append({"name": w_name, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
+                            t2 = p_info["secondaryType"].get("names", {}).get("English", "").lower()
+                            if t2: type_names.append(t2)
 
+                        types = [{"name": type_n, "image": f"https://leekduck.com/assets/img/types/{type_n}.png"} for type_n in type_names]
+
+                        weather_boosts = []
+                        seen_w = set()
+                        for type_n in type_names:
+                            w = TYPE_WEATHER_MAP.get(type_n)
+                            if w and w not in seen_w:
+                                seen_w.add(w)
+                                w_img = w.replace(" ", "_")
+                                weather_boosts.append({"name": w, "image": f"https://leekduck.com/assets/img/weather/{w_img}.png"})
+
+                        img_url = get_boss_image_url(f"Gigantamax {name_eng}" if is_gigantamax else f"Dynamax {name_eng}", dex_nr)
+                        
                         cp_dict = None
                         if p_info.get("stats"):
                             stats = p_info["stats"]
@@ -1005,25 +628,15 @@ def scrape_raids():
                             if b_atk and b_def and b_sta:
                                 cp_dict = get_cp_from_stats(b_atk, b_def, b_sta)
 
-                        if not cp_dict:
-                            min_c = r.get("minCp") or r.get("cp") or 0
-                            max_c = r.get("cp") or 0
-                            cp_dict = {
-                                "normal": {
-                                    "min": min_c,
-                                    "max": max_c
-                                }
-                            }
-
                         slug = r.get("pokemonId") or r.get("pokemon", "")
                         if is_gigantamax:
                             boss_display_name = f"Gigantamax {name_eng}"
                             pb_slug = slug if slug else f"{clean_id.upper()}_GIGANTAMAX"
-                            pb_url_item = f"https://www.pokebattler.com/max/{pb_slug}"
                         else:
                             boss_display_name = f"Dynamax {name_eng}"
                             pb_slug = slug if slug.startswith("DYNAMAX_") else f"DYNAMAX_{clean_id.upper()}"
-                            pb_url_item = f"https://www.pokebattler.com/max/{pb_slug}"
+                        
+                        pb_url_item = f"https://www.pokebattler.com/max/{pb_slug}"
 
                         max_battles.append({
                             "name": boss_display_name,
@@ -1036,7 +649,7 @@ def scrape_raids():
                             "image": img_url
                         })
     except Exception as e:
-        print(f"Error fetching Pokebattler max battles: {e}")
+        print(f"Error fetching from PokéBattler API: {e}")
 
     # Fetch Pokebattler estimators in parallel for standard raid bosses and schedule entries
     all_targets_for_estimator = bosses + schedule_entries
