@@ -208,9 +208,36 @@
             "name": "Crowned Sword Zacian",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [],
-            "combatPower": null,
-            "boostedWeather": [],
+            "types": [
+                {
+                    "name": "fairy",
+                    "image": "https://leekduck.com/assets/img/types/fairy.png"
+                },
+                {
+                    "name": "steel",
+                    "image": "https://leekduck.com/assets/img/types/steel.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2100,
+                    "max": 2188
+                },
+                "boosted": {
+                    "min": 2625,
+                    "max": 2735
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/ZACIAN_CROWNED_SWORD_FORM",
             "pokebattlerSlug": "ZACIAN_CROWNED_SWORD_FORM",
@@ -257,9 +284,36 @@
             "name": "Crowned Shield Zamazenta",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [],
-            "combatPower": null,
-            "boostedWeather": [],
+            "types": [
+                {
+                    "name": "fighting",
+                    "image": "https://leekduck.com/assets/img/types/fighting.png"
+                },
+                {
+                    "name": "steel",
+                    "image": "https://leekduck.com/assets/img/types/steel.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2100,
+                    "max": 2188
+                },
+                "boosted": {
+                    "min": 2625,
+                    "max": 2735
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/ZAMAZENTA_CROWNED_SHIELD_FORM",
             "pokebattlerSlug": "ZAMAZENTA_CROWNED_SHIELD_FORM",
@@ -444,9 +498,36 @@
             "name": "Black Kyurem",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [],
-            "combatPower": null,
-            "boostedWeather": [],
+            "types": [
+                {
+                    "name": "dragon",
+                    "image": "https://leekduck.com/assets/img/types/dragon.png"
+                },
+                {
+                    "name": "ice",
+                    "image": "https://leekduck.com/assets/img/types/ice.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1957,
+                    "max": 2042
+                },
+                "boosted": {
+                    "min": 2446,
+                    "max": 2553
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/KYUREM_BLACK_FORM",
             "pokebattlerSlug": "KYUREM_BLACK_FORM",
@@ -493,9 +574,36 @@
             "name": "White Kyurem",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [],
-            "combatPower": null,
-            "boostedWeather": [],
+            "types": [
+                {
+                    "name": "dragon",
+                    "image": "https://leekduck.com/assets/img/types/dragon.png"
+                },
+                {
+                    "name": "ice",
+                    "image": "https://leekduck.com/assets/img/types/ice.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1957,
+                    "max": 2042
+                },
+                "boosted": {
+                    "min": 2446,
+                    "max": 2553
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/KYUREM_WHITE_FORM",
             "pokebattlerSlug": "KYUREM_WHITE_FORM",
@@ -1254,10 +1362,29 @@
             "name": "Shadow Incarnate Tornadus",
             "tier": "Shadow 5-Star Raids",
             "canBeShiny": true,
-            "types": [],
-            "combatPower": null,
-            "boostedWeather": [],
-            "image": "",
+            "types": [
+                {
+                    "name": "flying",
+                    "image": "https://leekduck.com/assets/img/types/flying.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1828,
+                    "max": 1911
+                },
+                "boosted": {
+                    "min": 2285,
+                    "max": 2389
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/641.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS_SHADOW_FORM",
             "pokebattlerSlug": "TORNADUS_SHADOW_FORM",
             "startDate": "2026-11-16T14:00:00+00:00",
