@@ -1,990 +1,6 @@
 {
     "current": [
         {
-            "name": "Cofagrigus",
-            "tier": "3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1231,
-                    "max": 1299
-                },
-                "boosted": {
-                    "min": 1539,
-                    "max": 1624
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/563.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/COFAGRIGUS",
-            "pokebattlerSlug": "COFAGRIGUS",
-            "estimator": 0.62,
-            "estimatedPlayers": 0.62,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.62
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.31
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.21
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.15
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.12
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.1
-                }
-            ]
-        },
-        {
-            "name": "Trevenant",
-            "tier": "3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                },
-                {
-                    "name": "grass",
-                    "image": "https://leekduck.com/assets/img/types/grass.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1390,
-                    "max": 1462
-                },
-                "boosted": {
-                    "min": 1738,
-                    "max": 1828
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                },
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/709.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/TREVENANT",
-            "pokebattlerSlug": "TREVENANT",
-            "estimator": 0.38,
-            "estimatedPlayers": 0.38,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.38
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.19
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.13
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.1
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.08
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.06
-                }
-            ]
-        },
-        {
-            "name": "Dhelmise",
-            "tier": "3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                },
-                {
-                    "name": "grass",
-                    "image": "https://leekduck.com/assets/img/types/grass.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 0,
-                    "max": 1685
-                },
-                "boosted": {
-                    "min": 0,
-                    "max": 2107
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                },
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/781.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/DHELMISE",
-            "pokebattlerSlug": "DHELMISE",
-            "estimator": 0.77,
-            "estimatedPlayers": 0.77,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 2,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "TIGHT",
-                    "ratio": 0.77
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.39
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.26
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.19
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.15
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.13
-                }
-            ]
-        },
-        {
-            "name": "Pikachu",
-            "tier": "1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "electric",
-                    "image": "https://leekduck.com/assets/img/types/electric.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 493,
-                    "max": 536
-                },
-                "boosted": {
-                    "min": 616,
-                    "max": 670
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "rainy",
-                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/PIKACHU",
-            "pokebattlerSlug": "PIKACHU",
-            "estimator": 0.04,
-            "estimatedPlayers": 0.04,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.04
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.02
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Sinistea",
-            "tier": "1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 603,
-                    "max": 650
-                },
-                "boosted": {
-                    "min": 754,
-                    "max": 813
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/854.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/SINISTEA",
-            "pokebattlerSlug": "SINISTEA",
-            "estimator": 0.04,
-            "estimatedPlayers": 0.04,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.04
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.02
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Incarnate Tornadus",
-            "tier": "Shadow 5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ground",
-                    "image": "https://leekduck.com/assets/img/types/ground.png"
-                },
-                {
-                    "name": "flying",
-                    "image": "https://leekduck.com/assets/img/types/flying.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1762,
-                    "max": 2050
-                },
-                "boosted": {
-                    "min": 2203,
-                    "max": 2563
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                },
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/641.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS",
-            "pokebattlerSlug": "TORNADUS",
-            "estimator": 1.45,
-            "estimatedPlayers": 1.45,
-            "verdict": "EASY DUO",
-            "trainersNeeded": 3,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "HARD",
-                    "ratio": 1.45
-                },
-                {
-                    "trainers": "2",
-                    "status": "TIGHT",
-                    "ratio": 0.72
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.48
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.36
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.29
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.24
-                }
-            ]
-        },
-        {
-            "name": "Prinplup",
-            "tier": "Shadow 3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "water",
-                    "image": "https://leekduck.com/assets/img/types/water.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 868,
-                    "max": 972
-                },
-                "boosted": {
-                    "min": 1086,
-                    "max": 1515
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "rainy",
-                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/394.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/PRINPLUP_SHADOW_FORM",
-            "pokebattlerSlug": "PRINPLUP_SHADOW_FORM",
-            "estimator": 0.7,
-            "estimatedPlayers": 0.7,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 2,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "TIGHT",
-                    "ratio": 0.7
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.35
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.23
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.17
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.14
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.12
-                }
-            ]
-        },
-        {
-            "name": "Piloswine",
-            "tier": "Shadow 3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ice",
-                    "image": "https://leekduck.com/assets/img/types/ice.png"
-                },
-                {
-                    "name": "ground",
-                    "image": "https://leekduck.com/assets/img/types/ground.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1217,
-                    "max": 1340
-                },
-                "boosted": {
-                    "min": 1521,
-                    "max": 1675
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                },
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/221.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/PILOSWINE_SHADOW_FORM",
-            "pokebattlerSlug": "PILOSWINE_SHADOW_FORM",
-            "estimator": 0.59,
-            "estimatedPlayers": 0.59,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.59
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.29
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.2
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.15
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.12
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.1
-                }
-            ]
-        },
-        {
-            "name": "Poliwhirl",
-            "tier": "Shadow 3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "water",
-                    "image": "https://leekduck.com/assets/img/types/water.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 716,
-                    "max": 811
-                },
-                "boosted": {
-                    "min": 895,
-                    "max": 1013
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "rainy",
-                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/61.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/POLIWHIRL_SHADOW_FORM",
-            "pokebattlerSlug": "POLIWHIRL_SHADOW_FORM",
-            "estimator": 0.6,
-            "estimatedPlayers": 0.6,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.6
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.3
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.2
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.15
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.12
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.1
-                }
-            ]
-        },
-        {
-            "name": "Larvitar",
-            "tier": "Shadow 1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "rock",
-                    "image": "https://leekduck.com/assets/img/types/rock.png"
-                },
-                {
-                    "name": "ground",
-                    "image": "https://leekduck.com/assets/img/types/ground.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 0,
-                    "max": 594
-                },
-                "boosted": {
-                    "min": 0,
-                    "max": 743
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "partly cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/partly_cloudy.png"
-                },
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/246.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/LARVITAR_SHADOW_FORM",
-            "pokebattlerSlug": "LARVITAR_SHADOW_FORM",
-            "estimator": 0.03,
-            "estimatedPlayers": 0.03,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.03
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Mudkip",
-            "tier": "Shadow 1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "water",
-                    "image": "https://leekduck.com/assets/img/types/water.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 0,
-                    "max": 644
-                },
-                "boosted": {
-                    "min": 0,
-                    "max": 805
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "rainy",
-                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/258.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/MUDKIP_SHADOW_FORM",
-            "pokebattlerSlug": "MUDKIP_SHADOW_FORM",
-            "estimator": 0.04,
-            "estimatedPlayers": 0.04,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.04
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.02
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Makuhita",
-            "tier": "Shadow 1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "fighting",
-                    "image": "https://leekduck.com/assets/img/types/fighting.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 0,
-                    "max": 467
-                },
-                "boosted": {
-                    "min": 0,
-                    "max": 583
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/296.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/MAKUHITA_SHADOW_FORM",
-            "pokebattlerSlug": "MAKUHITA_SHADOW_FORM",
-            "estimator": 0.03,
-            "estimatedPlayers": 0.03,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.03
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Cranidos",
-            "tier": "Shadow 1-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "rock",
-                    "image": "https://leekduck.com/assets/img/types/rock.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 0,
-                    "max": 1040
-                },
-                "boosted": {
-                    "min": 0,
-                    "max": 1300
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "partly cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/partly_cloudy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/408.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CRANIDOS_SHADOW_FORM",
-            "pokebattlerSlug": "CRANIDOS_SHADOW_FORM",
-            "estimator": 0.03,
-            "estimatedPlayers": 0.03,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.03
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.01
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.01
-                }
-            ]
-        },
-        {
-            "name": "Crowned Sword Zacian",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "fairy",
-                    "image": "https://leekduck.com/assets/img/types/fairy.png"
-                },
-                {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2100,
-                    "max": 2188
-                },
-                "boosted": {
-                    "min": 2625,
-                    "max": 2735
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CROWNED_SWORD_ZACIAN",
-            "pokebattlerSlug": "CROWNED_SWORD_ZACIAN",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13 Into the Wild",
-            "guideUrl": "https://pokemongohub.net/post/guide/zacian-crowned-sword-raid-guide/",
-            "isFromSchedule": true
-        },
-        {
-            "name": "Crowned Shield Zamazenta",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "fighting",
-                    "image": "https://leekduck.com/assets/img/types/fighting.png"
-                },
-                {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2100,
-                    "max": 2188
-                },
-                "boosted": {
-                    "min": 2625,
-                    "max": 2735
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CROWNED_SHIELD_ZAMAZENTA",
-            "pokebattlerSlug": "CROWNED_SHIELD_ZAMAZENTA",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13 Into the Wild",
-            "guideUrl": "https://pokemongohub.net/post/guide/zamazenta-crowned-shield-raid-guide/",
-            "isFromSchedule": true
-        },
-        {
             "name": "Druddigon",
             "tier": "3-Star Raids",
             "canBeShiny": true,
@@ -1013,11 +29,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/621.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/DRUDDIGON",
             "pokebattlerSlug": "DRUDDIGON",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13",
+            "startDate": null,
             "guideUrl": null,
-            "isFromSchedule": true,
             "estimator": 0.42,
             "estimatedPlayers": 0.42,
             "verdict": "SOLOABLE",
@@ -1056,9 +69,77 @@
             ]
         },
         {
+            "name": "Machamp",
+            "tier": "3-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "fighting",
+                    "image": "https://leekduck.com/assets/img/types/fighting.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1667,
+                    "max": 1746
+                },
+                "boosted": {
+                    "min": 2084,
+                    "max": 2183
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/68.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/MACHAMP",
+            "pokebattlerSlug": "MACHAMP",
+            "startDate": null,
+            "guideUrl": null,
+            "estimator": 0.3,
+            "estimatedPlayers": 0.3,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.3
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.15
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.1
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.07
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.06
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.05
+                }
+            ]
+        },
+        {
             "name": "Orthworm",
             "tier": "3-Star Raids",
-            "canBeShiny": false,
+            "canBeShiny": true,
             "types": [
                 {
                     "name": "steel",
@@ -1084,11 +165,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/968.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/ORTHWORM",
             "pokebattlerSlug": "ORTHWORM",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13",
+            "startDate": null,
             "guideUrl": null,
-            "isFromSchedule": true,
             "estimator": 0.47,
             "estimatedPlayers": 0.47,
             "verdict": "SOLOABLE",
@@ -1125,471 +203,107 @@
                     "ratio": 0.08
                 }
             ]
-        }
-    ],
-    "schedule": [
-        {
-            "name": "Giratina (Origin Forme)",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                },
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1848,
-                    "max": 1931
-                },
-                "boosted": {
-                    "min": 2310,
-                    "max": 2414
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                },
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/GIRATINA_ORIGIN_FORM",
-            "pokebattlerSlug": "GIRATINA_ORIGIN_FORM",
-            "startDate": "2026-10-28",
-            "endDate": "2026-11-03",
-            "rawDate": "October 28–November 3",
-            "guideUrl": "https://pokemongohub.net/post/guide/giratina-altered-raid/",
-            "estimator": 1.39,
-            "estimatedPlayers": 1.39,
-            "verdict": "EASY DUO",
-            "trainersNeeded": 3,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "HARD",
-                    "ratio": 1.39
-                },
-                {
-                    "trainers": "2",
-                    "status": "TIGHT",
-                    "ratio": 0.69
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.46
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.35
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.28
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.23
-                }
-            ]
-        },
-        {
-            "name": "Giratina (Altered Forme)",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                },
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1848,
-                    "max": 1931
-                },
-                "boosted": {
-                    "min": 2310,
-                    "max": 2414
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                },
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/487.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/GIRATINA_ALTERED_FORM",
-            "pokebattlerSlug": "GIRATINA_ALTERED_FORM",
-            "startDate": "2026-11-04",
-            "endDate": "2026-11-08",
-            "rawDate": "November 4–8",
-            "guideUrl": "https://pokemongohub.net/post/guide/giratina-altered-raid/",
-            "estimator": 1.51,
-            "estimatedPlayers": 1.51,
-            "verdict": "EASY TRIO",
-            "trainersNeeded": 3,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 1.51
-                },
-                {
-                    "trainers": "2",
-                    "status": "TIGHT",
-                    "ratio": 0.76
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.5
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.38
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.3
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.25
-                }
-            ]
         },
         {
             "name": "Crowned Sword Zacian",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [
-                {
-                    "name": "fairy",
-                    "image": "https://leekduck.com/assets/img/types/fairy.png"
-                },
-                {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2100,
-                    "max": 2188
-                },
-                "boosted": {
-                    "min": 2625,
-                    "max": 2735
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
+            "types": [],
+            "combatPower": null,
+            "boostedWeather": [],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CROWNED_SWORD_ZACIAN",
-            "pokebattlerSlug": "CROWNED_SWORD_ZACIAN",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13 Into the Wild",
-            "guideUrl": "https://pokemongohub.net/post/guide/zacian-crowned-sword-raid-guide/"
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZACIAN_CROWNED_SWORD_FORM",
+            "pokebattlerSlug": "ZACIAN_CROWNED_SWORD_FORM",
+            "startDate": null,
+            "guideUrl": "https://cms.pokebattler.com/2025/06/28/zacian-crowned-sword-raid-guide/",
+            "estimator": 1.86,
+            "estimatedPlayers": 1.86,
+            "verdict": "EASY TRIO",
+            "trainersNeeded": 3,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 1.86
+                },
+                {
+                    "trainers": "2",
+                    "status": "TIGHT",
+                    "ratio": 0.93
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.62
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.47
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.37
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.31
+                }
+            ]
         },
         {
             "name": "Crowned Shield Zamazenta",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [
-                {
-                    "name": "fighting",
-                    "image": "https://leekduck.com/assets/img/types/fighting.png"
-                },
-                {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2100,
-                    "max": 2188
-                },
-                "boosted": {
-                    "min": 2625,
-                    "max": 2735
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "cloudy",
-                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
+            "types": [],
+            "combatPower": null,
+            "boostedWeather": [],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CROWNED_SHIELD_ZAMAZENTA",
-            "pokebattlerSlug": "CROWNED_SHIELD_ZAMAZENTA",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13 Into the Wild",
-            "guideUrl": "https://pokemongohub.net/post/guide/zamazenta-crowned-shield-raid-guide/"
-        },
-        {
-            "name": "Zekrom",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                },
-                {
-                    "name": "electric",
-                    "image": "https://leekduck.com/assets/img/types/electric.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2217,
-                    "max": 2307
-                },
-                "boosted": {
-                    "min": 2771,
-                    "max": 2884
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                },
-                {
-                    "name": "rainy",
-                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZEKROM",
-            "pokebattlerSlug": "ZEKROM",
-            "startDate": "2026-11-14",
-            "endDate": "2026-11-14",
-            "rawDate": "November 14 GO Wild Area: Global",
-            "guideUrl": null,
-            "estimator": 1.56,
-            "estimatedPlayers": 1.56,
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZAMAZENTA_CROWNED_SHIELD_FORM",
+            "pokebattlerSlug": "ZAMAZENTA_CROWNED_SHIELD_FORM",
+            "startDate": null,
+            "guideUrl": "https://cms.pokebattler.com/2025/06/28/zamazenta-crowned-shield-raid-guide/",
+            "estimator": 1.87,
+            "estimatedPlayers": 1.87,
             "verdict": "EASY TRIO",
             "trainersNeeded": 3,
             "trainerBoxes": [
                 {
                     "trainers": "1",
                     "status": "EXTREME",
-                    "ratio": 1.56
+                    "ratio": 1.87
                 },
                 {
                     "trainers": "2",
                     "status": "TIGHT",
-                    "ratio": 0.78
+                    "ratio": 0.94
                 },
                 {
                     "trainers": "3",
                     "status": "EASY",
-                    "ratio": 0.52
+                    "ratio": 0.62
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.39
+                    "ratio": 0.47
                 },
                 {
                     "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.37
+                },
+                {
+                    "trainers": "6+",
                     "status": "EASY",
                     "ratio": 0.31
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.26
                 }
             ]
-        },
-        {
-            "name": "White Kyurem",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                },
-                {
-                    "name": "ice",
-                    "image": "https://leekduck.com/assets/img/types/ice.png"
-                }
-            ],
-            "combatPower": null,
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/WHITE_KYUREM",
-            "pokebattlerSlug": "WHITE_KYUREM",
-            "startDate": "2026-11-14",
-            "endDate": "2026-11-14",
-            "rawDate": "November 14 GO Wild Area: Global",
-            "guideUrl": null
-        },
-        {
-            "name": "Reshiram",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                },
-                {
-                    "name": "fire",
-                    "image": "https://leekduck.com/assets/img/types/fire.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2217,
-                    "max": 2307
-                },
-                "boosted": {
-                    "min": 2771,
-                    "max": 2884
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                },
-                {
-                    "name": "sunny",
-                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/643.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/RESHIRAM",
-            "pokebattlerSlug": "RESHIRAM",
-            "startDate": "2026-11-15",
-            "endDate": "2026-11-15",
-            "rawDate": "November 15 GO Wild Area: Global",
-            "guideUrl": null,
-            "estimator": 1.64,
-            "estimatedPlayers": 1.64,
-            "verdict": "EASY TRIO",
-            "trainersNeeded": 3,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 1.64
-                },
-                {
-                    "trainers": "2",
-                    "status": "TIGHT",
-                    "ratio": 0.82
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.55
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.41
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.33
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.27
-                }
-            ]
-        },
-        {
-            "name": "Black Kyurem",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                },
-                {
-                    "name": "ice",
-                    "image": "https://leekduck.com/assets/img/types/ice.png"
-                }
-            ],
-            "combatPower": null,
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                },
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/BLACK_KYUREM",
-            "pokebattlerSlug": "BLACK_KYUREM",
-            "startDate": "2026-11-15",
-            "endDate": "2026-11-15",
-            "rawDate": "November 15 GO Wild Area: Global",
-            "guideUrl": null
-        },
+        }
+    ],
+    "schedule": [
         {
             "name": "Cresselia",
             "tier": "5-Star Raids",
@@ -1619,10 +333,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/488.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/CRESSELIA",
             "pokebattlerSlug": "CRESSELIA",
-            "startDate": "2026-11-16",
-            "endDate": "2026-11-24",
-            "rawDate": "November 16–24",
-            "guideUrl": "https://pokemongohub.net/post/guide/cresselia-raid/",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
             "estimator": 1.88,
             "estimatedPlayers": 1.88,
             "verdict": "EASY TRIO",
@@ -1689,10 +401,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/DARKRAI",
             "pokebattlerSlug": "DARKRAI",
-            "startDate": "2026-11-16",
-            "endDate": "2026-11-24",
-            "rawDate": "November 16–24",
-            "guideUrl": "https://pokemongohub.net/post/guide/darkrai-raid-counters-guide/",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
             "estimator": 1.27,
             "estimatedPlayers": 1.27,
             "verdict": "EASY DUO",
@@ -1731,142 +441,66 @@
             ]
         },
         {
-            "name": "Normal Deoxys",
+            "name": "Black Kyurem",
             "tier": "5-Star Raids",
             "canBeShiny": true,
-            "types": [
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
-                }
-            ],
+            "types": [],
             "combatPower": null,
-            "boostedWeather": [
+            "boostedWeather": [],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/KYUREM_BLACK_FORM",
+            "pokebattlerSlug": "KYUREM_BLACK_FORM",
+            "startDate": "2026-11-15T13:00:00+00:00",
+            "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-black-raid-guide/",
+            "estimator": 1.24,
+            "estimatedPlayers": 1.24,
+            "verdict": "EASY DUO",
+            "trainersNeeded": 2,
+            "trainerBoxes": [
                 {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/NORMAL_DEOXYS",
-            "pokebattlerSlug": "NORMAL_DEOXYS",
-            "startDate": "2026-11-25",
-            "endDate": "2026-12-01",
-            "rawDate": "November 25–December 1",
-            "guideUrl": null
-        },
-        {
-            "name": "Speed Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
-                }
-            ],
-            "combatPower": null,
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/SPEED_DEOXYS",
-            "pokebattlerSlug": "SPEED_DEOXYS",
-            "startDate": "2026-11-25",
-            "endDate": "2026-12-01",
-            "rawDate": "November 25–December 1",
-            "guideUrl": null
-        },
-        {
-            "name": "Attack Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
-                }
-            ],
-            "combatPower": null,
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/ATTACK_DEOXYS",
-            "pokebattlerSlug": "ATTACK_DEOXYS",
-            "startDate": "2026-11-25",
-            "endDate": "2026-12-01",
-            "rawDate": "November 25–December 1",
-            "guideUrl": null
-        },
-        {
-            "name": "Defense Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
-                }
-            ],
-            "combatPower": null,
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/DEFENSE_DEOXYS",
-            "pokebattlerSlug": "DEFENSE_DEOXYS",
-            "startDate": "2026-11-25",
-            "endDate": "2026-12-01",
-            "rawDate": "November 25–December 1",
-            "guideUrl": null
-        },
-        {
-            "name": "Mega Sableye",
-            "tier": "Mega Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dark",
-                    "image": "https://leekduck.com/assets/img/types/dark.png"
+                    "trainers": "1",
+                    "status": "HARD",
+                    "ratio": 1.24
                 },
                 {
-                    "name": "ghost",
-                    "image": "https://leekduck.com/assets/img/types/ghost.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 789,
-                    "max": 843
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.62
                 },
-                "boosted": {
-                    "min": 986,
-                    "max": 1054
-                }
-            },
-            "boostedWeather": [
                 {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.41
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.31
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.25
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.21
                 }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10066.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/SABLEYE_MEGA",
-            "pokebattlerSlug": "SABLEYE_MEGA",
-            "startDate": "2026-10-28",
-            "endDate": "2026-11-08",
-            "rawDate": "October 28–November 8",
-            "guideUrl": "https://pokemongohub.net/post/guide/mega-sableye-raid-counters-guide/",
+            ]
+        },
+        {
+            "name": "White Kyurem",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [],
+            "combatPower": null,
+            "boostedWeather": [],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10023.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/KYUREM_WHITE_FORM",
+            "pokebattlerSlug": "KYUREM_WHITE_FORM",
+            "startDate": "2026-11-14T13:00:00+00:00",
+            "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-white-raid-guide/",
             "estimator": 1.2,
             "estimatedPlayers": 1.2,
             "verdict": "EASY DUO",
@@ -1905,6 +539,158 @@
             ]
         },
         {
+            "name": "Reshiram",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "dragon",
+                    "image": "https://leekduck.com/assets/img/types/dragon.png"
+                },
+                {
+                    "name": "fire",
+                    "image": "https://leekduck.com/assets/img/types/fire.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2217,
+                    "max": 2307
+                },
+                "boosted": {
+                    "min": 2771,
+                    "max": 2884
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                },
+                {
+                    "name": "sunny",
+                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/643.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/RESHIRAM",
+            "pokebattlerSlug": "RESHIRAM",
+            "startDate": "2026-11-15T13:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 1.64,
+            "estimatedPlayers": 1.64,
+            "verdict": "EASY TRIO",
+            "trainersNeeded": 3,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 1.64
+                },
+                {
+                    "trainers": "2",
+                    "status": "TIGHT",
+                    "ratio": 0.82
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.55
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.41
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.33
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.27
+                }
+            ]
+        },
+        {
+            "name": "Zekrom",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "dragon",
+                    "image": "https://leekduck.com/assets/img/types/dragon.png"
+                },
+                {
+                    "name": "electric",
+                    "image": "https://leekduck.com/assets/img/types/electric.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2217,
+                    "max": 2307
+                },
+                "boosted": {
+                    "min": 2771,
+                    "max": 2884
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                },
+                {
+                    "name": "rainy",
+                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/644.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZEKROM",
+            "pokebattlerSlug": "ZEKROM",
+            "startDate": "2026-11-14T13:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 1.56,
+            "estimatedPlayers": 1.56,
+            "verdict": "EASY TRIO",
+            "trainersNeeded": 3,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 1.56
+                },
+                {
+                    "trainers": "2",
+                    "status": "TIGHT",
+                    "ratio": 0.78
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.52
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.39
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.31
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.26
+                }
+            ]
+        },
+        {
             "name": "Mega Banette",
             "tier": "Mega Raids",
             "canBeShiny": true,
@@ -1933,10 +719,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10056.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/BANETTE_MEGA",
             "pokebattlerSlug": "BANETTE_MEGA",
-            "startDate": "2026-11-16",
-            "endDate": "2026-11-24",
-            "rawDate": "November 16–24",
-            "guideUrl": "https://pokemongohub.net/post/guide/mega-banette-raid-guide/",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
             "estimator": 0.79,
             "estimatedPlayers": 0.79,
             "verdict": "SOLOABLE",
@@ -1975,27 +759,307 @@
             ]
         },
         {
-            "name": "Mega Metagross",
-            "tier": "Mega Raids",
+            "name": "Shadow Cranidos",
+            "tier": "Shadow 1-Star Raids",
             "canBeShiny": true,
             "types": [
                 {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                },
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                    "name": "rock",
+                    "image": "https://leekduck.com/assets/img/types/rock.png"
                 }
             ],
             "combatPower": {
                 "normal": {
-                    "min": 2078,
-                    "max": 2166
+                    "min": 974,
+                    "max": 1040
                 },
                 "boosted": {
-                    "min": 2598,
-                    "max": 2708
+                    "min": 1217,
+                    "max": 1300
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "partly cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/partly_cloudy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/408.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/CRANIDOS_SHADOW_FORM",
+            "pokebattlerSlug": "CRANIDOS_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.03,
+            "estimatedPlayers": 0.03,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.03
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.01
+                }
+            ]
+        },
+        {
+            "name": "Shadow Larvitar",
+            "tier": "Shadow 1-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "rock",
+                    "image": "https://leekduck.com/assets/img/types/rock.png"
+                },
+                {
+                    "name": "ground",
+                    "image": "https://leekduck.com/assets/img/types/ground.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 548,
+                    "max": 594
+                },
+                "boosted": {
+                    "min": 686,
+                    "max": 743
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "partly cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/partly_cloudy.png"
+                },
+                {
+                    "name": "sunny",
+                    "image": "https://leekduck.com/assets/img/weather/sunny.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/246.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/LARVITAR_SHADOW_FORM",
+            "pokebattlerSlug": "LARVITAR_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.03,
+            "estimatedPlayers": 0.03,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.03
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.01
+                }
+            ]
+        },
+        {
+            "name": "Shadow Makuhita",
+            "tier": "Shadow 1-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "fighting",
+                    "image": "https://leekduck.com/assets/img/types/fighting.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 424,
+                    "max": 467
+                },
+                "boosted": {
+                    "min": 530,
+                    "max": 583
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/296.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/MAKUHITA_SHADOW_FORM",
+            "pokebattlerSlug": "MAKUHITA_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.03,
+            "estimatedPlayers": 0.03,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.03
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.01
+                }
+            ]
+        },
+        {
+            "name": "Shadow Mudkip",
+            "tier": "Shadow 1-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "water",
+                    "image": "https://leekduck.com/assets/img/types/water.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 597,
+                    "max": 644
+                },
+                "boosted": {
+                    "min": 746,
+                    "max": 805
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "rainy",
+                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/258.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/MUDKIP_SHADOW_FORM",
+            "pokebattlerSlug": "MUDKIP_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.04,
+            "estimatedPlayers": 0.04,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.04
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.02
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.01
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.01
+                }
+            ]
+        },
+        {
+            "name": "Shadow Piloswine",
+            "tier": "Shadow 3-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "ice",
+                    "image": "https://leekduck.com/assets/img/types/ice.png"
+                },
+                {
+                    "name": "ground",
+                    "image": "https://leekduck.com/assets/img/types/ground.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1271,
+                    "max": 1340
+                },
+                "boosted": {
+                    "min": 1589,
+                    "max": 1675
                 }
             },
             "boostedWeather": [
@@ -2004,356 +1068,236 @@
                     "image": "https://leekduck.com/assets/img/weather/snow.png"
                 },
                 {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/METAGROSS_MEGA",
-            "pokebattlerSlug": "METAGROSS_MEGA",
-            "startDate": "2026-11-25",
-            "endDate": "2026-12-01",
-            "rawDate": "November 25–December 1",
-            "guideUrl": "https://pokemongohub.net/post/guide/mega-metagross-raid-guide/",
-            "estimator": 1.25,
-            "estimatedPlayers": 1.25,
-            "verdict": "EASY DUO",
-            "trainersNeeded": 2,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "HARD",
-                    "ratio": 1.25
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.62
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.42
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.31
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.25
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.21
-                }
-            ]
-        },
-        {
-            "name": "Incarnate Landorus",
-            "tier": "Shadow 5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "ground",
-                    "image": "https://leekduck.com/assets/img/types/ground.png"
-                },
-                {
-                    "name": "flying",
-                    "image": "https://leekduck.com/assets/img/types/flying.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1762,
-                    "max": 1911
-                },
-                "boosted": {
-                    "min": 2203,
-                    "max": 2389
-                }
-            },
-            "boostedWeather": [
-                {
                     "name": "sunny",
                     "image": "https://leekduck.com/assets/img/weather/sunny.png"
-                },
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
                 }
             ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/645.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/LANDORUS",
-            "pokebattlerSlug": "LANDORUS",
-            "startDate": "2026-11-01",
-            "endDate": "2026-11-01",
-            "rawDate": "November 1 Final day of the October 31–November 1 weekend",
-            "guideUrl": "https://pokemongohub.net/post/guide/shadow-tornadus-incarnate-raid-counters-guide/",
-            "estimator": 1.11,
-            "estimatedPlayers": 1.11,
-            "verdict": "EASY DUO",
-            "trainersNeeded": 2,
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/221.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/PILOSWINE_SHADOW_FORM",
+            "pokebattlerSlug": "PILOSWINE_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.59,
+            "estimatedPlayers": 0.59,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
             "trainerBoxes": [
                 {
                     "trainers": "1",
-                    "status": "HARD",
-                    "ratio": 1.11
+                    "status": "EASY",
+                    "ratio": 0.59
                 },
                 {
                     "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.56
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.37
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.28
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.22
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.19
-                }
-            ]
-        },
-        {
-            "name": "Incarnate Tornadus",
-            "tier": "Shadow 5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "flying",
-                    "image": "https://leekduck.com/assets/img/types/flying.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1762,
-                    "max": 1911
-                },
-                "boosted": {
-                    "min": 2203,
-                    "max": 2389
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/641.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS",
-            "pokebattlerSlug": "TORNADUS",
-            "startDate": null,
-            "endDate": null,
-            "rawDate": "Subsequent November weekends",
-            "guideUrl": "https://pokemongohub.net/post/guide/shadow-tornadus-incarnate-raid-counters-guide/",
-            "estimator": 1.45,
-            "estimatedPlayers": 1.45,
-            "verdict": "EASY DUO",
-            "trainersNeeded": 3,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "HARD",
-                    "ratio": 1.45
-                },
-                {
-                    "trainers": "2",
-                    "status": "TIGHT",
-                    "ratio": 0.72
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.48
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.36
-                },
-                {
-                    "trainers": "5",
                     "status": "EASY",
                     "ratio": 0.29
                 },
                 {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.24
-                }
-            ]
-        },
-        {
-            "name": "Druddigon",
-            "tier": "3-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dragon",
-                    "image": "https://leekduck.com/assets/img/types/dragon.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1487,
-                    "max": 1561
-                },
-                "boosted": {
-                    "min": 1859,
-                    "max": 1951
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/621.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/DRUDDIGON",
-            "pokebattlerSlug": "DRUDDIGON",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13",
-            "guideUrl": null,
-            "estimator": 0.42,
-            "estimatedPlayers": 0.42,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.42
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.21
-                },
-                {
                     "trainers": "3",
                     "status": "EASY",
-                    "ratio": 0.14
+                    "ratio": 0.2
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.1
+                    "ratio": 0.15
                 },
                 {
                     "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.08
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.07
-                }
-            ]
-        },
-        {
-            "name": "Orthworm",
-            "tier": "3-Star Raids",
-            "canBeShiny": false,
-            "types": [
-                {
-                    "name": "steel",
-                    "image": "https://leekduck.com/assets/img/types/steel.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1245,
-                    "max": 1313
-                },
-                "boosted": {
-                    "min": 1557,
-                    "max": 1642
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "snow",
-                    "image": "https://leekduck.com/assets/img/weather/snow.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/968.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/ORTHWORM",
-            "pokebattlerSlug": "ORTHWORM",
-            "startDate": "2026-11-09",
-            "endDate": "2026-11-13",
-            "rawDate": "November 9–13",
-            "guideUrl": null,
-            "estimator": 0.47,
-            "estimatedPlayers": 0.47,
-            "verdict": "SOLOABLE",
-            "trainersNeeded": 1,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EASY",
-                    "ratio": 0.47
-                },
-                {
-                    "trainers": "2",
-                    "status": "EASY",
-                    "ratio": 0.23
-                },
-                {
-                    "trainers": "3",
-                    "status": "EASY",
-                    "ratio": 0.16
-                },
-                {
-                    "trainers": "4",
                     "status": "EASY",
                     "ratio": 0.12
                 },
                 {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.09
-                },
-                {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.08
+                    "ratio": 0.1
                 }
             ]
         },
         {
-            "name": "Machamp wearing a modern jacket",
-            "tier": "3-Star Raids",
-            "canBeShiny": false,
+            "name": "Shadow Poliwhirl",
+            "tier": "Shadow 3-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "water",
+                    "image": "https://leekduck.com/assets/img/types/water.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 757,
+                    "max": 811
+                },
+                "boosted": {
+                    "min": 947,
+                    "max": 1013
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "rainy",
+                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/61.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/POLIWHIRL_SHADOW_FORM",
+            "pokebattlerSlug": "POLIWHIRL_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.6,
+            "estimatedPlayers": 0.6,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 1,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EASY",
+                    "ratio": 0.6
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.3
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.2
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.15
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.12
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.1
+                }
+            ]
+        },
+        {
+            "name": "Shadow Prinplup",
+            "tier": "Shadow 3-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "water",
+                    "image": "https://leekduck.com/assets/img/types/water.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 914,
+                    "max": 972
+                },
+                "boosted": {
+                    "min": 1142,
+                    "max": 1215
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "rainy",
+                    "image": "https://leekduck.com/assets/img/weather/rainy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/394.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/PRINPLUP_SHADOW_FORM",
+            "pokebattlerSlug": "PRINPLUP_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 0.7,
+            "estimatedPlayers": 0.7,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 2,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "TIGHT",
+                    "ratio": 0.7
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.35
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.23
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.17
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.14
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.12
+                }
+            ]
+        },
+        {
+            "name": "Shadow Incarnate Tornadus",
+            "tier": "Shadow 5-Star Raids",
+            "canBeShiny": true,
             "types": [],
             "combatPower": null,
             "boostedWeather": [],
             "image": "",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/MACHAMP_WEARING_A_MODERN_JACKET",
-            "pokebattlerSlug": "MACHAMP_WEARING_A_MODERN_JACKET",
-            "startDate": "2026-11-14",
-            "endDate": "2026-11-15",
-            "rawDate": "November 14–15",
-            "guideUrl": null
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS_SHADOW_FORM",
+            "pokebattlerSlug": "TORNADUS_SHADOW_FORM",
+            "startDate": "2026-11-16T14:00:00+00:00",
+            "guideUrl": null,
+            "estimator": 2.99,
+            "estimatedPlayers": 2.99,
+            "verdict": "MODERATE",
+            "trainersNeeded": 5,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 2.99
+                },
+                {
+                    "trainers": "2",
+                    "status": "HARD",
+                    "ratio": 1.5
+                },
+                {
+                    "trainers": "3",
+                    "status": "TIGHT",
+                    "ratio": 1.0
+                },
+                {
+                    "trainers": "4",
+                    "status": "TIGHT",
+                    "ratio": 0.75
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.6
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.5
+                }
+            ]
         }
     ]
 }
