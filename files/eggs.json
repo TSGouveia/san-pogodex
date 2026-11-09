@@ -987,7 +987,7 @@
             {
                 "name": "Shroodle",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm944.icon.png",
-                "shiny": false,
+                "shiny": true,
                 "rarityTier": 1,
                 "cp": "531",
                 "combatPower": {
