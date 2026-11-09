@@ -2250,7 +2250,13 @@ input, button, select {
 /* Grids for rotations */
 .rotation-grid-layout {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 1.25rem;
+}
+
+/* Upcoming date blocks wider grid layout */
+.raid-schedule-date-block .rotation-grid-layout {
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
     gap: 1.25rem;
 }
 
@@ -2307,27 +2313,52 @@ input, button, select {
 
 /* Raid Difficulty Estimator Box */
 .raid-difficulty-container {
-    margin-top: 0.45rem;
+    margin-top: 0.5rem;
     width: 100%;
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(15, 23, 42, 0.45);
     border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 10px 12px;
     box-sizing: border-box;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
+.raid-difficulty-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+}
+
 .raid-trainer-box {
     border-radius: 6px;
-    padding: 5px 6px;
+    padding: 8px 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 4px;
+    gap: 6px;
     min-width: 0;
-    overflow: hidden;
     box-sizing: border-box;
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.raid-trainer-box .trainer-count {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: #ffffff;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.raid-trainer-box .trainer-status {
+    font-size: 0.68rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
 }
 
 .raid-trainer-box:hover {

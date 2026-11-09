@@ -4844,8 +4844,8 @@ function renderActiveRotations() {
 
         const sortedTiers = [
             "Super Mega Raids",
-            "Mega Raids", 
             "5-Star Raids", 
+            "Mega Raids", 
             "Shadow 5-Star Raids", 
             "3-Star Raids", 
             "Shadow 3-Star Raids", 
@@ -5659,8 +5659,8 @@ function buildDifficultyHtml(estNum) {
         }
         return `
             <div class="raid-trainer-box" style="background: ${bBg}; border: 1px solid ${bBorder};" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                <span style="font-size: 0.72rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                <span style="font-size: 0.65rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px; white-space: nowrap;">${b.status}</span>
+                <span class="trainer-count"><i class="fa-solid fa-user" style="font-size: 0.58rem; opacity: 0.7;"></i> ${b.trainers}</span>
+                <span class="trainer-status" style="color: ${bCol};">${b.status}</span>
             </div>
         `;
     }).join('');
@@ -5675,7 +5675,7 @@ function buildDifficultyHtml(estNum) {
                     <i class="fa-solid fa-users" style="font-size: 0.65rem;"></i> ${trainersNeeded} Needed
                 </span>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%;">
+            <div class="raid-difficulty-grid">
                 ${boxesHtml}
             </div>
         </div>
@@ -5779,6 +5779,7 @@ function renderRaidSchedule() {
     });
 
     const tierOrder = [
+        'Super Mega Raids',
         '5-Star Raids',
         'Mega Raids',
         'Mega Legendary Raids',
@@ -5861,19 +5862,22 @@ function renderRaidSchedule() {
 
         sortedTiers.forEach(tier => {
             const sub = document.createElement('div');
-            const isMega = tier.toLowerCase().includes('mega');
+            const isSuperMega = tier.toLowerCase().includes('super mega');
+            const isMega = !isSuperMega && tier.toLowerCase().includes('mega');
             const isShadow = tier.toLowerCase().includes('shadow');
             const isFiveStar = tier.includes('5-Star') || tier.includes('Legendary');
             
-            let themeClass = isShadow ? 'theme-shadow' : (isMega ? 'theme-mega' : (isFiveStar ? 'theme-legendary' : 'theme-standard'));
+            let themeClass = isSuperMega ? 'theme-super-mega' : (isShadow ? 'theme-shadow' : (isMega ? 'theme-mega' : (isFiveStar ? 'theme-legendary' : 'theme-standard')));
             sub.className = `rotation-subchapter ${themeClass}`;
             sub.style.marginBottom = '1.25rem';
 
-            const tierIcon = isShadow 
-                ? '<i class="fa-solid fa-fire" style="color: #a855f7;"></i>' 
-                : (isMega 
-                    ? '<i class="fa-solid fa-dna" style="color: #ec4899;"></i>' 
-                    : '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>');
+            const tierIcon = isSuperMega
+                ? '<i class="fa-solid fa-bolt-lightning" style="color: #fb923c;"></i>'
+                : (isShadow 
+                    ? '<i class="fa-solid fa-fire" style="color: #a855f7;"></i>' 
+                    : (isMega 
+                        ? '<i class="fa-solid fa-dna" style="color: #ec4899;"></i>' 
+                        : '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>'));
 
             sub.innerHTML = `
                 <h4 class="rotation-subchapter-title" style="display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem;">

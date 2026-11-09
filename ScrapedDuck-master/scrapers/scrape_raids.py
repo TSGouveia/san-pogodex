@@ -747,8 +747,8 @@ def scrape_raids():
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png"
         },
         {
-            "name": "Mega Clefable",
-            "tier": "Mega Raids",
+            "name": "Super Mega Clefable",
+            "tier": "Super Mega Raids",
             "canBeShiny": True,
             "pokebattlerSlug": "CLEFABLE_MEGA",
             "startDate": "2026-11-28T14:00:00+00:00",
