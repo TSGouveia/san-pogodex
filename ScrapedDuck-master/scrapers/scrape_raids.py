@@ -307,25 +307,7 @@ def build_pokebattler_raid_url(boss_name, tier=None):
 def scrape_pokebattler_estimator(slug, tier=None):
     if not slug:
         return None
-    url = f"https://www.pokebattler.com/raids/{slug}"
-    try:
-        res = requests.get(url, headers=HEADERS, timeout=8)
-        if res.status_code == 200:
-            soup = bs4.BeautifulSoup(res.text, "html.parser")
-            table = soup.find("table")
-            if table:
-                rows = table.find_all("tr")[1:]
-                for r in rows:
-                    tds = [td.get_text(strip=True) for td in r.find_all(["th", "td"])]
-                    if len(tds) >= 5:
-                        try:
-                            return float(tds[4])
-                        except Exception:
-                            pass
-    except Exception as e:
-        print(f"  Warning scraping HTML estimator for {slug}: {e}")
 
-    # Fallback to PokeBattler Fight API if HTML has no table (e.g. single-page app render)
     tier_map = {
         "1-Star Raids": "RAID_LEVEL_1",
         "3-Star Raids": "RAID_LEVEL_3",
@@ -342,29 +324,51 @@ def scrape_pokebattler_estimator(slug, tier=None):
         else:
             tier_code = "RAID_LEVEL_5"
 
+    # Query PokéBattler Fight API to calculate general realistic estimator across regular counters
     try:
         api_url = f"https://fight.pokebattler.com/raids/defenders/{slug}/levels/{tier_code}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM"
-        api_res = requests.get(api_url, headers=HEADERS, timeout=8)
+        api_res = requests.get(api_url, headers=HEADERS, timeout=15)
         if api_res.status_code == 200:
             api_data = api_res.json()
             attackers = api_data.get("attackers", [])
             if attackers:
                 first = attackers[0]
                 by_move = first.get("byMove", [])
-                from collections import defaultdict
-                poke_ests = defaultdict(list)
-                for m in by_move:
-                    for d_entry in m.get("defenders", []):
-                        pid = d_entry.get("pokemonId")
-                        est = d_entry.get("total", {}).get("estimator")
-                        if est:
-                            poke_ests[pid].append(est)
-                if poke_ests:
-                    avg_ests = {pid: sum(ests) / len(ests) for pid, ests in poke_ests.items()}
-                    best_poke, best_val = min(avg_ests.items(), key=lambda x: x[1])
-                    return round(float(best_val), 2)
+                if by_move:
+                    # Move 0 is the aggregate simulation across all movesets
+                    m0 = by_move[0]
+                    defs = m0.get("defenders", [])
+                    # Filter out Megas and Primals to reflect general trainer teams
+                    non_mega = [x for x in defs if "MEGA" not in x.get("pokemonId", "") and "PRIMAL" not in x.get("pokemonId", "")]
+                    target_defs = non_mega if non_mega else defs
+                    ests = [x.get("total", {}).get("estimator", 0) for x in target_defs if x.get("total", {}).get("estimator")]
+                    if ests:
+                        general_avg = sum(ests) / len(ests)
+                        return round(float(general_avg), 2)
     except Exception as e:
-        print(f"  Warning fetching API estimator for {slug} ({tier_code}): {e}")
+        print(f"  Warning fetching API general estimator for {slug} ({tier_code}): {e}")
+
+    # Fallback to HTML table scraping if API is unreachable
+    url = f"https://www.pokebattler.com/raids/{slug}"
+    try:
+        res = requests.get(url, headers=HEADERS, timeout=8)
+        if res.status_code == 200:
+            soup = bs4.BeautifulSoup(res.text, "html.parser")
+            table = soup.find("table")
+            if table:
+                rows = table.find_all("tr")[1:]
+                row_ests = []
+                for r in rows:
+                    tds = [td.get_text(strip=True) for td in r.find_all(["th", "td"])]
+                    if len(tds) >= 5:
+                        try:
+                            row_ests.append(float(tds[4]))
+                        except Exception:
+                            pass
+                if row_ests:
+                    return round(sum(row_ests) / len(row_ests), 2)
+    except Exception as e:
+        print(f"  Warning scraping HTML estimator for {slug}: {e}")
 
     return None
 
@@ -671,7 +675,7 @@ def scrape_raids():
     # Map (slug, tier) pairs so the API fallback has the exact tier
     unique_boss_keys = list({(b.get("pokebattlerSlug"), b.get("tier")) for b in all_targets_for_estimator if b.get("pokebattlerSlug")})
     slug_tier_to_estimator = {}
-    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         future_to_key = {executor.submit(scrape_pokebattler_estimator, s, t): (s, t) for s, t in unique_boss_keys}
         for future in concurrent.futures.as_completed(future_to_key):
             s, t = future_to_key[future]
