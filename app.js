@@ -5533,9 +5533,9 @@ let currentRaidTab = 'active';
 
 // Global PokéBattler Estimator Filters (Legendary, Shadow, Mega, Party Power, Best Friends)
 const pbEstimatorFilters = {
-    legendary: true,
-    shadow: true,
-    mega: true,
+    legendary: false,
+    shadow: false,
+    mega: false,
     partyPower: false,
     bestFriends: false
 };
@@ -5574,22 +5574,21 @@ function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilte
     if (baseEst == null || isNaN(baseEst) || baseEst <= 0) return null;
     let est = Number(baseEst);
 
-    // Filter adjustments aligned with PokéBattler mechanics:
-    // 1. Mega: Top mega counters speed up raids by ~6-10% compared to pure general non-mega teams
+    // baseEst is the baseline regular non-mega / standard counter estimator (e.g. 3.02 for Zacian)
+    // When filters are toggled ON, they provide offensive boosts / access to stronger counters:
+    // 1. Mega: With Mega evolutions enabled, best counters speed up the raid (~6-10% lower estimator)
     if (filters.mega) {
-        est *= 0.94; // with best/primal mega attackers
-    } else {
-        est *= 1.0; // standard general non-mega team
+        est *= 0.94;
     }
 
-    // 2. Shadow: When enabled, shadows provide a +20% attack boost (~5-8% overall raid time reduction)
-    if (!filters.shadow) {
-        est *= 1.03; // without shadow counters, takes ~3% longer
+    // 2. Shadow: With Shadow Pokémon enabled (+20% damage), counters speed up the raid (~3-5% lower estimator)
+    if (filters.shadow) {
+        est *= 0.97;
     }
 
-    // 3. Legendary: When legendary counters are disabled, non-legendary counters take longer (~5-7%)
-    if (!filters.legendary) {
-        est *= 1.06;
+    // 3. Legendary: With Legendary Pokémon enabled, top legendary counters speed up the raid (~4-6% lower estimator)
+    if (filters.legendary) {
+        est *= 0.95;
     }
 
     // 4. Party Power: Niantic Party Power doubles charged attack damage in parties of 2+, reducing time to win by 20%
