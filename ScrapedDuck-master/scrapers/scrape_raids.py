@@ -516,15 +516,29 @@ def scrape_raids():
                         pid = r.get('pokemonId') or r.get('pokemon', '')
                         clean_name = format_boss_name(pid, r.get('pokemon', ''))
 
-                        # Dex lookup
+                        # Dex lookup & CP calculation (with robust base species fallback)
                         dex_nr = None
                         stats = get_pokedex_stats(poke_map, clean_name)
                         if stats and stats.get('dexNr'):
                             dex_nr = stats.get('dexNr')
                         else:
-                            base_s = clean_name.replace('Shadow ', '').replace('Mega ', '').strip()
-                            stats_base = get_pokedex_stats(poke_map, base_s)
-                            if stats_base: dex_nr = stats_base.get('dexNr')
+                            import re
+                            cleaned_candidate = clean_name
+                            for p in ['Shadow ', 'Mega ', 'Primal ', 'Crowned Sword ', 'Crowned Shield ', 'White ', 'Black ', 'Dawn Wings ', 'Dusk Mane ', 'Origin ', 'Altered ', 'Therian ', 'Incarnate ']:
+                                cleaned_candidate = re.sub(re.escape(p), '', cleaned_candidate, flags=re.IGNORECASE)
+                            cleaned_candidate = cleaned_candidate.strip()
+                            stats_base = get_pokedex_stats(poke_map, cleaned_candidate)
+                            if stats_base:
+                                stats = stats_base
+                                dex_nr = stats_base.get('dexNr')
+                            else:
+                                for word in clean_name.split():
+                                    if len(word) > 3 and word.lower() not in ['mega', 'shadow', 'crowned', 'sword', 'shield', 'form', 'forme', 'white', 'black', 'incarnate', 'therian']:
+                                        stats_word = get_pokedex_stats(poke_map, word)
+                                        if stats_word:
+                                            stats = stats_word
+                                            dex_nr = stats_word.get('dexNr')
+                                            break
 
                         # CP calculation
                         cp_dict = None
