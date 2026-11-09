@@ -5704,13 +5704,24 @@ function renderRaidSchedule() {
                 .replace(/^Shadow\s+/i, '')
                 .trim();
             const matchedPoke = findPokemonByName(cleanBossName) || findPokemonByName(raid.name);
-            const baseFormPoke = matchedPoke ? getBaseForm(matchedPoke) : null;
+            const baseFormPoke = matchedPoke || (() => {
+                const nameLower = safeLower(cleanBossName || raid.name);
+                let baseName = nameLower
+                    .replace(/^mega\s+/, '')
+                    .replace(/^primal\s+/, '')
+                    .replace(/^shadow\s+/, '')
+                    .replace(/\s*\(.*\)$/, '')
+                    .replace(/\s+(altered|origin|therian|incarnate|sky|land|standard|zen|ordinary|resolute|blade|shield|rapid-strike|single-strike)\s+form$/i, '')
+                    .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '');
+                return pokemonDatabase.find(p => p.name && safeLower(p.name) === baseName) || null;
+            })();
+            const targetPoke = matchedPoke || baseFormPoke;
 
-            const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
-            const isMissingSpecies = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
-            const isMissingForm = isMegaOrGmaxFormMissing(raid.name, matchedPoke);
+            const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
+            const isMissingSpecies = targetPoke && !isTransferred && isPokemonMissing(targetPoke);
+            const isMissingForm = isMegaOrGmaxFormMissing(raid.name, targetPoke);
             const isMissing = isMissingSpecies;
-            const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
+            const isCandyNeeded = targetPoke && (familyNeedsCandies(targetPoke) || needsCandies(targetPoke));
             const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isMissingForm ? 'missing-form-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : '')));
 
             card.className = `rotation-card-item ${themeClass} ${highlightClass} spawn-animation`;
