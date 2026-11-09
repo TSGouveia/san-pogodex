@@ -2305,6 +2305,35 @@ input, button, select {
     line-height: 1.3;
 }
 
+/* Raid Difficulty Estimator Box */
+.raid-difficulty-container {
+    margin-top: 0.45rem;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.raid-trainer-box {
+    border-radius: 6px;
+    padding: 5px 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    min-width: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    transition: transform 0.15s ease;
+}
+
+.raid-trainer-box:hover {
+    transform: translateY(-1px);
+}
+
 /* Color Themes */
 /* Super Mega (Orange) */
 .rotation-subchapter.super-mega .rotation-subchapter-title { color: #fb923c; }
