@@ -3,8 +3,10 @@ import os
 import json
 import math
 import re
+import datetime
 import requests
 import bs4
+from .cp_utils import get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -461,7 +463,9 @@ def get_boss_image_url(name, dex_nr):
 
 def scrape_raids():
     print("Scraping Raids from Pokémon GO Hub...")
+    # Initialize schedule list
     bosses = []
+    schedule_entries = []
     max_battles = []
     poke_map = load_pokedex_map()
     shiny_dexes, shiny_names = load_shiny_set()
@@ -567,7 +571,7 @@ def scrape_raids():
                     htxt = h.get_text(strip=True)
                     htxt_lower = htxt.lower()
 
-                    if "upcoming" in htxt_lower or "faq" in htxt_lower:
+                    if "upcoming" in htxt_lower or "faq" in htxt_lower or "schedule" in htxt_lower:
                         break
 
                     if "5-star shadow" in htxt_lower: current_tier = "Shadow 5-Star Raids"
@@ -730,6 +734,200 @@ def scrape_raids():
                                 })
 
                         curr = curr.find_next_sibling()
+
+                # --- 2. Extract Scheduled & Future Raid Bosses from Schedule Tables ---
+                print("  -> Scraping Raid Schedule & Future Rotations from Pokémon GO Hub...")
+                MONTHS = {
+                    'january': 1, 'february': 2, 'march': 3, 'april': 4, 'may': 5, 'june': 6,
+                    'july': 7, 'august': 8, 'september': 9, 'october': 10, 'november': 11, 'december': 12
+                }
+
+                def parse_date_range(text, default_year=2026, default_month=11):
+                    text = text.replace('–', '-').replace('—', '-').strip()
+                    cleaned_date = re.split(r'(?:Into the Wild|GO Wild Area|Final day|Subsequent)', text, flags=re.I)[0].strip()
+                    m1 = re.search(r'([A-Za-z]+)\s+(\d{1,2})\s*-\s*([A-Za-z]+)\s+(\d{1,2})', cleaned_date)
+                    if m1:
+                        m_start = MONTHS.get(m1.group(1).lower(), default_month)
+                        d_start = int(m1.group(2))
+                        m_end = MONTHS.get(m1.group(3).lower(), default_month)
+                        d_end = int(m1.group(4))
+                        y_start = default_year
+                        y_end = default_year + (1 if m_end < m_start else 0)
+                        return (f'{y_start:04d}-{m_start:02d}-{d_start:02d}', f'{y_end:04d}-{m_end:02d}-{d_end:02d}')
+                    m2 = re.search(r'([A-Za-z]+)\s+(\d{1,2})\s*-\s*(\d{1,2})', cleaned_date)
+                    if m2:
+                        m_start = MONTHS.get(m2.group(1).lower(), default_month)
+                        d_start = int(m2.group(2))
+                        d_end = int(m2.group(3))
+                        return (f'{default_year:04d}-{m_start:02d}-{d_start:02d}', f'{default_year:04d}-{m_start:02d}-{d_end:02d}')
+                    m3 = re.search(r'([A-Za-z]+)\s+(\d{1,2})', cleaned_date)
+                    if m3:
+                        m_start = MONTHS.get(m3.group(1).lower(), default_month)
+                        d_start = int(m3.group(2))
+                        return (f'{default_year:04d}-{m_start:02d}-{d_start:02d}', f'{default_year:04d}-{m_start:02d}-{d_start:02d}')
+                    return (None, None)
+
+                m_year = datetime.date.today().year
+                m_month = datetime.date.today().month
+                tm = re.search(r'(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})', soup.title.string if soup.title else '')
+                if tm:
+                    m_month = MONTHS.get(tm.group(1).lower(), m_month)
+                    m_year = int(tm.group(2))
+
+                seen_sched = set()
+                schedule_entries = []
+                for t in post_body.find_all('table'):
+                    prev = t.find_previous(['h1', 'h2', 'h3', 'h4'])
+                    h_text = prev.get_text(strip=True) if prev else ''
+                    sched_tier = '5-Star Raids'
+                    if '5-star shadow' in h_text.lower(): sched_tier = 'Shadow 5-Star Raids'
+                    elif 'mega' in h_text.lower(): sched_tier = 'Mega Raids'
+                    elif '5-star' in h_text.lower(): sched_tier = '5-Star Raids'
+                    elif '3-star' in h_text.lower(): sched_tier = '3-Star Raids'
+                    elif '1-star' in h_text.lower(): sched_tier = '1-Star Raids'
+
+                    for row in t.find_all('tr'):
+                        cells = row.find_all(['th', 'td'])
+                        if len(cells) < 2: continue
+                        date_str = cells[0].get_text(' ', strip=True)
+                        if any(h in date_str.lower() for h in ['date', 'availability']): continue
+                        start_d, end_d = parse_date_range(date_str, m_year, m_month)
+
+                        db_links = [a for a in cells[1].find_all('a') if 'event' not in a.get('href', '')]
+                        boss_items = []
+                        if db_links:
+                            for a in db_links:
+                                txt = a.get_text(strip=True)
+                                href = a.get('href', '')
+                                dex = None
+                                dm = re.search(r'/pokemon/(\d+)', href)
+                                if dm: dex = int(dm.group(1))
+                                if txt and not any(b['name'] == txt for b in boss_items):
+                                    boss_items.append({'name': txt, 'dex': dex})
+                        else:
+                            txt = cells[1].get_text(strip=True)
+                            if txt:
+                                boss_items.append({'name': txt, 'dex': None})
+
+                        guide_urls = {}
+                        if len(cells) >= 3:
+                            for a in cells[2].find_all('a'):
+                                guide_urls[a.get_text(strip=True).lower()] = a.get('href', '')
+
+                        for bi in boss_items:
+                            b_name = bi['name']
+                            clean_name = canonicalize_boss_name(b_name)
+                            dex_nr = bi['dex']
+                            if not dex_nr:
+                                for val in poke_map.values():
+                                    if isinstance(val, dict) and val.get('names', {}).get('English', '').lower() == clean_name.lower():
+                                        dex_nr = val.get('dexNr')
+                                        break
+
+                            key = (sched_tier, clean_name, start_d, end_d)
+                            if key in seen_sched:
+                                continue
+                            seen_sched.add(key)
+
+                            matched_guide = match_guide_url(clean_name)
+                            for g_name, g_url in guide_urls.items():
+                                if clean_name.lower() in g_name or g_name in clean_name.lower():
+                                    matched_guide = g_url
+                                    break
+
+                            guide_info = fetch_guide_details(matched_guide, sched_tier) if matched_guide else {
+                                'cp_normal_min': None, 'cp_normal_max': None,
+                                'cp_boosted_min': None, 'cp_boosted_max': None,
+                                'canBeShiny': False
+                            }
+
+                            cp_dict = None
+                            if guide_info.get('cp_normal_max'):
+                                cp_dict = {
+                                    'normal': {'min': guide_info.get('cp_normal_min'), 'max': guide_info.get('cp_normal_max')},
+                                    'boosted': {'min': guide_info.get('cp_boosted_min'), 'max': guide_info.get('cp_boosted_max')}
+                                }
+                            else:
+                                stats = get_pokedex_stats(poke_map, clean_name)
+                                if stats:
+                                    cp_norm = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=20, min_iv=10)
+                                    cp_boost = get_cp_for_level(stats['atk'], stats['def'], stats['sta'], level=25, min_iv=10)
+                                    cp_dict = {'normal': cp_norm, 'boosted': cp_boost}
+
+                            # Types and weather boosts
+                            type_names = []
+                            p_val = None
+                            for v in poke_map.values():
+                                if isinstance(v, dict) and (v.get('dexNr') == dex_nr or v.get('names', {}).get('English', '').lower() == clean_name.lower()):
+                                    p_val = v
+                                    break
+                            if p_val:
+                                t1 = (p_val.get('primaryType') or {}).get('names', {}).get('English', '').lower()
+                                t2 = (p_val.get('secondaryType') or {}).get('names', {}).get('English', '').lower()
+                                if t1: type_names.append(t1)
+                                if t2: type_names.append(t2)
+
+                            types = [{'name': t, 'image': f'https://leekduck.com/assets/img/types/{t}.png'} for t in type_names]
+                            weather_boosts = []
+                            seen_weathers = set()
+                            for t in type_names:
+                                w_name = TYPE_WEATHER_MAP.get(t)
+                                if w_name and w_name not in seen_weathers:
+                                    seen_weathers.add(w_name)
+                                    w_img = w_name.replace(' ', '_')
+                                    weather_boosts.append({'name': w_name, 'image': f'https://leekduck.com/assets/img/weather/{w_img}.png'})
+
+                            img_url = get_boss_image_url(clean_name, dex_nr)
+                            can_be_shiny = bool((dex_nr and dex_nr in shiny_dexes) or (clean_name.upper() in shiny_names) or guide_info.get('canBeShiny', False))
+                            pb_url = build_pokebattler_raid_url(clean_name, sched_tier)
+                            pb_slug = build_pokebattler_slug(clean_name, sched_tier)
+
+                            schedule_entries.append({
+                                'name': clean_name,
+                                'tier': sched_tier,
+                                'canBeShiny': can_be_shiny,
+                                'types': types,
+                                'combatPower': cp_dict,
+                                'boostedWeather': weather_boosts,
+                                'image': img_url,
+                                'pokebattlerUrl': pb_url,
+                                'pokebattlerSlug': pb_slug,
+                                'startDate': start_d,
+                                'endDate': end_d,
+                                'rawDate': date_str,
+                                'guideUrl': matched_guide
+                            })
+
+                # --- 3. Dynamic Rotation Alignment: Schedule vs Outdated Active Section ---
+                today_iso = datetime.date.today().isoformat()
+                active_from_schedule = [
+                    s for s in schedule_entries
+                    if s.get("startDate") and s.get("endDate") and s["startDate"] <= today_iso <= s["endDate"]
+                ]
+                past_schedule_boss_names = {
+                    s["name"].lower() for s in schedule_entries
+                    if s.get("endDate") and s["endDate"] < today_iso
+                }
+
+                if active_from_schedule:
+                    print(f"  -> Found {len(active_from_schedule)} confirmed active bosses for today ({today_iso}) from schedule.")
+                    # Remove bosses that have officially ended per schedule (e.g. Altered Giratina, Mega Sableye)
+                    before_count = len(bosses)
+                    bosses = [b for b in bosses if b["name"].lower() not in past_schedule_boss_names]
+                    if len(bosses) < before_count:
+                        print(f"  -> Filtered out {before_count - len(bosses)} expired boss(es) from active pool: {past_schedule_boss_names}")
+
+                    # Ensure currently active schedule bosses are included in active bosses list
+                    current_active_keys = {(b["tier"], b["name"].lower()) for b in bosses}
+                    for act in active_from_schedule:
+                        act_key = (act["tier"], act["name"].lower())
+                        if act_key not in current_active_keys:
+                            boss_copy = dict(act)
+                            boss_copy["isFromSchedule"] = True
+                            bosses.append(boss_copy)
+                            current_active_keys.add(act_key)
+                            print(f"  -> Promoted scheduled boss to active pool: [{act['tier']}] {act['name']}")
+
     except Exception as e:
         print(f"Error scraping Pokémon GO Hub raids: {e}")
 
@@ -840,10 +1038,11 @@ def scrape_raids():
     except Exception as e:
         print(f"Error fetching Pokebattler max battles: {e}")
 
-    # Fetch Pokebattler estimators in parallel for standard raid bosses
-    print(f"  -> Fetching Pokebattler estimators for {len(bosses)} raid bosses...")
+    # Fetch Pokebattler estimators in parallel for standard raid bosses and schedule entries
+    all_targets_for_estimator = bosses + schedule_entries
+    print(f"  -> Fetching Pokebattler estimators for {len(all_targets_for_estimator)} raid targets...")
     # Map (slug, tier) pairs so the API fallback has the exact tier
-    unique_boss_keys = list({(b.get("pokebattlerSlug"), b.get("tier")) for b in bosses if b.get("pokebattlerSlug")})
+    unique_boss_keys = list({(b.get("pokebattlerSlug"), b.get("tier")) for b in all_targets_for_estimator if b.get("pokebattlerSlug")})
     slug_tier_to_estimator = {}
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         future_to_key = {executor.submit(scrape_pokebattler_estimator, s, t): (s, t) for s, t in unique_boss_keys}
@@ -856,7 +1055,7 @@ def scrape_raids():
             except Exception as e:
                 print(f"  Error fetching estimator for {s}: {e}")
 
-    for b in bosses:
+    for b in all_targets_for_estimator:
         s = b.get("pokebattlerSlug")
         t = b.get("tier")
         if s and (s, t) in slug_tier_to_estimator:
@@ -869,8 +1068,14 @@ def scrape_raids():
                 b["trainersNeeded"] = diff_info["trainersNeeded"]
                 b["trainerBoxes"] = diff_info["boxes"]
 
-    print(f"  -> Saved {len(bosses)} standard raid bosses from Pokémon GO Hub and {len(max_battles)} max battle bosses.")
-    return bosses, max_battles
+    # Wrap result into rich payload containing current bosses and schedule calendar
+    raid_payload = {
+        "current": bosses,
+        "schedule": schedule_entries
+    }
+
+    print(f"  -> Saved {len(bosses)} active raid bosses and {len(schedule_entries)} scheduled rotations from Pokémon GO Hub, plus {len(max_battles)} max battle bosses.")
+    return raid_payload, max_battles
 
 if __name__ == "__main__":
     import sys

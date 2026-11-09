@@ -606,6 +606,7 @@ function isPokemonMissing(pokeOrId, dexType = currentDexType) {
 }
 let liveEggs = [];
 let liveRaids = [];
+let liveRaidSchedule = [];
 let liveMaxBattles = [];
 let liveResearch = [];
 let liveRocket = null;
@@ -1518,48 +1519,74 @@ function buildPokebattlerMaxUrl(bossName) {
     return `https://www.pokebattler.com/max/DYNAMAX_${clean}`;
 }
 
-        // 2. Parse Raid Bosses from ScrapedDuck array or pokemon-go-api (grouped currentList format)
+        // 2. Parse Raid Bosses from ScrapedDuck array or object with {current, schedule} or pokemon-go-api
         liveRaids = [];
-        if (Array.isArray(rawRaids)) {
-            rawRaids.forEach(boss => {
-                let tier = boss.tier || '5-Star Raids';
-                const isShadow = safeLower(boss.name).includes('shadow') || safeLower(tier).includes('shadow');
-                if (isShadow && !tier.startsWith('Shadow')) {
-                    tier = 'Shadow ' + tier;
-                }
+        liveRaidSchedule = [];
+        let rawRaidList = [];
+        let rawScheduleList = [];
 
-                let cleanName = (boss.name || '')
-                    .replace(/\bAlola\b/gi, 'Alolan')
-                    .replace(/\bHisui\b/gi, 'Hisuian')
-                    .replace(/\bGalar\b/gi, 'Galarian')
-                    .replace(/\bPaldea\b/gi, 'Paldean')
-                    .replace(/^Mega\s+([XY])\s+(.+)$/i, 'Mega $2 $1')
-                    .replace(/\bShadow\b/gi, '')
-                    .replace(/\s+/g, ' ')
-                    .trim();
+        if (rawRaids && typeof rawRaids === 'object' && !Array.isArray(rawRaids) && (rawRaids.current || rawRaids.schedule)) {
+            rawRaidList = Array.isArray(rawRaids.current) ? rawRaids.current : [];
+            rawScheduleList = Array.isArray(rawRaids.schedule) ? rawRaids.schedule : [];
+        } else if (Array.isArray(rawRaids)) {
+            rawRaidList = rawRaids;
+        }
 
-                const matchedPoke = findPokemonByName(cleanName) || findPokemonByName(boss.name);
-                const estValue = (boss.estimator != null) ? Number(boss.estimator) : ((boss.estimatedPlayers != null) ? Number(boss.estimatedPlayers) : null);
+        const parseSingleRaidBoss = (boss, defaultTier = '5-Star Raids') => {
+            let tier = boss.tier || defaultTier;
+            const isShadow = safeLower(boss.name).includes('shadow') || safeLower(tier).includes('shadow');
+            if (isShadow && !tier.startsWith('Shadow')) {
+                tier = 'Shadow ' + tier;
+            }
 
-                liveRaids.push({
-                    idName: matchedPoke ? matchedPoke.idName : cleanName,
-                    name: cleanName,
-                    tier: tier,
-                    image: boss.image || '',
-                    cp: boss.combatPower || null,
-                    shiny: boss.canBeShiny || false,
-                    types: boss.types || [],
-                    weatherBoosts: boss.boostedWeather || [],
-                    trainersText: boss.trainersText || null,
-                    estimatedPlayers: estValue,
-                    estimator: estValue,
-                    verdict: boss.verdict || null,
-                    trainersNeeded: boss.trainersNeeded || null,
-                    trainerBoxes: boss.trainerBoxes || null,
-                    pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(cleanName, tier),
-                    counters: {},
-                    battleResult: null
-                });
+            let cleanName = (boss.name || '')
+                .replace(/\bAlola\b/gi, 'Alolan')
+                .replace(/\bHisui\b/gi, 'Hisuian')
+                .replace(/\bGalar\b/gi, 'Galarian')
+                .replace(/\bPaldea\b/gi, 'Paldean')
+                .replace(/^Mega\s+([XY])\s+(.+)$/i, 'Mega $2 $1')
+                .replace(/\bShadow\b/gi, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const matchedPoke = findPokemonByName(cleanName) || findPokemonByName(boss.name);
+            const estValue = (boss.estimator != null) ? Number(boss.estimator) : ((boss.estimatedPlayers != null) ? Number(boss.estimatedPlayers) : null);
+
+            return {
+                idName: matchedPoke ? matchedPoke.idName : cleanName,
+                name: cleanName,
+                tier: tier,
+                image: boss.image || '',
+                cp: boss.combatPower || null,
+                shiny: boss.canBeShiny || false,
+                types: boss.types || [],
+                weatherBoosts: boss.boostedWeather || [],
+                trainersText: boss.trainersText || null,
+                estimatedPlayers: estValue,
+                estimator: estValue,
+                verdict: boss.verdict || null,
+                trainersNeeded: boss.trainersNeeded || null,
+                trainerBoxes: boss.trainerBoxes || null,
+                pokebattlerUrl: boss.pokebattlerUrl || buildPokebattlerRaidUrl(cleanName, tier),
+                startDate: boss.startDate || null,
+                endDate: boss.endDate || null,
+                rawDate: boss.rawDate || null,
+                guideUrl: boss.guideUrl || null,
+                isFromSchedule: boss.isFromSchedule || false,
+                counters: {},
+                battleResult: null
+            };
+        };
+
+        if (rawRaidList.length > 0) {
+            rawRaidList.forEach(boss => {
+                liveRaids.push(parseSingleRaidBoss(boss));
+            });
+        }
+
+        if (rawScheduleList.length > 0) {
+            rawScheduleList.forEach(boss => {
+                liveRaidSchedule.push(parseSingleRaidBoss(boss));
             });
         }
 
@@ -5110,7 +5137,107 @@ function renderActiveRotations() {
         });
     }
 
-    // 1.5 Render Max Battles Section
+    // 1.2 Render Upcoming & Scheduled Raids Calendar
+    if (liveRaidSchedule && liveRaidSchedule.length > 0) {
+        const schedSub = document.createElement('div');
+        schedSub.className = 'rotation-subchapter upcoming-raids-subchapter';
+        schedSub.style.marginTop = '2rem';
+        schedSub.style.borderTop = '1px solid rgba(255, 255, 255, 0.08)';
+        schedSub.style.paddingTop = '1.5rem';
+
+        schedSub.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                <h4 class="rotation-subchapter-title" style="margin: 0; color: #f5a623;">
+                    <i class="fa-solid fa-calendar-days"></i> Upcoming & Scheduled Raids
+                </h4>
+                <span style="font-size: 0.75rem; color: var(--text-secondary); background: rgba(245, 166, 35, 0.1); border: 1px solid rgba(245, 166, 35, 0.25); border-radius: 12px; padding: 2px 10px;">
+                    Monthly Rotation Calendar
+                </span>
+            </div>
+            <div class="rotation-grid-layout" id="upcoming-raids-grid"></div>
+        `;
+        raidsContainer.appendChild(schedSub);
+        const schedGrid = schedSub.querySelector('#upcoming-raids-grid');
+
+        // Sort schedule: upcoming first (by start date), then active, then past
+        const todayIso = new Date().toISOString().slice(0, 10);
+        const sortedSchedule = [...liveRaidSchedule].sort((a, b) => {
+            const startA = a.startDate || '9999-99-99';
+            const startB = b.startDate || '9999-99-99';
+            return startA.localeCompare(startB);
+        });
+
+        sortedSchedule.forEach(raid => {
+            const card = document.createElement('div');
+            const raidName = safeLower(raid.name);
+            const raidIdName = safeLower(raid.idName);
+            const matchedPoke = pokemonDatabase.find(p => p.idName && raidIdName && safeLower(p.idName) === raidIdName) || pokemonDatabase.find(p => p.name && raidName && safeLower(p.name) === raidName);
+            
+            let imgUrl = getPokemonImageUrl(raid.name, matchedPoke);
+            if (!imgUrl) imgUrl = raid.image || (matchedPoke ? matchedPoke.img : '');
+
+            // Determine status: ACTIVE NOW, UPCOMING, or CONCLUDED
+            let dateBadge = '';
+            let isPast = false;
+            let isActiveNow = false;
+
+            if (raid.startDate && raid.endDate) {
+                if (todayIso >= raid.startDate && todayIso <= raid.endDate) {
+                    isActiveNow = true;
+                    dateBadge = `<span style="font-size: 0.65rem; font-weight: 800; color: #22c55e; background: rgba(34, 197, 94, 0.18); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 4px; padding: 2px 6px;"><i class="fa-solid fa-circle-dot" style="font-size: 0.5rem; animation: pulse 1.5s infinite;"></i> ACTIVE NOW</span>`;
+                } else if (todayIso < raid.startDate) {
+                    dateBadge = `<span style="font-size: 0.65rem; font-weight: 800; color: #60a5fa; background: rgba(96, 165, 250, 0.15); border: 1px solid rgba(96, 165, 250, 0.35); border-radius: 4px; padding: 2px 6px;"><i class="fa-solid fa-clock"></i> UPCOMING</span>`;
+                } else {
+                    isPast = true;
+                    dateBadge = `<span style="font-size: 0.65rem; font-weight: 700; color: #94a3b8; background: rgba(148, 163, 184, 0.12); border: 1px solid rgba(148, 163, 184, 0.25); border-radius: 4px; padding: 2px 6px;">ENDED</span>`;
+                }
+            }
+
+            const rawDateLabel = raid.rawDate ? `<div style="font-size: 0.72rem; font-weight: 700; color: ${isActiveNow ? '#22c55e' : (isPast ? '#94a3b8' : '#f5a623')}; margin-top: 4px;"><i class="fa-solid fa-calendar"></i> ${raid.rawDate}</div>` : '';
+
+            card.className = `rotation-card-item theme-purple ${isPast ? 'opacity-60' : ''}`;
+            if (isPast) {
+                card.style.opacity = '0.65';
+                card.style.filter = 'grayscale(35%)';
+            }
+            card.style.position = 'relative';
+
+            let estHtml = '';
+            if (raid.estimator != null && !isNaN(raid.estimator) && raid.estimator > 0) {
+                const estVal = Number(raid.estimator).toFixed(2);
+                estHtml = `<div style="font-size: 0.68rem; font-weight: 700; color: #94a3b8; margin-top: 4px;"><i class="fa-solid fa-calculator" style="color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${estVal}</strong> (${raid.verdict || 'RAID'})</div>`;
+            }
+
+            card.innerHTML = `
+                ${raid.shiny ? shinySparkleSvg : ''}
+                <div class="rotation-badges" style="top: 8px; right: 8px;">
+                    ${dateBadge}
+                </div>
+                <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${matchedPoke ? `'${POKE_SPRITE_BACKUP_URL}/${matchedPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${matchedPoke ? matchedPoke.id : ''}.png'; } this.onerror=null;">
+                <div class="rotation-card-details-wrapper">
+                    <div style="font-size: 0.7rem; font-weight: 800; color: #f5a623; text-transform: uppercase; letter-spacing: 0.3px;">${raid.tier}</div>
+                    <span class="rotation-card-name">${raid.name}</span>
+                    ${rawDateLabel}
+                    ${estHtml}
+                    ${raid.guideUrl ? `
+                        <div style="margin-top: 6px;">
+                            <a href="${raid.guideUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.68rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 2px 7px; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;" onclick="event.stopPropagation();">
+                                <i class="fa-solid fa-book-open"></i> Raid Guide <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.55rem;"></i>
+                            </a>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            if (matchedPoke) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', () => {
+                    openModal(matchedPoke.id);
+                });
+            }
+            schedGrid.appendChild(card);
+        });
+    }
     if (maxBattlesContainer) {
         maxBattlesContainer.innerHTML = '';
         if (liveMaxBattles.length === 0) {
