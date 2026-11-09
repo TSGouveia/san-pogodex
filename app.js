@@ -2918,8 +2918,6 @@ function setupEventListeners() {
                 renderWildSpawns();
             } else if (targetSectionId === 'rotations-events-section') {
                 renderEventsPane();
-            } else if (targetSectionId === 'rotations-raid-schedule-section') {
-                renderRaidSchedule();
             } else if (targetSectionId === 'rotations-promocodes-section') {
                 renderPromoCodes();
             } else {
@@ -4819,6 +4817,7 @@ function updateModalCatchBtn(id) {
 }
 
 function renderActiveRotations() {
+    setupRaidsTabListener();
     const raidsContainer = document.getElementById('raids-tiers-container');
     const maxBattlesContainer = document.getElementById('maxbattles-container');
     const eggsContainer = document.getElementById('eggs-types-container');
@@ -5527,15 +5526,13 @@ function renderActiveRotations() {
 
     // Toggle tab buttons and sections based on actual data availability
     const hasMaxBattles = liveMaxBattles.length > 0;
-    const hasRaids = liveRaids.length > 0;
-    const hasRaidSchedule = liveRaidSchedule.length > 0;
+    const hasRaids = liveRaids.length > 0 || liveRaidSchedule.length > 0;
     const hasEggs = liveEggs.length > 0;
     const hasQuests = researchEncounters.length > 0;
     const hasRocket = liveRocket && Object.keys(liveRocket).length > 0;
 
     const navBtnMaxBattles = document.querySelector('.subnav-btn[data-target="rotations-maxbattles-section"]');
     const navBtnRaids = document.querySelector('.subnav-btn[data-target="rotations-raids-section"]');
-    const navBtnRaidSchedule = document.querySelector('.subnav-btn[data-target="rotations-raid-schedule-section"]');
     const navBtnEggs = document.querySelector('.subnav-btn[data-target="rotations-eggs-section"]');
     const navBtnQuests = document.querySelector('.subnav-btn[data-target="rotations-quests-section"]');
     const navBtnRocket = document.querySelector('.subnav-btn[data-target="rotations-rocket-section"]');
@@ -5543,7 +5540,6 @@ function renderActiveRotations() {
 
     const secMaxBattles = document.getElementById('rotations-maxbattles-section');
     const secRaids = document.getElementById('rotations-raids-section');
-    const secRaidSchedule = document.getElementById('rotations-raid-schedule-section');
     const secEggs = document.getElementById('rotations-eggs-section');
     const secQuests = document.getElementById('rotations-quests-section');
     const secRocket = document.getElementById('rotations-rocket-section');
@@ -5551,7 +5547,6 @@ function renderActiveRotations() {
 
     if (navBtnMaxBattles) navBtnMaxBattles.style.display = hasMaxBattles ? '' : 'none';
     if (navBtnRaids) navBtnRaids.style.display = hasRaids ? '' : 'none';
-    if (navBtnRaidSchedule) navBtnRaidSchedule.style.display = hasRaidSchedule ? '' : 'none';
     if (navBtnEggs) navBtnEggs.style.display = hasEggs ? '' : 'none';
     if (navBtnQuests) navBtnQuests.style.display = hasQuests ? '' : 'none';
     if (navBtnRocket) navBtnRocket.style.display = hasRocket ? '' : 'none';
@@ -5584,7 +5579,6 @@ function renderActiveRotations() {
         const targetSecId = activeBtn.dataset.target;
         if (secMaxBattles) secMaxBattles.classList.toggle('hidden', targetSecId !== 'rotations-maxbattles-section');
         if (secRaids) secRaids.classList.toggle('hidden', targetSecId !== 'rotations-raids-section');
-        if (secRaidSchedule) secRaidSchedule.classList.toggle('hidden', targetSecId !== 'rotations-raid-schedule-section');
         if (secEggs) secEggs.classList.toggle('hidden', targetSecId !== 'rotations-eggs-section');
         if (secQuests) secQuests.classList.toggle('hidden', targetSecId !== 'rotations-quests-section');
         if (secRocket) secRocket.classList.toggle('hidden', targetSecId !== 'rotations-rocket-section');
@@ -5614,6 +5608,61 @@ let partyRewardsData = [
 ];
 
 
+let currentRaidTab = 'active';
+
+function setupRaidsTabListener() {
+    const container = document.getElementById('rotations-raids-section');
+    if (!container) return;
+    const tabs = container.querySelectorAll('.raid-tab-btn');
+    if (!tabs || tabs.length === 0) return;
+
+    tabs.forEach(btn => {
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = 'true';
+        btn.addEventListener('click', () => {
+            tabs.forEach(b => {
+                b.classList.remove('active');
+                b.style.background = 'none';
+                b.style.color = '#94a3b8';
+            });
+            btn.classList.add('active');
+            btn.style.background = 'var(--accent-color)';
+            btn.style.color = '#000';
+            currentRaidTab = btn.dataset.tab;
+            toggleRaidsView();
+        });
+    });
+
+    // Set initial visual style
+    const activeBtn = container.querySelector(`.raid-tab-btn[data-tab="${currentRaidTab}"]`) || tabs[0];
+    if (activeBtn) {
+        tabs.forEach(b => {
+            b.classList.remove('active');
+            b.style.background = 'none';
+            b.style.color = '#94a3b8';
+        });
+        activeBtn.classList.add('active');
+        activeBtn.style.background = 'var(--accent-color)';
+        activeBtn.style.color = '#000';
+    }
+    toggleRaidsView();
+}
+
+function toggleRaidsView() {
+    const activeContainer = document.getElementById('raids-tiers-container');
+    const scheduleContainer = document.getElementById('raid-schedule-container');
+    if (!activeContainer || !scheduleContainer) return;
+
+    if (currentRaidTab === 'active') {
+        activeContainer.classList.remove('hidden');
+        scheduleContainer.classList.add('hidden');
+    } else {
+        activeContainer.classList.add('hidden');
+        scheduleContainer.classList.remove('hidden');
+        renderRaidSchedule();
+    }
+}
+
 function renderRaidSchedule() {
     const container = document.getElementById('raid-schedule-container');
     if (!container) return;
@@ -5631,23 +5680,30 @@ function renderRaidSchedule() {
     });
 
     if (upcomingRaids.length === 0) {
-        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1.5rem 0; text-align: center;"><i class="fa-solid fa-calendar-xmark" style="font-size: 1.5rem; margin-bottom: 0.5rem; display: block; opacity: 0.5;"></i>No upcoming raid rotations scheduled at the moment.</p>';
+        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.95rem; padding: 2rem 0; text-align: center;"><i class="fa-solid fa-calendar-xmark" style="font-size: 2rem; margin-bottom: 0.75rem; display: block; opacity: 0.5;"></i>No upcoming raid rotations scheduled at the moment.</p>';
         return;
     }
 
-    // Sort by startDate ascending
+    // Sort all upcoming raids by startDate ascending
     upcomingRaids.sort((a, b) => {
         const timeA = a.startDate ? new Date(a.startDate).getTime() : Infinity;
         const timeB = b.startDate ? new Date(b.startDate).getTime() : Infinity;
         return timeA - timeB;
     });
 
-    // Group by Tier
-    const raidsByTier = {};
+    // Group primary by DATE string (YYYY-MM-DD or readable date key)
+    const raidsByDate = {};
     upcomingRaids.forEach(r => {
-        const tier = r.tier || '5-Star Raids';
-        if (!raidsByTier[tier]) raidsByTier[tier] = [];
-        raidsByTier[tier].push(r);
+        let dateKey = 'TBA';
+        if (r.startDate) {
+            const d = new Date(r.startDate);
+            if (!isNaN(d.getTime())) {
+                // Key format: YYYY-MM-DD for deterministic sorting
+                dateKey = d.toISOString().split('T')[0];
+            }
+        }
+        if (!raidsByDate[dateKey]) raidsByDate[dateKey] = [];
+        raidsByDate[dateKey].push(r);
     });
 
     const tierOrder = [
@@ -5663,295 +5719,325 @@ function renderRaidSchedule() {
         '1-Star Raids'
     ];
 
-    const sortedTiers = Object.keys(raidsByTier).sort((a, b) => {
-        let idxA = tierOrder.indexOf(a);
-        let idxB = tierOrder.indexOf(b);
-        if (idxA === -1) idxA = 99;
-        if (idxB === -1) idxB = 99;
-        return idxA - idxB;
-    });
+    const sortedDates = Object.keys(raidsByDate).sort();
 
-    sortedTiers.forEach(tier => {
-        const sub = document.createElement('div');
-        const isMega = tier.toLowerCase().includes('mega');
-        const isShadow = tier.toLowerCase().includes('shadow');
-        const isFiveStar = tier.includes('5-Star') || tier.includes('Legendary');
+    sortedDates.forEach(dateKey => {
+        const dateGroupRaids = raidsByDate[dateKey];
+        const firstRaid = dateGroupRaids[0];
+        const sDate = firstRaid && firstRaid.startDate ? new Date(firstRaid.startDate) : null;
         
-        let themeClass = isShadow ? 'theme-shadow' : (isMega ? 'theme-mega' : (isFiveStar ? 'theme-legendary' : 'theme-standard'));
-        sub.className = `rotation-subchapter ${themeClass}`;
+        // Format friendly header for this date
+        let dateHeaderTitle = 'Upcoming Raids';
+        let countdownBadge = '';
+        if (sDate && !isNaN(sDate.getTime())) {
+            const formattedDate = sDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+            const formattedTime = sDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+            dateHeaderTitle = `${formattedDate} · ${formattedTime}`;
 
-        const tierIcon = isShadow 
-            ? '<i class="fa-solid fa-fire" style="color: #a855f7;"></i>' 
-            : (isMega 
-                ? '<i class="fa-solid fa-dna" style="color: #ec4899;"></i>' 
-                : '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>');
-
-        sub.innerHTML = `
-            <h4 class="rotation-subchapter-title" style="display: flex; align-items: center; justify-content: space-between;">
-                <span>${tierIcon} ${tier}</span>
-                <span style="font-size: 0.75rem; font-weight: 600; opacity: 0.7;">${raidsByTier[tier].length} upcoming</span>
-            </h4>
-            <div class="rotation-grid-layout"></div>
-        `;
-        container.appendChild(sub);
-
-        const grid = sub.querySelector('.rotation-grid-layout');
-
-        raidsByTier[tier].forEach(raid => {
-            const card = document.createElement('div');
-            const cleanBossName = (raid.name || '')
-                .replace(/^Mega\s+/i, '')
-                .replace(/^Shadow\s+/i, '')
-                .trim();
-            const matchedPoke = findPokemonByName(cleanBossName) || findPokemonByName(raid.name);
-            const baseFormPoke = matchedPoke || (() => {
-                const nameLower = safeLower(cleanBossName || raid.name);
-                let baseName = nameLower
-                    .replace(/^mega\s+/, '')
-                    .replace(/^primal\s+/, '')
-                    .replace(/^shadow\s+/, '')
-                    .replace(/\s*\(.*\)$/, '')
-                    .replace(/\s+(altered|origin|therian|incarnate|sky|land|standard|zen|ordinary|resolute|blade|shield|rapid-strike|single-strike)\s+form$/i, '')
-                    .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '');
-                return pokemonDatabase.find(p => p.name && safeLower(p.name) === baseName) || null;
-            })();
-            const targetPoke = matchedPoke || baseFormPoke;
-
-            const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
-            const isMissingSpecies = targetPoke && !isTransferred && isPokemonMissing(targetPoke);
-            const isMissingForm = isMegaOrGmaxFormMissing(raid.name, targetPoke);
-            const isMissing = isMissingSpecies;
-            const isCandyNeeded = targetPoke && (familyNeedsCandies(targetPoke) || needsCandies(targetPoke));
-            const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isMissingForm ? 'missing-form-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : '')));
-
-            card.className = `rotation-card-item ${themeClass} ${highlightClass} spawn-animation`;
-            card.setAttribute('data-scroll-target', `raid-schedule-${safeLower(raid.name).replace(/\s+/g, '-')}`);
-
-            let imgUrl = getPokemonImageUrl(raid.name, matchedPoke);
-            if (!imgUrl) {
-                imgUrl = raid.image || (matchedPoke ? matchedPoke.img : '') || `${POKE_SPRITE_BASE_URL}/1.png`;
-            }
-
-            // Start Date Display & Countdown badge
-            let dateBadgeHtml = '';
-            if (raid.startDate) {
-                const sDate = new Date(raid.startDate);
-                if (!isNaN(sDate.getTime())) {
-                    const formattedDate = sDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                    const diffMs = sDate.getTime() - now.getTime();
-                    let countdownText = '';
-                    if (diffMs > 0) {
-                        const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                        const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        if (days > 0) {
-                            countdownText = `in ${days}d ${hours}h`;
-                        } else if (hours > 0) {
-                            countdownText = `in ${hours}h`;
-                        } else {
-                            countdownText = 'starting soon';
-                        }
-                    } else {
-                        countdownText = 'starting now';
-                    }
-
-                    dateBadgeHtml = `
-                        <div class="raid-schedule-date" style="margin-top: 0.35rem; font-size: 0.72rem; font-weight: 700; color: #38bdf8; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 6px; padding: 4px 8px; display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-                            <span style="display: inline-flex; align-items: center; gap: 4px;"><i class="fa-regular fa-calendar" style="font-size: 0.65rem;"></i> ${formattedDate}</span>
-                            <span style="font-size: 0.65rem; color: #7dd3fc; font-weight: 800; text-transform: uppercase;">${countdownText}</span>
-                        </div>
-                    `;
-                }
-            }
-
-            // Difficulty section from PokéBattler estimator
-            let diffSectionHtml = '';
-            if (raid.estimator != null) {
-                const estNum = Number(raid.estimator);
-                const roundedEst = estNum.toFixed(2);
-                let verdict = raid.verdict || '';
-                let vColor = '#22c55e';
-                let vBg = 'rgba(34, 197, 94, 0.15)';
-                let vBorder = 'rgba(34, 197, 94, 0.35)';
-
-                if (estNum <= 1.0) {
-                    verdict = verdict || 'SOLO';
-                } else if (estNum <= 1.35) {
-                    verdict = verdict || 'EASY DUO';
-                } else if (estNum <= 2.0) {
-                    verdict = verdict || 'EASY TRIO';
-                    vColor = '#60a5fa';
-                    vBg = 'rgba(96, 165, 250, 0.15)';
-                    vBorder = 'rgba(96, 165, 250, 0.35)';
-                } else if (estNum <= 3.0) {
-                    verdict = verdict || 'MODERATE';
-                    vColor = '#eab308';
-                    vBg = 'rgba(234, 179, 8, 0.15)';
-                    vBorder = 'rgba(234, 179, 8, 0.35)';
-                } else if (estNum <= 5.0) {
-                    verdict = verdict || 'HARD';
-                    vColor = '#f97316';
-                    vBg = 'rgba(249, 115, 22, 0.15)';
-                    vBorder = 'rgba(249, 115, 22, 0.35)';
+            const diffMs = sDate.getTime() - now.getTime();
+            let countdownText = '';
+            if (diffMs > 0) {
+                const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                if (days > 0) {
+                    countdownText = `in ${days}d ${hours}h`;
+                } else if (hours > 0) {
+                    countdownText = `in ${hours}h`;
                 } else {
-                    verdict = verdict || 'EXTREME';
-                    vColor = '#ef4444';
-                    vBg = 'rgba(239, 68, 68, 0.15)';
-                    vBorder = 'rgba(239, 68, 68, 0.35)';
+                    countdownText = 'starting soon';
+                }
+            } else {
+                countdownText = 'live now';
+            }
+            countdownBadge = `<span style="font-size: 0.72rem; font-weight: 800; color: #38bdf8; background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.35); padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.3px;"><i class="fa-regular fa-clock" style="font-size: 0.65rem;"></i> ${countdownText}</span>`;
+        }
+
+        // Outer date card container
+        const dateBlock = document.createElement('div');
+        dateBlock.className = 'raid-schedule-date-block';
+        dateBlock.style.cssText = 'margin-bottom: 2rem; background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 1.25rem;';
+
+        dateBlock.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-regular fa-calendar-check" style="font-size: 1.1rem; color: var(--accent-color);"></i>
+                    <h3 style="font-size: 1.05rem; font-weight: 800; color: #f8fafc; margin: 0;">${dateHeaderTitle}</h3>
+                </div>
+                ${countdownBadge}
+            </div>
+            <div class="raid-schedule-date-tiers"></div>
+        `;
+        container.appendChild(dateBlock);
+
+        const tiersContainer = dateBlock.querySelector('.raid-schedule-date-tiers');
+
+        // Group this date's raids by Tier
+        const raidsByTier = {};
+        dateGroupRaids.forEach(r => {
+            const tier = r.tier || '5-Star Raids';
+            if (!raidsByTier[tier]) raidsByTier[tier] = [];
+            raidsByTier[tier].push(r);
+        });
+
+        const sortedTiers = Object.keys(raidsByTier).sort((a, b) => {
+            let idxA = tierOrder.indexOf(a);
+            let idxB = tierOrder.indexOf(b);
+            if (idxA === -1) idxA = 99;
+            if (idxB === -1) idxB = 99;
+            return idxA - idxB;
+        });
+
+        sortedTiers.forEach(tier => {
+            const sub = document.createElement('div');
+            const isMega = tier.toLowerCase().includes('mega');
+            const isShadow = tier.toLowerCase().includes('shadow');
+            const isFiveStar = tier.includes('5-Star') || tier.includes('Legendary');
+            
+            let themeClass = isShadow ? 'theme-shadow' : (isMega ? 'theme-mega' : (isFiveStar ? 'theme-legendary' : 'theme-standard'));
+            sub.className = `rotation-subchapter ${themeClass}`;
+            sub.style.marginBottom = '1.25rem';
+
+            const tierIcon = isShadow 
+                ? '<i class="fa-solid fa-fire" style="color: #a855f7;"></i>' 
+                : (isMega 
+                    ? '<i class="fa-solid fa-dna" style="color: #ec4899;"></i>' 
+                    : '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>');
+
+            sub.innerHTML = `
+                <h4 class="rotation-subchapter-title" style="display: flex; align-items: center; justify-content: space-between; font-size: 0.9rem;">
+                    <span>${tierIcon} ${tier}</span>
+                    <span style="font-size: 0.72rem; font-weight: 600; opacity: 0.7;">${raidsByTier[tier].length} ${raidsByTier[tier].length === 1 ? 'boss' : 'bosses'}</span>
+                </h4>
+                <div class="rotation-grid-layout"></div>
+            `;
+            tiersContainer.appendChild(sub);
+
+            const grid = sub.querySelector('.rotation-grid-layout');
+
+            raidsByTier[tier].forEach(raid => {
+                const card = document.createElement('div');
+                const cleanBossName = (raid.name || '')
+                    .replace(/^Mega\s+/i, '')
+                    .replace(/^Shadow\s+/i, '')
+                    .trim();
+                const matchedPoke = findPokemonByName(cleanBossName) || findPokemonByName(raid.name);
+                const baseFormPoke = matchedPoke || (() => {
+                    const nameLower = safeLower(cleanBossName || raid.name);
+                    let baseName = nameLower
+                        .replace(/^mega\s+/, '')
+                        .replace(/^primal\s+/, '')
+                        .replace(/^shadow\s+/, '')
+                        .replace(/\s*\(.*\)$/, '')
+                        .replace(/\s+(altered|origin|therian|incarnate|sky|land|standard|zen|ordinary|resolute|blade|shield|rapid-strike|single-strike)\s+form$/i, '')
+                        .replace(/^(alolan|galarian|hisuian|paldean)\s+/, '');
+                    return pokemonDatabase.find(p => p.name && safeLower(p.name) === baseName) || null;
+                })();
+                const targetPoke = matchedPoke || baseFormPoke;
+
+                const isTransferred = targetPoke && isPokemonTransferred(targetPoke);
+                const isMissingSpecies = targetPoke && !isTransferred && isPokemonMissing(targetPoke);
+                const isMissingForm = isMegaOrGmaxFormMissing(raid.name, targetPoke);
+                const isMissing = isMissingSpecies;
+                const isCandyNeeded = targetPoke && (familyNeedsCandies(targetPoke) || needsCandies(targetPoke));
+                const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isMissingForm ? 'missing-form-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : '')));
+
+                card.className = `rotation-card-item ${themeClass} ${highlightClass} spawn-animation`;
+                card.setAttribute('data-scroll-target', `raid-schedule-${safeLower(raid.name).replace(/\s+/g, '-')}`);
+
+                let imgUrl = getPokemonImageUrl(raid.name, matchedPoke);
+                if (!imgUrl) {
+                    imgUrl = raid.image || (matchedPoke ? matchedPoke.img : '') || `${POKE_SPRITE_BASE_URL}/1.png`;
                 }
 
-                const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum * 1.5));
+                // Difficulty section from PokéBattler estimator
+                let diffSectionHtml = '';
+                if (raid.estimator != null) {
+                    const estNum = Number(raid.estimator);
+                    const roundedEst = estNum.toFixed(2);
+                    let verdict = raid.verdict || '';
+                    let vColor = '#22c55e';
+                    let vBg = 'rgba(34, 197, 94, 0.15)';
+                    let vBorder = 'rgba(34, 197, 94, 0.35)';
 
-                const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
-                    const ratio = estNum / n;
-                    let st = 'EASY';
-                    if (ratio <= (2.0 / 3.0)) st = 'EASY';
-                    else if (ratio <= 1.0) st = 'TIGHT';
-                    else if (ratio <= 1.5) st = 'HARD';
-                    else st = 'EXTREME';
-                    return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
-                });
-
-                const boxesHtml = boxesData.map(b => {
-                    let bCol = '#22c55e';
-                    let bBg = 'rgba(34, 197, 94, 0.16)';
-                    let bBorder = 'rgba(34, 197, 94, 0.4)';
-                    if (b.status === 'TIGHT') {
-                        bCol = '#eab308';
-                        bBg = 'rgba(234, 179, 8, 0.18)';
-                        bBorder = 'rgba(234, 179, 8, 0.45)';
-                    } else if (b.status === 'HARD') {
-                        bCol = '#f97316';
-                        bBg = 'rgba(249, 115, 22, 0.18)';
-                        bBorder = 'rgba(249, 115, 22, 0.45)';
-                    } else if (b.status === 'EXTREME') {
-                        bCol = '#ef4444';
-                        bBg = 'rgba(239, 68, 68, 0.18)';
-                        bBorder = 'rgba(239, 68, 68, 0.45)';
+                    if (estNum <= 1.0) {
+                        verdict = verdict || 'SOLO';
+                    } else if (estNum <= 1.35) {
+                        verdict = verdict || 'EASY DUO';
+                    } else if (estNum <= 2.0) {
+                        verdict = verdict || 'EASY TRIO';
+                        vColor = '#60a5fa';
+                        vBg = 'rgba(96, 165, 250, 0.15)';
+                        vBorder = 'rgba(96, 165, 250, 0.35)';
+                    } else if (estNum <= 3.0) {
+                        verdict = verdict || 'MODERATE';
+                        vColor = '#eab308';
+                        vBg = 'rgba(234, 179, 8, 0.15)';
+                        vBorder = 'rgba(234, 179, 8, 0.35)';
+                    } else if (estNum <= 5.0) {
+                        verdict = verdict || 'HARD';
+                        vColor = '#f97316';
+                        vBg = 'rgba(249, 115, 22, 0.15)';
+                        vBorder = 'rgba(249, 115, 22, 0.35)';
+                    } else {
+                        verdict = verdict || 'EXTREME';
+                        vColor = '#ef4444';
+                        vBg = 'rgba(239, 68, 68, 0.15)';
+                        vBorder = 'rgba(239, 68, 68, 0.35)';
                     }
-                    return `
-                        <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 4px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                            <span style="font-size: 0.68rem; font-weight: 800; color: #ffffff;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                            <span style="font-size: 0.62rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+
+                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum * 1.5));
+
+                    const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
+                        const ratio = estNum / n;
+                        let st = 'EASY';
+                        if (ratio <= (2.0 / 3.0)) st = 'EASY';
+                        else if (ratio <= 1.0) st = 'TIGHT';
+                        else if (ratio <= 1.5) st = 'HARD';
+                        else st = 'EXTREME';
+                        return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
+                    });
+
+                    const boxesHtml = boxesData.map(b => {
+                        let bCol = '#22c55e';
+                        let bBg = 'rgba(34, 197, 94, 0.16)';
+                        let bBorder = 'rgba(34, 197, 94, 0.4)';
+                        if (b.status === 'TIGHT') {
+                            bCol = '#eab308';
+                            bBg = 'rgba(234, 179, 8, 0.18)';
+                            bBorder = 'rgba(234, 179, 8, 0.45)';
+                        } else if (b.status === 'HARD') {
+                            bCol = '#f97316';
+                            bBg = 'rgba(249, 115, 22, 0.18)';
+                            bBorder = 'rgba(249, 115, 22, 0.45)';
+                        } else if (b.status === 'EXTREME') {
+                            bCol = '#ef4444';
+                            bBg = 'rgba(239, 68, 68, 0.18)';
+                            bBorder = 'rgba(239, 68, 68, 0.45)';
+                        }
+                        return `
+                            <div style="background: ${bBg}; border: 1px solid ${bBorder}; border-radius: 5px; padding: 4px 6px; display: flex; align-items: center; justify-content: space-between; gap: 4px;" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                                <span style="font-size: 0.68rem; font-weight: 800; color: #ffffff;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
+                                <span style="font-size: 0.62rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px;">${b.status}</span>
+                            </div>
+                        `;
+                    }).join('');
+
+                    diffSectionHtml = `
+                        <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 8px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 6px;">
+                                <span style="font-size: 0.68rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
+                                    <i class="fa-solid fa-calculator" style="font-size: 0.6rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
+                                </span>
+                                <span style="font-size: 0.65rem; font-weight: 700; color: #94a3b8;">
+                                    <i class="fa-solid fa-users" style="font-size: 0.6rem;"></i> ${trainersNeeded} Needed
+                                </span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%;">
+                                ${boxesHtml}
+                            </div>
                         </div>
                     `;
-                }).join('');
+                }
 
-                diffSectionHtml = `
-                    <div class="raid-difficulty-container" style="margin-top: 0.45rem; width: 100%; background: rgba(0, 0, 0, 0.28); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 7px; padding: 6px 8px;">
-                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 4px; margin-bottom: 6px;">
-                            <span style="font-size: 0.68rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 4px;" title="PokeBattler Estimator">
-                                <i class="fa-solid fa-calculator" style="font-size: 0.6rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa;">${roundedEst}</strong>
-                            </span>
-                            <span style="font-size: 0.65rem; font-weight: 700; color: #94a3b8;">
-                                <i class="fa-solid fa-users" style="font-size: 0.6rem;"></i> ${trainersNeeded} Needed
-                            </span>
+                let pokebattlerBtn = '';
+                if (raid.pokebattlerUrl || diffSectionHtml) {
+                    pokebattlerBtn = `
+                        <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
+                            ${raid.pokebattlerUrl ? `
+                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                    <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
+                                        <i class="fa-solid fa-crosshairs"></i> Counters & Sims <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                    </a>
+                                </div>
+                            ` : ''}
+                            ${diffSectionHtml}
                         </div>
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%;">
-                            ${boxesHtml}
-                        </div>
-                    </div>
-                `;
-            }
+                    `;
+                }
 
-            let pokebattlerBtn = '';
-            if (raid.pokebattlerUrl || diffSectionHtml) {
-                pokebattlerBtn = `
-                    <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
-                        ${raid.pokebattlerUrl ? `
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
-                                    <i class="fa-solid fa-crosshairs"></i> Counters & Sims <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
-                                </a>
-                            </div>
-                        ` : ''}
-                        ${diffSectionHtml}
-                    </div>
-                `;
-            }
-
-            let cpMeta = '';
-            if (raid.cp) {
-                const getCpRange = (obj) => {
-                    if (obj == null) return null;
-                    if (typeof obj === 'number') return `${obj}`;
-                    if (typeof obj === 'string') return obj;
-                    if (typeof obj === 'object') {
-                        if (obj.min && obj.max && obj.min !== obj.max) return `${obj.min} - ${obj.max}`;
-                        return `${obj.max || obj.min || obj.cp || ''}`;
+                let cpMeta = '';
+                if (raid.cp) {
+                    const getCpRange = (obj) => {
+                        if (obj == null) return null;
+                        if (typeof obj === 'number') return `${obj}`;
+                        if (typeof obj === 'string') return obj;
+                        if (typeof obj === 'object') {
+                            if (obj.min && obj.max && obj.min !== obj.max) return `${obj.min} - ${obj.max}`;
+                            return `${obj.max || obj.min || obj.cp || ''}`;
+                        }
+                        return null;
+                    };
+                    let normalText = '';
+                    let boostedText = '';
+                    const normVal = getCpRange(raid.cp.normal) || (typeof raid.cp === 'number' ? raid.cp : null);
+                    const boostVal = getCpRange(raid.cp.boosted);
+                    if (normVal) {
+                        normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
                     }
-                    return null;
-                };
-                let normalText = '';
-                let boostedText = '';
-                const normVal = getCpRange(raid.cp.normal) || (typeof raid.cp === 'number' ? raid.cp : null);
-                const boostVal = getCpRange(raid.cp.boosted);
-                if (normVal) {
-                    normalText = `<div><i class="fa-solid fa-gamepad" style="font-size:0.65rem; opacity:0.7;"></i> <span>Normal: <strong>${normVal}</strong> CP</span></div>`;
+                    if (boostVal) {
+                        boostedText = `<div><i class="fa-solid fa-cloud-sun-rain" style="font-size:0.65rem; opacity:0.7;"></i> <span>Boosted: <strong>${boostVal}</strong> CP</span></div>`;
+                    }
+                    if (normalText || boostedText) {
+                        cpMeta = `<div class="rotation-cp-details">${normalText}${boostedText}</div>`;
+                    }
                 }
-                if (boostVal) {
-                    boostedText = `<div><i class="fa-solid fa-cloud-sun-rain" style="font-size:0.65rem; opacity:0.7;"></i> <span>Boosted: <strong>${boostVal}</strong> CP</span></div>`;
+
+                let weatherHtml = '';
+                if (raid.weatherBoosts && raid.weatherBoosts.length > 0) {
+                    const wIcons = {
+                        clear: 'fa-sun',
+                        sunny: 'fa-sun',
+                        partlycloudy: 'fa-cloud-sun',
+                        partly_cloudy: 'fa-cloud-sun',
+                        cloudy: 'fa-cloud',
+                        rain: 'fa-cloud-showers-heavy',
+                        rainy: 'fa-cloud-showers-heavy',
+                        wind: 'fa-wind',
+                        windy: 'fa-wind',
+                        snow: 'fa-snowflake',
+                        fog: 'fa-smog'
+                    };
+                    const badges = raid.weatherBoosts.map(w => {
+                        const wName = typeof w === 'object' && w ? (w.name || '') : String(w || '');
+                        const wLower = safeLower(wName).replace(/_/g, '').trim();
+                        const icon = wIcons[wLower] || 'fa-cloud-sun';
+                        return `<span class="weather-badge" style="font-size: 0.68rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 3px;" title="Boosted in ${wName} weather"><i class="fa-solid ${icon}"></i> ${wName}</span>`;
+                    }).join(', ');
+                    weatherHtml = `<div class="raid-weather-boosts" style="margin-top: 0.3rem; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span>Weather Boost:</span> ${badges}</div>`;
                 }
-                if (normalText || boostedText) {
-                    cpMeta = `<div class="rotation-cp-details">${normalText}${boostedText}</div>`;
+
+                const statusBadgeHtml = isTransferred 
+                    ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' 
+                    : (isMissing 
+                        ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' 
+                        : (isMissingForm 
+                            ? '<span class="missing-form-rotation-badge"><i class="fa-solid fa-dna"></i> Missing Form</span>' 
+                            : ''));
+
+                card.innerHTML = `
+                    ${raid.shiny ? shinySparkleSvg : ''}
+                    <div class="rotation-badges">
+                        ${statusBadgeHtml}
+                        ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
+                    </div>
+                    <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
+                    <div class="rotation-card-details-wrapper">
+                        <span class="rotation-card-name">${raid.name}</span>
+                        ${cpMeta}
+                        ${weatherHtml}
+                        ${pokebattlerBtn}
+                    </div>
+                `;
+
+                const clickTarget = matchedPoke || baseFormPoke;
+                if (clickTarget) {
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => {
+                        openModal(clickTarget.id);
+                    });
                 }
-            }
-
-            let weatherHtml = '';
-            if (raid.weatherBoosts && raid.weatherBoosts.length > 0) {
-                const wIcons = {
-                    clear: 'fa-sun',
-                    sunny: 'fa-sun',
-                    partlycloudy: 'fa-cloud-sun',
-                    partly_cloudy: 'fa-cloud-sun',
-                    cloudy: 'fa-cloud',
-                    rain: 'fa-cloud-showers-heavy',
-                    rainy: 'fa-cloud-showers-heavy',
-                    wind: 'fa-wind',
-                    windy: 'fa-wind',
-                    snow: 'fa-snowflake',
-                    fog: 'fa-smog'
-                };
-                const badges = raid.weatherBoosts.map(w => {
-                    const wName = typeof w === 'object' && w ? (w.name || '') : String(w || '');
-                    const wLower = safeLower(wName).replace(/_/g, '').trim();
-                    const icon = wIcons[wLower] || 'fa-cloud-sun';
-                    return `<span class="weather-badge" style="font-size: 0.68rem; color: var(--text-secondary); display: inline-flex; align-items: center; gap: 3px;" title="Boosted in ${wName} weather"><i class="fa-solid ${icon}"></i> ${wName}</span>`;
-                }).join(', ');
-                weatherHtml = `<div class="raid-weather-boosts" style="margin-top: 0.3rem; font-size: 0.7rem; display: flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span>Weather Boost:</span> ${badges}</div>`;
-            }
-
-            const statusBadgeHtml = isTransferred 
-                ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' 
-                : (isMissing 
-                    ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' 
-                    : (isMissingForm 
-                        ? '<span class="missing-form-rotation-badge"><i class="fa-solid fa-dna"></i> Missing Form</span>' 
-                        : ''));
-
-            card.innerHTML = `
-                ${raid.shiny ? shinySparkleSvg : ''}
-                <div class="rotation-badges">
-                    ${statusBadgeHtml}
-                    ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
-                </div>
-                <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
-                <div class="rotation-card-details-wrapper">
-                    <span class="rotation-card-name">${raid.name}</span>
-                    ${dateBadgeHtml}
-                    ${cpMeta}
-                    ${weatherHtml}
-                    ${pokebattlerBtn}
-                </div>
-            `;
-
-            const clickTarget = matchedPoke || baseFormPoke;
-            if (clickTarget) {
-                card.style.cursor = 'pointer';
-                card.addEventListener('click', () => {
-                    openModal(clickTarget.id);
-                });
-            }
-            grid.appendChild(card);
+                grid.appendChild(card);
+            });
         });
     });
 }

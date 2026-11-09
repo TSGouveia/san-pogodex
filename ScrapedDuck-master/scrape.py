@@ -99,6 +99,8 @@ def main():
     # 3. Scrape Raids & Max Battles
     raids, max_battles = scrape_raids()
     save_json("raids.json", raids)
+    if isinstance(raids, dict) and "schedule" in raids:
+        save_json("raids_schedule.json", raids["schedule"])
     save_json("maxBattles.json", max_battles)
 
     # 4. Scrape Research
