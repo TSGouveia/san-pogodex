@@ -1425,6 +1425,422 @@
                     "ratio": 0.65
                 }
             ]
+        },
+        {
+            "name": "Normal Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "DEOXYS_NORMAL_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1717,
+                    "max": 1806
+                },
+                "boosted": {
+                    "min": 2146,
+                    "max": 2257
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Windy",
+                    "image": "https://leekduck.com/assets/img/weather/Windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_NORMAL_FORM",
+            "estimator": 1.31,
+            "estimatedPlayers": 1.31,
+            "verdict": "EASY DUO",
+            "trainersNeeded": 2,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "HARD",
+                    "ratio": 1.31
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.66
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.44
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.33
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.26
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.22
+                }
+            ]
+        },
+        {
+            "name": "Attack Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "DEOXYS_ATTACK_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1372,
+                    "max": 1474
+                },
+                "boosted": {
+                    "min": 1716,
+                    "max": 1842
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Windy",
+                    "image": "https://leekduck.com/assets/img/weather/Windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_ATTACK_FORM",
+            "estimator": 0.68,
+            "estimatedPlayers": 0.68,
+            "verdict": "SOLOABLE",
+            "trainersNeeded": 2,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "TIGHT",
+                    "ratio": 0.68
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.34
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.23
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.17
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.14
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.11
+                }
+            ]
+        },
+        {
+            "name": "Defense Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "DEOXYS_DEFENSE_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1228,
+                    "max": 1299
+                },
+                "boosted": {
+                    "min": 1535,
+                    "max": 1624
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Windy",
+                    "image": "https://leekduck.com/assets/img/weather/Windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_DEFENSE_FORM",
+            "estimator": 3.22,
+            "estimatedPlayers": 3.22,
+            "verdict": "HARD",
+            "trainersNeeded": 5,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 3.22
+                },
+                {
+                    "trainers": "2",
+                    "status": "EXTREME",
+                    "ratio": 1.61
+                },
+                {
+                    "trainers": "3",
+                    "status": "HARD",
+                    "ratio": 1.07
+                },
+                {
+                    "trainers": "4",
+                    "status": "TIGHT",
+                    "ratio": 0.81
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.64
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.54
+                }
+            ]
+        },
+        {
+            "name": "Speed Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "DEOXYS_SPEED_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1568,
+                    "max": 1645
+                },
+                "boosted": {
+                    "min": 1960,
+                    "max": 2056
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Windy",
+                    "image": "https://leekduck.com/assets/img/weather/Windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_SPEED_FORM",
+            "estimator": 2.27,
+            "estimatedPlayers": 2.27,
+            "verdict": "MODERATE",
+            "trainersNeeded": 4,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 2.27
+                },
+                {
+                    "trainers": "2",
+                    "status": "HARD",
+                    "ratio": 1.14
+                },
+                {
+                    "trainers": "3",
+                    "status": "TIGHT",
+                    "ratio": 0.76
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.57
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.45
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.38
+                }
+            ]
+        },
+        {
+            "name": "Mega Metagross",
+            "tier": "Mega Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "METAGROSS_MEGA",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {
+                    "name": "steel",
+                    "image": "https://leekduck.com/assets/img/types/steel.png"
+                },
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2108,
+                    "max": 2186
+                },
+                "boosted": {
+                    "min": 2635,
+                    "max": 2733
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Snow",
+                    "image": "https://leekduck.com/assets/img/weather/Snow.png"
+                },
+                {
+                    "name": "Windy",
+                    "image": "https://leekduck.com/assets/img/weather/Windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/METAGROSS_MEGA",
+            "estimator": 1.89,
+            "estimatedPlayers": 1.89,
+            "verdict": "EASY TRIO",
+            "trainersNeeded": 3,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 1.89
+                },
+                {
+                    "trainers": "2",
+                    "status": "TIGHT",
+                    "ratio": 0.94
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.63
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.47
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.38
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.32
+                }
+            ]
+        },
+        {
+            "name": "Mega Clefable",
+            "tier": "Mega Raids",
+            "canBeShiny": true,
+            "pokebattlerSlug": "CLEFABLE_MEGA",
+            "startDate": "2026-11-28T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/event/super-mega-clefable-raid-day/",
+            "types": [
+                {
+                    "name": "fairy",
+                    "image": "https://leekduck.com/assets/img/types/fairy.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1332,
+                    "max": 1392
+                },
+                "boosted": {
+                    "min": 1665,
+                    "max": 1740
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "Cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/Cloudy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/CLEFABLE_MEGA",
+            "estimator": 1.24,
+            "estimatedPlayers": 1.24,
+            "verdict": "EASY DUO",
+            "trainersNeeded": 2,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "HARD",
+                    "ratio": 1.24
+                },
+                {
+                    "trainers": "2",
+                    "status": "EASY",
+                    "ratio": 0.62
+                },
+                {
+                    "trainers": "3",
+                    "status": "EASY",
+                    "ratio": 0.41
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.31
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.25
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.21
+                }
+            ]
         }
     ]
 }
