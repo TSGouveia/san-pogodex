@@ -397,6 +397,15 @@ def get_boss_image_url(name, dex_nr):
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10007.png"
     if 'giratina' in clean_lower and 'altered' in clean_lower:
         return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/487.png"
+    if 'deoxys' in clean_lower:
+        if 'attack' in clean_lower:
+            return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png"
+        elif 'defense' in clean_lower:
+            return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png"
+        elif 'speed' in clean_lower:
+            return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png"
+        else:
+            return "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png"
 
     # Megas & Primals
     if clean_lower.startswith('mega ') or clean_lower.startswith('super mega '):
@@ -668,6 +677,95 @@ def scrape_raids():
                         })
     except Exception as e:
         print(f"Error fetching from PokéBattler API: {e}")
+
+    # Explicitly ensure all confirmed scheduled bosses from official schedule (November 25 - December 1) are present
+    confirmed_future_schedule = [
+        {
+            "name": "Normal Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "DEOXYS_NORMAL_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
+            "combatPower": {"normal": {"min": 1717, "max": 1806}, "boosted": {"min": 2146, "max": 2257}},
+            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png"
+        },
+        {
+            "name": "Attack Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "DEOXYS_ATTACK_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
+            "combatPower": {"normal": {"min": 1372, "max": 1474}, "boosted": {"min": 1716, "max": 1842}},
+            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png"
+        },
+        {
+            "name": "Defense Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "DEOXYS_DEFENSE_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
+            "combatPower": {"normal": {"min": 1228, "max": 1299}, "boosted": {"min": 1535, "max": 1624}},
+            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png"
+        },
+        {
+            "name": "Speed Deoxys",
+            "tier": "5-Star Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "DEOXYS_SPEED_FORM",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
+            "combatPower": {"normal": {"min": 1568, "max": 1645}, "boosted": {"min": 1960, "max": 2056}},
+            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png"
+        },
+        {
+            "name": "Mega Metagross",
+            "tier": "Mega Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "METAGROSS_MEGA",
+            "startDate": "2026-11-25T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
+            "types": [
+                {"name": "steel", "image": "https://leekduck.com/assets/img/types/steel.png"},
+                {"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}
+            ],
+            "combatPower": {"normal": {"min": 2108, "max": 2186}, "boosted": {"min": 2635, "max": 2733}},
+            "boostedWeather": [
+                {"name": "Snow", "image": "https://leekduck.com/assets/img/weather/Snow.png"},
+                {"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png"
+        },
+        {
+            "name": "Mega Clefable",
+            "tier": "Mega Raids",
+            "canBeShiny": True,
+            "pokebattlerSlug": "CLEFABLE_MEGA",
+            "startDate": "2026-11-28T14:00:00+00:00",
+            "guideUrl": "https://pokemongohub.net/post/event/super-mega-clefable-raid-day/",
+            "types": [{"name": "fairy", "image": "https://leekduck.com/assets/img/types/fairy.png"}],
+            "combatPower": {"normal": {"min": 1332, "max": 1392}, "boosted": {"min": 1665, "max": 1740}},
+            "boostedWeather": [{"name": "Cloudy", "image": "https://leekduck.com/assets/img/weather/Cloudy.png"}],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png"
+        }
+    ]
+
+    existing_slug_dates = {(e.get('pokebattlerSlug'), e.get('startDate')) for e in schedule_entries}
+    for item in confirmed_future_schedule:
+        key = (item.get('pokebattlerSlug'), item.get('startDate'))
+        if key not in existing_slug_dates:
+            item['pokebattlerUrl'] = f"https://www.pokebattler.com/raids/{item.get('pokebattlerSlug')}"
+            schedule_entries.append(item)
 
     # Fetch Pokebattler estimators in parallel for standard raid bosses and schedule entries
     all_targets_for_estimator = bosses + schedule_entries

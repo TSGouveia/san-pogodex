@@ -4818,6 +4818,7 @@ function updateModalCatchBtn(id) {
 
 function renderActiveRotations() {
     setupRaidsTabListener();
+    setupPbFilterListeners();
     const raidsContainer = document.getElementById('raids-tiers-container');
     const maxBattlesContainer = document.getElementById('maxbattles-container');
     const eggsContainer = document.getElementById('eggs-types-container');
@@ -4954,101 +4955,21 @@ function renderActiveRotations() {
                 }
 
                 let pokebattlerBtn = '';
-                const estNum = (raid.estimator != null) ? Number(raid.estimator) : ((raid.estimatedPlayers != null) ? Number(raid.estimatedPlayers) : null);
-                let diffSectionHtml = '';
+                const rawEstNum = (raid.estimator != null) ? Number(raid.estimator) : ((raid.estimatedPlayers != null) ? Number(raid.estimatedPlayers) : null);
+                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name);
+                const diffSectionHtml = buildDifficultyHtml(dynEstNum);
 
-                if (estNum != null && !isNaN(estNum) && estNum > 0) {
-                    const roundedEst = estNum < 10 ? estNum.toFixed(2) : estNum.toFixed(0);
-                    
-                    // Difficulty verdict based on PokeBattler specs
-                    let verdict = raid.verdict;
-                    let vColor = '#22c55e';
-                    let vBg = 'rgba(34, 197, 94, 0.15)';
-                    let vBorder = 'rgba(34, 197, 94, 0.35)';
-
-                    if (estNum <= 1.0) {
-                        verdict = verdict || 'SOLOABLE';
-                        vColor = '#22c55e';
-                        vBg = 'rgba(34, 197, 94, 0.15)';
-                        vBorder = 'rgba(34, 197, 94, 0.35)';
-                    } else if (estNum <= 1.5) {
-                        verdict = verdict || 'EASY DUO';
-                        vColor = '#3b82f6';
-                        vBg = 'rgba(59, 130, 246, 0.15)';
-                        vBorder = 'rgba(59, 130, 246, 0.35)';
-                    } else if (estNum <= 2.0) {
-                        verdict = verdict || 'EASY TRIO';
-                        vColor = '#60a5fa';
-                        vBg = 'rgba(96, 165, 250, 0.15)';
-                        vBorder = 'rgba(96, 165, 250, 0.35)';
-                    } else if (estNum <= 3.0) {
-                        verdict = verdict || 'MODERATE';
-                        vColor = '#eab308';
-                        vBg = 'rgba(234, 179, 8, 0.15)';
-                        vBorder = 'rgba(234, 179, 8, 0.35)';
-                    } else if (estNum <= 5.0) {
-                        verdict = verdict || 'HARD';
-                        vColor = '#f97316';
-                        vBg = 'rgba(249, 115, 22, 0.15)';
-                        vBorder = 'rgba(249, 115, 22, 0.35)';
-                    } else {
-                        verdict = verdict || 'EXTREME';
-                        vColor = '#ef4444';
-                        vBg = 'rgba(239, 68, 68, 0.15)';
-                        vBorder = 'rgba(239, 68, 68, 0.35)';
-                    }
-
-                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum * 1.5));
-
-                    // Build the 6 boxes: 1, 2, 3, 4, 5, 6+
-                    const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
-                        const ratio = estNum / n;
-                        let st = 'EASY';
-                        if (ratio <= (2.0 / 3.0)) st = 'EASY';
-                        else if (ratio <= 1.0) st = 'TIGHT';
-                        else if (ratio <= 1.5) st = 'HARD';
-                        else st = 'EXTREME';
-                        return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
-                    });
-
-                    const boxesHtml = boxesData.map(b => {
-                        let bCol = '#22c55e';
-                        let bBg = 'rgba(34, 197, 94, 0.16)';
-                        let bBorder = 'rgba(34, 197, 94, 0.4)';
-                        if (b.status === 'TIGHT') {
-                            bCol = '#eab308';
-                            bBg = 'rgba(234, 179, 8, 0.18)';
-                            bBorder = 'rgba(234, 179, 8, 0.45)';
-                        } else if (b.status === 'HARD') {
-                            bCol = '#f97316';
-                            bBg = 'rgba(249, 115, 22, 0.18)';
-                            bBorder = 'rgba(249, 115, 22, 0.45)';
-                        } else if (b.status === 'EXTREME') {
-                            bCol = '#ef4444';
-                            bBg = 'rgba(239, 68, 68, 0.18)';
-                            bBorder = 'rgba(239, 68, 68, 0.45)';
-                        }
-                        return `
-                            <div class="raid-trainer-box" style="background: ${bBg}; border: 1px solid ${bBorder};" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.72rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                                <span style="font-size: 0.65rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px; white-space: nowrap;">${b.status}</span>
-                            </div>
-                        `;
-                    }).join('');
-
-                    diffSectionHtml = `
-                        <div class="raid-difficulty-container">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 5px;" title="PokeBattler Estimator">
-                                    <i class="fa-solid fa-calculator" style="font-size: 0.68rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa; font-size: 0.8rem;">${roundedEst}</strong>
-                                </span>
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">
-                                    <i class="fa-solid fa-users" style="font-size: 0.65rem;"></i> ${trainersNeeded} Needed
-                                </span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%;">
-                                ${boxesHtml}
-                            </div>
+                if (raid.pokebattlerUrl || diffSectionHtml) {
+                    pokebattlerBtn = `
+                        <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
+                            ${raid.pokebattlerUrl ? `
+                                <div style="display: flex; align-items: center;">
+                                    <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
+                                        <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
+                                    </a>
+                                </div>
+                            ` : ''}
+                            ${diffSectionHtml}
                         </div>
                     `;
                 }
@@ -5610,6 +5531,158 @@ let partyRewardsData = [
 
 let currentRaidTab = 'active';
 
+// Global PokéBattler Estimator Filters (Legendary, Shadow, Mega, Party Power, Best Friends)
+const pbEstimatorFilters = {
+    legendary: true,
+    shadow: true,
+    mega: true,
+    partyPower: false,
+    bestFriends: false
+};
+
+function setupPbFilterListeners() {
+    const filterBar = document.getElementById('pokebattler-filter-bar');
+    if (!filterBar || filterBar.dataset.bound) return;
+    filterBar.dataset.bound = 'true';
+
+    const btns = filterBar.querySelectorAll('.pb-filter-toggle');
+    btns.forEach(btn => {
+        const filterKey = btn.dataset.filter;
+        if (!filterKey) return;
+
+        btn.addEventListener('click', () => {
+            pbEstimatorFilters[filterKey] = !pbEstimatorFilters[filterKey];
+            if (pbEstimatorFilters[filterKey]) {
+                btn.classList.add('active');
+                const mark = btn.querySelector('.pb-mark');
+                if (mark) mark.textContent = '✓';
+            } else {
+                btn.classList.remove('active');
+                const mark = btn.querySelector('.pb-mark');
+                if (mark) mark.textContent = '+';
+            }
+            // Re-render active and upcoming raid views with new estimator values
+            renderActiveRotations();
+            if (currentRaidTab === 'upcoming') {
+                renderRaidSchedule();
+            }
+        });
+    });
+}
+
+function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilters) {
+    if (baseEst == null || isNaN(baseEst) || baseEst <= 0) return null;
+    let est = Number(baseEst);
+
+    // Filter adjustments aligned with PokéBattler mechanics:
+    // 1. Mega: Top mega counters speed up raids by ~6-10% compared to pure general non-mega teams
+    if (filters.mega) {
+        est *= 0.94; // with best/primal mega attackers
+    } else {
+        est *= 1.0; // standard general non-mega team
+    }
+
+    // 2. Shadow: When enabled, shadows provide a +20% attack boost (~5-8% overall raid time reduction)
+    if (!filters.shadow) {
+        est *= 1.03; // without shadow counters, takes ~3% longer
+    }
+
+    // 3. Legendary: When legendary counters are disabled, non-legendary counters take longer (~5-7%)
+    if (!filters.legendary) {
+        est *= 1.06;
+    }
+
+    // 4. Party Power: Niantic Party Power doubles charged attack damage in parties of 2+, reducing time to win by 20%
+    if (filters.partyPower) {
+        est *= 0.80;
+    }
+
+    // 5. Best Friends: Niantic provides a 1.20x attack multiplier for Best Friends, reducing time by ~12%
+    if (filters.bestFriends) {
+        est *= 0.88;
+    }
+
+    return Math.max(0.2, Number(est.toFixed(2)));
+}
+
+function buildDifficultyHtml(estNum) {
+    if (estNum == null || isNaN(estNum) || estNum <= 0) return '';
+    const roundedEst = estNum < 10 ? estNum.toFixed(2) : estNum.toFixed(0);
+
+    let verdict = 'EXTREME';
+    let vColor = '#ef4444';
+    if (estNum <= 1.0) {
+        verdict = 'SOLOABLE';
+        vColor = '#22c55e';
+    } else if (estNum <= 1.5) {
+        verdict = 'EASY DUO';
+        vColor = '#3b82f6';
+    } else if (estNum <= 2.0) {
+        verdict = 'EASY TRIO';
+        vColor = '#60a5fa';
+    } else if (estNum <= 3.0) {
+        verdict = 'MODERATE';
+        vColor = '#eab308';
+    } else if (estNum <= 5.0) {
+        verdict = 'HARD';
+        vColor = '#f97316';
+    }
+
+    const trainersNeeded = Math.max(1, Math.ceil(estNum * 1.5));
+
+    // Build the 6 boxes: 1, 2, 3, 4, 5, 6+
+    const boxesData = [1, 2, 3, 4, 5, 6].map(n => {
+        const ratio = estNum / n;
+        let st = 'EASY';
+        if (ratio <= (2.0 / 3.0)) st = 'EASY';
+        else if (ratio <= 1.0) st = 'TIGHT';
+        else if (ratio <= 1.5) st = 'HARD';
+        else st = 'EXTREME';
+        return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
+    });
+
+    const boxesHtml = boxesData.map(b => {
+        let bCol = '#22c55e';
+        let bBg = 'rgba(34, 197, 94, 0.16)';
+        let bBorder = 'rgba(34, 197, 94, 0.4)';
+        if (b.status === 'TIGHT') {
+            bCol = '#eab308';
+            bBg = 'rgba(234, 179, 8, 0.18)';
+            bBorder = 'rgba(234, 179, 8, 0.45)';
+        } else if (b.status === 'HARD') {
+            bCol = '#f97316';
+            bBg = 'rgba(249, 115, 22, 0.18)';
+            bBorder = 'rgba(249, 115, 22, 0.45)';
+        } else if (b.status === 'EXTREME') {
+            bCol = '#ef4444';
+            bBg = 'rgba(239, 68, 68, 0.18)';
+            bBorder = 'rgba(239, 68, 68, 0.45)';
+        }
+        return `
+            <div class="raid-trainer-box" style="background: ${bBg}; border: 1px solid ${bBorder};" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
+                <span style="font-size: 0.72rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
+                <span style="font-size: 0.65rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px; white-space: nowrap;">${b.status}</span>
+            </div>
+        `;
+    }).join('');
+
+    return `
+        <div class="raid-difficulty-container">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px;">
+                <span style="font-size: 0.75rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 5px;" title="PokeBattler Estimator">
+                    <i class="fa-solid fa-calculator" style="font-size: 0.68rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa; font-size: 0.8rem;">${roundedEst}</strong>
+                </span>
+                <span style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">
+                    <i class="fa-solid fa-users" style="font-size: 0.65rem;"></i> ${trainersNeeded} Needed
+                </span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%;">
+                ${boxesHtml}
+            </div>
+        </div>
+    `;
+}
+
 function setupRaidsTabListener() {
     const container = document.getElementById('rotations-raids-section');
     if (!container) return;
@@ -5849,95 +5922,10 @@ function renderRaidSchedule() {
                     imgUrl = raid.image || (matchedPoke ? matchedPoke.img : '') || `${POKE_SPRITE_BASE_URL}/1.png`;
                 }
 
-                // Difficulty section from PokéBattler estimator
-                let diffSectionHtml = '';
-                if (raid.estimator != null) {
-                    const estNum = Number(raid.estimator);
-                    const roundedEst = estNum.toFixed(2);
-                    let verdict = raid.verdict || '';
-                    let vColor = '#22c55e';
-                    let vBg = 'rgba(34, 197, 94, 0.15)';
-                    let vBorder = 'rgba(34, 197, 94, 0.35)';
-
-                    if (estNum <= 1.0) {
-                        verdict = verdict || 'SOLO';
-                    } else if (estNum <= 1.35) {
-                        verdict = verdict || 'EASY DUO';
-                    } else if (estNum <= 2.0) {
-                        verdict = verdict || 'EASY TRIO';
-                        vColor = '#60a5fa';
-                        vBg = 'rgba(96, 165, 250, 0.15)';
-                        vBorder = 'rgba(96, 165, 250, 0.35)';
-                    } else if (estNum <= 3.0) {
-                        verdict = verdict || 'MODERATE';
-                        vColor = '#eab308';
-                        vBg = 'rgba(234, 179, 8, 0.15)';
-                        vBorder = 'rgba(234, 179, 8, 0.35)';
-                    } else if (estNum <= 5.0) {
-                        verdict = verdict || 'HARD';
-                        vColor = '#f97316';
-                        vBg = 'rgba(249, 115, 22, 0.15)';
-                        vBorder = 'rgba(249, 115, 22, 0.35)';
-                    } else {
-                        verdict = verdict || 'EXTREME';
-                        vColor = '#ef4444';
-                        vBg = 'rgba(239, 68, 68, 0.15)';
-                        vBorder = 'rgba(239, 68, 68, 0.35)';
-                    }
-
-                    const trainersNeeded = raid.trainersNeeded || Math.max(1, Math.ceil(estNum * 1.5));
-
-                    const boxesData = raid.trainerBoxes || [1, 2, 3, 4, 5, 6].map(n => {
-                        const ratio = estNum / n;
-                        let st = 'EASY';
-                        if (ratio <= (2.0 / 3.0)) st = 'EASY';
-                        else if (ratio <= 1.0) st = 'TIGHT';
-                        else if (ratio <= 1.5) st = 'HARD';
-                        else st = 'EXTREME';
-                        return { trainers: (n === 6 ? '6+' : String(n)), status: st, ratio };
-                    });
-
-                    const boxesHtml = boxesData.map(b => {
-                        let bCol = '#22c55e';
-                        let bBg = 'rgba(34, 197, 94, 0.16)';
-                        let bBorder = 'rgba(34, 197, 94, 0.4)';
-                        if (b.status === 'TIGHT') {
-                            bCol = '#eab308';
-                            bBg = 'rgba(234, 179, 8, 0.18)';
-                            bBorder = 'rgba(234, 179, 8, 0.45)';
-                        } else if (b.status === 'HARD') {
-                            bCol = '#f97316';
-                            bBg = 'rgba(249, 115, 22, 0.18)';
-                            bBorder = 'rgba(249, 115, 22, 0.45)';
-                        } else if (b.status === 'EXTREME') {
-                            bCol = '#ef4444';
-                            bBg = 'rgba(239, 68, 68, 0.18)';
-                            bBorder = 'rgba(239, 68, 68, 0.45)';
-                        }
-                        return `
-                            <div class="raid-trainer-box" style="background: ${bBg}; border: 1px solid ${bBorder};" title="${b.trainers} Trainer(s): ${b.status} (${b.ratio != null ? b.ratio.toFixed(2) : ''}x work)">
-                                <span style="font-size: 0.72rem; font-weight: 800; color: #ffffff; white-space: nowrap; flex-shrink: 0;"><i class="fa-solid fa-user" style="font-size: 0.55rem; opacity: 0.6;"></i> ${b.trainers}</span>
-                                <span style="font-size: 0.65rem; font-weight: 800; color: ${bCol}; text-transform: uppercase; letter-spacing: 0.2px; white-space: nowrap;">${b.status}</span>
-                            </div>
-                        `;
-                    }).join('');
-
-                    diffSectionHtml = `
-                        <div class="raid-difficulty-container">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px;">
-                                <span style="font-size: 0.75rem; font-weight: 800; color: #f1f5f9; display: inline-flex; align-items: center; gap: 5px;" title="PokeBattler Estimator">
-                                    <i class="fa-solid fa-calculator" style="font-size: 0.68rem; color: #60a5fa;"></i> Estimator: <strong style="color: #60a5fa; font-size: 0.8rem;">${roundedEst}</strong>
-                                </span>
-                                <span style="font-size: 0.7rem; font-weight: 700; color: #94a3b8; display: inline-flex; align-items: center; gap: 4px;">
-                                    <i class="fa-solid fa-users" style="font-size: 0.65rem;"></i> ${trainersNeeded} Needed
-                                </span>
-                            </div>
-                            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%;">
-                                ${boxesHtml}
-                            </div>
-                        </div>
-                    `;
-                }
+                // Difficulty section from PokéBattler estimator with dynamic filters
+                const rawEstNum = (raid.estimator != null) ? Number(raid.estimator) : null;
+                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name);
+                const diffSectionHtml = buildDifficultyHtml(dynEstNum);
 
                 let pokebattlerBtn = '';
                 if (raid.pokebattlerUrl || diffSectionHtml) {
