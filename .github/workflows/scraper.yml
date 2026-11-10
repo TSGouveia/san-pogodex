@@ -6,11 +6,20 @@ on:
     - cron: '0 * * * *'
   # Allows manual run from GitHub Actions tab
   workflow_dispatch:
-  # Runs on push to main or master
+  # Runs on push to main or master, but only when the scraper itself changes
+  # (site-only commits don't need fresh data and used to collide with the hourly run)
   push:
     branches:
       - main
       - master
+    paths:
+      - 'ScrapedDuck-master/**'
+      - '.github/workflows/scraper.yml'
+
+# Never run two scrapes at once: overlapping runs both pushed to the data branch and conflicted
+concurrency:
+  group: scraper-data-sync
+  cancel-in-progress: false
 
 jobs:
   scrape-and-sync-data:
@@ -62,8 +71,14 @@ jobs:
           if ! git diff --quiet || ! git diff --staged --quiet; then
             TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M UTC")
             git commit -m "Auto-update scraped files - ${TIMESTAMP}"
-            git pull --rebase origin data
-            git push origin data
+            # Data is fully regenerated each run, so on conflict keep this run's files.
+            # (During a rebase, -X theirs means "the commit being replayed", i.e. ours.)
+            for attempt in 1 2 3; do
+              git pull --rebase -X theirs origin data && git push origin data && break
+              git rebase --abort 2>/dev/null || true
+              if [ "$attempt" = "3" ]; then echo "Push failed after 3 attempts"; exit 1; fi
+              sleep $((attempt * 5))
+            done
             # Purge jsDelivr cache so the website gets the new data immediately
             curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/metadata.json" || true
             curl -s "https://purge.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/events.min.json" || true
