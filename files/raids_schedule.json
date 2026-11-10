@@ -1,5 +1,73 @@
 [
     {
+        "name": "Machamp",
+        "tier": "3-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "fighting",
+                "image": "https://leekduck.com/assets/img/types/fighting.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1667,
+                "max": 1746
+            },
+            "boosted": {
+                "min": 2084,
+                "max": 2183
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "cloudy",
+                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/68.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/MACHAMP",
+        "pokebattlerSlug": "MACHAMP",
+        "startDate": "2026-11-14T13:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 0.57,
+        "estimatedPlayers": 0.57,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.57
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.28
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.19
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.14
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.11
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.09
+            }
+        ]
+    },
+    {
         "name": "Cresselia",
         "tier": "5-Star Raids",
         "canBeShiny": true,
