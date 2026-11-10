@@ -135,6 +135,158 @@
                     "ratio": 0.12
                 }
             ]
+        },
+        {
+            "name": "Crowned Sword Zacian",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "fairy",
+                    "image": "https://leekduck.com/assets/img/types/fairy.png"
+                },
+                {
+                    "name": "steel",
+                    "image": "https://leekduck.com/assets/img/types/steel.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2100,
+                    "max": 2188
+                },
+                "boosted": {
+                    "min": 2625,
+                    "max": 2735
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10188.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZACIAN_CROWNED_SWORD_FORM",
+            "pokebattlerSlug": "ZACIAN_CROWNED_SWORD_FORM",
+            "startDate": null,
+            "guideUrl": "https://cms.pokebattler.com/2025/06/28/zacian-crowned-sword-raid-guide/",
+            "estimator": 3.02,
+            "estimatedPlayers": 3.02,
+            "verdict": "HARD",
+            "trainersNeeded": 5,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 3.02
+                },
+                {
+                    "trainers": "2",
+                    "status": "EXTREME",
+                    "ratio": 1.51
+                },
+                {
+                    "trainers": "3",
+                    "status": "HARD",
+                    "ratio": 1.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "TIGHT",
+                    "ratio": 0.76
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.6
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.5
+                }
+            ]
+        },
+        {
+            "name": "Crowned Shield Zamazenta",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "fighting",
+                    "image": "https://leekduck.com/assets/img/types/fighting.png"
+                },
+                {
+                    "name": "steel",
+                    "image": "https://leekduck.com/assets/img/types/steel.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2100,
+                    "max": 2188
+                },
+                "boosted": {
+                    "min": 2625,
+                    "max": 2735
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "cloudy",
+                    "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10189.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/ZAMAZENTA_CROWNED_SHIELD_FORM",
+            "pokebattlerSlug": "ZAMAZENTA_CROWNED_SHIELD_FORM",
+            "startDate": null,
+            "guideUrl": "https://cms.pokebattler.com/2025/06/28/zamazenta-crowned-shield-raid-guide/",
+            "estimator": 3.04,
+            "estimatedPlayers": 3.04,
+            "verdict": "HARD",
+            "trainersNeeded": 5,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 3.04
+                },
+                {
+                    "trainers": "2",
+                    "status": "EXTREME",
+                    "ratio": 1.52
+                },
+                {
+                    "trainers": "3",
+                    "status": "HARD",
+                    "ratio": 1.01
+                },
+                {
+                    "trainers": "4",
+                    "status": "TIGHT",
+                    "ratio": 0.76
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.61
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.51
+                }
+            ]
         }
     ],
     "schedule": [
