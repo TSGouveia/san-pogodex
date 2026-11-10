@@ -389,40 +389,40 @@
             "pokebattlerSlug": "CRESSELIA",
             "startDate": "2026-11-16T14:00:00+00:00",
             "guideUrl": null,
-            "estimator": 2.65,
-            "estimatedPlayers": 2.65,
+            "estimator": 2.08,
+            "estimatedPlayers": 2.08,
             "verdict": "MODERATE",
             "trainersNeeded": 4,
             "trainerBoxes": [
                 {
                     "trainers": "1",
                     "status": "EXTREME",
-                    "ratio": 2.65
+                    "ratio": 2.08
                 },
                 {
                     "trainers": "2",
                     "status": "HARD",
-                    "ratio": 1.32
+                    "ratio": 1.04
                 },
                 {
                     "trainers": "3",
                     "status": "TIGHT",
-                    "ratio": 0.88
+                    "ratio": 0.69
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.66
+                    "ratio": 0.52
                 },
                 {
                     "trainers": "5",
                     "status": "EASY",
-                    "ratio": 0.53
+                    "ratio": 0.42
                 },
                 {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.44
+                    "ratio": 0.35
                 }
             ]
         },
@@ -533,40 +533,40 @@
             "pokebattlerSlug": "KYUREM_BLACK_FORM",
             "startDate": "2026-11-15T13:00:00+00:00",
             "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-black-raid-guide/",
-            "estimator": 1.9,
-            "estimatedPlayers": 1.9,
-            "verdict": "EASY TRIO",
+            "estimator": 1.42,
+            "estimatedPlayers": 1.42,
+            "verdict": "EASY DUO",
             "trainersNeeded": 3,
             "trainerBoxes": [
                 {
                     "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 1.9
+                    "status": "HARD",
+                    "ratio": 1.42
                 },
                 {
                     "trainers": "2",
                     "status": "TIGHT",
-                    "ratio": 0.95
+                    "ratio": 0.71
                 },
                 {
                     "trainers": "3",
                     "status": "EASY",
-                    "ratio": 0.63
+                    "ratio": 0.47
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.47
+                    "ratio": 0.35
                 },
                 {
                     "trainers": "5",
                     "status": "EASY",
-                    "ratio": 0.38
+                    "ratio": 0.28
                 },
                 {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.32
+                    "ratio": 0.24
                 }
             ]
         },
@@ -609,40 +609,40 @@
             "pokebattlerSlug": "KYUREM_WHITE_FORM",
             "startDate": "2026-11-14T13:00:00+00:00",
             "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-white-raid-guide/",
-            "estimator": 1.92,
-            "estimatedPlayers": 1.92,
-            "verdict": "EASY TRIO",
+            "estimator": 1.44,
+            "estimatedPlayers": 1.44,
+            "verdict": "EASY DUO",
             "trainersNeeded": 3,
             "trainerBoxes": [
                 {
                     "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 1.92
+                    "status": "HARD",
+                    "ratio": 1.44
                 },
                 {
                     "trainers": "2",
                     "status": "TIGHT",
-                    "ratio": 0.96
+                    "ratio": 0.72
                 },
                 {
                     "trainers": "3",
                     "status": "EASY",
-                    "ratio": 0.64
+                    "ratio": 0.48
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.48
+                    "ratio": 0.36
                 },
                 {
                     "trainers": "5",
                     "status": "EASY",
-                    "ratio": 0.38
+                    "ratio": 0.29
                 },
                 {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.32
+                    "ratio": 0.24
                 }
             ]
         },
