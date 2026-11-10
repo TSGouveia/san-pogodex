@@ -80,6 +80,16 @@
         "end": "2026-11-13T20:00:00.000"
     },
     {
+        "eventID": "zacian-crowned-sword-zamazenta-crowned-shield-in-5-star-raid-battles-november-2026",
+        "title": "Zacian (Crowned Sword) and Zamazenta (Crowned Shield) in 5-star Raid Battles",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/zacian-and-zamazenta-2.jpg",
+        "link": "https://leekduck.com/events/zacian-crowned-sword-zamazenta-crowned-shield-in-5-star-raid-battles-november-2026/",
+        "start": "2026-11-09T10:00:00.000",
+        "end": "2026-11-13T20:00:00.000"
+    },
+    {
         "eventID": "pokemon-go-wild-area-2026-global",
         "title": "Pokémon GO Wild Area 2026: Global",
         "type": "",
@@ -330,6 +340,26 @@
         "end": "2026-12-01T22:00:00.000"
     },
     {
+        "eventID": "max-battle-day-december-2026",
+        "title": "Max Battle Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/max-battle-day-december-2026/",
+        "start": "2026-12-05T14:00:00.000",
+        "end": "2026-12-05T17:00:00.000"
+    },
+    {
+        "eventID": "december-communityday2026",
+        "title": "December Community Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "link": "https://leekduck.com/events/december-communityday2026/",
+        "start": "2026-12-12T14:00:00.000",
+        "end": "2026-12-13T17:00:00.000"
+    },
+    {
         "eventID": "minior-showers-geminids-2026",
         "title": "Minior Showers: Geminids 2026",
         "type": "",
@@ -340,6 +370,46 @@
         "end": "2026-12-16T23:59:00.000"
     },
     {
+        "eventID": "raid-day-december-2026",
+        "title": "Raid Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/raid-day-december-2026/",
+        "start": "2026-12-19T14:00:00.000",
+        "end": "2026-12-19T17:00:00.000"
+    },
+    {
+        "eventID": "hatch-day-december-2026",
+        "title": "Hatch Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/hatch-day-december-2026/",
+        "start": "2026-12-26T11:00:00.000",
+        "end": "2026-12-26T17:00:00.000"
+    },
+    {
+        "eventID": "january-communitydayclassic2027",
+        "title": "January Community Day Classic",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "link": "https://leekduck.com/events/january-communitydayclassic2027/",
+        "start": "2027-01-02T14:00:00.000",
+        "end": "2027-01-02T17:00:00.000"
+    },
+    {
+        "eventID": "super-mega-raid-day-january-2027",
+        "title": "Super Mega Raid Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/super-mega-raid-day-january-2027/",
+        "start": "2027-01-09T14:00:00.000",
+        "end": "2027-01-09T17:00:00.000"
+    },
+    {
         "eventID": "pokemon-x-adidas-2026",
         "title": "adidas × Pokémon Timed Research",
         "type": "",
@@ -348,6 +418,56 @@
         "link": "https://leekduck.com/events/pokemon-x-adidas-2026/",
         "start": "2026-09-25T10:00:00.000",
         "end": "2027-01-15T20:00:00.000"
+    },
+    {
+        "eventID": "january-communityday2027",
+        "title": "January Community Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "link": "https://leekduck.com/events/january-communityday2027/",
+        "start": "2027-01-16T14:00:00.000",
+        "end": "2027-01-16T17:00:00.000"
+    },
+    {
+        "eventID": "max-battle-day-january-2027",
+        "title": "Max Battle Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/max-battle-day-january-2027/",
+        "start": "2027-01-23T14:00:00.000",
+        "end": "2027-01-23T17:00:00.000"
+    },
+    {
+        "eventID": "super-mega-raid-day-january-30-2027",
+        "title": "Super Mega Raid Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/super-mega-raid-day-january-30-2027/",
+        "start": "2027-01-30T14:00:00.000",
+        "end": "2027-01-30T17:00:00.000"
+    },
+    {
+        "eventID": "february-communityday2027",
+        "title": "February Community Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/cd-default.jpg",
+        "link": "https://leekduck.com/events/february-communityday2027/",
+        "start": "2027-02-06T14:00:00.000",
+        "end": "2027-02-06T17:00:00.000"
+    },
+    {
+        "eventID": "raid-day-february-2027",
+        "title": "Raid Day",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
+        "link": "https://leekduck.com/events/raid-day-february-2027/",
+        "start": "2027-02-13T14:00:00.000",
+        "end": "2027-02-13T17:00:00.000"
     },
     {
         "eventID": "pokemon-go-tour-alola-kaohsiung-2027",
