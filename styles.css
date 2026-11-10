@@ -4586,3 +4586,287 @@ img[src*="sprites/pokemon"] {
         text-align: center;
     }
 }
+
+/* ==========================================================================
+   MOBILE OVERHAUL (phones / small tablets)
+   Kept at the end of the file so it wins over the older mobile rules above.
+   ========================================================================== */
+.vb-short { display: none; }
+
+/* Older mobile rules use display:...!important on filter blocks, which beat .hidden.
+   Re-declare .hidden last so JS show/hide works everywhere. */
+.hidden { display: none !important; }
+
+@media (max-width: 768px) {
+    html, body {
+        overflow-x: clip;
+        max-width: 100%;
+    }
+    body {
+        padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    }
+
+    /* ---- Header: logo | progress | account ---- */
+    .app-header {
+        padding: 0.6rem 0.75rem !important;
+        padding-right: 3.5rem !important;
+    }
+    .header-container {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        min-width: 0;
+    }
+    .header-center-indicators {
+        display: none !important;
+    }
+    .logo-area .subtitle { display: none !important; }
+    .logo-area h1 { font-size: 1.45rem !important; }
+
+    /* Account button pinned to the top-right corner, icon-only */
+    #auth-status-container {
+        position: absolute !important;
+        top: 0.7rem;
+        right: 0.6rem;
+        width: auto !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        z-index: 20;
+        gap: 0.35rem !important;
+    }
+    #auth-status-container > span { display: none !important; }
+    #auth-trigger-btn,
+    #logout-btn {
+        width: 38px !important;
+        height: 38px !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        font-size: 0 !important;
+        border-radius: 50% !important;
+        gap: 0 !important;
+    }
+    #auth-trigger-btn i,
+    #logout-btn i {
+        font-size: 1rem !important;
+    }
+
+    /* ---- Bottom tab bar for the main views ---- */
+    /* Its children are fixed/absolute on mobile, so drop the empty box (and its flex gap) */
+    .view-switch-container {
+        display: contents !important;
+    }
+    .view-switcher {
+        position: fixed !important;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 900;
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr);
+        width: 100% !important;
+        overflow: visible !important;
+        gap: 0 !important;
+        padding: 4px 4px calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
+        background: rgba(11, 17, 32, 0.96) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.35);
+    }
+    .view-switcher .view-btn {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 3px !important;
+        min-width: 0 !important;
+        height: 56px;
+        padding: 4px 2px !important;
+        font-size: 0.66rem !important;
+        font-weight: 700 !important;
+        line-height: 1.1;
+        border-radius: 10px !important;
+        background: transparent !important;
+        color: #94a3b8 !important;
+        box-shadow: none !important;
+    }
+    .view-switcher .view-btn i {
+        font-size: 1.15rem !important;
+        margin: 0 !important;
+    }
+    .view-switcher .view-btn.active {
+        color: var(--accent-color) !important;
+        background: rgba(245, 166, 35, 0.12) !important;
+    }
+    .view-switcher .view-btn::after { display: none !important; }
+    .view-switcher .vb-full { display: none; }
+    .view-switcher .vb-short {
+        display: block;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    #nav-rotations-badge,
+    #nav-stats-badge {
+        top: 4px !important;
+        right: calc(50% - 20px) !important;
+    }
+
+    /* ---- Control center: only on the PokeDex grid, and compact ---- */
+    body:not([data-view="grid-pane"]) .control-center {
+        display: none !important;
+    }
+    .control-center {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.75rem !important;
+        gap: 0.5rem !important;
+    }
+    .filter-bar { gap: 0.5rem !important; }
+    .filter-actions {
+        display: grid !important;
+        grid-template-columns: auto 1fr;
+        gap: 0.4rem !important;
+    }
+    .filter-actions .radio-filters { grid-column: 1 / -1; }
+    .toggle-unreleased-btn {
+        width: auto !important;
+        height: 36px !important;
+        padding: 0 0.75rem !important;
+        font-size: 0.78rem !important;
+        justify-content: center !important;
+    }
+    .sort-wrapper { min-width: 0; }
+    .sort-wrapper select { height: 36px !important; }
+    .filter-actions .bulk-actions { grid-column: 1 / -1; }
+    .bulk-btn { height: 36px !important; padding: 0 8px !important; }
+
+    /* ---- PokeDex grid: 3 readable columns ---- */
+    .grid-container {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0.45rem !important;
+    }
+    .pokemon-card .card-img-wrapper img {
+        width: 64px !important;
+        height: 64px !important;
+    }
+    .pokemon-card .card-name { font-size: 0.78rem !important; }
+    .pokemon-card .type-badge {
+        font-size: 0.52rem !important;
+        padding: 2px 4px !important;
+        letter-spacing: 0.2px !important;
+    }
+
+    /* ---- Rotations sub-nav sticks to the top while scrolling ---- */
+    .rotations-subnav-container {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: var(--bg-primary);
+        padding: 0.4rem 0 !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    /* ---- Raid / Max Battle cards: one per row, sprite beside details ---- */
+    #raids-tiers-container .rotation-grid-layout,
+    #raid-schedule-container .rotation-grid-layout,
+    #maxbattles-container .rotation-grid-layout {
+        grid-template-columns: 1fr !important;
+        gap: 0.6rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-item {
+        flex-direction: row !important;
+        align-items: flex-start !important;
+        text-align: left !important;
+        padding: 2rem 0.75rem 0.75rem !important;
+        gap: 0.75rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-img {
+        width: 76px !important;
+        height: 76px !important;
+        margin: 0 !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-details-wrapper {
+        flex: 1 1 auto;
+        min-width: 0;
+        align-items: stretch !important;
+        text-align: left !important;
+        gap: 0.4rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-name {
+        font-size: 1.05rem !important;
+        font-weight: 800;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-cp-details {
+        align-items: flex-start !important;
+        padding: 5px 8px !important;
+        margin-top: 0 !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-cp-details div {
+        font-size: 0.74rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-weather-boosts {
+        flex-wrap: wrap;
+        margin-top: 0 !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-difficulty-container {
+        padding: 8px !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-difficulty-container > div:first-child {
+        flex-wrap: wrap;
+        row-gap: 2px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-difficulty-grid {
+        gap: 4px !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-trainer-box {
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 0 !important;
+        padding: 4px 2px !important;
+        text-align: center;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-trainer-box .trainer-status {
+        font-size: 0.62rem !important;
+        letter-spacing: 0.2px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-trainer-box .trainer-count {
+        font-size: 0.75rem !important;
+    }
+
+    /* ---- Rotation sections: less chrome around the content ---- */
+    .rotation-section {
+        padding: 0.85rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .rotation-section-header {
+        margin-bottom: 0.85rem !important;
+        padding-bottom: 0.6rem !important;
+    }
+
+    /* ---- Modal tabs: single scrollable row instead of wrapped labels ---- */
+    .modal-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scrollbar-width: none;
+    }
+    .modal-nav::-webkit-scrollbar { display: none; }
+    .modal-tab-btn {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+    }
+
+    /* ---- Modals: never wider than the phone ---- */
+    .modal-overlay { padding: 0 !important; }
+    .modal-card {
+        width: 100vw !important;
+        max-width: 100vw !important;
+    }
+}

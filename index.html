@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -21,7 +21,7 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css?v=20260926_1">
 </head>
-<body>
+<body data-view="grid-pane">
     <!-- Premium Loader Overlay -->
     <div class="loader-overlay" id="loader-overlay">
         <div class="loader-content">
@@ -125,20 +125,20 @@
             
             <div class="view-switcher" id="view-switcher">
                 <button class="view-btn active" data-view="grid-pane" id="btn-view-grid">
-                    <i class="fa-solid fa-border-all"></i> PokéDex Grid
+                    <i class="fa-solid fa-border-all"></i> <span class="vb-full">PokéDex Grid</span><span class="vb-short">PokéDex</span>
                 </button>
                 <button class="view-btn" data-view="candies-pane" id="btn-view-candies">
-                    <i class="fa-solid fa-person-walking"></i> Buddy Walk
+                    <i class="fa-solid fa-person-walking"></i> <span class="vb-full">Buddy Walk</span><span class="vb-short">Buddy</span>
                 </button>
                 <button class="view-btn" data-view="rotations-pane" id="btn-view-rotations" style="position: relative;">
-                    <i class="fa-solid fa-circle-info"></i> Active Rotations
+                    <i class="fa-solid fa-circle-info"></i> <span class="vb-full">Active Rotations</span><span class="vb-short">Rotations</span>
                     <span id="nav-rotations-badge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ef4444; color: #fff; font-size: 0.6rem; font-weight: 900; min-width: 15px; height: 15px; border-radius: 8px; padding: 0 3px; align-items: center; justify-content: center; line-height: 1; pointer-events: none;"></span>
                 </button>
                 <button class="view-btn" data-view="todo-pane" id="btn-view-todo">
-                    <i class="fa-solid fa-list-check"></i> To-Do Guide
+                    <i class="fa-solid fa-list-check"></i> <span class="vb-full">To-Do Guide</span><span class="vb-short">To-Do</span>
                 </button>
                 <button class="view-btn" data-view="stats-pane" id="btn-view-stats" style="position: relative;">
-                    <i class="fa-solid fa-id-card"></i> Profile &amp; Friends
+                    <i class="fa-solid fa-id-card"></i> <span class="vb-full">Profile &amp; Friends</span><span class="vb-short">Profile</span>
                     <span id="nav-stats-badge" style="display: none; position: absolute; top: 2px; right: 2px; background: #ef4444; color: #fff; font-size: 0.6rem; font-weight: 900; min-width: 15px; height: 15px; border-radius: 8px; padding: 0 3px; align-items: center; justify-content: center; line-height: 1; pointer-events: none;"></span>
                 </button>
             </div>

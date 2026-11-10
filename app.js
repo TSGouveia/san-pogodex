@@ -2757,6 +2757,7 @@ function setupEventListeners() {
 
             viewButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            document.body.dataset.view = targetPaneId;
 
             viewPanes.forEach(pane => {
                 if (pane.id === targetPaneId) {
@@ -7013,7 +7014,9 @@ if (googleAuthBtn) {
         authErrorMsg.style.display = 'none';
         const provider = new GoogleAuthProvider();
         
-        const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // UA alone misses phones in "desktop mode", so also treat coarse-pointer touch devices as mobile
+        const isTouchPrimary = (navigator.maxTouchPoints || 0) > 0 && window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+        const isMobileDevice = isTouchPrimary || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         
         if (isMobileDevice) {
             try {
