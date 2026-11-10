@@ -4403,3 +4403,120 @@ img[src*="sprites/pokemon"] {
     color: #fbbf24;
     box-shadow: 0 0 8px rgba(251, 191, 36, 0.25);
 }
+
+/* ==========================================================================
+   RAID CARDS (Active + Upcoming) — larger layout for the 2-per-row grid
+   ========================================================================== */
+@media (min-width: 769px) {
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-item {
+        padding: 1.5rem 1.5rem 1.35rem;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-img {
+        width: 150px;
+        height: 150px;
+        filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.35));
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-details-wrapper {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 0.45rem;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-details-wrapper > div:has(> .raid-difficulty-container) {
+        width: 100%;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-name {
+        font-size: 1.4rem;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.2px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-cp-details {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        gap: 0.3rem;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-cp-details strong {
+        font-size: 0.95rem;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-cp-details i {
+        font-size: 0.78rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-weather-boosts,
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-weather-boosts .weather-badge,
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-counters-list {
+        font-size: 0.8rem !important;
+        flex-wrap: wrap;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .counter-type-badge {
+        font-size: 0.76rem !important;
+        padding: 2px 7px !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-details-wrapper a[href] {
+        font-size: 0.8rem !important;
+        padding: 5px 10px !important;
+        border-radius: 6px !important;
+    }
+
+    /* Estimator box: header + trainer boxes */
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-container {
+        padding: 12px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-container > div:first-child {
+        flex-wrap: wrap;
+        row-gap: 4px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-container > div:first-child > span:first-child {
+        font-size: 0.88rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-container > div:first-child > span:first-child strong {
+        font-size: 0.98rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-container > div:first-child > span:last-child {
+        font-size: 0.8rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-difficulty-grid {
+        gap: 6px;
+    }
+    /* Stack count above status so the longest label (EXTREME) never overflows */
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-trainer-box {
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
+        padding: 7px 4px;
+        text-align: center;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-trainer-box .trainer-count {
+        font-size: 0.9rem;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-trainer-box .trainer-count i {
+        font-size: 0.7rem !important;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .raid-trainer-box .trainer-status {
+        font-size: 0.74rem;
+        letter-spacing: 0.4px;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: clip;
+    }
+}
+
+/* Mid-width screens: stack the sprite above the details so the estimator keeps full card width */
+@media (min-width: 769px) and (max-width: 1199px) {
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding-top: 2.25rem;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-img {
+        align-self: center;
+        width: 130px;
+        height: 130px;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container) .rotation-card-name {
+        align-self: center;
+        text-align: center;
+    }
+}
