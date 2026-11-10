@@ -2255,8 +2255,9 @@ input, button, select {
 }
 
 /* Upcoming date blocks wider grid layout */
-.raid-schedule-date-block .rotation-grid-layout {
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+.raid-schedule-date-block .rotation-grid-layout,
+#raids-tiers-container .rotation-grid-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.25rem;
 }
 
