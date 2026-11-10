@@ -10464,6 +10464,7 @@ function renderEventsCalendar(listContainer, now) {
 
     // Days Grid Container
     const gridEl = document.createElement('div');
+    gridEl.className = 'cal-grid';
     gridEl.style.cssText = `
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -10474,6 +10475,7 @@ function renderEventsCalendar(listContainer, now) {
     const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     weekDays.forEach(dayName => {
         const dayHeader = document.createElement('div');
+        dayHeader.className = 'cal-weekday';
         dayHeader.style.cssText = `
             text-align: center;
             font-size: 0.75rem;
@@ -10497,6 +10499,7 @@ function renderEventsCalendar(listContainer, now) {
     for (let p = 0; p < firstDayIndex; p++) {
         const padDayNum = daysInPrevMonth - firstDayIndex + p + 1;
         const padCell = document.createElement('div');
+        padCell.className = 'cal-pad';
         padCell.style.cssText = `
             min-height: 125px;
             background: rgba(0, 0, 0, 0.1);
@@ -10527,6 +10530,7 @@ function renderEventsCalendar(listContainer, now) {
         const dayDebuts = monthDebuts.filter(d => d.day === day).map(d => d.pokemon);
 
         const dayCell = document.createElement('div');
+        dayCell.className = 'cal-day' + (dayEvents.length === 0 && dayDebuts.length === 0 ? ' cal-empty' : '') + (isToday ? ' cal-today' : '');
         dayCell.style.cssText = `
             min-height: 125px;
             background: ${isToday ? 'rgba(245, 166, 35, 0.07)' : 'rgba(255, 255, 255, 0.02)'};
@@ -10541,6 +10545,7 @@ function renderEventsCalendar(listContainer, now) {
         `;
 
         const dayNumberEl = document.createElement('div');
+        dayNumberEl.className = 'cal-daynum';
         dayNumberEl.style.cssText = `
             display: flex;
             justify-content: space-between;
@@ -10550,13 +10555,14 @@ function renderEventsCalendar(listContainer, now) {
             color: ${isToday ? 'var(--accent-color)' : 'var(--text-primary)'};
         `;
         dayNumberEl.innerHTML = `
-            <span>${day}</span>
+            <span>${day}<span class="cal-dow">${weekDays[(firstDayIndex + day - 1) % 7]}</span></span>
             ${isToday ? '<span style="font-size: 0.62rem; font-weight: 800; background: var(--accent-color); color: #000; padding: 2px 7px; border-radius: 10px; text-transform: uppercase;">Today</span>' : ''}
         `;
         dayCell.appendChild(dayNumberEl);
 
         if (dayEvents.length > 0 || dayDebuts.length > 0) {
             const eventsListWrapper = document.createElement('div');
+            eventsListWrapper.className = 'cal-events';
             eventsListWrapper.style.cssText = `
                 display: flex;
                 flex-direction: column;
@@ -10812,6 +10818,7 @@ function renderEventsCalendar(listContainer, now) {
     const remainingCells = (7 - (totalRenderedCells % 7)) % 7;
     for (let r = 1; r <= remainingCells; r++) {
         const nextPadCell = document.createElement('div');
+        nextPadCell.className = 'cal-pad';
         nextPadCell.style.cssText = `
             min-height: 125px;
             background: rgba(0, 0, 0, 0.1);
