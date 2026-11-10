@@ -818,25 +818,25 @@
         "pokebattlerSlug": "MUDKIP_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.04,
-        "estimatedPlayers": 0.04,
+        "estimator": 0.05,
+        "estimatedPlayers": 0.05,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EASY",
-                "ratio": 0.04
+                "ratio": 0.05
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.02
+                "ratio": 0.03
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.01
+                "ratio": 0.02
             },
             {
                 "trainers": "4",
@@ -1234,40 +1234,40 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_ATTACK_FORM",
-        "estimator": 0.54,
-        "estimatedPlayers": 0.54,
+        "estimator": 0.68,
+        "estimatedPlayers": 0.68,
         "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
+        "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.54
+                "status": "TIGHT",
+                "ratio": 0.68
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.27
+                "ratio": 0.34
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.18
+                "ratio": 0.23
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.14
+                "ratio": 0.17
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.11
+                "ratio": 0.14
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.09
+                "ratio": 0.11
             }
         ]
     },
@@ -1302,40 +1302,40 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_DEFENSE_FORM",
-        "estimator": 2.61,
-        "estimatedPlayers": 2.61,
-        "verdict": "MODERATE",
-        "trainersNeeded": 4,
+        "estimator": 3.22,
+        "estimatedPlayers": 3.22,
+        "verdict": "HARD",
+        "trainersNeeded": 5,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.61
+                "ratio": 3.22
             },
             {
                 "trainers": "2",
-                "status": "HARD",
-                "ratio": 1.3
+                "status": "EXTREME",
+                "ratio": 1.61
             },
             {
                 "trainers": "3",
-                "status": "TIGHT",
-                "ratio": 0.87
+                "status": "HARD",
+                "ratio": 1.07
             },
             {
                 "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.65
+                "status": "TIGHT",
+                "ratio": 0.81
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.52
+                "ratio": 0.64
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.43
+                "ratio": 0.54
             }
         ]
     },
