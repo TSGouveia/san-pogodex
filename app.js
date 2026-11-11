@@ -5896,7 +5896,7 @@ function renderRaidSchedule() {
             raidsByTier[tier].forEach(raid => {
                 const card = document.createElement('div');
                 const cleanBossName = (raid.name || '')
-                    .replace(/^Mega\s+/i, '')
+                    .replace(/^(Super\s+)?Mega\s+/i, '')
                     .replace(/^Shadow\s+/i, '')
                     .trim();
                 const matchedPoke = findPokemonByName(cleanBossName) || findPokemonByName(raid.name);
