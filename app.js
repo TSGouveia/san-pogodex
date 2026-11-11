@@ -406,8 +406,10 @@ function getPokemonImageUrl(name, matchedPoke, isShiny = null) {
     const isShinyReq = (isShiny === true || (isShiny === null && currentDexType === 'shiny'));
     const baseUrl = isShinyReq ? POKE_SPRITE_SHINY_BASE_URL : POKE_SPRITE_BASE_URL;
     if (!name) return matchedPoke ? (isShinyReq ? getActivePokemonImageUrl(matchedPoke) : matchedPoke.img) : '';
+    // "Super Mega X" bosses use the regular Mega sprite
+    name = name.replace(/^\s*super\s+mega\s+/i, 'Mega ');
     const nameLower = name.toLowerCase().trim();
-    
+
     // Check special legend forms
     if (nameLower.includes('dawn wings') || nameLower.includes('dawn_wings')) return `${baseUrl}/10156.png`;
     if (nameLower.includes('dusk mane') || nameLower.includes('dusk_mane')) return `${baseUrl}/10155.png`;
