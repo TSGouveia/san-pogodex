@@ -313,6 +313,7 @@ def scrape_pokebattler_estimator(slug, tier=None):
         "3-Star Raids": "RAID_LEVEL_3",
         "5-Star Raids": "RAID_LEVEL_5",
         "Mega Raids": "RAID_LEVEL_MEGA",
+        "Super Mega Raids": "RAID_LEVEL_MEGA_5",
         "Shadow 1-Star Raids": "RAID_LEVEL_1_SHADOW",
         "Shadow 3-Star Raids": "RAID_LEVEL_3_SHADOW",
         "Shadow 5-Star Raids": "RAID_LEVEL_5_SHADOW",
@@ -324,29 +325,35 @@ def scrape_pokebattler_estimator(slug, tier=None):
         else:
             tier_code = "RAID_LEVEL_5"
 
-    # Query PokéBattler Fight API to calculate general realistic estimator across regular counters
-    try:
-        api_url = f"https://fight.pokebattler.com/raids/defenders/{slug}/levels/{tier_code}/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM"
-        api_res = requests.get(api_url, headers=HEADERS, timeout=15)
-        if api_res.status_code == 200:
-            api_data = api_res.json()
-            attackers = api_data.get("attackers", [])
-            if attackers:
-                first = attackers[0]
-                by_move = first.get("byMove", [])
-                if by_move:
-                    # Move 0 is the aggregate simulation across all movesets
-                    m0 = by_move[0]
-                    defs = m0.get("defenders", [])
-                    # Filter out Megas and Primals to reflect general trainer teams
-                    non_mega = [x for x in defs if "MEGA" not in x.get("pokemonId", "") and "PRIMAL" not in x.get("pokemonId", "")]
-                    target_defs = non_mega if non_mega else defs
-                    ests = [x.get("total", {}).get("estimator", 0) for x in target_defs if x.get("total", {}).get("estimator")]
-                    if ests:
-                        general_avg = sum(ests) / len(ests)
-                        return round(float(general_avg), 2)
-    except Exception as e:
-        print(f"  Warning fetching API general estimator for {slug} ({tier_code}): {e}")
+    # Query PokéBattler's Fight API for the same team estimator its raid page shows
+    # (top-6 counters, level 40, no weather), once per Mega/Shadow/Legendary filter combo.
+    # Keys are "<mega><shadow><legendary>" bits, e.g. "101" = megas+legendaries, no shadows.
+    base_api = (f"https://fight.pokebattler.com/raids/defenders/{slug}/levels/{tier_code}"
+                f"/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC"
+                f"?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME"
+                f"&aggregation=AVERAGE&randomAssistants=-1")
+    combos = {}
+    for m in (0, 1):
+        for sh in (0, 1):
+            for lg in (0, 1):
+                url = (f"{base_api}&includeMegas={'true' if m else 'false'}"
+                       f"&includeShadow={'true' if sh else 'false'}"
+                       f"&includeLegendary={'true' if lg else 'false'}")
+                try:
+                    try:
+                        r = requests.get(url, headers=HEADERS, timeout=45)
+                    except requests.exceptions.Timeout:
+                        r = requests.get(url, headers=HEADERS, timeout=60)  # first sim of a boss is slow
+                    if r.status_code != 200:
+                        continue
+                    atk = r.json().get("attackers", [])
+                    est = atk[0].get("randomMove", {}).get("total", {}).get("estimator") if atk else None
+                    if est:
+                        combos[f"{m}{sh}{lg}"] = round(float(est), 2)
+                except Exception as e:
+                    print(f"  Warning fetching estimator for {slug} ({tier_code}) combo {m}{sh}{lg}: {e}")
+    if combos:
+        return {"estimator": combos.get("000") or next(iter(combos.values())), "estimators": combos}
 
     # Fallback to HTML table scraping if API is unreachable
     url = f"https://www.pokebattler.com/raids/{slug}"
@@ -366,7 +373,7 @@ def scrape_pokebattler_estimator(slug, tier=None):
                         except Exception:
                             pass
                 if row_ests:
-                    return round(sum(row_ests) / len(row_ests), 2)
+                    return {"estimator": round(sum(row_ests) / len(row_ests), 2), "estimators": None}
     except Exception as e:
         print(f"  Warning scraping HTML estimator for {slug}: {e}")
 
@@ -788,8 +795,10 @@ def scrape_raids():
         s = b.get("pokebattlerSlug")
         t = b.get("tier")
         if s and (s, t) in slug_tier_to_estimator:
-            est_val = slug_tier_to_estimator[(s, t)]
+            est_info = slug_tier_to_estimator[(s, t)]
+            est_val = est_info["estimator"]
             b["estimator"] = est_val
+            b["estimators"] = est_info["estimators"]
             b["estimatedPlayers"] = est_val
             diff_info = compute_trainer_boxes(est_val)
             if diff_info:

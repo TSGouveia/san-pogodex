@@ -1566,6 +1566,7 @@ function buildPokebattlerMaxUrl(bossName) {
                 trainersText: boss.trainersText || null,
                 estimatedPlayers: estValue,
                 estimator: estValue,
+                estimators: boss.estimators || null,
                 verdict: boss.verdict || null,
                 trainersNeeded: boss.trainersNeeded || null,
                 trainerBoxes: boss.trainerBoxes || null,
@@ -4959,7 +4960,7 @@ function renderActiveRotations() {
 
                 let pokebattlerBtn = '';
                 const rawEstNum = (raid.estimator != null) ? Number(raid.estimator) : ((raid.estimatedPlayers != null) ? Number(raid.estimatedPlayers) : null);
-                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name);
+                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name, pbEstimatorFilters, raid.estimators);
                 const diffSectionHtml = buildDifficultyHtml(dynEstNum);
 
                 if (raid.pokebattlerUrl || diffSectionHtml) {
@@ -5573,25 +5574,17 @@ function setupPbFilterListeners() {
     });
 }
 
-function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilters) {
-    if (baseEst == null || isNaN(baseEst) || baseEst <= 0) return null;
-    let est = Number(baseEst);
+function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilters, estimators = null) {
+    const key = `${filters.mega ? 1 : 0}${filters.shadow ? 1 : 0}${filters.legendary ? 1 : 0}`;
+    const exact = estimators && estimators[key] != null ? Number(estimators[key]) : null;
+    if ((baseEst == null || isNaN(baseEst) || baseEst <= 0) && !exact) return null;
+    let est = exact || Number(baseEst);
 
-    // baseEst is the baseline regular non-mega / standard counter estimator (e.g. 3.02 for Zacian)
-    // When filters are toggled ON, they provide offensive boosts / access to stronger counters:
-    // 1. Mega: With Mega evolutions enabled, best counters speed up the raid (~6-10% lower estimator)
-    if (filters.mega) {
-        est *= 0.94;
-    }
-
-    // 2. Shadow: With Shadow Pokémon enabled (+20% damage), counters speed up the raid (~3-5% lower estimator)
-    if (filters.shadow) {
-        est *= 0.97;
-    }
-
-    // 3. Legendary: With Legendary Pokémon enabled, top legendary counters speed up the raid (~4-6% lower estimator)
-    if (filters.legendary) {
-        est *= 0.95;
+    // Exact PokéBattler values exist per Mega/Shadow/Legendary combo; only approximate when missing (old data)
+    if (!exact) {
+        if (filters.mega) est *= 0.94;
+        if (filters.shadow) est *= 0.97;
+        if (filters.legendary) est *= 0.95;
     }
 
     // 4. Party Power: Niantic Party Power doubles charged attack damage in parties of 2+, reducing time to win by 20%
@@ -5930,7 +5923,7 @@ function renderRaidSchedule() {
 
                 // Difficulty section from PokéBattler estimator with dynamic filters
                 const rawEstNum = (raid.estimator != null) ? Number(raid.estimator) : null;
-                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name);
+                const dynEstNum = calculateDynamicEstimator(rawEstNum, raid.name, pbEstimatorFilters, raid.estimators);
                 const diffSectionHtml = buildDifficultyHtml(dynEstNum);
 
                 let pokebattlerBtn = '';
