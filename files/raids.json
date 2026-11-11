@@ -1321,40 +1321,40 @@
             "pokebattlerSlug": "PRINPLUP_SHADOW_FORM",
             "startDate": "2026-11-16T14:00:00+00:00",
             "guideUrl": null,
-            "estimator": 0.75,
-            "estimatedPlayers": 0.75,
-            "verdict": "SOLOABLE",
+            "estimator": 1.01,
+            "estimatedPlayers": 1.01,
+            "verdict": "EASY DUO",
             "trainersNeeded": 2,
             "trainerBoxes": [
                 {
                     "trainers": "1",
-                    "status": "TIGHT",
-                    "ratio": 0.75
+                    "status": "HARD",
+                    "ratio": 1.01
                 },
                 {
                     "trainers": "2",
                     "status": "EASY",
-                    "ratio": 0.38
+                    "ratio": 0.51
                 },
                 {
                     "trainers": "3",
                     "status": "EASY",
-                    "ratio": 0.25
+                    "ratio": 0.34
                 },
                 {
                     "trainers": "4",
                     "status": "EASY",
-                    "ratio": 0.19
+                    "ratio": 0.25
                 },
                 {
                     "trainers": "5",
                     "status": "EASY",
-                    "ratio": 0.15
+                    "ratio": 0.2
                 },
                 {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.12
+                    "ratio": 0.17
                 }
             ]
         },
@@ -1593,40 +1593,40 @@
             ],
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_DEFENSE_FORM",
-            "estimator": 2.61,
-            "estimatedPlayers": 2.61,
-            "verdict": "MODERATE",
-            "trainersNeeded": 4,
+            "estimator": 3.22,
+            "estimatedPlayers": 3.22,
+            "verdict": "HARD",
+            "trainersNeeded": 5,
             "trainerBoxes": [
                 {
                     "trainers": "1",
                     "status": "EXTREME",
-                    "ratio": 2.61
+                    "ratio": 3.22
                 },
                 {
                     "trainers": "2",
-                    "status": "HARD",
-                    "ratio": 1.3
+                    "status": "EXTREME",
+                    "ratio": 1.61
                 },
                 {
                     "trainers": "3",
-                    "status": "TIGHT",
-                    "ratio": 0.87
+                    "status": "HARD",
+                    "ratio": 1.07
                 },
                 {
                     "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.65
+                    "status": "TIGHT",
+                    "ratio": 0.81
                 },
                 {
                     "trainers": "5",
                     "status": "EASY",
-                    "ratio": 0.52
+                    "ratio": 0.64
                 },
                 {
                     "trainers": "6+",
                     "status": "EASY",
-                    "ratio": 0.43
+                    "ratio": 0.54
                 }
             ]
         },
