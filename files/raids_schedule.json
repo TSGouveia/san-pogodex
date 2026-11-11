@@ -30,40 +30,50 @@
         "pokebattlerSlug": "MACHAMP",
         "startDate": "2026-11-14T13:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.57,
-        "estimatedPlayers": 0.57,
+        "estimator": 0.67,
+        "estimators": {
+            "000": 0.67,
+            "001": 0.54,
+            "010": 0.58,
+            "011": 0.5,
+            "100": 0.51,
+            "101": 0.42,
+            "110": 0.51,
+            "111": 0.41
+        },
+        "estimatedPlayers": 0.67,
         "verdict": "SOLOABLE",
-        "trainersNeeded": 1,
+        "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "EASY",
-                "ratio": 0.57
+                "status": "TIGHT",
+                "ratio": 0.67
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.28
+                "ratio": 0.34
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.19
+                "ratio": 0.22
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.14
+                "ratio": 0.17
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.11
+                "ratio": 0.13
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.09
+                "ratio": 0.11
             }
         ]
     },
@@ -98,40 +108,50 @@
         "pokebattlerSlug": "CRESSELIA",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 2.65,
-        "estimatedPlayers": 2.65,
+        "estimator": 2.9,
+        "estimators": {
+            "000": 2.9,
+            "001": 2.58,
+            "010": 2.62,
+            "011": 2.39,
+            "100": 2.16,
+            "101": 2.08,
+            "110": 2.16,
+            "111": 2.08
+        },
+        "estimatedPlayers": 2.9,
         "verdict": "MODERATE",
-        "trainersNeeded": 4,
+        "trainersNeeded": 5,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.65
+                "ratio": 2.9
             },
             {
                 "trainers": "2",
                 "status": "HARD",
-                "ratio": 1.32
+                "ratio": 1.45
             },
             {
                 "trainers": "3",
                 "status": "TIGHT",
-                "ratio": 0.88
+                "ratio": 0.97
             },
             {
                 "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.66
+                "status": "TIGHT",
+                "ratio": 0.72
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.53
+                "ratio": 0.58
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.44
+                "ratio": 0.48
             }
         ]
     },
@@ -166,40 +186,50 @@
         "pokebattlerSlug": "DARKRAI",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 2.19,
-        "estimatedPlayers": 2.19,
+        "estimator": 2.46,
+        "estimators": {
+            "000": 2.46,
+            "001": 2.15,
+            "010": 2.23,
+            "011": 2.08,
+            "100": 1.77,
+            "101": 1.66,
+            "110": 1.77,
+            "111": 1.66
+        },
+        "estimatedPlayers": 2.46,
         "verdict": "MODERATE",
         "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.19
+                "ratio": 2.46
             },
             {
                 "trainers": "2",
                 "status": "HARD",
-                "ratio": 1.09
+                "ratio": 1.23
             },
             {
                 "trainers": "3",
                 "status": "TIGHT",
-                "ratio": 0.73
+                "ratio": 0.82
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.55
+                "ratio": 0.61
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.44
+                "ratio": 0.49
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.36
+                "ratio": 0.41
             }
         ]
     },
@@ -242,40 +272,50 @@
         "pokebattlerSlug": "KYUREM_BLACK_FORM",
         "startDate": "2026-11-15T13:00:00+00:00",
         "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-black-raid-guide/",
-        "estimator": 1.9,
-        "estimatedPlayers": 1.9,
-        "verdict": "EASY TRIO",
-        "trainersNeeded": 3,
+        "estimator": 2.18,
+        "estimators": {
+            "000": 2.18,
+            "001": 1.58,
+            "010": 2.01,
+            "011": 1.56,
+            "100": 1.65,
+            "101": 1.43,
+            "110": 1.65,
+            "111": 1.43
+        },
+        "estimatedPlayers": 2.18,
+        "verdict": "MODERATE",
+        "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 1.9
+                "ratio": 2.18
             },
             {
                 "trainers": "2",
-                "status": "TIGHT",
-                "ratio": 0.95
+                "status": "HARD",
+                "ratio": 1.09
             },
             {
                 "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.63
+                "status": "TIGHT",
+                "ratio": 0.73
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.47
+                "ratio": 0.55
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.38
+                "ratio": 0.44
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.32
+                "ratio": 0.36
             }
         ]
     },
@@ -318,40 +358,50 @@
         "pokebattlerSlug": "KYUREM_WHITE_FORM",
         "startDate": "2026-11-14T13:00:00+00:00",
         "guideUrl": "https://cms.pokebattler.com/2025/03/01/kyurem-white-raid-guide/",
-        "estimator": 1.92,
-        "estimatedPlayers": 1.92,
-        "verdict": "EASY TRIO",
-        "trainersNeeded": 3,
+        "estimator": 2.24,
+        "estimators": {
+            "000": 2.24,
+            "001": 1.59,
+            "010": 2.03,
+            "011": 1.59,
+            "100": 1.69,
+            "101": 1.45,
+            "110": 1.69,
+            "111": 1.45
+        },
+        "estimatedPlayers": 2.24,
+        "verdict": "MODERATE",
+        "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 1.92
+                "ratio": 2.24
             },
             {
                 "trainers": "2",
-                "status": "TIGHT",
-                "ratio": 0.96
+                "status": "HARD",
+                "ratio": 1.12
             },
             {
                 "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.64
+                "status": "TIGHT",
+                "ratio": 0.75
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.48
+                "ratio": 0.56
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.38
+                "ratio": 0.45
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.32
+                "ratio": 0.37
             }
         ]
     },
@@ -394,25 +444,35 @@
         "pokebattlerSlug": "RESHIRAM",
         "startDate": "2026-11-15T13:00:00+00:00",
         "guideUrl": null,
-        "estimator": 2.59,
-        "estimatedPlayers": 2.59,
+        "estimator": 2.61,
+        "estimators": {
+            "000": 2.61,
+            "001": 2.29,
+            "010": 2.36,
+            "011": 2.11,
+            "100": 2.16,
+            "101": 1.8,
+            "110": 2.05,
+            "111": 1.8
+        },
+        "estimatedPlayers": 2.61,
         "verdict": "MODERATE",
         "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.59
+                "ratio": 2.61
             },
             {
                 "trainers": "2",
                 "status": "HARD",
-                "ratio": 1.29
+                "ratio": 1.3
             },
             {
                 "trainers": "3",
                 "status": "TIGHT",
-                "ratio": 0.86
+                "ratio": 0.87
             },
             {
                 "trainers": "4",
@@ -470,40 +530,50 @@
         "pokebattlerSlug": "ZEKROM",
         "startDate": "2026-11-14T13:00:00+00:00",
         "guideUrl": null,
-        "estimator": 2.34,
-        "estimatedPlayers": 2.34,
+        "estimator": 2.45,
+        "estimators": {
+            "000": 2.45,
+            "001": 1.95,
+            "010": 2.17,
+            "011": 1.89,
+            "100": 2.02,
+            "101": 1.67,
+            "110": 1.95,
+            "111": 1.67
+        },
+        "estimatedPlayers": 2.45,
         "verdict": "MODERATE",
         "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.34
+                "ratio": 2.45
             },
             {
                 "trainers": "2",
                 "status": "HARD",
-                "ratio": 1.17
+                "ratio": 1.23
             },
             {
                 "trainers": "3",
                 "status": "TIGHT",
-                "ratio": 0.78
+                "ratio": 0.82
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.58
+                "ratio": 0.61
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.47
+                "ratio": 0.49
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.39
+                "ratio": 0.41
             }
         ]
     },
@@ -538,40 +608,50 @@
         "pokebattlerSlug": "BANETTE_MEGA",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 1.12,
-        "estimatedPlayers": 1.12,
+        "estimator": 1.27,
+        "estimators": {
+            "000": 1.27,
+            "001": 1.13,
+            "010": 1.18,
+            "011": 1.12,
+            "100": 1.05,
+            "101": 0.95,
+            "110": 1.02,
+            "111": 0.93
+        },
+        "estimatedPlayers": 1.27,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.12
+                "ratio": 1.27
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.56
+                "ratio": 0.64
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.37
+                "ratio": 0.42
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.28
+                "ratio": 0.32
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.22
+                "ratio": 0.25
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.19
+                "ratio": 0.21
             }
         ]
     },
@@ -607,6 +687,16 @@
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
         "estimator": 0.04,
+        "estimators": {
+            "000": 0.04,
+            "001": 0.03,
+            "010": 0.03,
+            "011": 0.03,
+            "100": 0.03,
+            "101": 0.03,
+            "110": 0.03,
+            "111": 0.03
+        },
         "estimatedPlayers": 0.04,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
@@ -682,20 +772,30 @@
         "pokebattlerSlug": "LARVITAR_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.04,
-        "estimatedPlayers": 0.04,
+        "estimator": 0.03,
+        "estimators": {
+            "000": 0.03,
+            "001": 0.03,
+            "010": 0.03,
+            "011": 0.03,
+            "100": 0.03,
+            "101": 0.03,
+            "110": 0.03,
+            "111": 0.03
+        },
+        "estimatedPlayers": 0.03,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EASY",
-                "ratio": 0.04
+                "ratio": 0.03
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.02
+                "ratio": 0.01
             },
             {
                 "trainers": "3",
@@ -751,6 +851,16 @@
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
         "estimator": 0.04,
+        "estimators": {
+            "000": 0.04,
+            "001": 0.03,
+            "010": 0.03,
+            "011": 0.03,
+            "100": 0.03,
+            "101": 0.03,
+            "110": 0.03,
+            "111": 0.03
+        },
         "estimatedPlayers": 0.04,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
@@ -819,6 +929,16 @@
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
         "estimator": 0.05,
+        "estimators": {
+            "000": 0.05,
+            "001": 0.04,
+            "010": 0.05,
+            "011": 0.04,
+            "100": 0.04,
+            "101": 0.04,
+            "110": 0.04,
+            "111": 0.04
+        },
         "estimatedPlayers": 0.05,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
@@ -894,40 +1014,50 @@
         "pokebattlerSlug": "PILOSWINE_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.93,
-        "estimatedPlayers": 0.93,
-        "verdict": "SOLOABLE",
+        "estimator": 1.04,
+        "estimators": {
+            "000": 1.04,
+            "001": 0.81,
+            "010": 0.92,
+            "011": 0.78,
+            "100": 0.73,
+            "101": 0.69,
+            "110": 0.73,
+            "111": 0.69
+        },
+        "estimatedPlayers": 1.04,
+        "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "TIGHT",
-                "ratio": 0.93
+                "status": "HARD",
+                "ratio": 1.04
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.47
+                "ratio": 0.52
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.31
+                "ratio": 0.35
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.23
+                "ratio": 0.26
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.19
+                "ratio": 0.21
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.15
+                "ratio": 0.17
             }
         ]
     },
@@ -962,40 +1092,50 @@
         "pokebattlerSlug": "POLIWHIRL_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.83,
-        "estimatedPlayers": 0.83,
+        "estimator": 0.96,
+        "estimators": {
+            "000": 0.96,
+            "001": 0.78,
+            "010": 0.86,
+            "011": 0.75,
+            "100": 0.7,
+            "101": 0.67,
+            "110": 0.69,
+            "111": 0.66
+        },
+        "estimatedPlayers": 0.96,
         "verdict": "SOLOABLE",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "TIGHT",
-                "ratio": 0.83
+                "ratio": 0.96
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.41
+                "ratio": 0.48
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.28
+                "ratio": 0.32
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.21
+                "ratio": 0.24
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.17
+                "ratio": 0.19
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.14
+                "ratio": 0.16
             }
         ]
     },
@@ -1030,40 +1170,50 @@
         "pokebattlerSlug": "PRINPLUP_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 1.01,
-        "estimatedPlayers": 1.01,
+        "estimator": 1.12,
+        "estimators": {
+            "000": 1.12,
+            "001": 0.93,
+            "010": 0.99,
+            "011": 0.89,
+            "100": 0.79,
+            "101": 0.76,
+            "110": 0.79,
+            "111": 0.76
+        },
+        "estimatedPlayers": 1.12,
         "verdict": "EASY DUO",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.01
+                "ratio": 1.12
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.51
+                "ratio": 0.56
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.34
+                "ratio": 0.37
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.25
+                "ratio": 0.28
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.2
+                "ratio": 0.22
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.17
+                "ratio": 0.19
             }
         ]
     },
@@ -1098,40 +1248,50 @@
         "pokebattlerSlug": "TORNADUS_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 3.87,
-        "estimatedPlayers": 3.87,
+        "estimator": 4.02,
+        "estimators": {
+            "000": 4.02,
+            "001": 3.34,
+            "010": 3.56,
+            "011": 3.23,
+            "100": 3.22,
+            "101": 2.96,
+            "110": 3.17,
+            "111": 2.92
+        },
+        "estimatedPlayers": 4.02,
         "verdict": "HARD",
-        "trainersNeeded": 6,
+        "trainersNeeded": 7,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 3.87
+                "ratio": 4.02
             },
             {
                 "trainers": "2",
                 "status": "EXTREME",
-                "ratio": 1.94
+                "ratio": 2.01
             },
             {
                 "trainers": "3",
                 "status": "HARD",
-                "ratio": 1.29
+                "ratio": 1.34
             },
             {
                 "trainers": "4",
-                "status": "TIGHT",
-                "ratio": 0.97
+                "status": "HARD",
+                "ratio": 1.0
             },
             {
                 "trainers": "5",
                 "status": "TIGHT",
-                "ratio": 0.77
+                "ratio": 0.8
             },
             {
                 "trainers": "6+",
-                "status": "EASY",
-                "ratio": 0.65
+                "status": "TIGHT",
+                "ratio": 0.67
             }
         ]
     },
@@ -1166,40 +1326,50 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_NORMAL_FORM",
-        "estimator": 1.31,
-        "estimatedPlayers": 1.31,
+        "estimator": 1.45,
+        "estimators": {
+            "000": 1.45,
+            "001": 1.32,
+            "010": 1.33,
+            "011": 1.24,
+            "100": 1.19,
+            "101": 1.08,
+            "110": 1.13,
+            "111": 1.07
+        },
+        "estimatedPlayers": 1.45,
         "verdict": "EASY DUO",
-        "trainersNeeded": 2,
+        "trainersNeeded": 3,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "HARD",
-                "ratio": 1.31
+                "ratio": 1.45
             },
             {
                 "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.66
+                "status": "TIGHT",
+                "ratio": 0.72
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.44
+                "ratio": 0.48
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.33
+                "ratio": 0.36
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.26
+                "ratio": 0.29
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.22
+                "ratio": 0.24
             }
         ]
     },
@@ -1234,30 +1404,40 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_ATTACK_FORM",
-        "estimator": 0.68,
-        "estimatedPlayers": 0.68,
+        "estimator": 0.71,
+        "estimators": {
+            "000": 0.71,
+            "001": 0.68,
+            "010": 0.63,
+            "011": 0.61,
+            "100": 0.6,
+            "101": 0.57,
+            "110": 0.57,
+            "111": 0.55
+        },
+        "estimatedPlayers": 0.71,
         "verdict": "SOLOABLE",
         "trainersNeeded": 2,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "TIGHT",
-                "ratio": 0.68
+                "ratio": 0.71
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.34
+                "ratio": 0.35
             },
             {
                 "trainers": "3",
                 "status": "EASY",
-                "ratio": 0.23
+                "ratio": 0.24
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.17
+                "ratio": 0.18
             },
             {
                 "trainers": "5",
@@ -1267,7 +1447,7 @@
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.11
+                "ratio": 0.12
             }
         ]
     },
@@ -1302,40 +1482,50 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_DEFENSE_FORM",
-        "estimator": 3.22,
-        "estimatedPlayers": 3.22,
+        "estimator": 3.64,
+        "estimators": {
+            "000": 3.64,
+            "001": 3.2,
+            "010": 3.24,
+            "011": 2.94,
+            "100": 2.7,
+            "101": 2.62,
+            "110": 2.69,
+            "111": 2.62
+        },
+        "estimatedPlayers": 3.64,
         "verdict": "HARD",
-        "trainersNeeded": 5,
+        "trainersNeeded": 6,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 3.22
+                "ratio": 3.64
             },
             {
                 "trainers": "2",
                 "status": "EXTREME",
-                "ratio": 1.61
+                "ratio": 1.82
             },
             {
                 "trainers": "3",
                 "status": "HARD",
-                "ratio": 1.07
+                "ratio": 1.21
             },
             {
                 "trainers": "4",
                 "status": "TIGHT",
-                "ratio": 0.81
+                "ratio": 0.91
             },
             {
                 "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.64
+                "status": "TIGHT",
+                "ratio": 0.73
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.54
+                "ratio": 0.61
             }
         ]
     },
@@ -1370,40 +1560,50 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_SPEED_FORM",
-        "estimator": 2.27,
-        "estimatedPlayers": 2.27,
+        "estimator": 2.48,
+        "estimators": {
+            "000": 2.48,
+            "001": 2.24,
+            "010": 2.25,
+            "011": 2.07,
+            "100": 1.99,
+            "101": 1.83,
+            "110": 1.93,
+            "111": 1.85
+        },
+        "estimatedPlayers": 2.48,
         "verdict": "MODERATE",
         "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.27
+                "ratio": 2.48
             },
             {
                 "trainers": "2",
                 "status": "HARD",
-                "ratio": 1.14
+                "ratio": 1.24
             },
             {
                 "trainers": "3",
                 "status": "TIGHT",
-                "ratio": 0.76
+                "ratio": 0.83
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.57
+                "ratio": 0.62
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.45
+                "ratio": 0.5
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.38
+                "ratio": 0.41
             }
         ]
     },
@@ -1446,40 +1646,50 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/METAGROSS_MEGA",
-        "estimator": 1.89,
-        "estimatedPlayers": 1.89,
-        "verdict": "EASY TRIO",
-        "trainersNeeded": 3,
+        "estimator": 2.13,
+        "estimators": {
+            "000": 2.13,
+            "001": 1.84,
+            "010": 1.93,
+            "011": 1.74,
+            "100": 1.6,
+            "101": 1.53,
+            "110": 1.59,
+            "111": 1.53
+        },
+        "estimatedPlayers": 2.13,
+        "verdict": "MODERATE",
+        "trainersNeeded": 4,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 1.89
+                "ratio": 2.13
             },
             {
                 "trainers": "2",
-                "status": "TIGHT",
-                "ratio": 0.94
+                "status": "HARD",
+                "ratio": 1.06
             },
             {
                 "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.63
+                "status": "TIGHT",
+                "ratio": 0.71
             },
             {
                 "trainers": "4",
                 "status": "EASY",
-                "ratio": 0.47
+                "ratio": 0.53
             },
             {
                 "trainers": "5",
                 "status": "EASY",
-                "ratio": 0.38
+                "ratio": 0.43
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.32
+                "ratio": 0.35
             }
         ]
     },
@@ -1514,40 +1724,50 @@
         ],
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/CLEFABLE_MEGA",
-        "estimator": 1.24,
-        "estimatedPlayers": 1.24,
-        "verdict": "EASY DUO",
-        "trainersNeeded": 2,
+        "estimator": 3.65,
+        "estimators": {
+            "000": 3.65,
+            "001": 2.69,
+            "010": 3.19,
+            "011": 2.58,
+            "100": 2.77,
+            "101": 2.47,
+            "110": 2.71,
+            "111": 2.46
+        },
+        "estimatedPlayers": 3.65,
+        "verdict": "HARD",
+        "trainersNeeded": 6,
         "trainerBoxes": [
             {
                 "trainers": "1",
-                "status": "HARD",
-                "ratio": 1.24
+                "status": "EXTREME",
+                "ratio": 3.65
             },
             {
                 "trainers": "2",
-                "status": "EASY",
-                "ratio": 0.62
+                "status": "EXTREME",
+                "ratio": 1.82
             },
             {
                 "trainers": "3",
-                "status": "EASY",
-                "ratio": 0.41
+                "status": "HARD",
+                "ratio": 1.22
             },
             {
                 "trainers": "4",
-                "status": "EASY",
-                "ratio": 0.31
+                "status": "TIGHT",
+                "ratio": 0.91
             },
             {
                 "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.25
+                "status": "TIGHT",
+                "ratio": 0.73
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.21
+                "ratio": 0.61
             }
         ]
     }
