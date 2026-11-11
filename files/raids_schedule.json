@@ -682,20 +682,20 @@
         "pokebattlerSlug": "LARVITAR_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 0.03,
-        "estimatedPlayers": 0.03,
+        "estimator": 0.04,
+        "estimatedPlayers": 0.04,
         "verdict": "SOLOABLE",
         "trainersNeeded": 1,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EASY",
-                "ratio": 0.03
+                "ratio": 0.04
             },
             {
                 "trainers": "2",
                 "status": "EASY",
-                "ratio": 0.01
+                "ratio": 0.02
             },
             {
                 "trainers": "3",
@@ -1098,40 +1098,40 @@
         "pokebattlerSlug": "TORNADUS_SHADOW_FORM",
         "startDate": "2026-11-16T14:00:00+00:00",
         "guideUrl": null,
-        "estimator": 2.85,
-        "estimatedPlayers": 2.85,
-        "verdict": "MODERATE",
-        "trainersNeeded": 5,
+        "estimator": 3.87,
+        "estimatedPlayers": 3.87,
+        "verdict": "HARD",
+        "trainersNeeded": 6,
         "trainerBoxes": [
             {
                 "trainers": "1",
                 "status": "EXTREME",
-                "ratio": 2.85
+                "ratio": 3.87
             },
             {
                 "trainers": "2",
-                "status": "HARD",
-                "ratio": 1.43
+                "status": "EXTREME",
+                "ratio": 1.94
             },
             {
                 "trainers": "3",
-                "status": "TIGHT",
-                "ratio": 0.95
+                "status": "HARD",
+                "ratio": 1.29
             },
             {
                 "trainers": "4",
                 "status": "TIGHT",
-                "ratio": 0.71
+                "ratio": 0.97
             },
             {
                 "trainers": "5",
-                "status": "EASY",
-                "ratio": 0.57
+                "status": "TIGHT",
+                "ratio": 0.77
             },
             {
                 "trainers": "6+",
                 "status": "EASY",
-                "ratio": 0.48
+                "ratio": 0.65
             }
         ]
     },
