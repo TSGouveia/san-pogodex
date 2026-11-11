@@ -313,7 +313,7 @@ def scrape_pokebattler_estimator(slug, tier=None):
         "3-Star Raids": "RAID_LEVEL_3",
         "5-Star Raids": "RAID_LEVEL_5",
         "Mega Raids": "RAID_LEVEL_MEGA",
-        "Super Mega Raids": "RAID_LEVEL_MEGA_5",
+        "Super Mega Raids": "RAID_LEVEL_MEGA_7",
         "Shadow 1-Star Raids": "RAID_LEVEL_1_SHADOW",
         "Shadow 3-Star Raids": "RAID_LEVEL_3_SHADOW",
         "Shadow 5-Star Raids": "RAID_LEVEL_5_SHADOW",
@@ -325,13 +325,14 @@ def scrape_pokebattler_estimator(slug, tier=None):
         else:
             tier_code = "RAID_LEVEL_5"
 
-    # Query PokéBattler's Fight API for the same team estimator its raid page shows
-    # (top-6 counters, level 40, no weather), once per Mega/Shadow/Legendary filter combo.
+    # Query PokéBattler's Fight API exactly like its raid page does (level 40, no weather,
+    # numParty=1) and take the best counter's estimator, which is the number the page shows.
+    # Fetched once per Mega/Shadow/Legendary filter combo.
     # Keys are "<mega><shadow><legendary>" bits, e.g. "101" = megas+legendaries, no shadows.
     base_api = (f"https://fight.pokebattler.com/raids/defenders/{slug}/levels/{tier_code}"
                 f"/attackers/levels/40/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC"
-                f"?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME"
-                f"&aggregation=AVERAGE&randomAssistants=-1")
+                f"?aggregation=AVERAGE&attackerTypes=POKEMON_TYPE_ALL&dodgeStrategy=DODGE_REACTION_TIME"
+                f"&numParty=1&sort=ESTIMATOR&weatherCondition=NO_WEATHER")
     combos = {}
     for m in (0, 1):
         for sh in (0, 1):
@@ -347,7 +348,10 @@ def scrape_pokebattler_estimator(slug, tier=None):
                     if r.status_code != 200:
                         continue
                     atk = r.json().get("attackers", [])
-                    est = atk[0].get("randomMove", {}).get("total", {}).get("estimator") if atk else None
+                    defs = atk[0].get("randomMove", {}).get("defenders", []) if atk else []
+                    ests = [d.get("total", {}).get("estimator") for d in defs]
+                    ests = [e for e in ests if e]
+                    est = min(ests) if ests else None
                     if est:
                         combos[f"{m}{sh}{lg}"] = round(float(est), 2)
                 except Exception as e:
