@@ -5535,13 +5535,11 @@ let partyRewardsData = [
 
 let currentRaidTab = 'active';
 
-// Global PokéBattler Estimator Filters (Legendary, Shadow, Mega, Party Power, Best Friends)
+// Global PokéBattler Estimator Filters (Legendary, Shadow, Mega)
 const pbEstimatorFilters = {
     legendary: false,
     shadow: false,
-    mega: false,
-    partyPower: false,
-    bestFriends: false
+    mega: false
 };
 
 function setupPbFilterListeners() {
@@ -5587,15 +5585,6 @@ function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilte
         if (filters.legendary) est *= 0.95;
     }
 
-    // 4. Party Power: Niantic Party Power doubles charged attack damage in parties of 2+, reducing time to win by 20%
-    if (filters.partyPower) {
-        est *= 0.80;
-    }
-
-    // 5. Best Friends: Niantic provides a 1.20x attack multiplier for Best Friends, reducing time by ~12%
-    if (filters.bestFriends) {
-        est *= 0.88;
-    }
 
     return Math.max(0.2, Number(est.toFixed(2)));
 }
