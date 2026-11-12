@@ -169,35 +169,6 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/895.png"
     },
     {
-        "name": "Dynamax Registeel",
-        "tier": "Max Battles (5 Max)",
-        "canBeShiny": true,
-        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_REGISTEEL",
-        "types": [
-            {
-                "name": "steel",
-                "image": "https://leekduck.com/assets/img/types/steel.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1326,
-                "max": 1398
-            },
-            "boosted": {
-                "min": 1658,
-                "max": 1748
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "snow",
-                "image": "https://leekduck.com/assets/img/weather/snow.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/379.png"
-    },
-    {
         "name": "Dynamax Beldum",
         "tier": "Max Battles (3 Max)",
         "canBeShiny": true,
