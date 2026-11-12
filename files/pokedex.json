@@ -14886,8 +14886,55 @@
         },
         "regionForms": [],
         "evolutions": [],
-        "hasMegaEvolution": false,
-        "megaEvolutions": [],
+        "hasMegaEvolution": true,
+        "megaEvolutions": {
+            "CLEFABLE_MEGA": {
+                "id": "CLEFABLE_MEGA",
+                "names": {
+                    "English": "Mega Clefable",
+                    "German": "Mega-Pixi",
+                    "French": "Méga-Mélodelfe",
+                    "Italian": "MegaClefable",
+                    "Japanese": "メガピクシー",
+                    "Korean": "메가픽시",
+                    "Spanish": "Mega-Clefable"
+                },
+                "stats": {
+                    "stamina": 216,
+                    "attack": 253,
+                    "defense": 205
+                },
+                "primaryType": {
+                    "type": "POKEMON_TYPE_FAIRY",
+                    "names": {
+                        "English": "Fairy",
+                        "German": "Fee",
+                        "French": "Fée",
+                        "Italian": "Folletto",
+                        "Japanese": "フェアリー",
+                        "Korean": "페어리",
+                        "Spanish": "Hada"
+                    }
+                },
+                "secondaryType": {
+                    "type": "POKEMON_TYPE_FLYING",
+                    "names": {
+                        "English": "Flying",
+                        "German": "Flug",
+                        "French": "Vol",
+                        "Italian": "Volante",
+                        "Japanese": "ひこう",
+                        "Korean": "비행",
+                        "Spanish": "Volador"
+                    }
+                },
+                "energyCost": 300,
+                "assets": {
+                    "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm36.icon.png",
+                    "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm36.s.icon.png"
+                }
+            }
+        },
         "hasGigantamaxEvolution": false,
         "assetForms": [
             {
