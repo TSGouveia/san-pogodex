@@ -140,35 +140,6 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/484.png"
     },
     {
-        "name": "Dynamax Regidrago",
-        "tier": "Max Battles (5 Max)",
-        "canBeShiny": true,
-        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_REGIDRAGO",
-        "types": [
-            {
-                "name": "dragon",
-                "image": "https://leekduck.com/assets/img/types/dragon.png"
-            }
-        ],
-        "combatPower": {
-            "normal": {
-                "min": 1614,
-                "max": 1699
-            },
-            "boosted": {
-                "min": 2017,
-                "max": 2124
-            }
-        },
-        "boostedWeather": [
-            {
-                "name": "windy",
-                "image": "https://leekduck.com/assets/img/weather/windy.png"
-            }
-        ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/895.png"
-    },
-    {
         "name": "Dynamax Beldum",
         "tier": "Max Battles (3 Max)",
         "canBeShiny": true,
