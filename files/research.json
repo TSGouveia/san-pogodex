@@ -238,6 +238,576 @@
         ]
     },
     {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Catch 2 mighty Pokémon",
+        "rewards": [
+            {
+                "name": "Mighty Scizor",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm212.icon.png",
+                "shiny": true,
+                "min_cp": "1227",
+                "max_cp": "1286",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Aggron",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm306.icon.png",
+                "shiny": true,
+                "min_cp": "1227",
+                "max_cp": "1285",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Magnezone",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm462.icon.png",
+                "shiny": true,
+                "min_cp": "1313",
+                "max_cp": "1373",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Ferrothorn",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm598.icon.png",
+                "shiny": true,
+                "min_cp": "943",
+                "max_cp": "995",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Catch 10 Steel-type Pokémon",
+        "rewards": [
+            {
+                "name": "Magnemite",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm81.icon.png",
+                "shiny": true,
+                "min_cp": "544",
+                "max_cp": "583",
+                "combatPower": {
+                    "normal": {
+                        "min": 544,
+                        "max": 583
+                    }
+                }
+            },
+            {
+                "name": "Piplup",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm393.icon.png",
+                "shiny": true,
+                "min_cp": "426",
+                "max_cp": "460",
+                "combatPower": {
+                    "normal": {
+                        "min": 426,
+                        "max": 460
+                    }
+                }
+            },
+            {
+                "name": "Shieldon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm410.icon.png",
+                "shiny": true,
+                "min_cp": "348",
+                "max_cp": "381",
+                "combatPower": {
+                    "normal": {
+                        "min": 348,
+                        "max": 381
+                    }
+                }
+            },
+            {
+                "name": "Ferroseed",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm597.icon.png",
+                "shiny": true,
+                "min_cp": "370",
+                "max_cp": "403",
+                "combatPower": {
+                    "normal": {
+                        "min": 370,
+                        "max": 403
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Catch 4 different species of Steel-type Pokémon",
+        "rewards": [
+            {
+                "name": "Lucario",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm448.icon.png",
+                "shiny": true,
+                "min_cp": "1102",
+                "max_cp": "1158",
+                "combatPower": {
+                    "normal": {
+                        "min": 1102,
+                        "max": 1158
+                    }
+                }
+            },
+            {
+                "name": "Duraludon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm884.icon.png",
+                "shiny": true,
+                "min_cp": "1255",
+                "max_cp": "1314",
+                "combatPower": {
+                    "normal": {
+                        "min": 1255,
+                        "max": 1314
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Hatch an Egg",
+        "rewards": [
+            {
+                "name": "Beldum",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm374.icon.png",
+                "shiny": true,
+                "min_cp": "385",
+                "max_cp": "418",
+                "combatPower": {
+                    "normal": {
+                        "min": 385,
+                        "max": 418
+                    }
+                }
+            },
+            {
+                "name": "Bronzor",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm436.icon.png",
+                "shiny": true,
+                "min_cp": "229",
+                "max_cp": "258",
+                "combatPower": {
+                    "normal": {
+                        "min": 229,
+                        "max": 258
+                    }
+                }
+            },
+            {
+                "name": "Drilbur",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm529.icon.png",
+                "shiny": true,
+                "min_cp": "549",
+                "max_cp": "589",
+                "combatPower": {
+                    "normal": {
+                        "min": 549,
+                        "max": 589
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Power up Steel-type Pokémon 5 times",
+        "rewards": [
+            {
+                "name": "Alolan Sandshrew",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm27.fALOLA.icon.png",
+                "shiny": true,
+                "min_cp": "516",
+                "max_cp": "554",
+                "combatPower": {
+                    "normal": {
+                        "min": 503,
+                        "max": 540
+                    }
+                }
+            },
+            {
+                "name": "Alolan Diglett",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm50.fALOLA.icon.png",
+                "shiny": true,
+                "min_cp": "264",
+                "max_cp": "292",
+                "combatPower": {
+                    "normal": {
+                        "min": 262,
+                        "max": 289
+                    }
+                }
+            },
+            {
+                "name": "Galarian Stunfisk",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm618.fGALARIAN.icon.png",
+                "shiny": true,
+                "min_cp": "876",
+                "max_cp": "926",
+                "combatPower": {
+                    "normal": {
+                        "min": 876,
+                        "max": 926
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Use a Steel-type Charged Attack in a battle",
+        "rewards": [
+            {
+                "name": "Onix",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm95.icon.png",
+                "shiny": true,
+                "min_cp": "435",
+                "max_cp": "472",
+                "combatPower": {
+                    "normal": {
+                        "min": 435,
+                        "max": 472
+                    }
+                }
+            },
+            {
+                "name": "Skarmory",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm227.icon.png",
+                "shiny": true,
+                "min_cp": "854",
+                "max_cp": "903",
+                "combatPower": {
+                    "normal": {
+                        "min": 854,
+                        "max": 903
+                    }
+                }
+            },
+            {
+                "name": "Bronzor",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm436.icon.png",
+                "shiny": true,
+                "min_cp": "229",
+                "max_cp": "258",
+                "combatPower": {
+                    "normal": {
+                        "min": 229,
+                        "max": 258
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
+        "task": "Win 2 Max Battles",
+        "rewards": [
+            {
+                "name": "Mighty Metagross",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm376.icon.png",
+                "shiny": true,
+                "min_cp": "1559",
+                "max_cp": "1625",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Tinkaton",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm959.icon.png",
+                "shiny": true,
+                "min_cp": "914",
+                "max_cp": "964",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Catch 10 Dragon-type Pokémon",
+        "rewards": [
+            {
+                "name": "Charmander",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm4.icon.png",
+                "shiny": true,
+                "min_cp": "387",
+                "max_cp": "420",
+                "combatPower": {
+                    "normal": {
+                        "min": 387,
+                        "max": 420
+                    }
+                }
+            },
+            {
+                "name": "Trapinch",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm328.icon.png",
+                "shiny": true,
+                "min_cp": "507",
+                "max_cp": "546",
+                "combatPower": {
+                    "normal": {
+                        "min": 507,
+                        "max": 546
+                    }
+                }
+            },
+            {
+                "name": "Swablu",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm333.icon.png",
+                "shiny": true,
+                "min_cp": "322",
+                "max_cp": "353",
+                "combatPower": {
+                    "normal": {
+                        "min": 322,
+                        "max": 353
+                    }
+                }
+            },
+            {
+                "name": "Skrelp",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm690.icon.png",
+                "shiny": true,
+                "min_cp": "421",
+                "max_cp": "455",
+                "combatPower": {
+                    "normal": {
+                        "min": 421,
+                        "max": 455
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Catch 4 different species of Dragon-type Pokémon",
+        "rewards": [
+            {
+                "name": "Turtonator",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm776.icon.png",
+                "shiny": true,
+                "min_cp": "902",
+                "max_cp": "952",
+                "combatPower": {
+                    "normal": {
+                        "min": 902,
+                        "max": 952
+                    }
+                }
+            },
+            {
+                "name": "Duraludon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm884.icon.png",
+                "shiny": true,
+                "min_cp": "1255",
+                "max_cp": "1314",
+                "combatPower": {
+                    "normal": {
+                        "min": 1255,
+                        "max": 1314
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Catch 2 mighty Pokémon",
+        "rewards": [
+            {
+                "name": "Mighty Alolan Exeggutor",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm103.fALOLA.icon.png",
+                "shiny": true,
+                "min_cp": "1233",
+                "max_cp": "1292",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Kingdra",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm230.icon.png",
+                "shiny": true,
+                "min_cp": "1077",
+                "max_cp": "1132",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Haxorus",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm612.icon.png",
+                "shiny": true,
+                "min_cp": "1475",
+                "max_cp": "1540",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Noivern",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm715.icon.png",
+                "shiny": true,
+                "min_cp": "1129",
+                "max_cp": "1184",
+                "combatPower": null
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Use a Dragon-type Charged Attack in a battle",
+        "rewards": [
+            {
+                "name": "Goomy",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm704.icon.png",
+                "shiny": true,
+                "min_cp": "385",
+                "max_cp": "418",
+                "combatPower": {
+                    "normal": {
+                        "min": 385,
+                        "max": 418
+                    }
+                }
+            },
+            {
+                "name": "Jangmo-o",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm782.icon.png",
+                "shiny": true,
+                "min_cp": "382",
+                "max_cp": "415",
+                "combatPower": {
+                    "normal": {
+                        "min": 382,
+                        "max": 415
+                    }
+                }
+            },
+            {
+                "name": "Frigibax",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm996.icon.png",
+                "shiny": true,
+                "min_cp": "496",
+                "max_cp": "534",
+                "combatPower": {
+                    "normal": {
+                        "min": 496,
+                        "max": 534
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Hatch an Egg",
+        "rewards": [
+            {
+                "name": "Axew",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm610.icon.png",
+                "shiny": true,
+                "min_cp": "547",
+                "max_cp": "586",
+                "combatPower": {
+                    "normal": {
+                        "min": 547,
+                        "max": 586
+                    }
+                }
+            },
+            {
+                "name": "Tyrunt",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm696.icon.png",
+                "shiny": true,
+                "min_cp": "658",
+                "max_cp": "700",
+                "combatPower": {
+                    "normal": {
+                        "min": 658,
+                        "max": 700
+                    }
+                }
+            },
+            {
+                "name": "Noibat",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm714.icon.png",
+                "shiny": true,
+                "min_cp": "258",
+                "max_cp": "285",
+                "combatPower": {
+                    "normal": {
+                        "min": 258,
+                        "max": 285
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Power up Dragon-type Pokémon 5 times",
+        "rewards": [
+            {
+                "name": "Dratini",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm147.icon.png",
+                "shiny": true,
+                "min_cp": "397",
+                "max_cp": "430",
+                "combatPower": {
+                    "normal": {
+                        "min": 397,
+                        "max": 430
+                    }
+                }
+            },
+            {
+                "name": "Gible",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm443.icon.png",
+                "shiny": true,
+                "min_cp": "441",
+                "max_cp": "477",
+                "combatPower": {
+                    "normal": {
+                        "min": 441,
+                        "max": 477
+                    }
+                }
+            },
+            {
+                "name": "Deino",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm633.icon.png",
+                "shiny": true,
+                "min_cp": "420",
+                "max_cp": "455",
+                "combatPower": {
+                    "normal": {
+                        "min": 420,
+                        "max": 455
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pokémon GO Wild Area 2026: Global - Dragon hour Tasks",
+        "task": "Win 2 raids",
+        "rewards": [
+            {
+                "name": "Mighty Flygon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm330.icon.png",
+                "shiny": true,
+                "min_cp": "1085",
+                "max_cp": "1140",
+                "combatPower": null
+            },
+            {
+                "name": "Mighty Goodra",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm706.icon.png",
+                "shiny": true,
+                "min_cp": "1439",
+                "max_cp": "1502",
+                "combatPower": null
+            }
+        ]
+    },
+    {
         "category": "Catching Tasks",
         "task": "Catch 7 Pokémon",
         "rewards": [

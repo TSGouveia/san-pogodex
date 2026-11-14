@@ -1742,6 +1742,43 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/884.png"
     },
     {
+        "name": "Dynamax Eternatus",
+        "tier": "Max Battles (6 Max)",
+        "canBeShiny": false,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ETERNATUS",
+        "types": [
+            {
+                "name": "poison",
+                "image": "https://leekduck.com/assets/img/types/poison.png"
+            },
+            {
+                "name": "dragon",
+                "image": "https://leekduck.com/assets/img/types/dragon.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 2435,
+                "max": 2530
+            },
+            "boosted": {
+                "min": 3044,
+                "max": 3163
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "cloudy",
+                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+            },
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/890.png"
+    },
+    {
         "name": "Dynamax Duraludon",
         "tier": "Max Battles (4 Max)",
         "canBeShiny": true,
