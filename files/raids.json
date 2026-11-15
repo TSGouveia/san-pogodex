@@ -79,6 +79,162 @@
             ]
         },
         {
+            "name": "Cresselia",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "psychic",
+                    "image": "https://leekduck.com/assets/img/types/psychic.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1555,
+                    "max": 1633
+                },
+                "boosted": {
+                    "min": 1944,
+                    "max": 2041
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/488.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/CRESSELIA",
+            "pokebattlerSlug": "CRESSELIA",
+            "startDate": null,
+            "guideUrl": "https://www.pokebattler.com/raids/guides/CRESSELIA",
+            "estimator": 2.76,
+            "estimators": {
+                "000": 2.76,
+                "001": 2.0,
+                "010": 2.46,
+                "011": 2.0,
+                "100": 1.88,
+                "101": 1.89,
+                "110": 1.88,
+                "111": 1.88
+            },
+            "estimatedPlayers": 2.76,
+            "verdict": "MODERATE",
+            "trainersNeeded": 5,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 2.76
+                },
+                {
+                    "trainers": "2",
+                    "status": "HARD",
+                    "ratio": 1.38
+                },
+                {
+                    "trainers": "3",
+                    "status": "TIGHT",
+                    "ratio": 0.92
+                },
+                {
+                    "trainers": "4",
+                    "status": "TIGHT",
+                    "ratio": 0.69
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.55
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.46
+                }
+            ]
+        },
+        {
+            "name": "Darkrai",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "dark",
+                    "image": "https://leekduck.com/assets/img/types/dark.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 2048,
+                    "max": 2136
+                },
+                "boosted": {
+                    "min": 2560,
+                    "max": 2671
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "fog",
+                    "image": "https://leekduck.com/assets/img/weather/fog.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/DARKRAI",
+            "pokebattlerSlug": "DARKRAI",
+            "startDate": null,
+            "guideUrl": "https://www.pokebattler.com/raids/guides/DARKRAI",
+            "estimator": 2.25,
+            "estimators": {
+                "000": 2.25,
+                "001": 1.7,
+                "010": 2.04,
+                "011": 1.7,
+                "100": 1.59,
+                "101": 1.33,
+                "110": 1.59,
+                "111": 1.27
+            },
+            "estimatedPlayers": 2.25,
+            "verdict": "MODERATE",
+            "trainersNeeded": 4,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 2.25
+                },
+                {
+                    "trainers": "2",
+                    "status": "HARD",
+                    "ratio": 1.12
+                },
+                {
+                    "trainers": "3",
+                    "status": "TIGHT",
+                    "ratio": 0.75
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.56
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.45
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.38
+                }
+            ]
+        },
+        {
             "name": "Black Kyurem",
             "tier": "5-Star Raids",
             "canBeShiny": true,
@@ -249,164 +405,6 @@
                     "ratio": 0.42
                 }
             ]
-        }
-    ],
-    "schedule": [
-        {
-            "name": "Cresselia",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "psychic",
-                    "image": "https://leekduck.com/assets/img/types/psychic.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 1555,
-                    "max": 1633
-                },
-                "boosted": {
-                    "min": 1944,
-                    "max": 2041
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "windy",
-                    "image": "https://leekduck.com/assets/img/weather/windy.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/488.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/CRESSELIA",
-            "pokebattlerSlug": "CRESSELIA",
-            "startDate": "2026-11-16T14:00:00+00:00",
-            "guideUrl": null,
-            "estimator": 2.76,
-            "estimators": {
-                "000": 2.76,
-                "001": 2.0,
-                "010": 2.46,
-                "011": 2.0,
-                "100": 1.88,
-                "101": 1.89,
-                "110": 1.88,
-                "111": 1.88
-            },
-            "estimatedPlayers": 2.76,
-            "verdict": "MODERATE",
-            "trainersNeeded": 5,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 2.76
-                },
-                {
-                    "trainers": "2",
-                    "status": "HARD",
-                    "ratio": 1.38
-                },
-                {
-                    "trainers": "3",
-                    "status": "TIGHT",
-                    "ratio": 0.92
-                },
-                {
-                    "trainers": "4",
-                    "status": "TIGHT",
-                    "ratio": 0.69
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.55
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.46
-                }
-            ]
-        },
-        {
-            "name": "Darkrai",
-            "tier": "5-Star Raids",
-            "canBeShiny": true,
-            "types": [
-                {
-                    "name": "dark",
-                    "image": "https://leekduck.com/assets/img/types/dark.png"
-                }
-            ],
-            "combatPower": {
-                "normal": {
-                    "min": 2048,
-                    "max": 2136
-                },
-                "boosted": {
-                    "min": 2560,
-                    "max": 2671
-                }
-            },
-            "boostedWeather": [
-                {
-                    "name": "fog",
-                    "image": "https://leekduck.com/assets/img/weather/fog.png"
-                }
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/491.png",
-            "pokebattlerUrl": "https://www.pokebattler.com/raids/DARKRAI",
-            "pokebattlerSlug": "DARKRAI",
-            "startDate": "2026-11-16T14:00:00+00:00",
-            "guideUrl": null,
-            "estimator": 2.25,
-            "estimators": {
-                "000": 2.25,
-                "001": 1.7,
-                "010": 2.04,
-                "011": 1.7,
-                "100": 1.59,
-                "101": 1.33,
-                "110": 1.59,
-                "111": 1.27
-            },
-            "estimatedPlayers": 2.25,
-            "verdict": "MODERATE",
-            "trainersNeeded": 4,
-            "trainerBoxes": [
-                {
-                    "trainers": "1",
-                    "status": "EXTREME",
-                    "ratio": 2.25
-                },
-                {
-                    "trainers": "2",
-                    "status": "HARD",
-                    "ratio": 1.12
-                },
-                {
-                    "trainers": "3",
-                    "status": "TIGHT",
-                    "ratio": 0.75
-                },
-                {
-                    "trainers": "4",
-                    "status": "EASY",
-                    "ratio": 0.56
-                },
-                {
-                    "trainers": "5",
-                    "status": "EASY",
-                    "ratio": 0.45
-                },
-                {
-                    "trainers": "6+",
-                    "status": "EASY",
-                    "ratio": 0.38
-                }
-            ]
         },
         {
             "name": "Mega Banette",
@@ -437,8 +435,8 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10056.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/BANETTE_MEGA",
             "pokebattlerSlug": "BANETTE_MEGA",
-            "startDate": "2026-11-16T14:00:00+00:00",
-            "guideUrl": null,
+            "startDate": null,
+            "guideUrl": "https://www.pokebattler.com/raids/guides/BANETTE_MEGA",
             "estimator": 1.19,
             "estimators": {
                 "000": 1.19,
@@ -515,7 +513,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/408.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/CRANIDOS_SHADOW_FORM",
             "pokebattlerSlug": "CRANIDOS_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.04,
             "estimators": {
@@ -601,7 +599,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/246.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/LARVITAR_SHADOW_FORM",
             "pokebattlerSlug": "LARVITAR_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.03,
             "estimators": {
@@ -679,7 +677,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/296.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/MAKUHITA_SHADOW_FORM",
             "pokebattlerSlug": "MAKUHITA_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.03,
             "estimators": {
@@ -757,7 +755,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/258.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/MUDKIP_SHADOW_FORM",
             "pokebattlerSlug": "MUDKIP_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.05,
             "estimators": {
@@ -843,7 +841,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/221.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/PILOSWINE_SHADOW_FORM",
             "pokebattlerSlug": "PILOSWINE_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.96,
             "estimators": {
@@ -921,7 +919,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/61.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/POLIWHIRL_SHADOW_FORM",
             "pokebattlerSlug": "POLIWHIRL_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 0.93,
             "estimators": {
@@ -999,7 +997,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/394.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/PRINPLUP_SHADOW_FORM",
             "pokebattlerSlug": "PRINPLUP_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 1.07,
             "estimators": {
@@ -1077,7 +1075,7 @@
             "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/641.png",
             "pokebattlerUrl": "https://www.pokebattler.com/raids/TORNADUS_SHADOW_FORM",
             "pokebattlerSlug": "TORNADUS_SHADOW_FORM",
-            "startDate": "2026-11-16T14:00:00+00:00",
+            "startDate": null,
             "guideUrl": null,
             "estimator": 3.74,
             "estimators": {
@@ -1125,7 +1123,9 @@
                     "ratio": 0.62
                 }
             ]
-        },
+        }
+    ],
+    "schedule": [
         {
             "name": "Normal Deoxys",
             "tier": "5-Star Raids",
