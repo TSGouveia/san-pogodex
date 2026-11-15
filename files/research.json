@@ -1,5 +1,172 @@
 [
     {
+        "category": "Dynamax Trails Tasks",
+        "task": "Catch 8 Pokémon",
+        "rewards": [
+            {
+                "name": "Bulbasaur",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm1.icon.png",
+                "shiny": true,
+                "min_cp": "442",
+                "max_cp": "477",
+                "combatPower": {
+                    "normal": {
+                        "min": 442,
+                        "max": 477
+                    }
+                }
+            },
+            {
+                "name": "Charmander",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm4.icon.png",
+                "shiny": true,
+                "min_cp": "387",
+                "max_cp": "420",
+                "combatPower": {
+                    "normal": {
+                        "min": 387,
+                        "max": 420
+                    }
+                }
+            },
+            {
+                "name": "Squirtle",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm7.icon.png",
+                "shiny": true,
+                "min_cp": "372",
+                "max_cp": "405",
+                "combatPower": {
+                    "normal": {
+                        "min": 372,
+                        "max": 405
+                    }
+                }
+            },
+            {
+                "name": "Grookey",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm810.icon.png",
+                "shiny": true,
+                "min_cp": "430",
+                "max_cp": "465",
+                "combatPower": {
+                    "normal": {
+                        "min": 430,
+                        "max": 465
+                    }
+                }
+            },
+            {
+                "name": "Scorbunny",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm813.icon.png",
+                "shiny": true,
+                "min_cp": "434",
+                "max_cp": "470",
+                "combatPower": {
+                    "normal": {
+                        "min": 434,
+                        "max": 470
+                    }
+                }
+            },
+            {
+                "name": "Sobble",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm816.icon.png",
+                "shiny": false,
+                "min_cp": "434",
+                "max_cp": "470",
+                "combatPower": {
+                    "normal": {
+                        "min": 434,
+                        "max": 470
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Dynamax Trails Tasks",
+        "task": "Power up Pokémon 8 times",
+        "rewards": [
+            {
+                "name": "Magikarp",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm129.icon.png",
+                "shiny": true,
+                "min_cp": "99",
+                "max_cp": "117",
+                "combatPower": {
+                    "normal": {
+                        "min": 99,
+                        "max": 117
+                    }
+                }
+            },
+            {
+                "name": "Feebas",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm349.icon.png",
+                "shiny": true,
+                "min_cp": "99",
+                "max_cp": "117",
+                "combatPower": {
+                    "normal": {
+                        "min": 99,
+                        "max": 117
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Dynamax Trails Tasks",
+        "task": "Explore 1 km",
+        "rewards": [
+            {
+                "name": "Eevee",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm133.icon.png",
+                "shiny": true,
+                "min_cp": "424",
+                "max_cp": "459",
+                "combatPower": {
+                    "normal": {
+                        "min": 424,
+                        "max": 459
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Dynamax Trails Tasks",
+        "task": "Win a Max Battle",
+        "rewards": [
+            {
+                "name": "Drampa",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm780.icon.png",
+                "shiny": true,
+                "min_cp": "1191",
+                "max_cp": "1249",
+                "combatPower": {
+                    "normal": {
+                        "min": 1191,
+                        "max": 1249
+                    }
+                }
+            },
+            {
+                "name": "Duraludon",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm884.icon.png",
+                "shiny": true,
+                "min_cp": "1255",
+                "max_cp": "1314",
+                "combatPower": {
+                    "normal": {
+                        "min": 1255,
+                        "max": 1314
+                    }
+                }
+            }
+        ]
+    },
+    {
         "category": "Pokémon GO Wild Area 2026: Global - Steel hour Tasks",
         "task": "Catch 2 mighty Pokémon",
         "rewards": [
