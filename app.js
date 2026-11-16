@@ -5688,7 +5688,10 @@ window.openInfographic = function (tab, boss) {
     const loading = modal.querySelector('.infographic-loading');
     const statusEl = modal.querySelector('.infographic-status');
     const dl = modal.querySelector('.infographic-download');
-    const key = `${tab}:${boss}`;
+    // Counters follow the site's Estimator toggles (Legendary / Shadow / Mega)
+    const f = pbEstimatorFilters;
+    const filterQs = `&legendary=${f.legendary ? 1 : 0}&shadow=${f.shadow ? 1 : 0}&mega=${f.mega ? 1 : 0}`;
+    const key = `${tab}:${boss}${filterQs}`;
 
     const show = res => {
         img.src = res.url;
@@ -5715,7 +5718,7 @@ window.openInfographic = function (tab, boss) {
     frame.setAttribute('aria-hidden', 'true');
     frame.tabIndex = -1;
     frame.style.cssText = 'position: fixed; left: -12000px; top: 0; width: 1100px; height: 900px; border: 0; visibility: hidden;';
-    frame.src = `infographic.html?embed=1&tab=${encodeURIComponent(tab)}&boss=${encodeURIComponent(boss)}`;
+    frame.src = `infographic.html?embed=1&tab=${encodeURIComponent(tab)}&boss=${encodeURIComponent(boss)}${filterQs}`;
     infographicFrame = frame;
 
     const onMsg = e => {

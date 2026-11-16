@@ -1733,6 +1733,7 @@ if (EMBED.get('embed')) {
   document.documentElement.classList.add('embed');
   const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
   headerImg = null;
+  ['legendary', 'shadow', 'mega'].forEach(k => { if (EMBED.has(k)) filters[k] = EMBED.get(k) === '1'; }); // not persisted
   setTab(EMBED.get('tab') === 'max' ? 'max' : 'raid', true);
   $('boss').value = EMBED.get('boss') || '';
   new MutationObserver(() => post({ type: 'status', text: $('status').textContent }))
