@@ -164,6 +164,32 @@ def scrape_release_dates_from_bulbapedia():
             print(f"  -> Release dates scraper attempt {idx + 1} failed: {e}")
     return poke_dates
 
+def scrape_released_gmax_from_fandom():
+    """Released Gigantamax species per the Pokémon GO Fandom wiki.
+
+    pokemon-go-api lags behind on hasGigantamaxEvolution (e.g. Duraludon, Pikachu),
+    so this list is merged on top of it.
+    """
+    print("Scraping released Gigantamax list from Pokémon GO Fandom wiki...")
+    try:
+        res = requests.get(
+            "https://pokemongo.fandom.com/api.php",
+            params={"action": "parse", "page": "Gigantamax", "prop": "wikitext",
+                    "format": "json", "formatversion": "2", "redirects": "1"},
+            headers=HEADERS, timeout=15)
+        res.raise_for_status()
+        wikitext = res.json().get("parse", {}).get("wikitext", "") or ""
+        # Only the first ("Regular") tab, and only the part before the "Unreleased" header
+        regular = wikitext.split("|-|")[0]
+        released = re.split(r"\{\{PH\|Unreleased", regular)[0]
+        names = {m.group(1).strip().lower()
+                 for m in re.finditer(r"\{\{P\|([^|}]+)\|[^}]*gigantamax=t", released)}
+        print(f"  -> Found {len(names)} released Gigantamax species.")
+        return names
+    except Exception as e:
+        print(f"  -> Could not scrape Gigantamax list: {e}")
+        return set()
+
 def scrape_pokedex():
     print("Scraping Raw Pokédex Data...")
     try:
@@ -257,6 +283,16 @@ def scrape_pokedex():
                 print(f"  -> Warning: Could not save unreleased cache: {e}")
 
         unreleased_lower = {name.lower() for name in scraped_unreleased}
+
+        released_gmax = scrape_released_gmax_from_fandom()
+        gmax_added = []
+        for entry in pokedex_data:
+            eng = (entry.get("names", {}).get("English") or "").lower()
+            if eng in released_gmax and entry.get("id") == entry.get("formId") and not entry.get("hasGigantamaxEvolution"):
+                entry["hasGigantamaxEvolution"] = True
+                gmax_added.append(entry.get("id"))
+        if gmax_added:
+            print(f"  -> Marked as Gigantamax from Fandom: {', '.join(gmax_added)}")
 
         # Tag entries with unreleased boolean, releaseDate, and calculate standard CP benchmarks
         unreleased_flagged_count = 0

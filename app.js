@@ -614,6 +614,8 @@ let liveResearch = [];
 let liveRocket = null;
 let liveEvents = [];
 let liveSpawns = [];
+let rawPvpSeason = null; // GO Battle League season (pvp.json)
+let pvpFallbackRequested = false;
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
 let currentEventTab = 'calendar';
@@ -11625,7 +11627,36 @@ function renderToDoPane() {
         });
     }
 
+    // 8. Check GO Battle League reward encounters (current season)
+    if (!rawPvpSeason) loadPvpFallback();
+    if (rawPvpSeason && Array.isArray(rawPvpSeason.encounters)) {
+        const seasonEnd = rawPvpSeason.end ? new Date(`${rawPvpSeason.end}T20:00:00Z`) : null;
+        if (!seasonEnd || seasonEnd > new Date()) {
+            rawPvpSeason.encounters.forEach(tier => {
+                const rankLabel = isNaN(parseInt(tier.rank, 10)) ? tier.rank : `Rank ${tier.rank}+`;
+                [...(tier.guaranteed || []).map(e => [e, true]), ...(tier.possible || []).map(e => [e, false])].forEach(([entry, isGuaranteed]) => {
+                    const matched = entry.dexNr ? pokemonDatabase.find(p => Number(p.id) === Number(entry.dexNr)) : findPokemonByName(entry.baseName || entry.name);
+                    if (!matched) return;
+                    const isTransf = (currentDexType === 'normal') && isPokemonTransferred(matched);
+                    const isMiss = isMissingInActiveCategory(matched) && !isTransf;
+                    const isCandy = familyNeedsCandies(matched, { caught: activeSet }) || needsCandies(matched, { caught: activeSet });
+                    const key = getPvpScrollKey(entry, tier.rank);
+                    const detail = `GO Battle League ${rankLabel}${isGuaranteed ? ' (guaranteed)' : ''}`;
+
+                    if (isTransf) {
+                        addPriority(matched, 'Transferred', 'PVP', detail, 'rotations-pvp-section', key, entry.name);
+                    } else if (isMiss) {
+                        addPriority(matched, 'Missing', 'PVP', detail, 'rotations-pvp-section', key, entry.name);
+                    } else if (isCandy) {
+                        addPriority(matched, 'Candy', 'PVP', detail, 'rotations-pvp-section', key, entry.name);
+                    }
+                });
+            });
+        }
+    }
+
     const icons = {
+        PVP: 'fa-solid fa-trophy',
         Raid: 'fa-solid fa-hand-fist',
         'Max Battle': 'fa-solid fa-bolt',
         Egg: 'fa-solid fa-egg',
@@ -11636,6 +11667,7 @@ function renderToDoPane() {
     };
 
     const colors = {
+        PVP: '#c084fc',
         Raid: '#a78bfa',
         'Max Battle': '#f5a623',
         Egg: '#34d399',
@@ -11646,6 +11678,7 @@ function renderToDoPane() {
     };
 
     const borderColors = {
+        PVP: 'rgba(192, 132, 252, 0.25)',
         Raid: 'rgba(167, 139, 250, 0.25)',
         'Max Battle': 'rgba(245, 166, 35, 0.25)',
         Egg: 'rgba(52, 211, 153, 0.25)',
@@ -12173,8 +12206,6 @@ if (exitFriendBtn) {
 // ==========================================
 // GO Battle League (PVP) Season
 // ==========================================
-let rawPvpSeason = null;
-let pvpFallbackRequested = false;
 
 function loadPvpFallback() {
     if (pvpFallbackRequested) return;
@@ -12186,6 +12217,7 @@ function loadPvpFallback() {
                 rawPvpSeason = data;
                 const sec = document.getElementById('rotations-pvp-section');
                 if (sec && !sec.classList.contains('hidden')) renderPvpSeason();
+                if (typeof renderToDoPane === 'function') renderToDoPane();
             }
         })
         .catch(err => console.warn('Could not load pvp fallback:', err));
@@ -12231,7 +12263,11 @@ function getPvpTierTheme(rank) {
     return { theme: 'theme-green', sub: 'one-star' };
 }
 
-function buildPvpPokemonCard(entry, cardTheme, isGuaranteed) {
+function getPvpScrollKey(entry, rank) {
+    return `pvp-${safeLower(entry.name).replace(/[^a-z0-9]+/g, '-')}-${safeLower(rank).replace(/[^a-z0-9]/g, '')}`;
+}
+
+function buildPvpPokemonCard(entry, cardTheme, isGuaranteed, rank) {
     const matchedPoke = entry.dexNr
         ? pokemonDatabase.find(p => Number(p.id) === Number(entry.dexNr))
         : findPokemonByName(entry.baseName || entry.name);
@@ -12242,6 +12278,7 @@ function buildPvpPokemonCard(entry, cardTheme, isGuaranteed) {
 
     const card = document.createElement('div');
     card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
+    card.setAttribute('data-scroll-target', getPvpScrollKey(entry, rank));
     const dex = entry.dexNr || (matchedPoke ? matchedPoke.id : null);
     const imgUrl = getPokemonImageUrl(entry.name, matchedPoke) || (dex ? `${POKE_SPRITE_BASE_URL}/${dex}.png` : '');
     const fallbackId = getRegionalFormPokeApiId(entry.name) || dex;
@@ -12358,11 +12395,7 @@ function renderPvpSeason() {
     const encounters = Array.isArray(season.encounters) ? season.encounters : [];
     if (encounters.length > 0) {
         const encWrap = document.createElement('div');
-        encWrap.style.cssText = cardBox;
-        encWrap.innerHTML = `
-            <h4 class="rotation-subchapter-title" style="color: var(--accent-color); margin-bottom: 0.5rem;"><i class="fa-solid fa-paw"></i> Reward Encounters</h4>
-            ${season.encounterNote ? `<p style="margin: 0 0 1rem; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">${escapePvpHtml(season.encounterNote)}</p>` : ''}
-        `;
+        encWrap.style.cssText = 'margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px dashed var(--border-color);';
         encounters.forEach(tier => {
             const isNumeric = !isNaN(parseInt(tier.rank, 10));
             const { theme, sub } = getPvpTierTheme(tier.rank);
@@ -12377,11 +12410,18 @@ function renderPvpSeason() {
                 <div class="rotation-grid-layout"></div>
             `;
             const grid = subEl.querySelector('.rotation-grid-layout');
-            (tier.guaranteed || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, true)));
-            (tier.possible || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, false)));
+            (tier.guaranteed || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, true, tier.rank)));
+            (tier.possible || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, false, tier.rank)));
             encWrap.appendChild(subEl);
         });
-        container.appendChild(encWrap);
+        if (season.encounterNote) {
+            const note = document.createElement('p');
+            note.style.cssText = 'margin: 0.5rem 0 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;';
+            note.innerHTML = `<i class="fa-solid fa-circle-info"></i> ${escapePvpHtml(season.encounterNote)}`;
+            encWrap.appendChild(note);
+        }
+        // Encounters by rank go first (egg-pool style); season info sits below
+        container.prepend(encWrap);
     }
 
     // --- Ranks & rewards table ---
