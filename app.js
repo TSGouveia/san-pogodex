@@ -4245,6 +4245,51 @@ function loadObtainingTab(poke) {
         container.appendChild(partyCard);
     });
 
+    // 5.5 Dynamic Active Rotation Check: GO Battle League reward encounters
+    const activePvpTiers = [];
+    const pvpSeasonEnd = rawPvpSeason && rawPvpSeason.end ? new Date(`${rawPvpSeason.end}T20:00:00Z`) : null;
+    if (rawPvpSeason && Array.isArray(rawPvpSeason.encounters) && (!pvpSeasonEnd || pvpSeasonEnd > new Date())) {
+        rawPvpSeason.encounters.forEach(tier => {
+            const entries = [
+                ...(tier.guaranteed || []).map(e => ({ ...e, guaranteed: true })),
+                ...(tier.possible || []).map(e => ({ ...e, guaranteed: false }))
+            ].filter(e => (e.dexNr && Number(e.dexNr) === Number(poke.id)) || safeLower(e.baseName || e.name) === safeLower(poke.name));
+            if (entries.length > 0) activePvpTiers.push({ rank: tier.rank, entries });
+        });
+    }
+    activePvpTiers.forEach(tier => {
+        const rankLabel = isNaN(parseInt(tier.rank, 10)) ? `${tier.rank} rank` : `Rank ${tier.rank}`;
+        const forms = tier.entries.map(e => `<strong>${escapePvpHtml(e.name)}</strong>${e.guaranteed ? ' (guaranteed 1st encounter)' : ''}`).join(', ');
+        const pvpCard = document.createElement('div');
+        pvpCard.className = 'obtain-card active-rotation-link';
+        pvpCard.style.cursor = 'pointer';
+        pvpCard.style.border = '1px solid rgba(192, 132, 252, 0.4)';
+        pvpCard.style.background = 'linear-gradient(135deg, rgba(192, 132, 252, 0.08), var(--bg-tertiary))';
+        pvpCard.innerHTML = `
+            <div class="obtain-icon-box" style="color: #c084fc; background: rgba(192, 132, 252, 0.15);">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <div class="obtain-card-content" style="flex-grow: 1;">
+                <h4 style="color: #c084fc; display: flex; align-items: center; gap: 6px;">
+                    GO Battle League Reward <span style="font-size: 0.65rem; background: #c084fc; color: #3b0764; padding: 2px 6px; border-radius: 4px; font-weight: 800;">ACTIVE</span>
+                </h4>
+                <p>${forms} can be encountered from <strong>${escapePvpHtml(rankLabel)}</strong> onwards in Season ${rawPvpSeason.season}. Click to view all PVP rewards.</p>
+            </div>
+            <div style="align-self: center; padding-right: 0.5rem; color: #c084fc; opacity: 0.8;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+        `;
+        pvpCard.addEventListener('click', () => {
+            closeModal();
+            const rotationsTabBtn = document.querySelector('.view-switch-container .view-btn[data-view="rotations-pane"]');
+            if (rotationsTabBtn) rotationsTabBtn.click();
+            const pvpSubnavBtn = document.querySelector('.subnav-btn[data-target="rotations-pvp-section"]');
+            if (pvpSubnavBtn) pvpSubnavBtn.click();
+            jumpToRotationTarget(getPvpScrollKey(tier.entries[0], tier.rank));
+        });
+        container.appendChild(pvpCard);
+    });
+
     // 6. Dynamic Active Rotation Check: Wild Spawns (Only show if spawnRate >= 0.5%)
     const activeSpawn = liveSpawns.find(s => Number(s.dexNr) === Number(poke.id) || (s.name && s.name.toLowerCase() === poke.name.toLowerCase()));
     if (activeSpawn && activeSpawn.spawnRate >= 0.5) {
@@ -12401,11 +12446,9 @@ function renderPvpSeason() {
             const { theme, sub } = getPvpTierTheme(tier.rank);
             const subEl = document.createElement('div');
             subEl.className = `rotation-subchapter ${sub}`;
-            const count = (tier.guaranteed || []).length + (tier.possible || []).length;
             subEl.innerHTML = `
                 <h4 class="rotation-subchapter-title">
                     <i class="fa-solid ${isNumeric ? 'fa-ranking-star' : 'fa-medal'}"></i> ${isNumeric ? `Rank ${escapePvpHtml(tier.rank)}+` : escapePvpHtml(tier.rank)}
-                    <span style="font-size: 0.72rem; opacity: 0.7; text-transform: none; letter-spacing: 0;">(${count})</span>
                 </h4>
                 <div class="rotation-grid-layout"></div>
             `;
