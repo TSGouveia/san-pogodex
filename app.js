@@ -1236,7 +1236,7 @@ async function loadScrapedDataFromCdn() {
         }
 
         // 4. Load static JSON files with automatic fallback
-        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks'];
+        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks', 'pvp'];
         const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
         const fetchPromises = modules.map(m => fetchCdnFile(`${m}.min.json`, cacheBustQuery));
 
@@ -1336,6 +1336,7 @@ async function loadPokedex() {
         if (isNonEmpty(dbScrapedData.partyChallenges)) { partyRewardsData = dbScrapedData.partyChallenges; console.log("🔍 [DEBUG] partyRewardsData loaded:", partyRewardsData); }
         if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
         if (isNonEmpty(dbScrapedData.megaAttacks)) megaAttacksDatabase = dbScrapedData.megaAttacks;
+        if (isNonEmpty(dbScrapedData.pvp)) rawPvpSeason = dbScrapedData.pvp;
         if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
         if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
         if (isNonEmpty(dbScrapedData.pokedex)) {
@@ -2924,6 +2925,8 @@ function setupEventListeners() {
                 renderEventsPane();
             } else if (targetSectionId === 'rotations-promocodes-section') {
                 renderPromoCodes();
+            } else if (targetSectionId === 'rotations-pvp-section') {
+                renderPvpSeason();
             } else {
                 renderActiveRotations();
             }
@@ -12166,3 +12169,277 @@ if (exitFriendBtn) {
     exitFriendBtn.addEventListener('click', exitFriendPokedexMode);
 }
 
+
+// ==========================================
+// GO Battle League (PVP) Season
+// ==========================================
+let rawPvpSeason = null;
+let pvpFallbackRequested = false;
+
+function loadPvpFallback() {
+    if (pvpFallbackRequested) return;
+    pvpFallbackRequested = true;
+    fetchCdnFile('pvp.min.json', `?t=${Date.now()}`)
+        .then(data => data || fetch('files/pvp.min.json').then(r => r.ok ? r.json() : null))
+        .then(data => {
+            if (data && data.season) {
+                rawPvpSeason = data;
+                const sec = document.getElementById('rotations-pvp-section');
+                if (sec && !sec.classList.contains('hidden')) renderPvpSeason();
+            }
+        })
+        .catch(err => console.warn('Could not load pvp fallback:', err));
+}
+
+function escapePvpHtml(str) {
+    const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+    return String(str == null ? '' : str).replace(/[&<>"']/g, c => map[c]);
+}
+
+function parsePvpDate(iso) {
+    // Season weeks flip at 1 p.m. PT (~20:00 UTC)
+    return iso ? new Date(`${iso}T20:00:00Z`) : null;
+}
+
+function formatPvpDate(iso) {
+    const d = parsePvpDate(iso);
+    return d ? d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', timeZone: 'UTC' }) : '?';
+}
+
+function getPvpLeagueStyle(league) {
+    const l = league.toLowerCase();
+    if (l.includes('master league')) return { icon: 'fa-crown', color: '#c084fc' };
+    if (l.includes('ultra league')) return { icon: 'fa-star', color: '#fbbf24' };
+    if (l.includes('great league') && !l.includes('cup')) return { icon: 'fa-shield-halved', color: '#60a5fa' };
+    return { icon: 'fa-trophy', color: '#34d399' };
+}
+
+function getPvpCupRule(season, league) {
+    const rules = season.cupRules || {};
+    if (rules[league]) return rules[league];
+    const base = league.split(':')[0].trim();
+    const key = Object.keys(rules).find(k => k.split(':')[0].trim() === base);
+    return key ? rules[key] : '';
+}
+
+function getPvpTierTheme(rank) {
+    const n = parseInt(rank, 10);
+    if (isNaN(n)) return { theme: 'theme-super-mega', sub: 'super-mega' };
+    if (n >= 20) return { theme: 'theme-purple', sub: 'five-star' };
+    if (n >= 16) return { theme: 'theme-pink', sub: 'egg-7km' };
+    if (n >= 11) return { theme: 'theme-blue', sub: 'three-star' };
+    return { theme: 'theme-green', sub: 'one-star' };
+}
+
+function buildPvpPokemonCard(entry, cardTheme, isGuaranteed) {
+    const matchedPoke = entry.dexNr
+        ? pokemonDatabase.find(p => Number(p.id) === Number(entry.dexNr))
+        : findPokemonByName(entry.baseName || entry.name);
+    const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
+    const isMissing = matchedPoke && !isTransferred && isPokemonMissing(matchedPoke);
+    const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
+    const highlightClass = isTransferred ? 'transferred-rotation-target' : (isMissing ? 'missing-rotation-target' : (isCandyNeeded ? 'candy-rotation-target' : ''));
+
+    const card = document.createElement('div');
+    card.className = `rotation-card-item ${cardTheme} ${highlightClass} spawn-animation`;
+    const dex = entry.dexNr || (matchedPoke ? matchedPoke.id : null);
+    const imgUrl = getPokemonImageUrl(entry.name, matchedPoke) || (dex ? `${POKE_SPRITE_BASE_URL}/${dex}.png` : '');
+    const fallbackId = getRegionalFormPokeApiId(entry.name) || dex;
+    const onerror = fallbackId
+        ? `onerror="if(!this.dataset.retry){this.dataset.retry='1'; this.src='${POKE_SPRITE_BACKUP_URL}/${fallbackId}.png';}else{this.style.opacity=0.3;}"`
+        : `onerror="this.style.opacity=0.3;"`;
+
+    card.innerHTML = `
+        <div class="rotation-badges">
+            ${isTransferred ? '<span class="transferred-rotation-badge"><i class="fa-solid fa-arrows-spin"></i> Transferred</span>' : (isMissing ? '<span class="missing-rotation-badge"><i class="fa-solid fa-crosshairs"></i> Missing</span>' : '')}
+            ${isCandyNeeded && !isTransferred ? '<span class="candy-rotation-badge"><i class="fa-solid fa-candy-cane"></i> Candy</span>' : ''}
+        </div>
+        <img class="rotation-card-img" src="${imgUrl}" alt="${escapePvpHtml(entry.name)}" loading="lazy" ${onerror}>
+        <div class="rotation-card-details-wrapper">
+            <span class="rotation-card-name">${escapePvpHtml(entry.name)}</span>
+            ${isGuaranteed ? `<div class="rotation-cp-details"><div><i class="fa-solid fa-gift" style="font-size:0.65rem; color: var(--accent-color);"></i> <strong style="color: var(--accent-color);">Guaranteed 1st</strong></div></div>` : ''}
+        </div>
+    `;
+    if (matchedPoke) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => openModal(matchedPoke.id));
+    }
+    return card;
+}
+
+function renderPvpSeason() {
+    const container = document.getElementById('pvp-container');
+    if (!container) return;
+
+    const season = rawPvpSeason;
+    if (!season || !season.season) {
+        loadPvpFallback();
+        container.innerHTML = '<p class="no-rotations" style="color: var(--text-secondary); font-size: 0.9rem; padding: 1rem 0;">No GO Battle League season data available yet.</p>';
+        return;
+    }
+
+    const now = new Date();
+    const seasonEnd = parsePvpDate(season.end);
+    const daysLeft = seasonEnd ? Math.max(0, Math.ceil((seasonEnd - now) / 86400000)) : null;
+    const formats = Array.isArray(season.formats) ? season.formats : [];
+    const currentIdx = formats.findIndex(f => parsePvpDate(f.start) <= now && now < parsePvpDate(f.end));
+    const cardBox = 'background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.25rem;';
+
+    container.innerHTML = '';
+
+    // --- Season header ---
+    const header = document.createElement('div');
+    header.style.cssText = cardBox + 'display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;';
+    header.innerHTML = `
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(167, 139, 250, 0.12); border: 1px solid rgba(167, 139, 250, 0.3); display: flex; align-items: center; justify-content: center; color: #a78bfa; font-size: 1.35rem; flex-shrink: 0;">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div style="flex: 1; min-width: 200px;">
+            <div style="font-size: 0.75rem; font-weight: 800; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.8px;">Season ${season.season}</div>
+            <h3 style="margin: 2px 0 4px; font-size: 1.1rem; font-weight: 800; color: var(--text-primary);">${escapePvpHtml(season.title)}</h3>
+            <div style="font-size: 0.82rem; color: var(--text-secondary);">
+                <i class="fa-regular fa-calendar"></i> ${formatPvpDate(season.start)} – ${formatPvpDate(season.end)}
+                ${daysLeft !== null ? ` · <strong style="color: ${daysLeft <= 7 ? '#f87171' : 'var(--accent-color)'};">${daysLeft} day${daysLeft === 1 ? '' : 's'} left</strong>` : ''}
+            </div>
+        </div>
+        <a href="${escapePvpHtml(season.url)}" target="_blank" rel="noopener noreferrer" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary); text-decoration: none; border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 12px;">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Wiki
+        </a>
+    `;
+    container.appendChild(header);
+
+    // --- Current leagues + schedule ---
+    const leagueChip = (league) => {
+        const st = getPvpLeagueStyle(league);
+        return `<span style="display: inline-flex; align-items: center; gap: 6px; background: ${st.color}1f; color: ${st.color}; border: 1px solid ${st.color}55; padding: 4px 10px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;"><i class="fa-solid ${st.icon}"></i> ${escapePvpHtml(league)}</span>`;
+    };
+
+    if (formats.length > 0) {
+        const cur = formats[currentIdx];
+        const curBox = document.createElement('div');
+        curBox.style.cssText = cardBox;
+        if (cur) {
+            const rules = cur.leagues.map(l => ({ l, r: getPvpCupRule(season, l) })).filter(x => x.r);
+            curBox.innerHTML = `
+                <h4 class="rotation-subchapter-title" style="color: #34d399; margin-bottom: 0.75rem;">
+                    <i class="fa-solid fa-circle-play"></i> Active Now
+                    <span style="margin-left: auto; font-size: 0.75rem; color: var(--text-secondary); text-transform: none; letter-spacing: 0; font-weight: 600;">${formatPvpDate(cur.start)} – ${formatPvpDate(cur.end)}</span>
+                </h4>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">${cur.leagues.map(leagueChip).join('')}</div>
+                ${rules.map(x => `<p style="margin: 0.75rem 0 0; font-size: 0.82rem; color: var(--text-secondary); line-height: 1.45;"><strong style="color: var(--text-primary);">${escapePvpHtml(x.l)}:</strong> ${escapePvpHtml(x.r)}</p>`).join('')}
+            `;
+        } else {
+            curBox.innerHTML = `<p style="margin: 0; color: var(--text-secondary); font-size: 0.88rem;"><i class="fa-solid fa-pause"></i> No league is running right now.</p>`;
+        }
+        container.appendChild(curBox);
+
+        const sched = document.createElement('details');
+        sched.style.cssText = cardBox + 'padding: 0;';
+        sched.innerHTML = `
+            <summary style="cursor: pointer; padding: 1rem 1.25rem; font-weight: 800; font-size: 0.9rem; color: var(--text-primary); list-style: none; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-calendar-week" style="color: var(--accent-color);"></i> Season Schedule
+                <span style="margin-left: auto; font-size: 0.75rem; color: var(--text-secondary); font-weight: 600;">${formats.length} weeks <i class="fa-solid fa-chevron-down"></i></span>
+            </summary>
+            <div style="padding: 0 1.25rem 1rem; display: flex; flex-direction: column; gap: 8px;">
+                ${formats.map((f, i) => {
+                    const isPast = parsePvpDate(f.end) <= now;
+                    const isCur = i === currentIdx;
+                    return `<div style="display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; padding: 8px 10px; border-radius: 8px; border: 1px solid ${isCur ? 'rgba(52, 211, 153, 0.4)' : 'var(--border-color)'}; background: ${isCur ? 'rgba(52, 211, 153, 0.06)' : 'transparent'}; opacity: ${isPast ? 0.5 : 1};">
+                        <span style="min-width: 110px; font-size: 0.78rem; font-weight: 700; color: ${isCur ? '#34d399' : 'var(--text-secondary)'}; padding-top: 4px;">${formatPvpDate(f.start)} – ${formatPvpDate(f.end)}</span>
+                        <div style="display: flex; gap: 6px; flex-wrap: wrap; flex: 1;">${f.leagues.map(leagueChip).join('')}</div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `;
+        container.appendChild(sched);
+    }
+
+    // --- Encounters by rank ---
+    const encounters = Array.isArray(season.encounters) ? season.encounters : [];
+    if (encounters.length > 0) {
+        const encWrap = document.createElement('div');
+        encWrap.style.cssText = cardBox;
+        encWrap.innerHTML = `
+            <h4 class="rotation-subchapter-title" style="color: var(--accent-color); margin-bottom: 0.5rem;"><i class="fa-solid fa-paw"></i> Reward Encounters</h4>
+            ${season.encounterNote ? `<p style="margin: 0 0 1rem; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">${escapePvpHtml(season.encounterNote)}</p>` : ''}
+        `;
+        encounters.forEach(tier => {
+            const isNumeric = !isNaN(parseInt(tier.rank, 10));
+            const { theme, sub } = getPvpTierTheme(tier.rank);
+            const subEl = document.createElement('div');
+            subEl.className = `rotation-subchapter ${sub}`;
+            const count = (tier.guaranteed || []).length + (tier.possible || []).length;
+            subEl.innerHTML = `
+                <h4 class="rotation-subchapter-title">
+                    <i class="fa-solid ${isNumeric ? 'fa-ranking-star' : 'fa-medal'}"></i> ${isNumeric ? `Rank ${escapePvpHtml(tier.rank)}+` : escapePvpHtml(tier.rank)}
+                    <span style="font-size: 0.72rem; opacity: 0.7; text-transform: none; letter-spacing: 0;">(${count})</span>
+                </h4>
+                <div class="rotation-grid-layout"></div>
+            `;
+            const grid = subEl.querySelector('.rotation-grid-layout');
+            (tier.guaranteed || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, true)));
+            (tier.possible || []).forEach(p => grid.appendChild(buildPvpPokemonCard(p, theme, false)));
+            encWrap.appendChild(subEl);
+        });
+        container.appendChild(encWrap);
+    }
+
+    // --- Ranks & rewards table ---
+    const ranks = Array.isArray(season.ranks) ? season.ranks : [];
+    if (ranks.length > 0) {
+        const milestones = {};
+        (season.rankRewards || []).forEach(r => { milestones[String(r.rank)] = r.reward; });
+        const winDust = {};
+        (season.winStardust || []).forEach(r => String(r.rank).split('/').forEach(k => { winDust[k.trim()] = r; }));
+        const endDust = {};
+        ((season.endOfSeason && season.endOfSeason.stardust) || []).forEach(r => { endDust[String(r.rank)] = r.stardust; });
+        const fmtNum = v => (v && !isNaN(Number(v))) ? Number(v).toLocaleString('en-US') : (v || '—');
+        const encRanks = new Set(encounters.map(t => String(t.rank)));
+        const th = 'padding: 8px 10px; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-secondary); border-bottom: 1px solid var(--border-color); white-space: nowrap;';
+        const td = 'padding: 8px 10px; font-size: 0.82rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); white-space: nowrap;';
+
+        const rowsHtml = ranks.map(r => {
+            const key = String(r.rank);
+            const isNumeric = !isNaN(parseInt(key, 10));
+            const w = winDust[key];
+            let reward = '';
+            if (milestones[key]) {
+                reward = `<span style="color: var(--accent-color); font-weight: 700;"><i class="fa-solid fa-gift"></i> ${escapePvpHtml(milestones[key])}</span>`;
+            } else if (w) {
+                reward = `<i class="fa-solid fa-star" style="color: #a78bfa; font-size: 0.7rem;"></i> ${fmtNum(w.basic[0])} / ${fmtNum(w.basic[1])} <span style="color: var(--text-secondary); font-size: 0.75rem;">(Premium ${fmtNum(w.premium[0])} / ${fmtNum(w.premium[1])})</span>`;
+            }
+            return `<tr>
+                <td style="${td} font-weight: 800; color: ${isNumeric ? 'var(--text-primary)' : '#fb923c'};">${isNumeric ? 'Rank ' : ''}${escapePvpHtml(key)}${encRanks.has(key) ? ' <i class="fa-solid fa-paw" title="Unlocks new encounters" style="color: var(--accent-color); font-size: 0.7rem;"></i>' : ''}</td>
+                <td style="${td} color: var(--text-secondary);">${escapePvpHtml(r.requirement)}</td>
+                <td style="${td}">${reward || '—'}</td>
+                <td style="${td} text-align: right;">${fmtNum(endDust[key])}</td>
+            </tr>`;
+        }).join('');
+
+        const extras = [
+            ...((season.endOfSeason && season.endOfSeason.rewards) || []).map(x => `<i class="fa-solid fa-flag-checkered"></i> End of season: ${escapePvpHtml(x)}`),
+            (season.randomItems || []).length ? `<i class="fa-solid fa-box-open"></i> Mysterious Item pool: ${season.randomItems.map(escapePvpHtml).join(', ')}` : ''
+        ].filter(Boolean);
+
+        const rankBox = document.createElement('div');
+        rankBox.style.cssText = cardBox;
+        rankBox.innerHTML = `
+            <h4 class="rotation-subchapter-title" style="color: #a78bfa; margin-bottom: 0.75rem;"><i class="fa-solid fa-ranking-star"></i> Ranks &amp; Rewards</h4>
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead><tr>
+                        <th style="${th}">Rank</th>
+                        <th style="${th}">Requirement</th>
+                        <th style="${th}">Win Rewards (1st / 5th win)</th>
+                        <th style="${th} text-align: right;">End-of-Season Dust</th>
+                    </tr></thead>
+                    <tbody>${rowsHtml}</tbody>
+                </table>
+            </div>
+            ${extras.map(x => `<p style="margin: 0.75rem 0 0; font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;">${x}</p>`).join('')}
+        `;
+        container.appendChild(rankBox);
+    }
+
+    displayLastUpdatedTime();
+}

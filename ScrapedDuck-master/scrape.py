@@ -17,6 +17,7 @@ from scrapers.scrape_party import scrape_party
 from scrapers.scrape_pokedex import scrape_pokedex, scrape_types
 from scrapers.scrape_buddy import scrape_buddy_distances
 from scrapers.scrape_mega_attacks import scrape_mega_attacks
+from scrapers.scrape_pvp import scrape_pvp
 from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
@@ -134,6 +135,10 @@ def main():
     # 11. Scrape Mega Attacks
     mega_attacks = scrape_mega_attacks()
     save_json("megaAttacks.json", mega_attacks)
+
+    # 12. Scrape GO Battle League (latest season with Pokémon encounters)
+    pvp = scrape_pvp()
+    save_json("pvp.json", pvp)
 
     # Save metadata with timestamp so the client knows when data was updated
     metadata = {
