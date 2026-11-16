@@ -5142,3 +5142,20 @@ img[src*="sprites/pokemon"] {
     flex-wrap: wrap;
     gap: 6px;
 }
+
+/* Raid / Max cards (desktop): everything centred under the boss */
+@media (min-width: 769px) {
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-details-wrapper {
+        justify-content: center;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-cp-details,
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-weather-boosts,
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-counters-list {
+        justify-content: center !important;
+        text-align: center;
+    }
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-weather-boosts,
+    :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .raid-counters-list {
+        flex: 0 0 100%;
+    }
+}
