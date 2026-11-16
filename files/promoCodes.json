@@ -1,15 +1,5 @@
 [
     {
-        "title": "10th Anniversary – 500K Community Check-Ins",
-        "code": "CommunityMax10",
-        "description": "To celebrate 10 years of Pokémon GO, Trainers can redeem this promo code for 10 Max Mushrooms, unlocked by the community reaching 500,000 worldwide check-ins at community meetups. The code is expected to expire after Pokémon GO Wild Area ends, but the expiration date has not been confirmed.",
-        "status": "Active",
-        "expires": "Expires: ???",
-        "rewards": [
-            "Max Mushroom"
-        ]
-    },
-    {
         "title": "LEGO × Pokémon GO Berries",
         "code": "LEGOxPOKEMONGOxBERRIES",
         "description": "Promo code for free berries and Poké Balls tied to the Pokémon GO and LEGO Group partnership. Learn more here.",
@@ -30,6 +20,46 @@
         "expires": "Expires: January 15, 2027 at 11:59 PM",
         "rewards": [
             "adidas shoes"
+        ]
+    },
+    {
+        "title": "Pokémon Pikachu Classic Clog Avatar Item",
+        "code": "POKEMONGOxCROCSxELECTRIFYING",
+        "description": "Put a little spark in your step with the Pokémon Pikachu Classic Clog avatar item, inspired by the Pokémon Pikachu Crocs Classic Clog! Redeem this promo code in the Pokémon GO Web Store by Friday, December 31, 2027. Learn more here.",
+        "status": "Active",
+        "expires": "Expires: December 31, 2027 at 11:59 PM",
+        "rewards": [
+            "Pokémon Pikachu Classic Clog"
+        ]
+    },
+    {
+        "title": "Pokémon Gengar Classic Clog Avatar Item",
+        "code": "POKEMONGOxCROCSxENCHANTING",
+        "description": "Add a little mischief to your step with the Pokémon Gengar Classic Clog avatar item, inspired by the Pokémon Gengar Crocs Classic Clog! Redeem this promo code in the Pokémon GO Web Store by Friday, December 31, 2027. Learn more here.",
+        "status": "Active",
+        "expires": "Expires: December 31, 2027 at 11:59 PM",
+        "rewards": [
+            "Pokémon Gengar Classic Clog"
+        ]
+    },
+    {
+        "title": "Pokémon Jigglypuff Classic Platform Clog Avatar Item",
+        "code": "POKEMONGOxCROCSxMELODY",
+        "description": "Step out in style with the Pokémon Jigglypuff Classic Platform Clog avatar item, inspired by the Pokémon Jigglypuff Crocs Classic Platform Clog! Redeem this promo code in the Pokémon GO Web Store by Friday, December 31, 2027. Learn more here.",
+        "status": "Active",
+        "expires": "Expires: December 31, 2027 at 11:59 PM",
+        "rewards": [
+            "Pokémon Jigglypuff Classic Platform Clog"
+        ]
+    },
+    {
+        "title": "10th Anniversary – 500K Community Check-Ins",
+        "code": "CommunityMax10",
+        "description": "To celebrate 10 years of Pokémon GO, Trainers can redeem this promo code for 10 Max Mushrooms, unlocked by the community reaching 500,000 worldwide check-ins at community meetups. The code is expected to expire after Pokémon GO Wild Area ends, but the expiration date has not been confirmed.",
+        "status": "Expired",
+        "expires": "Expired",
+        "rewards": [
+            "Max Mushroom"
         ]
     },
     {

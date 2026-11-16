@@ -1,5 +1,571 @@
 [
     {
+        "name": "Pikachu",
+        "tier": "1-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "electric",
+                "image": "https://leekduck.com/assets/img/types/electric.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 493,
+                "max": 536
+            },
+            "boosted": {
+                "min": 616,
+                "max": 670
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "rainy",
+                "image": "https://leekduck.com/assets/img/weather/rainy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/PIKACHU",
+        "pokebattlerSlug": "PIKACHU",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 0.06,
+        "estimators": {
+            "000": 0.06,
+            "001": 0.05,
+            "010": 0.05,
+            "011": 0.05,
+            "100": 0.05,
+            "101": 0.04,
+            "110": 0.05,
+            "111": 0.04
+        },
+        "estimatedPlayers": 0.06,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 1,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EASY",
+                "ratio": 0.06
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.03
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.02
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.01
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.01
+            }
+        ]
+    },
+    {
+        "name": "Espeon Gofest 2024 Sscarf",
+        "tier": "3-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "psychic",
+                "image": "https://leekduck.com/assets/img/types/psychic.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1730,
+                "max": 1811
+            },
+            "boosted": {
+                "min": 2162,
+                "max": 2264
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/196.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/ESPEON_GOFEST_2024_SSCARF_FORM",
+        "pokebattlerSlug": "ESPEON_GOFEST_2024_SSCARF_FORM",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 0.7,
+        "estimators": {
+            "000": 0.7,
+            "001": 0.51,
+            "010": 0.58,
+            "011": 0.51,
+            "100": 0.47,
+            "101": 0.47,
+            "110": 0.47,
+            "111": 0.47
+        },
+        "estimatedPlayers": 0.7,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "TIGHT",
+                "ratio": 0.7
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.35
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.23
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.17
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.14
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.12
+            }
+        ]
+    },
+    {
+        "name": "Umbreon Gofest 2024 Mscarf",
+        "tier": "3-Star Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "dark",
+                "image": "https://leekduck.com/assets/img/types/dark.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1153,
+                "max": 1221
+            },
+            "boosted": {
+                "min": 1442,
+                "max": 1526
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/197.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/UMBREON_GOFEST_2024_MSCARF_FORM",
+        "pokebattlerSlug": "UMBREON_GOFEST_2024_MSCARF_FORM",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 0.75,
+        "estimators": {
+            "000": 0.75,
+            "001": 0.7,
+            "010": 0.68,
+            "011": 0.68,
+            "100": 0.58,
+            "101": 0.5,
+            "110": 0.58,
+            "111": 0.5
+        },
+        "estimatedPlayers": 0.75,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "TIGHT",
+                "ratio": 0.75
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.38
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.25
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.19
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.15
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.12
+            }
+        ]
+    },
+    {
+        "name": "Mega Beedrill",
+        "tier": "Mega Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "bug",
+                "image": "https://leekduck.com/assets/img/types/bug.png"
+            },
+            {
+                "name": "poison",
+                "image": "https://leekduck.com/assets/img/types/poison.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 994,
+                "max": 1054
+            },
+            "boosted": {
+                "min": 1242,
+                "max": 1318
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "rainy",
+                "image": "https://leekduck.com/assets/img/weather/rainy.png"
+            },
+            {
+                "name": "cloudy",
+                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10090.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/BEEDRILL_MEGA",
+        "pokebattlerSlug": "BEEDRILL_MEGA",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 0.93,
+        "estimators": {
+            "000": 0.93,
+            "001": 0.82,
+            "010": 0.78,
+            "011": 0.77,
+            "100": 0.66,
+            "101": 0.53,
+            "110": 0.66,
+            "111": 0.53
+        },
+        "estimatedPlayers": 0.93,
+        "verdict": "SOLOABLE",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "TIGHT",
+                "ratio": 0.93
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.47
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.31
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.23
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.19
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.15
+            }
+        ]
+    },
+    {
+        "name": "Mega Houndoom",
+        "tier": "Mega Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "dark",
+                "image": "https://leekduck.com/assets/img/types/dark.png"
+            },
+            {
+                "name": "fire",
+                "image": "https://leekduck.com/assets/img/types/fire.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1432,
+                "max": 1505
+            },
+            "boosted": {
+                "min": 1790,
+                "max": 1882
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
+            },
+            {
+                "name": "sunny",
+                "image": "https://leekduck.com/assets/img/weather/sunny.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10048.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/HOUNDOOM_MEGA",
+        "pokebattlerSlug": "HOUNDOOM_MEGA",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 1.21,
+        "estimators": {
+            "000": 1.21,
+            "001": 0.97,
+            "010": 1.05,
+            "011": 0.97,
+            "100": 0.88,
+            "101": 0.72,
+            "110": 0.88,
+            "111": 0.72
+        },
+        "estimatedPlayers": 1.21,
+        "verdict": "EASY DUO",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "HARD",
+                "ratio": 1.21
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.6
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.4
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.3
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.24
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.2
+            }
+        ]
+    },
+    {
+        "name": "Mega Manectric",
+        "tier": "Mega Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "electric",
+                "image": "https://leekduck.com/assets/img/types/electric.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 1267,
+                "max": 1337
+            },
+            "boosted": {
+                "min": 1585,
+                "max": 1672
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "rainy",
+                "image": "https://leekduck.com/assets/img/weather/rainy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10055.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/MANECTRIC_MEGA",
+        "pokebattlerSlug": "MANECTRIC_MEGA",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 1.26,
+        "estimators": {
+            "000": 1.26,
+            "001": 1.13,
+            "010": 1.08,
+            "011": 1.03,
+            "100": 0.97,
+            "101": 0.87,
+            "110": 0.97,
+            "111": 0.87
+        },
+        "estimatedPlayers": 1.26,
+        "verdict": "EASY DUO",
+        "trainersNeeded": 2,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "HARD",
+                "ratio": 1.26
+            },
+            {
+                "trainers": "2",
+                "status": "EASY",
+                "ratio": 0.63
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.42
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.32
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.25
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.21
+            }
+        ]
+    },
+    {
+        "name": "Mega Sableye",
+        "tier": "Mega Raids",
+        "canBeShiny": true,
+        "types": [
+            {
+                "name": "dark",
+                "image": "https://leekduck.com/assets/img/types/dark.png"
+            },
+            {
+                "name": "ghost",
+                "image": "https://leekduck.com/assets/img/types/ghost.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 789,
+                "max": 843
+            },
+            "boosted": {
+                "min": 986,
+                "max": 1054
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "fog",
+                "image": "https://leekduck.com/assets/img/weather/fog.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10066.png",
+        "pokebattlerUrl": "https://www.pokebattler.com/raids/SABLEYE_MEGA",
+        "pokebattlerSlug": "SABLEYE_MEGA",
+        "startDate": "2026-11-24T18:00:00+00:00",
+        "guideUrl": null,
+        "estimator": 1.66,
+        "estimators": {
+            "000": 1.66,
+            "001": 1.26,
+            "010": 1.4,
+            "011": 1.26,
+            "100": 1.2,
+            "101": 1.2,
+            "110": 1.2,
+            "111": 1.2
+        },
+        "estimatedPlayers": 1.66,
+        "verdict": "EASY TRIO",
+        "trainersNeeded": 3,
+        "trainerBoxes": [
+            {
+                "trainers": "1",
+                "status": "EXTREME",
+                "ratio": 1.66
+            },
+            {
+                "trainers": "2",
+                "status": "TIGHT",
+                "ratio": 0.83
+            },
+            {
+                "trainers": "3",
+                "status": "EASY",
+                "ratio": 0.55
+            },
+            {
+                "trainers": "4",
+                "status": "EASY",
+                "ratio": 0.41
+            },
+            {
+                "trainers": "5",
+                "status": "EASY",
+                "ratio": 0.33
+            },
+            {
+                "trainers": "6+",
+                "status": "EASY",
+                "ratio": 0.28
+            }
+        ]
+    },
+    {
         "name": "Normal Deoxys",
         "tier": "5-Star Raids",
         "canBeShiny": true,
