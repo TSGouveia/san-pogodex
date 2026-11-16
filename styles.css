@@ -5058,7 +5058,6 @@ img[src*="sprites/pokemon"] {
    INFOGRAPHIC button + modal (raid / max battle cards)
    ========================================================================== */
 .infographic-btn {
-    margin-left: 6px;
     font: inherit;
     font-size: 0.7rem;
     font-weight: 700;
@@ -5133,4 +5132,13 @@ img[src*="sprites/pokemon"] {
 .infographic-download.disabled {
     opacity: 0.45;
     pointer-events: none;
+}
+
+/* Counters + Infographic buttons: own line, centred (beats the desktop display:contents lift) */
+:is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-item .rotation-card-details-wrapper div.rotation-card-actions:has(> a[href]) {
+    display: flex !important;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
 }

@@ -5017,7 +5017,7 @@ function renderActiveRotations() {
                     pokebattlerBtn = `
                         <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
                             ${raid.pokebattlerUrl ? `
-                                <div style="display: flex; align-items: center;">
+                                <div class="rotation-card-actions" style="display: flex; align-items: center;">
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
@@ -5033,7 +5033,7 @@ function renderActiveRotations() {
                     pokebattlerBtn = `
                         <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
                             ${raid.pokebattlerUrl ? `
-                                <div style="display: flex; align-items: center;">
+                                <div class="rotation-card-actions" style="display: flex; align-items: center;">
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
@@ -5165,7 +5165,7 @@ function renderActiveRotations() {
                     let pokebattlerBtn = '';
                     if (boss.pokebattlerUrl) {
                         pokebattlerBtn = `
-                            <div style="margin-top: 0.4rem; display: flex; align-items: center;">
+                            <div class="rotation-card-actions" style="margin-top: 0.4rem; display: flex; align-items: center;">
                                 <a href="${boss.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                     <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                 </a>
@@ -6075,7 +6075,7 @@ function renderRaidSchedule() {
                     pokebattlerBtn = `
                         <div style="margin-top: 0.4rem; display: flex; flex-direction: column; gap: 4px;">
                             ${raid.pokebattlerUrl ? `
-                                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                <div class="rotation-card-actions" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
