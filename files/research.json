@@ -71,7 +71,7 @@
             {
                 "name": "Sobble",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm816.icon.png",
-                "shiny": false,
+                "shiny": true,
                 "min_cp": "434",
                 "max_cp": "470",
                 "combatPower": {
