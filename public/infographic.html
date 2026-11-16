@@ -395,6 +395,12 @@
   .cine-block .meter { margin:14px 0 9px; }
   .cine-block .lg { margin-bottom:10px; }
   .cine-block .c-est { font-size:13.5px; line-height:1.45; }
+  .c-gem { margin-top:6px; display:flex; align-items:center; gap:6px; color:#b98cff !important; }
+  .c-gem b { color:#d6b8ff !important; }
+  .poster:not(.dark) .c-gem { color:#7c3aed !important; }
+  .poster:not(.dark) .c-gem b { color:#5b21b6 !important; }
+  .gem-ic { flex:none; width:11px; height:11px; transform:rotate(45deg); border-radius:2px;
+    background:linear-gradient(135deg, #f0c8ff, #a259ff 55%, #6d28d9); box-shadow:0 0 6px rgba(162,89,255,.7); }
 
   .cine-boss { --ta:color-mix(in srgb, var(--t1) 75%, #fff); position:relative; height:460px; display:grid; place-items:center; }
   .cine-boss.shadow { --ta:#a259ff; }
@@ -535,8 +541,8 @@
   .poster .cards.hz .name.xlong { font-size:calc(min(20, var(--cw) * .066) * 1px) !important; }
   .poster .cards.hz .name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .tv-row { display:flex; align-items:center; gap:10px; }
-  .wxs2 { display:flex; gap:4px; }
-  .wxs2 img { width:28px; height:28px; border-radius:50%; background:rgba(0,0,0,.3); padding:3px; }
+  .wxs2 { display:flex; gap:6px; margin-left:auto; margin-top:-14px; margin-bottom:-14px; position:relative; top:10px; }
+  .wxs2 img { width:48px; height:48px; border-radius:50%; background:rgba(0,0,0,.3); padding:5px; }
   .shiny-tile { flex-direction:row !important; align-items:center; justify-content:flex-start !important; gap:10px; padding:6px 14px 6px 8px !important; }
   .shiny-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,213,74,.55)) drop-shadow(0 3px 4px rgba(0,0,0,.4)); margin:-6px 0; }
   .shiny-tile .fact.shiny { margin-top:2px; font-size:14px; }
@@ -658,6 +664,14 @@
   .sside b { margin:0 0 calc(var(--cw) * .045px) !important; }
   .cards.big .sside b { margin:0 0 16px !important; }
   .sside.self b { margin:0 !important; }
+  /* ===== hero strip: everything centred under the boss ===== */
+  .cine-strip { text-align:center; }
+  .tile { align-items:center; }
+  .tv-row { justify-content:center; }
+  .wxs2 { margin:-10px 0 !important; top:0 !important; }
+  .wxs2 img { width:40px; height:40px; padding:4px; }
+  .shiny-tile { justify-content:center !important; }
+  .shiny-tile > div { text-align:left; }
 </style>
 </head>
 <body>
@@ -1197,7 +1211,8 @@ function pbParse(id){
   let name = baseName;
   if (r.region) name = REGIONS[r.region][0] + ' ' + name;
   if (r.mega) name = (r.mega === 'PRIMAL' ? 'Primal ' : 'Mega ') + name + (r.megaSuffix && r.megaSuffix.length === 1 ? ' ' + r.megaSuffix : '');
-  if (r.form && !HIDDEN_FORMS.includes(r.form)) name += ' (' + titleCase(r.form) + ')';
+  if (r.form === 'ETERNAMAX') { name = 'Eternamax ' + name; r.giant = true; }
+  else if (r.form && !HIDDEN_FORMS.includes(r.form)) name += ' (' + titleCase(r.form) + ')';
   r.name = name;
   r.baseName = baseName;
   // PokeAPI candidates, most specific first
@@ -1256,6 +1271,8 @@ function tierLabel(t){
 }
 const norm = s => s.toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
 
+const displayId = (id, tier) => id === 'ETERNATUS' && /^RAID_LEVEL_6(_5)?_MAX/.test(tier) ? 'ETERNATUS_ETERNAMAX_FORM' : id;
+
 function bossOptions(raids, mode){
   const out = [], seen = new Set();
   for (const t of raids.tiers) {
@@ -1264,7 +1281,7 @@ function bossOptions(raids, mode){
     if ((mode === 'max') !== tier.includes('_MAX')) continue;
     const status = /_LEGACY$/.test(tier) ? 2 : /_FUTURE$/.test(tier) ? 1 : 0;
     for (const r of t.raids) {
-      const p = pbParse(r.pokemon);
+      const p = pbParse(displayId(r.pokemon, tier));
       const shown = (p.gmax ? 'Gigantamax ' : '') + (p.shadow ? 'Shadow ' : '') + p.name;
       const label = `${shown} — ${tierLabel(tier)}${status === 1 ? ' (upcoming)' : status === 2 ? ' (past)' : ''}`;
       if (seen.has(label)) continue; seen.add(label);
@@ -1476,7 +1493,7 @@ async function renderCounters(id){
     const list = defs.slice(0, 30);
     const minShown = Math.min(list.length, 3 + +$('nrows').value * per);
 
-    const bp = pbParse(boss.id);
+    const bp = pbParse(displayId(boss.id, boss.tier));
     status('Loading sprites…');
     const [bossInfo, ...infos] = await Promise.all([lookupSlugs(bp.slugs), ...list.map(d => lookupSlugs(d.p.slugs))]);
     if (id !== renderId) return;
@@ -1485,10 +1502,13 @@ async function renderCounters(id){
     bossTypes = bossInfo?.types || null;
     const th = currentTheme();
     const poster = setupPoster(th);
-    const bossName = (bp.gmax ? 'Gigantamax ' : tab === 'max' ? 'Dynamax ' : '') + (bp.shadow ? 'Shadow ' : '') + bp.name;
+    const bossName = (bp.gmax ? 'Gigantamax ' : tab === 'max' && !bp.giant ? 'Dynamax ' : '') + (bp.shadow ? 'Shadow ' : '') + bp.name;
     lastBossName = bossName;
     const weak = bossTypes ? weaknesses(bossTypes) : [];
-    const diff = tab === 'max' ? null : (E ? difficulty(E, 6) : null);
+    // Pokebattler's shadow raid numbers assume no Purified Gems; gems roughly halve players and faints -> assume gems are used
+    const shadowRaid = tab !== 'max' && !!E && (bp.shadow || /SHADOW/.test(boss.tier));
+    const dE = shadowRaid ? E / 2 : E;
+    const diff = tab === 'max' ? null : (dE ? difficulty(dE, 6) : null);
     // boss movesets (from the same Pokebattler response)
     const bossFast = [...new Set(atk.byMove.map(m => m.move1))].filter(m => m && m !== 'MOVE_NONE');
     const bossCharged = [...new Set(atk.byMove.map(m => m.move2))].filter(m => m && m !== 'MOVE_NONE');
@@ -1504,22 +1524,25 @@ async function renderCounters(id){
           `<span class="wk"><img crossorigin="anonymous" src="${TYPE_ICON(w.t)}" alt="${w.t}">${w.m > 2 ? '<b>×2</b>' : ''}</span>`).join('')}</div>` : '';
     const fmtD = ms => new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
     const upcoming = startMs && startMs > Date.now();
-    const when = startMs && endMs ? `${fmtD(startMs)} – ${fmtD(endMs)}` : startMs ? `From ${fmtD(startMs)}` : '';
+    const started = startMs && startMs <= Date.now();
+    const when = started && endMs ? fmtD(endMs)
+      : startMs && endMs ? `${fmtD(startMs)} – ${fmtD(endMs)}` : startMs && !started ? `From ${fmtD(startMs)}` : '';
+    const whenLab = started && endMs ? 'Expires' : upcoming ? 'Coming' : 'Available';
     const cpBlock = (when || pbEntry?.shiny) ? `<div class="cine-block">
-        ${when ? `<span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><div class="cine-big">${when}</div>` : ''}
+        ${when ? `<span class="c-lab">${whenLab}</span><div class="cine-big">${when}</div>` : ''}
         ${pbEntry?.shiny ? `<div class="fact shiny" style="margin-top:${when ? 10 : 0}px">${SPARKLE}Shiny available</div>` : ''}
       </div>` : '';
     const cid = catchId(boss.id);
     const cst = stats[cid] || stats[cid.replace(/_FORM$/, '')] || stats[cid + '_FORM'];
     const cp0 = pbParse(cid);
     const catchDiff = cp0.name !== bp.name; // e.g. Kyurem (White) -> Kyurem, Zacian (Crowned Sword) -> Zacian (Hero)
-    const catchInfo = catchDiff ? await lookupSlugs(cp0.slugs) : bossInfo;
+    const catchInfo = (catchDiff || bp.gmax || bp.mega || bp.giant) ? await lookupSlugs(cp0.slugs) : bossInfo;
     if (id !== renderId) return;
     const catchTypes = cst?.[3]?.length ? cst[3] : catchInfo?.types || bossTypes;
     const tierInfo = raids.tiers.find(t => t.tier === boss.tier)?.info;
     const wx = catchTypes ? weatherFor(catchTypes) : [];
     const tiles = [];
-    if (when) tiles.push(`<div class="tile"><span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><b class="tv">${when}</b></div>`);
+    if (when) tiles.push(`<div class="tile"><span class="c-lab">${whenLab}</span><b class="tv">${when}</b></div>`);
     const shinySprite = catchInfo?.sprite ? catchInfo.sprite.replace('/other/home/', '/other/home/shiny/').replace('/official-artwork/', '/official-artwork/shiny/') : null;
     if (cst) tiles.push(`<div class="tile"><span class="c-lab">Perfect CP</span><b class="tv">${cpAt(cst, CPM20, 15)}</b><span class="ts">100% IV catch${catchDiff ? ' · as ' + cp0.name : ''}</span></div>`);
     if (cst && wx.length) tiles.push(`<div class="tile"><span class="c-lab">Weather boosted</span><div class="tv-row"><b class="tv">${cpAt(cst, CPM25, 15)}</b><span class="wxs2">${wx.map(w =>
@@ -1532,9 +1555,14 @@ async function renderCounters(id){
         <div class="c-verdict">${diff.verdict}</div>
         <div class="meter">${diff.boxes.map(b => `<div class="pm" style="--bc:${b.c}">${PERSON}<span>${b.n}</span></div>`).join('')}</div>
         <div class="lg"><span><i style="background:#22c55e"></i>Easy</span><span><i style="background:#eab308"></i>Tight</span><span><i style="background:#f97316"></i>Hard</span><span><i style="background:#ef4444"></i>Extreme</span></div>
-        <div class="c-est"><b>${diff.needed}</b> trainer${diff.needed > 1 ? 's' : ''} recommended · Estimator <b>${E < 10 ? E.toFixed(2) : E.toFixed(0)}</b></div>
+        <div class="c-est"><b>${diff.needed}</b> trainer${diff.needed > 1 ? 's' : ''} recommended · Estimator <b>${dE < 10 ? dE.toFixed(2) : dE.toFixed(0)}</b></div>
+        ${shadowRaid ? `<div class="c-est c-gem"><span class="gem-ic"></span>Using Purified Gems</div>` : ''}
       </section>` : '';
-    let leftBlocks, rightBlocks = [diffBlock].filter(Boolean);
+    // Max Battles: no difficulty block -> show the boss's attack pool (Pokebattler doesn't split fast / charged here)
+    const bossMoves = [...new Set([...bossFast, ...bossCharged])];
+    const movesBlock = tab === 'max' && bossMoves.length ? `<div class="cine-block cine-moves two">
+        <span class="c-lab">Boss attacks</span>${bossMoves.map(moveHTML).join('')}</div>` : '';
+    let leftBlocks, rightBlocks = [diffBlock || movesBlock].filter(Boolean);
     if (rightBlocks.length) leftBlocks = [`<div class="cine-block">${typesHTML}<div style="height:12px"></div>${weakHTML}</div>`];
     else { leftBlocks = [`<div class="cine-block">${typesHTML}</div>`]; rightBlocks = weakHTML ? [`<div class="cine-block">${weakHTML}</div>`] : []; }
 
