@@ -540,6 +540,8 @@
   .shiny-tile { flex-direction:row !important; align-items:center; justify-content:flex-start !important; gap:10px; padding:6px 14px 6px 8px !important; }
   .shiny-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,213,74,.55)) drop-shadow(0 3px 4px rgba(0,0,0,.4)); margin:-6px 0; }
   .shiny-tile .fact.shiny { margin-top:2px; font-size:14px; }
+  .shiny-tile.locked .shiny-img { filter:grayscale(1) brightness(.55) drop-shadow(0 3px 4px rgba(0,0,0,.4)); opacity:.8; }
+  .shiny-tile.locked .fact.shiny { color:var(--muted); }
   /* wide cards: grid so the source pill gets a full-width row */
   .poster .cards.hz .card { display:grid !important; grid-template-columns:auto minmax(0, 1fr); align-items:center; column-gap:calc(var(--cw) * .05px); }
   .poster .cards.hz .card > .src { grid-column:1 / -1; justify-self:start; margin-top:calc(var(--cw) * .035px); font-size:calc(min(15, var(--cw) * .052) * 1px); }
@@ -1171,7 +1173,7 @@ const SPECIAL_NAMES = { HO_OH:'Ho-Oh', PORYGON_Z:'Porygon-Z', MR_MIME:'Mr. Mime'
 const SLUG_FIX = { NIDORAN_FEMALE:'nidoran-f', NIDORAN_MALE:'nidoran-m', FARFETCHD:'farfetchd', SIRFETCHD:'sirfetchd', FLABEBE:'flabebe' };
 const REGIONS = { ALOLA:['Alolan','alola'], GALARIAN:['Galarian','galar'], GALAR:['Galarian','galar'], HISUIAN:['Hisuian','hisui'],
   HISUI:['Hisuian','hisui'], PALDEA:['Paldean','paldea'], PALDEAN:['Paldean','paldea'] };
-const HIDDEN_FORMS = ['NORMAL','STANDARD','ORDINARY','INCARNATE','ALTERED','LAND','ARIA','RED_STRIPED','OVERCAST','PLANT','WEST','SPRING'];
+const HIDDEN_FORMS = ['NORMAL','STANDARD','ORDINARY','INCARNATE','ALTERED','LAND','ARIA','RED_STRIPED','OVERCAST','PLANT','WEST','SPRING','HERO'];
 const titleCase = s => s.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
 
 function pbParse(id){
@@ -1290,18 +1292,38 @@ async function fillBossList(){
 
 
 // ---------- GO stats (Pokebattler) for CP maths ----------
-let pbStats = JSON.parse(safeGet('pbStats') || 'null');
+let pbStats = JSON.parse(safeGet('pbStats2') || 'null');
 async function getStats(){
   if (pbStats) return pbStats;
   const d = await (await fetch(PB + '/pokemon')).json();
   pbStats = {};
-  for (const m of d.pokemon) if (m.stats) pbStats[m.pokemonId] = [m.stats.baseAttack, m.stats.baseDefense, m.stats.baseStamina];
-  safeSet('pbStats', JSON.stringify(pbStats));
+  const ty = t => t && t.replace(/^POKEMON_TYPE_/, '').toLowerCase();
+  for (const m of d.pokemon) if (m.stats) pbStats[m.pokemonId] = [m.stats.baseAttack, m.stats.baseDefense, m.stats.baseStamina, [ty(m.type), ty(m.type2)].filter(Boolean)];
+  safeSet('pbStats2', JSON.stringify(pbStats));
   return pbStats;
 }
 const CPM20 = 0.5974, CPM25 = 0.667934;
 const cpAt = (st, cpm, iv) => Math.max(10, Math.floor((st[0] + iv) * Math.sqrt(st[1] + iv) * Math.sqrt(st[2] + iv) * cpm * cpm / 10));
-const catchId = id => id.replace(/_SHADOW_FORM$/, '').replace(/_GIGANTAMAX$/, '').replace(/^DYNAMAX_/, '').replace(/_(MEGA|PRIMAL)(_[A-Z]+)?$/, '');
+// battle-only forms -> the form you actually catch after the raid / Max Battle
+const CATCH_FORM = [
+  [/^KYUREM_(BLACK|WHITE)(_FORM)?$/, 'KYUREM'],
+  [/^ZACIAN(_CROWNED_SWORD)?(_FORM)?$/, 'ZACIAN_HERO_FORM'],
+  [/^ZAMAZENTA(_CROWNED_SHIELD)?(_FORM)?$/, 'ZAMAZENTA_HERO_FORM'],
+  [/^NECROZMA_(DUSK_MANE|DAWN_WINGS|ULTRA)(_FORM)?$/, 'NECROZMA'],
+  [/^CALYREX_(ICE|SHADOW)_RIDER(_FORM)?$/, 'CALYREX'],
+  [/^ETERNATUS_ETERNAMAX(_FORM)?$/, 'ETERNATUS'],
+  [/^DARMANITAN(_GALARIAN)?_ZEN(_FORM)?$/, 'DARMANITAN$1_STANDARD_FORM'],
+  [/^AEGISLASH(_BLADE)?(_FORM)?$/, 'AEGISLASH_SHIELD_FORM'],
+  [/^MELOETTA_PIROUETTE(_FORM)?$/, 'MELOETTA_ARIA_FORM'],
+  [/^WISHIWASHI_SCHOOL(_FORM)?$/, 'WISHIWASHI_SOLO_FORM'],
+  [/^MORPEKO_HANGRY(_FORM)?$/, 'MORPEKO_FULL_BELLY_FORM'],
+  [/^MINIOR_(BLUE|GREEN|INDIGO|ORANGE|RED|VIOLET|YELLOW)(_FORM)?$/, 'MINIOR_METEOR_$1_FORM'],
+];
+const catchId = id => {
+  const s = id.replace(/_SHADOW_FORM$/, '').replace(/_GIGANTAMAX$/, '').replace(/^DYNAMAX_/, '').replace(/_(MEGA|PRIMAL)(_[A-Z]+)?$/, '');
+  for (const [re, to] of CATCH_FORM) if (re.test(s)) return s.replace(re, to);
+  return s;
+};
 const WEATHER = [
   ['Sunny', 'clearDay', ['grass','ground','fire']], ['Rainy', 'rainDay', ['water','electric','bug']],
   ['Partly cloudy', 'partlyCloudyDay', ['normal','rock']], ['Cloudy', 'overcastDay', ['fairy','fighting','poison']],
@@ -1375,6 +1397,7 @@ function difficulty(E, maxN){
   return { verdict, vc, needed: Math.max(1, Math.ceil(E * 1.5)), boxes };
 }
 
+const LOCK = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z"/></svg>';
 const SPARKLE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z"/></svg>';
 const PERSON = '<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="4.5" r="3.2"/><path d="M1.5 15c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z"/></svg>';
 function orbHTML(info, size, shadow){
@@ -1486,16 +1509,23 @@ async function renderCounters(id){
         ${when ? `<span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><div class="cine-big">${when}</div>` : ''}
         ${pbEntry?.shiny ? `<div class="fact shiny" style="margin-top:${when ? 10 : 0}px">${SPARKLE}Shiny available</div>` : ''}
       </div>` : '';
-    const cst = stats[catchId(boss.id)] || stats[catchId(boss.id).replace(/_FORM$/, '')];
+    const cid = catchId(boss.id);
+    const cst = stats[cid] || stats[cid.replace(/_FORM$/, '')] || stats[cid + '_FORM'];
+    const cp0 = pbParse(cid);
+    const catchDiff = cp0.name !== bp.name; // e.g. Kyurem (White) -> Kyurem, Zacian (Crowned Sword) -> Zacian (Hero)
+    const catchInfo = catchDiff ? await lookupSlugs(cp0.slugs) : bossInfo;
+    if (id !== renderId) return;
+    const catchTypes = cst?.[3]?.length ? cst[3] : catchInfo?.types || bossTypes;
     const tierInfo = raids.tiers.find(t => t.tier === boss.tier)?.info;
-    const wx = bossTypes ? weatherFor(bossTypes) : [];
+    const wx = catchTypes ? weatherFor(catchTypes) : [];
     const tiles = [];
     if (when) tiles.push(`<div class="tile"><span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><b class="tv">${when}</b></div>`);
-    const shinySprite = bossInfo?.sprite ? bossInfo.sprite.replace('/other/home/', '/other/home/shiny/').replace('/official-artwork/', '/official-artwork/shiny/') : null;
-    if (cst) tiles.push(`<div class="tile"><span class="c-lab">Perfect CP</span><b class="tv">${cpAt(cst, CPM20, 15)}</b><span class="ts">100% IV catch</span></div>`);
+    const shinySprite = catchInfo?.sprite ? catchInfo.sprite.replace('/other/home/', '/other/home/shiny/').replace('/official-artwork/', '/official-artwork/shiny/') : null;
+    if (cst) tiles.push(`<div class="tile"><span class="c-lab">Perfect CP</span><b class="tv">${cpAt(cst, CPM20, 15)}</b><span class="ts">100% IV catch${catchDiff ? ' · as ' + cp0.name : ''}</span></div>`);
     if (cst && wx.length) tiles.push(`<div class="tile"><span class="c-lab">Weather boosted</span><div class="tv-row"><b class="tv">${cpAt(cst, CPM25, 15)}</b><span class="wxs2">${wx.map(w =>
       `<img crossorigin="anonymous" src="${weatherIcon(w[1])}" alt="${w[0]}">`).join('')}</span></div><span class="ts">${wx.map(w => w[0]).join(' · ')}</span></div>`);
     if (pbEntry?.shiny && shinySprite) tiles.push(`<div class="tile shiny-tile"><img class="shiny-img" crossorigin="anonymous" src="${shinySprite}" alt=""><div><span class="c-lab">Shiny</span><span class="fact shiny">${SPARKLE}Available</span></div></div>`);
+    else if (catchInfo?.sprite) tiles.push(`<div class="tile shiny-tile locked"><img class="shiny-img" crossorigin="anonymous" src="${catchInfo.sprite}" alt=""><div><span class="c-lab">Shiny</span><span class="fact shiny">${LOCK}Locked</span></div></div>`);
     const stripHTML = tiles.length ? `<div class="cine-strip" style="--n:${tiles.length}">${tiles.join('')}</div>` : '';
     const diffBlock = diff ? `<section class="c-diff cine-block" style="--vc:${diff.vc}">
         <span class="c-lab">Difficulty</span>
@@ -1729,7 +1759,8 @@ $('export').addEventListener('click', async () => {
 
 const EMBED = new URLSearchParams(location.search);
 if (EMBED.get('embed')) {
-  // ?embed=1&tab=raid|max&boss=<Pokebattler id or name> -> render, export and post the PNG to the parent
+  // ?embed=1&tab=raid|max&boss=<Pokebattler id or name>[&legendary=0|1&shadow=0|1&mega=0|1]
+  // -> render, export and post the PNG to the parent page
   document.documentElement.classList.add('embed');
   const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
   headerImg = null;
