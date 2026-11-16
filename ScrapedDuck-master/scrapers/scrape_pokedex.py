@@ -284,15 +284,20 @@ def scrape_pokedex():
 
         unreleased_lower = {name.lower() for name in scraped_unreleased}
 
+        # Fandom is the source of truth for released Gigantamax; pokemon-go-api's
+        # flag is only kept if the Fandom request fails.
         released_gmax = scrape_released_gmax_from_fandom()
-        gmax_added = []
-        for entry in pokedex_data:
-            eng = (entry.get("names", {}).get("English") or "").lower()
-            if eng in released_gmax and entry.get("id") == entry.get("formId") and not entry.get("hasGigantamaxEvolution"):
-                entry["hasGigantamaxEvolution"] = True
-                gmax_added.append(entry.get("id"))
-        if gmax_added:
-            print(f"  -> Marked as Gigantamax from Fandom: {', '.join(gmax_added)}")
+        if released_gmax:
+            gmax_ids = []
+            for entry in pokedex_data:
+                eng = (entry.get("names", {}).get("English") or "").lower()
+                is_gmax = eng in released_gmax and entry.get("id") == entry.get("formId")
+                entry["hasGigantamaxEvolution"] = is_gmax
+                if is_gmax:
+                    gmax_ids.append(entry.get("id"))
+            print(f"  -> Gigantamax from Fandom ({len(gmax_ids)}): {', '.join(gmax_ids)}")
+        else:
+            print("  -> Keeping pokemon-go-api Gigantamax flags (Fandom unavailable)")
 
         # Tag entries with unreleased boolean, releaseDate, and calculate standard CP benchmarks
         unreleased_flagged_count = 0
