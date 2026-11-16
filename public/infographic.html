@@ -1,0 +1,1753 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoGo Tier List Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+  :root { --ui-bg:#0f1115; --ui-panel:#181b22; --ui-line:#2a2f3a; --ui-text:#e9ecf2; --ui-muted:#8f97a8; --accent:#c2185b; }
+  * { box-sizing: border-box; }
+  [hidden] { display:none !important; }
+  html.embed .editor { display:none; }
+  html.embed .app { grid-template-columns:1fr; height:auto; }
+  html.embed .stage { padding:0; overflow:visible; }
+  body { margin:0; background:var(--ui-bg); color:var(--ui-text); font-family:Nunito, system-ui, sans-serif; }
+  .app { display:grid; grid-template-columns:360px 1fr; height:100vh; }
+  @media (max-width:900px){ .app{ grid-template-columns:1fr; height:auto; } }
+
+  /* ---------- Editor ---------- */
+  .editor { background:var(--ui-panel); border-right:1px solid var(--ui-line); padding:20px; display:flex; flex-direction:column; gap:14px; overflow-y:auto; }
+  .editor h1 { font-size:18px; margin:0; font-weight:900; }
+  .editor label { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ui-muted); display:block; margin-bottom:6px; font-weight:800; }
+  .editor input, .editor textarea, .editor select { width:100%; background:#0f1115; border:1px solid var(--ui-line); color:var(--ui-text); border-radius:10px; padding:10px 12px; font:inherit; font-size:14px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .editor textarea { flex:1; min-height:300px; resize:vertical; font-family:ui-monospace, Consolas, monospace; font-size:13px; line-height:1.5; }
+  .check { display:flex; align-items:center; gap:8px; font-size:14px; }
+  .check input { width:auto; }
+  .hint { font-size:12px; color:var(--ui-muted); line-height:1.55; }
+  .hint code { background:#0f1115; padding:1px 5px; border-radius:4px; color:var(--ui-text); }
+  .btn { background:var(--accent); color:#fff; border:0; border-radius:10px; padding:12px; font:inherit; font-weight:900; font-size:15px; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:wait; }
+  .status { font-size:12px; color:var(--ui-muted); min-height:16px; }
+  .status.err { color:#ff8080; }
+
+  /* ---------- Preview ---------- */
+  .stage { overflow:auto; padding:24px; display:flex; justify-content:center; align-items:flex-start; }
+  .scaler { transform-origin:top left; }
+
+  /* ---------- Poster ---------- */
+  .poster { width:1080px; background:linear-gradient(180deg, var(--bg1, #eef1f6), var(--bg2, #eef1f6)); font-family:Nunito, sans-serif; color:#1f2430; overflow:hidden; display:flex; flex-direction:column; }
+
+  .p-head { position:relative; overflow:hidden; padding:36px 44px 32px; color:#fff; background:linear-gradient(120deg, var(--h1), var(--h2)); }
+  .p-head::before, .p-head::after { content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.10); }
+  .p-head::before { width:380px; height:380px; right:-110px; top:-190px; }
+  .p-head::after  { width:220px; height:220px; right:150px; top:50px; background:rgba(255,255,255,.07); }
+  .p-eyebrow { position:relative; display:inline-block; background:rgba(255,255,255,.2); padding:5px 14px; border-radius:99px; font-weight:900; font-size:15px; letter-spacing:.12em; text-transform:uppercase; }
+  .p-title { position:relative; font-size:68px; line-height:1; font-weight:900; margin:12px 0 8px; text-shadow:0 3px 0 rgba(0,0,0,.12); }
+  .p-sub { position:relative; font-size:21px; font-weight:700; opacity:.9; max-width:800px; }
+
+  /* Header image */
+  .p-img { display:block; width:100%; height:calc(var(--ih) * 1px); object-fit:cover; object-position:var(--ipos, center); }
+  .p-head.has-img::before, .p-head.has-img::after { display:none; }
+  .p-head.behind { min-height:calc(var(--ih) * 1px); display:flex; flex-direction:column; justify-content:flex-end; align-items:flex-start; }
+  .p-head.behind .bgimg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:var(--ipos, center); }
+  .p-head.behind .shade { position:absolute; inset:0;
+    background:linear-gradient(0deg, color-mix(in srgb, var(--h2) 92%, transparent) 0%, color-mix(in srgb, var(--h2) 45%, transparent) 30%, transparent 55%); }
+
+  .p-body { flex:1; padding:24px 32px 4px; display:flex; flex-direction:column; justify-content:center; gap:14px; }
+
+  /* Tier row: colored label on the left, cards on the right */
+  .tier { display:flex; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 3px 0 var(--shade, #dde2ea), 0 8px 20px rgba(30,40,60,.06); }
+  .tier-label { width:96px; flex-shrink:0; background:var(--tc); color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0; }
+  .tier-label b { font-size:44px; font-weight:900; line-height:1; text-shadow:0 2px 0 rgba(0,0,0,.15); }
+  .tier-label small { font-size:12px; font-weight:900; letter-spacing:.2em; margin-top:4px; opacity:.85; }
+  .cards { flex:1; display:flex; flex-wrap:wrap; justify-content:center; align-content:center; gap:10px; padding:14px; }
+
+  /* Compact card — sizes derive from --cw (card width in px, computed in JS) */
+  .card { width:calc(var(--cw) * 1px); position:relative; text-align:center; background:#f5f7fa; border:2px solid #e8ecf2; border-radius:16px; padding:calc(var(--cw) * .07px) 4px calc(var(--cw) * .08px); }
+  .orb { --ta:color-mix(in srgb, var(--t1) 75%, #fff); width:calc(var(--cw) * .74px); height:calc(var(--cw) * .74px); margin:0 auto; border-radius:50%; position:relative;
+    background:radial-gradient(circle at 50% 40%, #fff 0%, color-mix(in srgb, var(--t1) 30%, #fff) 72%);
+    border:3px solid color-mix(in srgb, var(--t1) 55%, #fff); }
+  .orb img.mon { position:absolute; left:-12%; top:-16%; width:124%; height:124%; object-fit:contain; filter:drop-shadow(0 3px 3px rgba(0,0,0,.2)); }
+  .orb .ph { position:absolute; inset:0; display:grid; place-items:center; font-size:calc(var(--cw) * .3px); font-weight:900; color:#b6bdc9; }
+  .ticons { position:absolute; top:calc(var(--cw) * .05px); left:calc(var(--cw) * .05px); display:flex; flex-direction:column; gap:3px; z-index:2; }
+  .ticons img { width:calc(var(--cw) * .24px); height:calc(var(--cw) * .24px); display:block; filter:drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
+  .name { font-weight:900; font-size:calc(min(19, var(--cw) * .14) * 1px); margin-top:calc(var(--cw) * .06px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .note { position:absolute; top:6px; right:6px; font-size:calc(min(12, var(--cw) * .1) * 1px); font-weight:900; background:#c2185b; color:#fff; padding:2px 6px; border-radius:7px; z-index:2; }
+
+  /* Big cards for tiers with few Pokémon */
+  .cards.big .card { display:flex; align-items:center; gap:20px; text-align:left; padding:14px 22px; }
+  .cards.big .orb { width:130px; height:130px; margin:0; flex-shrink:0; }
+  .cards.big .ticons { position:static; flex-direction:row; margin-top:8px; }
+  .cards.big .ticons img { width:36px; height:36px; }
+  .cards.big .name { font-size:30px; margin-top:0; }
+  .cards.big .note { position:static; display:inline-block; margin-top:8px; font-size:13px; padding:3px 8px; }
+  .cards.big .info { min-width:0; }
+
+  .p-foot { display:flex; justify-content:space-between; align-items:center; padding:16px 36px 22px; font-size:17px; font-weight:800; color:var(--foot, #7a8396); }
+  .p-foot b { color:#1f2430; }
+
+  /* Dark poster */
+  .poster.dark { background:linear-gradient(180deg, var(--dbg1, #1a1d27), var(--dbg2, #0e1016)); color:#eef1f6; }
+  .poster.dark .tier { background:rgba(255,255,255,.05); box-shadow:inset 0 0 0 1px rgba(255,255,255,.07), 0 3px 0 var(--dshade, rgba(0,0,0,.35)); }
+  .poster.dark .card { background:rgba(255,255,255,.05); border-color:rgba(255,255,255,.08); }
+  .poster.dark .orb { background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--t1) 55%, #2a2f3d) 0%, color-mix(in srgb, var(--t1) 22%, #151821) 75%);
+    border-color:color-mix(in srgb, var(--t1) 65%, #000); }
+  .poster.dark .orb .ph { color:#5a6170; }
+  .poster.dark .p-foot { color:rgba(255,255,255,.55); }
+  .poster.dark .p-foot b { color:#fff; }
+
+  /* ===== Shine & glow ===== */
+  .poster { position:relative; }
+  .poster > * { position:relative; z-index:1; }
+  .poster.dark {
+    background:
+      radial-gradient(700px 600px at 0% 25%, color-mix(in srgb, var(--h1) 38%, transparent), transparent 65%),
+      radial-gradient(800px 700px at 100% 55%, color-mix(in srgb, var(--h2) 34%, transparent), transparent 65%),
+      radial-gradient(700px 500px at 20% 100%, color-mix(in srgb, var(--h1) 28%, transparent), transparent 65%),
+      linear-gradient(180deg, var(--dbg1, color-mix(in srgb, var(--h1) 20%, #0d0a10)), var(--dbg2, color-mix(in srgb, var(--h2) 12%, #08060a)));
+  }
+  .poster.dark::before { /* star field */
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.55;
+    background-image:
+      radial-gradient(1.6px 1.6px at 23px 41px, #fff, transparent),
+      radial-gradient(1px 1px at 97px 133px, #fff, transparent),
+      radial-gradient(2.2px 2.2px at 161px 72px, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.2px 1.2px at 211px 187px, #fff, transparent),
+      radial-gradient(1.4px 1.4px at 58px 222px, rgba(255,255,255,.7), transparent),
+      radial-gradient(2px 2px at 140px 260px, rgba(255,255,255,.5), transparent);
+    background-size:260px 280px;
+  }
+
+  /* header: glossy sweep + glow */
+  .p-head { background:
+      linear-gradient(115deg, transparent 35%, rgba(255,255,255,.16) 48%, transparent 62%),
+      linear-gradient(120deg, var(--h1), var(--h2));
+    box-shadow:0 10px 40px -10px color-mix(in srgb, var(--h1) 80%, transparent); z-index:2; }
+  .p-head.behind { background:none; }
+  .p-title { text-shadow:0 0 28px rgba(255,255,255,.35), 0 4px 0 rgba(0,0,0,.18); }
+  .p-head::after { box-shadow:none; }
+  .p-img { box-shadow:0 0 0 0 transparent; }
+
+  /* tier label: glossy pill */
+  .tier-label { position:relative; overflow:hidden;
+    background:linear-gradient(165deg, color-mix(in srgb, var(--tc) 55%, #fff) 0%, var(--tc) 42%, color-mix(in srgb, var(--tc) 70%, #000) 100%); }
+  .tier-label::after { content:""; position:absolute; left:0; right:0; top:0; height:45%;
+    background:linear-gradient(180deg, rgba(255,255,255,.35), rgba(255,255,255,0)); }
+  .tier-label b { position:relative; font-size:50px; text-shadow:0 0 18px rgba(255,255,255,.55), 0 3px 0 rgba(0,0,0,.22); }
+  .tier-label small { position:relative; }
+
+  /* dark tier panel: tinted by tier colour + glow */
+  .poster.dark .tier {
+    background:linear-gradient(90deg, color-mix(in srgb, var(--tc) 20%, transparent) 0%, rgba(255,255,255,.045) 35%, rgba(255,255,255,.03) 100%);
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--tc) 45%, transparent),
+               0 0 28px -8px color-mix(in srgb, var(--tc) 70%, transparent),
+               0 4px 0 var(--dshade, rgba(0,0,0,.35));
+  }
+
+  /* cards: glass + sheen + glowing orb */
+  .card::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background:linear-gradient(135deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 38%); }
+  .poster.dark .card {
+    background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.025));
+    border-color:color-mix(in srgb, var(--t1) 38%, rgba(255,255,255,.08));
+    box-shadow:0 6px 16px -6px rgba(0,0,0,.5);
+  }
+  .poster.dark .orb { box-shadow:0 0 22px -2px color-mix(in srgb, var(--t1) 75%, transparent),
+    inset 0 -8px 14px rgba(0,0,0,.35), inset 0 5px 10px rgba(255,255,255,.22); }
+  .poster.dark .name { text-shadow:0 2px 6px rgba(0,0,0,.6); }
+  .orb img.mon { z-index:1; }
+
+  /* top tier: light rays + stronger glow */
+  .tier.top { box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--tc) 70%, #fff),
+    0 0 50px -6px color-mix(in srgb, var(--tc) 85%, transparent), 0 4px 0 var(--dshade, rgba(0,0,0,.35)) !important; }
+  .tier.top .tier-label b { font-size:62px; }
+  .cards.big .card { background:
+      repeating-conic-gradient(from 0deg at 87px 50%, color-mix(in srgb, var(--t1) 30%, transparent) 0deg 5deg, transparent 5deg 15deg),
+      radial-gradient(260px 200px at 87px 50%, color-mix(in srgb, var(--t1) 45%, transparent), transparent 70%),
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02)) !important;
+    border-color:color-mix(in srgb, var(--t1) 60%, #fff) !important; }
+  .poster:not(.dark) .cards.big .card { background:
+      repeating-conic-gradient(from 0deg at 87px 50%, color-mix(in srgb, var(--t1) 18%, transparent) 0deg 5deg, transparent 5deg 15deg),
+      radial-gradient(260px 200px at 87px 50%, color-mix(in srgb, var(--t1) 30%, transparent), transparent 70%), #fff !important; }
+  .cards.big .name { font-size:34px; }
+
+  /* type icons sit on the bottom edge of the orb (not over the face) */
+  .orb .ticons { top:auto; left:50%; transform:translateX(-50%); bottom:calc(var(--cw) * -.1px); flex-direction:row; gap:2px; z-index:3; }
+  .cards:not(.big) .name { margin-top:calc(var(--cw) * .13px); }
+
+  /* ===== Dynamax effects ===== */
+  .poster.dyn::after { /* red energy rays + clouds */
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(500px 260px at 8% 38%, color-mix(in srgb, var(--aura) 22%, transparent), transparent 70%),
+      radial-gradient(520px 300px at 95% 70%, color-mix(in srgb, var(--aura) 20%, transparent), transparent 70%),
+      radial-gradient(600px 260px at 50% 100%, color-mix(in srgb, var(--aura) 25%, transparent), transparent 70%);
+    -webkit-mask-image:linear-gradient(180deg, #000 0%, rgba(0,0,0,.6) 40%, #000 100%);
+            mask-image:linear-gradient(180deg, #000 0%, rgba(0,0,0,.6) 40%, #000 100%);
+  }
+  .poster.dyn .p-head { box-shadow:0 4px 0 var(--aura), 0 10px 50px -4px color-mix(in srgb, var(--aura) 75%, transparent); }
+  .poster.dyn .p-img { box-shadow:none; }
+  .poster.dyn .p-title { text-shadow:0 0 30px color-mix(in srgb, var(--aura) 80%, transparent), 0 0 8px rgba(255,255,255,.4), 0 4px 0 rgba(0,0,0,.2); }
+  .poster.dyn .p-eyebrow { padding-left:34px; }
+  .poster.dyn .p-eyebrow::before { content:""; position:absolute; left:13px; top:50%; width:12px; height:12px; margin-top:-6px; border-radius:50%;
+    background:var(--aura); box-shadow:0 0 0 3px rgba(255,255,255,.35), 0 0 14px 4px color-mix(in srgb, var(--aura) 90%, transparent); }
+  /* the iconic red Dynamax aura around each Pokémon */
+  .poster.dyn .orb img.mon { filter:drop-shadow(0 0 1.5px var(--ta)) drop-shadow(0 0 7px color-mix(in srgb, var(--ta) 85%, transparent)) drop-shadow(0 3px 3px rgba(0,0,0,.3)); }
+  .poster.dyn .orb { border-color:color-mix(in srgb, var(--ta) 65%, var(--t1));
+    box-shadow:0 0 0 2px color-mix(in srgb, var(--ta) 25%, transparent), 0 0 22px -2px color-mix(in srgb, var(--ta) 80%, transparent), inset 0 -8px 14px rgba(0,0,0,.35), inset 0 5px 10px rgba(255,255,255,.22); }
+  .poster.dyn .cards.big .orb { box-shadow:0 0 0 3px color-mix(in srgb, var(--ta) 30%, transparent), 0 0 46px 4px color-mix(in srgb, var(--ta) 85%, transparent), inset 0 -10px 18px rgba(0,0,0,.3), inset 0 6px 12px rgba(255,255,255,.3) !important; }
+  .poster.dyn .cards.big .card { border-color:color-mix(in srgb, var(--aura) 70%, #fff) !important; }
+  .cards.big .orb { box-shadow:0 0 40px 2px color-mix(in srgb, var(--t1) 80%, transparent), inset 0 -10px 18px rgba(0,0,0,.3), inset 0 6px 12px rgba(255,255,255,.3) !important; }
+
+  .drop { border:2px dashed var(--ui-line); border-radius:10px; padding:12px; text-align:center; font-size:13px; color:var(--ui-muted); cursor:pointer; }
+  .drop.over { border-color:var(--accent); color:var(--ui-text); }
+  .drop img { max-width:100%; max-height:90px; border-radius:6px; display:block; margin:0 auto 6px; }
+  .mini { background:#2a2f3a; color:var(--ui-text); border:0; border-radius:8px; padding:8px 10px; font:inherit; font-size:13px; font-weight:800; cursor:pointer; }
+  .editor input[type=range] { padding:0; accent-color:var(--accent); }
+  .swatches { display:flex; gap:6px; margin-top:6px; }
+  .swatches span { width:22px; height:22px; border-radius:6px; border:1px solid rgba(255,255,255,.2); }
+
+  /* ===== Sleek header (overrides) ===== */
+  .p-head, .p-head.behind { background:none !important; box-shadow:none !important; padding:46px 44px 30px; }
+  .p-head::before { display:none !important; }
+  .p-head::after { display:block !important; content:""; position:absolute; left:44px; right:44px; top:auto; bottom:0; width:auto; height:2px; border-radius:2px;
+    background:linear-gradient(90deg, var(--h1), var(--h2) 55%, transparent) !important; }
+  .p-eyebrow { background:none !important; padding:0 !important; border-radius:0; display:flex; align-items:center; gap:12px;
+    font-size:15px; letter-spacing:.28em; color:color-mix(in srgb, var(--h1) 40%, #fff); }
+  .p-eyebrow::before { content:""; position:static !important; width:28px; height:3px; margin:0 !important; border-radius:2px;
+    background:linear-gradient(90deg, var(--h1), var(--h2)); box-shadow:none !important; }
+  .poster.dyn .p-eyebrow::before { width:10px; height:10px; border-radius:50%; background:var(--aura); box-shadow:0 0 10px 2px color-mix(in srgb, var(--aura) 80%, transparent) !important; }
+  .p-title { font-size:78px; letter-spacing:-.015em; margin:14px 0 10px; color:#fff; text-shadow:none !important; }
+  .p-sub { font-weight:600; opacity:1; color:rgba(255,255,255,.6); }
+  .poster:not(.dark) .p-head:not(.behind) .p-title { color:#1f2430; }
+  .poster:not(.dark) .p-head:not(.behind) .p-sub { color:rgba(0,0,0,.55); }
+  /* image fades into the background; title overlaps the fade */
+  .p-img { -webkit-mask-image:linear-gradient(180deg, #000 55%, transparent); mask-image:linear-gradient(180deg, #000 55%, transparent); }
+  .p-head.has-img:not(.behind) { margin-top:-90px; }
+  .p-head.behind .shade { background:linear-gradient(0deg, rgba(8,5,10,.92) 0%, rgba(8,5,10,.5) 35%, transparent 70%) !important; }
+
+  /* ===== Softer tier letters ===== */
+  .tier-label { background:linear-gradient(165deg, color-mix(in srgb, var(--tc) 85%, #fff) 0%, var(--tc) 50%, color-mix(in srgb, var(--tc) 78%, #000) 100%) !important; }
+  .tier-label::after { opacity:.3; }
+  .tier-label b { text-shadow:0 2px 0 rgba(0,0,0,.18) !important; }
+
+  /* ===== Top tier: no rays, just a soft glow ===== */
+  .cards.big .card, .poster.dark .cards.big .card { background:
+      radial-gradient(220px 180px at 87px 50%, color-mix(in srgb, var(--t1) 35%, transparent), transparent 70%),
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02)) !important; }
+  .poster:not(.dark) .cards.big .card { background:
+      radial-gradient(220px 180px at 87px 50%, color-mix(in srgb, var(--t1) 25%, transparent), transparent 70%), #fff !important; }
+
+  /* ===== Type icons get their own row under the name ===== */
+  .cards:not(.big) .ticons { position:static !important; transform:none !important; flex-direction:row; justify-content:center; gap:3px; margin-top:calc(var(--cw) * .04px); }
+  .cards:not(.big) .name { margin-top:calc(var(--cw) * .07px) !important; }
+
+  /* ===== Editor tabs & pills ===== */
+  .tabs { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; background:#0f1115; padding:4px; border-radius:12px; }
+  .tabs button { background:none; border:0; color:var(--ui-muted); font:inherit; font-weight:800; font-size:13px; padding:9px 4px; border-radius:9px; cursor:pointer; }
+  .tabs button.on { background:var(--accent); color:#fff; }
+  .pills { display:flex; gap:6px; flex-wrap:wrap; }
+  .pill { background:#0f1115; border:1px solid var(--ui-line); color:var(--ui-muted); border-radius:99px; padding:7px 12px; font:inherit; font-weight:800; font-size:13px; cursor:pointer; }
+  .pill::before { content:"+ "; }
+  .pill.on { background:rgba(194,24,91,.2); border-color:var(--accent); color:#fff; }
+  .pill.on::before { content:"\2713  "; }
+
+  /* ===== Counters poster ===== */
+  .poster { --muted:rgba(0,0,0,.5); --panel:#fff; --card:#fff; --fg:#1f2430; }
+  .poster.dark { --muted:rgba(255,255,255,.58); --panel:rgba(255,255,255,.05); --card:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03)); --fg:#fff; }
+  .c-hero { display:grid; grid-template-columns:220px minmax(0,1fr) 270px; gap:28px; align-items:center; padding:44px 40px 26px; }
+  .c-hero .c-diff { flex-direction:column; align-items:stretch; gap:0; padding:20px 20px 18px; }
+  .c-hero .c-verdict { font-size:34px; margin:8px 0 8px; }
+  .c-hero .c-est { font-size:14px; line-height:1.45; }
+  .c-hero .c-boxes { margin:14px 0 0; display:grid; grid-template-columns:repeat(var(--bxc), 1fr); gap:6px; }
+  .c-hero .bx { width:auto; padding:8px 2px 7px; }
+  .c-hero .bx-n { font-size:17px; }
+  .c-hero .bx-s { font-size:9.5px; }
+  .c-hero.has-img { margin-top:-120px; }
+  .c-hero .orb { margin:0; }
+  .c-name { font-size:76px; font-weight:900; line-height:.98; margin:12px 0 18px; letter-spacing:-.015em; }
+  .c-types { display:flex; gap:8px; align-items:center; }
+  .c-types img { width:46px; height:46px; display:block; }
+  .c-weak { display:flex; align-items:center; gap:8px; margin-top:20px; flex-wrap:wrap; }
+  .c-lab { font-size:13px; font-weight:900; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); margin-right:6px; }
+  .wk { position:relative; }
+  .wk img { width:40px; height:40px; display:block; }
+  .wk b { position:absolute; right:-7px; bottom:-5px; background:#ef4444; color:#fff; font-size:10px; font-weight:900; padding:1px 4px; border-radius:6px; }
+  .c-body { padding:0 40px 8px; display:flex; flex-direction:column; gap:22px; }
+  .c-diff { display:flex; align-items:center; gap:24px; padding:22px 26px; border-radius:22px; background:var(--panel);
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--vc) 45%, transparent), 0 0 34px -12px var(--vc); }
+  .c-verdict { font-size:42px; font-weight:900; line-height:1; margin:6px 0 8px; color:var(--vc); }
+  .c-est { font-size:16px; font-weight:700; color:var(--muted); }
+  .c-est b { color:var(--fg); }
+  .c-boxes { margin-left:auto; display:flex; gap:8px; }
+  .bx { width:74px; padding:10px 4px 9px; border-radius:14px; text-align:center; background:color-mix(in srgb, var(--bc) 16%, transparent);
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--bc) 50%, transparent); }
+  .bx-n { display:flex; align-items:center; justify-content:center; gap:4px; font-weight:900; font-size:20px; }
+  .bx-n svg { width:13px; height:13px; opacity:.75; }
+  .bx-s { display:block; font-size:10.5px; font-weight:900; letter-spacing:.08em; color:var(--bc); margin-top:3px; }
+  .c-sec { display:flex; align-items:center; gap:14px; margin-top:4px; }
+  .c-sec span { font-size:15px; font-weight:900; letter-spacing:.25em; text-transform:uppercase; }
+  .c-sec i { font-style:normal; font-size:14px; font-weight:700; color:var(--muted); }
+  .c-sec::after { content:""; flex:1; height:2px; background:linear-gradient(90deg, var(--h1), transparent); }
+  .c-top { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .c-list { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .cc { position:relative; border-radius:18px; background:var(--card); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--t1) 38%, transparent), 0 6px 16px -8px rgba(0,0,0,.5); }
+  .cc::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none; background:linear-gradient(135deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 35%); }
+  .cc.top { padding:24px 14px 18px; text-align:center; }
+  .cc.top .orb { margin:0 auto; }
+  .rk { position:absolute; top:12px; left:12px; font-weight:900; font-size:18px; color:var(--muted); z-index:2; }
+  .cc.top .rk { font-size:22px; padding:2px 10px; border-radius:10px; background:var(--rkc); color:#241605; }
+  .cc.r1 { --rkc:#ffd54a; } .cc.r2 { --rkc:#cfd8dc; } .cc.r3 { --rkc:#e0a36b; }
+  .cc-name { font-weight:900; font-size:24px; margin-top:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cc-tags { display:flex; justify-content:center; gap:5px; margin-top:6px; }
+  .tg { font-size:10.5px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:99px; color:#fff; flex-shrink:0; }
+  .tg.sh { background:#7b3fe4; } .tg.mg { background:#e91e63; } .tg.gm { background:#d81b60; }
+  .cc-moves { display:flex; flex-direction:column; gap:5px; margin-top:10px; align-items:center; }
+  .mv { display:inline-flex; align-items:center; gap:6px; font-weight:800; font-size:15px; white-space:nowrap; }
+  .mv img { width:20px; height:20px; display:block; }
+  .cc.row { display:flex; align-items:center; gap:10px; padding:10px 12px 10px 8px; }
+  .cc.row .rk { position:static; width:26px; text-align:center; flex-shrink:0; }
+  .cc.row .orb { margin:0; flex-shrink:0; }
+  .cc-info { min-width:0; flex:1; }
+  .cc.row .cc-name { font-size:18px; margin:0; display:flex; align-items:center; gap:6px; }
+  .cc.row .cc-name span { overflow:hidden; text-overflow:ellipsis; }
+  .cc.row .cc-moves { align-items:flex-start; margin-top:5px; gap:3px; }
+  .cc.row .mv { font-size:13px; }
+  .cc.row .mv img { width:16px; height:16px; }
+  .orb.shadow { border-color:#8e44ec !important; box-shadow:0 0 0 2px rgba(142,68,236,.3), 0 0 22px -2px rgba(142,68,236,.85), inset 0 -8px 14px rgba(0,0,0,.35) !important; }
+  .poster .orb.shadow img.mon { filter:drop-shadow(0 0 1.5px #b06cff) drop-shadow(0 0 7px rgba(142,68,236,.85)) drop-shadow(0 3px 3px rgba(0,0,0,.3)) !important; }
+  .c-empty { padding:120px 48px; text-align:center; font-size:28px; font-weight:800; color:var(--muted); }
+
+
+  /* ===== Hero facts & new difficulty card ===== */
+  .c-facts { display:flex; align-items:center; gap:18px; margin-top:18px; flex-wrap:wrap; }
+  .fact { display:flex; align-items:center; gap:8px; font-size:17px; }
+  .fact b { font-weight:900; }
+  .fact .c-lab { margin-right:0; }
+  .wxs { display:flex; gap:3px; }
+  .wxs img { width:30px; height:30px; display:block; border-radius:50%; background:rgba(0,0,0,.28); padding:3px; }
+  .fact.shiny { gap:5px; font-weight:900; font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:#ffd54a; }
+  .fact.shiny svg { width:18px; height:18px; }
+  .c-hero .c-diff { align-self:stretch; justify-content:center; padding:22px 20px 20px; }
+  .c-hero .c-verdict { font-size:36px; margin:8px 0 0; }
+  .meter { display:flex; gap:5px; margin:16px 0 10px; }
+  .pm { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:9px 0 7px; border-radius:11px;
+    background:color-mix(in srgb, var(--bc) 18%, transparent); box-shadow:inset 0 -3px 0 var(--bc); }
+  .pm svg { width:18px; height:18px; color:var(--bc); }
+  .pm span { font-weight:900; font-size:14px; }
+  .lg { display:flex; gap:9px; font-size:10.5px; font-weight:800; color:var(--muted); margin-bottom:14px; flex-wrap:wrap; }
+  .lg i { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; }
+  .c-hero .c-est { font-size:14.5px; line-height:1.5; }
+
+  /* dense list: 4 columns, rank sits on the orb */
+  .c-list.dense { grid-template-columns:repeat(4,1fr); gap:8px; }
+  .c-list.dense .cc.row { gap:9px; padding:8px 10px 8px 8px; }
+  .c-list.dense .rk { position:absolute; top:4px; left:5px; width:auto; font-size:12px; padding:1px 5px; border-radius:6px; background:rgba(0,0,0,.55); color:#fff; }
+  .c-list.dense .cc-name { font-size:15px; gap:4px; }
+  .c-list.dense .tg { font-size:9px; padding:1px 5px; }
+  .c-list.dense .mv { font-size:12px; gap:4px; }
+  .c-list.dense .mv img { width:14px; height:14px; }
+  .c-list.dense .cc-moves { margin-top:3px; gap:2px; }
+  .c-body { flex:1; }
+  .poster.fill .c-list { flex:1; grid-auto-rows:1fr; }
+  .poster.fill .c-top { flex:0 0 auto; }
+  .c-list.large { gap:12px; }
+  .c-list.large .cc.row { gap:12px; padding:12px 14px 12px 10px; }
+  .c-list.large .cc-name { font-size:21px; }
+  .c-list.large .mv { font-size:15px; }
+  .c-list.large .mv img { width:19px; height:19px; }
+  .c-list.large .cc-moves { margin-top:6px; gap:4px; }
+  .c-group { display:flex; align-items:center; gap:10px; margin:16px 0 10px; font-size:30px; font-weight:900; }
+  .c-group svg { width:28px; height:28px; color:var(--vc); }
+  .c-guide { margin-top:12px; font-size:11px; font-weight:700; color:var(--muted); opacity:.8; line-height:1.4; }
+  /* equal columns no matter how long a name is */
+  .c-top { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .c-list { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; }
+  .c-list.dense { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; }
+  .cc, .cc-info, .c-txt { min-width:0; }
+  .cc.row .cc-name { min-width:0; }
+  .cc.row .cc-name span { white-space:nowrap; min-width:0; }
+
+  /* ===== Cinematic hero ===== */
+  .c-cine { position:relative; padding:40px 40px 6px; text-align:center; }
+  .c-cine.has-img { margin-top:-140px; }
+  .c-cine .p-eyebrow { justify-content:center; }
+  .cine-name { font-weight:900; line-height:1; margin:12px 0 0; letter-spacing:-.02em; white-space:nowrap;
+    text-shadow:0 0 50px color-mix(in srgb, var(--h1) 55%, transparent), 0 4px 0 rgba(0,0,0,.2); }
+  .cine-stage { display:grid; grid-template-columns:250px minmax(0,1fr) 250px; align-items:center; gap:10px; margin-top:-6px; }
+  .cine-side { display:flex; flex-direction:column; gap:14px; text-align:left; }
+  .cine-block { background:var(--panel); border-radius:18px; padding:16px 18px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.08); }
+  .poster:not(.dark) .cine-block { box-shadow:0 3px 0 var(--shade, #dde2ea); }
+  .cine-block .c-lab { display:block; margin:0 0 9px; }
+  .cine-icons { display:flex; flex-wrap:wrap; gap:8px; }
+  .cine-icons img.ti, .cine-icons .wk img { width:40px; height:40px; display:block; }
+  .cine-moves .mv { font-size:15px; margin:3px 0; display:flex; }
+  .cine-moves .sep { height:1px; background:rgba(255,255,255,.12); margin:8px 0; }
+  .cine-big { font-size:30px; font-weight:900; line-height:1; }
+  .cine-sub { display:flex; align-items:center; gap:8px; margin-top:10px; font-size:17px; }
+  .cine-sub b { font-weight:900; }
+  .cine-block.c-diff { display:block; padding:16px 18px; }
+  .cine-block .c-verdict { font-size:32px; margin:4px 0 0; }
+  .cine-block .meter { margin:14px 0 9px; }
+  .cine-block .lg { margin-bottom:10px; }
+  .cine-block .c-est { font-size:13.5px; line-height:1.45; }
+
+  .cine-boss { --ta:color-mix(in srgb, var(--t1) 75%, #fff); position:relative; height:460px; display:grid; place-items:center; }
+  .cine-boss.shadow { --ta:#a259ff; }
+  .cine-glow { position:absolute; left:50%; top:50%; width:420px; height:420px; transform:translate(-50%,-50%); border-radius:50%;
+    background:radial-gradient(circle, color-mix(in srgb, var(--ta) 55%, transparent) 0%, color-mix(in srgb, var(--ta) 16%, transparent) 45%, transparent 70%); }
+  .cine-ring { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); border-radius:50%; }
+  .cine-ring.r1 { width:360px; height:360px; border:2px solid color-mix(in srgb, var(--ta) 55%, transparent);
+    box-shadow:0 0 30px -4px color-mix(in srgb, var(--ta) 70%, transparent), inset 0 0 30px -4px color-mix(in srgb, var(--ta) 60%, transparent); }
+  .cine-ring.r2 { width:450px; height:450px; border:2px dashed color-mix(in srgb, var(--ta) 30%, transparent); }
+  .cine-floor { position:absolute; bottom:26px; left:50%; width:300px; height:44px; transform:translateX(-50%); border-radius:50%;
+    background:radial-gradient(closest-side, rgba(0,0,0,.55), transparent); }
+  .cine-img { position:relative; z-index:1; width:420px; height:420px; object-fit:contain;
+    filter:drop-shadow(0 0 2px var(--ta)) drop-shadow(0 0 24px color-mix(in srgb, var(--ta) 70%, transparent)) drop-shadow(0 16px 18px rgba(0,0,0,.45)); }
+  .cine-moves.two { display:block; }
+  .cine-moves.two .mv { margin:2px 0 !important; }
+  .cine-moves.two .c-lab { grid-column:1 / -1; }
+  .cine-moves.two .mv { font-size:14.5px; gap:6px; overflow:hidden; }
+  .cine-moves.two .mv img { width:17px; height:17px; flex-shrink:0; }
+  .cine-moves.two .mv span { overflow:hidden; text-overflow:ellipsis; }
+
+  /* ===== Max Battle source chip ===== */
+  .src { display:inline-flex; align-items:center; gap:3px; margin-top:calc(var(--cw) * .045px); padding:2px 8px 2px 3px; border-radius:99px;
+    background:color-mix(in srgb, var(--aura, #ff2a6d) 22%, transparent); box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--aura, #ff2a6d) 50%, transparent);
+    font-weight:900; font-size:calc(min(13, var(--cw) * .11) * 1px); white-space:nowrap; }
+  .src.self { padding:2px 8px; }
+  .src img { width:calc(var(--cw) * .17px); height:calc(var(--cw) * .17px); object-fit:contain; margin:-3px 0; }
+  .cards.big .src { font-size:15px; padding:3px 12px 3px 4px; margin-top:10px; }
+  .cards.big .src.self { padding:3px 12px; }
+  .cards.big .src img { width:30px; height:30px; }
+  /* source medallion */
+  .srcb { position:absolute; right:-14%; bottom:-10%; z-index:4; display:flex; flex-direction:column; align-items:center; }
+  .srcb-pic { width:calc(var(--cw) * .36px); height:calc(var(--cw) * .36px); border-radius:50%; display:grid; place-items:center; overflow:visible;
+    background:radial-gradient(circle at 50% 40%, #3a3346, #17131f); box-shadow:0 0 0 2px color-mix(in srgb, var(--aura, #ff2a6d) 80%, #fff), 0 0 12px color-mix(in srgb, var(--aura, #ff2a6d) 60%, transparent), 0 3px 6px rgba(0,0,0,.5); }
+  .poster:not(.dark) .srcb-pic { background:radial-gradient(circle at 50% 40%, #fff, #e7eaf0); }
+  .srcb-pic { overflow:hidden; }
+  .srcb-pic img { width:100%; height:100%; object-fit:contain; transform:scale(1.12) translateY(6%); filter:drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+  .srcb-n { position:relative; z-index:2; margin-top:calc(var(--cw) * -.07px); padding:1px 6px; border-radius:99px; font-weight:900; font-size:calc(min(13, var(--cw) * .115) * 1px); line-height:1.3;
+    background:var(--aura, #ff2a6d); color:#fff; box-shadow:0 2px 4px rgba(0,0,0,.4); white-space:nowrap; }
+  .srcb.self { right:-8%; bottom:-4%; }
+  .srcb.self .srcb-n { margin-top:0; }
+  .cards.big .src img { width:44px; height:44px; margin:-8px 0; }
+  /* a bit tighter overall */
+  .cards:not(.big) .card { padding-top:calc(var(--cw) * .05px); padding-bottom:calc(var(--cw) * .06px); }
+  .cards:not(.big) .name { margin-top:calc(var(--cw) * .09px) !important; }
+
+  /* ===== flatter cinematic hero ===== */
+  .c-cine { padding:30px 40px 0; }
+  .cine-name { margin-top:8px; }
+  .cine-stage { margin-top:-4px; }
+  .cine-boss { height:330px; }
+  .cine-img { width:300px; height:300px; }
+  .cine-glow { width:320px; height:320px; }
+  .cine-ring.r1 { width:270px; height:270px; }
+  .cine-ring.r2 { width:330px; height:330px; }
+  .cine-floor { bottom:18px; width:230px; height:36px; }
+  .cine-block { padding:14px 16px; }
+  .cine-block .c-verdict { font-size:28px; }
+  .cine-block .meter { margin:10px 0 8px; }
+  .cine-big { font-size:26px; }
+  /* ===== legible counter cards ===== */
+  .c-grid { display:grid; gap:12px; }
+  .c-grid.g3 { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+  .c-grid.g4 { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+  .poster.fill .c-grid { flex:1; grid-auto-rows:1fr; }
+  .cc.mid { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:20px 10px 16px; }
+  .cc.mid .orb { margin:0 auto; }
+  .cc.mid .rk { top:10px; left:10px; font-size:15px; padding:1px 8px; border-radius:8px; background:rgba(255,255,255,.1); color:var(--fg); }
+  .poster:not(.dark) .cc.mid .rk { background:rgba(0,0,0,.07); }
+  .cc.mid .cc-name { margin-top:12px; max-width:100%; }
+  .cc.mid .cc-tags { margin-top:5px; }
+  .cc.mid .cc-moves { margin-top:9px; gap:4px; }
+  .cc.mid .mv { font-size:15px; }
+  .cc.mid .mv img { width:19px; height:19px; }
+  .c-body { gap:18px; }
+  .c-cine { margin-bottom:6px; }
+  /* ===== tier list: bigger, legible cards ===== */
+  .cards:not(.big) .card { border-radius:20px; padding:calc(var(--cw) * .07px) 8px calc(var(--cw) * .08px);
+    background:linear-gradient(180deg, color-mix(in srgb, var(--t1) 14%, rgba(255,255,255,.07)), rgba(255,255,255,.025)) !important;
+    border:2px solid color-mix(in srgb, var(--t1) 45%, transparent) !important; }
+  .poster:not(.dark) .cards:not(.big) .card { background:linear-gradient(180deg, color-mix(in srgb, var(--t1) 12%, #fff), #fff) !important; }
+  .cards:not(.big) .orb { width:calc(var(--cw) * .68px); height:calc(var(--cw) * .68px); }
+  .cards:not(.big) .name { font-size:calc(min(23, var(--cw) * .135) * 1px) !important; margin-top:calc(var(--cw) * .1px) !important; }
+  .cards:not(.big) .ticons { gap:5px !important; margin-top:calc(var(--cw) * .05px) !important; }
+  .cards:not(.big) .ticons img { width:calc(min(34, var(--cw) * .19) * 1px) !important; height:calc(min(34, var(--cw) * .19) * 1px) !important; }
+  .cards:not(.big) .srcb { right:-16%; bottom:-12%; }
+  .cards:not(.big) .srcb-pic { width:calc(var(--cw) * .3px); height:calc(var(--cw) * .3px); box-shadow:0 0 0 3px color-mix(in srgb, var(--aura, #ff2a6d) 85%, #fff), 0 0 14px color-mix(in srgb, var(--aura, #ff2a6d) 60%, transparent), 0 4px 8px rgba(0,0,0,.5); }
+  .cards:not(.big) .srcb-n { font-size:calc(min(17, var(--cw) * .1) * 1px); padding:2px 9px; margin-top:calc(var(--cw) * -.06px); }
+  /* ===== source row under the types ===== */
+  .srow { display:inline-flex; align-items:center; gap:6px; max-width:100%; margin-top:calc(var(--cw) * .055px); padding:3px 10px 3px 4px; border-radius:99px;
+    background:rgba(255,255,255,.08); box-shadow:inset 0 0 0 1px rgba(255,255,255,.13); font-weight:800; font-size:calc(min(15, var(--cw) * .085) * 1px); white-space:nowrap; }
+  .poster:not(.dark) .srow { background:rgba(0,0,0,.05); box-shadow:inset 0 0 0 1px rgba(0,0,0,.08); }
+  .srow img { width:calc(min(34, var(--cw) * .18) * 1px); height:calc(min(34, var(--cw) * .18) * 1px); object-fit:contain; margin:-5px 0; flex-shrink:0; }
+  .srow-t { overflow:hidden; text-overflow:ellipsis; min-width:0; }
+  .srow b { color:#ffd54a; font-weight:900; flex-shrink:0; }
+  .poster:not(.dark) .srow b { color:#c77700; }
+
+  /* ===== counters info strip ===== */
+  .cine-strip { display:grid; grid-template-columns:repeat(var(--n), minmax(0, 1fr)); gap:10px; margin:6px 0 4px; text-align:left; }
+  .tile { background:var(--panel); border-radius:16px; padding:12px 14px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.08); display:flex; flex-direction:column; justify-content:center; min-width:0; }
+  .poster:not(.dark) .tile { box-shadow:0 3px 0 var(--shade, #dde2ea); }
+  .tile .c-lab { display:block; margin:0 0 6px; font-size:11.5px; }
+  .tile .tv { font-size:22px; font-weight:900; line-height:1.1; white-space:nowrap; }
+  .tile .ts { font-size:12.5px; font-weight:700; color:var(--muted); margin-top:4px; }
+  .tile .fact.shiny { margin-top:6px; font-size:13px; }
+  .wxrow { display:flex; gap:10px; flex-wrap:wrap; }
+  .wxi { display:flex; align-items:center; gap:5px; font-size:13px; font-weight:800; }
+  .wxi img { width:30px; height:30px; border-radius:50%; background:rgba(0,0,0,.3); padding:3px; }
+  .wxi i { font-style:normal; }
+
+  /* ===== tier list: wide cards for every tier ===== */
+  .poster .cards.hz .card { display:flex !important; align-items:center; gap:calc(var(--cw) * .05px); text-align:left !important;
+    padding:calc(var(--cw) * .045px) calc(var(--cw) * .05px) !important;
+    background:radial-gradient(calc(var(--cw) * .7px) calc(var(--cw) * .55px) at calc(var(--cw) * .22px) 50%, color-mix(in srgb, var(--t1) 32%, transparent), transparent 70%),
+      linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02)) !important;
+    border:2px solid color-mix(in srgb, var(--t1) 55%, transparent) !important; }
+  .poster:not(.dark) .cards.hz .card { background:radial-gradient(calc(var(--cw) * .7px) calc(var(--cw) * .55px) at calc(var(--cw) * .22px) 50%, color-mix(in srgb, var(--t1) 22%, transparent), transparent 70%), #fff !important; }
+  .poster .cards.hz .orb { width:calc(var(--cw) * .36px) !important; height:calc(var(--cw) * .36px) !important; margin:0 !important; flex-shrink:0; }
+  .poster .cards.hz .info { min-width:0; flex:1; }
+  .poster .cards.hz .name { font-size:calc(min(26, var(--cw) * .085) * 1px) !important; margin-top:0 !important; }
+  .poster .cards.hz .ticons { justify-content:flex-start !important; margin-top:calc(var(--cw) * .02px) !important; }
+  .poster .cards.hz .ticons img { width:calc(min(30, var(--cw) * .1) * 1px) !important; height:calc(min(30, var(--cw) * .1) * 1px) !important; }
+  .poster .cards.hz .srow { margin-top:calc(var(--cw) * .025px); font-size:calc(min(15, var(--cw) * .052) * 1px); }
+  .poster .cards.hz .srow img { width:calc(min(30, var(--cw) * .1) * 1px); height:calc(min(30, var(--cw) * .1) * 1px); }
+  /* uniform source pill (same as S tier) */
+  .src { max-width:100%; }
+  .src-t { overflow:hidden; text-overflow:ellipsis; min-width:0; white-space:nowrap; }
+  .src img { flex-shrink:0; }
+  .poster .cards.hz .src { font-size:calc(min(15, var(--cw) * .05) * 1px); padding:3px 10px 3px 4px; margin-top:calc(var(--cw) * .03px); }
+  .poster .cards.hz .src img { width:calc(min(32, var(--cw) * .11) * 1px); height:calc(min(32, var(--cw) * .11) * 1px); margin:-6px 0; }
+  .cards:not(.big):not(.hz) .src { font-size:calc(min(14, var(--cw) * .075) * 1px); }
+  .cards:not(.big):not(.hz) .src img { width:calc(min(28, var(--cw) * .14) * 1px); height:calc(min(28, var(--cw) * .14) * 1px); margin:-5px 0; }
+  .src-n { flex-shrink:0; font-weight:900; white-space:nowrap; }
+  .src-n::before { content:"· "; }
+  .src.self { padding-left:10px !important; }
+  .poster .cards.hz .orb { width:calc(var(--cw) * .31px) !important; height:calc(var(--cw) * .31px) !important; }
+  .poster .cards.hz .src { font-size:calc(min(14, var(--cw) * .048) * 1px); gap:5px; }
+  .poster .cards.hz .name.long { font-size:calc(min(23, var(--cw) * .075) * 1px) !important; }
+  .poster .cards.hz .name.xlong { font-size:calc(min(20, var(--cw) * .066) * 1px) !important; }
+  .poster .cards.hz .name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tv-row { display:flex; align-items:center; gap:10px; }
+  .wxs2 { display:flex; gap:4px; }
+  .wxs2 img { width:28px; height:28px; border-radius:50%; background:rgba(0,0,0,.3); padding:3px; }
+  .shiny-tile { flex-direction:row !important; align-items:center; justify-content:flex-start !important; gap:10px; padding:6px 14px 6px 8px !important; }
+  .shiny-img { width:72px; height:72px; object-fit:contain; filter:drop-shadow(0 0 10px rgba(255,213,74,.55)) drop-shadow(0 3px 4px rgba(0,0,0,.4)); margin:-6px 0; }
+  .shiny-tile .fact.shiny { margin-top:2px; font-size:14px; }
+  /* wide cards: grid so the source pill gets a full-width row */
+  .poster .cards.hz .card { display:grid !important; grid-template-columns:auto minmax(0, 1fr); align-items:center; column-gap:calc(var(--cw) * .05px); }
+  .poster .cards.hz .card > .src { grid-column:1 / -1; justify-self:start; margin-top:calc(var(--cw) * .035px); font-size:calc(min(15, var(--cw) * .052) * 1px); }
+  .cards:not(.big):not(.hz) .card > .src { margin-top:8px; }
+  /* ===== tighter layout (fit more) ===== */
+  .p-head, .p-head.behind { padding:30px 40px 20px !important; }
+  .p-title { font-size:64px !important; margin:8px 0 6px !important; }
+  .p-sub { font-size:19px !important; }
+  .p-head::after { left:40px !important; right:40px !important; }
+  .p-body { padding:16px 28px 2px !important; gap:10px !important; }
+  .tier-label { width:84px !important; }
+  .cards { padding:10px !important; }
+  .poster .cards.hz .card { padding:calc(var(--cw) * .035px) calc(var(--cw) * .04px) !important; row-gap:0; }
+  .poster .cards.hz .card > .src { margin-top:calc(var(--cw) * .025px); }
+  .cards.big .card { padding:10px 18px !important; }
+  .cards.big .orb { width:116px !important; height:116px !important; }
+  .p-foot { padding:12px 32px 18px !important; }
+
+  .c-cine { padding:22px 32px 0 !important; }
+  .cine-name { margin-top:4px !important; }
+  .cine-boss { height:260px !important; }
+  .cine-img { width:240px !important; height:240px !important; }
+  .cine-glow { width:260px !important; height:260px !important; }
+  .cine-ring.r1 { width:220px !important; height:220px !important; }
+  .cine-ring.r2 { width:270px !important; height:270px !important; }
+  .cine-floor { bottom:12px !important; width:190px !important; }
+  .cine-stage { grid-template-columns:240px minmax(0,1fr) 240px !important; }
+  .cine-block { padding:12px 14px !important; }
+  .cine-strip { gap:8px !important; margin:2px 0 0 !important; }
+  .tile { padding:9px 12px !important; }
+  .tile .tv { font-size:20px !important; }
+  .c-body { padding:0 32px 4px !important; gap:12px !important; }
+  .c-top, .c-grid { gap:8px !important; }
+  .cc.top { padding:16px 10px 12px !important; }
+  .cc.top .cc-name { margin-top:8px !important; }
+  .cc.mid { padding:12px 8px 10px !important; }
+  .cc.mid .cc-name { margin-top:8px !important; }
+  .cc-moves { margin-top:6px !important; }
+  .cc.mid .mv { font-size:14px !important; }
+  /* ===== tile cards: one strip, nothing overlaps ===== */
+  .poster .cards.tl { gap:8px; }
+  .poster .cards.tl .card { display:grid !important; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; column-gap:10px;
+    text-align:left !important; padding:8px 10px 8px 8px !important; border-radius:16px;
+    background:linear-gradient(90deg, color-mix(in srgb, var(--t1) 26%, transparent), rgba(255,255,255,.035) 60%) !important;
+    border:1.5px solid color-mix(in srgb, var(--t1) 50%, transparent) !important; }
+  .poster:not(.dark) .cards.tl .card { background:linear-gradient(90deg, color-mix(in srgb, var(--t1) 18%, #fff), #fff 60%) !important; }
+  .poster .cards.tl .orb { width:calc(var(--cw) * .32px) !important; height:calc(var(--cw) * .32px) !important; margin:0 !important; }
+  .poster .cards.tl .info { min-width:0; }
+  .poster .cards.tl .name { font-size:calc(min(20, var(--cw) * .088) * 1px) !important; margin:0 !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .poster .cards.tl .name.long { font-size:calc(min(18, var(--cw) * .08) * 1px) !important; }
+  .poster .cards.tl .name.xlong { font-size:calc(min(16, var(--cw) * .072) * 1px) !important; }
+  .poster .cards.tl .ticons { justify-content:flex-start !important; gap:3px !important; margin-top:5px !important; }
+  .poster .cards.tl .ticons img { width:calc(min(24, var(--cw) * .105) * 1px) !important; height:calc(min(24, var(--cw) * .105) * 1px) !important; }
+  .sside { display:flex; flex-direction:column; align-items:center; }
+  .sside-pic { width:calc(var(--cw) * .2px); height:calc(var(--cw) * .2px); border-radius:50%; overflow:hidden; display:grid; place-items:center;
+    background:rgba(0,0,0,.28); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.15); }
+  .poster:not(.dark) .sside-pic { background:rgba(0,0,0,.06); }
+  .sside-pic img { width:115%; height:115%; object-fit:contain; transform:translateY(5%); }
+  .sside b { margin-top:-6px; position:relative; padding:1px 6px; border-radius:99px; background:var(--aura, #ff2a6d); color:#fff;
+    font-weight:900; font-size:calc(min(12, var(--cw) * .055) * 1px); white-space:nowrap; box-shadow:0 2px 4px rgba(0,0,0,.35); }
+  .sside.self b { margin-top:0; }
+  .poster .cards.tl .card { column-gap:7px !important; padding:6px 8px 6px 6px !important; }
+  .poster .cards.tl .orb { width:calc(var(--cw) * .27px) !important; height:calc(var(--cw) * .27px) !important; }
+  .poster .cards.tl .name { font-size:calc(min(18, var(--cw) * .085) * 1px) !important; letter-spacing:-.01em; }
+  .poster .cards.tl .name.long { font-size:calc(min(16, var(--cw) * .077) * 1px) !important; }
+  .poster .cards.tl .name.xlong { font-size:calc(min(14.5, var(--cw) * .07) * 1px) !important; }
+  .poster .cards.tl .sside-pic { width:calc(var(--cw) * .17px); height:calc(var(--cw) * .17px); }
+  .poster .cards.tl .name { font-size:calc(min(28, var(--cw) * .085) * 1px) !important; }
+  .poster .cards.tl .name.long { font-size:calc(min(25, var(--cw) * .077) * 1px) !important; }
+  .poster .cards.tl .name.xlong { font-size:calc(min(22, var(--cw) * .07) * 1px) !important; }
+  .poster .cards.tl .ticons img { width:calc(min(34, var(--cw) * .1) * 1px) !important; height:calc(min(34, var(--cw) * .1) * 1px) !important; }
+  .poster .cards.tl .sside b { font-size:calc(min(16, var(--cw) * .052) * 1px); }
+  .poster .cards.tl .card { padding:calc(var(--cw) * .025px) calc(var(--cw) * .035px) calc(var(--cw) * .025px) calc(var(--cw) * .025px) !important; column-gap:calc(var(--cw) * .03px) !important; }
+
+  /* ===== counters: bigger boss, tighter counter cards ===== */
+  .cine-boss { height:340px !important; }
+  .cine-img { width:330px !important; height:330px !important; }
+  .cine-glow { width:340px !important; height:340px !important; }
+  .cine-ring.r1 { width:290px !important; height:290px !important; }
+  .cine-ring.r2 { width:350px !important; height:350px !important; }
+  .cine-floor { width:250px !important; bottom:14px !important; }
+  .cine-name { margin-bottom:-14px; }
+  .c-top { gap:8px !important; }
+  .cc.top { display:grid !important; grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:12px; text-align:left !important; padding:12px 14px 12px 12px !important; }
+  .cc.top .orb { margin:0 !important; }
+  .cc.top .rk { top:6px !important; left:6px !important; font-size:16px !important; padding:1px 7px !important; }
+  .cc.top .cc-name { margin-top:0 !important; }
+  .cc.top .cc-tags { justify-content:flex-start; }
+  .cc.top .cc-moves { align-items:flex-start !important; }
+  .cc.mid { display:grid !important; grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:9px; text-align:left !important; padding:8px 10px 8px 8px !important; }
+  .cc.mid .orb { margin:0 !important; }
+  .cc.mid .rk { top:4px !important; left:4px !important; font-size:12px !important; padding:0 5px !important; z-index:5; background:rgba(0,0,0,.6) !important; color:#fff !important; }
+  .cc.mid .cc-name { margin-top:0 !important; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cc.mid .cc-tags { justify-content:flex-start; margin-top:2px !important; }
+  .cc.mid .cc-moves { align-items:flex-start !important; margin-top:4px !important; gap:2px !important; }
+  .cc.mid .mv { font-size:13px !important; gap:4px; }
+  .cc.mid .mv img { width:16px !important; height:16px !important; }
+  .poster .cards.tl .name.long { font-size:calc(min(23, var(--cw) * .072) * 1px) !important; }
+  .poster .cards.tl .name.xlong { font-size:calc(min(20, var(--cw) * .065) * 1px) !important; }
+  /* fixed formats: tiers share the leftover height so there is no empty band at the bottom */
+  .poster.fit .p-body { justify-content:space-evenly !important; }
+  .poster.fit .tier .cards { align-content:center; }
+  /* ===== source medallion: stars on top, Pokémon pops out of its circle (same in every tier) ===== */
+  .sside { display:flex; flex-direction:column; align-items:center; }
+  .sside b { order:-1; margin:0 0 -5px !important; z-index:3; position:relative; }
+  .sside-pic { overflow:visible !important; position:relative; }
+  .sside-pic img { position:absolute; left:50%; bottom:6%; width:135% !important; height:135% !important; transform:translateX(-50%) !important;
+    object-fit:contain; z-index:2; filter:drop-shadow(0 3px 3px rgba(0,0,0,.45)); }
+  .sside.self b { margin:0 !important; }
+  .cards.big .card > .sside { margin-left:auto; padding-left:12px; }
+  .cards.big .sside-pic { width:84px; height:84px; }
+  .cards.big .sside b { font-size:17px; padding:2px 10px; }
+  .sside-pic img { width:122% !important; height:122% !important; bottom:3% !important; }
+  .sside b { margin:0 0 calc(var(--cw) * .045px) !important; }
+  .cards.big .sside b { margin:0 0 16px !important; }
+  .sside.self b { margin:0 !important; }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="editor">
+    <h1>PoGo Infographic Maker</h1>
+    <div class="tabs" id="tabs">
+      <button type="button" data-tab="tier">Tier List</button>
+      <button type="button" data-tab="raid">Raid Counters</button>
+      <button type="button" data-tab="max">Max Battle</button>
+    </div>
+    <div class="only-ctr" style="display:flex;flex-direction:column;gap:14px">
+      <div><label for="boss">Boss</label>
+        <input id="boss" list="bossList" placeholder="Start typing… e.g. Darkrai" autocomplete="off">
+        <datalist id="bossList"></datalist></div>
+      <div><label>Include</label>
+        <div class="pills" id="pills">
+          <button type="button" class="pill" data-f="legendary">Legendary</button>
+          <button type="button" class="pill" data-f="shadow">Shadow</button>
+          <button type="button" class="pill" data-f="mega">Mega</button>
+        </div></div>
+      <div class="row2">
+        <div class="ncw"><label for="nrows">Min rows (after top 3)</label>
+          <select id="nrows"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
+        <div class="ncw"><label for="nper">Per row</label>
+          <select id="nper"><option value="3">3 (bigger)</option><option value="4" selected>4</option></select></div>
+      </div>
+      <div><label for="lvl">Attacker level</label>
+        <select id="lvl"><option value="40" selected>Level 40</option><option value="50">Level 50</option></select></div>
+      <label class="check"><input type="checkbox" id="uniq"> One per species (no shadow + normal duplicates)</label>
+    </div>
+    <div class="only-tier"><label for="eyebrow">Tag</label><input id="eyebrow" value="Pokémon GO · Max Battles"></div>
+    <div class="only-tier"><label for="title">Title</label><input id="title" value="Max Tier List"></div>
+    <div class="only-tier"><label for="sub">Subtitle</label><input id="sub" value="The best attackers for Dynamax &amp; Gigantamax battles"></div>
+    <div><label for="foot">Credits (footer)</label><input id="foot" value="@LazySan"></div>
+    <div>
+      <label>Header image</label>
+      <div class="drop" id="drop">Click, drop or paste (Ctrl+V) an image</div>
+      <input type="file" id="img" accept="image/*" hidden>
+      <div class="swatches" id="swatches"></div>
+    </div>
+    <div class="row2" id="imgopts" hidden>
+      <div><label for="imgmode">Image style</label>
+        <select id="imgmode"><option value="banner" selected>Banner on top</option><option value="behind">Behind title</option></select></div>
+      <div><label for="ipos">Focus</label>
+        <select id="ipos"><option value="top">Top</option><option value="center" selected>Centre</option><option value="bottom">Bottom</option></select></div>
+      <div><label for="ih">Image height</label><input type="range" id="ih" min="180" max="900" step="10" value="420"></div>
+      <div style="display:flex;align-items:flex-end"><button class="mini" id="rmimg" type="button" style="width:100%">Remove image</button></div>
+    </div>
+    <div><label for="format">Format</label>
+        <select id="format">
+          <option value="auto" selected>Auto</option>
+          <option value="1350">Post 4:5</option>
+          <option value="1920">Story 9:16</option>
+          <option value="1080">Square 1:1</option>
+          <option class="col-opt" value="2">2 per row</option><option class="col-opt" value="3">3 per row</option><option class="col-opt" value="4">4 per row</option><option class="col-opt" value="5">5 per row</option><option class="col-opt" value="6">6 per row</option><option class="col-opt" value="7">7 per row</option>
+        </select></div>
+    <div class="row2">
+      <div><label for="theme">Colours</label>
+        <select id="theme">
+          <option value="image" id="themeImg" disabled>From image</option>
+          <option value="#d81b60,#8e24aa" selected>Dynamax</option>
+          <option value="#1e88e5,#3949ab">Blue</option>
+          <option value="#43a047,#00897b">Green</option>
+          <option value="#fb8c00,#e53935">Orange</option>
+          <option value="#37474f,#263238">Dark</option>
+          <option value="boss" id="themeBoss">From boss type</option>
+        </select></div>
+      <div><label for="mode">Poster theme</label>
+        <select id="mode"><option value="dark" selected>Dark</option><option value="light">Light</option></select></div>
+    </div>
+    <label class="check"><input type="checkbox" id="dyn" checked> Glow effects (aura &amp; energy, follows the colours)</label>
+    <div class="only-tier"><label for="cardstyle">Card style</label>
+      <select id="cardstyle"><option value="tile" selected>Tiles (most compact)</option><option value="wide">Wide (like S tier)</option><option value="compact">Compact</option></select></div>
+    <label class="check only-tier"><input type="checkbox" id="maxsrc" checked> Show where to get them (current Max Battles)</label>
+    <label class="check only-tier"><input type="checkbox" id="bigtop" checked> Big cards for small tiers (≤3)</label>
+    <div class="only-tier" style="flex:1;display:flex;flex-direction:column">
+      <label for="data">List</label>
+      <textarea id="data" spellcheck="false">### S Tier
+* Blissey
+* Excadrill
+
+### A+ Tier
+* Alakazam
+* Gengar
+* Metagross
+* Weavile
+* Rhyperior
+* Electivire
+* Darmanitan
+* Hydreigon
+
+### A Tier
+* Machamp
+* Gyarados
+* Omastar
+* Espeon
+* Gardevoir
+* Glaceon
+* Gallade
+* Rillaboom
+* Inteleon
+* Corviknight
+* Hatterene</textarea>
+    </div>
+    <div class="hint only-tier">
+      Lines ending in <code>Tier</code> start a new tier (markdown <code>###</code> and <code>*</code> bullets are fine).
+      Optional tag: <code>Gengar | GMAX</code>. Forms: <code>Darmanitan-Galar</code>, <code>Charizard-Gmax</code>.
+      <b>Auto</b> picks columns from the total count; <b>Post / Story / Square</b> pick the columns that fit that size.
+    </div>
+    <div class="status" id="status"></div>
+    <button class="btn" id="export">Export PNG</button>
+  </aside>
+
+  <main class="stage"><div class="scaler" id="scaler"><div class="poster" id="poster"></div></div></main>
+</div>
+
+<script>
+const TYPE_COLORS = {
+  normal:'#9fa19f', fire:'#e62829', water:'#2980ef', electric:'#e0ac00', grass:'#3fa129', ice:'#3dc7ef',
+  fighting:'#ff8000', poison:'#9141cb', ground:'#915121', flying:'#81b9ef', psychic:'#ef4179', bug:'#91a119',
+  rock:'#afa981', ghost:'#704170', dragon:'#5060e1', dark:'#624d4e', steel:'#60a1b8', fairy:'#ef70ef'
+};
+// Pokémon GO type icons (game assets, via PokeMiners/pogo_assets)
+const TYPE_ICON = t => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Types/POKEMON_TYPE_${t.toUpperCase()}_BORDERED.png`;
+const TIER_COLORS = {
+  'S+':'#c2185b', 'S':'#e53935', 'S-':'#f4511e', 'A+':'#fb8c00', 'A':'#f9a825', 'A-':'#c0a000',
+  'B+':'#7cb342', 'B':'#43a047', 'B-':'#00897b', 'C':'#1e88e5', 'D':'#5e35b1', 'F':'#757575'
+};
+const FALLBACK = Object.values(TIER_COLORS);
+const BIG_MAX = 3;
+// cards area width: 1080 - body padding(64) - label(96) - cards padding(28)
+const AREA = 1080 - 64 - 96 - 28 - 1, GAP = 10; // -1 guards against rounding wraps
+
+const $ = id => document.getElementById(id);
+function safeGet(k){ try { return localStorage.getItem('ig_' + k); } catch { return null; } }
+function safeSet(k,v){ try { localStorage.setItem('ig_' + k, v); } catch {} }
+const cache = JSON.parse(safeGet('pokeCache') || '{}');
+
+function slug(name){
+  return name.toLowerCase().trim().replace(/♀/g,'-f').replace(/♂/g,'-m').replace(/['.:]/g,'').replace(/é/g,'e').replace(/\s+/g,'-');
+}
+
+async function lookup(name){
+  const key = slug(name);
+  if (cache[key]) return cache[key];
+  const api = 'https://pokeapi.co/api/v2/';
+  let res = await fetch(api + 'pokemon/' + key);
+  if (!res.ok) { // e.g. "darmanitan" -> species -> default form
+    const sp = await fetch(api + 'pokemon-species/' + key);
+    if (!sp.ok) throw new Error(name);
+    res = await fetch(api + 'pokemon/' + (await sp.json()).id);
+    if (!res.ok) throw new Error(name);
+  }
+  const d = await res.json();
+  const info = {
+    sprite: d.sprites?.other?.home?.front_default || d.sprites?.other?.['official-artwork']?.front_default || d.sprites?.front_default,
+    types: d.types.map(t => t.type.name)
+  };
+  cache[key] = info; safeSet('pokeCache', JSON.stringify(cache));
+  return info;
+}
+
+function parse(text){
+  const tiers = []; let cur = null;
+  for (const raw of text.split(/\r?\n/)) {
+    // strip markdown headings, bullets and numbering
+    const line = raw.trim().replace(/^(#+|[*\-•+]|\d+[.)])\s*/, '').replace(/\*\*/g, '').trim();
+    if (!line) continue;
+    const m = line.match(/^(.+?)\s+tier:?$/i) || line.match(/^tier\s+(.+)$/i);
+    if (m) { cur = { label: m[1].trim(), mons: [] }; tiers.push(cur); continue; }
+    if (!cur) { cur = { label: '?', mons: [] }; tiers.push(cur); }
+    const [n, note] = line.split('|').map(s => s.trim());
+    cur.mons.push({ name: n, note });
+  }
+  return tiers;
+}
+
+const displayName = n => n.replace(/-gmax$/i,'').replace(/-/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function cardHTML(m, big){
+  const types = m.info?.types || [];
+  const t1 = TYPE_COLORS[types[0]] || '#9aa3b2';
+  const icons = `<div class="ticons">${types.map(ty => `<img crossorigin="anonymous" src="${TYPE_ICON(ty)}" alt="${ty}">`).join('')}</div>`;
+  return `<div class="card" style="--t1:${t1}">
+    ${m.note ? `<div class="note">${esc(m.note)}</div>` : ''}
+    <div class="orb">${m.info?.sprite ? `<img class="mon" crossorigin="anonymous" src="${m.info.sprite}" alt="">` : `<span class="ph">?</span>`}</div>
+    <div class="info">
+      <div class="name ${displayName(m.name).length > 11 ? 'xlong' : displayName(m.name).length > 9 ? 'long' : ''}">${esc(displayName(m.name))}</div>
+      ${icons}
+    </div>
+    ${m.src ? (big || tileMode() ? srcSide(m.src) : srcHTML(m.src)) : ''}
+  </div>`;
+}
+
+// put the type icons in the right spot: on the orb for compact cards, under the name for big cards
+function placeIcons(){
+  document.querySelectorAll('#poster .cards:not(.big) .card').forEach(c => {
+    // icons stay in their own row under the name
+  });
+}
+
+// sensible column ranges per card style
+function colRange(){ const cs = $('cardstyle').value; return cs === 'tile' ? [2, 5] : cs === 'wide' ? [2, 4] : [3, 7]; }
+const cwFor = cols => (AREA - (cols - 1) * GAP) / cols;
+function setCols(cols, scale = 1){
+  const cw = cwFor(cols) * scale;
+  let empty = 0;
+  document.querySelectorAll('#poster .cards:not(.big)').forEach(el => {
+    el.style.setProperty('--cw', cw);
+    // rows are filled completely before wrapping; only the last row can be partial
+    const n = el.children.length, rows = Math.ceil(n / cols);
+    el.style.paddingLeft = el.style.paddingRight = '';
+    empty += rows * cols - n;
+  });
+  return empty;
+}
+
+function setupPoster(th){
+  const poster = $('poster');
+  poster.style.minHeight = '';
+  for (const k of ['bg1','bg2','shade','foot','dbg1','dbg2','dshade']) poster.style.setProperty('--' + k, th[k] || '');
+  poster.classList.toggle('dark', $('mode').value === 'dark');
+  poster.classList.toggle('dyn', $('dyn').checked);
+  poster.style.setProperty('--h1', th.h1); poster.style.setProperty('--h2', th.h2);
+  // glow colour: classic Dynamax pink-red for the Dynamax preset, otherwise a bright version of the theme
+  poster.style.setProperty('--aura', $('theme').value === '#d81b60,#8e24aa' || (tab === 'tier' && $('theme').value === 'boss')
+    ? '#ff2a6d' : `color-mix(in srgb, ${th.h1} 78%, #fff)`);
+  poster.style.setProperty('--ih', $('ih').value);
+  poster.style.setProperty('--ipos', $('ipos').value);
+  return poster;
+}
+
+let renderId = 0;
+async function render(){
+  const id = ++renderId;
+  if (tab === 'tier') return renderTier(id);
+  return renderCounters(id);
+}
+
+async function renderTier(id){
+  const tiers = parse($('data').value);
+  const all = tiers.flatMap(t => t.mons);
+  $('status').className = 'status'; $('status').textContent = 'Loading Pokémon…';
+  const failed = [];
+  const infos = await Promise.all(all.map(m => lookup(m.name).catch(() => { failed.push(m.name); return null; })));
+  if (id !== renderId) return;
+  all.forEach((m, i) => m.info = infos[i]);
+  if ($('maxsrc').checked) {
+    $('status').textContent = 'Checking Max Battle sources…';
+    try { await attachSources(all); } catch {}
+    if (id !== renderId) return;
+  }
+
+  const th = currentTheme();
+  const { h1, h2 } = th;
+  const date = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  const bigOn = $('bigtop').checked;
+
+  const poster = setupPoster(th);
+  poster.classList.remove('fit');
+  const mode = headerImg ? $('imgmode').value : null;
+  poster.innerHTML = `
+    ${mode === 'banner' ? `<img class="p-img" src="${headerImg}" alt="">` : ''}
+    <div class="p-head ${mode ? 'has-img' : ''} ${mode === 'behind' ? 'behind' : ''}" style="--h1:${h1};--h2:${h2}">
+      ${mode === 'behind' ? `<img class="bgimg" src="${headerImg}" alt=""><div class="shade"></div>` : ''}
+      <div class="p-eyebrow">${esc($('eyebrow').value)}</div>
+      <div class="p-title">${esc($('title').value)}</div>
+      <div class="p-sub">${esc($('sub').value)}</div>
+    </div>
+    <div class="p-body">
+      ${tiers.map((t, ti) => {
+        const tc = TIER_COLORS[t.label.toUpperCase()] || FALLBACK[ti % FALLBACK.length];
+        const big = bigOn && t.mons.length > 0 && t.mons.length <= BIG_MAX;
+        const bigW = big ? cwFor(t.mons.length) : 0;
+        const wide = $('cardstyle').value === 'wide', tile = $('cardstyle').value === 'tile';
+        return `<section class="tier ${ti === 0 ? 'top' : ''}" style="--tc:${tc}">
+          <div class="tier-label"><b>${esc(t.label)}</b><small>TIER</small></div>
+          <div class="cards ${big ? 'big' : wide ? 'hz' : tile ? 'tl' : ''}" ${big ? `style="--cw:${bigW}"` : ''}>${t.mons.map(m => cardHTML(m, big)).join('')}</div>
+        </section>`;
+      }).join('')}
+    </div>
+    <div class="p-foot"><b>${esc($('foot').value)}</b><span>Updated ${date}</span></div>`;
+  placeIcons();
+
+  // choose the number of columns
+  const fmt = $('format').value;
+  let cols;
+  if (fmt === 'auto') {
+    let best = null;
+    // vertical first: the column count that gets closest to a 1080x1350 (4:5) post, never wider than tall
+    const [cMin, cMax] = colRange();
+    // vertical first: the most columns that still give at least a 4:5 portrait (1350px); else the tallest option
+    for (let c = cMin; c <= cMax; c++) {
+      setCols(c);
+      const h = poster.offsetHeight;
+      const score = h >= 1350 ? -c : 100000 - h;  // portrait-tall enough: prefer more columns; otherwise prefer taller
+      if (!best || score < best.score) best = { c, score };
+    }
+    cols = best.c; setCols(cols);
+  } else if (+fmt <= 12) {
+    cols = Math.min(Math.max(+fmt, colRange()[0]), colRange()[1]); setCols(cols);
+  } else {
+    // fixed size: fewest columns (= biggest cards) that still fit; then stretch the tiers to fill the canvas
+    const target = +fmt, [lo, hi] = colRange();
+    let scale = 1;
+    for (cols = lo; cols <= hi; cols++) {
+      setCols(cols);
+      if (poster.offsetHeight <= target) break;
+      // slightly smaller cards on this column count before giving up and adding a column
+      let a = 0.8, b = 1;
+      setCols(cols, a);
+      if (poster.offsetHeight > target) continue;
+      for (let i = 0; i < 7; i++) { const m = (a + b) / 2; setCols(cols, m); if (poster.offsetHeight <= target) a = m; else b = m; }
+      scale = a; setCols(cols, a); break;
+    }
+    if (cols > hi) { cols = hi; setCols(cols); }
+    poster.style.minHeight = target + 'px';
+    poster.classList.add('fit');
+  }
+
+  const msg = `${all.length} Pokémon · ${tiers.length} tiers · ${cols} per row · ${poster.offsetHeight}px tall`;
+  if (failed.length) { $('status').className = 'status err'; $('status').textContent = 'Not found: ' + failed.join(', '); }
+  else $('status').textContent = msg;
+  requestAnimationFrame(fit);
+}
+
+function fit(){
+  const stage = document.querySelector('.stage');
+  const s = Math.min(1, (stage.clientWidth - 48) / 1080);
+  const sc = $('scaler');
+  sc.style.transform = `scale(${s})`;
+  sc.style.width = (1080 * s) + 'px';
+  sc.style.height = ($('poster').offsetHeight * s) + 'px';
+}
+
+/* ---------- Header image + colours from image ---------- */
+let headerImg = safeGet('headerImg');
+let imgTheme = null;
+
+function currentTheme(){
+  const v = $('theme').value;
+  if (v === 'image' && imgTheme) return imgTheme;
+  if (v === 'boss' && tab !== 'tier' && bossTypes) {
+    const h1 = TYPE_COLORS[bossTypes[0]], h2 = bossTypes[1] ? TYPE_COLORS[bossTypes[1]] : `color-mix(in srgb, ${h1} 55%, #000)`;
+    return { h1, h2, dbg1: `color-mix(in srgb, ${h1} 22%, #0d0a10)`, dbg2: `color-mix(in srgb, ${h2} 12%, #08060a)` };
+  }
+  const [h1, h2] = (v === 'image' || v === 'boss' ? '#d81b60,#8e24aa' : v).split(',');
+  return { h1, h2 };
+}
+
+function rgb2hsl(r, g, b){
+  r/=255; g/=255; b/=255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), l = (mx+mn)/2;
+  if (mx === mn) return [0, 0, l];
+  const d = mx - mn, s = l > .5 ? d/(2-mx-mn) : d/(mx+mn);
+  let h = mx === r ? (g-b)/d + (g < b ? 6 : 0) : mx === g ? (b-r)/d + 2 : (r-g)/d + 4;
+  return [h*60, s, l];
+}
+const hsl = (h, s, l) => `hsl(${Math.round(h)} ${Math.round(s)}% ${Math.round(l)}%)`;
+
+function loadImage(src){
+  return new Promise((ok, bad) => { const i = new Image(); if (/^https?:/.test(src)) i.crossOrigin = 'anonymous'; i.onload = () => ok(i); i.onerror = bad; i.src = src; });
+}
+
+// Find the 2 most dominant vivid hues in the image and build a theme from them
+function paletteFrom(img){
+  const c = document.createElement('canvas'); c.width = c.height = 72;
+  const ctx = c.getContext('2d'); ctx.drawImage(img, 0, 0, 72, 72);
+  const px = ctx.getImageData(0, 0, 72, 72).data;
+  const N = 24, buckets = Array.from({ length: N }, () => ({ w: 0, h: 0, s: 0, l: 0 }));
+  for (let i = 0; i < px.length; i += 4) {
+    if (px[i+3] < 128) continue;
+    const [h, s, l] = rgb2hsl(px[i], px[i+1], px[i+2]);
+    if (s < .2 || l < .12 || l > .92) continue;
+    const w = s * (1 - Math.abs(l - .5) * 1.4);
+    const b = buckets[Math.floor(h / (360 / N)) % N];
+    b.w += w; b.h += h * w; b.s += s * w; b.l += l * w;
+  }
+  const ranked = buckets.filter(b => b.w > 0).map(b => ({ w: b.w, h: b.h/b.w, s: b.s/b.w*100, l: b.l/b.w*100 })).sort((a, b) => b.w - a.w);
+  if (!ranked.length) return null; // greyscale image
+  const a = ranked[0];
+  const hueDist = (x, y) => { const d = Math.abs(x - y) % 360; return Math.min(d, 360 - d); };
+  const b = ranked.find(r => hueDist(r.h, a.h) >= 30 && r.w >= a.w * .12) || { h: a.h + 25, s: a.s, l: a.l };
+  return {
+    h1: hsl(a.h, Math.max(a.s, 55), Math.min(a.l, 46)),
+    h2: hsl(b.h, Math.max(b.s, 50), Math.min(b.l, 36)),
+    bg1: hsl(a.h, 60, 93),
+    bg2: hsl(b.h, 50, 87),
+    shade: hsl(a.h, 35, 80),
+    foot: hsl(a.h, 25, 42),
+    dbg1: hsl(a.h, 38, 15),
+    dbg2: hsl(b.h, 40, 8),
+    dshade: hsl(a.h, 45, 6),
+    swatch: [hsl(a.h, a.s, a.l), hsl(b.h, b.s, b.l)]
+  };
+}
+
+async function setHeaderImage(src, fromUser){
+  if (!src) {
+    headerImg = null; imgTheme = null;
+    try { localStorage.removeItem('headerImg'); } catch {}
+    $('themeImg').disabled = true;
+    if ($('theme').value === 'image') $('theme').value = '#d81b60,#8e24aa';
+    $('drop').innerHTML = 'Click, drop or paste (Ctrl+V) an image';
+    $('imgopts').hidden = true; $('swatches').innerHTML = '';
+    render(); return;
+  }
+  let img = await loadImage(src);
+  if (fromUser) { // downscale so it can be saved and exported fast
+    const scale = Math.min(1, 2160 / img.naturalWidth);
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.naturalWidth * scale); c.height = Math.round(img.naturalHeight * scale);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    src = c.toDataURL('image/webp', .9);
+    safeSet('headerImg', src);
+    // default height = the image's natural aspect at 1080 wide
+    $('ih').value = Math.min(900, Math.max(180, Math.round(1080 * img.naturalHeight / img.naturalWidth)));
+  }
+  headerImg = src;
+  imgTheme = paletteFrom(img);
+  $('themeImg').disabled = !imgTheme;
+  if (imgTheme) $('theme').value = 'image';
+  $('drop').innerHTML = `<img src="${src}" alt="">Click, drop or paste to replace`;
+  $('swatches').innerHTML = imgTheme ? imgTheme.swatch.concat([imgTheme.bg1, imgTheme.bg2]).map(c => `<span style="background:${c}"></span>`).join('') : '';
+  $('imgopts').hidden = false;
+  render();
+}
+
+function readFile(file){
+  if (!file || !file.type.startsWith('image/')) return;
+  const r = new FileReader(); r.onload = () => setHeaderImage(r.result, true); r.readAsDataURL(file);
+}
+$('drop').addEventListener('click', () => $('img').click());
+$('img').addEventListener('change', e => readFile(e.target.files[0]));
+$('rmimg').addEventListener('click', () => setHeaderImage(null));
+for (const el of [$('drop'), document.querySelector('.stage')]) {
+  el.addEventListener('dragover', e => { e.preventDefault(); $('drop').classList.add('over'); });
+  el.addEventListener('dragleave', () => $('drop').classList.remove('over'));
+  el.addEventListener('drop', e => { e.preventDefault(); $('drop').classList.remove('over'); readFile(e.dataTransfer.files[0]); });
+}
+document.addEventListener('paste', e => {
+  const item = [...(e.clipboardData?.items || [])].find(i => i.type.startsWith('image/'));
+  if (item) { e.preventDefault(); readFile(item.getAsFile()); }
+});
+
+let t; const deb = () => { clearTimeout(t); t = setTimeout(render, 400); };
+['data','title','sub','eyebrow','foot','format','theme','bigtop','maxsrc','cardstyle','dyn','mode','imgmode','ipos','ih','nrows','nper','lvl','uniq'].forEach(id => $(id).addEventListener('input', deb));
+window.addEventListener('resize', fit);
+
+/* =====================================================================
+   Counters mode (Raid / Max Battle) — data from Pokebattler
+   ===================================================================== */
+let tab = safeGet('tab') || 'tier';
+const filters = Object.assign({ legendary: false, shadow: false, mega: false }, JSON.parse(safeGet('pbFilters') || '{}'));
+let bossTypes = null, lastBossName = '';
+const PB = 'https://fight.pokebattler.com';
+
+// Pokémon GO type chart (attacking type -> defending types)
+const GO_CHART = {
+  normal:   { se: [], nve: ['rock','steel'], ne: ['ghost'] },
+  fire:     { se: ['grass','ice','bug','steel'], nve: ['fire','water','rock','dragon'] },
+  water:    { se: ['fire','ground','rock'], nve: ['water','grass','dragon'] },
+  electric: { se: ['water','flying'], nve: ['electric','grass','dragon'], ne: ['ground'] },
+  grass:    { se: ['water','ground','rock'], nve: ['fire','grass','poison','flying','bug','dragon','steel'] },
+  ice:      { se: ['grass','ground','flying','dragon'], nve: ['fire','water','ice','steel'] },
+  fighting: { se: ['normal','ice','rock','dark','steel'], nve: ['poison','flying','psychic','bug','fairy'], ne: ['ghost'] },
+  poison:   { se: ['grass','fairy'], nve: ['poison','ground','rock','ghost'], ne: ['steel'] },
+  ground:   { se: ['fire','electric','poison','rock','steel'], nve: ['grass','bug'], ne: ['flying'] },
+  flying:   { se: ['grass','fighting','bug'], nve: ['electric','rock','steel'] },
+  psychic:  { se: ['fighting','poison'], nve: ['psychic','steel'], ne: ['dark'] },
+  bug:      { se: ['grass','psychic','dark'], nve: ['fire','fighting','poison','flying','ghost','steel','fairy'] },
+  rock:     { se: ['fire','ice','flying','bug'], nve: ['fighting','ground','steel'] },
+  ghost:    { se: ['psychic','ghost'], nve: ['dark'], ne: ['normal'] },
+  dragon:   { se: ['dragon'], nve: ['steel'], ne: ['fairy'] },
+  dark:     { se: ['psychic','ghost'], nve: ['fighting','dark','fairy'] },
+  steel:    { se: ['ice','rock','fairy'], nve: ['fire','water','electric','steel'] },
+  fairy:    { se: ['fighting','dragon','dark'], nve: ['fire','poison','steel'] }
+};
+function effectiveness(atk, defTypes){
+  let m = 1; const c = GO_CHART[atk];
+  for (const d of defTypes) {
+    if (c.se.includes(d)) m *= 1.6; else if (c.nve.includes(d)) m *= 0.625; else if (c.ne && c.ne.includes(d)) m *= 0.390625;
+  }
+  return m;
+}
+const weaknesses = defTypes => Object.keys(GO_CHART).map(t => ({ t, m: effectiveness(t, defTypes) })).filter(x => x.m > 1.01).sort((a, b) => b.m - a.m);
+
+// ---------- Pokebattler data ----------
+let raidsData = null;
+async function getRaids(){
+  if (raidsData) return raidsData;
+  return raidsData = await (await fetch(PB + '/raids')).json();
+}
+let moveTypes = JSON.parse(safeGet('pbMoveTypes') || 'null');
+async function getMoveTypes(){
+  if (moveTypes) return moveTypes;
+  const d = await (await fetch(PB + '/moves')).json();
+  moveTypes = {};
+  for (const m of d.move) moveTypes[m.moveId] = (m.type || '').replace('POKEMON_TYPE_', '').toLowerCase();
+  safeSet('pbMoveTypes', JSON.stringify(moveTypes));
+  return moveTypes;
+}
+const moveName = id => id.replace(/_FAST$/, '').replace(/_PLUS_PLUS$/, '++').replace(/_PLUS$/, '+')
+  .toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+// ---------- Pokebattler ID -> display name + PokeAPI slugs ----------
+const SPECIAL_NAMES = { HO_OH:'Ho-Oh', PORYGON_Z:'Porygon-Z', MR_MIME:'Mr. Mime', MIME_JR:'Mime Jr.', MR_RIME:'Mr. Rime',
+  JANGMO_O:'Jangmo-o', HAKAMO_O:'Hakamo-o', KOMMO_O:'Kommo-o', NIDORAN_FEMALE:'Nidoran♀', NIDORAN_MALE:'Nidoran♂',
+  TYPE_NULL:'Type: Null', TAPU_KOKO:'Tapu Koko', TAPU_LELE:'Tapu Lele', TAPU_BULU:'Tapu Bulu', TAPU_FINI:'Tapu Fini',
+  CHI_YU:'Chi-Yu', CHIEN_PAO:'Chien-Pao', TING_LU:'Ting-Lu', WO_CHIEN:'Wo-Chien' };
+const SLUG_FIX = { NIDORAN_FEMALE:'nidoran-f', NIDORAN_MALE:'nidoran-m', FARFETCHD:'farfetchd', SIRFETCHD:'sirfetchd', FLABEBE:'flabebe' };
+const REGIONS = { ALOLA:['Alolan','alola'], GALARIAN:['Galarian','galar'], GALAR:['Galarian','galar'], HISUIAN:['Hisuian','hisui'],
+  HISUI:['Hisuian','hisui'], PALDEA:['Paldean','paldea'], PALDEAN:['Paldean','paldea'] };
+const HIDDEN_FORMS = ['NORMAL','STANDARD','ORDINARY','INCARNATE','ALTERED','LAND','ARIA','RED_STRIPED','OVERCAST','PLANT','WEST','SPRING'];
+const titleCase = s => s.toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+
+function pbParse(id){
+  let s = id.replace(/^DYNAMAX_/, '');
+  const r = { id, shadow: false, mega: '', megaSuffix: '', gmax: false, region: null, form: '' };
+  if (/_SHADOW_FORM$/.test(s)) { r.shadow = true; s = s.replace(/_SHADOW_FORM$/, ''); }
+  if (/^SHADOW_/.test(s)) { r.shadow = true; s = s.slice(7); }
+  if (/_GIGANTAMAX$/.test(s)) { r.gmax = true; s = s.replace(/_GIGANTAMAX$/, ''); }
+  let m = s.match(/_(MEGA|PRIMAL)(?:_([A-Z]+))?$/);
+  if (m) { r.mega = m[1]; r.megaSuffix = m[2] || ''; s = s.slice(0, m.index); }
+  s = s.replace(/_FORM$/, '');
+  for (const k of Object.keys(REGIONS)) {
+    const re = new RegExp('_' + k + '(?=_|$)');
+    if (re.test(s)) { r.region = k; s = s.replace(re, ''); break; }
+  }
+  const two = s.split('_').slice(0, 2).join('_');
+  const twoName = Object.keys(SPECIAL_NAMES).find(k => s === k || s.startsWith(k + '_'));
+  r.base = twoName || s.split('_')[0];
+  r.form = s.slice(r.base.length).replace(/^_/, '');
+  const baseName = SPECIAL_NAMES[r.base] || titleCase(r.base);
+  let name = baseName;
+  if (r.region) name = REGIONS[r.region][0] + ' ' + name;
+  if (r.mega) name = (r.mega === 'PRIMAL' ? 'Primal ' : 'Mega ') + name + (r.megaSuffix && r.megaSuffix.length === 1 ? ' ' + r.megaSuffix : '');
+  if (r.form && !HIDDEN_FORMS.includes(r.form)) name += ' (' + titleCase(r.form) + ')';
+  r.name = name;
+  r.baseName = baseName;
+  // PokeAPI candidates, most specific first
+  const b = SLUG_FIX[r.base] || r.base.toLowerCase().replace(/_/g, '-');
+  const f = r.form.toLowerCase().replace(/_/g, '-');
+  const c = [];
+  if (r.mega) c.push(`${b}-${r.mega.toLowerCase()}${r.megaSuffix ? '-' + r.megaSuffix.toLowerCase() : ''}`, `${b}-${r.mega.toLowerCase()}`);
+  if (r.gmax) c.push(`${b}-gmax`);
+  if (r.region) { const reg = REGIONS[r.region][1]; if (f) c.push(`${b}-${reg}-${f}`); c.push(`${b}-${reg}`); }
+  if (f) { const parts = f.split('-'); for (let i = parts.length; i > 0; i--) c.push(`${b}-${parts.slice(0, i).join('-')}`); }
+  c.push(b);
+  r.slugs = [...new Set(c)];
+  return r;
+}
+
+const missing = new Set();
+async function lookupSlugs(slugs){
+  const api = 'https://pokeapi.co/api/v2/';
+  for (const sl of slugs) {
+    if (cache[sl]) return cache[sl];
+    if (missing.has(sl)) continue;
+    try {
+      const res = await fetch(api + 'pokemon/' + sl);
+      if (res.ok) {
+        const d = await res.json();
+        const info = {
+          sprite: d.sprites?.other?.home?.front_default || d.sprites?.other?.['official-artwork']?.front_default || d.sprites?.front_default,
+          types: d.types.map(t => t.type.name)
+        };
+        cache[sl] = info; safeSet('pokeCache', JSON.stringify(cache));
+        return info;
+      }
+    } catch {}
+    missing.add(sl);
+  }
+  try { return await lookup(slugs[slugs.length - 1]); } catch { return null; }
+}
+
+// ---------- Tiers ----------
+function tierLabel(t){
+  t = t.replace(/_(LEGACY|FUTURE)$/, '');
+  let m;
+  if ((m = t.match(/^RAID_LEVEL_(\d)(_5)?_MAX$/))) {
+    if (m[1] === '6') return m[2] ? 'Gigantamax Battle+' : 'Gigantamax Battle';
+    if (m[1] === '5') return 'Legendary Max Battle';
+    return `${m[1]}★ Max Battle`;
+  }
+  if (/MEGA_ENHANCED/.test(t)) return 'Super Mega Raid';
+  if (/^RAID_LEVEL_MEGA_5/.test(t)) return 'Legendary Mega Raid';
+  if (/^RAID_LEVEL_MEGA/.test(t)) return 'Mega Raid';
+  if (/ULTRA_BEAST/.test(t)) return 'Ultra Beast Raid';
+  if (/ELITE/.test(t)) return 'Elite Raid';
+  if ((m = t.match(/^RAID_LEVEL_(\d)_SHADOW$/))) return `Shadow ${m[1]}★ Raid`;
+  if ((m = t.match(/^RAID_LEVEL_(\d)$/))) return `${m[1]}★ Raid`;
+  return titleCase(t.replace(/^RAID_LEVEL_/, '')) + ' Raid';
+}
+const norm = s => s.toLowerCase().normalize('NFD').replace(/[^a-z0-9]/g, '');
+
+function bossOptions(raids, mode){
+  const out = [], seen = new Set();
+  for (const t of raids.tiers) {
+    const tier = t.tier;
+    if (tier.includes('UNSET')) continue;
+    if ((mode === 'max') !== tier.includes('_MAX')) continue;
+    const status = /_LEGACY$/.test(tier) ? 2 : /_FUTURE$/.test(tier) ? 1 : 0;
+    for (const r of t.raids) {
+      const p = pbParse(r.pokemon);
+      const shown = (p.gmax ? 'Gigantamax ' : '') + (p.shadow ? 'Shadow ' : '') + p.name;
+      const label = `${shown} — ${tierLabel(tier)}${status === 1 ? ' (upcoming)' : status === 2 ? ' (past)' : ''}`;
+      if (seen.has(label)) continue; seen.add(label);
+      out.push({ id: r.pokemon, tier: tier.replace(/_(LEGACY|FUTURE)$/, ''), status, label, shown, full: norm(shown), key: norm(p.name) });
+    }
+  }
+  return out.sort((a, b) => a.status - b.status || (a.status < 0 ? 0 : a.label.localeCompare(b.label)));
+}
+
+function findBoss(text, opts, mode){
+  const n = norm(text.split(' — ')[0]);
+  return opts.find(o => o.id === text) || opts.find(o => o.label === text) || opts.find(o => o.full === n) || opts.find(o => o.key === n)
+    || opts.find(o => o.full.startsWith(n) || o.key.startsWith(n))
+    || { id: text.toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, ''), tier: mode === 'max' ? 'RAID_LEVEL_3_MAX' : 'RAID_LEVEL_5', status: 0, guess: true };
+}
+
+async function fillBossList(){
+  try {
+    const opts = bossOptions(await getRaids(), tab);
+    $('bossList').innerHTML = opts.map(o => `<option value="${esc(o.label)}"></option>`).join('');
+  } catch {}
+}
+
+
+
+
+// ---------- GO stats (Pokebattler) for CP maths ----------
+let pbStats = JSON.parse(safeGet('pbStats') || 'null');
+async function getStats(){
+  if (pbStats) return pbStats;
+  const d = await (await fetch(PB + '/pokemon')).json();
+  pbStats = {};
+  for (const m of d.pokemon) if (m.stats) pbStats[m.pokemonId] = [m.stats.baseAttack, m.stats.baseDefense, m.stats.baseStamina];
+  safeSet('pbStats', JSON.stringify(pbStats));
+  return pbStats;
+}
+const CPM20 = 0.5974, CPM25 = 0.667934;
+const cpAt = (st, cpm, iv) => Math.max(10, Math.floor((st[0] + iv) * Math.sqrt(st[1] + iv) * Math.sqrt(st[2] + iv) * cpm * cpm / 10));
+const catchId = id => id.replace(/_SHADOW_FORM$/, '').replace(/_GIGANTAMAX$/, '').replace(/^DYNAMAX_/, '').replace(/_(MEGA|PRIMAL)(_[A-Z]+)?$/, '');
+const WEATHER = [
+  ['Sunny', 'clearDay', ['grass','ground','fire']], ['Rainy', 'rainDay', ['water','electric','bug']],
+  ['Partly cloudy', 'partlyCloudyDay', ['normal','rock']], ['Cloudy', 'overcastDay', ['fairy','fighting','poison']],
+  ['Windy', 'windyDay', ['dragon','flying','psychic']], ['Snow', 'snowDay', ['ice','steel']], ['Fog', 'fogDay', ['dark','ghost']]
+];
+const weatherFor = types => WEATHER.filter(w => types.some(t => w[2].includes(t)));
+const weatherIcon = key => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_large_${key}.png`;
+
+// legendary / mythical flag per species (cached)
+const legendCache = JSON.parse(safeGet('legendCache') || '{}');
+async function isLegendary(p){
+  const slug = p.slugs[p.slugs.length - 1];
+  if (slug in legendCache) return legendCache[slug];
+  try {
+    const sp = await (await fetch('https://pokeapi.co/api/v2/pokemon-species/' + slug)).json();
+    legendCache[slug] = !!(sp.is_legendary || sp.is_mythical);
+    safeSet('legendCache', JSON.stringify(legendCache));
+  } catch { return false; }
+  return legendCache[slug];
+}
+
+// ---------- Counters ----------
+const ctrCache = new Map();
+async function fetchCounters(id, tier, lvl, f, onWait){
+  const url = `${PB}/raids/defenders/${id}/levels/${tier}/attackers/levels/${lvl}/strategies/CINEMATIC_ATTACK_WHEN_POSSIBLE/DEFENSE_RANDOM_MC`
+    + `?sort=ESTIMATOR&weatherCondition=NO_WEATHER&dodgeStrategy=DODGE_REACTION_TIME&aggregation=AVERAGE&numParty=1`
+    + `&attackerTypes=POKEMON_TYPE_ALL&includeLegendary=${f.legendary}&includeShadow=${f.shadow}&includeMegas=${f.mega}`;
+  if (ctrCache.has(url)) return ctrCache.get(url);
+  for (let i = 0; i < 20; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) {
+        const d = await res.json();
+        const atk = d.attackers && d.attackers[0];
+        if (atk && atk.randomMove && atk.randomMove.defenders && atk.randomMove.defenders.length) { ctrCache.set(url, atk); return atk; }
+      } else if (res.status === 404 || res.status === 400) throw new Error('Pokebattler does not know this boss');
+    } catch (e) { if (/does not know/.test(e.message)) throw e; }
+    onWait && onWait(i);
+    await new Promise(r => setTimeout(r, 3000)); // Pokebattler is still simulating
+  }
+  throw new Error('Pokebattler took too long — try again in a minute');
+}
+
+// Max Battles: no reliable estimator exists, so show the usual group size per tier
+function maxGuide(tier){
+  const n = +(tier.match(/RAID_LEVEL_(\d)/) || [])[1] || 1;
+  return ({
+    1: { verdict: 'Soloable', vc: '#22c55e', players: '1 trainer', note: 'Easy solo with almost any team' },
+    2: { verdict: 'Easy', vc: '#3b82f6', players: '1–2 trainers', note: 'Soloable with good counters' },
+    3: { verdict: 'Moderate', vc: '#eab308', players: '2–4 trainers', note: 'Bring a group or strong Max moves' },
+    4: { verdict: 'Hard', vc: '#f97316', players: '4 trainers', note: 'Full party of 4 recommended' },
+    5: { verdict: 'Hard', vc: '#f97316', players: '4 trainers', note: 'Full party of well-built counters' },
+    6: { verdict: 'Very hard', vc: '#ef4444', players: '10+ trainers', note: 'Gigantamax: up to 40 trainers in groups of 4' }
+  })[Math.min(6, n)];
+}
+
+function difficulty(E, maxN){
+  const col = { EASY: '#22c55e', TIGHT: '#eab308', HARD: '#f97316', EXTREME: '#ef4444' };
+  let verdict = 'Extreme', vc = '#ef4444';
+  if (E <= 1) { verdict = 'Soloable'; vc = '#22c55e'; }
+  else if (E <= 1.5) { verdict = 'Easy duo'; vc = '#3b82f6'; }
+  else if (E <= 2) { verdict = 'Easy trio'; vc = '#60a5fa'; }
+  else if (E <= 3) { verdict = 'Moderate'; vc = '#eab308'; }
+  else if (E <= 5) { verdict = 'Hard'; vc = '#f97316'; }
+  const boxes = [];
+  for (let n = 1; n <= maxN; n++) {
+    const ratio = E / n;
+    const st = ratio <= 2 / 3 ? 'EASY' : ratio <= 1 ? 'TIGHT' : ratio <= 1.5 ? 'HARD' : 'EXTREME';
+    boxes.push({ n: n === maxN && maxN === 6 ? '6+' : String(n), st, c: col[st] });
+  }
+  return { verdict, vc, needed: Math.max(1, Math.ceil(E * 1.5)), boxes };
+}
+
+const SPARKLE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.6 7.4L22 11l-7.4 2.6L12 21l-2.6-7.4L2 11l7.4-2.6z"/></svg>';
+const PERSON = '<svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="4.5" r="3.2"/><path d="M1.5 15c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6z"/></svg>';
+function orbHTML(info, size, shadow){
+  const t1 = TYPE_COLORS[info?.types?.[0]] || '#9aa3b2';
+  return `<div class="orb ${shadow ? 'shadow' : ''}" style="--cw:${size / 0.74};--t1:${t1}">${info?.sprite
+    ? `<img class="mon" crossorigin="anonymous" src="${info.sprite}" alt="">` : `<span class="ph">?</span>`}</div>`;
+}
+function moveHTML(mid){
+  if (!mid || mid === 'MOVE_NONE') return '';
+  const t = moveTypes && moveTypes[mid];
+  return `<div class="mv">${t ? `<img crossorigin="anonymous" src="${TYPE_ICON(t)}" alt="">` : ''}<span>${esc(moveName(mid))}</span></div>`;
+}
+function tagsHTML(p){
+  return (p.shadow ? '<span class="tg sh">Shadow</span>' : '') + (p.gmax ? '<span class="tg gm">G-Max</span>' : '');
+}
+
+function emptyPoster(msg){
+  const poster = setupPoster(currentTheme());
+  poster.innerHTML = `<div class="c-empty">${esc(msg)}</div>`;
+  requestAnimationFrame(fit);
+}
+
+async function renderCounters(id){
+  const text = $('boss').value.trim();
+  const status = (m, err) => { $('status').className = 'status' + (err ? ' err' : ''); $('status').textContent = m; };
+  if (!text) { bossTypes = null; emptyPoster('Pick a boss on the left'); status(''); return; }
+  status('Loading from Pokebattler…');
+  try {
+    const [raids, , stats] = await Promise.all([getRaids(), getMoveTypes(), getStats().catch(() => ({}))]);
+    const boss = findBoss(text, bossOptions(raids, tab), tab);
+    if (boss.guess) { // not in any current list: legendary/mythical -> 5-star, otherwise 3-star
+      const bp0 = pbParse(boss.id);
+      try {
+        const sp = await (await fetch('https://pokeapi.co/api/v2/pokemon-species/' + bp0.slugs[bp0.slugs.length - 1])).json();
+        const legend = sp.is_legendary || sp.is_mythical;
+        if (bp0.gmax) boss.tier = 'RAID_LEVEL_6_MAX';
+        else if (tab === 'max') boss.tier = legend ? 'RAID_LEVEL_5_MAX' : 'RAID_LEVEL_3_MAX';
+        else boss.tier = bp0.mega ? 'RAID_LEVEL_MEGA' : legend ? 'RAID_LEVEL_5' : 'RAID_LEVEL_3';
+      } catch {}
+    }
+    const lvl = $('lvl').value;
+    const f = tab === 'max' ? { ...filters, mega: false } : filters;
+    const atk = await fetchCounters(boss.id, boss.tier, lvl, f, i => { if (id === renderId) status(`Pokebattler is simulating… (${i + 1})`); });
+    if (id !== renderId) return;
+
+    let defs = atk.randomMove.defenders.map(d => {
+      const best = d.byMove.reduce((a, b) => ((b.result?.estimator ?? 1e9) < (a.result?.estimator ?? 1e9) ? b : a));
+      return { id: d.pokemonId, est: d.total?.estimator ?? best.result?.estimator, move1: best.move1, move2: best.move2 };
+    }).filter(d => d.est).sort((a, b) => a.est - b.est);
+    defs.forEach(d => d.p = pbParse(d.id));
+    if (!f.legendary) { // Pokebattler ignores includeLegendary for some sims (e.g. Max Battles) — filter here too
+      const flags = await Promise.all(defs.map(d => isLegendary(d.p)));
+      defs = defs.filter((d, i) => !flags[i]);
+    }
+    if ($('uniq').checked) {
+      const seen = new Set();
+      defs = defs.filter(d => { const k = d.p.base + (d.p.region || '') + d.p.form; if (seen.has(k)) return false; seen.add(k); return true; });
+    }
+    const E = defs[0]?.est;
+    // dates + shiny straight from Pokebattler (/raids: breakingNews + raid entries)
+    const news = (raids.breakingNews || []).filter(n => n.pokemon === boss.id && (n.tier || '').replace(/_(LEGACY|FUTURE)$/, '') === boss.tier)
+      .sort((x, y) => (y.endDate || 0) - (x.endDate || 0))[0];
+    let pbEntry = null;
+    for (const t of raids.tiers) if (t.tier.replace(/_(LEGACY|FUTURE)$/, '') === boss.tier) { pbEntry = t.raids.find(r => r.pokemon === boss.id) || pbEntry; if (pbEntry) break; }
+    // Pokebattler stores "local time" events (e.g. 6:00 local) as Los Angeles time -> turn back into the viewer's wall clock
+    const wall = (ms, local) => {
+      if (!ms) return null;
+      if (!local) return ms;
+      const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hourCycle: 'h23',
+        year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }).formatToParts(new Date(ms)).map(x => [x.type, x.value]));
+      return new Date(+p.year, +p.month - 1, +p.day, +p.hour, +p.minute).getTime();
+    };
+    const startMs = wall(news?.startDate || pbEntry?.startDate, news ? news.localTime : true), endMs = wall(news?.endDate, news?.localTime);
+    const target = +$('format').value >= 1000 ? +$('format').value : 0; // fixed size -> fit as many as possible
+    const per = +$('nper').value;
+    const list = defs.slice(0, 30);
+    const minShown = Math.min(list.length, 3 + +$('nrows').value * per);
+
+    const bp = pbParse(boss.id);
+    status('Loading sprites…');
+    const [bossInfo, ...infos] = await Promise.all([lookupSlugs(bp.slugs), ...list.map(d => lookupSlugs(d.p.slugs))]);
+    if (id !== renderId) return;
+    list.forEach((d, i) => d.info = infos[i]);
+
+    bossTypes = bossInfo?.types || null;
+    const th = currentTheme();
+    const poster = setupPoster(th);
+    const bossName = (bp.gmax ? 'Gigantamax ' : tab === 'max' ? 'Dynamax ' : '') + (bp.shadow ? 'Shadow ' : '') + bp.name;
+    lastBossName = bossName;
+    const weak = bossTypes ? weaknesses(bossTypes) : [];
+    const diff = tab === 'max' ? null : (E ? difficulty(E, 6) : null);
+    // boss movesets (from the same Pokebattler response)
+    const bossFast = [...new Set(atk.byMove.map(m => m.move1))].filter(m => m && m !== 'MOVE_NONE');
+    const bossCharged = [...new Set(atk.byMove.map(m => m.move2))].filter(m => m && m !== 'MOVE_NONE');
+    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    const inc = [f.legendary ? 'Legendaries' : 'No legendaries', f.shadow ? 'Shadows' : 'No shadows'];
+    if (tab !== 'max') inc.push(f.mega ? 'Megas' : 'No megas');
+    const imgMode = headerImg ? 'banner' : null;
+
+    const cineSize = Math.min(76, Math.floor(1000 / (bossName.length * 0.58)));
+    const typesHTML = `<span class="c-lab">Type</span>
+        <div class="cine-icons">${(bossTypes || []).map(t => `<img class="ti" crossorigin="anonymous" src="${TYPE_ICON(t)}" alt="${t}">`).join('')}</div>`;
+    const weakHTML = weak.length ? `<span class="c-lab">Weak to</span><div class="cine-icons">${weak.map(w =>
+          `<span class="wk"><img crossorigin="anonymous" src="${TYPE_ICON(w.t)}" alt="${w.t}">${w.m > 2 ? '<b>×2</b>' : ''}</span>`).join('')}</div>` : '';
+    const fmtD = ms => new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const upcoming = startMs && startMs > Date.now();
+    const when = startMs && endMs ? `${fmtD(startMs)} – ${fmtD(endMs)}` : startMs ? `From ${fmtD(startMs)}` : '';
+    const cpBlock = (when || pbEntry?.shiny) ? `<div class="cine-block">
+        ${when ? `<span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><div class="cine-big">${when}</div>` : ''}
+        ${pbEntry?.shiny ? `<div class="fact shiny" style="margin-top:${when ? 10 : 0}px">${SPARKLE}Shiny available</div>` : ''}
+      </div>` : '';
+    const cst = stats[catchId(boss.id)] || stats[catchId(boss.id).replace(/_FORM$/, '')];
+    const tierInfo = raids.tiers.find(t => t.tier === boss.tier)?.info;
+    const wx = bossTypes ? weatherFor(bossTypes) : [];
+    const tiles = [];
+    if (when) tiles.push(`<div class="tile"><span class="c-lab">${upcoming ? 'Coming' : 'Available'}</span><b class="tv">${when}</b></div>`);
+    const shinySprite = bossInfo?.sprite ? bossInfo.sprite.replace('/other/home/', '/other/home/shiny/').replace('/official-artwork/', '/official-artwork/shiny/') : null;
+    if (cst) tiles.push(`<div class="tile"><span class="c-lab">Perfect CP</span><b class="tv">${cpAt(cst, CPM20, 15)}</b><span class="ts">100% IV catch</span></div>`);
+    if (cst && wx.length) tiles.push(`<div class="tile"><span class="c-lab">Weather boosted</span><div class="tv-row"><b class="tv">${cpAt(cst, CPM25, 15)}</b><span class="wxs2">${wx.map(w =>
+      `<img crossorigin="anonymous" src="${weatherIcon(w[1])}" alt="${w[0]}">`).join('')}</span></div><span class="ts">${wx.map(w => w[0]).join(' · ')}</span></div>`);
+    if (pbEntry?.shiny && shinySprite) tiles.push(`<div class="tile shiny-tile"><img class="shiny-img" crossorigin="anonymous" src="${shinySprite}" alt=""><div><span class="c-lab">Shiny</span><span class="fact shiny">${SPARKLE}Available</span></div></div>`);
+    const stripHTML = tiles.length ? `<div class="cine-strip" style="--n:${tiles.length}">${tiles.join('')}</div>` : '';
+    const diffBlock = diff ? `<section class="c-diff cine-block" style="--vc:${diff.vc}">
+        <span class="c-lab">Difficulty</span>
+        <div class="c-verdict">${diff.verdict}</div>
+        <div class="meter">${diff.boxes.map(b => `<div class="pm" style="--bc:${b.c}">${PERSON}<span>${b.n}</span></div>`).join('')}</div>
+        <div class="lg"><span><i style="background:#22c55e"></i>Easy</span><span><i style="background:#eab308"></i>Tight</span><span><i style="background:#f97316"></i>Hard</span><span><i style="background:#ef4444"></i>Extreme</span></div>
+        <div class="c-est"><b>${diff.needed}</b> trainer${diff.needed > 1 ? 's' : ''} recommended · Estimator <b>${E < 10 ? E.toFixed(2) : E.toFixed(0)}</b></div>
+      </section>` : '';
+    let leftBlocks, rightBlocks = [diffBlock].filter(Boolean);
+    if (rightBlocks.length) leftBlocks = [`<div class="cine-block">${typesHTML}<div style="height:12px"></div>${weakHTML}</div>`];
+    else { leftBlocks = [`<div class="cine-block">${typesHTML}</div>`]; rightBlocks = weakHTML ? [`<div class="cine-block">${weakHTML}</div>`] : []; }
+
+    const longest = Math.max(...bossName.split(' ').map(w => w.length));
+    const nameSize = Math.min(72, Math.floor(400 / (longest * 0.6)));
+    const build = (L, lay = per === 4 ? 'normal' : 'large') => { const top = L.slice(0, 3), rest = L.slice(3); return `
+      ${imgMode ? `<img class="p-img" src="${headerImg}" alt="">` : ''}
+      <section class="c-cine ${imgMode ? 'has-img' : ''}">
+        <div class="p-eyebrow">${esc(tierLabel(boss.tier))}${boss.status === 1 || boss.status === -1 ? ' · Upcoming' : ''}</div>
+        <div class="cine-name" style="font-size:${cineSize}px">${esc(bossName)}</div>
+        <div class="cine-stage">
+          <div class="cine-side">${leftBlocks.join('')}</div>
+          <div class="cine-boss ${bp.shadow ? 'shadow' : ''}" style="--t1:${TYPE_COLORS[bossTypes?.[0]] || '#9aa3b2'}">
+            <div class="cine-ring r2"></div><div class="cine-ring r1"></div><div class="cine-glow"></div>
+            ${bossInfo?.sprite ? `<img class="cine-img" crossorigin="anonymous" src="${bossInfo.sprite}" alt="">` : ''}
+            <div class="cine-floor"></div>
+          </div>
+          <div class="cine-side">${rightBlocks.join('')}</div>
+        </div>
+        ${stripHTML}
+      </section>
+      <div class="c-body">
+        <div class="c-sec"><span>Top counters</span><i>${inc.join(' · ')}</i></div>
+        <div class="c-top">${top.map((d, i) => `
+          <div class="cc top r${i + 1}" style="--t1:${TYPE_COLORS[d.info?.types?.[0]] || '#9aa3b2'}">
+            <div class="rk">#${i + 1}</div>
+            ${orbHTML(d.info, 104, d.p.shadow)}
+            <div style="min-width:0">
+            <div class="cc-name" style="font-size:${d.p.name.length > 20 ? 16 : d.p.name.length > 14 ? 18 : 21}px">${esc(d.p.name)}</div>
+            ${tagsHTML(d.p) ? `<div class="cc-tags">${tagsHTML(d.p)}</div>` : ''}
+            <div class="cc-moves">${moveHTML(d.move1)}${moveHTML(d.move2)}</div>
+            </div>
+          </div>`).join('')}
+        </div>
+        ${rest.length ? `<div class="c-grid g${lay === 'large' ? 3 : 4}">${rest.map((d, i) => `
+          <div class="cc mid" style="--t1:${TYPE_COLORS[d.info?.types?.[0]] || '#9aa3b2'}">
+            <div class="rk">#${i + 4}</div>
+            ${orbHTML(d.info, lay === 'large' ? 76 : 62, d.p.shadow)}
+            <div style="min-width:0">
+            <div class="cc-name" style="font-size:${(lay === 'large' ? 18 : 16) - (d.p.name.length > 16 ? 3 : d.p.name.length > 12 ? 1 : 0)}px">${esc(d.p.name)}</div>
+            ${tagsHTML(d.p) ? `<div class="cc-tags">${tagsHTML(d.p)}</div>` : ''}
+            <div class="cc-moves">${moveHTML(d.move1)}${moveHTML(d.move2)}</div>
+            </div>
+          </div>`).join('')}</div>` : ''}
+      </div>
+      <div class="p-foot"><b>${esc($('foot').value)}</b><span>Updated ${new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</span></div>`; };
+    let shown = target ? list.length : minShown;
+    poster.classList.remove('fill');
+    poster.innerHTML = build(list.slice(0, shown));
+    if (!target) { // Auto: add full rows until the poster is a vertical 4:5 (1350px)
+      while (shown + per <= list.length) {
+        poster.innerHTML = build(list.slice(0, shown + per));
+        if (poster.offsetHeight > 1350) { poster.innerHTML = build(list.slice(0, shown)); break; }
+        shown += per;
+      }
+    }
+    if (target) {
+      // only counts that fill complete rows: 3 on top + rows of 3 (large/normal) or 4 (dense)
+      const combos = [];
+      for (const lay of ['large', 'normal']) {
+        const pr = lay === 'normal' ? 4 : 3;
+        for (let r = 1; 3 + r * pr <= list.length; r++) combos.push({ lay, n: 3 + r * pr });
+      }
+      const order = { large: 0, normal: 1 };
+      combos.sort((x, y) => y.n - x.n || order[x.lay] - order[y.lay]);
+      shown = 3;
+      poster.innerHTML = build(list.slice(0, 3));
+      for (const c of combos) {
+        poster.innerHTML = build(list.slice(0, c.n), c.lay);
+        if (poster.offsetHeight <= target) { shown = c.n; break; }
+      }
+      poster.style.minHeight = target + 'px';
+      poster.classList.add('fill'); // stretch the rows to use the leftover space
+    }
+    status(`${bossName} · ${tierLabel(boss.tier)} · ${shown} counters · ${poster.offsetHeight}px tall`);
+    requestAnimationFrame(fit);
+  } catch (e) {
+    if (id !== renderId) return;
+    status(e.message || 'Something went wrong', true);
+  }
+}
+
+// ---------- Tabs & controls ----------
+function setTab(t, initial){
+  tab = t; safeSet('tab', t);
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.tab === t));
+  document.querySelectorAll('.only-tier').forEach(el => el.hidden = t !== 'tier');
+  document.querySelectorAll('.only-ctr').forEach(el => el.hidden = t === 'tier');
+  document.querySelector('.pill[data-f="mega"]').hidden = t === 'max';
+  document.querySelectorAll('.col-opt').forEach(o => o.hidden = t !== 'tier');
+  if (t !== 'tier' && +$('format').value < 1000 && $('format').value !== 'auto') $('format').value = 'auto';
+  syncCount();
+  const th = $('theme');
+  if (t === 'tier' && th.value === 'boss') th.value = '#d81b60,#8e24aa';
+  if (t !== 'tier' && th.value !== 'image' && !initial) th.value = 'boss';
+  if (t !== 'tier' && initial && th.value !== 'image') th.value = 'boss';
+  $('boss').value = safeGet('boss_' + t) || '';
+  if (t !== 'tier') fillBossList();
+  if (!initial) render();
+}
+function syncCount(){ document.querySelectorAll('.ncw').forEach(el => el.hidden = tab !== 'tier' && +$('format').value >= 1000); }
+$('format').addEventListener('input', syncCount);
+document.querySelectorAll('#tabs button').forEach(b => b.addEventListener('click', () => setTab(b.dataset.tab)));
+document.querySelectorAll('.pill').forEach(b => {
+  b.classList.toggle('on', !!filters[b.dataset.f]);
+  b.addEventListener('click', () => {
+    filters[b.dataset.f] = !filters[b.dataset.f];
+    b.classList.toggle('on', filters[b.dataset.f]);
+    safeSet('pbFilters', JSON.stringify(filters));
+    render();
+  });
+});
+$('boss').addEventListener('change', () => { safeSet('boss_' + tab, $('boss').value); render(); });
+
+
+/* ---------- Tier list: where to get each Pokémon (current Max Battles) ---------- */
+const famCache = JSON.parse(safeGet('famCache') || '{}');
+async function familyOf(name){
+  const key = slug(name);
+  if (famCache[key]) return famCache[key];
+  const api = 'https://pokeapi.co/api/v2/';
+  let sp = await fetch(api + 'pokemon-species/' + key);
+  if (!sp.ok) sp = await fetch(api + 'pokemon-species/' + key.split('-')[0]);
+  if (!sp.ok) return null;
+  const spd = await sp.json();
+  const chain = await (await fetch(spd.evolution_chain.url)).json();
+  const members = [];
+  (function walk(n){ members.push(n.species.name); n.evolves_to.forEach(walk); })(chain.chain);
+  const out = { species: spd.name, members };
+  famCache[key] = out; safeSet('famCache', JSON.stringify(famCache));
+  return out;
+}
+
+let maxSrcList = null;
+async function maxSources(){
+  if (maxSrcList) return maxSrcList;
+  const raids = await getRaids();
+  const out = new Map();
+  const add = (id, tier) => {
+    const m = (tier || '').match(/^RAID_LEVEL_(\d)_MAX$/); if (!m) return;
+    const pp = pbParse(id), species = pp.slugs[pp.slugs.length - 1], n = +m[1];
+    const k = species + n;
+    if (!out.has(k)) out.set(k, { species, n, gmax: pp.gmax });
+  };
+  for (const t of raids.tiers) for (const r of t.raids) add(r.pokemon, t.tier);   // current tiers only (LEGACY/FUTURE don't match)
+  return maxSrcList = [...out.values()];
+}
+
+async function attachSources(all){
+  const srcs = await maxSources();
+  await Promise.all(all.map(async m => {
+    m.src = null;
+    const fam = await familyOf(m.name).catch(() => null);
+    if (!fam) return;
+    let best = null;
+    for (const s of srcs) if (fam.members.includes(s.species) && (!best || s.n < best.n)) best = s;
+    if (!best) return;
+    m.src = { ...best, self: best.species === fam.species };
+    if (!m.src.self) m.src.info = await lookup(best.species).catch(() => null);
+  }));
+}
+
+const tileMode = () => $('cardstyle').value === 'tile';
+function srcSide(s){
+  const pic = !s.self && s.info?.sprite ? `<img crossorigin="anonymous" src="${s.info.sprite}" alt="">` : '';
+  return `<div class="sside ${s.self ? 'self' : ''}">${pic ? `<span class="sside-pic">${pic}</span>` : ''}<b>${srcLabel(s)}</b></div>`;
+}
+function srcRow(s){
+  const pic = !s.self && s.info?.sprite ? `<img crossorigin="anonymous" src="${s.info.sprite}" alt="">` : '';
+  return `<div class="srow">${pic}<span class="srow-t">${s.self ? 'Max Battle' : esc(srcName(s))}</span><b>${srcLabel(s)}</b></div>`;
+}
+// (old medallion style, unused)
+function srcBadge(s){
+  return `<div class="srcb ${s.self ? 'self' : ''}">${!s.self && s.info?.sprite ? `<span class="srcb-pic"><img crossorigin="anonymous" src="${s.info.sprite}" alt=""></span>` : ''}<span class="srcb-n">${srcLabel(s)}</span></div>`;
+}
+const srcLabel = s => s.n >= 6 ? 'G-Max' : s.n + '★';
+const srcName = s => s.species.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+function srcHTML(s){
+  const pic = !s.self && s.info?.sprite ? `<img crossorigin="anonymous" src="${s.info.sprite}" alt="">` : '';
+  return `<div class="src ${s.self ? 'self' : ''}">${pic}<span class="src-t">${s.self ? 'Max Battle' : 'from ' + esc(srcName(s))}</span><b class="src-n">${srcLabel(s)}</b></div>`;
+}
+
+/* ---------- Export ---------- */
+// html-to-image can't read the Google Fonts stylesheet (cross-origin), so we
+// download the font files ourselves and hand them over as inline base64.
+let fontCSS = null;
+async function getFontCSS(){
+  if (fontCSS) return fontCSS;
+  const link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  let css = await (await fetch(link.href)).text();
+  const urls = [...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m => m[1]))];
+  const toData = async u => {
+    const blob = await (await fetch(u)).blob();
+    return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+  };
+  const datas = await Promise.all(urls.map(toData));
+  urls.forEach((u, i) => { css = css.split(u).join(datas[i]); });
+  return fontCSS = css;
+}
+
+async function makePng(pixelRatio = 2){
+  await document.fonts.ready;
+  const node = $('poster');
+  const opts = { pixelRatio, width: 1080, height: node.offsetHeight };
+  try { opts.fontEmbedCSS = await getFontCSS(); } catch {}
+  // first pass warms up image loading; second one is the real render
+  await htmlToImage.toPng(node, opts).catch(() => {});
+  return htmlToImage.toPng(node, opts);
+}
+
+$('export').addEventListener('click', async () => {
+  const btn = $('export'); btn.disabled = true; btn.textContent = 'Exporting…';
+  try {
+    const url = await makePng(2);
+    const a = document.createElement('a');
+    a.download = slug((tab === 'tier' ? $('title').value : (lastBossName || $('boss').value) + ' counters') || 'infographic') + '.png'; a.href = url; a.click();
+  } catch (e) {
+    $('status').className = 'status err'; $('status').textContent = 'Export failed: ' + e.message;
+  }
+  btn.disabled = false; btn.textContent = 'Export PNG';
+});
+
+const EMBED = new URLSearchParams(location.search);
+if (EMBED.get('embed')) {
+  // ?embed=1&tab=raid|max&boss=<Pokebattler id or name> -> render, export and post the PNG to the parent
+  document.documentElement.classList.add('embed');
+  const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
+  headerImg = null;
+  setTab(EMBED.get('tab') === 'max' ? 'max' : 'raid', true);
+  $('boss').value = EMBED.get('boss') || '';
+  new MutationObserver(() => post({ type: 'status', text: $('status').textContent }))
+    .observe($('status'), { childList: true, characterData: true, subtree: true });
+  render().then(async () => {
+    if ($('status').classList.contains('err')) return post({ type: 'error', text: $('status').textContent });
+    try {
+      const url = await makePng(2);
+      post({ type: 'done', url, name: slug((lastBossName || $('boss').value) + ' counters') + '.png' });
+    } catch (e) { post({ type: 'error', text: 'Export failed: ' + e.message }); }
+  });
+} else {
+  setTab(tab, true);
+  if (headerImg) setHeaderImage(headerImg, false).catch(() => setHeaderImage(null)); else render();
+}
+</script>
+</body>
+</html>

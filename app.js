@@ -5021,6 +5021,7 @@ function renderActiveRotations() {
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
+                                    ${infographicBtnHtml(raid.pokebattlerUrl)}
                                 </div>
                             ` : ''}
                             ${diffSectionHtml}
@@ -5036,6 +5037,7 @@ function renderActiveRotations() {
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
+                                    ${infographicBtnHtml(raid.pokebattlerUrl)}
                                 </div>
                             ` : ''}
                             ${diffSectionHtml}
@@ -5167,6 +5169,7 @@ function renderActiveRotations() {
                                 <a href="${boss.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                     <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                 </a>
+                                ${infographicBtnHtml(boss.pokebattlerUrl)}
                             </div>
                         `;
                     }
@@ -5639,6 +5642,105 @@ function calculateDynamicEstimator(baseEst, raidName, filters = pbEstimatorFilte
     return Math.max(0.2, Number(est.toFixed(2)));
 }
 
+// ---------- Infographic (renders public/infographic.html offscreen, shows the PNG, offers download) ----------
+function infographicBtnHtml(pbUrl) {
+    const m = /pokebattler\.com\/(raids|max)\/([A-Za-z0-9_]+)/.exec(pbUrl || '');
+    if (!m) return '';
+    const tab = m[1] === 'max' ? 'max' : 'raid';
+    // Pokebattler's /raids data lists Max bosses without the DYNAMAX_ prefix used in page URLs
+    const boss = tab === 'max' ? m[2].replace(/^DYNAMAX_/, '') : m[2];
+    return `<button type="button" class="infographic-btn" data-ig-tab="${tab}" data-ig-boss="${boss}" onclick="event.stopPropagation(); window.openInfographic(this.dataset.igTab, this.dataset.igBoss);" title="Generate a counters infographic"><i class="fa-solid fa-image"></i> Infographic</button>`;
+}
+
+const infographicCache = new Map();
+let infographicFrame = null;
+
+window.openInfographic = function (tab, boss) {
+    let modal = document.getElementById('infographic-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'infographic-modal';
+        modal.className = 'modal-overlay hidden';
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-modal', 'true');
+        modal.innerHTML = `
+            <div class="modal-card infographic-card">
+                <button class="modal-close" type="button" aria-label="Close Infographic"><i class="fa-solid fa-xmark"></i></button>
+                <div class="infographic-body">
+                    <div class="infographic-loading"><i class="fa-solid fa-spinner fa-spin"></i><span class="infographic-status">Generating infographic…</span></div>
+                    <img class="infographic-img hidden" alt="Counters infographic">
+                </div>
+                <div class="infographic-actions">
+                    <a class="infographic-download disabled" download="infographic.png"><i class="fa-solid fa-download"></i> Download PNG</a>
+                </div>
+            </div>`;
+        document.body.appendChild(modal);
+        const close = () => {
+            modal.classList.add('hidden');
+            if (infographicFrame) { infographicFrame.remove(); infographicFrame = null; }
+        };
+        modal.querySelector('.modal-close').addEventListener('click', close);
+        modal.addEventListener('click', e => { if (e.target === modal) close(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) close(); });
+    }
+
+    const img = modal.querySelector('.infographic-img');
+    const loading = modal.querySelector('.infographic-loading');
+    const statusEl = modal.querySelector('.infographic-status');
+    const dl = modal.querySelector('.infographic-download');
+    const key = `${tab}:${boss}`;
+
+    const show = res => {
+        img.src = res.url;
+        img.classList.remove('hidden');
+        loading.classList.add('hidden');
+        dl.href = res.url;
+        dl.download = res.name || 'infographic.png';
+        dl.classList.remove('disabled');
+    };
+
+    img.classList.add('hidden');
+    img.removeAttribute('src');
+    loading.classList.remove('hidden', 'error');
+    loading.querySelector('i').className = 'fa-solid fa-spinner fa-spin';
+    statusEl.textContent = 'Generating infographic…';
+    dl.classList.add('disabled');
+    dl.removeAttribute('href');
+    modal.classList.remove('hidden');
+
+    if (infographicCache.has(key)) { show(infographicCache.get(key)); return; }
+
+    if (infographicFrame) infographicFrame.remove();
+    const frame = document.createElement('iframe');
+    frame.setAttribute('aria-hidden', 'true');
+    frame.tabIndex = -1;
+    frame.style.cssText = 'position: fixed; left: -12000px; top: 0; width: 1100px; height: 900px; border: 0; visibility: hidden;';
+    frame.src = `infographic.html?embed=1&tab=${encodeURIComponent(tab)}&boss=${encodeURIComponent(boss)}`;
+    infographicFrame = frame;
+
+    const onMsg = e => {
+        if (e.source !== frame.contentWindow || !e.data || e.data.source !== 'pogo-infographic') return;
+        const d = e.data;
+        if (d.type === 'status') {
+            if (d.text) statusEl.textContent = d.text;
+            return;
+        }
+        window.removeEventListener('message', onMsg);
+        frame.remove();
+        if (infographicFrame === frame) infographicFrame = null;
+        if (d.type === 'done') {
+            infographicCache.set(key, d);
+            if (!modal.classList.contains('hidden')) show(d);
+        } else {
+            loading.classList.add('error');
+            loading.querySelector('i').className = 'fa-solid fa-triangle-exclamation';
+            statusEl.textContent = d.text || 'Could not generate the infographic.';
+        }
+    };
+    window.addEventListener('message', onMsg);
+    document.body.appendChild(frame);
+};
+
 function buildDifficultyHtml(estNum) {
     if (estNum == null || isNaN(estNum) || estNum <= 0) return '';
     const roundedEst = estNum < 10 ? estNum.toFixed(2) : estNum.toFixed(0);
@@ -5974,6 +6076,7 @@ function renderRaidSchedule() {
                                     <a href="${raid.pokebattlerUrl}" target="_blank" rel="noopener noreferrer" style="font-size: 0.7rem; font-weight: 700; color: #f5a623; background: rgba(245, 166, 35, 0.12); border: 1px solid rgba(245, 166, 35, 0.3); padding: 3px 8px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s ease;" onclick="event.stopPropagation();" onmouseover="this.style.background='rgba(245, 166, 35, 0.25)'" onmouseout="this.style.background='rgba(245, 166, 35, 0.12)'">
                                         <i class="fa-solid fa-crosshairs"></i> Counters <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.6rem; opacity: 0.8;"></i>
                                     </a>
+                                    ${infographicBtnHtml(raid.pokebattlerUrl)}
                                 </div>
                             ` : ''}
                             ${diffSectionHtml}
