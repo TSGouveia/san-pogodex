@@ -405698,6 +405698,7 @@
         "assets": null,
         "regionForms": null,
         "evolutions": [],
+        "hasGigantamaxEvolution": false,
         "unreleased": true,
         "combatPower": {
             "maxL50": 3892,
