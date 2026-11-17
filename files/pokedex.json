@@ -177846,7 +177846,41 @@
             }
         },
         "eliteQuickMoves": [],
-        "eliteCinematicMoves": [],
+        "eliteCinematicMoves": {
+            "MAGNET_BOMB": {
+                "id": "MAGNET_BOMB",
+                "power": 75,
+                "energy": -33,
+                "durationMs": 3000,
+                "type": {
+                    "type": "POKEMON_TYPE_STEEL",
+                    "names": {
+                        "English": "Steel",
+                        "German": "Stahl",
+                        "French": "Acier",
+                        "Italian": "Acciaio",
+                        "Japanese": "はがね",
+                        "Korean": "강철",
+                        "Spanish": "Acero"
+                    }
+                },
+                "names": {
+                    "English": "Magnet Bomb",
+                    "German": "Magnetbombe",
+                    "French": "Bombe Aimant",
+                    "Italian": "Bombagnete",
+                    "Japanese": "マグネットボム",
+                    "Korean": "마그넷봄",
+                    "Spanish": "Bomba Imán"
+                },
+                "combat": {
+                    "energy": -40,
+                    "power": 70,
+                    "turns": 1,
+                    "buffs": null
+                }
+            }
+        },
         "assets": {
             "image": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm462.icon.png",
             "shinyImage": "https://raw.githubusercontent.com/pokemon-go-api/assets/main/Pokemon/pm462.s.icon.png"

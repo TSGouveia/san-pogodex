@@ -1565,14 +1565,14 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/831.png"
     },
     {
-        "name": "Dynamax Eternatus",
+        "name": "Gigantamax Duraludon",
         "tier": "Max Battles (6 Max)",
         "canBeShiny": false,
-        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ETERNATUS",
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DURALUDON_GIGANTAMAX",
         "types": [
             {
-                "name": "poison",
-                "image": "https://leekduck.com/assets/img/types/poison.png"
+                "name": "steel",
+                "image": "https://leekduck.com/assets/img/types/steel.png"
             },
             {
                 "name": "dragon",
@@ -1581,25 +1581,35 @@
         ],
         "combatPower": {
             "normal": {
-                "min": 2435,
-                "max": 2530
+                "min": 1674,
+                "max": 1753
             },
             "boosted": {
-                "min": 3044,
-                "max": 3163
+                "min": 2092,
+                "max": 2191
             }
         },
         "boostedWeather": [
             {
-                "name": "cloudy",
-                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+                "name": "snow",
+                "image": "https://leekduck.com/assets/img/weather/snow.png"
             },
             {
                 "name": "windy",
                 "image": "https://leekduck.com/assets/img/weather/windy.png"
             }
         ],
-        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/890.png"
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/884.png"
+    },
+    {
+        "name": "Dynamax Eternatus_Eternamax",
+        "tier": "Max Battles (6 Max)",
+        "canBeShiny": false,
+        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ETERNATUS_ETERNAMAX",
+        "types": [],
+        "combatPower": null,
+        "boostedWeather": [],
+        "image": ""
     },
     {
         "name": "Dynamax Duraludon",

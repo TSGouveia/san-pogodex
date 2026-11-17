@@ -719,6 +719,92 @@
             ]
         },
         {
+            "name": "Black Kyurem",
+            "tier": "5-Star Raids",
+            "canBeShiny": true,
+            "types": [
+                {
+                    "name": "dragon",
+                    "image": "https://leekduck.com/assets/img/types/dragon.png"
+                },
+                {
+                    "name": "ice",
+                    "image": "https://leekduck.com/assets/img/types/ice.png"
+                }
+            ],
+            "combatPower": {
+                "normal": {
+                    "min": 1957,
+                    "max": 2042
+                },
+                "boosted": {
+                    "min": 2446,
+                    "max": 2553
+                }
+            },
+            "boostedWeather": [
+                {
+                    "name": "windy",
+                    "image": "https://leekduck.com/assets/img/weather/windy.png"
+                },
+                {
+                    "name": "snow",
+                    "image": "https://leekduck.com/assets/img/weather/snow.png"
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10022.png",
+            "pokebattlerUrl": "https://www.pokebattler.com/raids/KYUREM_BLACK_FORM",
+            "pokebattlerSlug": "KYUREM_BLACK_FORM",
+            "startDate": null,
+            "guideUrl": "https://www.pokebattler.com/raids/guides/KYUREM_BLACK_FORM",
+            "estimator": 2.06,
+            "estimators": {
+                "000": 2.06,
+                "001": 1.36,
+                "010": 1.79,
+                "011": 1.36,
+                "100": 1.5,
+                "101": 1.24,
+                "110": 1.5,
+                "111": 1.24
+            },
+            "estimatedPlayers": 2.06,
+            "verdict": "MODERATE",
+            "trainersNeeded": 4,
+            "trainerBoxes": [
+                {
+                    "trainers": "1",
+                    "status": "EXTREME",
+                    "ratio": 2.06
+                },
+                {
+                    "trainers": "2",
+                    "status": "HARD",
+                    "ratio": 1.03
+                },
+                {
+                    "trainers": "3",
+                    "status": "TIGHT",
+                    "ratio": 0.69
+                },
+                {
+                    "trainers": "4",
+                    "status": "EASY",
+                    "ratio": 0.52
+                },
+                {
+                    "trainers": "5",
+                    "status": "EASY",
+                    "ratio": 0.41
+                },
+                {
+                    "trainers": "6+",
+                    "status": "EASY",
+                    "ratio": 0.34
+                }
+            ]
+        },
+        {
             "name": "White Kyurem",
             "tier": "5-Star Raids",
             "canBeShiny": true,
