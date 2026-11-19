@@ -5935,8 +5935,6 @@ function buildPokemonInfographicData(basePoke, formPoke) {
     // Full evolution tree (branches merged on common stages), requirements on each edge
     let evoTree = null;
     const treeStages = new Map();
-    // the game data has no lure requirement; these lure evolutions are fixed
-    const LURE_EVOS = { '470': 'Mossy Lure', '471': 'Glacial Lure', '462': 'Magnetic Lure', '476': 'Magnetic Lure', '738': 'Magnetic Lure' };
     try {
         const branches = getEvolutionBranches(basePoke) || [];
         const keyOf = st => `${st.id}|${st.name}`;
@@ -5952,7 +5950,7 @@ function buildPokemonInfographicData(basePoke, formPoke) {
                     child = {
                         key: keyOf(st), name: st.name, img: st.img, current: String(st.id) === String(basePoke.id), children: [],
                         candy: info.candies || 50,
-                        item: info.item && info.item.names ? info.item.names.English : (LURE_EVOS[String(st.id)] || null),
+                        item: info.item && info.item.names ? info.item.names.English : null,
                         quests: (info.quests || []).map(q => q && q.names && q.names.English).filter(Boolean)
                     };
                     node.children.push(child);
