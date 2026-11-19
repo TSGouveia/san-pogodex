@@ -13,7 +13,8 @@
   .wrap { display:flex; justify-content:center; padding:20px 0; }
   html.embed .wrap { padding:0; }
 
-  .poster { --t1:#888; --t2:#888; width:1080px; flex-shrink:0; position:relative; overflow:hidden; color:#eef1f6;
+  /* fixed 1080x1350 (4:5 post), same as the raid infographics */
+  .poster { --t1:#888; --t2:#888; width:1080px; height:1350px; display:flex; flex-direction:column; flex-shrink:0; position:relative; overflow:hidden; color:#eef1f6;
     background:
       radial-gradient(800px 600px at 100% 0%, color-mix(in srgb, var(--t1) 30%, transparent), transparent 65%),
       radial-gradient(700px 600px at 0% 70%, color-mix(in srgb, var(--t2) 20%, transparent), transparent 65%),
@@ -58,7 +59,10 @@
   .h-art .shiny img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
 
   /* ---------- Cards ---------- */
-  .body { display:flex; flex-direction:column; gap:16px; padding:26px 30px 26px; }
+  .hero { flex-shrink:0; }
+  .body { flex:1; min-height:0; overflow:hidden; position:relative; }
+  .fit { display:flex; flex-direction:column; gap:16px; padding:22px 30px 18px; width:1080px; transform-origin:top left; box-sizing:border-box; }
+  .fit.spread { justify-content:space-evenly; }
   .card { border-radius:20px; padding:18px 20px 20px; background:linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.08), 0 4px 0 rgba(0,0,0,.28); }
   .card h3 { margin:0 0 14px; display:flex; align-items:center; gap:10px; font-size:15px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.7); }
   .card h3::before { content:""; width:6px; height:18px; border-radius:3px; background:var(--accent, var(--t1)); }
@@ -113,7 +117,7 @@
   .ea .it { display:block; font-size:13px; font-weight:900; color:#a5f3fc; margin-top:2px; }
   .ea .qs { display:block; font-size:12px; font-weight:800; color:rgba(255,255,255,.72); margin-top:3px; line-height:1.25; }
 
-  .p-foot { padding:0 36px 22px; font-size:17px; font-weight:800; color:#fff; }
+  .p-foot { flex-shrink:0; padding:0 36px 20px; font-size:17px; font-weight:800; color:#fff; }
 </style>
 </head>
 <body>
@@ -245,13 +249,38 @@ async function render(p){
     .map(async x => { x.data = await toDataUrl(x.img); }));
   $('poster').innerHTML = `
     ${heroHTML(p)}
-    <div class="body">
+    <div class="body"><div class="fit" id="fit">
       ${pveCard(p)}
       ${pvpCard(p)}
       ${evoCard(p)}
       ${movesCard(p)}
-    </div>
+    </div></div>
     <div class="p-foot">${esc(footCredit())}</div>`;
+  await fitBody();
+}
+
+// Keep the 1080x1350 frame: shrink the cards proportionally when they don't fit,
+// spread them out when there is room left
+async function fitBody(){
+  await Promise.all([...$('poster').querySelectorAll('img')].map(i => i.decode ? i.decode().catch(() => {}) : null));
+  const box = $('poster').querySelector('.body'), fit = $('fit');
+  const avail = box.clientHeight;
+  fit.style.transform = ''; fit.style.width = '1080px'; fit.style.minHeight = '';
+  fit.classList.remove('spread');
+  // scale s so the box fits: lay it out at width 1080/s (scaled back to 1080), re-measure, repeat
+  let s = Math.min(1, avail / fit.scrollHeight);
+  for (let i = 0; i < 4 && s < 1; i++) {
+    fit.style.width = (1080 / s) + 'px';
+    s = Math.max(0.5, Math.min(1, avail / fit.scrollHeight));
+  }
+  if (s < 1) s = Math.min(s, avail / fit.scrollHeight);   // final check at the width actually used
+  if (s < 1) {
+    fit.style.transform = `scale(${s})`;
+  } else {
+    fit.style.width = '1080px';
+    fit.style.minHeight = avail + 'px';
+    fit.classList.add('spread');
+  }
 }
 
 let fontCSS = null;
