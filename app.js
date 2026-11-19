@@ -6001,8 +6001,13 @@ function modalObtainingSummary() {
     return Array.from(document.querySelectorAll('#obtaining-methods .obtain-card')).map(card => {
         const h = card.querySelector('h4');
         const p = card.querySelector('p');
-        return { method: clean(h ? h.textContent : ''), desc: clean(p ? p.textContent : '') };
-    }).filter(o => o.method && !seen.has(o.method + o.desc) && seen.add(o.method + o.desc)).slice(0, 8);
+        let method = clean(h ? h.textContent : '');
+        const active = /\bACTIVE\b/.test(method);
+        method = method.replace(/\s*\bACTIVE\b\s*/g, ' ').trim();
+        const desc = clean(p ? p.textContent : '').replace(/\s*Click to [^.!]*[.!]?/gi, '').trim();
+        return { method, desc, active };
+    }).filter(o => o.method && !seen.has(o.method + o.desc) && seen.add(o.method + o.desc))
+      .sort((a, b) => b.active - a.active).slice(0, 8);
 }
 
 let activeModalFormPoke = null;
