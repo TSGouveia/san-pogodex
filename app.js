@@ -5911,29 +5911,6 @@ function loadPvpTab(poke) {
 }
 
 // ---------- Pokémon infographic (renders public/pokemon-infographic.html) ----------
-function computeTypeMultipliers(types) {
-    const allTypes = ["normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison",
-        "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "steel", "dark", "fairy"];
-    const mult = {};
-    allTypes.forEach(t => mult[t] = 1.0);
-    (types || []).forEach(pt => {
-        const td = (typesDatabase || []).find(t => t.type.toLowerCase() === pt.toLowerCase());
-        if (!td) return;
-        (td.doubleDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 1.6; });
-        (td.halfDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 0.625; });
-        (td.noDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 0.39; });
-    });
-    const label = m => m >= 2.0 ? '2.56x' : m > 1.2 ? '1.6x' : m > 0.4 ? '0.62x' : m > 0.3 ? '0.39x' : '0.24x';
-    const weak = [], resist = [];
-    Object.entries(mult).forEach(([type, m]) => {
-        if (m > 1.2) weak.push({ type, x: label(m), m });
-        else if (m < 0.8) resist.push({ type, x: label(m), m });
-    });
-    weak.sort((a, b) => b.m - a.m);
-    resist.sort((a, b) => a.m - b.m);
-    return { weak, resist };
-}
-
 function buildPokemonInfographicData(basePoke, formPoke) {
     const poke = formPoke || basePoke;
     const raw = rawPokedexData ? rawPokedexData.find(x => x.dexNr === Number(basePoke.id)) : null;
@@ -5946,26 +5923,42 @@ function buildPokemonInfographicData(basePoke, formPoke) {
     const fast = [...moveList(poke.quickMoves, false), ...(!isForm && raw ? moveList(raw.eliteQuickMoves, true) : [])];
     const charged = [...moveList(poke.cinematicMoves, false), ...(!isForm && raw ? moveList(raw.eliteCinematicMoves, true) : [])];
 
-    // Evolution line containing this Pokémon, with candy costs
-    let evolution = [];
+    // Evolution line with PvP ranks per league, to see which stage is worth building.
+    // One row per stage; the Shadow rank sits inside the same cell instead of its own row.
+    let chain = [basePoke];
     try {
-        const chain = findEvolutionChain(basePoke) || [];
-        if (chain.length > 1) {
-            evolution = chain.map((stage, i) => {
-                const info = i > 0 ? getEvolutionParentInfo(stage) : null;
-                return { name: stage.name, img: stage.img, current: String(stage.id) === String(basePoke.id), candy: i > 0 ? ((info && info.candies) || 50) : null };
-            });
-        }
-    } catch (e) { evolution = []; }
-
-    const pvp = getPvpEntriesFor(poke).slice(0, 2).map(e => ({
-        name: e.name, shadow: e.shadow,
-        leagues: PVP_LEAGUES.map(L => {
-            const r = e[L.key];
-            return { label: L.label, short: L.short, color: L.color, rank: r ? r[0] : null, score: r ? r[1] : null,
-                moveset: r ? (r[2] || []).map(m => ({ name: pvpMoveName(m), type: pvpMoveType(m) })) : [] };
-        })
-    }));
+        const c = findEvolutionChain(basePoke) || [];
+        if (c.length > 1) chain = c;
+    } catch (e) { chain = [basePoke]; }
+    const pvpUsedMoves = new Set();
+    const normMove = n => String(n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const family = chain.map((stage, i) => {
+        const isCurrent = String(stage.id) === String(basePoke.id);
+        const info = i > 0 ? getEvolutionParentInfo(stage) : null;
+        const entries = getPvpEntriesFor(isCurrent ? poke : stage);
+        const normal = entries.find(e => !e.shadow) || null;
+        const shadow = normal ? (entries.find(e => e.id === normal.id + '_shadow') || null) : (entries.find(e => e.shadow) || null);
+        return {
+            name: isCurrent ? poke.name : stage.name,
+            img: isCurrent ? poke.img : stage.img,
+            current: isCurrent,
+            candy: i > 0 ? ((info && info.candies) || 50) : null,
+            leagues: PVP_LEAGUES.map(L => {
+                const r = normal && normal[L.key];
+                const sr = shadow && shadow[L.key];
+                if (isCurrent && r) (r[2] || []).forEach(m => pvpUsedMoves.add(normMove(pvpMoveName(m))));
+                return {
+                    rank: r ? r[0] : null,
+                    score: r ? r[1] : null,
+                    moveset: r ? (r[2] || []).map(pvpMoveName) : [],
+                    shadowRank: sr ? sr[0] : null
+                };
+            })
+        };
+    });
+    fast.forEach(m => { m.pvp = pvpUsedMoves.has(normMove(m.name)); });
+    charged.forEach(m => { m.pvp = pvpUsedMoves.has(normMove(m.name)); });
+    const leagues = PVP_LEAGUES.map(L => ({ label: L.label, short: L.short, cap: L.cap, color: L.color }));
 
     const buddy = buddyDistances ? (buddyDistances[String(basePoke.id)] || buddyDistances[(basePoke.name || '').toLowerCase()]) : null;
     const cps = poke.combatPower || calculateClientSideCombatPower(poke.stats) || {};
@@ -5980,16 +5973,16 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         types: poke.types,
         img: poke.img,
         shinyImg: `${POKE_SPRITE_SHINY_BASE_URL}/${(poke.img || '').split('/').pop().replace('.png', '') || basePoke.id}.png`,
-        stats: poke.stats,
         cps,
         mega: basePoke.mega, gmax: basePoke.gmax, shadow: isShadowEligible,
         legendary: raw ? raw.pokemonClass || null : null,
         buddy,
-        matchups: computeTypeMultipliers(poke.types),
         fast, charged,
-        evolution,
-        pvp,
-        obtaining: modalObtainingSummary()
+        leagues,
+        family,
+        hasPvp: Boolean(pvpRankingsData && pvpRankingsData.species),
+        // only what's live right now; static sources (wild, evolution…) aren't worth the space
+        obtaining: modalObtainingSummary().filter(o => o.active)
     };
 }
 
