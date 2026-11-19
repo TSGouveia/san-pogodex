@@ -5655,43 +5655,55 @@ function infographicBtnHtml(pbUrl) {
 const infographicCache = new Map();
 let infographicFrame = null;
 
-window.openInfographic = function (tab, boss) {
+function ensureInfographicModal() {
     let modal = document.getElementById('infographic-modal');
-    if (!modal) {
-        modal = document.createElement('div');
-        modal.id = 'infographic-modal';
-        modal.className = 'modal-overlay hidden';
-        modal.setAttribute('role', 'dialog');
-        modal.setAttribute('aria-modal', 'true');
-        modal.innerHTML = `
-            <div class="modal-card infographic-card">
-                <button class="modal-close" type="button" aria-label="Close Infographic"><i class="fa-solid fa-xmark"></i></button>
-                <div class="infographic-body">
-                    <div class="infographic-loading"><i class="fa-solid fa-spinner fa-spin"></i><span class="infographic-status">Generating infographic…</span></div>
-                    <img class="infographic-img hidden" alt="Counters infographic">
+    if (modal) return modal;
+    modal = document.createElement('div');
+    modal.id = 'infographic-modal';
+    modal.className = 'modal-overlay hidden';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.innerHTML = `
+        <div class="modal-card infographic-card">
+            <button class="modal-close" type="button" aria-label="Close Infographic"><i class="fa-solid fa-xmark"></i></button>
+            <div class="infographic-controls hidden">
+                <div class="infographic-modes">
+                    <button type="button" data-ig-mode="week">Week</button>
+                    <button type="button" data-ig-mode="month">Month</button>
                 </div>
-                <div class="infographic-actions">
-                    <a class="infographic-download disabled" download="infographic.png"><i class="fa-solid fa-download"></i> Download PNG</a>
+                <div class="infographic-period">
+                    <button type="button" data-ig-step="-1" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span class="infographic-period-label"></span>
+                    <button type="button" data-ig-step="1" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
-            </div>`;
-        document.body.appendChild(modal);
-        const close = () => {
-            modal.classList.add('hidden');
-            if (infographicFrame) { infographicFrame.remove(); infographicFrame = null; }
-        };
-        modal.querySelector('.modal-close').addEventListener('click', close);
-        modal.addEventListener('click', e => { if (e.target === modal) close(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) close(); });
-    }
+            </div>
+            <div class="infographic-body">
+                <div class="infographic-loading"><i class="fa-solid fa-spinner fa-spin"></i><span class="infographic-status">Generating infographic…</span></div>
+                <img class="infographic-img hidden" alt="Infographic">
+            </div>
+            <div class="infographic-actions">
+                <a class="infographic-download disabled" download="infographic.png"><i class="fa-solid fa-download"></i> Download PNG</a>
+            </div>
+        </div>`;
+    document.body.appendChild(modal);
+    const close = () => {
+        modal.classList.add('hidden');
+        if (infographicFrame) { infographicFrame.remove(); infographicFrame = null; }
+    };
+    modal.querySelector('.modal-close').addEventListener('click', close);
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.classList.contains('hidden')) close(); });
+    return modal;
+}
 
+// Renders `src` in an offscreen iframe and shows the PNG it posts back.
+// `onReady(frame)` runs when the page reports it is ready (used to hand it data).
+function runInfographic(key, src, onReady) {
+    const modal = ensureInfographicModal();
     const img = modal.querySelector('.infographic-img');
     const loading = modal.querySelector('.infographic-loading');
     const statusEl = modal.querySelector('.infographic-status');
     const dl = modal.querySelector('.infographic-download');
-    // Counters follow the site's Estimator toggles (Legendary / Shadow / Mega)
-    const f = pbEstimatorFilters;
-    const filterQs = `&legendary=${f.legendary ? 1 : 0}&shadow=${f.shadow ? 1 : 0}&mega=${f.mega ? 1 : 0}`;
-    const key = `${tab}:${boss}${filterQs}`;
 
     const show = res => {
         img.src = res.url;
@@ -5711,26 +5723,28 @@ window.openInfographic = function (tab, boss) {
     dl.removeAttribute('href');
     modal.classList.remove('hidden');
 
+    if (infographicFrame) { infographicFrame.remove(); infographicFrame = null; }
     if (infographicCache.has(key)) { show(infographicCache.get(key)); return; }
 
-    if (infographicFrame) infographicFrame.remove();
     const frame = document.createElement('iframe');
     frame.setAttribute('aria-hidden', 'true');
     frame.tabIndex = -1;
     frame.style.cssText = 'position: fixed; left: -12000px; top: 0; width: 1100px; height: 900px; border: 0; visibility: hidden;';
-    frame.src = `infographic.html?embed=1&tab=${encodeURIComponent(tab)}&boss=${encodeURIComponent(boss)}${filterQs}`;
+    frame.src = src;
     infographicFrame = frame;
 
     const onMsg = e => {
         if (e.source !== frame.contentWindow || !e.data || e.data.source !== 'pogo-infographic') return;
         const d = e.data;
+        if (d.type === 'ready') { if (onReady) onReady(frame); return; }
         if (d.type === 'status') {
-            if (d.text) statusEl.textContent = d.text;
+            if (d.text && infographicFrame === frame) statusEl.textContent = d.text;
             return;
         }
         window.removeEventListener('message', onMsg);
         frame.remove();
-        if (infographicFrame === frame) infographicFrame = null;
+        if (infographicFrame !== frame) return; // superseded by a newer request
+        infographicFrame = null;
         if (d.type === 'done') {
             infographicCache.set(key, d);
             if (!modal.classList.contains('hidden')) show(d);
@@ -5742,6 +5756,63 @@ window.openInfographic = function (tab, boss) {
     };
     window.addEventListener('message', onMsg);
     document.body.appendChild(frame);
+}
+
+window.openInfographic = function (tab, boss) {
+    const modal = ensureInfographicModal();
+    modal.querySelector('.infographic-controls').classList.add('hidden');
+    // Counters follow the site's Estimator toggles (Legendary / Shadow / Mega)
+    const f = pbEstimatorFilters;
+    const filterQs = `&legendary=${f.legendary ? 1 : 0}&shadow=${f.shadow ? 1 : 0}&mega=${f.mega ? 1 : 0}`;
+    runInfographic(`${tab}:${boss}${filterQs}`,
+        `infographic.html?embed=1&tab=${encodeURIComponent(tab)}&boss=${encodeURIComponent(boss)}${filterQs}`);
+};
+
+// ---------- Events infographic (week / month calendar, renders public/events-infographic.html) ----------
+const eventsInfographicState = { mode: 'week', offset: 0 };
+
+function eventsInfographicPeriodLabel(mode, offset) {
+    const now = new Date();
+    if (mode === 'month') {
+        return new Date(now.getFullYear(), now.getMonth() + offset, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+    }
+    const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7) + offset * 7);
+    const sun = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 6);
+    const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    return `${fmt(mon)} – ${fmt(sun)}`;
+}
+
+window.openEventsInfographic = function (mode, offset) {
+    const st = eventsInfographicState;
+    if (mode) st.mode = mode;
+    if (typeof offset === 'number') st.offset = offset;
+
+    const modal = ensureInfographicModal();
+    const controls = modal.querySelector('.infographic-controls');
+    controls.classList.remove('hidden');
+    if (!controls.dataset.bound) {
+        controls.dataset.bound = 'true';
+        controls.querySelectorAll('[data-ig-mode]').forEach(b => b.addEventListener('click', () => {
+            if (b.dataset.igMode !== eventsInfographicState.mode) window.openEventsInfographic(b.dataset.igMode, 0);
+        }));
+        controls.querySelectorAll('[data-ig-step]').forEach(b => b.addEventListener('click', () => {
+            window.openEventsInfographic(null, eventsInfographicState.offset + Number(b.dataset.igStep));
+        }));
+    }
+    controls.querySelectorAll('[data-ig-mode]').forEach(b => b.classList.toggle('active', b.dataset.igMode === st.mode));
+    controls.querySelector('.infographic-period-label').textContent = eventsInfographicPeriodLabel(st.mode, st.offset);
+
+    // Same events the list shows (respects the Scope / location filter)
+    const events = (Array.isArray(liveEvents) ? liveEvents : [])
+        .filter(ev => isEventMatchingLocation(ev))
+        .map(ev => ({ title: ev.title, start: ev.start, end: ev.end, banner: ev.banner }));
+    const sig = events.map(ev => `${ev.title}|${ev.start}|${ev.end}`).join('\n');
+    let hash = 0;
+    for (let i = 0; i < sig.length; i++) hash = (hash * 31 + sig.charCodeAt(i)) | 0;
+
+    runInfographic(`events:${st.mode}:${st.offset}:${new Date().toDateString()}:${hash}`,
+        `events-infographic.html?embed=1&mode=${st.mode}&offset=${st.offset}`,
+        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events }, location.origin));
 };
 
 function buildDifficultyHtml(estNum) {

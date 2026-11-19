@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoGo Events Infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0f1115; color:#e9ecf2; font-family:Nunito, system-ui, sans-serif; }
+  .bar { display:flex; gap:8px; align-items:center; justify-content:center; padding:14px; flex-wrap:wrap; }
+  .bar button { background:#181b22; color:#e9ecf2; border:1px solid #2a2f3a; border-radius:8px; padding:8px 14px; font:inherit; font-weight:800; cursor:pointer; }
+  .bar button.on { background:#c2185b; border-color:#c2185b; }
+  .bar .status { font-size:13px; color:#8f97a8; min-width:120px; text-align:center; }
+  html.embed .bar { display:none; }
+  .stage { display:flex; justify-content:center; padding:0 0 24px; }
+  html.embed .stage { padding:0; }
+
+  /* ---------- Poster ---------- */
+  .poster { --h1:#7c3aed; --h2:#c2185b; width:1080px; position:relative; overflow:hidden; color:#eef1f6;
+    background:
+      radial-gradient(700px 600px at 0% 20%, color-mix(in srgb, var(--h1) 34%, transparent), transparent 65%),
+      radial-gradient(800px 700px at 100% 60%, color-mix(in srgb, var(--h2) 26%, transparent), transparent 65%),
+      linear-gradient(180deg, #15111f, #0b0a10); }
+  .poster::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.5;
+    background-image:
+      radial-gradient(1.6px 1.6px at 23px 41px, #fff, transparent),
+      radial-gradient(1px 1px at 97px 133px, #fff, transparent),
+      radial-gradient(2px 2px at 161px 72px, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.2px 1.2px at 211px 187px, #fff, transparent),
+      radial-gradient(1.4px 1.4px at 58px 222px, rgba(255,255,255,.7), transparent);
+    background-size:240px 240px; }
+  .poster > * { position:relative; }
+
+  .p-head { overflow:hidden; padding:38px 44px 30px; color:#fff; background:linear-gradient(120deg, var(--h1), var(--h2)); }
+  .p-head::before, .p-head::after { content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.10); }
+  .p-head::before { width:380px; height:380px; right:-110px; top:-190px; }
+  .p-head::after { width:220px; height:220px; right:150px; top:50px; background:rgba(255,255,255,.07); }
+  .p-eyebrow { position:relative; display:inline-block; background:rgba(255,255,255,.2); padding:5px 14px; border-radius:99px; font-weight:900; font-size:15px; letter-spacing:.12em; text-transform:uppercase; }
+  .p-title { position:relative; font-size:72px; line-height:1; font-weight:900; margin:12px 0 8px; text-shadow:0 3px 0 rgba(0,0,0,.14); }
+  .p-sub { position:relative; font-size:21px; font-weight:700; opacity:.9; }
+
+  .p-body { padding:24px 28px 8px; display:flex; flex-direction:column; gap:18px; }
+
+  /* Week row: 7 day columns, events packed into lanes */
+  .wk { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); column-gap:8px; row-gap:8px; }
+  .dh { text-align:center; padding:8px 0 10px; border-radius:14px; background:rgba(255,255,255,.05); box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); }
+  .dh small { display:block; font-size:13px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+  .dh b { display:block; font-size:30px; font-weight:900; line-height:1.05; }
+  .dh.wkend small { color:color-mix(in srgb, var(--h2) 60%, #fff); }
+
+  .ev { --c:#f97316; min-width:0; display:flex; gap:10px; align-items:center; padding:8px 10px 8px 8px; border-radius:14px;
+    background:linear-gradient(90deg, color-mix(in srgb, var(--c) 30%, #1a1724), color-mix(in srgb, var(--c) 14%, #15131d));
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 55%, transparent), 0 3px 0 rgba(0,0,0,.3); }
+  .ev.cl { border-top-left-radius:3px; border-bottom-left-radius:3px; }
+  .ev.cr { border-top-right-radius:3px; border-bottom-right-radius:3px; }
+  .ev .th { flex-shrink:0; width:64px; height:64px; border-radius:10px; object-fit:cover; background:color-mix(in srgb, var(--c) 40%, #222); }
+  .ev .tx { min-width:0; flex:1; }
+  .ev .cat { display:inline-block; font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#fff; background:var(--c); padding:2px 7px; border-radius:6px; margin-bottom:3px; }
+  .ev .t { font-size:17px; font-weight:900; line-height:1.15; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .ev .tm { font-size:13.5px; font-weight:800; color:rgba(255,255,255,.7); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  /* one-day events in the week view stack vertically */
+  .ev.one { flex-direction:column; align-items:stretch; gap:6px; padding:6px 6px 8px; }
+  .ev.one .th { width:100%; height:70px; }
+  .ev.one .t { font-size:15px; -webkit-line-clamp:3; }
+  .ev.one .tx { padding:0 3px; }
+
+  /* Month view: compact */
+  .month { display:flex; flex-direction:column; gap:10px; }
+  .mhead { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); column-gap:6px; text-align:center; font-size:14px; font-weight:900; letter-spacing:.14em; color:rgba(255,255,255,.55); }
+  .mweek { display:grid; grid-template-columns:repeat(7, minmax(0, 1fr)); column-gap:6px; row-gap:5px; padding:6px; border-radius:16px; background:rgba(255,255,255,.04); box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); min-height:92px; align-content:start; }
+  .mday { font-size:20px; font-weight:900; padding:2px 6px 2px; }
+  .mday.out { color:rgba(255,255,255,.22); }
+  .mev { --c:#f97316; min-width:0; font-size:13.5px; font-weight:800; line-height:1.2; padding:4px 8px; border-radius:8px; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    background:color-mix(in srgb, var(--c) 72%, #111); box-shadow:inset 0 -2px 0 rgba(0,0,0,.18); }
+  .mev.cl { border-top-left-radius:2px; border-bottom-left-radius:2px; }
+  .mev.cr { border-top-right-radius:2px; border-bottom-right-radius:2px; }
+  .mev.one { max-height:calc(2.4em + 8px); white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .mev i { font-style:normal; opacity:.8; margin-right:4px; }
+
+  /* Long-running events */
+  .sec-t { font-size:15px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.6); margin:4px 2px -6px; }
+  .longs { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+  .longs .ev .th { width:52px; height:52px; }
+  .longs .ev .t { font-size:16px; -webkit-line-clamp:1; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:8px 16px; justify-content:center; font-size:14px; font-weight:800; color:rgba(255,255,255,.75); }
+  .legend span { display:inline-flex; align-items:center; gap:6px; }
+  .legend span::before { content:""; width:13px; height:13px; border-radius:4px; background:var(--c); }
+
+  .empty { text-align:center; padding:60px 20px; font-size:22px; font-weight:800; color:rgba(255,255,255,.55); }
+  .p-foot { display:flex; justify-content:space-between; align-items:center; padding:16px 36px 22px; font-size:17px; font-weight:800; color:rgba(255,255,255,.55); }
+  .p-foot b { color:#fff; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <button data-mode="week">Week</button><button data-mode="month">Month</button>
+  <button id="prev">‹</button><button id="next">›</button>
+  <button id="export">Export PNG</button>
+  <span class="status" id="status"></span>
+</div>
+<div class="stage"><div class="poster" id="poster"></div></div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const DAY = 86400000;
+const LONG_DAYS = 16; // longer events go to the "running all period" list instead of the calendar
+const Q = new URLSearchParams(location.search);
+const EMBEDDED = !!Q.get('embed');
+let mode = Q.get('mode') === 'month' ? 'month' : 'week';
+let offset = parseInt(Q.get('offset') || '0', 10) || 0;
+let rawEvents = [];
+
+function footCredit(){ try { return localStorage.getItem('ig_foot') || '@LazySan'; } catch { return '@LazySan'; } }
+
+// ---------- Categories (first match wins) ----------
+const CATS = [
+  { k:'inperson',  label:'In-person',        c:'#64748b', test:e => !!e.loc },
+  { k:'cd',        label:'Community Day',    c:'#22c55e', test:e => /community day/i.test(e.title) },
+  { k:'spotlight', label:'Spotlight Hour',   c:'#f59e0b', test:e => /spotlight hour/i.test(e.title) },
+  { k:'raidhour',  label:'Raid Hour',        c:'#fb7185', test:e => /raid hour/i.test(e.title) },
+  { k:'raidday',   label:'Raid Day',         c:'#e11d48', test:e => /raid day/i.test(e.title) },
+  { k:'max',       label:'Max Battles',      c:'#d946ef', test:e => /max monday|dynamax|gigantamax|max battle|eternamax/i.test(e.title) },
+  { k:'mega',      label:'Mega Raids',       c:'#a855f7', test:e => /mega raids/i.test(e.title) },
+  { k:'shadow',    label:'Shadow Raids',     c:'#6366f1', test:e => /shadow raids/i.test(e.title) },
+  { k:'raids',     label:'5★ Raids',         c:'#ef4444', test:e => /raid battles|\braids\b/i.test(e.title) },
+  { k:'gbl',       label:'GO Battle League', c:'#3b82f6', test:e => /\bleague\b|\bcup\b/i.test(e.title) },
+  { k:'research',  label:'Research',         c:'#06b6d4', test:e => /research/i.test(e.title) },
+  { k:'pass',      label:'GO Pass',          c:'#14b8a6', test:e => /go pass/i.test(e.title) },
+  { k:'big',       label:'Special Event',    c:'#eab308', test:e => /go tour|go fest|wild area|safari/i.test(e.title) },
+  { k:'season',    label:'Season',           c:'#94a3b8', test:e => e.days > 60 },
+  { k:'event',     label:'Event',            c:'#f97316', test:() => true },
+];
+
+// Same rules as the site's getEventLocation()
+function locationOf(title){
+  if (/global/i.test(title) || !/^Pokémon /i.test(title)) return null; // only "Pokémon GO Wild Area: City" style titles
+  const m = title.match(/(?:city safari|safari zone|wild area(?:\s+\d{4})?|go fest(?:\s+\d{4})?|go tour(?::\s*[^:\-]+)?|night out(?:\s+\d{4})?)\s*[:\-–—]\s*([^(\d]+?)(?:\s+\d{4}|\s*\(|$)/i);
+  if (!m || !m[1]) return null;
+  const loc = m[1].trim().replace(/^[\-–—:\s]+|[\-–—:\s]+$/g, '');
+  return loc && loc.toLowerCase() !== 'global' ? loc : null;
+}
+
+function shortTitle(t, cat){
+  let s = t.split(' | ')[0].trim()
+    .replace(/^Pokémon GO\s+/i, '').replace(/^Pokémon (?=Night Out)/i, '')
+    .replace(/\s+20\d\d\b/g, '')
+    .replace(/\s*\((?:[^)]*,){2,}[^)]*\)/g, ' (all forms)')
+    .replace(/\s+Formes?\)/g, ')');
+  if (cat === 'raids') s = s.replace(/\s+in 5-star Raid Battles$/i, '').replace(/^/, '5★ ');
+  if (cat === 'mega') s = s.replace(/\s+in Mega Raids$/i, '');
+  if (cat === 'shadow') s = s.replace(/\s+in Shadow Raids$/i, '');
+  if (cat === 'spotlight') s = s.replace(/\s+Spotlight Hour$/i, '');
+  if (cat === 'raidhour') s = s.replace(/\s+Raid Hour$/i, '');
+  if (cat === 'cd') s = s.replace(/\s+Community Day$/i, '');
+  if (cat === 'max') s = s.replace(/\s+during Max Monday$/i, '').replace(/^Max Monday:\s*Pokémon to be announced$/i, 'Max Monday (TBA)');
+  if (cat === 'gbl') s = s.replace(/Great League/g, 'GL').replace(/Ultra League/g, 'UL').replace(/Master League/g, 'ML');
+  return s.replace(/\s{2,}/g, ' ').trim() || t;
+}
+
+function isTba(v){
+  if (!v || typeof v !== 'string') return !v;
+  const t = v.trim().toLowerCase();
+  if (!t || t === 'tba' || t === 'null') return true;
+  if (t.includes('23:59:00.000-0700') || t.includes('23:59:00.000-0800')) return true;
+  return isNaN(new Date(v).getTime());
+}
+
+function normalise(list){
+  const seen = new Set();
+  const out = [];
+  (list || []).forEach(ev => {
+    const title = ev.title || ev.name || '';
+    if (!title || isTba(ev.start) || isTba(ev.end)) return;
+    const start = new Date(ev.start), end = new Date(ev.end);
+    if (!(end > start)) return;
+    const key = title + '|' + start.getTime();
+    if (seen.has(key)) return;
+    seen.add(key);
+    const e = { title, start, end, image: ev.banner || ev.image || '', loc: locationOf(title), days: (end - start) / DAY };
+    const cat = CATS.find(c => c.test(e));
+    e.cat = cat; e.short = shortTitle(title, cat.k);
+    out.push(e);
+  });
+  return out.sort((a, b) => a.start - b.start || b.end - a.end);
+}
+
+// ---------- Dates ----------
+const startOfDay = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const addDays = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+const mondayOf = d => addDays(startOfDay(d), -((d.getDay() + 6) % 7));
+const dayDiff = (a, b) => Math.round((startOfDay(b) - startOfDay(a)) / DAY);
+const hm = d => String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+const md = d => d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+const wd = d => d.toLocaleDateString('en-GB', { weekday:'short' });
+const lastMoment = e => new Date(e.end.getTime() - 1); // an event ending at 00:00 doesn't occupy that day
+
+function period(){
+  const now = new Date();
+  if (mode === 'week') {
+    const from = addDays(mondayOf(now), offset * 7);
+    return { from, to: addDays(from, 7), gridFrom: from, weeks: 1 };
+  }
+  const from = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+  const to = new Date(from.getFullYear(), from.getMonth() + 1, 1);
+  const gridFrom = mondayOf(from);
+  const weeks = Math.ceil(dayDiff(gridFrom, to) / 7);
+  return { from, to, gridFrom, weeks };
+}
+
+// Pack the events overlapping [ws, ws+7) into lanes
+function weekSegments(events, ws){
+  const we = addDays(ws, 7);
+  const segs = events.filter(e => e.end > ws && e.start < we).map(e => {
+    const a = Math.max(0, dayDiff(ws, e.start));
+    const b = Math.min(6, dayDiff(ws, lastMoment(e)));
+    return { e, a, b: Math.max(a, b), cutL: e.start < ws, cutR: lastMoment(e) >= we };
+  }).sort((x, y) => x.a - y.a || (y.b - y.a) - (x.b - x.a) || x.e.start - y.e.start);
+  // multi-day bars first, one-day cards after, so a tall one-day card never shares a row with a bar
+  segs.sort((x, y) => (x.a === x.b) - (y.a === y.b));
+  const lanes = [];
+  let firstOneLane = -1;
+  segs.forEach(s => {
+    if (s.a === s.b && firstOneLane < 0) firstOneLane = lanes.length;
+    const min = s.a === s.b ? firstOneLane : 0;
+    let i = lanes.findIndex((end, k) => k >= min && end < s.a);
+    if (i < 0) { i = lanes.length; lanes.push(-1); }
+    lanes[i] = s.b; s.lane = i;
+  });
+  return segs;
+}
+
+function timeText(e, s, ws){
+  const one = s.a === s.b;
+  if (!s.cutL && !s.cutR && one) return dayDiff(e.start, lastMoment(e)) === 0 ? `${hm(e.start)} – ${hm(e.end)}` : `${hm(e.start)} → ${wd(e.end)} ${hm(e.end)}`;
+  const from = s.cutL ? `since ${md(e.start)}` : `${wd(e.start)} ${hm(e.start)}`;
+  const to = `${s.cutR ? md(e.end) : wd(e.end)} ${hm(e.end)}`;
+  return `${from} → ${to}`;
+}
+
+function thumb(e){
+  return e.img ? `<img class="th" src="${e.img}" alt="">` : `<div class="th"></div>`;
+}
+
+function evCard(s, ws, extraCls = ''){
+  const e = s.e;
+  const cls = ['ev', extraCls, s.a === s.b ? 'one' : '', s.cutL ? 'cl' : '', s.cutR ? 'cr' : ''].filter(Boolean).join(' ');
+  return `<div class="${cls}" style="--c:${e.cat.c}; grid-column:${s.a + 1} / ${s.b + 2}; grid-row:${s.lane + 2}">
+    ${thumb(e)}
+    <div class="tx"><span class="cat">${esc(e.cat.label)}</span><div class="t">${esc(e.short)}</div><div class="tm">${esc(timeText(e, s, ws))}</div></div>
+  </div>`;
+}
+
+function longList(longs, p){
+  if (!longs.length) return '';
+  return `<div class="sec-t">Running ${mode === 'week' ? 'all week' : 'all month'}</div><div class="longs">${longs.map(e => `
+    <div class="ev" style="--c:${e.cat.c}">${thumb(e)}
+      <div class="tx"><span class="cat">${esc(e.cat.label)}</span><div class="t">${esc(e.short)}</div>
+      <div class="tm">${e.start < p.from ? 'Until' : md(e.start) + ' →'} ${md(e.end)} ${hm(e.end)}</div></div>
+    </div>`).join('')}</div>`;
+}
+
+function legend(list){
+  const cats = [...new Map(list.map(e => [e.cat.k, e.cat])).values()];
+  return cats.length ? `<div class="legend">${cats.map(c => `<span style="--c:${c.c}">${esc(c.label)}</span>`).join('')}</div>` : '';
+}
+
+function weekHTML(events, p){
+  const ws = p.gridFrom;
+  const segs = weekSegments(events, ws);
+  const heads = [...Array(7)].map((_, i) => {
+    const d = addDays(ws, i);
+    return `<div class="dh${i > 4 ? ' wkend' : ''}" style="grid-column:${i + 1}; grid-row:1"><small>${wd(d)}</small><b>${d.getDate()}</b></div>`;
+  }).join('');
+  return `<div class="wk">${heads}${segs.map(s => evCard(s, ws)).join('')}</div>`;
+}
+
+function monthHTML(events, p){
+  const heads = ['MON','TUE','WED','THU','FRI','SAT','SUN'].map(d => `<div>${d}</div>`).join('');
+  let rows = '';
+  for (let w = 0; w < p.weeks; w++) {
+    const ws = addDays(p.gridFrom, w * 7);
+    const days = [...Array(7)].map((_, i) => {
+      const d = addDays(ws, i);
+      const out = d < p.from || d >= p.to;
+      return `<div class="mday${out ? ' out' : ''}" style="grid-column:${i + 1}; grid-row:1">${d.getDate()}</div>`;
+    }).join('');
+    const segs = weekSegments(events, ws).map(s => {
+      const e = s.e;
+      const cls = ['mev', s.a === s.b ? 'one' : '', s.cutL ? 'cl' : '', s.cutR ? 'cr' : ''].filter(Boolean).join(' ');
+      const time = s.a === s.b && !s.cutL && e.days < 1 ? `<i>${hm(e.start)}</i>` : '';
+      return `<div class="${cls}" style="--c:${e.cat.c}; grid-column:${s.a + 1} / ${s.b + 2}; grid-row:${s.lane + 2}">${time}${esc(e.short)}</div>`;
+    }).join('');
+    rows += `<div class="mweek">${days}${segs}</div>`;
+  }
+  return `<div class="month"><div class="mhead">${heads}</div>${rows}</div>`;
+}
+
+// LeekDuck's CDN sends no CORS headers, so images go through a CORS-enabled resizer and are inlined
+async function inlineImages(list){
+  const cache = new Map();
+  await Promise.all(list.map(async e => {
+    if (!e.image) return;
+    const src = 'https://images.weserv.nl/?url=' + encodeURIComponent(e.image.replace(/^https?:\/\//, '')) + '&w=320&h=200&fit=cover&output=jpg&q=80';
+    if (!cache.has(src)) cache.set(src, (async () => {
+      const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 12000);
+      try {
+        const blob = await (await fetch(src, { signal: ctl.signal })).blob();
+        if (!blob.type.startsWith('image/')) return null;
+        return await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+      } catch { return null; } finally { clearTimeout(t); }
+    })());
+    e.img = await cache.get(src);
+  }));
+}
+
+function periodLabel(p){
+  if (mode === 'month') return { eyebrow:'Monthly events', title:p.from.toLocaleDateString('en-GB', { month:'long' }), sub:String(p.from.getFullYear()) };
+  const last = addDays(p.to, -1);
+  const sameMonth = p.from.getMonth() === last.getMonth();
+  const title = sameMonth ? `${md(p.from).split(' ')[1]} ${p.from.getDate()} – ${last.getDate()}` : `${md(p.from).split(' ').reverse().join(' ')} – ${md(last).split(' ').reverse().join(' ')}`;
+  return { eyebrow:'Weekly events', title, sub:String(last.getFullYear()) };
+}
+
+async function render(){
+  const p = period();
+  const all = normalise(rawEvents).filter(e => e.end > p.from && e.start < p.to);
+  const longs = all.filter(e => e.days > LONG_DAYS);
+  const cal = all.filter(e => e.days <= LONG_DAYS);
+  if (mode === 'week') await inlineImages(all); else await inlineImages(longs);
+  const L = periodLabel(p);
+  const count = all.length;
+  $('poster').innerHTML = `
+    <div class="p-head"><span class="p-eyebrow">Pokémon GO · ${esc(L.eyebrow)}</span><div class="p-title">${esc(L.title)}</div>
+      <div class="p-sub">${esc(L.sub)} · ${count} event${count === 1 ? '' : 's'}</div></div>
+    <div class="p-body">
+      ${cal.length ? (mode === 'week' ? weekHTML(cal, p) : monthHTML(cal, p)) : (longs.length ? '' : '<div class="empty">No events announced for this period yet.</div>')}
+      ${longList(longs, p)}
+      ${legend(all)}
+    </div>
+    <div class="p-foot"><b>${esc(footCredit())}</b><span>Times in local time · data: LeekDuck</span></div>`;
+  return { p, L };
+}
+
+// ---------- Export (same approach as infographic.html) ----------
+let fontCSS = null;
+async function getFontCSS(){
+  if (fontCSS) return fontCSS;
+  const link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  let css = await (await fetch(link.href)).text();
+  const urls = [...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m => m[1]))];
+  const toData = async u => {
+    const blob = await (await fetch(u)).blob();
+    return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+  };
+  const datas = await Promise.all(urls.map(toData));
+  urls.forEach((u, i) => { css = css.split(u).join(datas[i]); });
+  return fontCSS = css;
+}
+async function makePng(pixelRatio = 2){
+  await document.fonts.ready;
+  const node = $('poster');
+  const opts = { pixelRatio, width: 1080, height: node.offsetHeight };
+  try { opts.fontEmbedCSS = await getFontCSS(); } catch {}
+  await htmlToImage.toPng(node, opts).catch(() => {});
+  return htmlToImage.toPng(node, opts);
+}
+function fileName(p){
+  const y = p.from.getFullYear(), m = String(p.from.getMonth() + 1).padStart(2, '0'), d = String(p.from.getDate()).padStart(2, '0');
+  return mode === 'week' ? `pogo-week-${y}-${m}-${d}.png` : `pogo-month-${y}-${m}.png`;
+}
+
+if (EMBEDDED) {
+  // ?embed=1&mode=week|month&offset=N  ->  parent sends {source:'pogo-site', type:'events', events}, we post back the PNG
+  document.documentElement.classList.add('embed');
+  const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
+  window.addEventListener('message', async e => {
+    if (e.origin !== location.origin || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'events') return;
+    rawEvents = e.data.events || [];
+    try {
+      post({ type: 'status', text: 'Loading event images…' });
+      const { p } = await render();
+      post({ type: 'status', text: 'Rendering…' });
+      const url = await makePng(2);
+      post({ type: 'done', url, name: fileName(p) });
+    } catch (err) { post({ type: 'error', text: 'Export failed: ' + err.message }); }
+  });
+  post({ type: 'ready' });
+} else {
+  // Standalone preview (dev): reads the scraped events file
+  const syncBtns = () => document.querySelectorAll('[data-mode]').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
+  const go = async () => { syncBtns(); $('status').textContent = 'Rendering…'; await render(); $('status').textContent = ''; };
+  document.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { mode = b.dataset.mode; offset = 0; go(); }));
+  $('prev').addEventListener('click', () => { offset--; go(); });
+  $('next').addEventListener('click', () => { offset++; go(); });
+  $('export').addEventListener('click', async () => {
+    const url = await makePng(2); const a = document.createElement('a'); a.href = url; a.download = fileName(period()); a.click();
+  });
+  fetch(Q.get('src') || '/files/events.json').then(r => r.json()).then(d => { rawEvents = d; go(); })
+    .catch(() => { $('status').textContent = 'Open this from the Events section of the site.'; });
+}
+</script>
+</body>
+</html>

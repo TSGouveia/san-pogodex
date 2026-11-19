@@ -5134,6 +5134,56 @@ img[src*="sprites/pokemon"] {
     pointer-events: none;
 }
 
+/* Events infographic: button next to the Scope filter + Week/Month controls in the modal */
+.events-infographic-btn {
+    font-size: 0.82rem;
+    padding: 7px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+}
+.infographic-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-right: 2.5rem; /* clear the close button */
+}
+.infographic-controls.hidden { display: none; }
+.infographic-modes,
+.infographic-period {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    padding: 3px;
+    border-radius: 8px;
+}
+.infographic-controls button {
+    font: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #94a3b8;
+    background: none;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.infographic-controls button:hover { color: var(--text-primary); }
+.infographic-controls button.active {
+    background: var(--accent-color);
+    color: #000;
+}
+.infographic-period-label {
+    min-width: 8.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
 /* Counters + Infographic buttons: own line, centred (beats the desktop display:contents lift) */
 :is(#raids-tiers-container, #raid-schedule-container, #maxbattles-container) .rotation-card-item .rotation-card-details-wrapper div.rotation-card-actions:has(> a[href]) {
     display: flex !important;
