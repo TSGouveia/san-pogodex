@@ -615,6 +615,7 @@ let liveRocket = null;
 let liveEvents = [];
 let liveSpawns = [];
 let rawPvpSeason = null; // GO Battle League season (pvp.json)
+let pvpRankingsData = null; // PvPoke league rankings (pvpRankings.json)
 let pvpFallbackRequested = false;
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
@@ -1238,7 +1239,7 @@ async function loadScrapedDataFromCdn() {
         }
 
         // 4. Load static JSON files with automatic fallback
-        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks', 'pvp'];
+        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks', 'pvp', 'pvpRankings'];
         const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
         const fetchPromises = modules.map(m => fetchCdnFile(`${m}.min.json`, cacheBustQuery));
 
@@ -1339,6 +1340,7 @@ async function loadPokedex() {
         if (isNonEmpty(dbScrapedData.buddyDistances)) buddyDistances = dbScrapedData.buddyDistances;
         if (isNonEmpty(dbScrapedData.megaAttacks)) megaAttacksDatabase = dbScrapedData.megaAttacks;
         if (isNonEmpty(dbScrapedData.pvp)) rawPvpSeason = dbScrapedData.pvp;
+        if (isNonEmpty(dbScrapedData.pvpRankings)) pvpRankingsData = dbScrapedData.pvpRankings;
         if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
         if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
         if (isNonEmpty(dbScrapedData.pokedex)) {
@@ -3632,10 +3634,12 @@ function applyModalPokemonForm(basePoke, rf) {
         modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
         modalPokeTypes.innerHTML = basePoke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
 
+        activeModalFormPoke = basePoke;
         loadCpsTab(basePoke);
         loadStatsTab(basePoke);
         loadMovesTab(basePoke);
         loadTypeMatchupsTab(basePoke);
+        loadPvpTab(basePoke);
         return;
     }
 
@@ -3679,10 +3683,12 @@ function applyModalPokemonForm(basePoke, rf) {
         cinematicMoves: rf.cinematicMoves || basePoke.cinematicMoves
     };
 
+    activeModalFormPoke = formPoke;
     loadCpsTab(formPoke);
     loadStatsTab(formPoke);
     loadMovesTab(formPoke);
     loadTypeMatchupsTab(formPoke);
+    loadPvpTab(formPoke);
 }
 
 function openModal(id) {
@@ -5832,6 +5838,185 @@ window.openEventsInfographic = function (mode, offset) {
     runInfographic(`events:${st.mode}:${st.offset}:${new Date().toDateString()}:${hash}`,
         `events-infographic.html?embed=1&mode=${st.mode}&offset=${st.offset}`,
         frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events, debuts }, location.origin));
+};
+
+// ---------- PvP tab (PvPoke rankings, pvpRankings.json from the scraper) ----------
+const PVP_LEAGUES = [
+    { key: 'great', label: 'Great League', short: 'GL', cap: '1,500 CP', color: '#3b82f6' },
+    { key: 'ultra', label: 'Ultra League', short: 'UL', cap: '2,500 CP', color: '#eab308' },
+    { key: 'master', label: 'Master League', short: 'ML', cap: 'No CP cap', color: '#a855f7' }
+];
+const PVP_REGIONAL_TAGS = ['alolan', 'galarian', 'hisuian', 'paldean'];
+
+// PvPoke entries (normal, shadow, other formes) for the Pokémon / regional form shown in the modal
+function getPvpEntriesFor(poke) {
+    if (!pvpRankingsData || !pvpRankingsData.species || !poke) return [];
+    const all = pvpRankingsData.species[String(poke.id)] || [];
+    const nameLower = (poke.name || '').toLowerCase();
+    const tag = PVP_REGIONAL_TAGS.find(t => nameLower.includes(t) || nameLower.includes(t.replace(/an$/, 'a')));
+    const filtered = tag
+        ? all.filter(e => e.id.includes(tag))
+        : all.filter(e => !PVP_REGIONAL_TAGS.some(t => e.id.includes(t)));
+    return filtered.length ? filtered : all;
+}
+
+function pvpMoveName(id) {
+    const m = pvpRankingsData && pvpRankingsData.moves && pvpRankingsData.moves[id];
+    return m ? m[0] : String(id || '').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+function pvpMoveType(id) {
+    const m = pvpRankingsData && pvpRankingsData.moves && pvpRankingsData.moves[id];
+    return m ? m[1] : 'normal';
+}
+
+function loadPvpTab(poke) {
+    const container = document.getElementById('pvp-rankings');
+    if (!container) return;
+    if (!pvpRankingsData || !pvpRankingsData.species) {
+        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">PvP rankings are not available yet.</p>`;
+        return;
+    }
+    const entries = getPvpEntriesFor(poke);
+    if (!entries.length) {
+        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">${poke.name} isn't ranked in any league.</p>`;
+        return;
+    }
+    const leagues = pvpRankingsData.leagues || {};
+    container.innerHTML = entries.map(e => {
+        const cols = PVP_LEAGUES.map(L => {
+            const r = e[L.key];
+            const total = leagues[L.key] ? leagues[L.key].total : null;
+            if (!r) {
+                return `<div class="pvp-league unranked" style="--lc: ${L.color};">
+                    <div class="pvp-league-name">${L.label}<span>${L.cap}</span></div>
+                    <div class="pvp-rank">—</div>
+                    <div class="pvp-sub">Not ranked</div>
+                </div>`;
+            }
+            const [rank, score, moveset] = r;
+            const tier = rank <= 25 ? 'top' : rank <= 100 ? 'good' : '';
+            return `<div class="pvp-league ${tier}" style="--lc: ${L.color};">
+                <div class="pvp-league-name">${L.label}<span>${L.cap}</span></div>
+                <div class="pvp-rank">#${rank}</div>
+                <div class="pvp-sub">of ${total || '?'} · score ${score}</div>
+                <div class="pvp-score-bar"><i style="width: ${Math.max(0, Math.min(100, score || 0))}%"></i></div>
+                <div class="pvp-moves">${(moveset || []).map((m, i) => `<span class="type-badge type-${pvpMoveType(m)}" title="${i === 0 ? 'Fast move' : 'Charged move'}">${pvpMoveName(m)}</span>`).join('')}</div>
+            </div>`;
+        }).join('');
+        return `<div class="pvp-entry">
+            <div class="pvp-entry-title">${e.shadow ? '<span class="pvp-shadow-tag">Shadow</span>' : ''}${e.name.replace(/\s*\(Shadow\)/, '')}</div>
+            <div class="pvp-leagues">${cols}</div>
+        </div>`;
+    }).join('') + `<p class="pvp-source">Overall rankings from PvPoke · moveset = recommended (fast, charged, charged)</p>`;
+}
+
+// ---------- Pokémon infographic (renders public/pokemon-infographic.html) ----------
+function computeTypeMultipliers(types) {
+    const allTypes = ["normal", "fire", "water", "grass", "electric", "ice", "fighting", "poison",
+        "ground", "flying", "psychic", "bug", "rock", "ghost", "dragon", "steel", "dark", "fairy"];
+    const mult = {};
+    allTypes.forEach(t => mult[t] = 1.0);
+    (types || []).forEach(pt => {
+        const td = (typesDatabase || []).find(t => t.type.toLowerCase() === pt.toLowerCase());
+        if (!td) return;
+        (td.doubleDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 1.6; });
+        (td.halfDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 0.625; });
+        (td.noDamageFrom || []).forEach(a => { const k = a.toLowerCase(); if (mult[k] !== undefined) mult[k] *= 0.39; });
+    });
+    const label = m => m >= 2.0 ? '2.56x' : m > 1.2 ? '1.6x' : m > 0.4 ? '0.62x' : m > 0.3 ? '0.39x' : '0.24x';
+    const weak = [], resist = [];
+    Object.entries(mult).forEach(([type, m]) => {
+        if (m > 1.2) weak.push({ type, x: label(m), m });
+        else if (m < 0.8) resist.push({ type, x: label(m), m });
+    });
+    weak.sort((a, b) => b.m - a.m);
+    resist.sort((a, b) => a.m - b.m);
+    return { weak, resist };
+}
+
+function buildPokemonInfographicData(basePoke, formPoke) {
+    const poke = formPoke || basePoke;
+    const raw = rawPokedexData ? rawPokedexData.find(x => x.dexNr === Number(basePoke.id)) : null;
+    const moveList = (obj, elite) => (obj ? (Array.isArray(obj) ? obj : Object.values(obj)) : []).map(m => ({
+        name: m.names ? (m.names.English || m.id) : m.id,
+        type: ((m.type && m.type.names && m.type.names.English) || (m.type && m.type.type ? m.type.type.replace('POKEMON_TYPE_', '') : 'normal')).toLowerCase(),
+        elite
+    }));
+    const isForm = poke !== basePoke;
+    const fast = [...moveList(poke.quickMoves, false), ...(!isForm && raw ? moveList(raw.eliteQuickMoves, true) : [])];
+    const charged = [...moveList(poke.cinematicMoves, false), ...(!isForm && raw ? moveList(raw.eliteCinematicMoves, true) : [])];
+
+    // Evolution line containing this Pokémon, with candy costs
+    let evolution = [];
+    try {
+        const chain = findEvolutionChain(basePoke) || [];
+        if (chain.length > 1) {
+            evolution = chain.map((stage, i) => {
+                const info = i > 0 ? getEvolutionParentInfo(stage) : null;
+                return { name: stage.name, img: stage.img, current: String(stage.id) === String(basePoke.id), candy: i > 0 ? ((info && info.candies) || 50) : null };
+            });
+        }
+    } catch (e) { evolution = []; }
+
+    const pvp = getPvpEntriesFor(poke).slice(0, 2).map(e => ({
+        name: e.name, shadow: e.shadow,
+        leagues: PVP_LEAGUES.map(L => {
+            const r = e[L.key];
+            return { label: L.label, short: L.short, color: L.color, rank: r ? r[0] : null, score: r ? r[1] : null,
+                moveset: r ? (r[2] || []).map(m => ({ name: pvpMoveName(m), type: pvpMoveType(m) })) : [] };
+        })
+    }));
+
+    const buddy = buddyDistances ? (buddyDistances[String(basePoke.id)] || buddyDistances[(basePoke.name || '').toLowerCase()]) : null;
+    const cps = poke.combatPower || calculateClientSideCombatPower(poke.stats) || {};
+    // PvPoke only lists a "_shadow" variant for Pokémon that exist as Shadow in GO
+    const isShadowEligible = Boolean(pvpRankingsData && pvpRankingsData.species && (pvpRankingsData.species[String(basePoke.id)] || []).some(e => e.shadow));
+
+    return {
+        id: basePoke.id,
+        num: basePoke.num,
+        name: poke.name,
+        gen: basePoke.gen,
+        types: poke.types,
+        img: poke.img,
+        shinyImg: `${POKE_SPRITE_SHINY_BASE_URL}/${(poke.img || '').split('/').pop().replace('.png', '') || basePoke.id}.png`,
+        stats: poke.stats,
+        cps,
+        mega: basePoke.mega, gmax: basePoke.gmax, shadow: isShadowEligible,
+        legendary: raw ? raw.pokemonClass || null : null,
+        buddy,
+        matchups: computeTypeMultipliers(poke.types),
+        fast, charged,
+        evolution,
+        pvp,
+        obtaining: modalObtainingSummary()
+    };
+}
+
+// The modal's "How to get" tab (loadObtainingTab) already merges every source, incl. active rotations;
+// reuse what it rendered so the infographic always matches it
+function modalObtainingSummary() {
+    const clean = s => (s || '').replace(/[\u{1F300}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
+    const seen = new Set();
+    return Array.from(document.querySelectorAll('#obtaining-methods .obtain-card')).map(card => {
+        const h = card.querySelector('h4');
+        const p = card.querySelector('p');
+        return { method: clean(h ? h.textContent : ''), desc: clean(p ? p.textContent : '') };
+    }).filter(o => o.method && !seen.has(o.method + o.desc) && seen.add(o.method + o.desc)).slice(0, 8);
+}
+
+let activeModalFormPoke = null;
+
+window.openPokemonInfographic = function () {
+    const basePoke = pokemonDatabase.find(p => p.id === activeModalPokemonId);
+    if (!basePoke) return;
+    const formPoke = activeModalFormPoke && String(activeModalFormPoke.id) === String(basePoke.id) ? activeModalFormPoke : basePoke;
+    const payload = buildPokemonInfographicData(basePoke, formPoke);
+    const modal = ensureInfographicModal();
+    modal.querySelector('.infographic-controls').classList.add('hidden');
+    const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${payload.obtaining.length}`;
+    runInfographic(key, `pokemon-infographic.html?embed=1`,
+        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'pokemon', pokemon: payload }, location.origin));
 };
 
 function buildDifficultyHtml(estNum) {

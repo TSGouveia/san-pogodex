@@ -1163,6 +1163,7 @@
                     <div class="modal-forms-row" id="modal-pokemon-forms" style="display: none;">
                         <!-- Regional & Special form toggle chips -->
                     </div>
+                    <button type="button" class="infographic-btn modal-infographic-btn" onclick="window.openPokemonInfographic()" title="Generate an infographic for this Pokémon"><i class="fa-solid fa-image"></i> Infographic</button>
                 </div>
                 <div class="modal-pokemon-img-container" id="modal-pokemon-img-container">
                     <img src="" alt="" class="modal-pokemon-img" id="modal-pokemon-img">
@@ -1190,6 +1191,9 @@
                     </button>
                     <button class="modal-tab-btn" data-target="matchups-tab">
                         <i class="fa-solid fa-shield-halved"></i> Type Matchups
+                    </button>
+                    <button class="modal-tab-btn" data-target="pvp-tab">
+                        <i class="fa-solid fa-trophy"></i> PvP
                     </button>
                 </div>
 
@@ -1245,6 +1249,14 @@
                     <div class="tab-pane" id="matchups-tab">
                         <h3 class="pane-title">Type Effectiveness</h3>
                         <div class="matchups-grid" id="type-matchups">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- PvP League Rankings Tab -->
+                    <div class="tab-pane" id="pvp-tab">
+                        <h3 class="pane-title">GO Battle League Rankings</h3>
+                        <div class="pvp-rankings" id="pvp-rankings">
                             <!-- Populated dynamically -->
                         </div>
                     </div>

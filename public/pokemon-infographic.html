@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PoGo Pokémon Infographic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+<style>
+  * { box-sizing:border-box; }
+  body { margin:0; background:#0f1115; color:#e9ecf2; font-family:Nunito, system-ui, sans-serif; }
+  .stage { display:flex; justify-content:center; padding:20px 0; }
+  html.embed .stage { padding:0; }
+
+  .poster { --t1:#888; --t2:#888; width:1080px; flex-shrink:0; position:relative; overflow:hidden; color:#eef1f6;
+    background:
+      radial-gradient(800px 600px at 100% 0%, color-mix(in srgb, var(--t1) 30%, transparent), transparent 65%),
+      radial-gradient(700px 600px at 0% 70%, color-mix(in srgb, var(--t2) 20%, transparent), transparent 65%),
+      linear-gradient(180deg, #14121c, #0b0a10); }
+  .poster::before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.45;
+    background-image:
+      radial-gradient(1.6px 1.6px at 23px 41px, #fff, transparent),
+      radial-gradient(1px 1px at 97px 133px, #fff, transparent),
+      radial-gradient(2px 2px at 161px 72px, rgba(255,255,255,.8), transparent),
+      radial-gradient(1.2px 1.2px at 211px 187px, #fff, transparent);
+    background-size:240px 240px; }
+  .poster > * { position:relative; }
+
+  /* ---------- Hero ---------- */
+  .hero { display:flex; gap:10px; padding:40px 44px 26px; min-height:440px;
+    background:linear-gradient(125deg, color-mix(in srgb, var(--t1) 70%, #000) 0%, color-mix(in srgb, var(--t2) 45%, #120f1a) 70%, transparent 100%); overflow:hidden; }
+  .hero::after { content:""; position:absolute; right:-120px; top:-120px; width:620px; height:620px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.18), rgba(255,255,255,.04) 55%, transparent 70%); }
+  .h-info { flex:1; min-width:0; z-index:2; display:flex; flex-direction:column; }
+  .h-num { font-size:22px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.75); }
+  .h-name { font-size:84px; font-weight:900; line-height:.95; margin:4px 0 14px; text-shadow:0 4px 0 rgba(0,0,0,.2); }
+  .h-name.long { font-size:62px; }
+  .types { display:flex; gap:8px; flex-wrap:wrap; }
+  .type { --c:#888; display:inline-flex; align-items:center; font-size:15px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:#fff;
+    background:var(--c); padding:6px 14px; border-radius:99px; box-shadow:inset 0 -3px 0 rgba(0,0,0,.2), 0 2px 0 rgba(0,0,0,.25); text-shadow:0 1px 1px rgba(0,0,0,.3); }
+  .type.sm { font-size:12px; padding:4px 10px; }
+  .tags { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .tag { font-size:13px; font-weight:900; letter-spacing:.06em; text-transform:uppercase; padding:4px 10px; border-radius:8px; background:rgba(0,0,0,.3); color:rgba(255,255,255,.85); box-shadow:inset 0 0 0 1px rgba(255,255,255,.15); }
+  .tag.mega { color:#f0abfc; } .tag.gmax { color:#fda4af; } .tag.shadow { color:#c4b5fd; } .tag.leg { color:#fde68a; }
+
+  .stats { margin-top:auto; padding-top:22px; display:flex; flex-direction:column; gap:9px; max-width:470px; }
+  .stat { display:grid; grid-template-columns:56px 1fr 50px; align-items:center; gap:12px; font-weight:900; }
+  .stat b { font-size:15px; letter-spacing:.1em; color:rgba(255,255,255,.7); }
+  .stat .bar { height:14px; border-radius:7px; background:rgba(0,0,0,.35); overflow:hidden; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+  .stat .bar i { display:block; height:100%; border-radius:7px; }
+  .stat span { font-size:21px; text-align:right; }
+  .maxcp { display:flex; align-items:baseline; gap:10px; margin-top:6px; }
+  .maxcp small { font-size:14px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.7); }
+  .maxcp b { font-size:34px; font-weight:900; }
+  .maxcp em { font-style:normal; font-size:15px; font-weight:800; color:rgba(255,255,255,.6); }
+
+  .h-art { width:430px; flex-shrink:0; position:relative; z-index:1; }
+  .h-art .main { position:absolute; right:-10px; top:-14px; width:420px; height:420px; object-fit:contain; filter:drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
+  .h-art .shiny { position:absolute; right:-6px; bottom:-14px; width:120px; height:120px; border-radius:50%; background:rgba(0,0,0,.35); box-shadow:inset 0 0 0 2px rgba(255,255,255,.18); }
+  .h-art .shiny img { position:absolute; inset:-8px; width:136px; height:136px; object-fit:contain; filter:drop-shadow(0 4px 6px rgba(0,0,0,.4)); }
+  .h-art .shiny span { position:absolute; left:50%; bottom:-10px; transform:translateX(-50%); font-size:12px; font-weight:900; letter-spacing:.1em; background:#fbbf24; color:#1a1408; padding:2px 9px; border-radius:6px; white-space:nowrap; }
+
+  /* ---------- Grid ---------- */
+  .grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; padding:26px 30px 10px; }
+  .card { border-radius:20px; padding:18px 20px 20px; background:linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.08), 0 4px 0 rgba(0,0,0,.28); min-width:0; }
+  .card.wide { grid-column:1 / -1; }
+  .card h3 { margin:0 0 12px; display:flex; align-items:center; gap:10px; font-size:15px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.7); }
+  .card h3::before { content:""; width:6px; height:18px; border-radius:3px; background:var(--accent, var(--t1)); }
+
+  .cps { display:flex; flex-direction:column; gap:8px; }
+  .cprow { display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; padding:9px 12px; border-radius:12px; background:rgba(0,0,0,.22); }
+  .cprow .l { font-size:16px; font-weight:900; }
+  .cprow .l small { display:block; font-size:12.5px; font-weight:800; color:rgba(255,255,255,.55); }
+  .cprow .v { text-align:right; font-weight:900; font-size:24px; color:#fde68a; }
+  .cprow .v small { display:block; font-size:12.5px; font-weight:800; color:rgba(255,255,255,.55); }
+
+  .mgroup + .mgroup { margin-top:14px; }
+  .mlabel { font-size:13px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); margin-bottom:7px; }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; }
+  .weak .type, .chips .type { text-transform:none; letter-spacing:0; font-size:14.5px; }
+  .type .x { margin-left:7px; font-size:12px; font-weight:900; background:rgba(0,0,0,.28); padding:1px 6px; border-radius:6px; }
+  .type.elite { box-shadow:inset 0 -3px 0 rgba(0,0,0,.2), 0 0 0 2px #fde68a; }
+  .type .el { margin-left:6px; font-size:11px; color:#fde68a; }
+
+  .evo { display:flex; align-items:center; justify-content:center; gap:4px; }
+  .evo.n3 .evs { width:96px; } .evo.n3 .evs .o { width:84px; height:84px; } .evo.n3 .evs .o img { width:100px; height:100px; } .evo.n3 .arrow { min-width:48px; font-size:12px; }
+  .evo.n4 .evs { width:78px; } .evo.n4 .evs .o { width:68px; height:68px; } .evo.n4 .evs .o img { width:84px; height:84px; } .evo.n4 .arrow { min-width:40px; font-size:11px; } .evo.n4 .evs .n { font-size:13px; }
+  .evs { text-align:center; width:120px; }
+  .evs .o { width:100px; height:100px; margin:0 auto; border-radius:50%; position:relative; background:rgba(0,0,0,.25); box-shadow:inset 0 0 0 2px rgba(255,255,255,.08); }
+  .evs.cur .o { background:color-mix(in srgb, var(--t1) 35%, rgba(0,0,0,.2)); box-shadow:inset 0 0 0 3px color-mix(in srgb, var(--t1) 70%, #fff); }
+  .evs .o img { position:absolute; inset:-8px; width:116px; height:116px; object-fit:contain; filter:drop-shadow(0 4px 4px rgba(0,0,0,.4)); }
+  .stage .n { font-size:15px; font-weight:900; margin-top:6px; line-height:1.1; }
+  .arrow { text-align:center; font-size:13px; font-weight:900; color:#fde68a; min-width:66px; }
+  .arrow i { display:block; font-style:normal; font-size:26px; line-height:1; color:rgba(255,255,255,.45); }
+  .muted { color:rgba(255,255,255,.5); font-weight:800; font-size:15px; }
+
+  .pvp-variant + .pvp-variant { margin-top:14px; }
+  .pvp-vname { font-size:15px; font-weight:900; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .pvp-vname .sh { font-size:11px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:#e9d5ff; background:rgba(124,58,237,.45); padding:2px 8px; border-radius:6px; }
+  .leagues { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:10px; }
+  .league { --lc:#3b82f6; border-radius:14px; padding:11px 13px; background:linear-gradient(160deg, color-mix(in srgb, var(--lc) 26%, transparent), rgba(0,0,0,.18)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--lc) 45%, transparent); min-width:0; }
+  .league.off { opacity:.45; }
+  .league .ln { font-size:12.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:color-mix(in srgb, var(--lc) 55%, #fff); }
+  .league .rk { font-size:36px; font-weight:900; line-height:1.05; }
+  .league .rk.top { color:#fbbf24; } .league .rk.good { color:#4ade80; }
+  .league .sc { font-size:13px; font-weight:800; color:rgba(255,255,255,.6); margin-bottom:7px; }
+  .league .chips .type { font-size:12px; padding:3px 8px; }
+
+  .ways { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
+  .way { padding:10px 13px; border-radius:12px; background:rgba(0,0,0,.22); min-width:0; }
+  .way b { display:block; font-size:16px; font-weight:900; }
+  .way span { display:block; font-size:13.5px; font-weight:700; color:rgba(255,255,255,.65); line-height:1.3; margin-top:2px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+  .p-foot { display:flex; justify-content:space-between; align-items:center; padding:16px 36px 22px; font-size:17px; font-weight:800; color:rgba(255,255,255,.55); }
+  .p-foot b { color:#fff; }
+</style>
+</head>
+<body>
+<div class="stage"><div class="poster" id="poster"></div></div>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
+const Q = new URLSearchParams(location.search);
+const TYPE_COLORS = { normal:'#9fa19f', fire:'#e62829', water:'#2980ef', electric:'#fac000', grass:'#3fa129', ice:'#3dcef3', fighting:'#ff8000', poison:'#9141cb', ground:'#915121', flying:'#81b9ef', psychic:'#ef4179', bug:'#91a119', rock:'#afa981', ghost:'#704170', dragon:'#5060e1', steel:'#60a1b8', dark:'#624d4e', fairy:'#ef70ef' };
+const tc = t => TYPE_COLORS[t] || '#888';
+const cap = s => String(s || '').replace(/\b\w/g, c => c.toUpperCase());
+function footCredit(){ try { return localStorage.getItem('ig_foot') || '@LazySan'; } catch { return '@LazySan'; } }
+
+const typeChip = (t, extra = '', cls = '') => `<span class="type ${cls}" style="--c:${tc(t)}">${esc(cap(t))}${extra}</span>`;
+const moveChip = m => `<span class="type${m.elite ? ' elite' : ''}" style="--c:${tc(m.type)}">${esc(m.name)}${m.elite ? '<span class="el">★ Elite</span>' : ''}</span>`;
+
+function heroHTML(p){
+  const s = p.stats || {};
+  const bars = [['ATK', s.atk, '#f87171', 400], ['DEF', s.def, '#60a5fa', 400], ['STA', s.sta, '#4ade80', 500]];
+  const tags = [
+    p.legendary === 'POKEMON_CLASS_LEGENDARY' ? '<span class="tag leg">Legendary</span>' : '',
+    p.legendary === 'POKEMON_CLASS_MYTHIC' ? '<span class="tag leg">Mythical</span>' : '',
+    p.mega ? '<span class="tag mega">Mega</span>' : '',
+    p.gmax ? '<span class="tag gmax">Gigantamax</span>' : '',
+    p.shadow ? '<span class="tag shadow">Shadow</span>' : '',
+    p.buddy ? `<span class="tag">Buddy ${esc(p.buddy)} km</span>` : '',
+    p.gen && p.gen < 50 ? `<span class="tag">Gen ${esc(String(p.gen).replace('8.5', '8 · Hisui'))}</span>` : '',
+  ].join('');
+  return `<div class="hero">
+    <div class="h-info">
+      <div class="h-num">#${esc(p.num)}</div>
+      <div class="h-name${p.name.length > 11 ? ' long' : ''}">${esc(p.name)}</div>
+      <div class="types">${p.types.map(t => typeChip(t)).join('')}</div>
+      <div class="tags">${tags}</div>
+      <div class="stats">
+        ${bars.map(([l, v, c, max]) => `<div class="stat"><b>${l}</b><div class="bar"><i style="width:${Math.min(100, (v || 0) / max * 100)}%; background:${c}"></i></div><span>${v ?? '–'}</span></div>`).join('')}
+        ${p.cps && p.cps.maxL50 ? `<div class="maxcp"><small>MAX CP</small><b>${p.cps.maxL50}</b><em>at level 50 · 15/15/15</em></div>` : ''}
+      </div>
+    </div>
+    <div class="h-art">
+      ${p.imgData ? `<img class="main" src="${p.imgData}" alt="">` : ''}
+      ${p.shinyData ? `<div class="shiny"><img src="${p.shinyData}" alt=""><span>SHINY</span></div>` : ''}
+    </div>
+  </div>`;
+}
+
+function cpsCard(c){
+  if (!c || !c.raidsL20) return '';
+  const row = (l, sub, v) => v ? `<div class="cprow"><div class="l">${l}<small>${sub}</small></div><div class="v">${v.max}<small>min ${v.min}</small></div></div>` : '';
+  return `<div class="card"><h3>100% IV CPs</h3><div class="cps">
+    ${row('Field Research', 'Level 15', c.researchL15)}
+    ${row('Raids & Eggs', 'Level 20', c.raidsL20)}
+    ${row('Weather Boosted Raids', 'Level 25', c.raidsWbL25)}
+  </div></div>`;
+}
+
+function matchupCard(m){
+  const g = (label, list) => list.length ? `<div class="mgroup"><div class="mlabel">${label}</div><div class="chips">${list.map(x => typeChip(x.type, `<span class="x">${x.x}</span>`)).join('')}</div></div>` : '';
+  return `<div class="card"><h3>Type Matchups</h3>${g('Weak to', m.weak)}${g('Resists', m.resist)}</div>`;
+}
+
+function movesCard(p){
+  if (!p.fast.length && !p.charged.length) return '';
+  return `<div class="card"><h3>Moves</h3>
+    ${p.fast.length ? `<div class="mgroup"><div class="mlabel">Fast attacks</div><div class="chips">${p.fast.map(moveChip).join('')}</div></div>` : ''}
+    ${p.charged.length ? `<div class="mgroup"><div class="mlabel">Charged attacks</div><div class="chips">${p.charged.map(moveChip).join('')}</div></div>` : ''}
+  </div>`;
+}
+
+function evoCard(p){
+  if (!p.evolution.length) return `<div class="card"><h3>Evolution</h3><div class="muted">Doesn't evolve.</div></div>`;
+  const parts = p.evolution.map((s, i) => `${i ? `<div class="arrow"><i>→</i>${s.candy} candy</div>` : ''}
+    <div class="evs${s.current ? ' cur' : ''}"><div class="o">${s.data ? `<img src="${s.data}" alt="">` : ''}</div><div class="n">${esc(s.name)}</div></div>`).join('');
+  return `<div class="card"><h3>Evolution</h3><div class="evo n${Math.min(4, p.evolution.length)}">${parts}</div></div>`;
+}
+
+function pvpCard(p){
+  if (!p.pvp.length) return '';
+  const v = p.pvp.map(e => `<div class="pvp-variant">
+    ${p.pvp.length > 1 ? `<div class="pvp-vname">${e.shadow ? '<span class="sh">Shadow</span>' : ''}${esc(e.name.replace(/\s*\(Shadow\)/, ''))}</div>` : ''}
+    <div class="leagues">${e.leagues.map(l => `<div class="league${l.rank ? '' : ' off'}" style="--lc:${l.color}">
+      <div class="ln">${esc(l.label)}</div>
+      <div class="rk ${l.rank && l.rank <= 25 ? 'top' : l.rank && l.rank <= 100 ? 'good' : ''}">${l.rank ? '#' + l.rank : '—'}</div>
+      <div class="sc">${l.rank ? `score ${l.score}` : 'not ranked'}</div>
+      ${l.moveset.length ? `<div class="chips">${l.moveset.map(m => `<span class="type" style="--c:${tc(m.type)}">${esc(m.name)}</span>`).join('')}</div>` : ''}
+    </div>`).join('')}</div>
+  </div>`).join('');
+  return `<div class="card wide" style="--accent:#fbbf24"><h3>PvP Rankings</h3>${v}</div>`;
+}
+
+function waysCard(p){
+  const list = (p.obtaining || []).filter(o => o && o.method);
+  if (!list.length) return '';
+  return `<div class="card wide" style="--accent:#34d399"><h3>How to Get</h3><div class="ways">${list.map(o => `<div class="way"><b>${esc(o.method)}</b><span>${esc(o.desc || '')}</span></div>`).join('')}</div></div>`;
+}
+
+// Inline images so the PNG export can read them
+const cache = new Map();
+function toDataUrl(url){
+  if (!url) return Promise.resolve(null);
+  if (!cache.has(url)) cache.set(url, (async () => {
+    const tryFetch = async u => {
+      try {
+        const res = await fetch(u); if (!res.ok) return null;
+        const blob = await res.blob(); if (!blob.type.startsWith('image/')) return null;
+        return await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(blob); });
+      } catch { return null; }
+    };
+    return await tryFetch(url) || await tryFetch('https://images.weserv.nl/?url=' + encodeURIComponent(url.replace(/^https?:\/\//, '')) + '&w=500&output=png');
+  })());
+  return cache.get(url);
+}
+
+async function render(p){
+  const [t1, t2] = [tc(p.types[0]), tc(p.types[1] || p.types[0])];
+  $('poster').style.setProperty('--t1', t1);
+  $('poster').style.setProperty('--t2', t2);
+  [p.imgData, p.shinyData] = await Promise.all([toDataUrl(p.img), toDataUrl(p.shinyImg)]);
+  await Promise.all(p.evolution.map(async s => { s.data = await toDataUrl(s.img); }));
+  $('poster').innerHTML = `
+    ${heroHTML(p)}
+    <div class="grid">
+      ${cpsCard(p.cps)}
+      ${matchupCard(p.matchups)}
+      ${movesCard(p)}
+      ${evoCard(p)}
+      ${pvpCard(p)}
+      ${waysCard(p)}
+    </div>
+    <div class="p-foot"><b>${esc(footCredit())}</b><span>PvP rankings: PvPoke · ${new Date().toLocaleDateString('en-GB', { month:'long', year:'numeric' })}</span></div>`;
+}
+
+let fontCSS = null;
+async function getFontCSS(){
+  if (fontCSS) return fontCSS;
+  const link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  let css = await (await fetch(link.href)).text();
+  const urls = [...new Set([...css.matchAll(/url\((https:[^)]+)\)/g)].map(m => m[1]))];
+  const toData = async u => { const b = await (await fetch(u)).blob(); return new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(b); }); };
+  const datas = await Promise.all(urls.map(toData));
+  urls.forEach((u, i) => { css = css.split(u).join(datas[i]); });
+  return fontCSS = css;
+}
+async function makePng(pixelRatio = 2){
+  await document.fonts.ready;
+  const node = $('poster');
+  const opts = { pixelRatio, width: 1080, height: node.offsetHeight };
+  try { opts.fontEmbedCSS = await getFontCSS(); } catch {}
+  await htmlToImage.toPng(node, opts).catch(() => {});
+  return htmlToImage.toPng(node, opts);
+}
+const slug = s => String(s || 'pokemon').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+if (Q.get('embed')) {
+  // ?embed=1 -> parent sends {source:'pogo-site', type:'pokemon', pokemon}; we post back the PNG
+  document.documentElement.classList.add('embed');
+  const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
+  window.addEventListener('message', async e => {
+    if (e.origin !== location.origin || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'pokemon') return;
+    const p = e.data.pokemon;
+    try {
+      post({ type: 'status', text: 'Loading artwork…' });
+      await render(p);
+      post({ type: 'status', text: 'Rendering…' });
+      const url = await makePng(2);
+      post({ type: 'done', url, name: slug(p.name) + '-infographic.png' });
+    } catch (err) { post({ type: 'error', text: 'Export failed: ' + err.message }); }
+  });
+  post({ type: 'ready' });
+} else {
+  window.__render = render; // dev preview hook
+}
+</script>
+</body>
+</html>

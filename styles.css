@@ -5134,6 +5134,81 @@ img[src*="sprites/pokemon"] {
     pointer-events: none;
 }
 
+/* Pokémon modal: Infographic button under the name/types */
+.modal-infographic-btn {
+    margin-top: 0.6rem;
+    font-size: 0.78rem;
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.25);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+.modal-infographic-btn:hover { background: rgba(0, 0, 0, 0.4); }
+
+/* Pokémon modal: PvP tab */
+.pvp-rankings { display: flex; flex-direction: column; gap: 1rem; }
+.pvp-entry-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+.pvp-shadow-tag {
+    font-size: 0.65rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #e9d5ff;
+    background: rgba(124, 58, 237, 0.35);
+    border: 1px solid rgba(167, 139, 250, 0.5);
+    padding: 2px 7px;
+    border-radius: 5px;
+}
+.pvp-leagues {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+}
+@media (max-width: 640px) {
+    .pvp-leagues { grid-template-columns: 1fr; }
+}
+.pvp-league {
+    --lc: #3b82f6;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--lc) 16%, transparent), var(--bg-tertiary, rgba(255,255,255,0.03)));
+    border: 1px solid color-mix(in srgb, var(--lc) 40%, transparent);
+    border-radius: 10px;
+    padding: 0.7rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+.pvp-league.unranked { opacity: 0.55; }
+.pvp-league-name {
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: color-mix(in srgb, var(--lc) 60%, #fff);
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4rem;
+}
+.pvp-league-name span { color: var(--text-secondary); font-weight: 700; text-transform: none; letter-spacing: 0; }
+.pvp-rank { font-size: 1.6rem; font-weight: 900; line-height: 1.1; color: var(--text-primary); }
+.pvp-league.top .pvp-rank { color: #fbbf24; }
+.pvp-league.good .pvp-rank { color: #4ade80; }
+.pvp-sub { font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); }
+.pvp-score-bar { height: 5px; border-radius: 3px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin: 0.2rem 0 0.35rem; }
+.pvp-score-bar i { display: block; height: 100%; background: var(--lc); border-radius: 3px; }
+.pvp-moves { display: flex; flex-wrap: wrap; gap: 4px; }
+.pvp-moves .type-badge { font-size: 0.66rem; text-transform: none; }
+.pvp-source { font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0.25rem 0 0; }
+
 /* Events infographic: button next to the Scope filter + Week/Month controls in the modal */
 .events-infographic-btn {
     font-size: 0.82rem;

@@ -18,6 +18,7 @@ from scrapers.scrape_pokedex import scrape_pokedex, scrape_types
 from scrapers.scrape_buddy import scrape_buddy_distances
 from scrapers.scrape_mega_attacks import scrape_mega_attacks
 from scrapers.scrape_pvp import scrape_pvp
+from scrapers.scrape_pvp_rankings import scrape_pvp_rankings
 from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
@@ -139,6 +140,11 @@ def main():
     # 12. Scrape GO Battle League (latest season with Pokémon encounters)
     pvp = scrape_pvp()
     save_json("pvp.json", pvp)
+
+    # 13. PvP rankings per league (PvPoke), trimmed to rank / score / moveset
+    pvp_rankings = scrape_pvp_rankings()
+    if pvp_rankings:
+        save_json("pvpRankings.json", pvp_rankings)
 
     # Save metadata with timestamp so the client knows when data was updated
     metadata = {
