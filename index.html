@@ -1193,7 +1193,7 @@
                         <i class="fa-solid fa-shield-halved"></i> Type Matchups
                     </button>
                     <button class="modal-tab-btn" data-target="pvp-tab">
-                        <i class="fa-solid fa-trophy"></i> PvP
+                        <i class="fa-solid fa-trophy"></i> Ranks
                     </button>
                 </div>
 
@@ -1255,7 +1255,13 @@
 
                     <!-- PvP League Rankings Tab -->
                     <div class="tab-pane" id="pvp-tab">
-                        <h3 class="pane-title">GO Battle League Rankings</h3>
+                        <div class="moves-tab-header">
+                            <h3 class="pane-title" style="margin-bottom: 0;">Battle Rankings</h3>
+                            <div class="moves-mode-selector">
+                                <button type="button" class="rank-mode-btn active" data-mode="pvp">Trainer Battles (PvP)</button>
+                                <button type="button" class="rank-mode-btn" data-mode="pve">Raid Attackers (PvE)</button>
+                            </div>
+                        </div>
                         <div class="pvp-rankings" id="pvp-rankings">
                             <!-- Populated dynamically -->
                         </div>

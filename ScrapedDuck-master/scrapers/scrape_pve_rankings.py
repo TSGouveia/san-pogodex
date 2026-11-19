@@ -16,7 +16,8 @@ Output shape:
   "updatedAt": "...", "level": 40,
   "types": {"dark": 412, ...},                              # attackers ranked per type
   "species": {"983": [ {"name": "Kingambit", "form": "Normal", "shadow": true, "mega": false,
-                        "t": [["dark", 9, 18.41, "Snarl", "Foul Play", 0], ...]} ]}  # top types; last = elite flags (1 fast, 2 charged)
+                        "t": [["dark", 9, 18.41, "Snarl", "Foul Play", 0, "dark", "dark"], ...]} ]}
+                        # top types: type, rank, eDPS, fast, charged, elite flags (1 fast, 2 charged), fast type, charged type
 }
 """
 import re
@@ -317,13 +318,13 @@ def scrape_pve_rankings():
                     tdo = dps * hp / ((y_num or EST_Y_NUM) / dfn)
                     r = get_edps(dps, tdo, est["hp"])
                     if not best or r > best[0]:
-                        best = (r, fo["name"], co["name"], (1 if fe else 0) + (2 if ce else 0))
+                        best = (r, fo["name"], co["name"], (1 if fe else 0) + (2 if ce else 0), fo["type"].lower(), co["type"].lower())
             if best and best[0] > 0:
                 scored.append((best[0], i, best))
         scored.sort(key=lambda x: -x[0])
         totals[T.lower()] = len(scored)
         for rank, (_, i, best) in enumerate(scored, start=1):
-            results.setdefault(i, []).append([T.lower(), rank, round(best[0], 2), best[1], best[2], best[3]])
+            results.setdefault(i, []).append([T.lower(), rank, round(best[0], 2), best[1], best[2], best[3], best[4], best[5]])
 
     species = {}
     for i, rows in results.items():

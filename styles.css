@@ -4000,7 +4000,8 @@ html {
     gap: 3px;
 }
 
-.move-mode-btn {
+.move-mode-btn,
+.rank-mode-btn {
     background: transparent;
     border: none;
     color: var(--text-secondary);
@@ -4012,11 +4013,13 @@ html {
     transition: all 0.2s ease;
 }
 
-.move-mode-btn:hover {
+.move-mode-btn:hover,
+.rank-mode-btn:hover {
     color: var(--text-primary);
 }
 
-.move-mode-btn.active {
+.move-mode-btn.active,
+.rank-mode-btn.active {
     background: var(--accent-color);
     color: #0f172a;
     box-shadow: 0 2px 8px rgba(245, 166, 35, 0.3);
@@ -5207,6 +5210,7 @@ img[src*="sprites/pokemon"] {
 .pvp-score-bar i { display: block; height: 100%; background: var(--lc); border-radius: 3px; }
 .pvp-moves { display: flex; flex-wrap: wrap; gap: 4px; }
 .pvp-moves .type-badge { font-size: 0.66rem; text-transform: none; }
+.pve-mega-tag { color: #fae8ff; background: rgba(217, 70, 239, 0.35); border-color: rgba(232, 121, 249, 0.5); }
 .pvp-source { font-size: 0.72rem; color: var(--text-secondary); text-align: center; margin: 0.25rem 0 0; }
 
 /* Events infographic: button next to the Scope filter + Week/Month controls in the modal */

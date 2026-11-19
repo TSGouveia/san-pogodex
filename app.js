@@ -5871,9 +5871,70 @@ function pvpMoveType(id) {
     return m ? m[1] : 'normal';
 }
 
+let currentRankingsMode = 'pvp'; // 'pvp' or 'pve' in the modal's Rankings tab
+
+// Rankings tab: PvP (PvPoke leagues) / PvE (raid attacker rank per type) toggle
 function loadPvpTab(poke) {
     const container = document.getElementById('pvp-rankings');
     if (!container) return;
+    const btns = document.querySelectorAll('.rank-mode-btn');
+    btns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === currentRankingsMode);
+        btn.onclick = () => {
+            currentRankingsMode = btn.dataset.mode;
+            btns.forEach(b => b.classList.toggle('active', b.dataset.mode === currentRankingsMode));
+            loadPvpTab(poke);
+        };
+    });
+    if (currentRankingsMode === 'pve') renderPveRankings(poke, container);
+    else renderPvpRankings(poke, container);
+}
+
+// Raid attacker variants (normal, shadow, megas, other formes) for the Pokémon / regional form shown
+function getPveEntriesFor(poke) {
+    if (!pveRankingsData || !pveRankingsData.species || !poke) return [];
+    const all = pveRankingsData.species[String(poke.id)] || [];
+    const formTag = f => ({ Alola: 'alolan', Galarian: 'galarian', Hisuian: 'hisuian', Paldea: 'paldean' })[f] || '';
+    const want = PVP_REGIONAL_TAGS.find(t => (poke.name || '').toLowerCase().includes(t)) || '';
+    const filtered = all.filter(v => formTag(v.form) === want);
+    return (filtered.length ? filtered : all).slice().sort((x, y) => (x.t[0] ? x.t[0][1] : 1e9) - (y.t[0] ? y.t[0][1] : 1e9));
+}
+
+function renderPveRankings(poke, container) {
+    if (!pveRankingsData || !pveRankingsData.species) {
+        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">Raid attacker rankings are not available yet.</p>`;
+        return;
+    }
+    const entries = getPveEntriesFor(poke);
+    if (!entries.length) {
+        container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">${poke.name} isn't ranked as a raid attacker.</p>`;
+        return;
+    }
+    const totals = pveRankingsData.types || {};
+    container.innerHTML = entries.map(v => {
+        const tags = (v.mega ? '<span class="pvp-shadow-tag pve-mega-tag">Mega</span>' : '') + (v.shadow ? '<span class="pvp-shadow-tag">Shadow</span>' : '');
+        // best type always; other types only if genuinely good (mixed movesets create noisy off-types)
+        const rows = (v.t || []).filter((r, i) => i === 0 || r[1] <= 150);
+        const cards = rows.map(([type, rank, edps, fast, charged, elite, fastType, chargedType]) => {
+            const tier = rank <= 10 ? 'top' : rank <= 50 ? 'good' : '';
+            return `<div class="pvp-league ${tier}" style="--lc: var(--type-${type});">
+                <div class="pvp-league-name">${type} attacker<span>of ${totals[type] || '?'}</span></div>
+                <div class="pvp-rank">#${rank}</div>
+                <div class="pvp-sub">${edps} eDPS</div>
+                <div class="pvp-moves">
+                    <span class="type-badge type-${fastType || type}" title="Fast move">${fast}${elite & 1 ? ' ★' : ''}</span>
+                    <span class="type-badge type-${chargedType || type}" title="Charged move">${charged}${elite & 2 ? ' ★' : ''}</span>
+                </div>
+            </div>`;
+        }).join('');
+        return `<div class="pvp-entry">
+            <div class="pvp-entry-title">${tags}${v.name}</div>
+            <div class="pvp-leagues pve-types">${cards}</div>
+        </div>`;
+    }).join('') + `<p class="pvp-source">Raid attacker rank per type among all Pokémon (incl. Mega & Shadow) · level 40 · DialgaDex method · ★ elite move</p>`;
+}
+
+function renderPvpRankings(poke, container) {
     if (!pvpRankingsData || !pvpRankingsData.species) {
         container.innerHTML = `<p style="color: var(--text-secondary); text-align: center; padding: 2rem 0;">PvP rankings are not available yet.</p>`;
         return;
