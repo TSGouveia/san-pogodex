@@ -26,6 +26,7 @@
       radial-gradient(1.2px 1.2px at 211px 187px, #fff, transparent);
     background-size:240px 240px; }
   .poster > * { position:relative; }
+  .hero .h-info .cps { max-width:520px; }
 
   /* ---------- Hero ---------- */
   .hero { display:flex; gap:10px; padding:40px 44px 30px; min-height:420px;
@@ -51,11 +52,14 @@
   .cp.max b { color:#fff; }
   .cps-note { font-size:12.5px; font-weight:800; color:rgba(255,255,255,.55); margin-top:7px; }
 
-  .h-art { width:420px; flex-shrink:0; position:relative; z-index:1; }
-  .h-art .main { position:absolute; right:-10px; top:-14px; width:410px; height:410px; object-fit:contain; filter:drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
-  .h-art .shiny { position:absolute; right:-6px; bottom:-18px; width:116px; height:116px; border-radius:50%; background:rgba(0,0,0,.35); box-shadow:inset 0 0 0 2px rgba(255,255,255,.18); }
-  .h-art .shiny img { position:absolute; inset:-8px; width:132px; height:132px; object-fit:contain; filter:drop-shadow(0 4px 6px rgba(0,0,0,.4)); }
-  .h-art .shiny span { position:absolute; left:50%; bottom:-10px; transform:translateX(-50%); font-size:12px; font-weight:900; letter-spacing:.1em; background:#fbbf24; color:#1a1408; padding:2px 9px; border-radius:6px; white-space:nowrap; }
+  .h-art { width:470px; flex-shrink:0; position:relative; z-index:1; }
+  .h-art .main { position:absolute; left:-20px; top:-18px; width:330px; height:330px; object-fit:contain; filter:drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
+  .h-art .shiny { position:absolute; right:-14px; bottom:-26px; width:270px; height:270px; }
+  .h-art .shiny::before { content:""; position:absolute; inset:6%; border-radius:50%;
+    background:radial-gradient(circle, rgba(253,230,138,.38), rgba(251,191,36,.12) 55%, transparent 72%); box-shadow:inset 0 0 0 2px rgba(253,230,138,.35); }
+  .h-art .shiny img { position:absolute; inset:-4%; width:108%; height:108%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
+  .h-art .shiny span { position:absolute; left:50%; top:4px; transform:translateX(-50%); font-size:14px; font-weight:900; letter-spacing:.14em; background:linear-gradient(90deg, #fde68a, #fbbf24); color:#1a1408; padding:4px 12px; border-radius:8px; white-space:nowrap; box-shadow:0 3px 0 rgba(0,0,0,.3); }
+  .h-art .shiny span::before { content:"\2726  "; }
 
   /* ---------- Cards ---------- */
   .body { display:flex; flex-direction:column; gap:16px; padding:26px 30px 26px; }
@@ -63,27 +67,26 @@
   .card h3 { margin:0 0 14px; display:flex; align-items:center; gap:10px; font-size:15px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.7); }
   .card h3::before { content:""; width:6px; height:18px; border-radius:3px; background:var(--accent, var(--t1)); }
 
-  /* Evolution line × leagues */
-  .fam { display:grid; grid-template-columns:230px repeat(3, minmax(0, 1fr)); gap:8px; align-items:stretch; }
-  .fh { font-size:13px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; padding:0 4px 2px; color:color-mix(in srgb, var(--lc) 55%, #fff); display:flex; align-items:baseline; justify-content:space-between; }
-  .fh span { font-size:11.5px; letter-spacing:.04em; color:rgba(255,255,255,.45); text-transform:none; }
-  .who { display:flex; align-items:center; gap:10px; padding:6px 10px 6px 6px; border-radius:14px; background:rgba(0,0,0,.2); }
-  .who.cur { background:color-mix(in srgb, var(--t1) 28%, rgba(0,0,0,.2)); box-shadow:inset 0 0 0 2px color-mix(in srgb, var(--t1) 65%, #fff); }
-  .who .o { width:74px; height:74px; flex-shrink:0; position:relative; }
-  .who .o img { position:absolute; inset:-6px; width:86px; height:86px; object-fit:contain; filter:drop-shadow(0 4px 4px rgba(0,0,0,.4)); }
-  .who b { display:block; font-size:18px; font-weight:900; line-height:1.1; }
-  .who small { display:block; font-size:12.5px; font-weight:800; color:#fde68a; margin-top:2px; }
-  .cell { --lc:#3b82f6; border-radius:14px; padding:9px 12px; background:linear-gradient(160deg, color-mix(in srgb, var(--lc) 18%, transparent), rgba(0,0,0,.18)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--lc) 35%, transparent); min-width:0; display:flex; flex-direction:column; justify-content:center; }
-  .cell.best { box-shadow:inset 0 0 0 2.5px #fbbf24, 0 0 18px rgba(251,191,36,.18); }
-  .cell.off { opacity:.4; }
-  .cell .rk { display:flex; align-items:baseline; gap:8px; font-size:30px; font-weight:900; line-height:1.05; }
-  .cell .rk.top { color:#fbbf24; } .cell .rk.good { color:#4ade80; }
-  .cell .rk em { font-style:normal; font-size:12.5px; font-weight:800; color:rgba(255,255,255,.55); }
-  .cell .ms { font-size:12px; font-weight:800; color:rgba(255,255,255,.65); margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .cell .sh { display:inline-flex; align-items:center; gap:5px; margin-top:5px; font-size:12px; font-weight:900; color:#ddd6fe; }
-  .cell .sh i { font-style:normal; font-size:10px; letter-spacing:.06em; background:rgba(124,58,237,.5); padding:1px 6px; border-radius:5px; }
-  .fam-note { font-size:12.5px; font-weight:800; color:rgba(255,255,255,.5); margin-top:10px; }
-  .fam-note b { color:#fbbf24; }
+  /* Best-of tiles (PvP per league, PvE per type) */
+  .tiles { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:12px; }
+  .tile { --lc:#3b82f6; position:relative; border-radius:16px; padding:12px 14px 13px; min-width:0;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--lc) 24%, transparent), rgba(0,0,0,.2));
+    box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--lc) 45%, transparent); }
+  .tile.off { opacity:.45; }
+  .tile .lbl { font-size:12.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:color-mix(in srgb, var(--lc) 55%, #fff); display:flex; justify-content:space-between; gap:6px; }
+  .tile .lbl span { color:rgba(255,255,255,.45); letter-spacing:.03em; text-transform:none; }
+  .tile .row { display:flex; align-items:center; gap:10px; margin-top:6px; }
+  .tile .o { width:70px; height:70px; flex-shrink:0; position:relative; }
+  .tile .o img { position:absolute; inset:-6px; width:82px; height:82px; object-fit:contain; filter:drop-shadow(0 4px 4px rgba(0,0,0,.4)); }
+  .tile .rk { font-size:34px; font-weight:900; line-height:1; }
+  .tile .rk.top { color:#fbbf24; } .tile .rk.good { color:#4ade80; }
+  .tile .rk em { font-style:normal; font-size:13px; font-weight:800; color:rgba(255,255,255,.55); margin-left:4px; }
+  .tile .nm { font-size:16px; font-weight:900; line-height:1.15; margin-top:3px; }
+  .tile .vt { display:inline-block; font-size:10.5px; font-weight:900; letter-spacing:.06em; padding:1px 6px; border-radius:5px; margin-right:5px; vertical-align:2px; }
+  .tile .vt.sh { background:rgba(124,58,237,.55); color:#ede9fe; } .tile .vt.mg { background:rgba(217,70,239,.5); color:#fdf4ff; }
+  .tile .ms { font-size:12.5px; font-weight:800; color:rgba(255,255,255,.7); margin-top:8px; line-height:1.3; }
+  .tile .ms b { color:#fde68a; font-weight:900; }
+  .note { font-size:12.5px; font-weight:800; color:rgba(255,255,255,.5); margin-top:10px; }
 
   /* Moves */
   .mrow { display:grid; grid-template-columns:150px 1fr; align-items:start; gap:10px; }
@@ -149,30 +152,37 @@ function heroHTML(p){
   </div>`;
 }
 
-function familyCard(p){
-  if (!p.hasPvp || !p.family.length) return '';
-  const fam = p.family;
-  // best (lowest) rank per league across the line, normal or shadow
-  const best = p.leagues.map((_, li) => Math.min(...fam.map(s => Math.min(s.leagues[li].rank || 1e9, s.leagues[li].shadowRank || 1e9))));
-  const head = `<div></div>${p.leagues.map(L => `<div class="fh" style="--lc:${L.color}">${esc(L.label)}<span>${esc(L.cap)}</span></div>`).join('')}`;
-  const rows = fam.map(s => `
-    <div class="who${s.current ? ' cur' : ''}"><div class="o">${s.data ? `<img src="${s.data}" alt="">` : ''}</div>
-      <div><b>${esc(s.name)}</b>${s.candy ? `<small>Evolve: ${s.candy} candy</small>` : ''}</div></div>
-    ${s.leagues.map((l, li) => {
-      const has = l.rank || l.shadowRank;
-      const isBest = has && best[li] < 1e9 && (l.rank === best[li] || l.shadowRank === best[li]);
-      const cls = l.rank && l.rank <= 25 ? 'top' : l.rank && l.rank <= 100 ? 'good' : '';
-      return `<div class="cell${has ? '' : ' off'}${isBest ? ' best' : ''}" style="--lc:${p.leagues[li].color}">
-        <div class="rk ${cls}">${l.rank ? '#' + l.rank : '—'}${l.rank ? `<em>score ${l.score}</em>` : ''}</div>
-        ${l.moveset.length ? `<div class="ms">${esc(l.moveset.join(' · '))}</div>` : ''}
-        ${l.shadowRank ? `<div class="sh"><i>SHADOW</i>#${l.shadowRank}</div>` : ''}
-      </div>`;
-    }).join('')}`).join('');
-  const title = fam.length > 1 ? 'Evolution line · PvP ranks' : 'PvP ranks';
-  return `<div class="card" style="--accent:#fbbf24"><h3>${title}</h3>
-    <div class="fam">${head}${rows}</div>
-    <div class="fam-note"><b>Gold border</b> = best of the line in that league · moveset = fast · charged · charged</div>
-  </div>`;
+const rankCls = r => r && r <= 25 ? 'top' : r && r <= 100 ? 'good' : '';
+const variantTag = x => (x.mega ? '<span class="vt mg">MEGA</span>' : '') + (x.shadow ? '<span class="vt sh">SHADOW</span>' : '');
+
+function pvpCard(p){
+  if (!p.hasPvp) return '';
+  const tiles = p.pvpBest.map(L => {
+    const b = L.best;
+    if (!b) return `<div class="tile off" style="--lc:${L.color}"><div class="lbl">${esc(L.label)}<span>${esc(L.cap)}</span></div><div class="row"><div class="rk">—</div></div><div class="ms">Not ranked</div></div>`;
+    return `<div class="tile" style="--lc:${L.color}">
+      <div class="lbl">${esc(L.label)}<span>${esc(L.cap)}</span></div>
+      <div class="row"><div class="o">${b.data ? `<img src="${b.data}" alt="">` : ''}</div>
+        <div><div class="rk ${rankCls(b.rank)}">#${b.rank}<em>score ${b.score}</em></div>
+        <div class="nm">${variantTag(b)}${esc(b.name.replace(/\s*\(Shadow\)/, ''))}</div></div></div>
+      <div class="ms">${esc(b.moveset.join(' · '))}</div>
+    </div>`;
+  }).join('');
+  return `<div class="card" style="--accent:#fbbf24"><h3>Best in PvP</h3><div class="tiles">${tiles}</div>
+    <div class="note">Best ${p.familySize > 1 ? 'of the evolution line ' : ''}in each league · PvPoke overall rankings</div></div>`;
+}
+
+function pveCard(p){
+  if (!p.pveBest || !p.pveBest.length) return '';
+  const tiles = p.pveBest.map(r => `<div class="tile" style="--lc:${tc(r.type)}">
+      <div class="lbl">${esc(cap(r.type))} attacker${r.total ? `<span>of ${r.total}</span>` : ''}</div>
+      <div class="row"><div class="o">${r.data ? `<img src="${r.data}" alt="">` : ''}</div>
+        <div><div class="rk ${rankCls(r.rank)}">#${r.rank}<em>${r.edps} eDPS</em></div>
+        <div class="nm">${variantTag(r)}${esc(r.name)}</div></div></div>
+      <div class="ms">${esc(r.fast)}${r.elite & 1 ? ' <b>★</b>' : ''} · ${esc(r.charged)}${r.elite & 2 ? ' <b>★</b>' : ''}</div>
+    </div>`).join('');
+  return `<div class="card" style="--accent:#f87171"><h3>Best raid attacker</h3><div class="tiles">${tiles}</div>
+    <div class="note">Rank among all attackers of that type · level 40, DialgaDex method · <b style="color:#fde68a">★</b> elite move</div></div>`;
 }
 
 function movesCard(p){
@@ -212,11 +222,13 @@ async function render(p){
   $('poster').style.setProperty('--t1', tc(p.types[0]));
   $('poster').style.setProperty('--t2', tc(p.types[1] || p.types[0]));
   [p.imgData, p.shinyData] = await Promise.all([toDataUrl(p.img), toDataUrl(p.shinyImg)]);
-  await Promise.all((p.family || []).map(async s => { s.data = await toDataUrl(s.img); }));
+  await Promise.all([...(p.pvpBest || []).map(L => L.best).filter(Boolean), ...(p.pveBest || [])]
+    .map(async x => { x.data = await toDataUrl(x.img); }));
   $('poster').innerHTML = `
     ${heroHTML(p)}
     <div class="body">
-      ${familyCard(p)}
+      ${pveCard(p)}
+      ${pvpCard(p)}
       ${movesCard(p)}
       ${waysCard(p)}
     </div>

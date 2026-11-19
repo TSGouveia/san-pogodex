@@ -616,6 +616,7 @@ let liveEvents = [];
 let liveSpawns = [];
 let rawPvpSeason = null; // GO Battle League season (pvp.json)
 let pvpRankingsData = null; // PvPoke league rankings (pvpRankings.json)
+let pveRankingsData = null; // raid attacker rankings per type, DialgaDex method (pveRankings.json)
 let pvpFallbackRequested = false;
 let currentSpawnFilter = 'all';
 let currentSpawnSearch = '';
@@ -1239,7 +1240,7 @@ async function loadScrapedDataFromCdn() {
         }
 
         // 4. Load static JSON files with automatic fallback
-        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks', 'pvp', 'pvpRankings'];
+        const modules = ['events', 'raids', 'maxBattles', 'research', 'eggs', 'rocketLineups', 'promoCodes', 'partyChallenges', 'buddyDistances', 'types', 'spawns', 'pokedex', 'megaAttacks', 'pvp', 'pvpRankings', 'pveRankings'];
         const cacheBustQuery = latestUpdatedAt ? `?v=${encodeURIComponent(latestUpdatedAt)}` : `?t=${Date.now()}`;
         const fetchPromises = modules.map(m => fetchCdnFile(`${m}.min.json`, cacheBustQuery));
 
@@ -1341,6 +1342,7 @@ async function loadPokedex() {
         if (isNonEmpty(dbScrapedData.megaAttacks)) megaAttacksDatabase = dbScrapedData.megaAttacks;
         if (isNonEmpty(dbScrapedData.pvp)) rawPvpSeason = dbScrapedData.pvp;
         if (isNonEmpty(dbScrapedData.pvpRankings)) pvpRankingsData = dbScrapedData.pvpRankings;
+        if (isNonEmpty(dbScrapedData.pveRankings)) pveRankingsData = dbScrapedData.pveRankings;
         if (isNonEmpty(dbScrapedData.types)) typesDatabase = dbScrapedData.types;
         if (isNonEmpty(dbScrapedData.spawns)) rawSpawns = dbScrapedData.spawns;
         if (isNonEmpty(dbScrapedData.pokedex)) {
@@ -5923,42 +5925,55 @@ function buildPokemonInfographicData(basePoke, formPoke) {
     const fast = [...moveList(poke.quickMoves, false), ...(!isForm && raw ? moveList(raw.eliteQuickMoves, true) : [])];
     const charged = [...moveList(poke.cinematicMoves, false), ...(!isForm && raw ? moveList(raw.eliteCinematicMoves, true) : [])];
 
-    // Evolution line with PvP ranks per league, to see which stage is worth building.
-    // One row per stage; the Shadow rank sits inside the same cell instead of its own row.
+    // Whole evolution line: the infographic shows only the best stage per PvP league and the best
+    // raid-attacker types, so it says whether (and what) to evolve without listing everything.
     let chain = [basePoke];
     try {
         const c = findEvolutionChain(basePoke) || [];
         if (c.length > 1) chain = c;
     } catch (e) { chain = [basePoke]; }
-    const pvpUsedMoves = new Set();
-    const normMove = n => String(n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-    const family = chain.map((stage, i) => {
+    const stages = chain.map(stage => {
         const isCurrent = String(stage.id) === String(basePoke.id);
-        const info = i > 0 ? getEvolutionParentInfo(stage) : null;
-        const entries = getPvpEntriesFor(isCurrent ? poke : stage);
-        const normal = entries.find(e => !e.shadow) || null;
-        const shadow = normal ? (entries.find(e => e.id === normal.id + '_shadow') || null) : (entries.find(e => e.shadow) || null);
-        return {
-            name: isCurrent ? poke.name : stage.name,
-            img: isCurrent ? poke.img : stage.img,
-            current: isCurrent,
-            candy: i > 0 ? ((info && info.candies) || 50) : null,
-            leagues: PVP_LEAGUES.map(L => {
-                const r = normal && normal[L.key];
-                const sr = shadow && shadow[L.key];
-                if (isCurrent && r) (r[2] || []).forEach(m => pvpUsedMoves.add(normMove(pvpMoveName(m))));
-                return {
-                    rank: r ? r[0] : null,
-                    score: r ? r[1] : null,
-                    moveset: r ? (r[2] || []).map(pvpMoveName) : [],
-                    shadowRank: sr ? sr[0] : null
-                };
-            })
-        };
+        return { poke: isCurrent ? poke : stage, name: isCurrent ? poke.name : stage.name, img: isCurrent ? poke.img : stage.img, current: isCurrent };
     });
-    fast.forEach(m => { m.pvp = pvpUsedMoves.has(normMove(m.name)); });
-    charged.forEach(m => { m.pvp = pvpUsedMoves.has(normMove(m.name)); });
-    const leagues = PVP_LEAGUES.map(L => ({ label: L.label, short: L.short, cap: L.cap, color: L.color }));
+    const normMove = n => String(n || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const usedMoves = new Set();
+
+    // PvP: best stage (normal or shadow) in each league
+    const pvpBest = PVP_LEAGUES.map(L => {
+        let best = null;
+        stages.forEach(st => getPvpEntriesFor(st.poke).forEach(e => {
+            const r = e[L.key];
+            if (r && (!best || r[0] < best.rank)) best = { rank: r[0], score: r[1], moveset: (r[2] || []).map(pvpMoveName), name: st.name, img: st.img, shadow: e.shadow, current: st.current };
+        }));
+        if (best && best.current) best.moveset.forEach(m => usedMoves.add(normMove(m)));
+        return { label: L.label, cap: L.cap, color: L.color, best };
+    });
+
+    // PvE: best raid-attacker types across the line (incl. Mega / Shadow variants)
+    const regionTag = n => (PVP_REGIONAL_TAGS.find(t => (n || '').toLowerCase().includes(t)) || '');
+    const pveFormTag = f => ({ Alola: 'alolan', Galarian: 'galarian', Hisuian: 'hisuian', Paldea: 'paldean' })[f] || '';
+    const pveRows = [];
+    if (pveRankingsData && pveRankingsData.species) {
+        stages.forEach(st => {
+            const want = regionTag(st.name);
+            (pveRankingsData.species[String(st.poke.id)] || []).forEach(v => {
+                if (pveFormTag(v.form) !== want) return;   // keep the regional form shown, or the non-regional ones
+                const img = v.mega ? (getPokemonImageUrl(v.name, st.poke) || st.img) : st.img;
+                (v.t || []).forEach(t => pveRows.push({
+                    type: t[0], rank: t[1], edps: t[2], fast: t[3], charged: t[4], elite: t[5],
+                    name: v.name, shadow: v.shadow, mega: v.mega, img, current: st.current && !v.mega
+                }));
+            });
+        });
+    }
+    const bestByType = new Map();
+    pveRows.forEach(r => { const cur = bestByType.get(r.type); if (!cur || r.rank < cur.rank) bestByType.set(r.type, r); });
+    const pveBest = [...bestByType.values()].sort((x, y) => x.rank - y.rank).slice(0, 3)
+        .map(r => ({ ...r, total: (pveRankingsData.types || {})[r.type] || null }));
+
+    fast.forEach(m => { m.pvp = usedMoves.has(normMove(m.name)); });
+    charged.forEach(m => { m.pvp = usedMoves.has(normMove(m.name)); });
 
     const buddy = buddyDistances ? (buddyDistances[String(basePoke.id)] || buddyDistances[(basePoke.name || '').toLowerCase()]) : null;
     const cps = poke.combatPower || calculateClientSideCombatPower(poke.stats) || {};
@@ -5978,8 +5993,9 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         legendary: raw ? raw.pokemonClass || null : null,
         buddy,
         fast, charged,
-        leagues,
-        family,
+        pvpBest,
+        pveBest,
+        familySize: stages.length,
         hasPvp: Boolean(pvpRankingsData && pvpRankingsData.species),
         // only what's live right now; static sources (wild, evolution…) aren't worth the space
         obtaining: modalObtainingSummary().filter(o => o.active)
@@ -6012,7 +6028,7 @@ window.openPokemonInfographic = function () {
     const payload = buildPokemonInfographicData(basePoke, formPoke);
     const modal = ensureInfographicModal();
     modal.querySelector('.infographic-controls').classList.add('hidden');
-    const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${payload.obtaining.length}`;
+    const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${pveRankingsData ? pveRankingsData.updatedAt : ''}:${payload.obtaining.length}`;
     runInfographic(key, `pokemon-infographic.html?embed=1`,
         frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'pokemon', pokemon: payload }, location.origin));
 };

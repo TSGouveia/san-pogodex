@@ -19,6 +19,7 @@ from scrapers.scrape_buddy import scrape_buddy_distances
 from scrapers.scrape_mega_attacks import scrape_mega_attacks
 from scrapers.scrape_pvp import scrape_pvp
 from scrapers.scrape_pvp_rankings import scrape_pvp_rankings
+from scrapers.scrape_pve_rankings import scrape_pve_rankings
 from scrapers.cp_utils import load_pokedex_map, get_pokedex_stats, get_cp_for_level
 
 HEADERS = {
@@ -145,6 +146,11 @@ def main():
     pvp_rankings = scrape_pvp_rankings()
     if pvp_rankings:
         save_json("pvpRankings.json", pvp_rankings)
+
+    # 14. Raid attacker rankings per type (DialgaDex method and data)
+    pve_rankings = scrape_pve_rankings()
+    if pve_rankings:
+        save_json("pveRankings.json", pve_rankings)
 
     # Save metadata with timestamp so the client knows when data was updated
     metadata = {
