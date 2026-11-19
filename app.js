@@ -5969,7 +5969,8 @@ function buildPokemonInfographicData(basePoke, formPoke) {
     }
     const bestByType = new Map();
     pveRows.forEach(r => { const cur = bestByType.get(r.type); if (!cur || r.rank < cur.rank) bestByType.set(r.type, r); });
-    const pveBest = [...bestByType.values()].sort((x, y) => x.rank - y.rank).slice(0, 3)
+    // best type always; others only if they're genuinely good (mixed movesets create noisy off-types)
+    const pveBest = [...bestByType.values()].sort((x, y) => x.rank - y.rank).filter((r, i) => i === 0 || r.rank <= 150).slice(0, 3)
         .map(r => ({ ...r, total: (pveRankingsData.types || {})[r.type] || null }));
 
     fast.forEach(m => { m.pvp = usedMoves.has(normMove(m.name)); });
