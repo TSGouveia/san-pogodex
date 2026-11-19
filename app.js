@@ -5932,7 +5932,41 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         const c = findEvolutionChain(basePoke) || [];
         if (c.length > 1) chain = c;
     } catch (e) { chain = [basePoke]; }
-    const stages = chain.map(stage => {
+    // Full evolution tree (branches merged on common stages), requirements on each edge
+    let evoTree = null;
+    const treeStages = new Map();
+    // the game data has no lure requirement; these lure evolutions are fixed
+    const LURE_EVOS = { '470': 'Mossy Lure', '471': 'Glacial Lure', '462': 'Magnetic Lure', '476': 'Magnetic Lure', '738': 'Magnetic Lure' };
+    try {
+        const branches = getEvolutionBranches(basePoke) || [];
+        const keyOf = st => `${st.id}|${st.name}`;
+        branches.forEach(branch => {
+            if (!branch || !branch.length) return;
+            branch.forEach(st => { if (!treeStages.has(keyOf(st))) treeStages.set(keyOf(st), st); });
+            if (!evoTree) evoTree = { key: keyOf(branch[0]), name: branch[0].name, img: branch[0].img, current: String(branch[0].id) === String(basePoke.id), children: [] };
+            let node = evoTree;
+            branch.slice(1).forEach(st => {
+                let child = node.children.find(c => c.key === keyOf(st));
+                if (!child) {
+                    const info = getEvolutionParentInfo(st) || {};
+                    child = {
+                        key: keyOf(st), name: st.name, img: st.img, current: String(st.id) === String(basePoke.id), children: [],
+                        candy: info.candies || 50,
+                        item: info.item && info.item.names ? info.item.names.English : (LURE_EVOS[String(st.id)] || null),
+                        quests: (info.quests || []).map(q => q && q.names && q.names.English).filter(Boolean)
+                    };
+                    node.children.push(child);
+                }
+                node = child;
+            });
+        });
+        if (evoTree && !evoTree.children.length) evoTree = null;
+    } catch (e) { evoTree = null; }
+
+    // best-of sections look at every branch (e.g. all Eeveelutions), not just this line
+    const stageList = treeStages.size ? [...treeStages.values()] : chain;
+    if (!stageList.some(st => String(st.id) === String(basePoke.id))) stageList.push(basePoke);
+    const stages = stageList.map(stage => {
         const isCurrent = String(stage.id) === String(basePoke.id);
         return { poke: isCurrent ? poke : stage, name: isCurrent ? poke.name : stage.name, img: isCurrent ? poke.img : stage.img, current: isCurrent };
     });
@@ -5998,26 +6032,8 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         pveBest,
         familySize: stages.length,
         hasPvp: Boolean(pvpRankingsData && pvpRankingsData.species),
-        // only what's live right now; static sources (wild, evolution…) aren't worth the space
-        obtaining: modalObtainingSummary().filter(o => o.active)
+        evoTree
     };
-}
-
-// The modal's "How to get" tab (loadObtainingTab) already merges every source, incl. active rotations;
-// reuse what it rendered so the infographic always matches it
-function modalObtainingSummary() {
-    const clean = s => (s || '').replace(/[\u{1F300}-\u{1FAFF}\u{2300}-\u{27BF}\u{FE0F}]/gu, '').replace(/\s+/g, ' ').trim();
-    const seen = new Set();
-    return Array.from(document.querySelectorAll('#obtaining-methods .obtain-card')).map(card => {
-        const h = card.querySelector('h4');
-        const p = card.querySelector('p');
-        let method = clean(h ? h.textContent : '');
-        const active = /\bACTIVE\b/.test(method);
-        method = method.replace(/\s*\bACTIVE\b\s*/g, ' ').trim();
-        const desc = clean(p ? p.textContent : '').replace(/\s*Click to [^.!]*[.!]?/gi, '').trim();
-        return { method, desc, active };
-    }).filter(o => o.method && !seen.has(o.method + o.desc) && seen.add(o.method + o.desc))
-      .sort((a, b) => b.active - a.active).slice(0, 8);
 }
 
 let activeModalFormPoke = null;
@@ -6029,7 +6045,7 @@ window.openPokemonInfographic = function () {
     const payload = buildPokemonInfographicData(basePoke, formPoke);
     const modal = ensureInfographicModal();
     modal.querySelector('.infographic-controls').classList.add('hidden');
-    const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${pveRankingsData ? pveRankingsData.updatedAt : ''}:${payload.obtaining.length}`;
+    const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${pveRankingsData ? pveRankingsData.updatedAt : ''}:${payload.evoTree ? 1 : 0}`;
     runInfographic(key, `pokemon-infographic.html?embed=1`,
         frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'pokemon', pokemon: payload }, location.origin));
 };

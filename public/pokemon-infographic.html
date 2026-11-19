@@ -54,12 +54,8 @@
 
   .h-art { width:470px; flex-shrink:0; position:relative; z-index:1; }
   .h-art .main { position:absolute; left:-20px; top:-18px; width:330px; height:330px; object-fit:contain; filter:drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
-  .h-art .shiny { position:absolute; right:-14px; bottom:-26px; width:270px; height:270px; }
-  .h-art .shiny::before { content:""; position:absolute; inset:6%; border-radius:50%;
-    background:radial-gradient(circle, rgba(253,230,138,.38), rgba(251,191,36,.12) 55%, transparent 72%); box-shadow:inset 0 0 0 2px rgba(253,230,138,.35); }
-  .h-art .shiny img { position:absolute; inset:-4%; width:108%; height:108%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
-  .h-art .shiny span { position:absolute; left:50%; top:4px; transform:translateX(-50%); font-size:14px; font-weight:900; letter-spacing:.14em; background:linear-gradient(90deg, #fde68a, #fbbf24); color:#1a1408; padding:4px 12px; border-radius:8px; white-space:nowrap; box-shadow:0 3px 0 rgba(0,0,0,.3); }
-  .h-art .shiny span::before { content:"\2726  "; }
+  .h-art .shiny { position:absolute; right:-6px; bottom:-22px; width:245px; height:245px; }
+  .h-art .shiny img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
 
   /* ---------- Cards ---------- */
   .body { display:flex; flex-direction:column; gap:16px; padding:26px 30px 26px; }
@@ -99,11 +95,23 @@
   .type .pv { margin-left:6px; font-size:10.5px; font-weight:900; background:rgba(0,0,0,.35); padding:1px 5px; border-radius:5px; }
   .legend { font-size:12.5px; font-weight:800; color:rgba(255,255,255,.5); margin-top:12px; }
 
-  /* How to get (active only) */
-  .ways { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px; }
-  .way { padding:10px 13px; border-radius:12px; background:rgba(0,0,0,.22); min-width:0; }
-  .way b { display:block; font-size:16px; font-weight:900; }
-  .way span { display:block; font-size:13.5px; font-weight:700; color:rgba(255,255,255,.65); line-height:1.3; margin-top:2px; }
+  /* Evolution tree */
+  .et { display:flex; align-items:center; justify-content:center; }
+  .kids { display:flex; flex-direction:column; gap:10px; }
+  .kids.many { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:10px 6px; }
+  .kid { display:flex; align-items:center; }
+  .en { width:128px; flex-shrink:0; text-align:center; }
+  .en .o { width:96px; height:96px; margin:0 auto; border-radius:50%; position:relative; background:rgba(0,0,0,.22); box-shadow:inset 0 0 0 2px rgba(255,255,255,.07); }
+  .en.cur .o { background:color-mix(in srgb, var(--t1) 32%, rgba(0,0,0,.2)); box-shadow:inset 0 0 0 3px color-mix(in srgb, var(--t1) 70%, #fff); }
+  .en .o img { position:absolute; inset:-8px; width:112px; height:112px; object-fit:contain; filter:drop-shadow(0 4px 4px rgba(0,0,0,.4)); }
+  .en .n { font-size:15px; font-weight:900; margin-top:6px; line-height:1.1; }
+  .kids.many .en { width:104px; } .kids.many .en .o { width:76px; height:76px; } .kids.many .en .o img { width:90px; height:90px; inset:-7px; }
+  .ea { width:178px; flex-shrink:0; text-align:center; padding:0 8px; position:relative; }
+  .kids.many .ea { width:150px; }
+  .ea::after { content:""; display:block; height:3px; margin:6px 6px 0; border-radius:2px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.4)); }
+  .ea b { display:block; font-size:15px; font-weight:900; color:#fde68a; }
+  .ea .it { display:block; font-size:13px; font-weight:900; color:#a5f3fc; margin-top:2px; }
+  .ea .qs { display:block; font-size:12px; font-weight:800; color:rgba(255,255,255,.72); margin-top:3px; line-height:1.25; }
 
   .p-foot { padding:0 36px 22px; font-size:17px; font-weight:800; color:#fff; }
 </style>
@@ -129,7 +137,7 @@ function heroHTML(p){
     p.mega ? '<span class="tag mega">Mega</span>' : '',
     p.gmax ? '<span class="tag gmax">Gigantamax</span>' : '',
     p.shadow ? '<span class="tag shadow">Shadow</span>' : '',
-    p.buddy ? `<span class="tag">Buddy ${esc(p.buddy)} km</span>` : '',
+    p.buddy ? `<span class="tag">${esc(p.buddy)} km / candy</span>` : '',
   ].join('');
   const cp = (label, sub, v, cls = '') => v ? `<div class="cp ${cls}"><small>${label}</small><b>${v}</b><em>${sub}</em></div>` : '';
   return `<div class="hero">
@@ -147,7 +155,7 @@ function heroHTML(p){
     </div>
     <div class="h-art">
       ${p.imgData ? `<img class="main" src="${p.imgData}" alt="">` : ''}
-      ${p.shinyData ? `<div class="shiny"><img src="${p.shinyData}" alt=""><span>SHINY</span></div>` : ''}
+      ${p.shinyData ? `<div class="shiny"><img src="${p.shinyData}" alt="Shiny"></div>` : ''}
     </div>
   </div>`;
 }
@@ -169,7 +177,7 @@ function pvpCard(p){
     </div>`;
   }).join('');
   return `<div class="card" style="--accent:#fbbf24"><h3>Best in PvP</h3><div class="tiles">${tiles}</div>
-    <div class="note">Best ${p.familySize > 1 ? 'of the evolution line ' : ''}in each league · PvPoke overall rankings</div></div>`;
+    <div class="note">Best ${p.familySize > 1 ? "of the evolution family " : ""}in each league · PvPoke overall rankings</div></div>`;
 }
 
 function pveCard(p){
@@ -195,11 +203,22 @@ function movesCard(p){
   </div>`;
 }
 
-function waysCard(p){
-  const list = (p.obtaining || []).filter(o => o && o.method);
-  if (!list.length) return '';
-  return `<div class="card" style="--accent:#4ade80"><h3>Available right now</h3><div class="ways">${list.map(o => `<div class="way"><b>${esc(o.method.replace(/^Active\s+/i, ''))}</b><span>${esc(o.desc || '')}</span></div>`).join('')}</div></div>`;
+function evoNodeHTML(n){
+  return `<div class="en${n.current ? ' cur' : ''}"><div class="o">${n.data ? `<img src="${n.data}" alt="">` : ''}</div><div class="n">${esc(n.name)}</div></div>`;
 }
+function evoReqHTML(n){
+  return `<b>${n.candy} candy</b>${n.item ? `<span class="it">+ ${esc(n.item)}</span>` : ''}${(n.quests || []).map(q => `<span class="qs">${esc(q)}</span>`).join('')}`;
+}
+function evoTreeHTML(n){
+  if (!n.children || !n.children.length) return evoNodeHTML(n);
+  return `<div class="et">${evoNodeHTML(n)}<div class="kids${n.children.length > 3 ? ' many' : ''}">${n.children.map(c =>
+    `<div class="kid"><div class="ea">${evoReqHTML(c)}</div>${evoTreeHTML(c)}</div>`).join('')}</div></div>`;
+}
+function evoCard(p){
+  if (!p.evoTree) return '';
+  return `<div class="card"><h3>Evolution</h3>${evoTreeHTML(p.evoTree)}</div>`;
+}
+function evoNodes(n, out = []){ if (n) { out.push(n); (n.children || []).forEach(c => evoNodes(c, out)); } return out; }
 
 // Inline images so the PNG export can read them
 const cache = new Map();
@@ -222,15 +241,15 @@ async function render(p){
   $('poster').style.setProperty('--t1', tc(p.types[0]));
   $('poster').style.setProperty('--t2', tc(p.types[1] || p.types[0]));
   [p.imgData, p.shinyData] = await Promise.all([toDataUrl(p.img), toDataUrl(p.shinyImg)]);
-  await Promise.all([...(p.pvpBest || []).map(L => L.best).filter(Boolean), ...(p.pveBest || [])]
+  await Promise.all([...(p.pvpBest || []).map(L => L.best).filter(Boolean), ...(p.pveBest || []), ...evoNodes(p.evoTree)]
     .map(async x => { x.data = await toDataUrl(x.img); }));
   $('poster').innerHTML = `
     ${heroHTML(p)}
     <div class="body">
       ${pveCard(p)}
       ${pvpCard(p)}
+      ${evoCard(p)}
       ${movesCard(p)}
-      ${waysCard(p)}
     </div>
     <div class="p-foot">${esc(footCredit())}</div>`;
 }
