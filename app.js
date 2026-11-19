@@ -5802,17 +5802,36 @@ window.openEventsInfographic = function (mode, offset) {
     controls.querySelectorAll('[data-ig-mode]').forEach(b => b.classList.toggle('active', b.dataset.igMode === st.mode));
     controls.querySelector('.infographic-period-label').textContent = eventsInfographicPeriodLabel(st.mode, st.offset);
 
-    // Same events the list shows (respects the Scope / location filter)
+    // Same events the list shows (respects the Scope / location filter), with the Pokémon the site
+    // calendar matches for each one, plus upcoming debuts
+    const typesOf = id => {
+        const p = pokemonDatabase.find(x => String(x.id) === String(id));
+        return (p && p.types) || [];
+    };
     const events = (Array.isArray(liveEvents) ? liveEvents : [])
         .filter(ev => isEventMatchingLocation(ev))
-        .map(ev => ({ title: ev.title, start: ev.start, end: ev.end, banner: ev.banner }));
-    const sig = events.map(ev => `${ev.title}|${ev.start}|${ev.end}`).join('\n');
+        .map(ev => {
+            const ctx = getEventContext(ev);
+            return {
+                title: ev.title, start: ev.start, end: ev.end, banner: ev.banner,
+                typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
+                pokemon: getEventFeaturedPokemonList(ev).slice(0, 4).map(p => ({ name: p.name, img: p.img, types: typesOf(p.id) }))
+            };
+        });
+    const yearMs = 365 * 24 * 3600 * 1000;
+    const debuts = (pokemonDatabase || []).filter(p => {
+        if (!p.releaseDate || (typeof p.releaseDate === 'string' && /tba/i.test(p.releaseDate))) return false;
+        const d = new Date(p.releaseDate);
+        return !isNaN(d.getTime()) && Math.abs(d.getTime() - Date.now()) < yearMs;
+    }).map(p => ({ date: p.releaseDate, name: p.name, img: getActivePokemonImageUrl(p, false), types: p.types || [] }));
+
+    const sig = events.map(ev => `${ev.title}|${ev.start}|${ev.end}|${ev.pokemon.length}`).join('\n') + debuts.map(d => d.name + d.date).join();
     let hash = 0;
     for (let i = 0; i < sig.length; i++) hash = (hash * 31 + sig.charCodeAt(i)) | 0;
 
     runInfographic(`events:${st.mode}:${st.offset}:${new Date().toDateString()}:${hash}`,
         `events-infographic.html?embed=1&mode=${st.mode}&offset=${st.offset}`,
-        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events }, location.origin));
+        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events, debuts }, location.origin));
 };
 
 function buildDifficultyHtml(estNum) {
