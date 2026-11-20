@@ -3616,6 +3616,9 @@ function compileObtainingDetails(poke) {
 // ==========================================================================
 // DETAILS MODAL IMPLEMENTATION
 // ==========================================================================
+// Infographic button sits on the same line as the type badges (re-added whenever the types are redrawn)
+const MODAL_INFOGRAPHIC_BTN = `<button type="button" class="modal-infographic-btn" onclick="event.stopPropagation(); window.openPokemonInfographic()" title="Generate an infographic image of this Pokémon"><i class="fa-solid fa-image"></i> Infographic</button>`;
+
 function applyModalPokemonForm(basePoke, rf) {
     if (!basePoke) return;
 
@@ -3634,7 +3637,7 @@ function applyModalPokemonForm(basePoke, rf) {
 
         const primaryType = basePoke.types[0] || 'normal';
         modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
-        modalPokeTypes.innerHTML = basePoke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+        modalPokeTypes.innerHTML = basePoke.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('') + MODAL_INFOGRAPHIC_BTN;
 
         activeModalFormPoke = basePoke;
         loadCpsTab(basePoke);
@@ -3668,7 +3671,7 @@ function applyModalPokemonForm(basePoke, rf) {
 
     const primaryType = formTypes[0] || 'normal';
     modalHeaderBg.style.background = `linear-gradient(135deg, var(--type-${primaryType}) 0%, var(--bg-secondary) 100%)`;
-    modalPokeTypes.innerHTML = formTypes.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+    modalPokeTypes.innerHTML = formTypes.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('') + MODAL_INFOGRAPHIC_BTN;
 
     const formPoke = {
         ...basePoke,

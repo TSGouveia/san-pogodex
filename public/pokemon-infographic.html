@@ -55,10 +55,14 @@
 
   .h-art { width:470px; flex-shrink:0; position:relative; z-index:1; }
   .h-art .main { position:absolute; left:-20px; top:-18px; width:330px; height:330px; object-fit:contain; filter:drop-shadow(0 14px 18px rgba(0,0,0,.45)); }
-  .h-art .shiny { position:absolute; right:-6px; bottom:-22px; width:245px; height:245px; }
+  /* shiny: soft golden glow and sparkles behind it, no outline; caption underneath */
+  .h-art .shiny { position:absolute; right:-6px; bottom:18px; width:232px; height:232px; }
+  .h-art .shiny::before { content:""; position:absolute; inset:-14%; border-radius:50%;
+    background:radial-gradient(circle, rgba(253,230,138,.42) 0%, rgba(251,191,36,.18) 38%, rgba(251,191,36,.05) 58%, transparent 70%); }
   .h-art .shiny img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
-  .h-art .shiny .lab { position:absolute; right:4px; top:-4px; font-size:17px; font-weight:900; letter-spacing:.16em; text-transform:uppercase;
-    color:#fde68a; text-shadow:0 2px 0 rgba(0,0,0,.45), 0 0 14px rgba(251,191,36,.55); }
+  .h-art .shiny .sp { position:absolute; color:#fde68a; line-height:1; text-shadow:0 0 10px rgba(251,191,36,.9); }
+  .h-art .shiny .lab { position:absolute; left:50%; bottom:-30px; transform:translateX(-50%); white-space:nowrap; font-size:16px; font-weight:900; letter-spacing:.18em;
+    color:#fde68a; text-shadow:0 2px 0 rgba(0,0,0,.45), 0 0 12px rgba(251,191,36,.55); }
   .h-art .shiny .lab i { font-style:normal; color:#fbbf24; margin-right:6px; }
 
   /* ---------- Cards ---------- */
@@ -136,6 +140,10 @@ function footCredit(){ try { return localStorage.getItem('ig_foot') || '@LazySan
 
 const moveChip = m => `<span class="type${m.elite ? ' elite' : ''}" style="--c:${tc(m.type)}">${esc(m.name)}${m.elite ? '<span class="el">★ Elite</span>' : ''}${m.pvp ? '<span class="pv">PvP</span>' : ''}</span>`;
 
+// sparkles scattered around the shiny artwork: [left %, top %, size px, opacity]
+const SPARKLES = [[2, 10, 22, .95], [88, 4, 16, .8], [96, 46, 24, .9], [-6, 58, 14, .7], [12, 88, 18, .85], [80, 86, 13, .65], [50, -6, 12, .6]]
+  .map(([l, t, z, o]) => `<span class="sp" style="left:${l}%; top:${t}%; font-size:${z}px; opacity:${o}">✦</span>`).join('');
+
 function heroHTML(p){
   const c = p.cps || {};
   const tags = [
@@ -162,7 +170,7 @@ function heroHTML(p){
     </div>
     <div class="h-art">
       ${p.imgData ? `<img class="main" src="${p.imgData}" alt="">` : ''}
-      ${p.shinyData ? `<div class="shiny"><img src="${p.shinyData}" alt="Shiny"><div class="lab"><i>✦</i>Shiny</div></div>` : ''}
+      ${p.shinyData ? `<div class="shiny">${SPARKLES}<img src="${p.shinyData}" alt="Shiny"><div class="lab"><i>✦</i>SHINY</div></div>` : ''}
     </div>
   </div>`;
 }

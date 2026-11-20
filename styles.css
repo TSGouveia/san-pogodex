@@ -5137,32 +5137,25 @@ img[src*="sprites/pokemon"] {
     pointer-events: none;
 }
 
-/* Pokémon modal: Infographic icon button on the artwork, mirrors the shiny toggle (bottom-left) */
+/* Pokémon modal: Infographic button on the type-badge line */
+.modal-types-row { align-items: center; flex-wrap: wrap; }
 .modal-infographic-btn {
-    position: absolute;
-    bottom: -2px;
-    left: -2px;
-    background: rgba(15, 23, 42, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #e2e8f0;
-    font-size: 0.8rem;
-    padding: 3px 8px;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 0.25rem;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    padding: 3px 10px;
+    border-radius: 6px;
     cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
-.modal-infographic-btn:hover {
-    background: rgba(192, 132, 252, 0.25);
-    border-color: #c084fc;
-    color: #c084fc;
-    box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
-    transform: scale(1.1);
-}
-@media (max-width: 768px) {
-    .modal-infographic-btn { font-size: 0.7rem; padding: 2px 6px; }
-}
+.modal-infographic-btn:hover { background: rgba(0, 0, 0, 0.45); border-color: rgba(255, 255, 255, 0.5); }
 
 /* Pokémon modal: PvP tab */
 .pvp-rankings { display: flex; flex-direction: column; gap: 1rem; }
