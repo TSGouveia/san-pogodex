@@ -1163,11 +1163,11 @@
                     <div class="modal-forms-row" id="modal-pokemon-forms" style="display: none;">
                         <!-- Regional & Special form toggle chips -->
                     </div>
-                    <button type="button" class="infographic-btn modal-infographic-btn" onclick="window.openPokemonInfographic()" title="Generate an infographic for this Pokémon"><i class="fa-solid fa-image"></i> Infographic</button>
                 </div>
                 <div class="modal-pokemon-img-container" id="modal-pokemon-img-container">
                     <img src="" alt="" class="modal-pokemon-img" id="modal-pokemon-img">
                     <button class="modal-shiny-toggle-btn" id="modal-shiny-toggle-btn">✨</button>
+                    <button type="button" class="modal-infographic-btn" onclick="event.stopPropagation(); window.openPokemonInfographic()" title="Generate an infographic" aria-label="Generate an infographic"><i class="fa-solid fa-image"></i></button>
                 </div>
             </div>
 
