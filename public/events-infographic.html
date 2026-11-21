@@ -151,8 +151,9 @@
   .btypes img { width:20px; height:20px; }
   .ntypes { display:inline-flex; gap:5px; margin-left:12px; vertical-align:middle; position:relative; top:-3px; } .ntypes img { width:34px; height:34px; }
   /* same three columns on every day card: text | info | art */
-  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 400px 300px; align-items:center; gap:14px; }
-  .dcard.wev .art, .dcard.wev .art.n4 { width:300px; }
+  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 400px 280px; align-items:center; gap:14px; }
+  .dcard.wev .dside { margin-right:-18px !important; }
+  .dcard.wev .art, .dcard.wev .art.n4 { width:280px; }
   .dcard.wev .dside { width:auto; margin:0; }
   .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
   .dside small { display:flex; align-items:center; gap:5px; font-size:14px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
