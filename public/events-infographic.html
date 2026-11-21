@@ -151,12 +151,13 @@
   .btypes img { width:20px; height:20px; }
   .ntypes { display:inline-flex; gap:5px; margin-left:12px; vertical-align:middle; position:relative; top:-3px; } .ntypes img { width:34px; height:34px; }
   /* same three columns on every day card: text | info | art */
-  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 320px 280px; align-items:center; gap:30px; }
+  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 320px 350px; align-items:center; gap:30px; }
+  .dcard.wev .art { margin-left:70px; }
   .dcard.wev .art, .dcard.wev .art.n4 { width:280px; }
   .dcard.wev .dside { width:auto; margin:0; }
   .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
   .dside small { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
-  .dside small img { width:20px; height:20px; }
+  .dside small img { width:auto; height:18px; object-fit:contain; }
   .ds-cp { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .ds-cp i { grid-column:1 / -1; font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); margin-bottom:-4px; }
   .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:7px 11px; }
@@ -183,7 +184,7 @@
   .bcp { display:flex; gap:6px; flex-shrink:0; }
   .bcp > div { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:58px; padding:4px 7px; border-radius:9px; background:rgba(0,0,0,.3); }
   .bcp small { display:flex; gap:2px; align-items:center; height:18px; font-size:10.5px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.55); }
-  .bcp small img { width:20px; height:20px; }
+  .bcp small img { width:auto; height:17px; object-fit:contain; }
   .bcp b { font-size:17px; font-weight:900; line-height:1.1; color:#ffd54a; }
   .bcp .bst b { color:#7dd3fc; }
   .orb { --t:#888; flex-shrink:0; width:76px; height:76px; border-radius:50%; position:relative;
