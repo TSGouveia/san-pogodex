@@ -117,25 +117,30 @@
   .dcard.wev .art.n2 img { width:150px; height:150px; }
   .dcard.wev .art.n3 img { width:130px; height:130px; } .dcard.wev .art.n3 img:nth-child(1){ left:85px; }
   .dcard.wev .art.n4 img { width:110px; height:110px; }
-  .raids { display:flex; flex-direction:column; gap:16px; }
+  .raids { display:grid; grid-template-columns:minmax(0, 1fr) 3px minmax(0, 1fr); gap:0 16px; align-items:start; }
+  .rsplit { align-self:stretch; border-radius:3px; background:linear-gradient(180deg, transparent, color-mix(in srgb, var(--h1) 70%, #fff), color-mix(in srgb, var(--h2) 70%, #fff), transparent); }
+  .rcol { display:flex; flex-direction:column; gap:12px; min-width:0; }
+  .rcol-t { font-size:15px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+  .rcol-t b { font-weight:900; color:#fff; }
+  .rcol.end .rcol-t b { color:#fda4af; } .rcol.start .rcol-t b { color:#86efac; }
+  .rcol .wnone { height:auto; padding:18px; }
   .rgroup { --c:#ef4444; border-radius:18px; padding:14px 16px 16px; background:linear-gradient(160deg, color-mix(in srgb, var(--c) 20%, transparent), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 40%, transparent); }
   .rgroup.wide { grid-column:1 / -1; }
   .rgroup h3 { margin:0 0 10px; font-size:15px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:color-mix(in srgb, var(--c) 55%, #fff); }
   .bosses { display:grid; gap:12px; }
-  .bosses.n1 { grid-template-columns:1fr; } .bosses.n2 { grid-template-columns:1fr 1fr; } .bosses.n3 { grid-template-columns:1fr 1fr 1fr; }
+
   .boss { --t:#888; position:relative; display:flex; align-items:center; gap:14px; min-width:0; padding:12px 16px 12px 10px; border-radius:16px; overflow:hidden;
     background:radial-gradient(160px 140px at 70px 50%, color-mix(in srgb, var(--t) 40%, transparent), transparent 75%), rgba(0,0,0,.22);
     box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.07); }
-  .bart { flex-shrink:0; width:130px; height:130px; position:relative; }
+  .bart { flex-shrink:0; width:110px; height:110px; position:relative; }
   .bart img { position:absolute; inset:-8%; width:116%; height:116%; object-fit:contain; filter:drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
-  .bosses.n3 .boss { flex-direction:column; text-align:center; padding:12px 10px 14px; }
-  .bosses.n3 .bart { width:150px; height:150px; }
+
   .btx { min-width:0; }
   .orb { --t:#888; flex-shrink:0; width:76px; height:76px; border-radius:50%; position:relative;
     background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--t) 55%, #2a2f3d) 0%, color-mix(in srgb, var(--t) 20%, #151821) 75%);
     border:3px solid color-mix(in srgb, var(--t) 60%, #000); }
   .orb img { position:absolute; left:-14%; top:-18%; width:128%; height:128%; object-fit:contain; filter:drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
-  .boss .bn { font-size:26px; font-weight:900; line-height:1.1; text-shadow:0 2px 0 rgba(0,0,0,.25); }
+  .boss .bn { font-size:23px; font-weight:900; line-height:1.1; text-shadow:0 2px 0 rgba(0,0,0,.25); }
   .boss .bd { font-size:16px; font-weight:800; color:rgba(255,255,255,.7); margin-top:6px; line-height:1.35; }
 
   .empty { text-align:center; padding:40px 20px; font-size:20px; font-weight:800; color:rgba(255,255,255,.5); }
@@ -253,7 +258,7 @@ function collect(p){
   dayItems.sort((a, b) => a.date - b.date);
 
   const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).flatMap(e => e.pokemon.length
-    ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end }))
+    ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end, title: e.title }))
     : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) })).filter(t => t.bosses.length);
   // the same boss returning in the period is one entry with several date ranges
   raids.forEach(t => {
@@ -322,19 +327,23 @@ function monthHTML(items, p){
   return `<div class="mhead">${heads}</div><div class="mgrid">${cells}</div>`;
 }
 
-function raidsHTML(raids){
+function raidsHTML(raids, p){
   if (!raids.length) return '';
-  // one section per category, one big card per boss
-  const groups = raids.map(t => `
-    <div class="rgroup" style="--c:${t.c}">
-      <h3>${esc(t.label)}</h3>
-      <div class="bosses n${Math.min(3, t.bosses.length)}">${t.bosses.map(b => `
+  const card = b => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
           <div class="btx"><div class="bn">${esc(b.name)}</div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div></div>
-        </div>`).join('')}</div>
-    </div>`).join('');
-  return `<div class="sec-t">Raid Bosses</div><div class="raids">${groups}</div>`;
+        </div>`;
+  // starting = first appears inside the period; ending = already there and leaves inside the period (or still running)
+  const side = starting => raids.map(t => {
+    const bs = t.bosses.filter(b => (b.ranges[0][0] >= p.from) === starting);
+    return bs.length ? `<div class="rgroup" style="--c:${t.c}"><h3>${esc(t.label)}</h3><div class="bosses">${bs.map(card).join('')}</div></div>` : '';
+  }).join('');
+  const L = side(false), R = side(true);
+  const word = mode === 'month' ? 'this month' : 'this week';
+  const col = (title, html, cls) => `<div class="rcol ${cls}"><div class="rcol-t">${title}</div>${html || `<div class="wnone">Nothing ${word}</div>`}</div>`;
+  return `<div class="sec-t">Raid Bosses</div><div class="raids">
+    ${col(`<b>Ending</b> ${word}`, L, 'end')}<div class="rsplit"></div>${col(`<b>Starting</b> ${word}`, R, 'start')}</div>`;
 }
 
 // Inline every image as a data URL so the PNG export can read it (proxy when the host sends no CORS headers)
@@ -356,6 +365,29 @@ function toDataUrl(url){
   })());
   return imgCache.get(url);
 }
+const DEFAULT_FORMS = ['normal', 'incarnate', 'altered', 'land', 'aria', 'ordinary', 'standard', 'hero', 'plant', 'overcast', 'west', 'red striped'];
+const formArtCache = {};
+function formArt(base, form){
+  const slug = (base + '-' + form).toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  if (!(slug in formArtCache)) formArtCache[slug] = fetch('https://pokeapi.co/api/v2/pokemon/' + slug).then(r => r.ok ? r.json() : null)
+    .then(d => d ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${d.id}.png` : null).catch(() => null);
+  return formArtCache[slug];
+}
+async function expandForms(raids){
+  await Promise.all(raids.map(async t => {
+    const out = [];
+    for (const b of t.bosses) {
+      const m = (b.title || '').match(/\(([^)]*?)\s+Formes?\)/i);
+      const forms = m ? m[1].split(/,\s*|\s+and\s+/i).map(x => x.replace(/^and\s+/i, '').trim()).filter(Boolean) : [];
+      if (!b.poke || forms.length < 2) { out.push(b); continue; }
+      const base = b.poke.name;
+      const arts = await Promise.all(forms.map(fm => DEFAULT_FORMS.includes(fm.toLowerCase()) ? b.poke.img : formArt(base, fm)));
+      forms.forEach((fm, i) => out.push({ ...b, name: `${base} (${fm})`, poke: { ...b.poke, name: `${base} (${fm})`, img: arts[i] || b.poke.img } }));
+    }
+    t.bosses = out;
+  }));
+}
+
 async function inlineImages(dayItems, raids){
   const jobs = [];
   dayItems.forEach(it => {
@@ -378,6 +410,7 @@ function periodLabel(p){
 async function render(){
   const p = period();
   const { dayItems, raids } = collect(p);
+  await expandForms(raids);
   await inlineImages(dayItems, raids);
   const L = periodLabel(p);
   const n = dayItems.length;
@@ -386,7 +419,7 @@ async function render(){
       <div class="p-sub">${esc(L.sub)} · ${n} event${n === 1 ? '' : 's'}</div></div>
     <div class="p-wrap"><div class="p-body" id="pbody">
       ${mode === 'week' ? weekHTML(dayItems, p) : monthHTML(dayItems, p)}
-      ${raidsHTML(raids)}
+      ${raidsHTML(raids, p)}
     </div></div>
     <div class="p-foot"><b>${esc(footCredit())}</b><span>Times in local time · data: LeekDuck</span></div>`;
   await fitBody();
