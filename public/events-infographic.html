@@ -138,6 +138,21 @@
   .bart img { position:absolute; inset:-8%; width:116%; height:116%; object-fit:contain; filter:drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
 
   .btx { min-width:0; flex:1; }
+  .btypes { display:inline-flex; gap:3px; margin-left:7px; vertical-align:-3px; }
+  .btypes img { width:20px; height:20px; }
+  .dmeta { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; }
+  .dtypes { display:inline-flex; gap:5px; } .dtypes img { width:32px; height:32px; }
+  .dbonus { font-size:19px; font-weight:900; color:#fde68a; background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:5px 12px; border-radius:10px; }
+  .dcp { display:inline-flex; align-items:center; gap:7px; background:rgba(0,0,0,.3); padding:5px 12px; border-radius:10px; font-weight:900; }
+  .dcp i { font-style:normal; font-size:14px; color:rgba(255,255,255,.7); margin-right:2px; }
+  .dcp small { font-size:12px; letter-spacing:.1em; color:rgba(255,255,255,.55); }
+  .dcp b { font-size:22px; color:#ffd54a; } .dcp b.bst { color:#7dd3fc; }
+  .dwx { display:inline-flex; gap:2px; margin-left:6px; } .dwx img { width:24px; height:24px; }
+  /* 4 Pokémon (e.g. all Deoxys formes): tight 2x2 */
+  .dcard.wev .art.n4 { width:290px; }
+  .dcard.wev .art.n4 img { width:150px; height:150px; }
+  .dcard.wev .art.n4 img:nth-child(1){ left:0; top:-22px; } .dcard.wev .art.n4 img:nth-child(2){ right:0; top:-22px; }
+  .dcard.wev .art.n4 img:nth-child(3){ left:0; bottom:-22px; } .dcard.wev .art.n4 img:nth-child(4){ right:0; bottom:-22px; }
   .bcp { display:flex; gap:6px; flex-shrink:0; }
   .bcp > div { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:58px; padding:4px 7px; border-radius:9px; background:rgba(0,0,0,.3); }
   .bcp small { display:flex; gap:2px; align-items:center; height:18px; font-size:10.5px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.55); }
@@ -230,7 +245,7 @@ function normalise(raw){
     const [kl, kc] = eventKind(title);
     out.push({ title, start, end, hours: (end - start) / 3600000, banner: ev.banner || ev.image || '', loc: ev.loc || null,
       kind: ev.typeLabel && ev.typeLabel !== 'Event' ? ev.typeLabel : kl, color: ev.color && ev.typeLabel !== 'Event' ? ev.color : kc,
-      pokemon: (ev.pokemon || []).filter(p => p && p.img) });
+      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null });
   });
   return out.sort((a, b) => a.start - b.start);
 }
@@ -255,7 +270,7 @@ function period(){
 function collect(p){
   const evs = normalise(data.events).filter(e => e.end > p.from && e.start < p.to);
   const dayItems = evs.filter(e => e.hours <= MAX_EVENT_HOURS && e.start >= p.from && !RAID_TIERS.some(t => t.re.test(e.title)))
-    .map(e => ({ title: e.title, date: e.start, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(e.start)} – ${hm(e.end)}`,
+    .map(e => ({ title: e.title, bonus: e.bonus, date: e.start, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(e.start)} – ${hm(e.end)}`,
       names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
       pokemon: e.pokemon.slice(0, 4), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color }));
   (data.debuts || []).forEach(d => {
@@ -289,6 +304,21 @@ function artHTML(it){
   return '';
 }
 
+function dayMeta(it){
+  const types = it.pokemon.flatMap(x => x.types || []);
+  const parts = [];
+  if (types.length) parts.push(`<span class="dtypes">${typesHTML(types)}</span>`);
+  if (it.bonus) parts.push(`<span class="dbonus">✦ ${esc(it.bonus)}</span>`);
+  let cpHTML = '';
+  if (CATCH_KIND.test(it.kind + ' ' + (it.title || ''))) {
+    const pairs = [], seen = new Set();
+    it.pokemon.forEach(x => { if (!x.cp) return; const k = x.cp + '/' + x.cpB; if (seen.has(k)) return; seen.add(k); pairs.push(x); });
+    cpHTML = pairs.map(x => `<span class="dcp">${pairs.length > 1 ? `<i>${esc(x.name)}</i>` : ''}<small>CP</small><b>${x.cp}</b>${x.cpB ? `<span class="dwx">${wxOf(x.types).map(w => icon(WX_URL(w), w)).join('')}</span><b class="bst">${x.cpB}</b>` : ''}</span>`).join('');
+  }
+  if (!parts.length && !cpHTML) return '';
+  return `<div class="dmeta">${parts.join('')}</div>${cpHTML ? `<div class="dmeta">${cpHTML}</div>` : ''}`;
+}
+
 // One row per day (Mon -> Sun): date block on the left, that day's events as wide cards on the right
 function weekHTML(items, p){
   const today = startOfDay(new Date()).getTime();
@@ -305,6 +335,7 @@ function weekHTML(items, p){
             <div class="kind">${esc(it.kind)}</div>
             <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}</div>
             <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
+            ${dayMeta(it)}
           </div>
           ${artHTML(it)}
         </div>`).join('') : '<div class="wnone">No events</div>'}</div>
@@ -340,7 +371,7 @@ function raidsHTML(raids, p){
   const card = b => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div class="btx"><div class="bn">${esc(b.name)}</div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div></div>
+          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div></div>
           ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
         </div>`;
   // starting = first appears inside the period; ending = already there and leaves inside the period;
@@ -433,8 +464,12 @@ function raidInfo(){
   })();
   return raidInfoP;
 }
-async function attachRaidInfo(raids){
+async function attachRaidInfo(raids, dayItems){
   const map = await raidInfo();
+  (dayItems || []).forEach(it => it.pokemon.forEach(x => {
+    const info = map.get(raidKey(x.name)) || map.get(raidKey(String(x.name).replace(/^mega /i, '')));
+    if (info && info.cp && !/^mega /i.test(x.name)) { x.cp = info.cp; x.cpB = info.boosted; }
+  }));
   const jobs = [];
   raids.forEach(t => t.bosses.forEach(b => {
     const info = map.get(raidKey(b.name)) || map.get(raidKey('mega ' + b.name));
@@ -446,7 +481,26 @@ async function attachRaidInfo(raids){
   await Promise.all(jobs);
 }
 
+const TYPE_ICON = t => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Types/POKEMON_TYPE_${String(t).toUpperCase()}_BORDERED.png`;
+const TYPE_WX = { grass:'sunny', ground:'sunny', fire:'sunny', water:'rainy', electric:'rainy', bug:'rainy', normal:'partly cloudy', rock:'partly cloudy',
+  fairy:'cloudy', fighting:'cloudy', poison:'cloudy', dragon:'windy', flying:'windy', psychic:'windy', ice:'snow', steel:'snow', dark:'fog', ghost:'fog' };
+const WX_URL = w => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_large_${WX_ICON[w]}.png`;
+const ICONS = {};
+const icon = (url, alt, cls = '') => ICONS[url] ? `<img class="${cls}" src="${ICONS[url]}" alt="${esc(alt)}">` : '';
+const typesHTML = types => [...new Set(types || [])].map(t => icon(TYPE_ICON(t), t, 'ti')).join('');
+const wxOf = types => [...new Set((types || []).map(t => TYPE_WX[t]).filter(Boolean))];
+// events where you catch the Pokémon at raid / Max Battle level -> show its catch CP
+const CATCH_KIND = /raid hour|raid day|max monday|max battle/i;
+
 async function inlineImages(dayItems, raids){
+  const urls = new Set();
+  const addTypes = ts => (ts || []).forEach(t => { urls.add(TYPE_ICON(t)); if (TYPE_WX[t]) urls.add(WX_URL(TYPE_WX[t])); });
+  dayItems.forEach(it => it.pokemon.forEach(x => addTypes(x.types)));
+  raids.forEach(t => t.bosses.forEach(b => b.poke && addTypes(b.poke.types)));
+  await Promise.all([...urls].map(u => toDataUrl(u).then(d => { if (d) ICONS[u] = d; })));
+  await inlineImages0(dayItems, raids);
+}
+async function inlineImages0(dayItems, raids){
   const jobs = [];
   dayItems.forEach(it => {
     it.pokemon.forEach(x => jobs.push(toDataUrl(x.img).then(d => { x.data = d; })));
@@ -469,7 +523,7 @@ async function render(){
   const p = period();
   const { dayItems, raids } = collect(p);
   await expandForms(raids, dayItems);
-  await attachRaidInfo(raids);
+  await attachRaidInfo(raids, dayItems);
   await inlineImages(dayItems, raids);
   const L = periodLabel(p);
   const n = dayItems.length;

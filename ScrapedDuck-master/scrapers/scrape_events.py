@@ -16,7 +16,7 @@ def scrape_events():
                 event_id = item.get("eventID")
                 start = item.get("start")
                 end = item.get("end")
-                event_dates[event_id] = {"start": start, "end": end}
+                event_dates[event_id] = {"start": start, "end": end, "eventType": item.get("eventType") or ""}
     except Exception as e:
         print(f"Error fetching events feed: {e}")
 
@@ -78,6 +78,22 @@ def scrape_events():
                     "end": end_date
                 }
                 all_events.append(event_data)
+
+        # Spotlight Hour: the special bonus is only on the event page ("... and the special bonus is 2× Catch Candy.")
+        import re
+        for ev_data in all_events:
+            etype = event_dates.get(ev_data["eventID"], {}).get("eventType", "")
+            if etype != "pokemon-spotlight-hour" and "spotlight" not in ev_data["eventID"]:
+                continue
+            try:
+                page = requests.get(ev_data["link"], headers=HEADERS, timeout=15)
+                page.encoding = "utf-8"
+                text = re.sub(r"\s+", " ", BeautifulSoup(page.text, "html.parser").get_text(" "))
+                m = re.search(r"special bonus is\s+(.+?)\s*\.", text, re.I)
+                if m:
+                    ev_data["bonus"] = m.group(1).strip()
+            except Exception as e:
+                print(f"  Could not read bonus for {ev_data['eventID']}: {e}")
 
         print(f"  -> Saved {len(all_events)} unique events.")
         return all_events

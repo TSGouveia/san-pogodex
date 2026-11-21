@@ -1751,7 +1751,8 @@ function buildPokebattlerMaxUrl(bossName) {
                     start: ev.start,
                     end: ev.end,
                     desc: ev.heading || ev.description || '',
-                    details: ev.extraData || null
+                    details: ev.extraData || null,
+                    bonus: ev.bonus || null
                 });
             });
         }
@@ -5824,16 +5825,18 @@ window.openEventsInfographic = function (mode, offset) {
         .map(ev => {
             const ctx = getEventContext(ev);
             return {
-                title: ev.title, start: ev.start, end: ev.end, banner: ev.banner,
+                title: ev.title, start: ev.start, end: ev.end, banner: ev.banner, bonus: ev.bonus || null,
                 typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
-                // Mega Raids / (Super) Mega Raid Day: show the Mega form
+                // Mega Raids / (Super) Mega Raid Day: show the Mega form; cp / cpB = 100% IV catch CP (level 20 / 25 boosted)
                 pokemon: getEventFeaturedPokemonList(ev).slice(0, 4).map(p => {
                     const megaEv = /mega raid|raid day/i.test(ev.title || '') && !/^mega /i.test(p.name);
                     const base = pokemonDatabase.find(x => String(x.id) === String(p.id));
                     const megaImg = megaEv && base && base.mega ? getPokemonImageUrl(`Mega ${p.name}`, base, false) : null;
+                    const cps = base ? (base.combatPower || calculateClientSideCombatPower(base.stats) || {}) : {};
+                    const extra = { types: typesOf(p.id), cp: cps.raidsL20 && cps.raidsL20.max, cpB: cps.raidsWbL25 && cps.raidsWbL25.max };
                     return megaImg && megaImg !== base.img
-                        ? { name: `Mega ${p.name}`, img: megaImg, types: typesOf(p.id) }
-                        : { name: p.name, img: p.img, types: typesOf(p.id) };
+                        ? { name: `Mega ${p.name}`, img: megaImg, ...extra }
+                        : { name: p.name, img: p.img, ...extra };
                 })
             };
         });
