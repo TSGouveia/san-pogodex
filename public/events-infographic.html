@@ -151,23 +151,22 @@
   .btypes img { width:20px; height:20px; }
   .ntypes { display:inline-flex; gap:5px; margin-left:12px; vertical-align:middle; position:relative; top:-3px; } .ntypes img { width:34px; height:34px; }
   /* same three columns on every day card: text | info | art */
-  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 400px 280px; align-items:center; gap:14px; }
-  .dcard.wev .dside { margin-right:-18px !important; }
+  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 320px 280px; align-items:center; gap:30px; }
   .dcard.wev .art, .dcard.wev .art.n4 { width:280px; }
   .dcard.wev .dside { width:auto; margin:0; }
   .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
-  .dside small { display:flex; align-items:center; gap:5px; font-size:14px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
-  .dside small img { width:26px; height:26px; }
+  .dside small { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+  .dside small img { width:20px; height:20px; }
   .ds-cp { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .ds-cp i { grid-column:1 / -1; font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); margin-bottom:-4px; }
-  .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:10px 14px; }
-  .ds-cp b { display:block; font-size:44px; font-weight:900; line-height:1.05; color:#ffd54a; }
+  .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:7px 11px; }
+  .ds-cp b { display:block; font-size:36px; font-weight:900; line-height:1.05; color:#ffd54a; }
   .ds-cp .bst b { color:#7dd3fc; }
   .ds-weak div { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
-  .ds-weak span { position:relative; } .ds-weak img { width:42px; height:42px; display:block; }
+  .ds-weak span { position:relative; } .ds-weak img { width:34px; height:34px; display:block; }
   .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
   .ds-bonus { background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:12px 14px; }
-  .ds-bonus small { color:#fde68a; } .ds-bonus b { display:block; font-size:40px; font-weight:900; color:#fde68a; line-height:1.1; margin-top:2px; }
+  .ds-bonus small { color:#fde68a; } .ds-bonus b { display:block; font-size:32px; font-weight:900; color:#fde68a; line-height:1.1; margin-top:2px; }
   .dmeta { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; }
   .dtypes { display:inline-flex; gap:5px; } .dtypes img { width:32px; height:32px; }
   .dbonus { font-size:19px; font-weight:900; color:#fde68a; background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:5px 12px; border-radius:10px; }
@@ -493,7 +492,7 @@ async function expandForms(raids, dayItems){
 const RAID_FILES = ['https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/raids.min.json', 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/raids.min.json'];
 const raidKey = n => String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ')
   .filter(w => w && !['shadow', 'incarnate', 'forme', 'form'].includes(w)).sort().join(' ');
-const WX_ICON = { sunny: 'clearDay', clear: 'clearDay', rainy: 'rainDay', 'partly cloudy': 'partlyCloudyDay', cloudy: 'overcastDay', windy: 'windyDay', snow: 'snowDay', fog: 'fogDay' };
+const WX_ICON = { sunny: 'sunny', clear: 'sunny', rainy: 'rain', 'partly cloudy': 'partlycloudy_day', cloudy: 'cloudy', windy: 'windy', snow: 'snow', fog: 'fog' };
 let raidInfoP = null;
 function raidInfo(){
   if (!raidInfoP) raidInfoP = (async () => {
@@ -505,7 +504,7 @@ function raidInfo(){
         const map = new Map();
         list.forEach(x => { const k = raidKey(x.name); if (!map.has(k) && x.combatPower) map.set(k, {
           cp: x.combatPower.normal && x.combatPower.normal.max, boosted: x.combatPower.boosted && x.combatPower.boosted.max,
-          weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_large_${WX_ICON[w.name]}.png` : w.image })) }); });
+          weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? WX_URL(w.name) : w.image })) }); });
         return map;
       } catch {}
     }
@@ -533,7 +532,7 @@ async function attachRaidInfo(raids, dayItems){
 const TYPE_ICON = t => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Types/POKEMON_TYPE_${String(t).toUpperCase()}_BORDERED.png`;
 const TYPE_WX = { grass:'sunny', ground:'sunny', fire:'sunny', water:'rainy', electric:'rainy', bug:'rainy', normal:'partly cloudy', rock:'partly cloudy',
   fairy:'cloudy', fighting:'cloudy', poison:'cloudy', dragon:'windy', flying:'windy', psychic:'windy', ice:'snow', steel:'snow', dark:'fog', ghost:'fog' };
-const WX_URL = w => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_large_${WX_ICON[w]}.png`;
+const WX_URL = w => `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_small_${WX_ICON[w]}.png`;
 const ICONS = {};
 const icon = (url, alt, cls = '') => ICONS[url] ? `<img class="${cls}" src="${ICONS[url]}" alt="${esc(alt)}">` : '';
 const typesHTML = types => [...new Set(types || [])].map(t => icon(TYPE_ICON(t), t, 'ti')).join('');
