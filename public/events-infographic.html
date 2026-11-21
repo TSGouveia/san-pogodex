@@ -149,7 +149,11 @@
   .bosses.solo .bcp > div { min-width:80px; } .bosses.solo .bcp b { font-size:24px; }
   .btypes { display:inline-flex; gap:3px; margin-left:7px; vertical-align:-3px; }
   .btypes img { width:20px; height:20px; }
-  .ntypes { display:flex; gap:6px; margin:2px 0 10px; } .ntypes img { width:34px; height:34px; }
+  .ntypes { display:inline-flex; gap:5px; margin-left:12px; vertical-align:middle; position:relative; top:-3px; } .ntypes img { width:34px; height:34px; }
+  /* same three columns on every day card: text | info | art */
+  .dcard.wev { display:grid; grid-template-columns:minmax(0, 1fr) 400px 300px; align-items:center; gap:14px; }
+  .dcard.wev .art, .dcard.wev .art.n4 { width:300px; }
+  .dcard.wev .dside { width:auto; margin:0; }
   .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
   .dside small { display:flex; align-items:center; gap:5px; font-size:14px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
   .dside small img { width:26px; height:26px; }
@@ -359,7 +363,7 @@ function daySide(it){
     const wk = def.length ? weakTo(def) : [];
     if (wk.length) blocks.push(`<div class="ds-weak"><small>Weak to</small><div>${wk.slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div></div>`);
   }
-  return blocks.length ? `<div class="dside">${blocks.join('')}</div>` : '';
+  return `<div class="dside">${blocks.join('')}</div>`; // always there, so every card has the same columns
 }
 
 // One row per day (Mon -> Sun): date block on the left, that day's events as wide cards on the right
@@ -376,8 +380,7 @@ function weekHTML(items, p){
         <div class="dcard wev" style="--c:${it.color}; --g:${it.glow}">
           <div class="tx">
             <div class="kind">${esc(it.kind)}</div>
-            <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}</div>
-            ${it.pokemon.length ? `<div class="ntypes">${typesHTML(it.pokemon.flatMap(x => x.types || []))}</div>` : ''}
+            <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}${it.pokemon.length ? `<span class="ntypes">${typesHTML(it.pokemon.flatMap(x => x.types || []))}</span>` : ''}</div>
             <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
           </div>
           ${daySide(it)}
