@@ -92,6 +92,31 @@
   .mev .t { font-size:11.5px; font-weight:800; color:rgba(255,255,255,.65); }
 
   /* ---------- Raid bosses ---------- */
+  /* week: day-by-day rows */
+  .wk { display:flex; flex-direction:column; gap:12px; }
+  .p-body.spread .wk { flex:1; }
+  .wday { display:grid; grid-template-columns:118px minmax(0, 1fr); gap:14px; }
+  .wday.has { flex:1 1 auto; }
+  .wdate { border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:10px 0; line-height:1;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--c) 26%, transparent), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 40%, transparent); }
+  .wdate small { font-size:15px; font-weight:900; letter-spacing:.14em; color:color-mix(in srgb, var(--c) 55%, #fff); }
+  .wdate b { font-size:50px; font-weight:900; margin:4px 0 2px; }
+  .wdate span { font-size:15px; font-weight:800; color:rgba(255,255,255,.55); }
+  .wday.none .wdate { background:rgba(255,255,255,.03); box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); flex-direction:row; gap:6px; padding:14px 0; }
+  .wday.none .wdate small, .wday.none .wdate span { font-size:12px; letter-spacing:.06em; }
+  .wday.none .wdate b { font-size:26px; margin:0; } .wday.none .wdate small { color:rgba(255,255,255,.5); }
+  .wday.today .wdate { background:linear-gradient(160deg, var(--h1), var(--h2)); box-shadow:0 0 24px -4px color-mix(in srgb, var(--h1) 70%, transparent); }
+  .wday.today .wdate small, .wday.today .wdate span { color:#fff; }
+  .wevs { display:flex; flex-direction:column; gap:10px; min-width:0; }
+  .wnone { height:100%; display:flex; align-items:center; padding:0 20px; border-radius:18px; font-size:17px; font-weight:800; color:rgba(255,255,255,.35); border:2px dashed rgba(255,255,255,.08); }
+  .dcard.wev { flex:1 1 auto; min-height:150px; padding:18px 20px 18px 24px; }
+  .dcard.wev .nm { font-size:40px; -webkit-line-clamp:2; } .dcard.wev .nm.long { font-size:30px; }
+  .dcard.wev .kind { font-size:15px; } .dcard.wev .tm { font-size:18px; }
+  .dcard.wev .art { width:300px; height:190px; }
+  .dcard.wev .art.n1 img { height:220px; top:-15px; }
+  .dcard.wev .art.n2 img { width:150px; height:150px; }
+  .dcard.wev .art.n3 img { width:130px; height:130px; } .dcard.wev .art.n3 img:nth-child(1){ left:85px; }
+  .dcard.wev .art.n4 img { width:110px; height:110px; }
   .raids { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
   .rgroup { --c:#ef4444; border-radius:18px; padding:14px 16px 16px; background:linear-gradient(160deg, color-mix(in srgb, var(--c) 20%, transparent), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 40%, transparent); }
   .rgroup.wide { grid-column:1 / -1; }
@@ -244,18 +269,28 @@ function artHTML(it){
   return '';
 }
 
-function weekHTML(items){
-  if (!items.length) return '<div class="empty">No one-day events this week.</div>';
-  return `<div class="days">${items.map(it => `
-    <div class="dcard" style="--c:${it.color}; --g:${it.glow}">
-      <div class="tab"><small>${wd(it.date).toUpperCase()}</small>${md(it.date)}</div>
-      <div class="tx">
-        <div class="kind">${esc(it.kind)}</div>
-        <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}</div>
-        <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
-      </div>
-      ${artHTML(it)}
-    </div>`).join('')}</div>`;
+// One row per day (Mon -> Sun): date block on the left, that day's events as wide cards on the right
+function weekHTML(items, p){
+  const today = startOfDay(new Date()).getTime();
+  const rows = [];
+  for (let k = 0; k < 7; k++) {
+    const d = addDays(p.from, k);
+    const its = items.filter(it => sameDay(it.date, d));
+    const isToday = startOfDay(d).getTime() === today;
+    rows.push(`<div class="wday${its.length ? ' has' : ' none'}${isToday ? ' today' : ''}" style="--c:${its[0] ? its[0].color : '#8b93a7'}">
+      <div class="wdate"><small>${wd(d).toUpperCase()}</small><b>${d.getDate()}</b><span>${d.toLocaleDateString('en-GB', { month: 'short' })}</span></div>
+      <div class="wevs">${its.length ? its.map(it => `
+        <div class="dcard wev" style="--c:${it.color}; --g:${it.glow}">
+          <div class="tx">
+            <div class="kind">${esc(it.kind)}</div>
+            <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}</div>
+            <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
+          </div>
+          ${artHTML(it)}
+        </div>`).join('') : '<div class="wnone">No events</div>'}</div>
+    </div>`);
+  }
+  return `<div class="wk">${rows.join('')}</div>`;
 }
 
 function monthHTML(items, p){
@@ -342,7 +377,7 @@ async function render(){
     <div class="p-head"><span class="p-eyebrow">Pokémon GO · ${esc(L.eyebrow)}</span><div class="p-title">${esc(L.title)}</div>
       <div class="p-sub">${esc(L.sub)} · ${n} event${n === 1 ? '' : 's'}</div></div>
     <div class="p-wrap"><div class="p-body" id="pbody">
-      ${mode === 'week' ? weekHTML(dayItems) : monthHTML(dayItems, p)}
+      ${mode === 'week' ? weekHTML(dayItems, p) : monthHTML(dayItems, p)}
       ${raidsHTML(raids)}
     </div></div>
     <div class="p-foot"><b>${esc(footCredit())}</b><span>Times in local time · data: LeekDuck</span></div>`;
@@ -394,9 +429,9 @@ function fileName(p){
 if (EMBEDDED) {
   // ?embed=1&mode=week|month&offset=N -> parent sends {source:'pogo-site', type:'events', events, debuts}; we post back the PNG
   document.documentElement.classList.add('embed');
-  const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.origin); } catch {} };
+  const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.protocol === 'file:' || location.origin === 'null' ? '*' : location.origin); } catch {} };
   window.addEventListener('message', async e => {
-    if (e.origin !== location.origin || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'events') return;
+    if (e.source !== parent || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'events') return;
     data = { events: e.data.events || [], debuts: e.data.debuts || [] };
     try {
       post({ type: 'status', text: 'Loading Pokémon images…' });
