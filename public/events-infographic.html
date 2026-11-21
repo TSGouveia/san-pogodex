@@ -140,6 +140,20 @@
   .btx { min-width:0; flex:1; }
   .btypes { display:inline-flex; gap:3px; margin-left:7px; vertical-align:-3px; }
   .btypes img { width:20px; height:20px; }
+  .ntypes { display:flex; gap:6px; margin:2px 0 10px; } .ntypes img { width:34px; height:34px; }
+  .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
+  .dside small { display:flex; align-items:center; gap:5px; font-size:14px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
+  .dside small img { width:26px; height:26px; }
+  .ds-cp { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .ds-cp i { grid-column:1 / -1; font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); margin-bottom:-4px; }
+  .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:10px 14px; }
+  .ds-cp b { display:block; font-size:44px; font-weight:900; line-height:1.05; color:#ffd54a; }
+  .ds-cp .bst b { color:#7dd3fc; }
+  .ds-weak div { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
+  .ds-weak span { position:relative; } .ds-weak img { width:42px; height:42px; display:block; }
+  .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
+  .ds-bonus { background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:12px 14px; }
+  .ds-bonus small { color:#fde68a; } .ds-bonus b { display:block; font-size:40px; font-weight:900; color:#fde68a; line-height:1.1; margin-top:2px; }
   .dmeta { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; }
   .dtypes { display:inline-flex; gap:5px; } .dtypes img { width:32px; height:32px; }
   .dbonus { font-size:19px; font-weight:900; color:#fde68a; background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:5px 12px; border-radius:10px; }
@@ -304,19 +318,39 @@ function artHTML(it){
   return '';
 }
 
-function dayMeta(it){
-  const types = it.pokemon.flatMap(x => x.types || []);
-  const parts = [];
-  if (types.length) parts.push(`<span class="dtypes">${typesHTML(types)}</span>`);
-  if (it.bonus) parts.push(`<span class="dbonus">✦ ${esc(it.bonus)}</span>`);
-  let cpHTML = '';
+const GO_CHART = { normal:{se:[],nve:['rock','steel'],ne:['ghost']}, fire:{se:['grass','ice','bug','steel'],nve:['fire','water','rock','dragon']},
+  water:{se:['fire','ground','rock'],nve:['water','grass','dragon']}, electric:{se:['water','flying'],nve:['electric','grass','dragon'],ne:['ground']},
+  grass:{se:['water','ground','rock'],nve:['fire','grass','poison','flying','bug','dragon','steel']}, ice:{se:['grass','ground','flying','dragon'],nve:['fire','water','ice','steel']},
+  fighting:{se:['normal','ice','rock','dark','steel'],nve:['poison','flying','psychic','bug','fairy'],ne:['ghost']}, poison:{se:['grass','fairy'],nve:['poison','ground','rock','ghost'],ne:['steel']},
+  ground:{se:['fire','electric','poison','rock','steel'],nve:['grass','bug'],ne:['flying']}, flying:{se:['grass','fighting','bug'],nve:['electric','rock','steel']},
+  psychic:{se:['fighting','poison'],nve:['psychic','steel'],ne:['dark']}, bug:{se:['grass','psychic','dark'],nve:['fire','fighting','poison','flying','ghost','steel','fairy']},
+  rock:{se:['fire','ice','flying','bug'],nve:['fighting','ground','steel']}, ghost:{se:['psychic','ghost'],nve:['dark'],ne:['normal']},
+  dragon:{se:['dragon'],nve:['steel'],ne:['fairy']}, dark:{se:['psychic','ghost'],nve:['fighting','dark','fairy']},
+  steel:{se:['ice','rock','fairy'],nve:['fire','water','electric','steel']}, fairy:{se:['fighting','dragon','dark'],nve:['fire','poison','steel']} };
+function weakTo(def){
+  return Object.keys(GO_CHART).map(a => { let m = 1; const c = GO_CHART[a];
+    def.forEach(d => { if (c.se.includes(d)) m *= 1.6; else if (c.nve.includes(d)) m *= 0.625; else if (c.ne && c.ne.includes(d)) m *= 0.39; });
+    return { t: a, m }; }).filter(x => x.m > 1.01).sort((a, b) => b.m - a.m);
+}
+function daySide(it){
+  const blocks = [];
+  if (it.bonus) blocks.push(`<div class="ds-bonus"><small>Bonus</small><b>${esc(it.bonus)}</b></div>`);
   if (CATCH_KIND.test(it.kind + ' ' + (it.title || ''))) {
     const pairs = [], seen = new Set();
     it.pokemon.forEach(x => { if (!x.cp) return; const k = x.cp + '/' + x.cpB; if (seen.has(k)) return; seen.add(k); pairs.push(x); });
-    cpHTML = pairs.map(x => `<span class="dcp">${pairs.length > 1 ? `<i>${esc(x.name)}</i>` : ''}<small>CP</small><b>${x.cp}</b>${x.cpB ? `<span class="dwx">${wxOf(x.types).map(w => icon(WX_URL(w), w)).join('')}</span><b class="bst">${x.cpB}</b>` : ''}</span>`).join('');
+    pairs.slice(0, 2).forEach(x => {
+      const wx = wxOf(x.types);
+      blocks.push(`<div class="ds-cp">${pairs.length > 1 ? `<i>${esc(x.name)}</i>` : ''}
+        <div><small>Catch CP</small><b>${x.cp}</b></div>
+        ${x.cpB ? `<div class="bst"><small>${wx.map(w => icon(WX_URL(w), w)).join('')}${esc(wx.map(w => w.replace(/\b\w/g, c => c.toUpperCase())).join(' · '))}</small><b>${x.cpB}</b></div>` : ''}
+      </div>`);
+    });
+    // weaknesses of the boss (same typing for all its formes)
+    const def = (it.pokemon[0] && it.pokemon[0].types) || [];
+    const wk = def.length ? weakTo(def) : [];
+    if (wk.length) blocks.push(`<div class="ds-weak"><small>Weak to</small><div>${wk.slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div></div>`);
   }
-  if (!parts.length && !cpHTML) return '';
-  return `<div class="dmeta">${parts.join('')}</div>${cpHTML ? `<div class="dmeta">${cpHTML}</div>` : ''}`;
+  return blocks.length ? `<div class="dside">${blocks.join('')}</div>` : '';
 }
 
 // One row per day (Mon -> Sun): date block on the left, that day's events as wide cards on the right
@@ -334,9 +368,10 @@ function weekHTML(items, p){
           <div class="tx">
             <div class="kind">${esc(it.kind)}</div>
             <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}</div>
+            ${it.pokemon.length ? `<div class="ntypes">${typesHTML(it.pokemon.flatMap(x => x.types || []))}</div>` : ''}
             <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
-            ${dayMeta(it)}
           </div>
+          ${daySide(it)}
           ${artHTML(it)}
         </div>`).join('') : '<div class="wnone">No events</div>'}</div>
     </div>`);
@@ -495,6 +530,7 @@ const CATCH_KIND = /raid hour|raid day|max monday|max battle/i;
 async function inlineImages(dayItems, raids){
   const urls = new Set();
   const addTypes = ts => (ts || []).forEach(t => { urls.add(TYPE_ICON(t)); if (TYPE_WX[t]) urls.add(WX_URL(TYPE_WX[t])); });
+  Object.keys(TYPE_WX).forEach(t => urls.add(TYPE_ICON(t)));
   dayItems.forEach(it => it.pokemon.forEach(x => addTypes(x.types)));
   raids.forEach(t => t.bosses.forEach(b => b.poke && addTypes(b.poke.types)));
   await Promise.all([...urls].map(u => toDataUrl(u).then(d => { if (d) ICONS[u] = d; })));
