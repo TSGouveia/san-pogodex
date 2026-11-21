@@ -137,7 +137,13 @@
   .bart { flex-shrink:0; width:66px; height:66px; position:relative; }
   .bart img { position:absolute; inset:-8%; width:116%; height:116%; object-fit:contain; filter:drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
 
-  .btx { min-width:0; }
+  .btx { min-width:0; flex:1; }
+  .bcp { display:flex; gap:6px; flex-shrink:0; }
+  .bcp > div { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:58px; padding:4px 7px; border-radius:9px; background:rgba(0,0,0,.3); }
+  .bcp small { display:flex; gap:2px; align-items:center; height:18px; font-size:10.5px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.55); }
+  .bcp small img { width:20px; height:20px; }
+  .bcp b { font-size:17px; font-weight:900; line-height:1.1; color:#ffd54a; }
+  .bcp .bst b { color:#7dd3fc; }
   .orb { --t:#888; flex-shrink:0; width:76px; height:76px; border-radius:50%; position:relative;
     background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--t) 55%, #2a2f3d) 0%, color-mix(in srgb, var(--t) 20%, #151821) 75%);
     border:3px solid color-mix(in srgb, var(--t) 60%, #000); }
@@ -249,7 +255,7 @@ function period(){
 function collect(p){
   const evs = normalise(data.events).filter(e => e.end > p.from && e.start < p.to);
   const dayItems = evs.filter(e => e.hours <= MAX_EVENT_HOURS && e.start >= p.from && !RAID_TIERS.some(t => t.re.test(e.title)))
-    .map(e => ({ date: e.start, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(e.start)} – ${hm(e.end)}`,
+    .map(e => ({ title: e.title, date: e.start, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(e.start)} – ${hm(e.end)}`,
       names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
       pokemon: e.pokemon.slice(0, 4), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color }));
   (data.debuts || []).forEach(d => {
@@ -335,6 +341,7 @@ function raidsHTML(raids, p){
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
           <div class="btx"><div class="bn">${esc(b.name)}</div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div></div>
+          ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
         </div>`;
   // starting = first appears inside the period; ending = already there and leaves inside the period;
   // ongoing = already there and still there after the period
@@ -378,19 +385,65 @@ function formArt(base, form){
     .then(d => d ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${d.id}.png` : null).catch(() => null);
   return formArtCache[slug];
 }
-async function expandForms(raids){
+const titleForms = t => { const m = (t || '').match(/\(([^)]*?)\s+Formes?\)/i);
+  return m ? m[1].split(/,\s*|\s+and\s+/i).map(x => x.replace(/^and\s+/i, '').trim()).filter(Boolean) : []; };
+async function formsOf(poke, title){
+  const forms = titleForms(title);
+  if (!poke || forms.length < 2 || /\(/.test(poke.name)) return [poke];
+  const arts = await Promise.all(forms.map(fm => DEFAULT_FORMS.includes(fm.toLowerCase()) ? poke.img : formArt(poke.name, fm)));
+  return forms.map((fm, i) => ({ ...poke, name: `${poke.name} (${fm})`, img: arts[i] || poke.img }));
+}
+async function expandForms(raids, dayItems){
   await Promise.all(raids.map(async t => {
     const out = [];
     for (const b of t.bosses) {
-      const m = (b.title || '').match(/\(([^)]*?)\s+Formes?\)/i);
-      const forms = m ? m[1].split(/,\s*|\s+and\s+/i).map(x => x.replace(/^and\s+/i, '').trim()).filter(Boolean) : [];
-      if (!b.poke || forms.length < 2) { out.push(b); continue; }
-      const base = b.poke.name;
-      const arts = await Promise.all(forms.map(fm => DEFAULT_FORMS.includes(fm.toLowerCase()) ? b.poke.img : formArt(base, fm)));
-      forms.forEach((fm, i) => out.push({ ...b, name: `${base} (${fm})`, poke: { ...b.poke, name: `${base} (${fm})`, img: arts[i] || b.poke.img } }));
+      const ps = await formsOf(b.poke, b.title);
+      if (ps.length < 2) { out.push(b); continue; }
+      ps.forEach(x => out.push({ ...b, name: x.name, poke: x }));
     }
     t.bosses = out;
   }));
+  await Promise.all((dayItems || []).map(async it => {
+    if (it.pokemon.length !== 1) return;
+    const ps = await formsOf(it.pokemon[0], it.title);
+    if (ps.length > 1) it.pokemon = ps.slice(0, 4);
+  }));
+}
+
+const RAID_FILES = ['https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/raids.min.json', 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/raids.min.json'];
+const raidKey = n => String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ')
+  .filter(w => w && !['shadow', 'incarnate', 'forme', 'form'].includes(w)).sort().join(' ');
+const WX_ICON = { sunny: 'clearDay', clear: 'clearDay', rainy: 'rainDay', 'partly cloudy': 'partlyCloudyDay', cloudy: 'overcastDay', windy: 'windyDay', snow: 'snowDay', fog: 'fogDay' };
+let raidInfoP = null;
+function raidInfo(){
+  if (!raidInfoP) raidInfoP = (async () => {
+    for (const u of RAID_FILES) {
+      try {
+        const r = await fetch(u + '?t=' + Math.floor(Date.now() / 600000)); if (!r.ok) continue;
+        const d = await r.json();
+        const list = Array.isArray(d) ? d : [...(d.current || []), ...(d.schedule || [])];
+        const map = new Map();
+        list.forEach(x => { const k = raidKey(x.name); if (!map.has(k) && x.combatPower) map.set(k, {
+          cp: x.combatPower.normal && x.combatPower.normal.max, boosted: x.combatPower.boosted && x.combatPower.boosted.max,
+          weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? `https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Weather/weatherIcon_large_${WX_ICON[w.name]}.png` : w.image })) }); });
+        return map;
+      } catch {}
+    }
+    return new Map();
+  })();
+  return raidInfoP;
+}
+async function attachRaidInfo(raids){
+  const map = await raidInfo();
+  const jobs = [];
+  raids.forEach(t => t.bosses.forEach(b => {
+    const info = map.get(raidKey(b.name)) || map.get(raidKey('mega ' + b.name));
+    if (!info) return;
+    b.cp = info.cp; b.boosted = info.boosted;
+    b.weather = info.weather.map(w => ({ ...w }));
+    b.weather.forEach(w => jobs.push(toDataUrl(w.img).then(d => { w.data = d; })));
+  }));
+  await Promise.all(jobs);
 }
 
 async function inlineImages(dayItems, raids){
@@ -415,7 +468,8 @@ function periodLabel(p){
 async function render(){
   const p = period();
   const { dayItems, raids } = collect(p);
-  await expandForms(raids);
+  await expandForms(raids, dayItems);
+  await attachRaidInfo(raids);
   await inlineImages(dayItems, raids);
   const L = periodLabel(p);
   const n = dayItems.length;

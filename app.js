@@ -10884,6 +10884,22 @@ function getEventFeaturedPokemonList(ev) {
     // Sort found Pokemon by their appearance order in the event title
     found.sort((a, b) => a.matchIndex - b.matchIndex);
 
+    // "Deoxys (Normal, Defense, Attack, and Speed Formes)" -> one entry per forme
+    const formesMatch = (ev.title || '').match(/\(([^)]*?)\s+Formes?\)/i);
+    const formes = formesMatch ? formesMatch[1].split(/,\s*|\s+and\s+/i).map(x => x.replace(/^and\s+/i, '').trim()).filter(Boolean) : [];
+    if (found.length === 1 && formes.length > 1 && !found[0].name.includes('(')) {
+        const base = found[0];
+        const slug = base.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        const raw = rawPokedexData ? rawPokedexData.find(r => String(r.dexNr) === String(base.id)) : null;
+        return formes.map(fm => {
+            const fKey = fm.toUpperCase().replace(/[^A-Z0-9]+/g, '_');
+            const asset = raw && Array.isArray(raw.assetForms) ? raw.assetForms.find(a => a.form === fKey && a.image) : null;
+            const mapped = pokeApiIdMapping[`${slug}-${fm.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`];
+            const img = mapped ? `${POKE_SPRITE_BASE_URL}/${mapped}.png` : asset ? asset.image : base.img;
+            return { ...base, name: `${base.name} (${fm})`, img };
+        });
+    }
+
     return found;
 }
 
