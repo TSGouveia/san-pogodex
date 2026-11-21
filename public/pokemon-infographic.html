@@ -13,8 +13,8 @@
   .wrap { display:flex; justify-content:center; padding:20px 0; }
   html.embed .wrap { padding:0; }
 
-  /* fixed 1080x1350 (4:5 post), same as the raid infographics */
-  .poster { --t1:#888; --t2:#888; width:1080px; height:1350px; display:flex; flex-direction:column; flex-shrink:0; position:relative; overflow:hidden; color:#eef1f6;
+  /* fixed 1080x1920 (9:16, full phone screen), same as the raid infographics */
+  .poster { --t1:#888; --t2:#888; width:1080px; height:1920px; display:flex; flex-direction:column; flex-shrink:0; position:relative; overflow:hidden; color:#eef1f6;
     background:
       radial-gradient(800px 600px at 100% 0%, color-mix(in srgb, var(--t1) 30%, transparent), transparent 65%),
       radial-gradient(700px 600px at 0% 70%, color-mix(in srgb, var(--t2) 20%, transparent), transparent 65%),
@@ -270,7 +270,7 @@ async function render(p){
   await fitBody();
 }
 
-// Keep the 1080x1350 frame: shrink the cards proportionally when they don't fit,
+// Keep the 1080x1920 frame: shrink the cards proportionally when they don't fit,
 // spread them out when there is room left
 async function fitBody(){
   await Promise.all([...$('poster').querySelectorAll('img')].map(i => i.decode ? i.decode().catch(() => {}) : null));

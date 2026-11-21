@@ -42,7 +42,11 @@
   .p-title { position:relative; font-size:72px; line-height:1; font-weight:900; margin:12px 0 8px; text-shadow:0 3px 0 rgba(0,0,0,.14); }
   .p-sub { position:relative; font-size:21px; font-weight:700; opacity:.9; }
 
-  .p-body { padding:26px 30px 10px; display:flex; flex-direction:column; gap:22px; }
+  .poster { height:1920px; display:flex; flex-direction:column; }
+  .p-head, .p-foot { flex-shrink:0; }
+  .p-wrap { flex:1; min-height:0; overflow:hidden; position:relative; }
+  .p-body { padding:26px 30px 10px; display:flex; flex-direction:column; gap:22px; width:1080px; box-sizing:border-box; transform-origin:top left; }
+  .p-body.spread { justify-content:space-evenly; }
   .sec-t { display:flex; align-items:center; gap:12px; font-size:16px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.65); }
   .sec-t::after { content:""; flex:1; height:2px; border-radius:2px; background:rgba(255,255,255,.08); }
 
@@ -337,12 +341,26 @@ async function render(){
   $('poster').innerHTML = `
     <div class="p-head"><span class="p-eyebrow">Pokémon GO · ${esc(L.eyebrow)}</span><div class="p-title">${esc(L.title)}</div>
       <div class="p-sub">${esc(L.sub)} · ${n} event${n === 1 ? '' : 's'}</div></div>
-    <div class="p-body">
+    <div class="p-wrap"><div class="p-body" id="pbody">
       ${mode === 'week' ? weekHTML(dayItems) : monthHTML(dayItems, p)}
       ${raidsHTML(raids)}
-    </div>
+    </div></div>
     <div class="p-foot"><b>${esc(footCredit())}</b><span>Times in local time · data: LeekDuck</span></div>`;
+  await fitBody();
   return { p };
+}
+
+// Keep the 1080x1920 (9:16) frame: shrink the body when it doesn't fit, spread it out when there is room
+async function fitBody(){
+  await Promise.all([...$('poster').querySelectorAll('img')].map(i => i.decode ? i.decode().catch(() => {}) : null));
+  const box = $('poster').querySelector('.p-wrap'), fit = $('pbody');
+  const avail = box.clientHeight;
+  fit.style.transform = ''; fit.style.width = '1080px'; fit.style.minHeight = ''; fit.classList.remove('spread');
+  let s = Math.min(1, avail / fit.scrollHeight);
+  for (let i = 0; i < 4 && s < 1; i++) { fit.style.width = (1080 / s) + 'px'; s = Math.max(0.4, Math.min(1, avail / fit.scrollHeight)); }
+  if (s < 1) s = Math.min(s, avail / fit.scrollHeight);
+  if (s < 1) fit.style.transform = `scale(${s})`;
+  else { fit.style.width = '1080px'; fit.style.minHeight = avail + 'px'; fit.classList.add('spread'); }
 }
 
 // ---------- Export (same approach as infographic.html) ----------

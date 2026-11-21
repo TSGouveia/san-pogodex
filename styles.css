@@ -5104,6 +5104,19 @@ img[src*="sprites/pokemon"] {
     height: auto;
     border-radius: var(--border-radius-md);
 }
+/* phones: the 9:16 infographic covers the whole screen */
+@media (max-width: 640px) {
+    #infographic-modal .infographic-card {
+        max-width: none;
+        width: 100vw;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+        padding: 0.5rem;
+    }
+    #infographic-modal .infographic-body { align-items: center; overflow: hidden; }
+    #infographic-modal .infographic-img { width: auto; height: 100%; max-width: 100%; object-fit: contain; border-radius: 0; }
+}
 .infographic-loading {
     display: flex;
     flex-direction: column;
