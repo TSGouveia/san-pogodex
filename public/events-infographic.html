@@ -138,6 +138,12 @@
   .bart img { position:absolute; inset:-8%; width:116%; height:116%; object-fit:contain; filter:drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
 
   .btx { min-width:0; flex:1; }
+  .bdate { flex-shrink:0; display:flex; flex-direction:column; align-items:center; text-align:center; min-width:88px; margin:0 6px; line-height:1; }
+  .bdate small { font-size:10.5px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; }
+  .bdate b { font-size:26px; font-weight:900; margin:3px 0 3px; white-space:nowrap; }
+  .bdate span { font-size:11.5px; font-weight:800; color:rgba(255,255,255,.5); white-space:nowrap; }
+  .bdate.end small, .bdate.end b { color:#fda4af; } .bdate.start small, .bdate.start b { color:#86efac; } .bdate.on small, .bdate.on b { color:#93c5fd; }
+  .bosses.solo .bdate b { font-size:32px; } .bosses.solo .bdate { min-width:120px; }
   .bweak { display:flex; align-items:center; gap:3px; margin-top:4px; }
   .bweak small { font-size:9.5px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-right:3px; }
   .bweak span { position:relative; } .bweak img { width:20px; height:20px; display:block; }
@@ -157,7 +163,8 @@
   .dcard.wev .dside { width:auto; margin:0; }
   .dside { flex-shrink:0; display:flex; flex-direction:column; gap:8px; justify-content:center; width:400px; margin-right:6px; position:relative; z-index:2; }
   .dside small { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.55); }
-  .dside small img { width:auto; height:18px; object-fit:contain; }
+  .dside small img { width:auto; height:16px; object-fit:contain; margin-right:4px; }
+  .ds-cp .bst small { margin-bottom:3px; }
   .ds-cp { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
   .ds-cp i { grid-column:1 / -1; font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); margin-bottom:-4px; }
   .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:7px 11px; }
@@ -183,8 +190,9 @@
   .dcard.wev .art.n4 img:nth-child(3){ left:0; bottom:-22px; } .dcard.wev .art.n4 img:nth-child(4){ right:0; bottom:-22px; }
   .bcp { display:flex; gap:6px; flex-shrink:0; }
   .bcp > div { display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:58px; padding:4px 7px; border-radius:9px; background:rgba(0,0,0,.3); }
-  .bcp small { display:flex; gap:2px; align-items:center; height:18px; font-size:10.5px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.55); }
-  .bcp small img { width:auto; height:17px; object-fit:contain; }
+  .bcp small { display:flex; gap:4px; align-items:center; height:18px; font-size:10.5px; font-weight:900; letter-spacing:.1em; color:rgba(255,255,255,.55); }
+  .bcp small img { width:auto; height:15px; object-fit:contain; }
+  .bcp .bst small { gap:5px; margin-bottom:4px; }
   .bcp b { font-size:17px; font-weight:900; line-height:1.1; color:#ffd54a; }
   .bcp .bst b { color:#7dd3fc; }
   .orb { --t:#888; flex-shrink:0; width:76px; height:76px; border-radius:50%; position:relative;
@@ -416,10 +424,18 @@ function monthHTML(items, p){
 
 function raidsHTML(raids, p){
   if (!raids.length) return '';
-  const card = b => `
+  // the date that matters for the column in big bold: end date when leaving, start date when arriving
+  const dateHTML = (b, k) => {
+    const r0 = b.ranges[0], rl = b.ranges[b.ranges.length - 1];
+    if (k === 'start') return `<div class="bdate start"><small>Starts</small><b>${md(r0[0])}</b><span>until ${md(rl[1])}</span></div>`;
+    if (k === 'end') return `<div class="bdate end"><small>Ends</small><b>${md(rl[1])}</b><span>since ${md(r0[0])}</span></div>`;
+    return `<div class="bdate on"><small>Until</small><b>${md(rl[1])}</b><span>since ${md(r0[0])}</span></div>`;
+  };
+  const card = (b, k) => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
+          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
+          ${dateHTML(b, k)}
           ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
         </div>`;
   // starting = first appears inside the period; ending = already there and leaves inside the period;
@@ -428,7 +444,7 @@ function raidsHTML(raids, p){
   const side = (k, cls = '') => raids.map(t => {
     const bs = t.bosses.filter(b => kind(b) === k);
     const st = cls === 'two' ? ` style="grid-template-columns:repeat(${Math.min(3, bs.length)}, minmax(0, 1fr))"` : '';
-    return bs.length ? `<div class="rgroup" style="--c:${t.c}"><h3>${esc(t.label)}</h3><div class="bosses ${cls}${bs.length === 1 && cls === 'two' ? ' solo' : ''}"${st}>${bs.map(card).join('')}</div></div>` : '';
+    return bs.length ? `<div class="rgroup" style="--c:${t.c}"><h3>${esc(t.label)}</h3><div class="bosses ${cls}${bs.length === 1 && cls === 'two' ? ' solo' : ''}"${st}>${bs.map(b => card(b, k)).join('')}</div></div>` : '';
   }).join('');
   const L = side('end'), R = side('start'), O = side('on', 'two');
   const word = mode === 'month' ? 'this month' : 'this week';
