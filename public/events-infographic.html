@@ -117,18 +117,26 @@
   .dcard.wev .art.n2 img { width:150px; height:150px; }
   .dcard.wev .art.n3 img { width:130px; height:130px; } .dcard.wev .art.n3 img:nth-child(1){ left:85px; }
   .dcard.wev .art.n4 img { width:110px; height:110px; }
-  .raids { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+  .raids { display:flex; flex-direction:column; gap:16px; }
   .rgroup { --c:#ef4444; border-radius:18px; padding:14px 16px 16px; background:linear-gradient(160deg, color-mix(in srgb, var(--c) 20%, transparent), rgba(255,255,255,.03)); box-shadow:inset 0 0 0 1.5px color-mix(in srgb, var(--c) 40%, transparent); }
   .rgroup.wide { grid-column:1 / -1; }
   .rgroup h3 { margin:0 0 10px; font-size:15px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:color-mix(in srgb, var(--c) 55%, #fff); }
-  .bosses { display:flex; flex-wrap:wrap; gap:10px 14px; }
-  .boss { display:flex; align-items:center; gap:10px; min-width:0; flex:1 1 200px; }
+  .bosses { display:grid; gap:12px; }
+  .bosses.n1 { grid-template-columns:1fr; } .bosses.n2 { grid-template-columns:1fr 1fr; } .bosses.n3 { grid-template-columns:1fr 1fr 1fr; }
+  .boss { --t:#888; position:relative; display:flex; align-items:center; gap:14px; min-width:0; padding:12px 16px 12px 10px; border-radius:16px; overflow:hidden;
+    background:radial-gradient(160px 140px at 70px 50%, color-mix(in srgb, var(--t) 40%, transparent), transparent 75%), rgba(0,0,0,.22);
+    box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.07); }
+  .bart { flex-shrink:0; width:130px; height:130px; position:relative; }
+  .bart img { position:absolute; inset:-8%; width:116%; height:116%; object-fit:contain; filter:drop-shadow(0 6px 6px rgba(0,0,0,.45)); }
+  .bosses.n3 .boss { flex-direction:column; text-align:center; padding:12px 10px 14px; }
+  .bosses.n3 .bart { width:150px; height:150px; }
+  .btx { min-width:0; }
   .orb { --t:#888; flex-shrink:0; width:76px; height:76px; border-radius:50%; position:relative;
     background:radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--t) 55%, #2a2f3d) 0%, color-mix(in srgb, var(--t) 20%, #151821) 75%);
     border:3px solid color-mix(in srgb, var(--t) 60%, #000); }
   .orb img { position:absolute; left:-14%; top:-18%; width:128%; height:128%; object-fit:contain; filter:drop-shadow(0 3px 3px rgba(0,0,0,.4)); }
-  .boss .bn { font-size:18px; font-weight:900; line-height:1.1; }
-  .boss .bd { font-size:14px; font-weight:800; color:rgba(255,255,255,.65); margin-top:2px; }
+  .boss .bn { font-size:26px; font-weight:900; line-height:1.1; text-shadow:0 2px 0 rgba(0,0,0,.25); }
+  .boss .bd { font-size:16px; font-weight:800; color:rgba(255,255,255,.7); margin-top:6px; line-height:1.35; }
 
   .empty { text-align:center; padding:40px 20px; font-size:20px; font-weight:800; color:rgba(255,255,255,.5); }
   .p-foot { display:flex; justify-content:space-between; align-items:center; padding:16px 36px 22px; font-size:17px; font-weight:800; color:rgba(255,255,255,.55); }
@@ -244,10 +252,9 @@ function collect(p){
   });
   dayItems.sort((a, b) => a.date - b.date);
 
-  const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).map(e => ({
-    name: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title).replace(/\s+in .*$/i, ''),
-    poke: e.pokemon[0] ? { ...e.pokemon[0] } : null, start: e.start, end: e.end,
-  })) })).filter(t => t.bosses.length);
+  const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).flatMap(e => e.pokemon.length
+    ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end }))
+    : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) })).filter(t => t.bosses.length);
   // the same boss returning in the period is one entry with several date ranges
   raids.forEach(t => {
     t.bosses = t.bosses.reduce((acc, b) => {
@@ -317,13 +324,14 @@ function monthHTML(items, p){
 
 function raidsHTML(raids){
   if (!raids.length) return '';
+  // one section per category, one big card per boss
   const groups = raids.map(t => `
-    <div class="rgroup${t.bosses.length > 2 ? ' wide' : ''}" style="--c:${t.c}">
+    <div class="rgroup" style="--c:${t.c}">
       <h3>${esc(t.label)}</h3>
-      <div class="bosses">${t.bosses.map(b => `
-        <div class="boss">
-          <div class="orb" style="--t:${typeColor(b.poke)}">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div><div class="bn">${esc(b.name)}</div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join(' · ')}</div></div>
+      <div class="bosses n${Math.min(3, t.bosses.length)}">${t.bosses.map(b => `
+        <div class="boss" style="--t:${typeColor(b.poke)}">
+          <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
+          <div class="btx"><div class="bn">${esc(b.name)}</div><div class="bd">${b.ranges.map(r => `${md(r[0])} – ${md(r[1])}`).join('<br>')}</div></div>
         </div>`).join('')}</div>
     </div>`).join('');
   return `<div class="sec-t">Raid Bosses</div><div class="raids">${groups}</div>`;
