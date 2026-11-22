@@ -1565,16 +1565,6 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/831.png"
     },
     {
-        "name": "Dynamax Eternatus_Eternamax",
-        "tier": "Max Battles (6 Max)",
-        "canBeShiny": false,
-        "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ETERNATUS_ETERNAMAX",
-        "types": [],
-        "combatPower": null,
-        "boostedWeather": [],
-        "image": ""
-    },
-    {
         "name": "Dynamax Toxtricity",
         "tier": "Max Battles (4 Max)",
         "canBeShiny": false,

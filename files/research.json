@@ -167,6 +167,63 @@
         ]
     },
     {
+        "category": "Pawniard Community Day Tasks",
+        "task": "Catch 3 Pawniard",
+        "rewards": [
+            {
+                "name": "Pawniard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm624.icon.png",
+                "shiny": true,
+                "min_cp": "574",
+                "max_cp": "614",
+                "combatPower": {
+                    "normal": {
+                        "min": 574,
+                        "max": 614
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pawniard Community Day - Special backgrounds Tasks",
+        "task": "Catch 5 Pokemon while in a Party",
+        "rewards": [
+            {
+                "name": "Pawniard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm624.icon.png",
+                "shiny": true,
+                "min_cp": "574",
+                "max_cp": "614",
+                "combatPower": {
+                    "normal": {
+                        "min": 574,
+                        "max": 614
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Pawniard Community Day - Special backgrounds Tasks",
+        "task": "Catch 50 Pokemon",
+        "rewards": [
+            {
+                "name": "Pawniard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm624.icon.png",
+                "shiny": true,
+                "min_cp": "574",
+                "max_cp": "614",
+                "combatPower": {
+                    "normal": {
+                        "min": 574,
+                        "max": 614
+                    }
+                }
+            }
+        ]
+    },
+    {
         "category": "Catching Tasks",
         "task": "Catch 7 Pokémon",
         "rewards": [
