@@ -807,11 +807,13 @@ function slug(name){
   return name.toLowerCase().trim().replace(/♀/g,'-f').replace(/♂/g,'-m').replace(/['.:]/g,'').replace(/é/g,'e').replace(/\s+/g,'-');
 }
 
+const SPRITE_ALIAS = { 'gimmighoul': 'gimmighoul-roaming' };
+
 async function lookup(name){
   const key = slug(name);
   if (cache[key]) return cache[key];
   const api = 'https://pokeapi.co/api/v2/';
-  let res = await fetch(api + 'pokemon/' + key);
+  let res = await fetch(api + 'pokemon/' + (SPRITE_ALIAS[key] || key));
   if (!res.ok) { // e.g. "darmanitan" -> species -> default form
     const sp = await fetch(api + 'pokemon-species/' + key);
     if (!sp.ok) throw new Error(name);
@@ -1227,7 +1229,7 @@ async function lookupSlugs(slugs){
     if (cache[sl]) return cache[sl];
     if (missing.has(sl)) continue;
     try {
-      const res = await fetch(api + 'pokemon/' + sl);
+      const res = await fetch(api + 'pokemon/' + (SPRITE_ALIAS[sl] || sl));
       if (res.ok) {
         const d = await res.json();
         const info = {

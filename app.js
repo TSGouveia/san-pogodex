@@ -419,6 +419,7 @@ function getPokemonImageUrl(name, matchedPoke, isShiny = null) {
     if (nameLower.includes('crowned sword') || nameLower.includes('zacian crowned')) return `${baseUrl}/10188.png`;
     if (nameLower.includes('crowned shield') || nameLower.includes('zamazenta crowned')) return `${baseUrl}/10189.png`;
     if (nameLower.includes('bloodmoon') || nameLower.includes('ursaluna bloodmoon')) return `${baseUrl}/10272.png`;
+    if (nameLower.includes('gimmighoul')) return `${baseUrl}/10263.png`;
 
     // Check if it's a regional form
     const rfId = getRegionalFormPokeApiId(name);
