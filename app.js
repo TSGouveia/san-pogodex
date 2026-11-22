@@ -8127,7 +8127,7 @@ function renderCandiesPane() {
 
         const isShinyView = (currentDexType === 'shiny');
         if (isShinyView) {
-            const basePokeApiId = getRegionalFormPokeApiId(displayTitle) || family.base.id;
+            const basePokeApiId = getRegionalFormPokeApiId(displayTitle) || (Number(family.base.id) === 999 ? 10263 : family.base.id);
             displayImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePokeApiId}.png`;
         }
 
@@ -12239,7 +12239,7 @@ function renderToDoPane() {
         const displayName = item.formName || item.poke.name;
         let imgUrl = getPokemonImageUrl(displayName, item.poke) || item.poke.img;
         if (isShinyView) {
-            const pokeApiId = getRegionalFormPokeApiId(displayName) || item.poke.id;
+            const pokeApiId = getRegionalFormPokeApiId(displayName) || (Number(item.poke.id) === 999 ? 10263 : item.poke.id);
             imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
         }
         const iconClass = icons[item.source] || 'fa-solid fa-star';
