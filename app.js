@@ -6101,6 +6101,15 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         mega: basePoke.mega, gmax: basePoke.gmax, shadow: isShadowEligible,
         legendary: raw ? raw.pokemonClass || null : null,
         buddy,
+        releaseDate: basePoke.releaseDate || null,
+        stats: poke.stats || basePoke.stats || null,
+        statRanks: (() => {
+            const st = poke.stats || basePoke.stats;
+            if (!st) return null;
+            const all = pokemonDatabase.filter(x => x.stats && !x.unreleased);
+            const rk = k => 1 + all.filter(x => x.stats[k] > st[k]).length;
+            return { atk: rk('atk'), def: rk('def'), sta: rk('sta'), total: all.length };
+        })(),
         fast, charged,
         pvpBest,
         pveBest,

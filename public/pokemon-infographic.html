@@ -124,6 +124,16 @@
   .ea .it { display:block; font-size:13px; font-weight:900; color:#a5f3fc; margin-top:2px; }
   .ea .qs { display:block; font-size:12px; font-weight:800; color:rgba(255,255,255,.72); margin-top:3px; line-height:1.25; }
 
+  .sm { display:grid; grid-template-columns:1fr 1.25fr; gap:16px; }
+  .stat { display:grid; grid-template-columns:54px 1fr 96px; align-items:center; gap:10px; margin:9px 0; }
+  .stat .k { font-size:15px; font-weight:900; color:rgba(255,255,255,.7); }
+  .stat .bar { height:14px; border-radius:7px; background:rgba(0,0,0,.28); overflow:hidden; }
+  .stat .bar i { display:block; height:100%; border-radius:7px; background:linear-gradient(90deg, var(--t1), var(--t2)); }
+  .stat .v { font-size:22px; font-weight:900; text-align:right; line-height:1; }
+  .stat .v em { display:block; font-style:normal; font-size:11px; font-weight:800; color:rgba(255,255,255,.55); margin-top:2px; white-space:nowrap; }
+  .mu { display:flex; gap:10px; align-items:flex-start; margin:8px 0; }
+  .mu .ml { width:84px; flex-shrink:0; font-size:13px; font-weight:900; color:rgba(255,255,255,.7); padding-top:6px; }
+  .mu .chips .type small { font-size:11px; font-weight:900; margin-left:5px; opacity:.85; }
   .p-foot { flex-shrink:0; padding:0 36px 20px; font-size:17px; font-weight:800; color:#fff; }
 </style>
 </head>
@@ -218,6 +228,43 @@ function movesCard(p){
   </div>`;
 }
 
+// Pokémon GO type chart: attacker -> {defender: multiplier}
+const SE = 1.6, NVE = 0.625, IMM = 0.390625;
+const CHART = {
+  normal:{rock:NVE,steel:NVE,ghost:IMM}, fire:{fire:NVE,water:NVE,rock:NVE,dragon:NVE,grass:SE,ice:SE,bug:SE,steel:SE},
+  water:{water:NVE,grass:NVE,dragon:NVE,fire:SE,ground:SE,rock:SE}, electric:{electric:NVE,grass:NVE,dragon:NVE,ground:IMM,water:SE,flying:SE},
+  grass:{fire:NVE,grass:NVE,poison:NVE,flying:NVE,bug:NVE,dragon:NVE,steel:NVE,water:SE,ground:SE,rock:SE},
+  ice:{fire:NVE,water:NVE,ice:NVE,steel:NVE,grass:SE,ground:SE,flying:SE,dragon:SE},
+  fighting:{poison:NVE,flying:NVE,psychic:NVE,bug:NVE,fairy:NVE,ghost:IMM,normal:SE,ice:SE,rock:SE,dark:SE,steel:SE},
+  poison:{poison:NVE,ground:NVE,rock:NVE,ghost:NVE,steel:IMM,grass:SE,fairy:SE},
+  ground:{grass:NVE,bug:NVE,flying:IMM,fire:SE,electric:SE,poison:SE,rock:SE,steel:SE},
+  flying:{electric:NVE,rock:NVE,steel:NVE,grass:SE,fighting:SE,bug:SE},
+  psychic:{psychic:NVE,steel:NVE,dark:IMM,fighting:SE,poison:SE},
+  bug:{fire:NVE,fighting:NVE,poison:NVE,flying:NVE,ghost:NVE,steel:NVE,fairy:NVE,grass:SE,psychic:SE,dark:SE},
+  rock:{fighting:NVE,ground:NVE,steel:NVE,fire:SE,ice:SE,flying:SE,bug:SE},
+  ghost:{dark:NVE,normal:IMM,psychic:SE,ghost:SE}, dragon:{steel:NVE,fairy:IMM,dragon:SE},
+  dark:{fighting:NVE,dark:NVE,fairy:NVE,psychic:SE,ghost:SE},
+  steel:{fire:NVE,water:NVE,electric:NVE,steel:NVE,ice:SE,rock:SE,fairy:SE},
+  fairy:{fire:NVE,poison:NVE,steel:NVE,fighting:SE,dragon:SE,dark:SE}
+};
+const fmtX = m => (Math.round(m * 1000) / 1000).toString().replace(/^0/, '') + '×';
+function statsCard(p){
+  const st = p.stats, rk = p.statRanks || {};
+  const rows = st ? [['ATK', st.atk, rk.atk], ['DEF', st.def, rk.def], ['HP', st.sta, rk.sta]].map(([k, v, r]) =>
+    `<div class="stat"><div class="k">${k}</div><div class="bar"><i style="width:${Math.min(100, v / 3.5)}%"></i></div><div class="v">${v}${r ? `<em>#${r}${rk.total ? ' of ' + rk.total : ''}</em>` : ''}</div></div>`).join('') : '';
+  const mult = {};
+  Object.keys(CHART).forEach(a => { mult[a] = p.types.reduce((m, d) => m * (CHART[a][d] || 1), 1); });
+  const group = (f, sort) => Object.entries(mult).filter(([, m]) => f(m)).sort(sort)
+    .map(([t, m]) => `<span class="type" style="--c:${tc(t)}">${esc(cap(t))}<small>${fmtX(m)}</small></span>`).join('');
+  const weak = group(m => m > 1.01, (a, b) => b[1] - a[1]), res = group(m => m < 0.99, (a, b) => a[1] - b[1]);
+  return `<div class="sm">
+    ${rows ? `<div class="card"><h3>Base stats</h3>${rows}${p.releaseDate ? `<div class="note">Released ${esc(p.releaseDate)}</div>` : ''}</div>` : ''}
+    <div class="card" style="--accent:#a78bfa"><h3>Type matchups</h3>
+      ${weak ? `<div class="mu"><div class="ml">Weak to</div><div class="chips">${weak}</div></div>` : ''}
+      ${res ? `<div class="mu"><div class="ml">Resists</div><div class="chips">${res}</div></div>` : ''}
+    </div></div>`;
+}
+
 function evoNodeHTML(n){
   return `<div class="en${n.current ? ' cur' : ''}"><div class="o">${n.data ? `<img src="${n.data}" alt="">` : ''}</div><div class="n">${esc(n.name)}</div></div>`;
 }
@@ -261,6 +308,7 @@ async function render(p){
   $('poster').innerHTML = `
     ${heroHTML(p)}
     <div class="body"><div class="fit" id="fit">
+      ${statsCard(p)}
       ${pveCard(p)}
       ${pvpCard(p)}
       ${evoCard(p)}
