@@ -5714,7 +5714,41 @@ function ensureInfographicModal() {
 
 // Renders `src` in an offscreen iframe and shows the PNG it posts back.
 // `onReady(frame)` runs when the page reports it is ready (used to hand it data).
-function runInfographic(key, src, onReady) {
+function infographicTabPage(tab, body) {
+    try {
+        tab.document.open();
+        tab.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Infographic</title>
+<style>html,body{margin:0;background:#0f1117;color:#e5e7eb;font:600 15px system-ui,sans-serif}main{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px;box-sizing:border-box}
+img{max-width:100%;max-height:calc(100vh - 90px);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,.5)}a{color:#0f1117;background:#fde68a;padding:10px 18px;border-radius:10px;text-decoration:none;font-weight:800}</style></head><body><main>${body}</main></body></html>`);
+        tab.document.close();
+    } catch (e) {}
+}
+
+function runInfographic(key, src, onReady, tab = null) {
+    if (tab) {
+        const esc = t => String(t || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const done = d => infographicTabPage(tab, `<img src="${d.url}" alt="Infographic"><a href="${d.url}" download="${esc(d.name || 'infographic.png')}">Download PNG</a>`);
+        infographicTabPage(tab, '<div>Generating infographic…</div>');
+        if (infographicCache.has(key)) { done(infographicCache.get(key)); return; }
+        const frame = document.createElement('iframe');
+        frame.setAttribute('aria-hidden', 'true');
+        frame.tabIndex = -1;
+        frame.style.cssText = 'position: fixed; left: -12000px; top: 0; width: 1100px; height: 900px; border: 0; visibility: hidden;';
+        frame.src = src;
+        const onMsg = e => {
+            if (e.source !== frame.contentWindow || !e.data || e.data.source !== 'pogo-infographic') return;
+            const d = e.data;
+            if (d.type === 'ready') { if (onReady) onReady(frame); return; }
+            if (d.type === 'status') { infographicTabPage(tab, `<div>${esc(d.text)}</div>`); return; }
+            window.removeEventListener('message', onMsg);
+            frame.remove();
+            if (d.type === 'done') { infographicCache.set(key, d); done(d); }
+            else infographicTabPage(tab, `<div>${esc(d.text || 'Could not generate the infographic.')}</div>`);
+        };
+        window.addEventListener('message', onMsg);
+        document.body.appendChild(frame);
+        return;
+    }
     const modal = ensureInfographicModal();
     const img = modal.querySelector('.infographic-img');
     const loading = modal.querySelector('.infographic-loading');
@@ -6156,12 +6190,12 @@ window.openPokemonInfographic = function () {
     const basePoke = pokemonDatabase.find(p => p.id === activeModalPokemonId);
     if (!basePoke) return;
     const formPoke = activeModalFormPoke && String(activeModalFormPoke.id) === String(basePoke.id) ? activeModalFormPoke : basePoke;
+    const tab = window.open('', '_blank');   // open now, inside the click, so popup blockers allow it
     const payload = buildPokemonInfographicData(basePoke, formPoke);
-    const modal = ensureInfographicModal();
-    modal.querySelector('.infographic-controls').classList.add('hidden');
+    if (!tab) ensureInfographicModal().querySelector('.infographic-controls').classList.add('hidden');
     const key = `pokemon:${payload.id}:${payload.name}:${pvpRankingsData ? pvpRankingsData.updatedAt : ''}:${pveRankingsData ? pveRankingsData.updatedAt : ''}:${payload.evoTree ? 1 : 0}`;
     runInfographic(key, `pokemon-infographic.html?embed=1`,
-        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'pokemon', pokemon: payload }, location.origin));
+        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'pokemon', pokemon: payload }, location.origin), tab);
 };
 
 function buildDifficultyHtml(estNum) {
