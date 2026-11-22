@@ -5861,9 +5861,35 @@ window.openEventsInfographic = function (mode, offset) {
 };
 
 // ---------- PvP tab (PvPoke rankings, pvpRankings.json from the scraper) ----------
+// CP multipliers, levels 1..50 in half steps
+const PVP_CPM = (() => {
+    const L = [0.094,0.16639787,0.21573247,0.25572005,0.29024988,0.3210876,0.34921268,0.3752356,0.39956728,0.4225,0.44310755,0.4627984,0.48168495,0.49985844,0.51739395,0.5343543,0.5507927,0.5667545,0.5822789,0.5974,0.6121573,0.6265671,0.64065295,0.65443563,0.667934,0.6811649,0.69414365,0.7068842,0.7193991,0.7317,0.7377695,0.74378943,0.74976104,0.7556855,0.76156384,0.76739717,0.7731865,0.77893275,0.784637,0.7903,0.7953,0.8003,0.8053,0.8103,0.8153,0.8203,0.8253,0.8303,0.8353,0.8403];
+    const out = [];
+    L.forEach((c, i) => {
+        out.push({ lvl: i + 1, cpm: c });
+        if (i + 1 < L.length) out.push({ lvl: i + 1.5, cpm: i + 1 < 40 ? Math.sqrt((c * c + L[i + 1] * L[i + 1]) / 2) : (c + L[i + 1]) / 2 });
+    });
+    return out;
+})();
+// Rank-1 (highest stat product) IVs under a CP cap, up to level 50
+function pvpRank1Ivs(stats, cap) {
+    if (!stats) return null;
+    const cpOf = (a, d, s, m) => Math.max(10, Math.floor((stats.atk + a) * Math.sqrt(stats.def + d) * Math.sqrt(stats.sta + s) * m * m / 10));
+    if (!cap) return { iv: '15/15/15', lvl: 50, cp: cpOf(15, 15, 15, 0.8403) };
+    let best = null;
+    for (let a = 0; a < 16; a++) for (let d = 0; d < 16; d++) for (let s = 0; s < 16; s++) {
+        let lo = 0, hi = PVP_CPM.length - 1, k = -1;
+        while (lo <= hi) { const mid = (lo + hi) >> 1; if (cpOf(a, d, s, PVP_CPM[mid].cpm) <= cap) { k = mid; lo = mid + 1; } else hi = mid - 1; }
+        if (k < 0) continue;
+        const m = PVP_CPM[k].cpm;
+        const sp = (stats.atk + a) * m * (stats.def + d) * m * Math.floor((stats.sta + s) * m);
+        if (!best || sp > best.sp) best = { sp, iv: `${a}/${d}/${s}`, lvl: PVP_CPM[k].lvl, cp: cpOf(a, d, s, m) };
+    }
+    return best && { iv: best.iv, lvl: best.lvl, cp: best.cp };
+}
 const PVP_LEAGUES = [
-    { key: 'great', label: 'Great League', short: 'GL', cap: '1,500 CP', color: '#3b82f6' },
-    { key: 'ultra', label: 'Ultra League', short: 'UL', cap: '2,500 CP', color: '#eab308' },
+    { key: 'great', label: 'Great League', short: 'GL', cap: '1,500 CP', cpCap: 1500, color: '#3b82f6' },
+    { key: 'ultra', label: 'Ultra League', short: 'UL', cap: '2,500 CP', cpCap: 2500, color: '#eab308' },
     { key: 'master', label: 'Master League', short: 'ML', cap: 'No CP cap', color: '#a855f7' }
 ];
 const PVP_REGIONAL_TAGS = ['alolan', 'galarian', 'hisuian', 'paldean'];
@@ -6055,9 +6081,10 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         let best = null;
         stages.forEach(st => getPvpEntriesFor(st.poke).forEach(e => {
             const r = e[L.key];
-            if (r && (!best || r[0] < best.rank)) best = { rank: r[0], score: r[1], moveset: (r[2] || []).map(pvpMoveName), name: st.name, img: st.img, shadow: e.shadow, current: st.current };
+            if (r && (!best || r[0] < best.rank)) best = { rank: r[0], score: r[1], moveset: (r[2] || []).map(pvpMoveName), name: st.name, img: st.img, shadow: e.shadow, current: st.current, stats: st.poke.stats };
         }));
         if (best && best.current) best.moveset.forEach(m => usedMoves.add(normMove(m)));
+        if (best) { best.r1 = pvpRank1Ivs(best.stats, L.cpCap); delete best.stats; }
         return { label: L.label, cap: L.cap, color: L.color, best };
     });
 
@@ -6105,6 +6132,7 @@ function buildPokemonInfographicData(basePoke, formPoke) {
         legendary: raw ? raw.pokemonClass || null : null,
         buddy,
         releaseDate: basePoke.releaseDate || null,
+        obtaining: (basePoke.obtaining || []).map(o => String(o.method || '').trim()).filter(Boolean),
         stats: poke.stats || basePoke.stats || null,
         statRanks: (() => {
             const st = poke.stats || basePoke.stats;
