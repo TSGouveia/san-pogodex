@@ -3255,7 +3255,7 @@ function renderPokedex(forceClear = false) {
         let subTitleText = '';
 
         if (currentDexType === 'shiny') {
-            const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
+            const pokeApiId = getRegionalFormPokeApiId(poke.name) || (Number(poke.id) === 999 ? 10263 : poke.id);
             imgSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${pokeApiId}.png`;
         } else if (currentDexType === 'mega') {
             const formLookupName = poke.displayName || (poke.isPrimal ? `Primal ${poke.name}` : (poke.megaForm && poke.megaForm !== 'MEGA' ? `Mega ${poke.name} ${poke.megaForm}` : `Mega ${poke.name}`));
