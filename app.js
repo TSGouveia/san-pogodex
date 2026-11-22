@@ -396,7 +396,7 @@ function getActivePokemonImageUrl(pokeOrId, isShiny = null) {
     if (!poke) return '';
     const isShinyReq = (isShiny === true || (isShiny === null && currentDexType === 'shiny'));
     if (isShinyReq) {
-        const pokeApiId = getRegionalFormPokeApiId(poke.name) || poke.id;
+        const pokeApiId = getRegionalFormPokeApiId(poke.name) || (Number(poke.id) === 999 ? 10263 : poke.id);
         return `${POKE_SPRITE_SHINY_BASE_URL}/${pokeApiId}.png`;
     }
     return poke.img || `${POKE_SPRITE_BASE_URL}/${poke.id}.png`;
@@ -1972,7 +1972,7 @@ function formatPokemon(p) {
         name: p.names.English,
         gen: gen,
         types: types,
-        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr}.png`,
+        img: `${POKE_SPRITE_BASE_URL}/${p.dexNr === 999 ? 10263 : p.dexNr}.png`,
         stats: {
             atk: p.stats ? p.stats.attack : 100,
             def: p.stats ? p.stats.defense : 100,
