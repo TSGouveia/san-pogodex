@@ -134,7 +134,7 @@
   .mu { display:flex; gap:10px; align-items:flex-start; margin:8px 0; }
   .mu .ml { width:84px; flex-shrink:0; font-size:13px; font-weight:900; color:rgba(255,255,255,.7); padding-top:6px; }
   .mu .chips .type small { font-size:11px; font-weight:900; margin-left:5px; opacity:.85; }
-  .tag.wx { background:rgba(125,211,252,.16); color:#e0f2fe; }
+  .types .wx { display:inline-flex; align-items:center; font-size:14px; font-weight:900; letter-spacing:.05em; text-transform:uppercase; padding:0 12px; border-radius:999px; background:rgba(0,0,0,.28); color:#e0f2fe; box-shadow:inset 0 0 0 1px rgba(125,211,252,.35); }
   .r1 { margin-top:8px; padding-top:7px; border-top:1px solid rgba(255,255,255,.1); font-size:12.5px; font-weight:800; color:rgba(255,255,255,.7); }
   .r1 span { display:block; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.5); }
   .r1 b { font-size:17px; font-weight:900; color:#fde68a; margin-right:6px; }
@@ -162,7 +162,7 @@ const SPARKLES = [[2, 10, 22, .95], [88, 4, 16, .8], [96, 46, 24, .9], [-6, 58, 
 const WEATHER = { sunny:['☀️','Sunny',['fire','grass','ground']], rainy:['🌧️','Rainy',['water','electric','bug']], partly:['⛅','Partly Cloudy',['normal','rock']],
   cloudy:['☁️','Cloudy',['fairy','fighting','poison']], windy:['🌬️','Windy',['dragon','flying','psychic']], snow:['❄️','Snow',['ice','steel']], fog:['🌫️','Fog',['dark','ghost']] };
 const weatherTags = types => Object.values(WEATHER).filter(([, , ts]) => ts.some(t => types.includes(t)))
-  .map(([i, n]) => `<span class="tag wx">${i} ${n} boost</span>`).join('');
+  .map(([i, n]) => `<span class="wx">${i} ${n}</span>`).join('');
 
 function heroHTML(p){
   const c = p.cps || {};
@@ -171,15 +171,14 @@ function heroHTML(p){
     p.legendary === 'POKEMON_CLASS_MYTHIC' ? '<span class="tag leg">Mythical</span>' : '',
     p.mega ? '<span class="tag mega">Mega</span>' : '',
     p.gmax ? '<span class="tag gmax">Gigantamax</span>' : '',
-    p.shadow ? '<span class="tag shadow">Shadow</span>' : '',
     p.buddy ? `<span class="tag">${esc(p.buddy)} km / candy</span>` : '',
-  ].join('') + weatherTags(p.types);
+  ].join('');
   const cp = (label, sub, v, cls = '') => v ? `<div class="cp ${cls}"><small>${label}</small><b>${v}</b><em>${sub}</em></div>` : '';
   return `<div class="hero">
     <div class="h-info">
       <div class="h-num">#${esc(p.num)}</div>
       <div class="h-name${p.name.length > 11 ? ' long' : ''}">${esc(p.name)}</div>
-      <div class="types">${p.types.map(t => `<span class="type" style="--c:${tc(t)}">${esc(cap(t))}</span>`).join('')}</div>
+      <div class="types">${p.types.map(t => `<span class="type" style="--c:${tc(t)}">${esc(cap(t))}</span>`).join('')}${weatherTags(p.types)}</div>
       <div class="tags">${tags}</div>
       ${c.raidsL20 ? `<div class="cps">
         ${cp('Research', 'Level 15', c.researchL15 && c.researchL15.max)}
