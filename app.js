@@ -200,6 +200,9 @@ function getRegionalFormPokeApiId(name) {
         return '10252';
     }
 
+    // Gimmighoul: use the Roaming form artwork instead of the Chest
+    if (/gimmighoul/.test(nameClean)) return '10263';
+
     // Direct checks for Basculin
     if (nameClean.includes('white-striped') || nameClean.includes('white striped')) {
         return '10247';
@@ -3627,7 +3630,7 @@ function applyModalPokemonForm(basePoke, rf) {
     if (!rf) {
         modalPokeName.textContent = basePoke.name;
         const normalImg = basePoke.img;
-        const shinyImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${basePoke.id}.png`;
+        const shinyImg = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${Number(basePoke.id) === 999 ? 10263 : basePoke.id}.png`;
 
         if (modalPokeImg) {
             modalPokeImg.dataset.normal = normalImg;
