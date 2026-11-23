@@ -629,13 +629,15 @@ function applyRaidClock(rerender = false) {
     const next = allRaidBosses.flatMap(r => [raidTime(r.startDate), raidTime(r.endDate)]).filter(t => t && t > now).sort((a, b) => a - b)[0];
     if (next) raidClockTimer = setTimeout(() => applyRaidClock(true), Math.min(next - now + 1000, 2 ** 31 - 1));
 }
-// "Mon 24 Nov, 10:00" in the viewer's locale
-const fmtRaidDate = t => new Date(t).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+// "Mon 16/11, 06:00" (English, 24h, this device's time zone)
+const fmtRaidDate = t => new Date(t).toLocaleString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+// one line: start -> end
 function raidDatesHtml(raid) {
     const s = raidTime(raid.startDate), e = raidTime(raid.endDate);
     if (s == null && e == null) return '';
-    const part = (label, t, color) => `<div><i class="fa-regular ${label === 'Starts' ? 'fa-calendar-plus' : 'fa-calendar-xmark'}" style="font-size:0.65rem; opacity:0.7;"></i> <span>${label}: <strong style="color:${color}">${fmtRaidDate(t)}</strong></span></div>`;
-    return `<div class="rotation-cp-details raid-dates">${s != null ? part('Starts', s, '#86efac') : ''}${e != null ? part('Ends', e, '#fda4af') : ''}</div>`;
+    const start = s != null ? `<strong style="color:#86efac">${fmtRaidDate(s)}</strong>` : '';
+    const end = e != null ? `<strong style="color:#fda4af">${fmtRaidDate(e)}</strong>` : '';
+    return `<div class="rotation-cp-details raid-dates"><div><i class="fa-regular fa-calendar" style="font-size:0.65rem; opacity:0.7;"></i> <span>${start}${start && end ? ' → ' : ''}${end}</span></div></div>`;
 }
 let liveMaxBattles = [];
 let liveResearch = [];
