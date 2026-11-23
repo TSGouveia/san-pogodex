@@ -1,5 +1,120 @@
 [
     {
+        "category": "Twilight Wishes Tasks",
+        "task": "Catch 10 Pokémon",
+        "rewards": [
+            {
+                "name": "Electrike",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm309.icon.png",
+                "shiny": true,
+                "min_cp": "380",
+                "max_cp": "413",
+                "combatPower": {
+                    "normal": {
+                        "min": 380,
+                        "max": 413
+                    }
+                }
+            },
+            {
+                "name": "Greavard",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
+                "shiny": true,
+                "min_cp": "402",
+                "max_cp": "435",
+                "combatPower": {
+                    "normal": {
+                        "min": 402,
+                        "max": 435
+                    }
+                }
+            },
+            {
+                "name": "Flamigo",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm973.icon.png",
+                "shiny": true,
+                "min_cp": "1125",
+                "max_cp": "1181",
+                "combatPower": {
+                    "normal": {
+                        "min": 1125,
+                        "max": 1181
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Twilight Wishes Tasks",
+        "task": "Explore 1 km",
+        "rewards": [
+            {
+                "name": "Staryu",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm120.icon.png",
+                "shiny": true,
+                "min_cp": "459",
+                "max_cp": "495",
+                "combatPower": {
+                    "normal": {
+                        "min": 459,
+                        "max": 495
+                    }
+                }
+            },
+            {
+                "name": "Elgyem",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm605.icon.png",
+                "shiny": true,
+                "min_cp": "554",
+                "max_cp": "593",
+                "combatPower": {
+                    "normal": {
+                        "min": 554,
+                        "max": 593
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Twilight Wishes Tasks",
+        "task": "Hatch an Egg",
+        "rewards": [
+            {
+                "name": "Maschiff",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm942.icon.png",
+                "shiny": false,
+                "min_cp": "560",
+                "max_cp": "600",
+                "combatPower": {
+                    "normal": {
+                        "min": 560,
+                        "max": 600
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "category": "Twilight Wishes Tasks",
+        "task": "Use a Lure Module at a PokéStop",
+        "rewards": [
+            {
+                "name": "Applin",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm840.icon.png",
+                "shiny": true,
+                "min_cp": "277",
+                "max_cp": "306",
+                "combatPower": {
+                    "normal": {
+                        "min": 277,
+                        "max": 306
+                    }
+                }
+            }
+        ]
+    },
+    {
         "category": "Dynamax Trails Tasks",
         "task": "Catch 8 Pokémon",
         "rewards": [

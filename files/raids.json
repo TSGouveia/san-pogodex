@@ -2652,5 +2652,255 @@
                 }
             ]
         }
+    ],
+    "calendar": [
+        {
+            "pokemonId": "LIEPARD",
+            "name": "Liepard",
+            "tier": "RAID_LEVEL_3",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "GOLURK",
+            "name": "Golurk",
+            "tier": "RAID_LEVEL_3",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MEOWTH_ALOLA_FORM",
+            "name": "Meowth Alola",
+            "tier": "RAID_LEVEL_1",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MISDREAVUS",
+            "name": "Misdreavus",
+            "tier": "RAID_LEVEL_1",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "YAMASK_GALARIAN_FORM",
+            "name": "Yamask Galarian",
+            "tier": "RAID_LEVEL_1",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "SANDYGAST",
+            "name": "Sandygast",
+            "tier": "RAID_LEVEL_1",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MAROWAK_ALOLA_FORM",
+            "name": "Marowak Alola",
+            "tier": "RAID_LEVEL_3",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T10:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "CRESSELIA",
+            "name": "Cresselia",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "DARKRAI",
+            "name": "Darkrai",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "BANETTE_MEGA",
+            "name": "Mega Banette",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-11-24T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "CLEFABLE_MEGA",
+            "name": "Mega Clefable",
+            "tier": "RAID_LEVEL_4_MEGA_ENHANCED",
+            "start": "2026-11-28T14:00:00.000",
+            "end": "2026-11-28T17:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "ESPEON_GOFEST_2024_SSCARF_FORM",
+            "name": "Espeon Gofest 2024 Sscarf",
+            "tier": "RAID_LEVEL_3",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "UMBREON_GOFEST_2024_MSCARF_FORM",
+            "name": "Umbreon Gofest 2024 Mscarf",
+            "tier": "RAID_LEVEL_3",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "BEEDRILL_MEGA",
+            "name": "Mega Beedrill",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "HOUNDOOM_MEGA",
+            "name": "Mega Houndoom",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "SABLEYE_MEGA",
+            "name": "Mega Sableye",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MANECTRIC_MEGA",
+            "name": "Mega Manectric",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "PIKACHU",
+            "name": "Pikachu",
+            "tier": "RAID_LEVEL_1",
+            "start": "2026-11-24T10:00:00.000",
+            "end": "2026-11-30T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "LARVITAR_SHADOW_FORM",
+            "name": "Shadow Larvitar",
+            "tier": "RAID_LEVEL_1_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MUDKIP_SHADOW_FORM",
+            "name": "Shadow Mudkip",
+            "tier": "RAID_LEVEL_1_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "MAKUHITA_SHADOW_FORM",
+            "name": "Shadow Makuhita",
+            "tier": "RAID_LEVEL_1_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "CRANIDOS_SHADOW_FORM",
+            "name": "Shadow Cranidos",
+            "tier": "RAID_LEVEL_1_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "POLIWHIRL_SHADOW_FORM",
+            "name": "Shadow Poliwhirl",
+            "tier": "RAID_LEVEL_3_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "PILOSWINE_SHADOW_FORM",
+            "name": "Shadow Piloswine",
+            "tier": "RAID_LEVEL_3_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "PRINPLUP_SHADOW_FORM",
+            "name": "Shadow Prinplup",
+            "tier": "RAID_LEVEL_3_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T20:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "DEOXYS_NORMAL_FORM",
+            "name": "Deoxys Normal",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-25T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "DEOXYS_ATTACK_FORM",
+            "name": "Deoxys Attack",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-25T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "DEOXYS_DEFENSE_FORM",
+            "name": "Deoxys Defense",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-25T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "DEOXYS_SPEED_FORM",
+            "name": "Deoxys Speed",
+            "tier": "RAID_LEVEL_5",
+            "start": "2026-11-25T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "METAGROSS_MEGA",
+            "name": "Mega Metagross",
+            "tier": "RAID_LEVEL_MEGA",
+            "start": "2026-11-25T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        },
+        {
+            "pokemonId": "TORNADUS_SHADOW_FORM",
+            "name": "Shadow Incarnate Tornadus",
+            "tier": "RAID_LEVEL_5_SHADOW",
+            "start": "2026-11-16T06:00:00.000",
+            "end": "2026-12-01T22:00:00.000",
+            "shiny": true
+        }
     ]
 }
