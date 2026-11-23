@@ -485,10 +485,44 @@ def get_boss_image_url(name, dex_nr):
 
     return f"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/{dex_nr}.png" if dex_nr else ""
 
+def _pb_time(ms, local):
+    """Pokebattler timestamp -> ISO string. 'localTime' rotations are stored as US Pacific wall time,
+    so they become a zone-less local time (like LeekDuck's), meant to be read in the viewer's time zone."""
+    if not ms:
+        return None
+    utc = datetime.datetime.fromtimestamp(ms / 1000.0, datetime.timezone.utc)
+    if not local:
+        return utc.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+    try:
+        from zoneinfo import ZoneInfo
+        wall = utc.astimezone(ZoneInfo("America/Los_Angeles"))
+    except Exception:
+        wall = utc - datetime.timedelta(hours=8)
+    return wall.strftime("%Y-%m-%dT%H:%M:%S.000")
+
+def build_raid_calendar(pb_data, format_boss_name):
+    """Raid rotations with start/end dates (Pokebattler's 'breakingNews' list, the calendar on pokebattler.com/raids)."""
+    out = []
+    for r in pb_data.get("breakingNews", []) or []:
+        pid = r.get("pokemon") or ""
+        if not pid or r.get("type", "RAID_TYPE_RAID") != "RAID_TYPE_RAID":
+            continue
+        local = bool(r.get("localTime"))
+        out.append({
+            "pokemonId": pid,
+            "name": format_boss_name(pid, pid),
+            "tier": r.get("tier", ""),
+            "start": _pb_time(r.get("startDate"), local),
+            "end": _pb_time(r.get("endDate"), local),
+            "shiny": bool(r.get("shiny")),
+        })
+    return out
+
 def scrape_raids():
     print("Scraping Raids directly from PokéBattler API...")
     bosses = []
     schedule_entries = []
+    calendar = []
     max_battles = []
     poke_map = load_pokedex_map()
     shiny_dexes, shiny_names = load_shiny_set()
@@ -522,6 +556,7 @@ def scrape_raids():
         res = requests.get(pb_url, headers=HEADERS, timeout=15)
         if res.status_code == 200:
             pb_data = res.json()
+            calendar = build_raid_calendar(pb_data, format_boss_name)
             target_tiers = {
                 'RAID_LEVEL_1': '1-Star Raids',
                 'RAID_LEVEL_3': '3-Star Raids',
@@ -813,7 +848,8 @@ def scrape_raids():
     # Wrap result into rich payload containing current bosses and schedule calendar
     raid_payload = {
         "current": bosses,
-        "schedule": schedule_entries
+        "schedule": schedule_entries,
+        "calendar": calendar
     }
 
     print(f"  -> Saved {len(bosses)} active raid bosses and {len(schedule_entries)} scheduled rotations from Pokémon GO Hub, plus {len(max_battles)} max battle bosses.")

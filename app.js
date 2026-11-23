@@ -612,6 +612,7 @@ function isPokemonMissing(pokeOrId, dexType = currentDexType) {
 }
 let liveEggs = [];
 let liveRaids = [];
+let liveRaidCalendar = []; // Pokebattler rotations with start/end (events infographic)
 let liveRaidSchedule = [];
 let liveMaxBattles = [];
 let liveResearch = [];
@@ -1541,6 +1542,7 @@ function buildPokebattlerMaxUrl(bossName) {
         if (rawRaids && typeof rawRaids === 'object' && !Array.isArray(rawRaids) && (rawRaids.current || rawRaids.schedule)) {
             rawRaidList = Array.isArray(rawRaids.current) ? rawRaids.current : [];
             rawScheduleList = Array.isArray(rawRaids.schedule) ? rawRaids.schedule : [];
+            liveRaidCalendar = Array.isArray(rawRaids.calendar) ? rawRaids.calendar : [];
         } else if (Array.isArray(rawRaids)) {
             rawRaidList = rawRaids;
         }
@@ -1756,8 +1758,7 @@ function buildPokebattlerMaxUrl(bossName) {
                     end: ev.end,
                     desc: ev.heading || ev.description || '',
                     details: ev.extraData || null,
-                    bonus: ev.bonus || null,
-                    raids: Array.isArray(ev.raids) ? ev.raids : null
+                    bonus: ev.bonus || null
                 });
             });
         }
@@ -5876,15 +5877,7 @@ window.openEventsInfographic = function (mode, offset) {
                     return megaImg && megaImg !== base.img
                         ? { name: `Mega ${p.name}`, img: megaImg, ...extra }
                         : { name: p.name, img: p.img, ...extra };
-                }),
-                // raid bosses listed on the event page itself (e.g. an event's Mega Raids)
-                raids: (ev.raids || []).map(t => ({
-                    tier: t.tier,
-                    bosses: (t.bosses || []).map(b => {
-                        const base = findPokemonByName(b.name.replace(/^\s*(super\s+)?(mega|primal|shadow)\s+/i, ''));
-                        return { name: b.name, img: (base && getPokemonImageUrl(b.name, base, false)) || b.image, types: base ? typesOf(base.id) : [] };
-                    })
-                }))
+                })
             };
         });
     const yearMs = 365 * 24 * 3600 * 1000;
@@ -5894,13 +5887,19 @@ window.openEventsInfographic = function (mode, offset) {
         return !isNaN(d.getTime()) && Math.abs(d.getTime() - Date.now()) < yearMs;
     }).map(p => ({ date: p.releaseDate, name: p.name, img: getActivePokemonImageUrl(p, false), types: p.types || [] }));
 
-    const sig = events.map(ev => `${ev.title}|${ev.start}|${ev.end}|${ev.pokemon.length}`).join('\n') + debuts.map(d => d.name + d.date).join();
+    // Raid rotations with dates from Pokebattler (covers bosses LeekDuck only lists inside an event page)
+    const raidCalendar = (liveRaidCalendar || []).map(r => {
+        const base = findPokemonByName(String(r.name || '').replace(/^\s*(super\s+)?(mega|primal|shadow)\s+/i, ''));
+        return { name: r.name, tier: r.tier, start: r.start, end: r.end, species: base ? base.name : '',
+            img: base ? getPokemonImageUrl(r.name, base, false) : '', types: base ? typesOf(base.id) : [] };
+    });
+    const sig = raidCalendar.map(r => r.name + r.start + r.end).join() + events.map(ev => `${ev.title}|${ev.start}|${ev.end}|${ev.pokemon.length}`).join('\n') + debuts.map(d => d.name + d.date).join();
     let hash = 0;
     for (let i = 0; i < sig.length; i++) hash = (hash * 31 + sig.charCodeAt(i)) | 0;
 
     runInfographic(`events:${st.mode}:${st.offset}:${new Date().toDateString()}:${hash}`,
         `events-infographic.html?embed=1&mode=${st.mode}&offset=${st.offset}`,
-        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events, debuts }, location.origin));
+        frame => frame.contentWindow.postMessage({ source: 'pogo-site', type: 'events', events, debuts, raidCalendar }, location.origin));
 };
 
 // ---------- PvP tab (PvPoke rankings, pvpRankings.json from the scraper) ----------

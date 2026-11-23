@@ -5,37 +5,6 @@ HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 }
 
-def scrape_event_raids(url):
-    """Raid bosses listed on an event page (e.g. the Mega Raids of Twilight Wishes), grouped by tier heading."""
-    try:
-        res = requests.get(url, headers=HEADERS, timeout=10)
-        if res.status_code != 200:
-            return []
-        soup = BeautifulSoup(res.text, "html.parser")
-        header = soup.select_one("h2.event-section-header.raids")
-        if not header:
-            return []
-        tiers, tier = [], None
-        for el in header.find_next_siblings():
-            if el.name == "h2":
-                break
-            if el.name == "h3":
-                tier = {"tier": el.get_text(" ", strip=True), "bosses": []}
-                tiers.append(tier)
-            elif tier is not None and el.name == "ul":
-                for li in el.select("li.pkmn-list-item"):
-                    name_el = li.select_one(".pkmn-name")
-                    img_el = li.select_one(".pkmn-list-img img")
-                    if name_el and name_el.get_text(strip=True):
-                        tier["bosses"].append({
-                            "name": name_el.get_text(" ", strip=True),
-                            "image": img_el.get("src", "") if img_el else "",
-                        })
-        return [t for t in tiers if t["bosses"]]
-    except Exception as e:
-        print(f"  Error fetching event raids {url}: {e}")
-        return []
-
 def scrape_events():
     print("Scraping Events...")
     event_dates = {}
@@ -108,9 +77,6 @@ def scrape_events():
                     "start": start_date,
                     "end": end_date
                 }
-                raids = scrape_event_raids(event_data["link"])
-                if raids:
-                    event_data["raids"] = raids
                 all_events.append(event_data)
 
         # Spotlight Hour: the special bonus is only on the event page ("... and the special bonus is 2× Catch Candy.")

@@ -224,7 +224,7 @@ const Q = new URLSearchParams(location.search);
 const EMBEDDED = !!Q.get('embed');
 let mode = Q.get('mode') === 'month' ? 'month' : 'week';
 let offset = parseInt(Q.get('offset') || '0', 10) || 0;
-let data = { events: [], debuts: [] };
+let data = { events: [], debuts: [], raidCalendar: [] };
 
 function footCredit(){ try { return localStorage.getItem('ig_foot') || '@LazySan'; } catch { return '@LazySan'; } }
 
@@ -251,13 +251,13 @@ const RAID_TIERS = [
   { k:'shadow', label:'Shadow Raids', c:'#6366f1', re:/\bin shadow raids/i },
   { k:'max',    label:'Max Battles',  c:'#ec4899', re:/\bin max battles\b/i },
 ];
-// Tier heading on an event page ("Mega Raids", "Five-Star Raids", ...) -> RAID_TIERS key
-function pageTierKey(h){
-  const t = (h || '').toLowerCase();
-  if (/shadow/.test(t)) return 'shadow';
-  if (/mega|primal/.test(t)) return 'mega';
-  if (/max|dynamax|gigantamax/.test(t)) return 'max';
-  if (/five|5/.test(t)) return '5star';
+// Pokebattler tier (RAID_LEVEL_MEGA, RAID_LEVEL_5_SHADOW, ...) -> RAID_TIERS key
+function pbTierKey(t){
+  t = String(t || '');
+  if (/MAX/.test(t)) return 'max';
+  if (/SHADOW/.test(t)) return /_5_/.test(t + '_') ? 'shadow' : null;
+  if (/MEGA/.test(t)) return 'mega';
+  if (/^RAID_LEVEL_(5|6|ULTRA_BEAST)$/.test(t)) return '5star';
   return null;
 }
 
@@ -290,7 +290,7 @@ function normalise(raw){
     const [kl, kc] = eventKind(title);
     out.push({ title, start, end, hours: (end - start) / 3600000, banner: ev.banner || ev.image || '', loc: ev.loc || null,
       kind: ev.typeLabel && ev.typeLabel !== 'Event' ? ev.typeLabel : kl, color: ev.color && ev.typeLabel !== 'Event' ? ev.color : kc,
-      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null, raids: Array.isArray(ev.raids) ? ev.raids : [] });
+      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null });
   });
   return out.sort((a, b) => a.start - b.start);
 }
@@ -328,16 +328,16 @@ function collect(p){
   const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).flatMap(e => e.pokemon.length
     ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end, title: e.title }))
     : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) }));
-  // bosses that only appear on an event's page (e.g. the Mega Raids of a week-long event), unless a rotation already covers them
-  evs.forEach(e => e.raids.forEach(rt => {
-    const t = raids.find(x => x.k === pageTierKey(rt.tier));
-    if (!t) return;
-    (rt.bosses || []).forEach(b => {
-      const base = (b && b.name || '').replace(/\s*\(.*?\)\s*/g, ' ').trim().toLowerCase();
-      if (!base || t.bosses.some(x => (x.name + ' ' + (x.title || '')).toLowerCase().includes(base))) return;
-      t.bosses.push({ name: b.name, poke: b.img ? { name: b.name, img: b.img, types: b.types || [] } : null, start: e.start, end: e.end });
-    });
-  }));
+  // Pokebattler's raid calendar fills in bosses LeekDuck only lists inside an event page (e.g. an event's Mega Raids),
+  // unless a LeekDuck rotation already covers that Pokémon; raid days / hours (< 1 day) stay as day cards
+  (data.raidCalendar || []).forEach(r => {
+    const t = raids.find(x => x.k === pbTierKey(r.tier));
+    const start = new Date(r.start), end = new Date(r.end);
+    if (!t || isTba(r.start) || isTba(r.end) || !(end > start) || end - start < DAY || !(end > p.from && start < p.to)) return;
+    const sp = String(r.species || r.name || '').toLowerCase();
+    if (!sp || t.bosses.some(x => (x.name + ' ' + (x.title || '')).toLowerCase().includes(sp))) return;
+    t.bosses.push({ name: r.name, poke: r.img ? { name: r.name, img: r.img, types: r.types || [] } : null, start, end });
+  });
   for (let i = raids.length - 1; i >= 0; i--) if (!raids[i].bosses.length) raids.splice(i, 1);
   // the same boss returning in the period is one entry with several date ranges
   raids.forEach(t => {
@@ -672,7 +672,7 @@ if (EMBEDDED) {
   const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.protocol === 'file:' || location.origin === 'null' ? '*' : location.origin); } catch {} };
   window.addEventListener('message', async e => {
     if (e.source !== parent || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'events') return;
-    data = { events: e.data.events || [], debuts: e.data.debuts || [] };
+    data = { events: e.data.events || [], debuts: e.data.debuts || [], raidCalendar: e.data.raidCalendar || [] };
     try {
       post({ type: 'status', text: 'Loading Pokémon images…' });
       const { p } = await render();
