@@ -170,6 +170,12 @@
   .ds-cp > div, .ds-weak, .ds-bonus { background:rgba(0,0,0,.28); border-radius:12px; padding:8px 12px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); padding:7px 11px; }
   .ds-cp b { display:block; font-size:36px; font-weight:900; line-height:1.05; color:#ffd54a; }
   .ds-cp .bst b { color:#7dd3fc; }
+  /* 3+ formes (e.g. Deoxys Raid Hour): one compact row per forme */
+  .ds-cpt { display:grid; grid-template-columns:auto 1fr 1fr; align-items:center; column-gap:12px; row-gap:3px; background:rgba(0,0,0,.28); border-radius:12px; padding:7px 11px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); }
+  .ds-cpt small { margin-bottom:2px; }
+  .ds-cpt i { font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); }
+  .ds-cpt b { font-size:24px; font-weight:900; line-height:1.1; color:#ffd54a; }
+  .ds-cpt b.bst { color:#7dd3fc; }
   .ds-weak div { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
   .ds-weak span { position:relative; } .ds-weak img { width:34px; height:34px; display:block; }
   .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
@@ -381,7 +387,14 @@ function daySide(it){
   if (CATCH_KIND.test(it.kind + ' ' + (it.title || ''))) {
     const pairs = [], seen = new Set();
     it.pokemon.forEach(x => { if (!x.cp) return; const k = x.cp + '/' + x.cpB; if (seen.has(k)) return; seen.add(k); pairs.push(x); });
-    pairs.slice(0, 2).forEach(x => {
+    if (pairs.length > 2) {
+      // "Deoxys (Attack)" -> "Attack"
+      const short = n => { const m = String(n).match(/\(([^)]+)\)\s*$/); return m ? m[1] : n; };
+      const wx = wxOf(pairs[0].types);
+      blocks.push(`<div class="ds-cpt"><span></span><small>Catch CP</small><small>${wx.map(w => icon(WX_URL(w), w)).join('') || 'Boosted'}</small>
+        ${pairs.slice(0, 4).map(x => `<i>${esc(short(x.name))}</i><b>${x.cp}</b><b class="bst">${x.cpB || ''}</b>`).join('')}
+      </div>`);
+    } else pairs.forEach(x => {
       const wx = wxOf(x.types);
       blocks.push(`<div class="ds-cp">${pairs.length > 1 ? `<i>${esc(x.name)}</i>` : ''}
         <div><small>Catch CP</small><b>${x.cp}</b></div>
