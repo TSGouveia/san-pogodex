@@ -37,6 +37,11 @@ def load_pokedex_map():
                             poke_map[str(dex_nr)] = item
                         if name_eng and name_eng not in poke_map:
                             poke_map[name_eng] = item
+                        # forms with their own stats (DEOXYS_ATTACK, KYUREM_BLACK, ...), keyed by form id
+                        for form in (item.get("regionForms") or {}).values():
+                            fid = str((form or {}).get("formId", "")).upper()
+                            if fid and fid not in poke_map and form.get("stats"):
+                                poke_map[fid] = form
                 break
             except Exception as e:
                 print(f"  Warning loading pokedex for cp utils: {e}")

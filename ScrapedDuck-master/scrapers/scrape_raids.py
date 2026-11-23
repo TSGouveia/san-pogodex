@@ -6,7 +6,7 @@ import re
 import datetime
 import requests
 import bs4
-from .cp_utils import get_pokedex_stats, get_cp_for_level
+from .cp_utils import get_pokedex_stats, get_cp_for_level, load_pokedex_map
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -49,34 +49,6 @@ def load_shiny_set():
     except Exception as e:
         print(f"  Warning loading shiny database: {e}")
     return shiny_dexes, shiny_names
-
-def load_pokedex_map():
-    poke_map = {}
-    paths = [
-        os.path.join(os.path.dirname(__file__), "..", "files", "pokedex.json"),
-        os.path.join(os.path.dirname(__file__), "..", "..", "files", "pokedex.json"),
-        os.path.join("files", "pokedex.json")
-    ]
-    for p in paths:
-        if os.path.exists(p):
-            try:
-                with open(p, "r", encoding="utf-8") as f:
-                    dex_data = json.load(f)
-                    for item in dex_data:
-                        pid = str(item.get("id", "")).upper()
-                        name_eng = item.get("names", {}).get("English", "").upper()
-                        dex_nr = item.get("dexNr")
-                        if pid:
-                            poke_map[pid] = item
-                        if dex_nr:
-                            poke_map[dex_nr] = item
-                            poke_map[str(dex_nr)] = item
-                        if name_eng and name_eng not in poke_map:
-                            poke_map[name_eng] = item
-                break
-            except Exception as e:
-                print(f"  Warning loading pokedex for raids: {e}")
-    return poke_map
 
 def calculate_cp(base_atk, base_def, base_sta, iv_atk=15, iv_def=15, iv_sta=15, cpm=0.59740001):
     atk = base_atk + iv_atk
@@ -564,7 +536,9 @@ def scrape_raids():
                 'RAID_LEVEL_MEGA': 'Mega Raids',
                 'RAID_LEVEL_1_SHADOW': 'Shadow 1-Star Raids',
                 'RAID_LEVEL_3_SHADOW': 'Shadow 3-Star Raids',
-                'RAID_LEVEL_5_SHADOW': 'Shadow 5-Star Raids'
+                'RAID_LEVEL_5_SHADOW': 'Shadow 5-Star Raids',
+                'RAID_LEVEL_4_MEGA_ENHANCED': 'Super Mega Raids',
+                'RAID_LEVEL_5_MEGA_ENHANCED': 'Super Mega Raids'
             }
 
             for t in pb_data.get('tiers', []):
@@ -574,10 +548,13 @@ def scrape_raids():
                     for r in t.get('raids', []):
                         pid = r.get('pokemonId') or r.get('pokemon', '')
                         clean_name = format_boss_name(pid, r.get('pokemon', ''))
+                        if tier_label == 'Super Mega Raids' and not clean_name.startswith('Super '):
+                            clean_name = 'Super ' + clean_name
 
                         # Dex lookup & CP calculation (with robust base species fallback)
                         dex_nr = None
-                        stats = get_pokedex_stats(poke_map, clean_name)
+                        # Pokebattler id first (DEOXYS_ATTACK_FORM -> DEOXYS_ATTACK) so forms get their own stats
+                        stats = get_pokedex_stats(poke_map, pid[:-5] if pid.endswith('_FORM') else pid) or get_pokedex_stats(poke_map, clean_name)
                         if stats and stats.get('dexNr'):
                             dex_nr = stats.get('dexNr')
                         else:
@@ -608,8 +585,9 @@ def scrape_raids():
 
                         # Types and weather
                         type_names = []
-                        p_val = None
-                        for v in poke_map.values():
+                        form_val = poke_map.get(pid[:-5] if pid.endswith('_FORM') else pid)
+                        p_val = form_val if isinstance(form_val, dict) and form_val.get('primaryType') else None
+                        for v in ([] if p_val else poke_map.values()):
                             if isinstance(v, dict) and (v.get('dexNr') == dex_nr or v.get('names', {}).get('English', '').lower() == clean_name.lower()):
                                 p_val = v
                                 break
@@ -723,95 +701,6 @@ def scrape_raids():
                         })
     except Exception as e:
         print(f"Error fetching from PokéBattler API: {e}")
-
-    # Explicitly ensure all confirmed scheduled bosses from official schedule (November 25 - December 1) are present
-    confirmed_future_schedule = [
-        {
-            "name": "Normal Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "DEOXYS_NORMAL_FORM",
-            "startDate": "2026-11-25T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
-            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
-            "combatPower": {"normal": {"min": 1717, "max": 1806}, "boosted": {"min": 2146, "max": 2257}},
-            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png"
-        },
-        {
-            "name": "Attack Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "DEOXYS_ATTACK_FORM",
-            "startDate": "2026-11-25T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
-            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
-            "combatPower": {"normal": {"min": 1372, "max": 1474}, "boosted": {"min": 1716, "max": 1842}},
-            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png"
-        },
-        {
-            "name": "Defense Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "DEOXYS_DEFENSE_FORM",
-            "startDate": "2026-11-25T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
-            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
-            "combatPower": {"normal": {"min": 1228, "max": 1299}, "boosted": {"min": 1535, "max": 1624}},
-            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png"
-        },
-        {
-            "name": "Speed Deoxys",
-            "tier": "5-Star Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "DEOXYS_SPEED_FORM",
-            "startDate": "2026-11-25T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
-            "types": [{"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}],
-            "combatPower": {"normal": {"min": 1568, "max": 1645}, "boosted": {"min": 1960, "max": 2056}},
-            "boostedWeather": [{"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png"
-        },
-        {
-            "name": "Mega Metagross",
-            "tier": "Mega Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "METAGROSS_MEGA",
-            "startDate": "2026-11-25T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/guide/current-go-raids/",
-            "types": [
-                {"name": "steel", "image": "https://leekduck.com/assets/img/types/steel.png"},
-                {"name": "psychic", "image": "https://leekduck.com/assets/img/types/psychic.png"}
-            ],
-            "combatPower": {"normal": {"min": 2108, "max": 2186}, "boosted": {"min": 2635, "max": 2733}},
-            "boostedWeather": [
-                {"name": "Snow", "image": "https://leekduck.com/assets/img/weather/Snow.png"},
-                {"name": "Windy", "image": "https://leekduck.com/assets/img/weather/Windy.png"}
-            ],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png"
-        },
-        {
-            "name": "Super Mega Clefable",
-            "tier": "Super Mega Raids",
-            "canBeShiny": True,
-            "pokebattlerSlug": "CLEFABLE_MEGA",
-            "startDate": "2026-11-28T14:00:00+00:00",
-            "guideUrl": "https://pokemongohub.net/post/event/super-mega-clefable-raid-day/",
-            "types": [{"name": "fairy", "image": "https://leekduck.com/assets/img/types/fairy.png"}],
-            "combatPower": {"normal": {"min": 1332, "max": 1392}, "boosted": {"min": 1665, "max": 1740}},
-            "boostedWeather": [{"name": "Cloudy", "image": "https://leekduck.com/assets/img/weather/Cloudy.png"}],
-            "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png"
-        }
-    ]
-
-    existing_slug_dates = {(e.get('pokebattlerSlug'), e.get('startDate')) for e in schedule_entries}
-    for item in confirmed_future_schedule:
-        key = (item.get('pokebattlerSlug'), item.get('startDate'))
-        if key not in existing_slug_dates:
-            item['pokebattlerUrl'] = f"https://www.pokebattler.com/raids/{item.get('pokebattlerSlug')}"
-            schedule_entries.append(item)
 
     # Fetch Pokebattler estimators in parallel for standard raid bosses and schedule entries
     all_targets_for_estimator = bosses + schedule_entries
