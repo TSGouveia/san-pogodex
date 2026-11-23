@@ -192,7 +192,9 @@
   .ds-pl { background:rgba(0,0,0,.28); border-radius:12px; padding:7px 11px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); }
   .ds-pl .pl span { font-size:14px; padding:5px 0; }
   .pk .pl { margin-top:6px; } .pk .pl span { font-size:10px; padding:3px 0; }
-  .btx .pl > div { margin-top:6px; max-width:270px; gap:4px; } .btx .pl span { font-size:12px; padding:3px 0; }
+  /* raid boss rows: the trainers scale sits in the middle of the row, between the name and the date */
+  .bpl { flex:1 1 0; min-width:110px; align-self:center; display:flex; justify-content:center; margin:0 8px; } .bpl .pl { width:150px; }
+  .bpl .pl > div { margin-top:0; gap:3px; } .bpl .pl span { font-size:10px; padding:3px 0; }
   .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
   .ds-bonus { background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:12px 14px; }
   .ds-bonus small { color:#fde68a; } .ds-bonus b { display:block; font-size:32px; font-weight:900; color:#fde68a; line-height:1.1; margin-top:2px; }
@@ -493,7 +495,8 @@ function raidsHTML(raids, p){
   const card = (b, k) => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}${playersHTML(b.est, false)}</div>
+          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
+          ${b.est ? `<div class="bpl">${playersHTML(b.est, false)}</div>` : ''}
           ${dateHTML(b, k)}
           ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
         </div>`;
