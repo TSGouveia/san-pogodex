@@ -184,6 +184,15 @@
   .pk small { font-size:9.5px; letter-spacing:.08em; margin-top:3px; white-space:nowrap; } .pk small.pkl { margin-top:6px; }
   .pkw { display:flex; gap:7px; margin-top:3px; } .pkw span { position:relative; } .pkw img { width:22px; height:22px; display:block; }
   .pkw em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:9px; font-weight:900; background:#ef4444; color:#fff; border-radius:5px; padding:0 2px; }
+  /* trainers needed: 1..6+ chips coloured by difficulty */
+  .pl small { display:block; }
+  .pl > div { display:flex; gap:3px; margin-top:3px; }
+  .pl span { flex:1; min-width:0; text-align:center; font-size:11px; font-weight:900; line-height:1; padding:4px 0; border-radius:5px;
+    color:var(--pc); background:color-mix(in srgb, var(--pc) 18%, transparent); box-shadow:inset 0 0 0 1.2px color-mix(in srgb, var(--pc) 50%, transparent); }
+  .ds-pl { background:rgba(0,0,0,.28); border-radius:12px; padding:7px 11px; box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.06); }
+  .ds-pl .pl span { font-size:14px; padding:5px 0; }
+  .pk .pl { margin-top:6px; } .pk .pl span { font-size:10px; padding:3px 0; }
+  .btx .pl > div { margin-top:6px; max-width:270px; gap:4px; } .btx .pl span { font-size:12px; padding:3px 0; }
   .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
   .ds-bonus { background:rgba(253,230,138,.12); box-shadow:inset 0 0 0 1.5px rgba(253,230,138,.35); padding:12px 14px; }
   .ds-bonus small { color:#fde68a; } .ds-bonus b { display:block; font-size:32px; font-weight:900; color:#fde68a; line-height:1.1; margin-top:2px; }
@@ -405,6 +414,7 @@ function daySide(it){
         <div class="pk"><i>${esc(short(x.name))}</i>
           <div class="pkc"><div><small>Catch CP</small><b>${x.cp}</b></div>${x.cpB ? `<div class="bst"><small>Boosted</small><b>${wxIcons(x)}${x.cpB}</b></div>` : ''}</div>
           ${own ? `<small class="pkl">Weak to</small><div class="pkw">${weakIcons(x.types, 4)}</div>` : ''}
+          ${playersHTML(x.est)}
         </div>`).join('')}</div></div>`);
     } else pairs.forEach(x => {
       const wx = wxOf(x.types);
@@ -412,6 +422,7 @@ function daySide(it){
         <div><small>Catch CP</small><b>${x.cp}</b></div>
         ${x.cpB ? `<div class="bst"><small>${wx.map(w => icon(WX_URL(w), w)).join('')}${esc(wx.map(w => w.replace(/\b\w/g, c => c.toUpperCase())).join(' · '))}</small><b>${x.cpB}</b></div>` : ''}
       </div>`);
+      if (x.est) blocks.push(`<div class="ds-pl">${playersHTML(x.est)}</div>`);
     });
     // one typing (a Pokémon and its formes): a shared "Weak to" box; otherwise each Pokémon's box has its own
     if (typings.size === 1 || (typings.size > 1 && pairs.length < 2)) {
@@ -482,7 +493,7 @@ function raidsHTML(raids, p){
   const card = (b, k) => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
+          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}${playersHTML(b.est, false)}</div>
           ${dateHTML(b, k)}
           ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
         </div>`;
@@ -569,7 +580,8 @@ function raidInfo(){
         const map = new Map();
         list.forEach(x => { const k = raidKey(x.name); if (!map.has(k) && x.combatPower) map.set(k, {
           cp: x.combatPower.normal && x.combatPower.normal.max, boosted: x.combatPower.boosted && x.combatPower.boosted.max,
-          weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? WX_URL(w.name) : w.image })) }); });
+          weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? WX_URL(w.name) : w.image })),
+          est: estFor(x) }); });
         return map;
       } catch {}
     }
@@ -577,17 +589,33 @@ function raidInfo(){
   })();
   return raidInfoP;
 }
+// Pokebattler estimator for the site's Mega / Shadow / Legendary counter filters (same number the SanDex raid cards use)
+function estFor(x){
+  const f = data.estFilters || {};
+  const exact = x.estimators && x.estimators[`${f.mega ? 1 : 0}${f.shadow ? 1 : 0}${f.legendary ? 1 : 0}`];
+  const v = Number(exact != null ? exact : x.estimator);
+  return v > 0 ? v : null;
+}
+// 1..6+ trainers, coloured like the SanDex difficulty boxes (work per trainer = estimator / trainers)
+const PL_COL = { EASY:'#22c55e', TIGHT:'#eab308', HARD:'#f97316', EXTREME:'#ef4444' };
+function playersHTML(est, label = true){
+  if (!est) return '';
+  const st = n => { const r = est / n; return r <= 2 / 3 ? 'EASY' : r <= 1 ? 'TIGHT' : r <= 1.5 ? 'HARD' : 'EXTREME'; };
+  return `<div class="pl">${label ? '<small>Trainers</small>' : ''}<div>${[1, 2, 3, 4, 5, 6].map(n =>
+    `<span style="--pc:${PL_COL[st(n)]}">${n === 6 ? '6+' : n}</span>`).join('')}</div></div>`;
+}
 async function attachRaidInfo(raids, dayItems){
   const map = await raidInfo();
   (dayItems || []).forEach(it => it.pokemon.forEach(x => {
     const info = map.get(raidKey(x.name)) || map.get(raidKey(String(x.name).replace(/^mega /i, '')));
     if (info && info.cp && !/^mega /i.test(x.name)) { x.cp = info.cp; x.cpB = info.boosted; }
+    if (info && info.est) x.est = info.est;
   }));
   const jobs = [];
   raids.forEach(t => t.bosses.forEach(b => {
     const info = map.get(raidKey(b.name)) || map.get(raidKey('mega ' + b.name));
     if (!info) return;
-    b.cp = info.cp; b.boosted = info.boosted;
+    b.cp = info.cp; b.boosted = info.boosted; b.est = info.est;
     b.weather = info.weather.map(w => ({ ...w }));
     b.weather.forEach(w => jobs.push(toDataUrl(w.img).then(d => { w.data = d; })));
   }));
@@ -700,7 +728,7 @@ if (EMBEDDED) {
   const post = m => { try { parent.postMessage(Object.assign({ source: 'pogo-infographic' }, m), location.protocol === 'file:' || location.origin === 'null' ? '*' : location.origin); } catch {} };
   window.addEventListener('message', async e => {
     if (e.source !== parent || !e.data || e.data.source !== 'pogo-site' || e.data.type !== 'events') return;
-    data = { events: e.data.events || [], debuts: e.data.debuts || [], raidCalendar: e.data.raidCalendar || [] };
+    data = { events: e.data.events || [], debuts: e.data.debuts || [], raidCalendar: e.data.raidCalendar || [], estFilters: e.data.estFilters || {} };
     try {
       post({ type: 'status', text: 'Loading Pokémon images…' });
       const { p } = await render();
