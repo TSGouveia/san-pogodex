@@ -251,6 +251,15 @@ const RAID_TIERS = [
   { k:'shadow', label:'Shadow Raids', c:'#6366f1', re:/\bin shadow raids/i },
   { k:'max',    label:'Max Battles',  c:'#ec4899', re:/\bin max battles\b/i },
 ];
+// Tier heading on an event page ("Mega Raids", "Five-Star Raids", ...) -> RAID_TIERS key
+function pageTierKey(h){
+  const t = (h || '').toLowerCase();
+  if (/shadow/.test(t)) return 'shadow';
+  if (/mega|primal/.test(t)) return 'mega';
+  if (/max|dynamax|gigantamax/.test(t)) return 'max';
+  if (/five|5/.test(t)) return '5star';
+  return null;
+}
 
 function isTba(v){
   if (!v) return true;
@@ -281,7 +290,7 @@ function normalise(raw){
     const [kl, kc] = eventKind(title);
     out.push({ title, start, end, hours: (end - start) / 3600000, banner: ev.banner || ev.image || '', loc: ev.loc || null,
       kind: ev.typeLabel && ev.typeLabel !== 'Event' ? ev.typeLabel : kl, color: ev.color && ev.typeLabel !== 'Event' ? ev.color : kc,
-      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null });
+      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null, raids: Array.isArray(ev.raids) ? ev.raids : [] });
   });
   return out.sort((a, b) => a.start - b.start);
 }
@@ -318,7 +327,18 @@ function collect(p){
 
   const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).flatMap(e => e.pokemon.length
     ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end, title: e.title }))
-    : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) })).filter(t => t.bosses.length);
+    : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) }));
+  // bosses that only appear on an event's page (e.g. the Mega Raids of a week-long event), unless a rotation already covers them
+  evs.forEach(e => e.raids.forEach(rt => {
+    const t = raids.find(x => x.k === pageTierKey(rt.tier));
+    if (!t) return;
+    (rt.bosses || []).forEach(b => {
+      const base = (b && b.name || '').replace(/\s*\(.*?\)\s*/g, ' ').trim().toLowerCase();
+      if (!base || t.bosses.some(x => (x.name + ' ' + (x.title || '')).toLowerCase().includes(base))) return;
+      t.bosses.push({ name: b.name, poke: b.img ? { name: b.name, img: b.img, types: b.types || [] } : null, start: e.start, end: e.end });
+    });
+  }));
+  for (let i = raids.length - 1; i >= 0; i--) if (!raids[i].bosses.length) raids.splice(i, 1);
   // the same boss returning in the period is one entry with several date ranges
   raids.forEach(t => {
     t.bosses = t.bosses.reduce((acc, b) => {

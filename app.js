@@ -1756,7 +1756,8 @@ function buildPokebattlerMaxUrl(bossName) {
                     end: ev.end,
                     desc: ev.heading || ev.description || '',
                     details: ev.extraData || null,
-                    bonus: ev.bonus || null
+                    bonus: ev.bonus || null,
+                    raids: Array.isArray(ev.raids) ? ev.raids : null
                 });
             });
         }
@@ -5875,7 +5876,15 @@ window.openEventsInfographic = function (mode, offset) {
                     return megaImg && megaImg !== base.img
                         ? { name: `Mega ${p.name}`, img: megaImg, ...extra }
                         : { name: p.name, img: p.img, ...extra };
-                })
+                }),
+                // raid bosses listed on the event page itself (e.g. an event's Mega Raids)
+                raids: (ev.raids || []).map(t => ({
+                    tier: t.tier,
+                    bosses: (t.bosses || []).map(b => {
+                        const base = findPokemonByName(b.name.replace(/^\s*(super\s+)?(mega|primal|shadow)\s+/i, ''));
+                        return { name: b.name, img: (base && getPokemonImageUrl(b.name, base, false)) || b.image, types: base ? typesOf(base.id) : [] };
+                    })
+                }))
             };
         });
     const yearMs = 365 * 24 * 3600 * 1000;
