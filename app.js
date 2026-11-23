@@ -637,7 +637,9 @@ function raidDatesHtml(raid) {
     if (s == null && e == null) return '';
     const start = s != null ? `<strong style="color:#86efac">${fmtRaidDate(s)}</strong>` : '';
     const end = e != null ? `<strong style="color:#fda4af">${fmtRaidDate(e)}</strong>` : '';
-    return `<div class="rotation-cp-details raid-dates"><div><i class="fa-regular fa-calendar" style="font-size:0.65rem; opacity:0.7;"></i> <span>${start}${start && end ? ' → ' : ''}${end}</span></div></div>`;
+    // flex row so the arrow icon sits on the text's centre line (a "→" glyph rides low in most fonts)
+    const arrow = start && end ? '<i class="fa-solid fa-arrow-right" style="font-size:0.6rem; opacity:0.7;"></i>' : '';
+    return `<div class="rotation-cp-details raid-dates"><div style="display:flex; align-items:center; gap:5px; flex-wrap:wrap;"><i class="fa-regular fa-calendar" style="font-size:0.65rem; opacity:0.7;"></i>${start}${arrow}${end}</div></div>`;
 }
 let liveMaxBattles = [];
 let liveResearch = [];
