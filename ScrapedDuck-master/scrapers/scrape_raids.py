@@ -529,6 +529,11 @@ def scrape_raids():
         if res.status_code == 200:
             pb_data = res.json()
             calendar = build_raid_calendar(pb_data, format_boss_name)
+            # Pokebattler's per-tier lists keep stale bosses (e.g. Black/White Kyurem with no dates).
+            # When a tier has rotations in its dated calendar, only bosses in that calendar are real.
+            calendar_tiers = {}
+            for c in calendar:
+                calendar_tiers.setdefault(c["tier"], set()).add(c["pokemonId"])
             target_tiers = {
                 'RAID_LEVEL_1': '1-Star Raids',
                 'RAID_LEVEL_3': '3-Star Raids',
@@ -547,6 +552,9 @@ def scrape_raids():
                     tier_label = target_tiers[t_key]
                     for r in t.get('raids', []):
                         pid = r.get('pokemonId') or r.get('pokemon', '')
+                        if t_key in calendar_tiers and pid not in calendar_tiers[t_key] and r.get('pokemon', '') not in calendar_tiers[t_key]:
+                            print(f"  Skipping {pid} ({t_key}): not in Pokebattler's raid calendar")
+                            continue
                         clean_name = format_boss_name(pid, r.get('pokemon', ''))
                         if tier_label == 'Super Mega Raids' and not clean_name.startswith('Super '):
                             clean_name = 'Super ' + clean_name
