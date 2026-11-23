@@ -391,8 +391,8 @@ function daySide(it){
   const blocks = [];
   if (it.bonus) blocks.push(`<div class="ds-bonus"><small>Bonus</small><b>${esc(it.bonus)}</b></div>`);
   if (CATCH_KIND.test(it.kind + ' ' + (it.title || ''))) {
-    // "Deoxys (Attack)" -> "Attack"
-    const short = n => { const m = String(n).match(/\(([^)]+)\)\s*$/); return m ? m[1] : n; };
+    // "Deoxys (Attack)" -> "Deoxys Attack"
+    const short = n => String(n).replace(/\s*\(([^)]+)\)\s*$/, ' $1');
     const pairs = [], seen = new Set();
     it.pokemon.forEach(x => { if (!x.cp) return; const k = x.cp + '/' + x.cpB; if (seen.has(k)) return; seen.add(k); pairs.push(x); });
     const weakIcons = (def, n) => weakTo(def).slice(0, n).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('');
