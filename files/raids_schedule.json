@@ -28,7 +28,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10001.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_ATTACK_FORM",
         "pokebattlerSlug": "DEOXYS_ATTACK_FORM",
-        "startDate": "2026-11-25T14:00:00+00:00",
+        "startDate": "2026-11-25T06:00:00.000",
+        "endDate": "2026-12-01T22:00:00.000",
         "guideUrl": null,
         "estimator": 0.61,
         "estimators": {
@@ -106,7 +107,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10002.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_DEFENSE_FORM",
         "pokebattlerSlug": "DEOXYS_DEFENSE_FORM",
-        "startDate": "2026-11-25T14:00:00+00:00",
+        "startDate": "2026-11-25T06:00:00.000",
+        "endDate": "2026-12-01T22:00:00.000",
         "guideUrl": null,
         "estimator": 3.31,
         "estimators": {
@@ -184,7 +186,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/386.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_NORMAL_FORM",
         "pokebattlerSlug": "DEOXYS_NORMAL_FORM",
-        "startDate": "2026-11-25T14:00:00+00:00",
+        "startDate": "2026-11-25T06:00:00.000",
+        "endDate": "2026-12-01T22:00:00.000",
         "guideUrl": null,
         "estimator": 1.26,
         "estimators": {
@@ -262,7 +265,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10003.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/DEOXYS_SPEED_FORM",
         "pokebattlerSlug": "DEOXYS_SPEED_FORM",
-        "startDate": "2026-11-25T14:00:00+00:00",
+        "startDate": "2026-11-25T06:00:00.000",
+        "endDate": "2026-12-01T22:00:00.000",
         "guideUrl": null,
         "estimator": 2.19,
         "estimators": {
@@ -348,7 +352,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/10076.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/METAGROSS_MEGA",
         "pokebattlerSlug": "METAGROSS_MEGA",
-        "startDate": "2026-11-25T14:00:00+00:00",
+        "startDate": "2026-11-25T06:00:00.000",
+        "endDate": "2026-12-01T22:00:00.000",
         "guideUrl": null,
         "estimator": 1.86,
         "estimators": {
@@ -426,7 +431,8 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/36.png",
         "pokebattlerUrl": "https://www.pokebattler.com/raids/CLEFABLE_MEGA",
         "pokebattlerSlug": "CLEFABLE_MEGA",
-        "startDate": "2026-11-28T22:00:00+00:00",
+        "startDate": "2026-11-28T14:00:00.000",
+        "endDate": "2026-11-28T17:00:00.000",
         "guideUrl": null,
         "estimator": 2.87,
         "estimators": {
