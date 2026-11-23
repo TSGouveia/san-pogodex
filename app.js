@@ -614,6 +614,29 @@ let liveEggs = [];
 let liveRaids = [];
 let liveRaidCalendar = []; // Pokebattler rotations with start/end (events infographic)
 let liveRaidSchedule = [];
+let allRaidBosses = []; // every scraped raid boss; applyRaidClock() splits them into liveRaids / liveRaidSchedule
+
+const raidTime = v => { if (!v) return null; const d = new Date(v); return isNaN(d.getTime()) ? null : d.getTime(); };
+let raidClockTimer = null;
+// Started and not ended -> liveRaids; not started yet -> liveRaidSchedule; ended -> dropped.
+// Re-runs itself at the next start/end so the Raids tab updates without a reload.
+function applyRaidClock(rerender = false) {
+    const now = Date.now();
+    liveRaids = allRaidBosses.filter(r => { const s = raidTime(r.startDate), e = raidTime(r.endDate); return (s == null || s <= now) && (e == null || e > now); });
+    liveRaidSchedule = allRaidBosses.filter(r => { const s = raidTime(r.startDate), e = raidTime(r.endDate); return s != null && s > now && (e == null || e > now); });
+    if (rerender && typeof renderActiveRotations === 'function') renderActiveRotations();
+    clearTimeout(raidClockTimer);
+    const next = allRaidBosses.flatMap(r => [raidTime(r.startDate), raidTime(r.endDate)]).filter(t => t && t > now).sort((a, b) => a - b)[0];
+    if (next) raidClockTimer = setTimeout(() => applyRaidClock(true), Math.min(next - now + 1000, 2 ** 31 - 1));
+}
+// "Mon 24 Nov, 10:00" in the viewer's locale
+const fmtRaidDate = t => new Date(t).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+function raidDatesHtml(raid) {
+    const s = raidTime(raid.startDate), e = raidTime(raid.endDate);
+    if (s == null && e == null) return '';
+    const part = (label, t, color) => `<div><i class="fa-regular ${label === 'Starts' ? 'fa-calendar-plus' : 'fa-calendar-xmark'}" style="font-size:0.65rem; opacity:0.7;"></i> <span>${label}: <strong style="color:${color}">${fmtRaidDate(t)}</strong></span></div>`;
+    return `<div class="rotation-cp-details raid-dates">${s != null ? part('Starts', s, '#86efac') : ''}${e != null ? part('Ends', e, '#fda4af') : ''}</div>`;
+}
 let liveMaxBattles = [];
 let liveResearch = [];
 let liveRocket = null;
@@ -1605,6 +1628,9 @@ function buildPokebattlerMaxUrl(bossName) {
                 liveRaidSchedule.push(parseSingleRaidBoss(boss));
             });
         }
+        // Current vs upcoming is decided by this device's clock (Pokebattler start/end dates), not by the scraper
+        allRaidBosses = [...liveRaids, ...liveRaidSchedule];
+        applyRaidClock();
 
         // Parse Max Battles from Firestore
         liveMaxBattles = [];
@@ -5114,6 +5140,7 @@ function renderActiveRotations() {
                     <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
+                        ${raidDatesHtml(raid)}
                         ${cpMeta}
                         ${weatherHtml}
                         ${countersHtml}
@@ -6372,8 +6399,8 @@ function renderRaidSchedule() {
         if (r.startDate) {
             const d = new Date(r.startDate);
             if (!isNaN(d.getTime())) {
-                // Key format: YYYY-MM-DD for deterministic sorting
-                dateKey = d.toISOString().split('T')[0];
+                // Key format: YYYY-MM-DD (local day) for deterministic sorting
+                dateKey = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
             }
         }
         if (!raidsByDate[dateKey]) raidsByDate[dateKey] = [];
@@ -6617,6 +6644,7 @@ function renderRaidSchedule() {
                     <img class="rotation-card-img" src="${imgUrl}" alt="${raid.name}" onerror="if(this.src !== '${raid.image || ''}' && '${raid.image || ''}') { this.src='${raid.image || ''}'; } else if(${baseFormPoke ? `'${POKE_SPRITE_BACKUP_URL}/${baseFormPoke.id}.png'` : 'null'}) { this.src='${POKE_SPRITE_BACKUP_URL}/${baseFormPoke ? baseFormPoke.id : ''}.png'; } this.onerror=null;">
                     <div class="rotation-card-details-wrapper">
                         <span class="rotation-card-name">${raid.name}</span>
+                        ${raidDatesHtml(raid)}
                         ${cpMeta}
                         ${weatherHtml}
                         ${pokebattlerBtn}

@@ -532,6 +532,14 @@ def scrape_raids():
             # Pokebattler's per-tier lists keep stale bosses (e.g. Black/White Kyurem). A boss counts only if
             # Pokebattler gives it a date: its own start/end, or a rotation in the dated calendar (breakingNews).
             dated_ids = {c["pokemonId"] for c in calendar if c.get("start") or c.get("end")}
+            # Pokebattler id -> its rotation (start/end as local wall time), the one still running or next
+            now_ms = datetime.datetime.now(datetime.timezone.utc).timestamp() * 1000
+            rotations = {}
+            for b in sorted(pb_data.get("breakingNews", []) or [], key=lambda x: x.get("startDate") or 0):
+                bid, local = b.get("pokemon") or "", bool(b.get("localTime"))
+                if not bid or (bid in rotations and (rotations[bid]["endMs"] or 0) > now_ms):
+                    continue
+                rotations[bid] = {"start": _pb_time(b.get("startDate"), local), "end": _pb_time(b.get("endDate"), local), "endMs": b.get("endDate")}
             target_tiers = {
                 'RAID_LEVEL_1': '1-Star Raids',
                 'RAID_LEVEL_3': '3-Star Raids',
@@ -632,7 +640,8 @@ def scrape_raids():
                             'image': img_url,
                             'pokebattlerUrl': pb_url_item,
                             'pokebattlerSlug': pb_slug,
-                            'startDate': start_iso,
+                            'startDate': (rotations.get(pid) or {}).get('start') or start_iso,
+                            'endDate': (rotations.get(pid) or {}).get('end'),
                             'guideUrl': article_url,
                             'estimator': None
                         }
