@@ -1565,14 +1565,41 @@
         "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/831.png"
     },
     {
-        "name": "Dynamax Eternatus_Eternamax",
+        "name": "Dynamax Eternatus (Eternamax)",
         "tier": "Max Battles (6 Max)",
         "canBeShiny": false,
         "pokebattlerUrl": "https://www.pokebattler.com/max/DYNAMAX_ETERNATUS_ETERNAMAX",
-        "types": [],
-        "combatPower": null,
-        "boostedWeather": [],
-        "image": ""
+        "types": [
+            {
+                "name": "poison",
+                "image": "https://leekduck.com/assets/img/types/poison.png"
+            },
+            {
+                "name": "dragon",
+                "image": "https://leekduck.com/assets/img/types/dragon.png"
+            }
+        ],
+        "combatPower": {
+            "normal": {
+                "min": 4543,
+                "max": 4678
+            },
+            "boosted": {
+                "min": 5679,
+                "max": 5848
+            }
+        },
+        "boostedWeather": [
+            {
+                "name": "cloudy",
+                "image": "https://leekduck.com/assets/img/weather/cloudy.png"
+            },
+            {
+                "name": "windy",
+                "image": "https://leekduck.com/assets/img/weather/windy.png"
+            }
+        ],
+        "image": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/890.png"
     },
     {
         "name": "Dynamax Toxtricity",
