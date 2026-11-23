@@ -341,7 +341,8 @@ function collect(p){
   for (let i = raids.length - 1; i >= 0; i--) if (!raids[i].bosses.length) raids.splice(i, 1);
   // the same boss returning in the period is one entry with several date ranges
   raids.forEach(t => {
-    t.bosses = t.bosses.reduce((acc, b) => {
+    // chronological: bosses that start earlier come first
+    t.bosses = t.bosses.sort((a, b) => a.start - b.start).reduce((acc, b) => {
       const prev = acc.find(x => x.name === b.name);
       const last = prev && prev.ranges[prev.ranges.length - 1];
       if (last && b.start - last[1] <= DAY) { if (b.end > last[1]) last[1] = b.end; }
