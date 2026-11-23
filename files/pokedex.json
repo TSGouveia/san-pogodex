@@ -308516,7 +308516,7 @@
         "megaEvolutions": [],
         "hasGigantamaxEvolution": false,
         "assetForms": [],
-        "unreleased": true,
+        "unreleased": false,
         "combatPower": {
             "maxL50": 392,
             "researchL15": {
@@ -315745,7 +315745,8 @@
         "megaEvolutions": [],
         "hasGigantamaxEvolution": false,
         "assetForms": [],
-        "unreleased": true,
+        "unreleased": false,
+        "releaseDate": "Dec 1, 2026",
         "combatPower": {
             "maxL50": 1551,
             "researchL15": {
