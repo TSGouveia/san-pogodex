@@ -175,7 +175,8 @@
   .ds-cpt small { margin-bottom:2px; }
   .ds-cpt i { font-style:normal; font-size:14px; font-weight:900; color:rgba(255,255,255,.75); }
   .ds-cpt b { font-size:24px; font-weight:900; line-height:1.1; color:#ffd54a; }
-  .ds-cpt b.bst { color:#7dd3fc; }
+  .ds-cpt b.bst { color:#7dd3fc; display:flex; align-items:center; gap:3px; }
+  .ds-cpt b.bst img { height:16px; width:auto; }
   .ds-weak div { display:flex; flex-wrap:wrap; gap:5px; margin-top:4px; }
   .ds-weak span { position:relative; } .ds-weak img { width:34px; height:34px; display:block; }
   .ds-weak em { position:absolute; right:-6px; bottom:-4px; font-style:normal; font-size:11px; font-weight:900; background:#ef4444; color:#fff; border-radius:6px; padding:0 3px; }
@@ -390,9 +391,12 @@ function daySide(it){
     if (pairs.length > 2) {
       // "Deoxys (Attack)" -> "Attack"
       const short = n => { const m = String(n).match(/\(([^)]+)\)\s*$/); return m ? m[1] : n; };
-      const wx = wxOf(pairs[0].types);
-      blocks.push(`<div class="ds-cpt"><span></span><small>Catch CP</small><small>${wx.map(w => icon(WX_URL(w), w)).join('') || 'Boosted'}</small>
-        ${pairs.slice(0, 4).map(x => `<i>${esc(short(x.name))}</i><b>${x.cp}</b><b class="bst">${x.cpB || ''}</b>`).join('')}
+      // same boost weather for every row (e.g. formes of one Pokémon) -> icons once in the header, otherwise on each row
+      const rows = pairs.slice(0, 4), wxs = rows.map(x => wxOf(x.types));
+      const sameWx = wxs.every(w => w.join() === wxs[0].join());
+      const wxIcons = w => w.map(x => icon(WX_URL(x), x)).join('');
+      blocks.push(`<div class="ds-cpt"><span></span><small>Catch CP</small><small>${(sameWx && wxIcons(wxs[0])) || 'Boosted'}</small>
+        ${rows.map((x, i) => `<i>${esc(short(x.name))}</i><b>${x.cp}</b><b class="bst">${x.cpB ? (sameWx ? '' : wxIcons(wxs[i])) + x.cpB : ''}</b>`).join('')}
       </div>`);
     } else pairs.forEach(x => {
       const wx = wxOf(x.types);
@@ -401,10 +405,14 @@ function daySide(it){
         ${x.cpB ? `<div class="bst"><small>${wx.map(w => icon(WX_URL(w), w)).join('')}${esc(wx.map(w => w.replace(/\b\w/g, c => c.toUpperCase())).join(' · '))}</small><b>${x.cpB}</b></div>` : ''}
       </div>`);
     });
-    // weaknesses of the boss (same typing for all its formes)
-    const def = (it.pokemon[0] && it.pokemon[0].types) || [];
-    const wk = def.length ? weakTo(def) : [];
-    if (wk.length) blocks.push(`<div class="ds-weak"><small>Weak to</small><div>${wk.slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div></div>`);
+    // weaknesses: one typing (a Pokémon and its formes) -> its weaknesses; several different
+    // Pokémon -> only the types every one of them is weak to (the multiplier shown is the lowest)
+    const typings = [...new Map(it.pokemon.filter(x => x.types && x.types.length)
+      .map(x => [[...x.types].sort().join('/'), x.types])).values()];
+    let wk = typings.length ? weakTo(typings[0]) : [];
+    typings.slice(1).forEach(def => { const o = new Map(weakTo(def).map(w => [w.t, w.m]));
+      wk = wk.filter(w => o.has(w.t)).map(w => ({ t: w.t, m: Math.min(w.m, o.get(w.t)) })); });
+    if (wk.length) blocks.push(`<div class="ds-weak"><small>${typings.length > 1 ? 'All weak to' : 'Weak to'}</small><div>${wk.slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div></div>`);
   }
   return `<div class="dside">${blocks.join('')}</div>`; // always there, so every card has the same columns
 }
