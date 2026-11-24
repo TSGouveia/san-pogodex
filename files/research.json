@@ -17,6 +17,14 @@
                 }
             },
             {
+                "name": "Cottonee wearing a flower crown",
+                "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm546.cSPRING_2024.icon.png",
+                "shiny": true,
+                "min_cp": "271",
+                "max_cp": "300",
+                "combatPower": null
+            },
+            {
                 "name": "Greavard",
                 "image": "https://cdn.leekduck.com/assets/img/pokemon_icons_crop/pm971.icon.png",
                 "shiny": true,
