@@ -2,8 +2,8 @@
     "season": 29,
     "title": "GO Battle League: Daydream Destinations",
     "url": "https://pokemongo.fandom.com/wiki/Season_29",
-    "start": "2026-09-08",
-    "end": "2026-12-01",
+    "start": "2026-12-01",
+    "end": "2027-03-02",
     "formats": [
         {
             "leagues": [
@@ -11,34 +11,32 @@
                 "Ultra League: Mega Edition",
                 "Master League: Mega Edition"
             ],
-            "start": "2026-09-08",
-            "end": "2026-09-15"
+            "start": "2026-12-01",
+            "end": "2026-12-08"
         },
         {
             "leagues": [
-                "Great League",
+                "Great League: Mega Edition",
+                "Mountain Cup: Great League Edition"
+            ],
+            "start": "2026-12-08",
+            "end": "2026-12-15"
+        },
+        {
+            "leagues": [
                 "Ultra League: Mega Edition",
-                "Willpower Cup: Great League Edition"
+                "Holiday Cup: Great League Edition"
             ],
-            "start": "2026-09-15",
-            "end": "2026-09-22"
+            "start": "2026-12-15",
+            "end": "2026-12-22"
         },
         {
             "leagues": [
-                "Ultra League",
                 "Master League: Mega Edition",
-                "Retro Cup: Great League Edition"
+                "Holiday Cup: Great League Edition"
             ],
-            "start": "2026-09-22",
-            "end": "2026-09-29"
-        },
-        {
-            "leagues": [
-                "Master League",
-                "Mega Color Cup: Great League Edition"
-            ],
-            "start": "2026-09-29",
-            "end": "2026-10-06"
+            "start": "2026-12-22",
+            "end": "2026-12-29"
         },
         {
             "leagues": [
@@ -46,34 +44,32 @@
                 "Ultra League: Mega Edition",
                 "Master League: Mega Edition"
             ],
-            "start": "2026-10-06",
-            "end": "2026-10-13"
+            "start": "2026-12-29",
+            "end": "2027-01-05"
         },
         {
             "leagues": [
-                "Great League",
+                "Great League: Mega Edition",
+                "Fighting Cup: Great League Edition"
+            ],
+            "start": "2027-01-05",
+            "end": "2027-01-12"
+        },
+        {
+            "leagues": [
                 "Ultra League: Mega Edition",
-                "Little Cup: Great League Edition"
+                "Jungle Cup: Great League Edition"
             ],
-            "start": "2026-10-13",
-            "end": "2026-10-20"
+            "start": "2027-01-12",
+            "end": "2027-01-19"
         },
         {
             "leagues": [
-                "Ultra League",
                 "Master League: Mega Edition",
-                "Fantasy Cup: Great League Edition"
+                "Master League"
             ],
-            "start": "2026-10-20",
-            "end": "2026-10-27"
-        },
-        {
-            "leagues": [
-                "Master League",
-                "Mega Halloween Cup: Great League Edition"
-            ],
-            "start": "2026-10-27",
-            "end": "2026-11-03"
+            "start": "2027-01-19",
+            "end": "2027-01-26"
         },
         {
             "leagues": [
@@ -81,45 +77,54 @@
                 "Ultra League: Mega Edition",
                 "Master League: Mega Edition"
             ],
-            "start": "2026-11-03",
-            "end": "2026-11-10"
+            "start": "2027-01-26",
+            "end": "2027-02-02"
         },
         {
             "leagues": [
-                "Great League",
+                "Great League: Mega Edition",
+                "Master League"
+            ],
+            "start": "2027-02-02",
+            "end": "2027-02-09"
+        },
+        {
+            "leagues": [
                 "Ultra League: Mega Edition",
-                "2026 GO LAIC Cup"
+                "Love Cup: Great League Edition",
+                "2027 GO EUIC Cup"
             ],
-            "start": "2026-11-10",
-            "end": "2026-11-17"
+            "start": "2027-02-09",
+            "end": "2027-02-16"
         },
         {
             "leagues": [
-                "Ultra League",
                 "Master League: Mega Edition",
-                "2026 GO LAIC Cup"
+                "Mega Catch Cup: Great League Edition",
+                "2027 GO EUIC Cup"
             ],
-            "start": "2026-11-17",
-            "end": "2026-11-24"
+            "start": "2027-02-16",
+            "end": "2027-02-23"
         },
         {
             "leagues": [
-                "Master League",
+                "| Great League: Mega Edition",
+                "Ultra League: Mega Edition",
+                "Master League: Mega Edition",
                 "Mega Catch Cup: Great League Edition"
             ],
-            "start": "2026-11-24",
-            "end": "2026-12-01"
+            "start": "2027-02-23",
+            "end": "2027-03-02"
         }
     ],
     "cupRules": {
-        "Willpower Cup: Great League Edition": "1,500 CP limit. Only Fighting-, Psychic-, and Dark-types allowed. Gardevoir, Zorua, and Zoroark are banned.",
-        "Retro Cup: Great League Edition": "1,500 CP limit. Dark-, Steel-, and Fairy-types are banned.",
-        "Mega Color Cup: Great League Edition": "1,500 CP limit. Only Grass-, Fire-, Water-, and Electric-types allowed. Mega-Evolved Pokémon are allowed.",
-        "Little Cup": "500 CP limit. Only Pokémon that are able to evolve and have not evolved even once allowed.",
-        "Fantasy Cup: Great League Edition": "1,500 CP limit. Only Dragon-, Steel-, and Fairy-types allowed.",
-        "Mega Halloween Cup: Great League Edition": "1,500 CP limit. Only Bug-, Poison-, Ghost-, Dark-, and Fairy-types allowed. Mega-Evolved Pokémon are allowed.",
-        "2026 GO LAIC Cup": "1,500 CP limit. Fire-, Dark-, Steel-, and Fairy-types are banned. Legendary Pokémon, Mythical Pokémon, and Ultra Beasts are banned. Mega-Evolved Pokémon, Chansey, Snorlax, Furret, Wobbuffet, Galarian Corsola, Kingdra, Medicham, Altaria, Dusclops, Jellicent, Araquanid, Oranguru, Annihilape, and Clodsire are banned.",
-        "Mega Catch Cup: Great League Edition": "1,500 CP limit. Only Pokémon caught during Twilight Trails allowed. Mega-Evolved Pokémon are allowed."
+        "Mountain Cup: Great League Edition": "1,500 CP limit. Only Rock-, Ground-, Ice-, and Steel-types allowed.",
+        "Holiday Cup: Great League Edition": "1,500 CP limit. Only Normal-, Grass-, Electric-, Flying-, Ice-, and Ghost-types allowed.",
+        "Fighting Cup: Great League Edition": "1,500 CP limit. Only Fighting-types allowed. Flying-, Psychic-, and Ghost-types are banned.",
+        "Jungle Cup: Great League Edition": "1,500 CP limit. Only Normal-, Grass-, Electric-, Bug-, Flying-, Poison-, Ground-, and Dark-types allowed.",
+        "Love Cup: Great League Edition": "1,500 CP limit. Only Only red- and pink-colored Pokémon allowed.",
+        "2027 GO EUIC Cup": "1,500 CP limit. Mega-Evolved Pokémon are allowed. Only Electric-, Rock-, Poison-, Ice-, and Dark-types allowed. Grass-, Ground-, Fighting-, Steel-, and Fairy-types are banned. Nidorina, Grimer, Lanturn, Magcargo, Sableye, Mega Sableye, Pachirisu, Drapion, Crustle, Malamar, Mega Malamar, Dragalge, Charjabug, Minior, Carkol, and Coalossal are banned.",
+        "Mega Catch Cup: Great League Edition": "1,500 CP limit. Only Pokémon caught during Daydream Destinations allowed. Mega-Evolved Pokémon are allowed."
     },
     "ranks": [
         {
@@ -440,24 +445,24 @@
             "rank": "1",
             "guaranteed": [
                 {
-                    "name": "Toxtricity (Low Key)",
-                    "baseName": "Toxtricity",
-                    "form": "Low Key",
-                    "dexNr": 849
+                    "name": "Altaria",
+                    "baseName": "Altaria",
+                    "form": null,
+                    "dexNr": 334
                 }
             ],
             "possible": [
                 {
-                    "name": "Vulpix",
-                    "baseName": "Vulpix",
+                    "name": "Mareep",
+                    "baseName": "Mareep",
                     "form": null,
-                    "dexNr": 37
+                    "dexNr": 179
                 },
                 {
-                    "name": "Bellsprout",
-                    "baseName": "Bellsprout",
+                    "name": "Wooper",
+                    "baseName": "Wooper",
                     "form": null,
-                    "dexNr": 69
+                    "dexNr": 194
                 },
                 {
                     "name": "Swablu",
@@ -466,16 +471,16 @@
                     "dexNr": 333
                 },
                 {
-                    "name": "Inkay",
-                    "baseName": "Inkay",
-                    "form": null,
-                    "dexNr": 686
-                },
-                {
                     "name": "Mareanie",
                     "baseName": "Mareanie",
                     "form": null,
                     "dexNr": 747
+                },
+                {
+                    "name": "Rookidee",
+                    "baseName": "Rookidee",
+                    "form": null,
+                    "dexNr": 821
                 }
             ]
         },
@@ -484,16 +489,16 @@
             "guaranteed": [],
             "possible": [
                 {
-                    "name": "Hisuian Voltorb",
-                    "baseName": "Voltorb",
-                    "form": "Hisuian",
-                    "dexNr": 100
+                    "name": "Tynamo",
+                    "baseName": "Tynamo",
+                    "form": null,
+                    "dexNr": 602
                 },
                 {
-                    "name": "Audino",
-                    "baseName": "Audino",
+                    "name": "Nacli",
+                    "baseName": "Nacli",
                     "form": null,
-                    "dexNr": 531
+                    "dexNr": 932
                 }
             ]
         },
@@ -831,10 +836,10 @@
             "rank": "Ace",
             "guaranteed": [
                 {
-                    "name": "Dondozo",
-                    "baseName": "Dondozo",
-                    "form": null,
-                    "dexNr": 977
+                    "name": "Alolan Golem",
+                    "baseName": "Golem",
+                    "form": "Alolan",
+                    "dexNr": 76
                 }
             ],
             "possible": []
@@ -843,10 +848,10 @@
             "rank": "Veteran",
             "guaranteed": [
                 {
-                    "name": "Kingdra",
-                    "baseName": "Kingdra",
+                    "name": "Drampa",
+                    "baseName": "Drampa",
                     "form": null,
-                    "dexNr": 230
+                    "dexNr": 780
                 }
             ],
             "possible": []
@@ -876,7 +881,7 @@
             "possible": []
         }
     ],
-    "encounterNote": "Starting with this Season, active Tier 5 Raid Bosses are no longer obtained during their time in raids. Instead, a static pool of Legendary Pokémon was available starting at rank 20.",
+    "encounterNote": "",
     "endOfSeason": {
         "rewards": [
             "1 Elite Fast TM (rank 19 or above)"
