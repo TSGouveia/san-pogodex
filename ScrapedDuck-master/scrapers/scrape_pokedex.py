@@ -25,8 +25,39 @@ BULBAPEDIA_PARSE_WIKITEXT_API = "https://bulbapedia.bulbagarden.net/w/api.php?ac
 BULBAPEDIA_API_URL = "https://bulbapedia.bulbagarden.net/w/api.php?action=parse&page=List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO&prop=text&format=json"
 BULBAPEDIA_URL = "https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_availability_in_Pok%C3%A9mon_GO"
 
+def parse_upcoming_from_wikitext(text):
+    """Species Bulbapedia has moved from 'Unreleased' into the by-date table with
+    a 'TBA' or future date (e.g. announced for an upcoming season) — not out yet.
+    Only plain dex codes (e.g. 0746, not 0774Y) count, so a new form of an
+    already released species doesn't flag the whole species."""
+    from datetime import datetime
+    text = re.sub(r'<!--.*?-->', '', text, flags=re.DOTALL)
+    cut = re.search(r'==+\s*Unreleased', text, re.IGNORECASE)
+    if not cut:
+        return set()
+    today = datetime.utcnow().date()
+    upcoming = set()
+    for row in text[:cut.start()].split('|-'):
+        cells = [c.strip() for c in row.split('\n|')[1:]]
+        if len(cells) < 2:
+            continue
+        date_cell = cells[0]
+        is_future = 'TBA' in date_cell
+        if not is_future:
+            dm = re.search(r'([A-Z][a-z]+) (\d{1,2}), (\d{4})', date_cell)
+            if dm:
+                for fmt in ("%b %d %Y", "%B %d %Y"):
+                    try:
+                        is_future = datetime.strptime(" ".join(dm.groups()), fmt).date() > today
+                        break
+                    except ValueError:
+                        pass
+        if is_future:
+            for name in re.findall(r'\{\{MSP(?:/GO)?\|\d+\|([^}|]+)\}\}', cells[1]):
+                upcoming.add(name.strip())
+    return upcoming
+
 def parse_unreleased_from_wikitext(text):
-    import re
     m = re.search(r'==+\s*Unreleased.*?\n(.*?)(?=\n==+|$)', text, re.DOTALL | re.IGNORECASE)
     if not m:
         return set()
@@ -36,7 +67,10 @@ def parse_unreleased_from_wikitext(text):
         species_table = tables[1]
         raw_names = re.findall(r'\{\{(?:MSP(?:/GO)?|MS)\|[^|}]+\|([^}|]+)', species_table)
         names = {re.sub(r'\s*\([^)]*\)', '', n).strip() for n in raw_names}
-        return {n for n in names if n}
+        names = {n for n in names if n}
+        if names:
+            names |= parse_upcoming_from_wikitext(text)
+        return names
     return set()
 
 def parse_unreleased_from_html(html_content):
