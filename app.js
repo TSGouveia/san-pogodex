@@ -5907,8 +5907,10 @@ window.openEventsInfographic = function (mode, offset) {
         .filter(ev => isEventMatchingLocation(ev))
         .map(ev => {
             const ctx = getEventContext(ev);
+            const rumorPoke = getEventFeaturedPokemonList(ev).find(p => p.rumorTag);
             return {
                 title: ev.title, start: ev.start, end: ev.end, banner: ev.banner, bonus: ev.bonus || null,
+                rumorTag: ev.rumorTag || (rumorPoke && rumorPoke.rumorTag) || null,
                 typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
                 // Mega Raids / (Super) Mega Raid Day: show the Mega form; cp / cpB = 100% IV catch CP (level 20 / 25 boosted)
                 pokemon: getEventFeaturedPokemonList(ev).slice(0, 4).map(p => {
@@ -10665,7 +10667,7 @@ function openEventModal(ev) {
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
                 if (matchedPoke && spawn.form) {
-                    pokeImgUrl = getPokemonImageUrl(rumorFormSpriteName(spawn.form, matchedPoke.name), matchedPoke);
+                    pokeImgUrl = rumorFormImage(spawn.form, matchedPoke);
                 } else if (matchedPoke) {
                     pokeImgUrl = getActivePokemonImageUrl(matchedPoke);
                 } else {
@@ -10934,7 +10936,7 @@ function getEventFeaturedPokemonList(ev) {
                 if (!seenPokeIds.has(formKey)) {
                     seenPokeIds.add(formKey);
                     seenPokeIds.add(matched.id);
-                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: getPokemonImageUrl(rumorFormSpriteName(cand.form, matched.name), matched), rumorTag: cand.rumorTag || null });
+                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: rumorFormImage(cand.form, matched), rumorTag: cand.rumorTag || null });
                 }
                 continue;
             }
@@ -13211,10 +13213,28 @@ var eventRumors = [];
 
 const RUMOR_EVENT_TYPES = ['Hatch Day', 'Raid Hour', 'Raid Day', 'Community Day', 'Spotlight Hour', 'Max Monday', 'Max Battle Day', 'Event'];
 
-const RUMOR_FORM_SUGGESTIONS = ['Mega', 'Mega X', 'Mega Y', 'Primal', 'Gigantamax', 'Dynamax', 'Shadow', 'Alolan', 'Galarian', 'Hisuian', 'Paldean', 'Origin', 'Therian', 'Attack', 'Defense', 'Speed'];
+const RUMOR_FORM_SUGGESTIONS = ['Mega', 'Mega X', 'Mega Y', 'Primal', 'Gigantamax', 'Dynamax', 'Shadow', 'Alolan', 'Galarian', 'Hisuian', 'Paldean', 'Origin', 'Therian', 'Attack', 'Defense', 'Speed', 'Armored', 'Clone'];
 
 // Turns a free-text form + species into the name format getPokemonImageUrl understands
 // ("Gmax" + Charizard -> "Gigantamax Charizard", "Mega X" + Charizard -> "Mega Charizard X")
+// Forms with no PokeAPI artwork (Armored Mewtwo, 2019 Clone Pokémon) fall back to the GO icon
+// from the pokedex data's assetForms; everything else uses the official artwork
+const RUMOR_GO_ONLY_FORMS = [
+    { re: /^armou?red$/i, form: 'A' },
+    { re: /^(clone|copy)$/i, form: 'COPY_2019' }
+];
+function rumorFormImage(form, poke, isShiny = null) {
+    const goForm = RUMOR_GO_ONLY_FORMS.find(f => f.re.test(String(form || '').trim()));
+    if (goForm && rawPokedexData && Array.isArray(rawPokedexData)) {
+        const entry = rawPokedexData.find(r => String(r.dexNr) === String(poke.id));
+        const asset = entry && Array.isArray(entry.assetForms)
+            ? entry.assetForms.find(a => a.form === goForm.form && !a.costume) : null;
+        const shinyReq = isShiny === true || (isShiny === null && currentDexType === 'shiny');
+        if (asset) return (shinyReq && asset.shinyImage) || asset.image;
+    }
+    return getPokemonImageUrl(rumorFormSpriteName(form, poke.name), poke, isShiny);
+}
+
 function rumorFormSpriteName(form, name) {
     const f = String(form || '').trim();
     if (/^(g-?max|gigantamax)$/i.test(f)) return `Gigantamax ${name}`;
@@ -13466,7 +13486,7 @@ function renderRumorChips() {
     box.innerHTML = rumorDraftPokemon.map((p, i) => {
         const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
         const name = m ? m.name : `#${p.id}`;
-        const img = m ? (p.form ? getPokemonImageUrl(rumorFormSpriteName(p.form, m.name), m, false) : getActivePokemonImageUrl(m, false)) : '';
+        const img = m ? (p.form ? rumorFormImage(p.form, m, false) : getActivePokemonImageUrl(m, false)) : '';
         return `<span style="display: inline-flex; align-items: center; gap: 4px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px 8px 2px 2px; font-size: 0.8rem; color: var(--text-primary);">
             <img src="${img}" style="width: 26px; height: 26px; object-fit: contain;" onerror="this.style.display='none'">
             ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}

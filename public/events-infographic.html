@@ -228,6 +228,9 @@
   .empty { text-align:center; padding:40px 20px; font-size:20px; font-weight:800; color:rgba(255,255,255,.5); }
   .p-foot { display:flex; justify-content:space-between; align-items:center; padding:16px 36px 22px; font-size:17px; font-weight:800; color:rgba(255,255,255,.55); }
   .p-foot b { color:#fff; }
+  /* Subtle "not confirmed" note next to an event's kind */
+  .rtag { margin-left:.6em; font-size:.72em; font-weight:600; font-style:italic; letter-spacing:.04em; text-transform:lowercase; opacity:.55; }
+  .mev .k + .rtag { margin-left:4px; font-size:9px; color:#cbd5e1; }
 </style>
 </head>
 <body>
@@ -317,7 +320,7 @@ function normalise(raw){
     const [kl, kc] = eventKind(title);
     out.push({ title, start, end, hours: (end - start) / 3600000, banner: ev.banner || ev.image || '', loc: ev.loc || null,
       kind: ev.typeLabel && ev.typeLabel !== 'Event' ? ev.typeLabel : kl, color: ev.color && ev.typeLabel !== 'Event' ? ev.color : kc,
-      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null });
+      pokemon: (ev.pokemon || []).filter(p => p && p.img), bonus: ev.bonus || null, rumorTag: ev.rumorTag || null });
   });
   return out.sort((a, b) => a.start - b.start);
 }
@@ -354,7 +357,7 @@ function collect(p){
     .flatMap(e => eventDays(e).filter(date => date >= p.from && date < p.to).map(date => {
       const multi = e.hours > 24;
       const dayEnd = multi ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), e.end.getHours(), e.end.getMinutes()) : e.end;
-      return { title: e.title, bonus: e.bonus, date, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(date)} – ${hm(dayEnd)}`,
+      return { title: e.title, bonus: e.bonus, rumorTag: e.rumorTag, date, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(date)} – ${hm(dayEnd)}`,
         names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
         pokemon: e.pokemon.slice(0, 4).map(x => ({ ...x })), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color };
     }));
@@ -366,7 +369,7 @@ function collect(p){
   dayItems.sort((a, b) => a.date - b.date);
 
   const raids = RAID_TIERS.map(t => ({ ...t, bosses: evs.filter(e => t.re.test(e.title)).flatMap(e => e.pokemon.length
-    ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end, title: e.title }))
+    ? e.pokemon.map(x => ({ name: x.name, poke: { ...x }, start: e.start, end: e.end, title: e.title, rumorTag: e.rumorTag }))
     : [{ name: shortTitle(e.title).replace(/\s+in .*$/i, ''), poke: null, start: e.start, end: e.end }]) }));
   // Pokebattler's raid calendar fills in bosses LeekDuck only lists inside an event page (e.g. an event's Mega Raids),
   // unless a LeekDuck rotation already covers that Pokémon; raid days / hours (< 1 day) stay as day cards
@@ -395,6 +398,11 @@ function collect(p){
 }
 
 // ---------- Rendering ----------
+function rumorTagHTML(tag){
+  if (!tag) return '';
+  return `<span class="rtag">${tag === 'datamined' ? 'datamined' : 'rumored'}</span>`;
+}
+
 function artHTML(it){
   if (it.pokemon.length) return `<div class="art n${it.pokemon.length}">${it.pokemon.map(x => `<img src="${x.data}" alt="">`).join('')}</div>`;
   if (it.bannerData) return `<div class="art banner"><img src="${it.bannerData}" alt=""></div>`;
@@ -466,7 +474,7 @@ function weekHTML(items, p){
       <div class="wevs">${its.length ? its.map(it => `
         <div class="dcard wev" style="--c:${it.color}; --g:${it.glow}">
           <div class="tx">
-            <div class="kind">${esc(it.kind)}</div>
+            <div class="kind">${esc(it.kind)}${rumorTagHTML(it.rumorTag)}</div>
             <div class="nm${it.names.length > 26 ? ' long' : ''}">${esc(it.names)}${it.pokemon.length ? `<span class="ntypes">${typesHTML(it.pokemon.flatMap(x => x.types || []))}</span>` : ''}</div>
             <span class="tm">${esc(it.time)}</span>${it.loc ? `<span class="loc">📍 ${esc(it.loc)}</span>` : ''}
           </div>
@@ -490,7 +498,7 @@ function monthHTML(items, p){
       <div class="dn">${d.getDate()}</div>
       ${its.map(it => `<div class="mev" style="--c:${it.color}">
         ${it.pokemon.length ? `<div class="sp n${Math.min(3, it.pokemon.length)}">${it.pokemon.slice(0, 3).map(x => `<img src="${x.data}" alt="">`).join('')}</div>` : ''}
-        <span class="k">${esc(it.kind)}</span>
+        <span class="k">${esc(it.kind)}</span>${rumorTagHTML(it.rumorTag)}
         <div class="n">${esc(it.names)}</div>
         ${it.kind === 'Debut' ? '' : `<div class="t">${esc(it.time)}</div>`}
       </div>`).join('')}
@@ -512,7 +520,7 @@ function raidsHTML(raids, p){
   const card = (b, k) => `
         <div class="boss" style="--t:${typeColor(b.poke)}">
           <div class="bart">${b.poke && b.poke.data ? `<img src="${b.poke.data}" alt="">` : ''}</div>
-          <div class="btx"><div class="bn">${esc(b.name)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
+          <div class="btx"><div class="bn">${esc(b.name)}${rumorTagHTML(b.rumorTag)}<span class="btypes">${b.poke ? typesHTML(b.poke.types) : ''}</span></div>${b.poke && b.poke.types && b.poke.types.length ? `<div class="bweak"><small>Weak</small>${weakTo(b.poke.types).slice(0, 6).map(w => `<span>${icon(TYPE_ICON(w.t), w.t)}${w.m > 2 ? '<em>×2</em>' : ''}</span>`).join('')}</div>` : ''}</div>
           ${b.est ? `<div class="bpl">${playersHTML(b.est, false)}</div>` : ''}
           ${dateHTML(b, k)}
           ${b.cp ? `<div class="bcp"><div><small>CP</small><b>${b.cp}</b></div>${b.boosted ? `<div class="bst"><small>${(b.weather || []).filter(w => w.data).map(w => `<img src="${w.data}" alt="${esc(w.name)}">`).join('') || 'Boosted'}</small><b>${b.boosted}</b></div>` : ''}</div>` : ''}
