@@ -10673,8 +10673,9 @@ function openEventModal(ev) {
                 } else if (matchedPoke) {
                     pokeImgUrl = getActivePokemonImageUrl(matchedPoke);
                 } else {
-                    // asset_url from the API has the correct sprite for Megas and alternate forms
-                    pokeImgUrl = spawn.asset_url || '';
+                    // Forms ("Alolan Sandshrew", Megas): official artwork when PokeAPI has it, GO icon only as last resort
+                    const basePoke = findPokemonByName(spawn.name);
+                    pokeImgUrl = basePoke ? officialFormArt(spawn.name, basePoke, spawn.asset_url) : (spawn.asset_url || '');
                 }
 
                 let titleText = spawn.shiny_available ? `${displayName} (Shiny Available)` : displayName;
@@ -10946,7 +10947,17 @@ function getEventFeaturedPokemonList(ev) {
         for (const cand of candidateList) {
             if (!cand || !cand.name) continue;
             const candName = cand.name.toLowerCase();
-            const matched = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === candName);
+            let matched = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === candName);
+            // Form names from LeekDuck ("Alolan Sandshrew", "Mega Gengar"): official artwork of that form
+            if (!matched && !cand.form) {
+                const basePoke = findPokemonByName(cand.name);
+                if (basePoke && !seenPokeIds.has('n:' + candName)) {
+                    seenPokeIds.add('n:' + candName);
+                    seenPokeIds.add(basePoke.id);
+                    found.push({ name: formatSpawnName(cand.name), id: basePoke.id, img: officialFormArt(cand.name, basePoke, cand.asset_url), rumorTag: cand.rumorTag || null, day: cand.day || 0 });
+                }
+                continue;
+            }
             if (matched && cand.form) {
                 const formKey = `${matched.id}|${cand.form}`;
                 if (!seenPokeIds.has(formKey)) {
@@ -10957,7 +10968,7 @@ function getEventFeaturedPokemonList(ev) {
                 continue;
             }
             if (matched && !seenPokeIds.has(matched.id)) {
-                let img = cand.asset_url || matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`;
+                let img = matched.img || cand.asset_url || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`;
                 let name = matched.name;
                 if (isRaidDay) {
                     const megaImg = getPokemonImageUrl(`Mega ${matched.name}`, matched);
@@ -11003,40 +11014,40 @@ function getEventFeaturedPokemonList(ev) {
             // Specific form detection and sprite matching
             if (cleanTitle.includes('origin') && rawAssetForms.some(a => a.form === 'ORIGIN')) {
                 const f = rawAssetForms.find(a => a.form === 'ORIGIN');
-                if (f && f.image) { sprite = f.image; displayName += ' (Origin)'; }
+                if (f && f.image) { sprite = officialFormArt('Origin ' + p.name, p, f.image); displayName += ' (Origin)'; }
             } else if (cleanTitle.includes('altered') && rawAssetForms.some(a => a.form === 'ALTERED')) {
                 const f = rawAssetForms.find(a => a.form === 'ALTERED');
-                if (f && f.image) { sprite = f.image; displayName += ' (Altered)'; }
+                if (f && f.image) { sprite = officialFormArt('Altered ' + p.name, p, f.image); displayName += ' (Altered)'; }
             } else if (cleanTitle.includes('dawn wings') && rawAssetForms.some(a => a.form === 'DAWN_WINGS')) {
                 const f = rawAssetForms.find(a => a.form === 'DAWN_WINGS');
-                if (f && f.image) { sprite = f.image; displayName += ' (Dawn Wings)'; }
+                if (f && f.image) { sprite = officialFormArt('Dawn Wings ' + p.name, p, f.image); displayName += ' (Dawn Wings)'; }
             } else if (cleanTitle.includes('dusk mane') && rawAssetForms.some(a => a.form === 'DUSK_MANE')) {
                 const f = rawAssetForms.find(a => a.form === 'DUSK_MANE');
-                if (f && f.image) { sprite = f.image; displayName += ' (Dusk Mane)'; }
+                if (f && f.image) { sprite = officialFormArt('Dusk Mane ' + p.name, p, f.image); displayName += ' (Dusk Mane)'; }
             } else if (cleanTitle.includes('alolan') && rawAssetForms.some(a => a.form === 'ALOLA')) {
                 const f = rawAssetForms.find(a => a.form === 'ALOLA');
-                if (f && f.image) { sprite = f.image; displayName += ' (Alolan)'; }
+                if (f && f.image) { sprite = officialFormArt('Alolan ' + p.name, p, f.image); displayName += ' (Alolan)'; }
             } else if (cleanTitle.includes('galarian') && rawAssetForms.some(a => a.form === 'GALARIAN')) {
                 const f = rawAssetForms.find(a => a.form === 'GALARIAN');
-                if (f && f.image) { sprite = f.image; displayName += ' (Galarian)'; }
+                if (f && f.image) { sprite = officialFormArt('Galarian ' + p.name, p, f.image); displayName += ' (Galarian)'; }
             } else if (cleanTitle.includes('hisuian') && rawAssetForms.some(a => a.form === 'HISUIAN')) {
                 const f = rawAssetForms.find(a => a.form === 'HISUIAN');
-                if (f && f.image) { sprite = f.image; displayName += ' (Hisuian)'; }
+                if (f && f.image) { sprite = officialFormArt('Hisuian ' + p.name, p, f.image); displayName += ' (Hisuian)'; }
             } else if (cleanTitle.includes('paldean') && rawAssetForms.some(a => a.form && a.form.startsWith('PALDEA'))) {
                 const f = rawAssetForms.find(a => a.form && a.form.startsWith('PALDEA'));
-                if (f && f.image) { sprite = f.image; displayName += ' (Paldean)'; }
+                if (f && f.image) { sprite = officialFormArt('Paldean ' + p.name, p, f.image); displayName += ' (Paldean)'; }
             } else if (cleanTitle.includes('therian') && rawAssetForms.some(a => a.form === 'THERIAN')) {
                 const f = rawAssetForms.find(a => a.form === 'THERIAN');
-                if (f && f.image) { sprite = f.image; displayName += ' (Therian)'; }
+                if (f && f.image) { sprite = officialFormArt('Therian ' + p.name, p, f.image); displayName += ' (Therian)'; }
             } else if (cleanTitle.includes('incarnate') && rawAssetForms.some(a => a.form === 'INCARNATE')) {
                 const f = rawAssetForms.find(a => a.form === 'INCARNATE');
-                if (f && f.image) { sprite = f.image; displayName += ' (Incarnate)'; }
+                if (f && f.image) { sprite = officialFormArt('Incarnate ' + p.name, p, f.image); displayName += ' (Incarnate)'; }
             } else if (cleanTitle.includes('mega') && rawAssetForms.some(a => a.form === 'MEGA')) {
                 const f = rawAssetForms.find(a => a.form === 'MEGA');
-                if (f && f.image) { sprite = f.image; displayName = 'Mega ' + displayName; }
+                if (f && f.image) { sprite = officialFormArt('Mega ' + p.name, p, f.image); displayName = 'Mega ' + displayName; }
             } else if (cleanTitle.includes('primal') && rawAssetForms.some(a => a.form === 'PRIMAL')) {
                 const f = rawAssetForms.find(a => a.form === 'PRIMAL');
-                if (f && f.image) { sprite = f.image; displayName = 'Primal ' + displayName; }
+                if (f && f.image) { sprite = officialFormArt('Primal ' + p.name, p, f.image); displayName = 'Primal ' + displayName; }
             } else if (isRaidDay) {
                 // If event is a Raid Day, prioritize Mega/Primal sprite if available
                 const megaImg = getPokemonImageUrl(`Mega ${p.name}`, p);
@@ -13289,6 +13300,16 @@ function rumorLikelyText(feats) {
     if (!feats.some(f => f.day)) return feats.map(nm).join(', ');
     const groups = [...new Set(feats.map(f => f.day || 0))].sort((a, b) => a - b);
     return groups.map(g => `<b>${g === 0 ? 'All days' : 'Day ' + g}:</b> ${feats.filter(f => (f.day || 0) === g).map(nm).join(', ')}`).join(' · ');
+}
+
+// Official PokeAPI artwork for a form name ("Alolan Sandshrew", "Mega Gengar"); `fallback` (usually a GO icon)
+// only when PokeAPI has no artwork for that form
+function officialFormArt(fullName, poke, fallback) {
+    const url = getPokemonImageUrl(fullName, poke);
+    const baseUrls = [poke && poke.img, poke && getActivePokemonImageUrl(poke)];
+    const isForm = String(fullName || '').toLowerCase().trim() !== String((poke && poke.name) || '').toLowerCase().trim();
+    if (url && (!isForm || !baseUrls.includes(url))) return url;
+    return fallback || url || (poke && poke.img) || '';
 }
 
 function rumorTagStyle(tag) {
