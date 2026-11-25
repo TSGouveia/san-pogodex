@@ -10657,7 +10657,7 @@ function openEventModal(ev) {
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
                 if (matchedPoke && spawn.form) {
-                    pokeImgUrl = getPokemonImageUrl(`${spawn.form} ${matchedPoke.name}`, matchedPoke);
+                    pokeImgUrl = getPokemonImageUrl(rumorFormSpriteName(spawn.form, matchedPoke.name), matchedPoke);
                 } else if (matchedPoke) {
                     pokeImgUrl = getActivePokemonImageUrl(matchedPoke);
                 } else {
@@ -10920,7 +10920,7 @@ function getEventFeaturedPokemonList(ev) {
                 if (!seenPokeIds.has(formKey)) {
                     seenPokeIds.add(formKey);
                     seenPokeIds.add(matched.id);
-                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: getPokemonImageUrl(`${cand.form} ${matched.name}`, matched), rumorTag: cand.rumorTag || null });
+                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: getPokemonImageUrl(rumorFormSpriteName(cand.form, matched.name), matched), rumorTag: cand.rumorTag || null });
                 }
                 continue;
             }
@@ -13197,6 +13197,19 @@ var eventRumors = [];
 
 const RUMOR_EVENT_TYPES = ['Hatch Day', 'Raid Hour', 'Raid Day', 'Community Day', 'Spotlight Hour', 'Max Monday', 'Max Battle Day', 'Event'];
 
+const RUMOR_FORM_SUGGESTIONS = ['Mega', 'Mega X', 'Mega Y', 'Primal', 'Gigantamax', 'Dynamax', 'Shadow', 'Alolan', 'Galarian', 'Hisuian', 'Paldean', 'Origin', 'Therian', 'Attack', 'Defense', 'Speed'];
+
+// Turns a free-text form + species into the name format getPokemonImageUrl understands
+// ("Gmax" + Charizard -> "Gigantamax Charizard", "Mega X" + Charizard -> "Mega Charizard X")
+function rumorFormSpriteName(form, name) {
+    const f = String(form || '').trim();
+    if (/^(g-?max|gigantamax)$/i.test(f)) return `Gigantamax ${name}`;
+    const mega = f.match(/^mega(?:\s*([xy]))?$/i);
+    if (mega) return `Mega ${name}${mega[1] ? ' ' + mega[1].toUpperCase() : ''}`;
+    if (/^(dynamax|d-?max|shadow|purified)$/i.test(f)) return name; // same artwork as the base form
+    return `${f} ${name}`;
+}
+
 function rumorTagStyle(tag) {
     if (tag === 'datamined') return { color: '#c084fc', bg: 'rgba(168, 85, 247, 0.18)', icon: 'fa-code', label: 'Datamined' };
     return { color: '#facc15', bg: 'rgba(234, 179, 8, 0.18)', icon: 'fa-circle-question', label: 'Rumor' };
@@ -13361,10 +13374,11 @@ function buildRumorAdminModal() {
             <label style="${lbl}">Pokémon</label>
             <div style="display: flex; gap: 6px;">
                 <input id="rumor-poke-input" list="rumor-poke-list" style="${inp} flex: 2;" placeholder="Search name...">
-                <input id="rumor-form-input" style="${inp} flex: 1;" placeholder="Form (optional)">
+                <input id="rumor-form-input" style="${inp} flex: 1;" placeholder="Form (optional)" list="rumor-form-list">
                 <button type="button" id="rumor-poke-add" style="border: none; background: var(--accent-color); color: #0b1322; font-weight: 800; padding: 0 14px; border-radius: 8px; cursor: pointer;">Add</button>
             </div>
             <datalist id="rumor-poke-list"></datalist>
+            <datalist id="rumor-form-list">${RUMOR_FORM_SUGGESTIONS.map(f => `<option value="${f}">`).join('')}</datalist>
             <div id="rumor-poke-chips" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;"></div>
 
             <div style="display: flex; gap: 8px;">
@@ -13438,7 +13452,7 @@ function renderRumorChips() {
     box.innerHTML = rumorDraftPokemon.map((p, i) => {
         const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
         const name = m ? m.name : `#${p.id}`;
-        const img = m ? (p.form ? getPokemonImageUrl(`${p.form} ${m.name}`, m, false) : getActivePokemonImageUrl(m, false)) : '';
+        const img = m ? (p.form ? getPokemonImageUrl(rumorFormSpriteName(p.form, m.name), m, false) : getActivePokemonImageUrl(m, false)) : '';
         return `<span style="display: inline-flex; align-items: center; gap: 4px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px 8px 2px 2px; font-size: 0.8rem; color: var(--text-primary);">
             <img src="${img}" style="width: 26px; height: 26px; object-fit: contain;" onerror="this.style.display='none'">
             ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}
