@@ -392,7 +392,7 @@ function collect(p){
     if (!t || isTba(r.start) || isTba(r.end) || !(end > start) || end - start < DAY || !(end > p.from && start < p.to)) return;
     const sp = squashName(r.species || r.name);
     if (!sp || t.bosses.some(x => squashName(x.name + ' ' + (x.title || '')).includes(sp))) return;
-    t.bosses.push({ name: r.name, poke: r.img ? { name: r.name, img: r.img, types: r.types || [] } : null, start, end });
+    t.bosses.push({ name: r.name, poke: r.img ? { name: r.name, img: r.img, types: r.types || [], cp: r.cp || null, cpB: r.cpB || null } : null, start, end });
   });
   for (let i = raids.length - 1; i >= 0; i--) if (!raids[i].bosses.length) raids.splice(i, 1);
   // the same boss returning in the period is one entry with several date ranges
@@ -662,10 +662,15 @@ async function attachRaidInfo(raids, dayItems){
   }));
   const jobs = [];
   raids.forEach(t => t.bosses.forEach(b => {
-    const info = map.get(raidKey(b.name)) || map.get(raidKey('mega ' + b.name));
-    if (!info) return;
-    b.cp = info.cp; b.boosted = info.boosted; b.est = info.est;
-    b.weather = info.weather.map(w => ({ ...w }));
+    const info = map.get(raidKey(b.name)) || map.get(raidKey('mega ' + b.name)) || {};
+    // Fall back to the base Pokémon (catch CP from its stats, weather from its types) when the raid data
+    // has no CP / weather, e.g. upcoming bosses that only exist in the raid calendar
+    const fb = b.poke || {};
+    b.cp = info.cp || fb.cp || null;
+    b.boosted = info.boosted || fb.cpB || null;
+    b.est = info.est || null;
+    const wx = info.weather && info.weather.length ? info.weather : wxOf(fb.types).map(w => ({ name: w, img: WX_URL(w) }));
+    b.weather = wx.map(w => ({ ...w }));
     b.weather.forEach(w => jobs.push(toDataUrl(w.img).then(d => { w.data = d; })));
   }));
   await Promise.all(jobs);

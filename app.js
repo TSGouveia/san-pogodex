@@ -5937,7 +5937,9 @@ window.openEventsInfographic = function (mode, offset) {
         const base = findPokemonByName(String(r.name || '').replace(/^\s*(super\s+)?(mega|primal|shadow)\s+/i, ''));
         // Use the Pokédex spelling ("Ho Oh" -> "Ho-Oh") so it merges with the same boss from LeekDuck
         const name = base ? String(r.name || '').replace(new RegExp(base.name.replace(/[^a-z0-9]+/gi, '[^a-z0-9]*'), 'i'), base.name) : r.name;
-        return { name, tier: r.tier, start: r.start, end: r.end, species: base ? base.name : '',
+        // Catch CP from the base Pokémon's stats (Megas / Primals / Shadows are caught as the base form)
+        const baseCps = base ? (base.combatPower || calculateClientSideCombatPower(base.stats) || {}) : {};
+        return { name, cp: baseCps.raidsL20 ? baseCps.raidsL20.max : null, cpB: baseCps.raidsWbL25 ? baseCps.raidsWbL25.max : null, tier: r.tier, start: r.start, end: r.end, species: base ? base.name : '',
             img: base ? getPokemonImageUrl(r.name, base, false) : '', types: base ? typesOf(base.id) : [] };
     });
     const sig = raidCalendar.map(r => r.name + r.start + r.end).join() + events.map(ev => `${ev.title}|${ev.start}|${ev.end}|${ev.pokemon.length}`).join('\n') + debuts.map(d => d.name + d.date).join();
