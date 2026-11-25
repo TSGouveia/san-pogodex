@@ -5918,7 +5918,7 @@ window.openEventsInfographic = function (mode, offset) {
                     const base = pokemonDatabase.find(x => String(x.id) === String(p.id));
                     const megaImg = megaEv && base && base.mega ? getPokemonImageUrl(`Mega ${p.name}`, base, false) : null;
                     const cps = base ? (base.combatPower || calculateClientSideCombatPower(base.stats) || {}) : {};
-                    const extra = { types: typesOf(p.id), cp: cps.raidsL20 && cps.raidsL20.max, cpB: cps.raidsWbL25 && cps.raidsWbL25.max };
+                    const extra = { types: typesOf(p.id), cp: cps.raidsL20 && cps.raidsL20.max, cpB: cps.raidsWbL25 && cps.raidsWbL25.max, day: p.day || 0 };
                     return megaImg && megaImg !== base.img
                         ? { name: `Mega ${p.name}`, img: megaImg, ...extra }
                         : { name: p.name, img: p.img, ...extra };
@@ -10630,7 +10630,7 @@ function openEventModal(ev) {
             const seen = new Map();
             allSpawns.forEach(s => {
                 if (!s.name) return;
-                const key = s.name.toLowerCase() + '|' + (s.form || '').toLowerCase();
+                const key = s.name.toLowerCase() + '|' + (s.form || '').toLowerCase() + '|' + (s.day || 0);
                 if (seen.has(key)) {
                     if (s.shiny_available) seen.get(key).shiny_available = true;
                 } else {
@@ -10680,6 +10680,8 @@ function openEventModal(ev) {
                     titleText += ` - ${rumorTagStyle(spawn.rumorTag).label}, not confirmed`;
                     highlightStyle = `border: 1px dashed ${rumorTagStyle(spawn.rumorTag).color};`;
                 }
+                if (spawn.day) titleText = `Day ${spawn.day} · ${titleText}`;
+                const dayChip = spawn.day ? `<span style="position: absolute; top: -6px; left: -4px; font-size: 0.5rem; font-weight: 800; color: #0b1322; background: var(--accent-color); padding: 0 4px; border-radius: 4px;">D${spawn.day}</span>` : '';
                 const rumorStrip = spawn.rumorTag ? `<span style="position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: ${rumorTagStyle(spawn.rumorTag).color}; background: #0b1322; border: 1px solid ${rumorTagStyle(spawn.rumorTag).color}88; padding: 0 4px; border-radius: 4px; white-space: nowrap;">${rumorTagStyle(spawn.rumorTag).label}</span>` : '';
 
                 return `
@@ -10687,6 +10689,7 @@ function openEventModal(ev) {
                         ${shinySparkle}
                         <img src="${pokeImgUrl}" alt="${displayName}" style="width: 100%; height: 100%; object-fit: contain;${spawn.rumorTag ? ' opacity: 0.8;' : ''}" onerror="this.style.display='none'">
                         ${rumorStrip}
+                        ${dayChip}
                     </div>
                 `;
             }).join('');
@@ -10849,7 +10852,7 @@ function createEventCardElement(ev, now) {
                     </h3>
                     <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.7;"></i>
                 </div>
-                ${rumoredFeats.length ? `<div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-question" style="color: ${rumorTagStyle(cardRumorTag).color};"></i> Likely: ${rumoredFeats.map(f => escapeRumorHtml(f.form ? `${f.name} (${f.form})` : f.name)).join(', ')}</div>` : ''}
+                ${rumoredFeats.length ? `<div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-question" style="color: ${rumorTagStyle(cardRumorTag).color};"></i> Likely: ${rumoredFeats.map(f => escapeRumorHtml((f.form ? `${f.name} (${f.form})` : f.name) + (f.day ? ` - day ${f.day}` : ''))).join(', ')}</div>` : ''}
             </div>
         </div>
     `;
@@ -10936,7 +10939,7 @@ function getEventFeaturedPokemonList(ev) {
                 if (!seenPokeIds.has(formKey)) {
                     seenPokeIds.add(formKey);
                     seenPokeIds.add(matched.id);
-                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: rumorFormImage(cand.form, matched), rumorTag: cand.rumorTag || null });
+                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: rumorFormImage(cand.form, matched), rumorTag: cand.rumorTag || null, day: cand.day || 0 });
                 }
                 continue;
             }
@@ -10955,7 +10958,8 @@ function getEventFeaturedPokemonList(ev) {
                     name: name,
                     id: matched.id,
                     img: img,
-                    rumorTag: cand.rumorTag || null
+                    rumorTag: cand.rumorTag || null,
+                    day: cand.day || 0
                 });
             }
         }
@@ -11364,7 +11368,8 @@ function renderEventsCalendar(listContainer, now) {
             });
 
             dayEvents.forEach(ev => {
-                const pokeList = getEventFeaturedPokemonList(ev);
+                const calDayIdx = eventDayIndex(ev, new Date(targetYear, targetMonth, day));
+                const pokeList = getEventFeaturedPokemonList(ev).filter(p => !p.day || p.day === calDayIdx);
                 const ctx = getEventContext(ev);
 
                 const evItem = document.createElement('div');
@@ -13244,6 +13249,27 @@ function rumorFormSpriteName(form, name) {
     return `${f} ${name}`;
 }
 
+// 1-based day of a multi-day event that `date` falls on (Community Day day 1 / day 2)
+function eventDayIndex(ev, date) {
+    const s = new Date(ev.start);
+    if (isNaN(s.getTime())) return 1;
+    const d0 = new Date(s.getFullYear(), s.getMonth(), s.getDate());
+    const d1 = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    return Math.round((d1 - d0) / 86400000) + 1;
+}
+
+// Days of an event as [{ idx, label }] (only meaningful when it spans more than one day)
+function eventDayOptions(startStr, endStr) {
+    const s = startStr && !isTbaDate(startStr) ? new Date(startStr) : null;
+    const e = endStr && !isTbaDate(endStr) ? new Date(endStr) : null;
+    if (!s || !e || e <= s) return [];
+    const out = [];
+    for (let d = new Date(s.getFullYear(), s.getMonth(), s.getDate()), i = 1; d < e && i <= 14; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1), i++) {
+        out.push({ idx: i, label: `Day ${i} - ${d.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric' })}` });
+    }
+    return out.length > 1 ? out : [];
+}
+
 function rumorTagStyle(tag) {
     if (tag === 'datamined') return { color: '#c084fc', bg: 'rgba(168, 85, 247, 0.18)', icon: 'fa-code', label: 'Datamined' };
     return { color: '#facc15', bg: 'rgba(234, 179, 8, 0.18)', icon: 'fa-circle-question', label: 'Rumor' };
@@ -13267,7 +13293,7 @@ function rumorFeatures(r) {
     const tag = r.tag === 'confirmed' ? null : (r.tag || 'rumor');
     return (Array.isArray(r.pokemon) ? r.pokemon : []).map(p => {
         const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
-        return m ? { name: m.name, form: (p.form || '').trim(), rumorTag: tag } : null;
+        return m ? { name: m.name, form: (p.form || '').trim(), day: Number(p.day) || 0, rumorTag: tag } : null;
     }).filter(Boolean);
 }
 
@@ -13409,6 +13435,7 @@ function buildRumorAdminModal() {
             <div style="display: flex; gap: 6px;">
                 <input id="rumor-poke-input" list="rumor-poke-list" style="${inp} flex: 2;" placeholder="Search name...">
                 <input id="rumor-form-input" style="${inp} flex: 1;" placeholder="Form (optional)" list="rumor-form-list">
+                <select id="rumor-day-input" style="${inp} flex: 1; display: none;"></select>
                 <button type="button" id="rumor-poke-add" style="border: none; background: var(--accent-color); color: #0b1322; font-weight: 800; padding: 0 14px; border-radius: 8px; cursor: pointer;">Add</button>
             </div>
             <datalist id="rumor-poke-list"></datalist>
@@ -13450,6 +13477,7 @@ function buildRumorAdminModal() {
     modal.querySelector('#rumor-poke-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addRumorDraftPokemon(); } });
     modal.querySelector('#rumor-form-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addRumorDraftPokemon(); } });
     modal.querySelector('#rumor-reset').addEventListener('click', resetRumorForm);
+    ['rumor-event-select', 'rumor-start', 'rumor-end'].forEach(id => modal.querySelector('#' + id).addEventListener('change', refreshRumorDayOptions));
     modal.querySelector('#rumor-save').addEventListener('click', saveRumor);
     return modal;
 }
@@ -13465,6 +13493,7 @@ function setRumorMode(mode) {
     });
     modal.querySelector('#rumor-existing-fields').style.display = mode === 'existing' ? 'block' : 'none';
     modal.querySelector('#rumor-new-fields').style.display = mode === 'new' ? 'block' : 'none';
+    refreshRumorDayOptions();
 }
 
 function fillRumorEventSelect(selectedKey) {
@@ -13481,6 +13510,24 @@ function fillRumorEventSelect(selectedKey) {
     if (selectedKey) sel.value = selectedKey;
 }
 
+function currentRumorDayOptions() {
+    if (rumorMode === 'existing') {
+        const ev = scrapedEvents.find(e => e.key === document.getElementById('rumor-event-select').value);
+        return ev ? eventDayOptions(ev.start, ev.end) : [];
+    }
+    return eventDayOptions(document.getElementById('rumor-start').value, document.getElementById('rumor-end').value);
+}
+
+function refreshRumorDayOptions() {
+    const sel = document.getElementById('rumor-day-input');
+    if (!sel) return;
+    const opts = currentRumorDayOptions();
+    const prev = sel.value;
+    sel.innerHTML = '<option value="0">All days</option>' + opts.map(o => `<option value="${o.idx}">${escapeRumorHtml(o.label)}</option>`).join('');
+    sel.style.display = opts.length ? 'block' : 'none';
+    sel.value = opts.some(o => String(o.idx) === prev) ? prev : '0';
+}
+
 function renderRumorChips() {
     const box = document.getElementById('rumor-poke-chips');
     box.innerHTML = rumorDraftPokemon.map((p, i) => {
@@ -13489,7 +13536,7 @@ function renderRumorChips() {
         const img = m ? (p.form ? rumorFormImage(p.form, m, false) : getActivePokemonImageUrl(m, false)) : '';
         return `<span style="display: inline-flex; align-items: center; gap: 4px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px 8px 2px 2px; font-size: 0.8rem; color: var(--text-primary);">
             <img src="${img}" style="width: 26px; height: 26px; object-fit: contain;" onerror="this.style.display='none'">
-            ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}
+            ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}${p.day ? ` <b style="color: var(--accent-color); font-size: 0.7rem;">D${p.day}</b>` : ''}
             <button type="button" data-i="${i}" class="rumor-chip-x" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 0 2px;"><i class="fa-solid fa-xmark"></i></button>
         </span>`;
     }).join('');
@@ -13508,8 +13555,10 @@ function addRumorDraftPokemon() {
         || pokemonDatabase.find(p => p.name && p.name.toLowerCase().startsWith(q));
     if (!m) { setRumorMsg(`Pokémon "${input.value}" not found`, true); return; }
     const form = formInput.value.trim();
-    if (!rumorDraftPokemon.some(p => String(p.id) === String(m.id) && (p.form || '') === form)) {
-        rumorDraftPokemon.push({ id: Number(m.id), form });
+    const daySel = document.getElementById('rumor-day-input');
+    const day = daySel && daySel.style.display !== 'none' ? Number(daySel.value) || 0 : 0;
+    if (!rumorDraftPokemon.some(p => String(p.id) === String(m.id) && (p.form || '') === form && (p.day || 0) === day)) {
+        rumorDraftPokemon.push({ id: Number(m.id), form, day });
     }
     input.value = '';
     formInput.value = '';
@@ -13547,7 +13596,7 @@ function loadRumorIntoForm(r) {
     resetRumorForm();
     rumorEditingId = r.id;
     document.getElementById('rumor-form-title').textContent = 'Edit rumor';
-    rumorDraftPokemon = (r.pokemon || []).map(p => ({ id: Number(p.id), form: p.form || '' }));
+    rumorDraftPokemon = (r.pokemon || []).map(p => ({ id: Number(p.id), form: p.form || '', day: Number(p.day) || 0 }));
     document.getElementById('rumor-tag').value = r.tag || 'rumor';
     document.getElementById('rumor-source').value = r.source || '';
     if (r.eventKey) {
@@ -13562,6 +13611,7 @@ function loadRumorIntoForm(r) {
         document.getElementById('rumor-banner').value = r.banner || '';
     }
     renderRumorChips();
+    refreshRumorDayOptions();
     document.getElementById('rumor-admin-modal').firstElementChild.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -13569,7 +13619,7 @@ async function saveRumor() {
     if (!isRumorAdmin()) { setRumorMsg('Not allowed', true); return; }
     const tag = document.getElementById('rumor-tag').value;
     const data = {
-        pokemon: rumorDraftPokemon.map(p => ({ id: p.id, form: p.form || '' })),
+        pokemon: rumorDraftPokemon.map(p => ({ id: p.id, form: p.form || '', day: p.day || 0 })),
         tag,
         source: document.getElementById('rumor-source').value.trim(),
         updatedAt: new Date().toISOString()
@@ -13619,7 +13669,7 @@ function renderRumorAdminList() {
     list.innerHTML = rows.map(r => {
         const names = (r.pokemon || []).map(p => {
             const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
-            return escapeRumorHtml((m ? m.name : '#' + p.id) + (p.form ? ` (${p.form})` : ''));
+            return escapeRumorHtml((m ? m.name : '#' + p.id) + (p.form ? ` (${p.form})` : '') + (p.day ? ` - D${p.day}` : ''));
         }).join(', ') || '<em>no Pokémon</em>';
         const orphan = r.eventKey && !scrapedEvents.some(e => e.key === r.eventKey);
         const ended = r.end && !isTbaDate(r.end) && new Date(r.end).getTime() < now;

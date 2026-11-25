@@ -366,10 +366,13 @@ function collect(p){
   const dayItems = evs.filter(e => e.hours <= MAX_EVENT_HOURS && !RAID_TIERS.some(t => t.re.test(e.title)))
     .flatMap(e => eventDays(e).filter(date => date >= p.from && date < p.to).map(date => {
       const multi = e.hours > 24;
+      // Pokémon tagged for a specific day of a multi-day event only show on that day
+      const dayIdx = Math.round((startOfDay(date) - startOfDay(e.start)) / DAY) + 1;
+      const pks = e.pokemon.filter(x => !x.day || x.day === dayIdx);
       const dayEnd = multi ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), e.end.getHours(), e.end.getMinutes()) : e.end;
       return { title: e.title, bonus: e.bonus, rumorTag: e.rumorTag, date, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(date)} – ${hm(dayEnd)}`,
-        names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
-        pokemon: e.pokemon.slice(0, 9).map(x => ({ ...x })), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color };
+        names: pks.length ? joinNames(pks.map(x => x.name)) : shortTitle(e.title),
+        pokemon: pks.slice(0, 9).map(x => ({ ...x })), banner: pks.length ? '' : e.banner, glow: pks.length ? typeColor(pks[0]) : e.color };
     }));
   (data.debuts || []).forEach(d => {
     const date = new Date(d.date);
