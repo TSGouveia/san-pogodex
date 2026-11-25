@@ -611,7 +611,7 @@ async function expandForms(raids, dayItems){
 
 const RAID_FILES = ['https://raw.githubusercontent.com/TSGouveia/san-pogodex/data/files/raids.min.json', 'https://cdn.jsdelivr.net/gh/TSGouveia/san-pogodex@data/files/raids.min.json'];
 const raidKey = n => String(n || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(' ')
-  .filter(w => w && !['shadow', 'incarnate', 'forme', 'form'].includes(w)).sort().join(' ');
+  .filter(w => w && !['shadow', 'incarnate', 'forme', 'form', 'super', 'normal'].includes(w)).sort().join(' ');
 const WX_ICON = { sunny: 'sunny', clear: 'sunny', rainy: 'rain', 'partly cloudy': 'partlycloudy_day', cloudy: 'cloudy', windy: 'windy', snow: 'snow', fog: 'fog' };
 let raidInfoP = null;
 function raidInfo(){
@@ -626,6 +626,11 @@ function raidInfo(){
           cp: x.combatPower.normal && x.combatPower.normal.max, boosted: x.combatPower.boosted && x.combatPower.boosted.max,
           weather: (x.boostedWeather || []).map(w => ({ name: w.name, img: WX_ICON[w.name] ? WX_URL(w.name) : w.image })),
           est: estFor(x) }); });
+        // Upcoming rotations (raid calendar) carry only the estimator: fill in bosses not listed above
+        (d.calendar || []).forEach(x => { const k = raidKey(x.name); const est = estFor(x); if (!est) return;
+          const cur = map.get(k);
+          if (!cur) map.set(k, { cp: null, boosted: null, weather: [], est });
+          else if (!cur.est) cur.est = est; });
         return map;
       } catch {}
     }

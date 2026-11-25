@@ -291,6 +291,8 @@ def scrape_pokebattler_estimator(slug, tier=None):
         "Shadow 5-Star Raids": "RAID_LEVEL_5_SHADOW",
     }
     tier_code = tier_map.get(tier)
+    if not tier_code and tier and str(tier).startswith("RAID_LEVEL_"):
+        tier_code = str(tier)  # already a Pokebattler tier code (raid calendar entries)
     if not tier_code:
         if "MEGA" in slug:
             tier_code = "RAID_LEVEL_MEGA"
@@ -748,6 +750,44 @@ def scrape_raids():
                 b["verdict"] = diff_info["verdict"]
                 b["trainersNeeded"] = diff_info["trainersNeeded"]
                 b["trainerBoxes"] = diff_info["boxes"]
+
+    # Raid calendar (upcoming rotations) has no estimators: reuse the ones above when the boss is
+    # already known, otherwise query Pokebattler with the calendar's own pokemonId + tier code.
+    # Max battles use a different simulator, so they are skipped; ended rotations too.
+    known_by_slug = {}
+    for (s, t), est in slug_tier_to_estimator.items():
+        known_by_slug.setdefault(s, est)
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    def _cal_still_relevant(c):
+        end = c.get("end")
+        if not end:
+            return True
+        try:
+            e = datetime.datetime.fromisoformat(end.replace("Z", "+00:00"))
+            if e.tzinfo is None:
+                e = e.replace(tzinfo=datetime.timezone.utc)
+            return e > now_utc - datetime.timedelta(days=1)
+        except Exception:
+            return True
+    cal_targets = [c for c in calendar if c.get("pokemonId") and "MAX" not in str(c.get("tier", "")) and _cal_still_relevant(c)]
+    cal_missing = list({(c["pokemonId"], c.get("tier")) for c in cal_targets if c["pokemonId"] not in known_by_slug})
+    cal_est = {}
+    if cal_missing:
+        print(f"  -> Fetching Pokebattler estimators for {len(cal_missing)} upcoming calendar bosses...")
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            fut = {executor.submit(scrape_pokebattler_estimator, s, t): (s, t) for s, t in cal_missing}
+            for future in concurrent.futures.as_completed(fut):
+                try:
+                    est = future.result()
+                    if est is not None:
+                        cal_est[fut[future]] = est
+                except Exception as e:
+                    print(f"  Error fetching calendar estimator for {fut[future][0]}: {e}")
+    for c in cal_targets:
+        est = cal_est.get((c["pokemonId"], c.get("tier"))) or known_by_slug.get(c["pokemonId"])
+        if est:
+            c["estimator"] = est["estimator"]
+            c["estimators"] = est["estimators"]
 
     # Wrap result into rich payload containing current bosses and schedule calendar
     raid_payload = {
