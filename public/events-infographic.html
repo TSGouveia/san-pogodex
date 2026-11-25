@@ -763,9 +763,18 @@ async function getFontCSS(){
   urls.forEach((u, i) => { css = css.split(u).join(datas[i]); });
   return fontCSS = css;
 }
+// Shrink text that would be cut off (ellipsis / line clamp) until it fits, down to 55% of its size
+function fitText(root){
+  root.querySelectorAll('.pk i, .dcard .nm, .mev .n, .boss .bn').forEach(el => {
+    const base = parseFloat(getComputedStyle(el).fontSize);
+    const over = () => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1;
+    for (let fs = base; over() && fs > base * .55; fs -= .5) el.style.fontSize = (fs - .5) + 'px';
+  });
+}
 async function makePng(pixelRatio = 2){
   await document.fonts.ready;
   const node = $('poster');
+  fitText(node);
   const opts = { pixelRatio, width: 1080, height: node.offsetHeight };
   try { opts.fontEmbedCSS = await getFontCSS(); } catch {}
   await htmlToImage.toPng(node, opts).catch(() => {});

@@ -13307,7 +13307,9 @@ function rumorLikelyText(feats) {
 function officialFormArt(fullName, poke, fallback) {
     const url = getPokemonImageUrl(fullName, poke);
     const baseUrls = [poke && poke.img, poke && getActivePokemonImageUrl(poke)];
-    const isForm = String(fullName || '').toLowerCase().trim() !== String((poke && poke.name) || '').toLowerCase().trim();
+    // Default forms (Incarnate, Altered, Land, Aria...) share the base artwork, so the base image is correct for them
+    const isDefaultForm = /^(incarnate|altered|land|aria|ordinary|standard|normal)\s/i.test(String(fullName || '').trim());
+    const isForm = !isDefaultForm && String(fullName || '').toLowerCase().trim() !== String((poke && poke.name) || '').toLowerCase().trim();
     if (url && (!isForm || !baseUrls.includes(url))) return url;
     return fallback || url || (poke && poke.img) || '';
 }
