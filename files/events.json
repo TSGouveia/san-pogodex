@@ -233,12 +233,12 @@
         "end": "2026-12-13T17:00:00.000"
     },
     {
-        "eventID": "unannounced-event-december-2026",
-        "title": "Unannounced Event",
+        "eventID": "pokemon-champions-celebration-event-2026",
+        "title": "Pokémon Champions Celebration Event 2026",
         "type": "",
         "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
-        "link": "https://leekduck.com/events/unannounced-event-december-2026/",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-12-08-pokemon-champions-celebration-event-2026/pokemon-champions-celebration-event-2026.jpg",
+        "link": "https://leekduck.com/events/pokemon-champions-celebration-event-2026/",
         "start": "2026-12-08T10:00:00.000",
         "end": "2026-12-14T20:00:00.000"
     },
@@ -273,12 +273,12 @@
         "end": "2026-12-15T22:00:00.000"
     },
     {
-        "eventID": "unannounced-pokemon-in-5-star-raid-battles-december-2026",
-        "title": "Unannounced Pokémon in 5-star Raid Battles",
+        "eventID": "pokemon-champions-celebration-5-star-raid-battles-december-2026",
+        "title": "Pokémon Champions Celebration 5-star Raid Battles",
         "type": "",
         "category": "current",
         "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
-        "link": "https://leekduck.com/events/unannounced-pokemon-in-5-star-raid-battles-december-2026/",
+        "link": "https://leekduck.com/events/pokemon-champions-celebration-5-star-raid-battles-december-2026/",
         "start": "2026-12-09T06:00:00.000",
         "end": "2026-12-15T22:00:00.000"
     },
