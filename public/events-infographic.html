@@ -242,7 +242,7 @@
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c]));
 const DAY = 86400000;
-const MAX_EVENT_HOURS = 24; // only short (1-day) events go on the calendar
+const MAX_EVENT_HOURS = 48.05; // short events (up to 2 days, like the site calendar) go on the calendar
 const Q = new URLSearchParams(location.search);
 const EMBEDDED = !!Q.get('embed');
 let mode = Q.get('mode') === 'month' ? 'month' : 'week';
@@ -337,10 +337,23 @@ function period(){
 // ---------- Collect what goes on the poster ----------
 function collect(p){
   const evs = normalise(data.events).filter(e => e.end > p.from && e.start < p.to);
-  const dayItems = evs.filter(e => e.hours <= MAX_EVENT_HOURS && e.start >= p.from && !RAID_TIERS.some(t => t.re.test(e.title)))
-    .map(e => ({ title: e.title, bonus: e.bonus, date: e.start, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(e.start)} – ${hm(e.end)}`,
-      names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
-      pokemon: e.pokemon.slice(0, 4), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color }));
+  // Multi-day short events (e.g. a 2-day Community Day, 14:00 day 1 -> 17:00 day 2) get one entry per day
+  const eventDays = e => {
+    const days = [];
+    for (let d = startOfDay(e.start); d < e.end; d = addDays(d, 1)) {
+      const date = sameDay(d, e.start) ? e.start : new Date(d.getFullYear(), d.getMonth(), d.getDate(), e.start.getHours(), e.start.getMinutes());
+      if (date < e.end) days.push(date);
+    }
+    return days.length ? days : [e.start];
+  };
+  const dayItems = evs.filter(e => e.hours <= MAX_EVENT_HOURS && !RAID_TIERS.some(t => t.re.test(e.title)))
+    .flatMap(e => eventDays(e).filter(date => date >= p.from && date < p.to).map(date => {
+      const multi = e.hours > 24;
+      const dayEnd = multi ? new Date(date.getFullYear(), date.getMonth(), date.getDate(), e.end.getHours(), e.end.getMinutes()) : e.end;
+      return { title: e.title, bonus: e.bonus, date, kind: e.kind, color: e.color, loc: e.loc, time: `${hm(date)} – ${hm(dayEnd)}`,
+        names: e.pokemon.length ? joinNames(e.pokemon.map(x => x.name)) : shortTitle(e.title),
+        pokemon: e.pokemon.slice(0, 4).map(x => ({ ...x })), banner: e.pokemon.length ? '' : e.banner, glow: e.pokemon.length ? typeColor(e.pokemon[0]) : e.color };
+    }));
   (data.debuts || []).forEach(d => {
     const date = new Date(d.date);
     if (isNaN(date) || date < p.from || date >= p.to || !d.img) return;
