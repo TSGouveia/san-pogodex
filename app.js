@@ -28,7 +28,8 @@ import {
     arrayUnion,
     arrayRemove,
     onSnapshot,
-    writeBatch
+    writeBatch,
+    deleteDoc
 } from 'firebase/firestore';
 
 // Global Application Database loaded dynamically
@@ -1780,6 +1781,7 @@ function buildPokebattlerMaxUrl(bossName) {
                 const rawImg = ev.image || ev.banner || '';
                 const hdBanner = rawImg.replace(/\/cdn-cgi\/image\/[^\/]+\//, '/');
                 liveEvents.push({
+                    key: eventKey,
                     title: ev.name || ev.title || '',
                     category: ev.heading || ev.eventType || ev.category || 'Event',
                     banner: hdBanner,
@@ -1799,6 +1801,9 @@ function buildPokebattlerMaxUrl(bossName) {
             if (isNaN(db)) return -1;
             return da - db;
         });
+        // Keep the pristine scraped list; rumors (Firestore) are layered on top of it
+        scrapedEvents = liveEvents;
+        applyEventRumors();
 
         // 5. Parse Wild Spawns strictly from Firestore database
         liveSpawns = [];
@@ -1923,6 +1928,7 @@ function syncUpcomingReleaseDates() {
         // 2. Cross-reference with upcoming liveEvents ONLY if the Pokémon is currently unreleased
         if (poke.unreleased) {
             const upcomingEvent = liveEvents.find(ev => {
+                if (ev.rumorTag) return false;
                 if (!ev.start) return false;
                 const startDate = new Date(ev.start);
                 if (isNaN(startDate.getTime()) || startDate <= now) return false;
@@ -10529,7 +10535,7 @@ function openEventModal(ev) {
     if (categoryEl) {
         const modalLoc = getEventLocation(ev);
         const modalLocBadge = modalLoc ? `<span style="font-size: 0.65rem; font-weight: 800; color: #f43f5e; background: rgba(244, 63, 94, 0.2); border: 1px solid rgba(244, 63, 94, 0.5); padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: inline-flex; align-items: center; gap: 4px;"><i class="fa-solid fa-location-dot"></i>${modalLoc}</span>` : '';
-        categoryEl.innerHTML = `<span style="font-size: 0.65rem; font-weight: 800; color: ${categoryColor}; background: ${categoryBg}; border: 1px solid ${categoryColor}40; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${ev.category}</span> ${modalLocBadge}`;
+        categoryEl.innerHTML = `<span style="font-size: 0.65rem; font-weight: 800; color: ${categoryColor}; background: ${categoryBg}; border: 1px solid ${categoryColor}40; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">${ev.category}</span> ${modalLocBadge} ${ev.rumorTag ? rumorBadgeHtml(ev.rumorTag, true) : ''}`;
     }
 
     // Dates
@@ -10614,7 +10620,7 @@ function openEventModal(ev) {
             const seen = new Map();
             allSpawns.forEach(s => {
                 if (!s.name) return;
-                const key = s.name.toLowerCase();
+                const key = s.name.toLowerCase() + '|' + (s.form || '').toLowerCase();
                 if (seen.has(key)) {
                     if (s.shiny_available) seen.get(key).shiny_available = true;
                 } else {
@@ -10630,7 +10636,8 @@ function openEventModal(ev) {
                 const isCandyNeeded = matchedPoke && (familyNeedsCandies(matchedPoke) || needsCandies(matchedPoke));
 
                 // Format the raw API name into a readable display name
-                const displayName = matchedPoke ? matchedPoke.name : formatSpawnName(spawn.name);
+                const baseDisplayName = matchedPoke ? matchedPoke.name : formatSpawnName(spawn.name);
+                const displayName = spawn.form ? `${baseDisplayName} (${spawn.form})` : baseDisplayName;
 
                 let highlightStyle = 'border: 1px solid rgba(255,255,255,0.05);';
                 if (matchedPoke) {
@@ -10649,26 +10656,34 @@ function openEventModal(ev) {
                 // For matched Pokémon use PokeAPI official artwork.
                 // For unmatched (Megas, alternate forms) fall back to spawn.asset_url from the events API.
                 let pokeImgUrl;
-                if (matchedPoke) {
+                if (matchedPoke && spawn.form) {
+                    pokeImgUrl = getPokemonImageUrl(`${spawn.form} ${matchedPoke.name}`, matchedPoke);
+                } else if (matchedPoke) {
                     pokeImgUrl = getActivePokemonImageUrl(matchedPoke);
                 } else {
                     // asset_url from the API has the correct sprite for Megas and alternate forms
                     pokeImgUrl = spawn.asset_url || '';
                 }
 
-                const titleText = spawn.shiny_available ? `${displayName} (Shiny Available)` : displayName;
+                let titleText = spawn.shiny_available ? `${displayName} (Shiny Available)` : displayName;
+                if (spawn.rumorTag) {
+                    titleText += ` - ${rumorTagStyle(spawn.rumorTag).label}, not confirmed`;
+                    highlightStyle = `border: 1px dashed ${rumorTagStyle(spawn.rumorTag).color};`;
+                }
+                const rumorStrip = spawn.rumorTag ? `<span style="position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: ${rumorTagStyle(spawn.rumorTag).color}; background: #0b1322; border: 1px solid ${rumorTagStyle(spawn.rumorTag).color}88; padding: 0 4px; border-radius: 4px; white-space: nowrap;">${rumorTagStyle(spawn.rumorTag).label}</span>` : '';
 
                 return `
                     <div ${matchedPoke ? `class="clickable-spawn-icon" data-id="${matchedId}"` : ''} title="${titleText}" style="position: relative; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.02); border-radius: 8px; ${highlightStyle} padding: 4px; cursor: ${matchedPoke ? 'pointer' : 'default'}; transition: transform 0.2s ease;">
                         ${shinySparkle}
-                        <img src="${pokeImgUrl}" alt="${displayName}" style="width: 100%; height: 100%; object-fit: contain;" onerror="this.style.display='none'">
+                        <img src="${pokeImgUrl}" alt="${displayName}" style="width: 100%; height: 100%; object-fit: contain;${spawn.rumorTag ? ' opacity: 0.8;' : ''}" onerror="this.style.display='none'">
+                        ${rumorStrip}
                     </div>
                 `;
             }).join('');
 
             spawnsEl.innerHTML = `
                 <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Featured Pokémon</span>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <div style="display: flex; gap: 8px; flex-wrap: wrap; row-gap: 14px;">
                     ${spawnItems}
                 </div>
             `;
@@ -10788,18 +10803,24 @@ function createEventCardElement(ev, now) {
     const evLocation = getEventLocation(ev);
     const locationBadge = evLocation ? `<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 800; color: #f43f5e; background: rgba(11, 19, 34, 0.88); border: 1px solid rgba(244, 63, 94, 0.5); padding: 3px 8px; border-radius: 6px; white-space: nowrap; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.5);"><i class="fa-solid fa-location-dot" style="font-size:0.58rem;"></i>${evLocation}</span>` : '';
 
+    const rumoredFeats = (ev.details && Array.isArray(ev.details.features)) ? ev.details.features.filter(f => f && f.rumorTag) : [];
+    const cardRumorTag = ev.rumorTag || (rumoredFeats[0] && rumoredFeats[0].rumorTag) || null;
+    const cardRumorBadge = cardRumorTag ? rumorBadgeHtml(cardRumorTag, false) : '';
+    if (ev.rumorTag) card.style.border = `1px dashed ${rumorTagStyle(ev.rumorTag).color}88`;
     const bannerHtml = ev.banner ? `
         <div style="width: 100%; height: 130px; position: relative; overflow: hidden; background: #0b1322;">
             <img src="${ev.banner}" alt="${ev.title}" style="width: 100%; height: 100%; object-fit: cover;">
             <div style="position: absolute; bottom: 8px; left: 8px; z-index: 2; display: flex; gap: 6px; flex-wrap: wrap;">
                 ${categoryBadge}
                 ${locationBadge}
+                ${cardRumorBadge}
             </div>
         </div>
     ` : `
         <div style="width: 100%; height: 50px; background: linear-gradient(135deg, #1e293b, #0f172a); position: relative; display: flex; align-items: center; padding-left: 8px; gap: 6px;">
             ${categoryBadge}
             ${locationBadge}
+            ${cardRumorBadge}
         </div>
     `;
     card.innerHTML = `
@@ -10818,6 +10839,7 @@ function createEventCardElement(ev, now) {
                     </h3>
                     <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.7;"></i>
                 </div>
+                ${rumoredFeats.length ? `<div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-question" style="color: ${rumorTagStyle(cardRumorTag).color};"></i> Likely: ${rumoredFeats.map(f => escapeRumorHtml(f.form ? `${f.name} (${f.form})` : f.name)).join(', ')}</div>` : ''}
             </div>
         </div>
     `;
@@ -10893,6 +10915,15 @@ function getEventFeaturedPokemonList(ev) {
             if (!cand || !cand.name) continue;
             const candName = cand.name.toLowerCase();
             const matched = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === candName);
+            if (matched && cand.form) {
+                const formKey = `${matched.id}|${cand.form}`;
+                if (!seenPokeIds.has(formKey)) {
+                    seenPokeIds.add(formKey);
+                    seenPokeIds.add(matched.id);
+                    found.push({ name: `${matched.name} (${cand.form})`, id: matched.id, img: getPokemonImageUrl(`${cand.form} ${matched.name}`, matched), rumorTag: cand.rumorTag || null });
+                }
+                continue;
+            }
             if (matched && !seenPokeIds.has(matched.id)) {
                 let img = cand.asset_url || matched.img || `${POKE_SPRITE_BASE_URL}/${matched.id}.png`;
                 let name = matched.name;
@@ -10907,7 +10938,8 @@ function getEventFeaturedPokemonList(ev) {
                 found.push({
                     name: name,
                     id: matched.id,
-                    img: img
+                    img: img,
+                    rumorTag: cand.rumorTag || null
                 });
             }
         }
@@ -11371,7 +11403,9 @@ function renderEventsCalendar(listContainer, now) {
                         <span style="overflow: hidden; text-overflow: ellipsis;">${ctx.typeLabel}</span>
                     </span>
                     ${calLocBadge}
+                    ${(ev.rumorTag || pokeList.some(p => p.rumorTag)) ? rumorBadgeHtml(ev.rumorTag || pokeList.find(p => p.rumorTag).rumorTag, true) : ''}
                 `;
+                if (ev.rumorTag) evItem.style.border = `1px dashed ${rumorTagStyle(ev.rumorTag).color}88`;
                 evItem.appendChild(typeRow);
 
                 // Line 2: Centered Schedule / Time Range
@@ -11409,13 +11443,14 @@ function renderEventsCalendar(listContainer, now) {
                         const imgEl = document.createElement('img');
                         imgEl.src = getActivePokemonImageUrl(poke);
                         imgEl.alt = poke.name;
-                        imgEl.title = poke.name;
+                        imgEl.title = poke.rumorTag ? `${poke.name} (${rumorTagStyle(poke.rumorTag).label} - not confirmed)` : poke.name;
                         imgEl.style.cssText = `
                             width: 38px;
                             height: 38px;
                             object-fit: contain;
                             filter: drop-shadow(0 3px 4px rgba(0,0,0,0.55));
                             transition: transform 0.15s ease;
+                            ${poke.rumorTag ? `opacity: 0.75; outline: 1px dashed ${rumorTagStyle(poke.rumorTag).color}; outline-offset: 1px; border-radius: 6px;` : ''}
                         `;
                         imgEl.onerror = () => { imgEl.style.display = 'none'; };
                         spriteRow.appendChild(imgEl);
@@ -13141,4 +13176,442 @@ function renderPvpSeason() {
     }
 
     displayLastUpdatedTime();
+}
+
+// =====================================================================
+// EVENT RUMORS (unconfirmed / datamined Pokémon & events)
+// Stored in Firestore collection `event_rumors` (public read, admin write).
+// Doc shape: { eventKey: string|null, title, category, start, end, banner,
+//              pokemon: [{ id, form }], tag: 'rumor'|'datamined'|'confirmed',
+//              source, updatedAt }
+// eventKey set   -> adds Pokémon to that scraped event
+// eventKey null  -> creates a standalone event
+// =====================================================================
+
+// Firebase Auth UIDs allowed to edit rumors (must match the Firestore rule)
+const RUMOR_ADMIN_UIDS = ['aSQVNeZMglVgqSyllFF2o3jDt5i1'];
+
+// `var` (not let) so the loader can safely touch these whatever the timing
+var scrapedEvents = [];
+var eventRumors = [];
+
+const RUMOR_EVENT_TYPES = ['Hatch Day', 'Raid Hour', 'Raid Day', 'Community Day', 'Spotlight Hour', 'Max Monday', 'Max Battle Day', 'Event'];
+
+function rumorTagStyle(tag) {
+    if (tag === 'datamined') return { color: '#c084fc', bg: 'rgba(168, 85, 247, 0.18)', icon: 'fa-code', label: 'Datamined' };
+    return { color: '#facc15', bg: 'rgba(234, 179, 8, 0.18)', icon: 'fa-circle-question', label: 'Rumor' };
+}
+
+function rumorBadgeHtml(tag, small) {
+    const st = rumorTagStyle(tag);
+    const fs = small ? '0.6rem' : '0.65rem';
+    return `<span title="Not confirmed by Niantic" style="display: inline-flex; align-items: center; gap: 4px; font-size: ${fs}; font-weight: 800; color: ${st.color}; background: rgba(11, 19, 34, 0.88); border: 1px dashed ${st.color}; padding: ${small ? '2px 6px' : '3px 8px'}; border-radius: 6px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.4px;"><i class="fa-solid ${st.icon}" style="font-size: 0.55rem;"></i>${st.label}</span>`;
+}
+
+function escapeRumorHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function isRumorAdmin() {
+    return !!(currentUser && RUMOR_ADMIN_UIDS.includes(currentUser.uid));
+}
+
+function rumorFeatures(r) {
+    const tag = r.tag === 'confirmed' ? null : (r.tag || 'rumor');
+    return (Array.isArray(r.pokemon) ? r.pokemon : []).map(p => {
+        const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
+        return m ? { name: m.name, form: (p.form || '').trim(), rumorTag: tag } : null;
+    }).filter(Boolean);
+}
+
+function applyEventRumors() {
+    const merged = (Array.isArray(scrapedEvents) ? scrapedEvents : []).map(ev => ({ ...ev }));
+    (Array.isArray(eventRumors) ? eventRumors : []).forEach(r => {
+        const feats = rumorFeatures(r);
+        if (r.eventKey) {
+            const target = merged.find(ev => ev.key === r.eventKey);
+            if (!target) return; // scraped event vanished -> rumor has nothing to attach to
+            const details = target.details ? { ...target.details } : {};
+            const official = new Set([...(details.spawns || []), ...(details.features || [])]
+                .filter(s => s && s.name && !s.rumorTag).map(s => s.name.toLowerCase()));
+            // Official data wins: if LeekDuck already lists the Pokémon, drop our copy
+            const extra = feats.filter(f => !official.has(f.name.toLowerCase()));
+            if (!extra.length) return;
+            details.features = [...(details.features || []), ...extra];
+            target.details = details;
+        } else {
+            if (!r.start && !r.end) return;
+            const tag = r.tag === 'confirmed' ? null : (r.tag || 'rumor');
+            merged.push({
+                key: 'rumor:' + r.id,
+                rumorId: r.id,
+                title: r.title || r.category || 'Event',
+                category: r.category || 'Event',
+                banner: r.banner || '',
+                url: r.source || '',
+                start: r.start || '',
+                end: r.end || '',
+                desc: tag ? `${rumorTagStyle(tag).label} - not officially announced yet.` : '',
+                details: { features: feats },
+                bonus: null,
+                rumorTag: tag
+            });
+        }
+    });
+    merged.sort((a, b) => {
+        const da = a.start ? new Date(a.start).getTime() : 0;
+        const db = b.start ? new Date(b.start).getTime() : 0;
+        if (isNaN(da)) return 1;
+        if (isNaN(db)) return -1;
+        return da - db;
+    });
+    liveEvents = merged;
+}
+
+function refreshEventsAfterRumorChange() {
+    applyEventRumors();
+    try {
+        if (document.getElementById('events-list-container')) renderEventsList();
+    } catch (e) { console.warn('Rumor re-render failed:', e); }
+    if (!document.getElementById('rumor-admin-modal')?.classList.contains('hidden')) renderRumorAdminList();
+}
+
+// Live subscription (public read)
+try {
+    onSnapshot(collection(db, 'event_rumors'), snap => {
+        eventRumors = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        refreshEventsAfterRumorChange();
+    }, err => console.warn('event_rumors listener error:', err));
+} catch (e) {
+    console.warn('Could not subscribe to event_rumors:', e);
+}
+
+// ---------------- Admin panel ----------------
+
+let rumorEditingId = null;
+let rumorDraftPokemon = [];
+
+function ensureRumorAdminButton() {
+    const wrapper = document.querySelector('.events-location-filter-wrapper');
+    if (!wrapper) return;
+    let btn = document.getElementById('rumor-admin-btn');
+    if (!isRumorAdmin()) { if (btn) btn.remove(); return; }
+    if (btn) return;
+    btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'rumor-admin-btn';
+    btn.className = 'infographic-btn';
+    btn.title = 'Add rumored / datamined Pokémon and events';
+    btn.innerHTML = '<i class="fa-solid fa-circle-question"></i> Rumors';
+    btn.addEventListener('click', openRumorAdmin);
+    wrapper.appendChild(btn);
+}
+
+onAuthStateChanged(auth, user => {
+    ensureRumorAdminButton();
+    // Helper to find your UID: open the site with ?myuid while logged in
+    if (user && new URLSearchParams(window.location.search).has('myuid')) {
+        prompt('Your Firebase UID (copy it):', user.uid);
+    }
+});
+
+function rumorInputStyle() {
+    return 'width: 100%; box-sizing: border-box; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.85rem; padding: 8px 10px; border-radius: 8px; outline: none;';
+}
+
+function buildRumorAdminModal() {
+    let modal = document.getElementById('rumor-admin-modal');
+    if (modal) return modal;
+    const inp = rumorInputStyle();
+    const lbl = 'font-size: 0.72rem; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin: 10px 0 4px;';
+    modal = document.createElement('div');
+    modal.id = 'rumor-admin-modal';
+    modal.className = 'hidden';
+    modal.style.cssText = 'position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.65); display: flex; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 4vh 12px;';
+    modal.innerHTML = `
+        <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 14px; width: 100%; max-width: 560px; padding: 1.2rem 1.3rem; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="margin: 0; font-size: 1.1rem; color: var(--text-primary);"><i class="fa-solid fa-circle-question" style="color: #facc15;"></i> <span id="rumor-form-title">New rumor</span></h3>
+                <button type="button" id="rumor-close" style="background: none; border: none; color: var(--text-secondary); font-size: 1.2rem; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div style="display: flex; gap: 6px; margin-top: 12px; background: var(--bg-primary, #0b1322); padding: 4px; border-radius: 8px;">
+                <button type="button" class="rumor-mode-btn" data-mode="existing" style="flex: 1; border: none; padding: 7px; border-radius: 6px; font-weight: 700; cursor: pointer;">Existing event</button>
+                <button type="button" class="rumor-mode-btn" data-mode="new" style="flex: 1; border: none; padding: 7px; border-radius: 6px; font-weight: 700; cursor: pointer;">New event</button>
+            </div>
+
+            <div id="rumor-existing-fields">
+                <label style="${lbl}">Event</label>
+                <select id="rumor-event-select" style="${inp}"></select>
+            </div>
+
+            <div id="rumor-new-fields">
+                <label style="${lbl}">Type</label>
+                <select id="rumor-category" style="${inp}">${RUMOR_EVENT_TYPES.map(t => `<option>${t}</option>`).join('')}</select>
+                <label style="${lbl}">Title (optional)</label>
+                <input id="rumor-title" style="${inp}" placeholder="e.g. Hatch Day (defaults to the type)">
+                <div style="display: flex; gap: 8px;">
+                    <div style="flex: 1;"><label style="${lbl}">Start (local time)</label><input id="rumor-start" type="datetime-local" style="${inp}"></div>
+                    <div style="flex: 1;"><label style="${lbl}">End (local time)</label><input id="rumor-end" type="datetime-local" style="${inp}"></div>
+                </div>
+                <label style="${lbl}">Banner image URL (optional)</label>
+                <input id="rumor-banner" style="${inp}" placeholder="https://...">
+            </div>
+
+            <label style="${lbl}">Pokémon</label>
+            <div style="display: flex; gap: 6px;">
+                <input id="rumor-poke-input" list="rumor-poke-list" style="${inp} flex: 2;" placeholder="Search name...">
+                <input id="rumor-form-input" style="${inp} flex: 1;" placeholder="Form (optional)">
+                <button type="button" id="rumor-poke-add" style="border: none; background: var(--accent-color); color: #0b1322; font-weight: 800; padding: 0 14px; border-radius: 8px; cursor: pointer;">Add</button>
+            </div>
+            <datalist id="rumor-poke-list"></datalist>
+            <div id="rumor-poke-chips" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;"></div>
+
+            <div style="display: flex; gap: 8px;">
+                <div style="flex: 1;">
+                    <label style="${lbl}">Tag</label>
+                    <select id="rumor-tag" style="${inp}">
+                        <option value="rumor">Rumor</option>
+                        <option value="datamined">Datamined</option>
+                        <option value="confirmed">Confirmed (no badge)</option>
+                    </select>
+                </div>
+                <div style="flex: 2;">
+                    <label style="${lbl}">Source link (optional)</label>
+                    <input id="rumor-source" style="${inp}" placeholder="https://...">
+                </div>
+            </div>
+
+            <div id="rumor-msg" style="font-size: 0.8rem; margin-top: 10px; min-height: 1em;"></div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 6px;">
+                <button type="button" id="rumor-reset" style="background: none; border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700; padding: 8px 14px; border-radius: 8px; cursor: pointer;">Clear</button>
+                <button type="button" id="rumor-save" style="border: none; background: var(--accent-color); color: #0b1322; font-weight: 800; padding: 8px 18px; border-radius: 8px; cursor: pointer;"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+            </div>
+
+            <hr style="border: none; border-top: 1px solid var(--border-color); margin: 16px 0 10px;">
+            <span style="${lbl} margin-top: 0;">Current rumors</span>
+            <div id="rumor-list" style="display: flex; flex-direction: column; gap: 8px;"></div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+    modal.querySelector('#rumor-close').addEventListener('click', () => modal.classList.add('hidden'));
+    modal.querySelectorAll('.rumor-mode-btn').forEach(b => b.addEventListener('click', () => setRumorMode(b.dataset.mode)));
+    modal.querySelector('#rumor-poke-add').addEventListener('click', addRumorDraftPokemon);
+    modal.querySelector('#rumor-poke-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addRumorDraftPokemon(); } });
+    modal.querySelector('#rumor-form-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addRumorDraftPokemon(); } });
+    modal.querySelector('#rumor-reset').addEventListener('click', resetRumorForm);
+    modal.querySelector('#rumor-save').addEventListener('click', saveRumor);
+    return modal;
+}
+
+let rumorMode = 'existing';
+function setRumorMode(mode) {
+    rumorMode = mode;
+    const modal = document.getElementById('rumor-admin-modal');
+    modal.querySelectorAll('.rumor-mode-btn').forEach(b => {
+        const on = b.dataset.mode === mode;
+        b.style.background = on ? 'var(--accent-color)' : 'transparent';
+        b.style.color = on ? '#0b1322' : 'var(--text-secondary)';
+    });
+    modal.querySelector('#rumor-existing-fields').style.display = mode === 'existing' ? 'block' : 'none';
+    modal.querySelector('#rumor-new-fields').style.display = mode === 'new' ? 'block' : 'none';
+}
+
+function fillRumorEventSelect(selectedKey) {
+    const sel = document.getElementById('rumor-event-select');
+    const now = Date.now();
+    const upcoming = (scrapedEvents || []).filter(ev => {
+        const end = isTbaDate(ev.end) ? null : new Date(ev.end).getTime();
+        return end === null || end >= now || ev.key === selectedKey;
+    });
+    sel.innerHTML = upcoming.map(ev => {
+        const d = isTbaDate(ev.start) ? 'TBA' : new Date(ev.start).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
+        return `<option value="${escapeRumorHtml(ev.key)}">${escapeRumorHtml(d)} · ${escapeRumorHtml(ev.title)}</option>`;
+    }).join('') || '<option value="">No upcoming events</option>';
+    if (selectedKey) sel.value = selectedKey;
+}
+
+function renderRumorChips() {
+    const box = document.getElementById('rumor-poke-chips');
+    box.innerHTML = rumorDraftPokemon.map((p, i) => {
+        const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
+        const name = m ? m.name : `#${p.id}`;
+        const img = m ? (p.form ? getPokemonImageUrl(`${p.form} ${m.name}`, m, false) : getActivePokemonImageUrl(m, false)) : '';
+        return `<span style="display: inline-flex; align-items: center; gap: 4px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px 8px 2px 2px; font-size: 0.8rem; color: var(--text-primary);">
+            <img src="${img}" style="width: 26px; height: 26px; object-fit: contain;" onerror="this.style.display='none'">
+            ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}
+            <button type="button" data-i="${i}" class="rumor-chip-x" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 0 2px;"><i class="fa-solid fa-xmark"></i></button>
+        </span>`;
+    }).join('');
+    box.querySelectorAll('.rumor-chip-x').forEach(b => b.addEventListener('click', () => {
+        rumorDraftPokemon.splice(Number(b.dataset.i), 1);
+        renderRumorChips();
+    }));
+}
+
+function addRumorDraftPokemon() {
+    const input = document.getElementById('rumor-poke-input');
+    const formInput = document.getElementById('rumor-form-input');
+    const q = input.value.trim().toLowerCase();
+    if (!q) return;
+    const m = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === q)
+        || pokemonDatabase.find(p => p.name && p.name.toLowerCase().startsWith(q));
+    if (!m) { setRumorMsg(`Pokémon "${input.value}" not found`, true); return; }
+    const form = formInput.value.trim();
+    if (!rumorDraftPokemon.some(p => String(p.id) === String(m.id) && (p.form || '') === form)) {
+        rumorDraftPokemon.push({ id: Number(m.id), form });
+    }
+    input.value = '';
+    formInput.value = '';
+    setRumorMsg('');
+    renderRumorChips();
+    input.focus();
+}
+
+function setRumorMsg(text, isError) {
+    const el = document.getElementById('rumor-msg');
+    if (!el) return;
+    el.textContent = text;
+    el.style.color = isError ? '#f87171' : '#34d399';
+}
+
+function toLocalInputValue(str) {
+    // Stored as "YYYY-MM-DDTHH:mm:00" (no offset = viewer's local time, like LeekDuck local events)
+    return str ? String(str).slice(0, 16) : '';
+}
+
+function resetRumorForm() {
+    rumorEditingId = null;
+    rumorDraftPokemon = [];
+    document.getElementById('rumor-form-title').textContent = 'New rumor';
+    ['rumor-title', 'rumor-start', 'rumor-end', 'rumor-banner', 'rumor-source', 'rumor-poke-input', 'rumor-form-input'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('rumor-tag').value = 'rumor';
+    document.getElementById('rumor-category').value = RUMOR_EVENT_TYPES[0];
+    fillRumorEventSelect(null);
+    setRumorMode('existing');
+    renderRumorChips();
+    setRumorMsg('');
+}
+
+function loadRumorIntoForm(r) {
+    resetRumorForm();
+    rumorEditingId = r.id;
+    document.getElementById('rumor-form-title').textContent = 'Edit rumor';
+    rumorDraftPokemon = (r.pokemon || []).map(p => ({ id: Number(p.id), form: p.form || '' }));
+    document.getElementById('rumor-tag').value = r.tag || 'rumor';
+    document.getElementById('rumor-source').value = r.source || '';
+    if (r.eventKey) {
+        setRumorMode('existing');
+        fillRumorEventSelect(r.eventKey);
+    } else {
+        setRumorMode('new');
+        document.getElementById('rumor-category').value = RUMOR_EVENT_TYPES.includes(r.category) ? r.category : 'Event';
+        document.getElementById('rumor-title').value = r.title || '';
+        document.getElementById('rumor-start').value = toLocalInputValue(r.start);
+        document.getElementById('rumor-end').value = toLocalInputValue(r.end);
+        document.getElementById('rumor-banner').value = r.banner || '';
+    }
+    renderRumorChips();
+    document.getElementById('rumor-admin-modal').firstElementChild.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function saveRumor() {
+    if (!isRumorAdmin()) { setRumorMsg('Not allowed', true); return; }
+    const tag = document.getElementById('rumor-tag').value;
+    const data = {
+        pokemon: rumorDraftPokemon.map(p => ({ id: p.id, form: p.form || '' })),
+        tag,
+        source: document.getElementById('rumor-source').value.trim(),
+        updatedAt: new Date().toISOString()
+    };
+    if (rumorMode === 'existing') {
+        const key = document.getElementById('rumor-event-select').value;
+        if (!key) { setRumorMsg('Pick an event', true); return; }
+        if (!data.pokemon.length) { setRumorMsg('Add at least one Pokémon', true); return; }
+        const ev = scrapedEvents.find(e => e.key === key);
+        Object.assign(data, { eventKey: key, title: ev ? ev.title : '', category: ev ? ev.category : '', start: ev ? (ev.start || '') : '', end: ev ? (ev.end || '') : '', banner: '' });
+    } else {
+        const category = document.getElementById('rumor-category').value;
+        const start = document.getElementById('rumor-start').value;
+        const end = document.getElementById('rumor-end').value;
+        if (!start) { setRumorMsg('Start date is required', true); return; }
+        if (end && end < start) { setRumorMsg('End is before start', true); return; }
+        Object.assign(data, {
+            eventKey: null,
+            category,
+            title: document.getElementById('rumor-title').value.trim() || category,
+            start: start + ':00',
+            end: (end || start) + ':00',
+            banner: document.getElementById('rumor-banner').value.trim()
+        });
+    }
+    const btn = document.getElementById('rumor-save');
+    btn.disabled = true;
+    try {
+        const ref = rumorEditingId ? doc(db, 'event_rumors', rumorEditingId) : doc(collection(db, 'event_rumors'));
+        await setDoc(ref, data);
+        resetRumorForm();
+        setRumorMsg('Saved!');
+    } catch (e) {
+        console.error('Save rumor failed:', e);
+        setRumorMsg('Save failed: ' + (e.code || e.message), true);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+function renderRumorAdminList() {
+    const list = document.getElementById('rumor-list');
+    if (!list) return;
+    const rows = [...eventRumors].sort((a, b) => String(a.start || '').localeCompare(String(b.start || '')));
+    if (!rows.length) { list.innerHTML = '<span style="font-size: 0.8rem; color: var(--text-secondary);">None yet.</span>'; return; }
+    const now = Date.now();
+    list.innerHTML = rows.map(r => {
+        const names = (r.pokemon || []).map(p => {
+            const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
+            return escapeRumorHtml((m ? m.name : '#' + p.id) + (p.form ? ` (${p.form})` : ''));
+        }).join(', ') || '<em>no Pokémon</em>';
+        const orphan = r.eventKey && !scrapedEvents.some(e => e.key === r.eventKey);
+        const ended = r.end && !isTbaDate(r.end) && new Date(r.end).getTime() < now;
+        const d = r.start && !isTbaDate(r.start) ? new Date(r.start).toLocaleDateString(undefined, { day: 'numeric', month: 'short' }) : 'TBA';
+        const badge = r.tag === 'confirmed' ? '<span style="font-size: 0.6rem; font-weight: 800; color: #34d399;">CONFIRMED</span>' : rumorBadgeHtml(r.tag || 'rumor', true);
+        return `<div style="display: flex; align-items: center; gap: 8px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; ${ended || orphan ? 'opacity: 0.55;' : ''}">
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-primary); display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+                    ${escapeRumorHtml(d)} · ${escapeRumorHtml(r.title || r.category || 'Event')} ${badge}
+                    ${r.eventKey ? '' : '<span style="font-size: 0.6rem; color: var(--text-secondary);">(new event)</span>'}
+                    ${ended ? '<span style="font-size: 0.6rem; color: var(--text-secondary);">(ended)</span>' : ''}
+                    ${orphan ? '<span style="font-size: 0.6rem; color: #f87171;">(event no longer listed)</span>' : ''}
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${names}</div>
+            </div>
+            <button type="button" data-act="edit" data-id="${escapeRumorHtml(r.id)}" title="Edit" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;"><i class="fa-solid fa-pen"></i></button>
+            ${r.tag !== 'confirmed' ? `<button type="button" data-act="confirm" data-id="${escapeRumorHtml(r.id)}" title="Mark as confirmed (removes the badge)" style="background: none; border: none; color: #34d399; cursor: pointer;"><i class="fa-solid fa-check"></i></button>` : ''}
+            <button type="button" data-act="delete" data-id="${escapeRumorHtml(r.id)}" title="Delete" style="background: none; border: none; color: #f87171; cursor: pointer;"><i class="fa-solid fa-trash"></i></button>
+        </div>`;
+    }).join('');
+    list.querySelectorAll('button[data-act]').forEach(b => b.addEventListener('click', async () => {
+        const r = eventRumors.find(x => x.id === b.dataset.id);
+        if (!r) return;
+        try {
+            if (b.dataset.act === 'edit') loadRumorIntoForm(r);
+            else if (b.dataset.act === 'confirm') await setDoc(doc(db, 'event_rumors', r.id), { tag: 'confirmed', updatedAt: new Date().toISOString() }, { merge: true });
+            else if (b.dataset.act === 'delete' && confirm(`Delete rumor "${r.title || r.category}"?`)) await deleteDoc(doc(db, 'event_rumors', r.id));
+        } catch (e) {
+            console.error('Rumor action failed:', e);
+            setRumorMsg('Action failed: ' + (e.code || e.message), true);
+        }
+    }));
+}
+
+function openRumorAdmin() {
+    if (!isRumorAdmin()) return;
+    const modal = buildRumorAdminModal();
+    document.getElementById('rumor-poke-list').innerHTML = pokemonDatabase
+        .filter(p => p.name).map(p => `<option value="${escapeRumorHtml(p.name)}">`).join('');
+    resetRumorForm();
+    renderRumorAdminList();
+    modal.classList.remove('hidden');
 }
