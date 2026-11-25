@@ -5906,7 +5906,7 @@ window.openEventsInfographic = function (mode, offset) {
                 typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
                 // Mega Raids / (Super) Mega Raid Day: show the Mega form; cp / cpB = 100% IV catch CP (level 20 / 25 boosted)
                 pokemon: getEventFeaturedPokemonList(ev).slice(0, 4).map(p => {
-                    const megaEv = /mega raid|raid day/i.test(ev.title || '') && !/^mega /i.test(p.name);
+                    const megaEv = /mega raid/i.test(ev.title || '') && !/^mega /i.test(p.name);
                     const base = pokemonDatabase.find(x => String(x.id) === String(p.id));
                     const megaImg = megaEv && base && base.mega ? getPokemonImageUrl(`Mega ${p.name}`, base, false) : null;
                     const cps = base ? (base.combatPower || calculateClientSideCombatPower(base.stats) || {}) : {};
@@ -10888,10 +10888,15 @@ function getEventContext(ev) {
         badgeColor = '#f97316';
         badgeBg = 'rgba(249, 115, 22, 0.25)';
         icon = 'fa-bolt-lightning';
-    } else if (t.includes('raid day')) {
+    } else if (t.includes('mega raid day')) {
         typeLabel = 'Super Mega Raid Day';
         badgeColor = '#e11d48';
         badgeBg = 'rgba(225, 29, 72, 0.25)';
+        icon = 'fa-hand-fist';
+    } else if (t.includes('raid day')) {
+        typeLabel = 'Raid Day';
+        badgeColor = '#f87171';
+        badgeBg = 'rgba(239, 68, 68, 0.25)';
         icon = 'fa-hand-fist';
     }
 
@@ -10904,7 +10909,8 @@ function getEventFeaturedPokemonList(ev) {
     if (!pokemonDatabase || pokemonDatabase.length === 0) return [];
     const found = [];
     const seenPokeIds = new Set();
-    const isRaidDay = (ev.title || '').toLowerCase().includes('raid day') || (ev.category || '').toLowerCase().includes('raid day');
+    // Only (Super) Mega Raid Days feature Mega forms; a plain "Raid Day" uses the regular artwork
+    const isRaidDay = /mega raid day/i.test(ev.title || '') || /mega raid day/i.test(ev.category || '');
 
     // 1. Check if event details explicitly contain spawns or features
     if (ev.details) {
