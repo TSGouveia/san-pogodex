@@ -1088,6 +1088,12 @@ function findPokemonByName(name) {
     let found = pokemonDatabase.find(p => p.name && p.name.toLowerCase() === nameLower);
     if (found) return found;
 
+    // 1b. Punctuation-insensitive match ("Ho Oh" -> "Ho-Oh", "Mr Mime" -> "Mr. Mime")
+    const squash = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '');
+    const nameSquashed = squash(nameLower);
+    found = pokemonDatabase.find(p => p.name && squash(p.name) === nameSquashed);
+    if (found) return found;
+
     // 2. Clean name match (e.g. remove trailing numbers, text in parenthesis, Shadow/Regional prefixes)
     let cleanName = nameLower
         .replace(/^shadow\s+/g, '') // strip "Shadow " prefix
@@ -5927,7 +5933,9 @@ window.openEventsInfographic = function (mode, offset) {
     // Raid rotations with dates from Pokebattler (covers bosses LeekDuck only lists inside an event page)
     const raidCalendar = (liveRaidCalendar || []).map(r => {
         const base = findPokemonByName(String(r.name || '').replace(/^\s*(super\s+)?(mega|primal|shadow)\s+/i, ''));
-        return { name: r.name, tier: r.tier, start: r.start, end: r.end, species: base ? base.name : '',
+        // Use the Pokédex spelling ("Ho Oh" -> "Ho-Oh") so it merges with the same boss from LeekDuck
+        const name = base ? String(r.name || '').replace(new RegExp(base.name.replace(/[^a-z0-9]+/gi, '[^a-z0-9]*'), 'i'), base.name) : r.name;
+        return { name, tier: r.tier, start: r.start, end: r.end, species: base ? base.name : '',
             img: base ? getPokemonImageUrl(r.name, base, false) : '', types: base ? typesOf(base.id) : [] };
     });
     const sig = raidCalendar.map(r => r.name + r.start + r.end).join() + events.map(ev => `${ev.title}|${ev.start}|${ev.end}|${ev.pokemon.length}`).join('\n') + debuts.map(d => d.name + d.date).join();

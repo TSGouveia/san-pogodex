@@ -302,6 +302,9 @@ function shortTitle(t){
 }
 const joinNames = ns => ns.length <= 1 ? (ns[0] || '') : ns.slice(0, -1).join(', ') + ' & ' + ns[ns.length - 1];
 
+// "Ho Oh" / "Ho-Oh" / "ho-oh" all compare equal
+const squashName = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+
 function normalise(raw){
   const seen = new Set(), out = [];
   (raw || []).forEach(ev => {
@@ -371,8 +374,8 @@ function collect(p){
     const t = raids.find(x => x.k === pbTierKey(r.tier));
     const start = new Date(r.start), end = new Date(r.end);
     if (!t || isTba(r.start) || isTba(r.end) || !(end > start) || end - start < DAY || !(end > p.from && start < p.to)) return;
-    const sp = String(r.species || r.name || '').toLowerCase();
-    if (!sp || t.bosses.some(x => (x.name + ' ' + (x.title || '')).toLowerCase().includes(sp))) return;
+    const sp = squashName(r.species || r.name);
+    if (!sp || t.bosses.some(x => squashName(x.name + ' ' + (x.title || '')).includes(sp))) return;
     t.bosses.push({ name: r.name, poke: r.img ? { name: r.name, img: r.img, types: r.types || [] } : null, start, end });
   });
   for (let i = raids.length - 1; i >= 0; i--) if (!raids[i].bosses.length) raids.splice(i, 1);
@@ -380,7 +383,7 @@ function collect(p){
   raids.forEach(t => {
     // chronological: bosses that start earlier come first
     t.bosses = t.bosses.sort((a, b) => a.start - b.start).reduce((acc, b) => {
-      const prev = acc.find(x => x.name === b.name);
+      const prev = acc.find(x => squashName(x.name) === squashName(b.name));
       const last = prev && prev.ranges[prev.ranges.length - 1];
       if (last && b.start - last[1] <= DAY) { if (b.end > last[1]) last[1] = b.end; }
       else if (prev) prev.ranges.push([b.start, b.end]);
