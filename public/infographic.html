@@ -1517,10 +1517,11 @@ async function renderCounters(id){
     const weakHTML = weak.length ? `<span class="c-lab">Weak to</span><div class="cine-icons">${weak.map(w =>
           `<span class="wk"><img crossorigin="anonymous" src="${TYPE_ICON(w.t)}" alt="${w.t}">${w.m > 2 ? '<b>×2</b>' : ''}</span>`).join('')}</div>` : '';
     const fmtD = ms => new Date(ms).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const fmtDT = ms => `${fmtD(ms)}, ${new Date(ms).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}`;
     const upcoming = startMs && startMs > Date.now();
     const started = startMs && startMs <= Date.now();
     const when = started && endMs ? fmtD(endMs)
-      : startMs && endMs ? `${fmtD(startMs)} – ${fmtD(endMs)}` : startMs && !started ? `From ${fmtD(startMs)}` : '';
+      : startMs && endMs ? `${fmtDT(startMs)} – ${fmtD(endMs)}` : startMs && !started ? `From ${fmtDT(startMs)}` : '';
     const whenLab = started && endMs ? 'Expires' : upcoming ? 'Coming' : 'Available';
     const cpBlock = (when || pbEntry?.shiny) ? `<div class="cine-block">
         ${when ? `<span class="c-lab">${whenLab}</span><div class="cine-big">${when}</div>` : ''}
