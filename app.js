@@ -5913,7 +5913,7 @@ window.openEventsInfographic = function (mode, offset) {
                 rumorTag: ev.rumorTag || (rumorPoke && rumorPoke.rumorTag) || null,
                 typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
                 // Mega Raids / (Super) Mega Raid Day: show the Mega form; cp / cpB = 100% IV catch CP (level 20 / 25 boosted)
-                pokemon: getEventFeaturedPokemonList(ev).slice(0, 4).map(p => {
+                pokemon: getEventFeaturedPokemonList(ev).slice(0, 9).map(p => {
                     const megaEv = /mega raid/i.test(ev.title || '') && !/^mega /i.test(p.name);
                     const base = pokemonDatabase.find(x => String(x.id) === String(p.id));
                     const megaImg = megaEv && base && base.mega ? getPokemonImageUrl(`Mega ${p.name}`, base, false) : null;
