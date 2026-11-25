@@ -1945,62 +1945,6 @@
     ],
     "calendar": [
         {
-            "pokemonId": "LIEPARD",
-            "name": "Liepard",
-            "tier": "RAID_LEVEL_3",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "GOLURK",
-            "name": "Golurk",
-            "tier": "RAID_LEVEL_3",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "MEOWTH_ALOLA_FORM",
-            "name": "Meowth Alola",
-            "tier": "RAID_LEVEL_1",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "MISDREAVUS",
-            "name": "Misdreavus",
-            "tier": "RAID_LEVEL_1",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "YAMASK_GALARIAN_FORM",
-            "name": "Yamask Galarian",
-            "tier": "RAID_LEVEL_1",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "SANDYGAST",
-            "name": "Sandygast",
-            "tier": "RAID_LEVEL_1",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
-            "pokemonId": "MAROWAK_ALOLA_FORM",
-            "name": "Marowak Alola",
-            "tier": "RAID_LEVEL_3",
-            "start": "2026-11-16T06:00:00.000",
-            "end": "2026-11-24T10:00:00.000",
-            "shiny": true
-        },
-        {
             "pokemonId": "CRESSELIA",
             "name": "Cresselia",
             "tier": "RAID_LEVEL_5",

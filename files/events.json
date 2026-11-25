@@ -344,6 +344,16 @@
         "end": "2026-12-19T17:00:00.000"
     },
     {
+        "eventID": "choose-your-path-daydream-destinations-2026-12-15",
+        "title": "Choose Your Path: Daydream Destinations (December 15, 2026)",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/choose-your-path-daydream-destinations-2026.jpg",
+        "link": "https://leekduck.com/events/choose-your-path-daydream-destinations-2026-12-15/",
+        "start": "2026-12-15T10:00:00.000",
+        "end": "2026-12-21T20:00:00.000"
+    },
+    {
         "eventID": "max-mondays-2026-12-21",
         "title": "Dynamax Alolan Sandshrew during Max Monday",
         "type": "",
@@ -606,6 +616,16 @@
         "end": "2027-01-16T17:00:00.000"
     },
     {
+        "eventID": "choose-your-path-daydream-destinations-2027-01-12",
+        "title": "Choose Your Path: Daydream Destinations (January 12, 2027)",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/choose-your-path-daydream-destinations-2026.jpg",
+        "link": "https://leekduck.com/events/choose-your-path-daydream-destinations-2027-01-12/",
+        "start": "2027-01-12T10:00:00.000",
+        "end": "2027-01-18T20:00:00.000"
+    },
+    {
         "eventID": "gbl-daydream-destinations_ultra-league-mega-edition_jungle-cup-great-league-edition",
         "title": "Ultra League: Mega Edition and Jungle Cup: Great League Edition | Daydream Destinations",
         "type": "",
@@ -644,6 +664,16 @@
         "link": "https://leekduck.com/events/super-mega-raid-day-january-30-2027/",
         "start": "2027-01-30T14:00:00.000",
         "end": "2027-01-30T17:00:00.000"
+    },
+    {
+        "eventID": "choose-your-path-daydream-destinations-2027-01-26",
+        "title": "Choose Your Path: Daydream Destinations (January 26, 2027)",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/choose-your-path-daydream-destinations-2026.jpg",
+        "link": "https://leekduck.com/events/choose-your-path-daydream-destinations-2027-01-26/",
+        "start": "2027-01-26T10:00:00.000",
+        "end": "2027-02-01T20:00:00.000"
     },
     {
         "eventID": "gbl-daydream-destinations_great-league-mega-edition_ultra-league-mega-edition_master-league-mega-edition-split-3",
@@ -704,6 +734,16 @@
         "link": "https://leekduck.com/events/pokemon-go-tour-alola-kaohsiung-2027/",
         "start": "2027-02-19T00:00:00.000+0800",
         "end": "2027-02-21T23:59:59.000+0800"
+    },
+    {
+        "eventID": "choose-your-path-daydream-destinations-2027-02-16",
+        "title": "Choose Your Path: Daydream Destinations (February 16, 2027)",
+        "type": "",
+        "category": "current",
+        "image": "https://cdn.leekduck.com/assets/img/events/choose-your-path-daydream-destinations-2026.jpg",
+        "link": "https://leekduck.com/events/choose-your-path-daydream-destinations-2027-02-16/",
+        "start": "2027-02-16T10:00:00.000",
+        "end": "2027-02-21T20:00:00.000"
     },
     {
         "eventID": "pokemon-go-tour-alola-los-angeles-2027",
