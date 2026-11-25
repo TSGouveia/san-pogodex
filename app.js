@@ -5913,7 +5913,7 @@ window.openEventsInfographic = function (mode, offset) {
                 rumorTag: ev.rumorTag || (rumorPoke && rumorPoke.rumorTag) || null,
                 typeLabel: ctx.typeLabel, color: ctx.badgeColor, loc: getEventLocation(ev),
                 // Mega Raids / (Super) Mega Raid Day: show the Mega form; cp / cpB = 100% IV catch CP (level 20 / 25 boosted)
-                pokemon: getEventFeaturedPokemonList(ev).slice(0, 9).map(p => {
+                pokemon: getEventFeaturedPokemonList(ev).slice(0, 40).map(p => {
                     const megaEv = /mega raid/i.test(ev.title || '') && !/^mega /i.test(p.name);
                     const base = pokemonDatabase.find(x => String(x.id) === String(p.id));
                     const megaImg = megaEv && base && base.mega ? getPokemonImageUrl(`Mega ${p.name}`, base, false) : null;
@@ -10639,7 +10639,7 @@ function openEventModal(ev) {
             });
             const uniqueSpawns = Array.from(seen.values());
 
-            const spawnItems = uniqueSpawns.map(spawn => {
+            const spawnHtml = uniqueSpawns.map(spawn => {
                 const matchedPoke = pokemonDatabase.find(p => p.name && spawn.name && p.name.toLowerCase() === spawn.name.toLowerCase());
                 const isTransferred = matchedPoke && isPokemonTransferred(matchedPoke);
                 const isMissing = matchedPoke && (isPokemonMissing(matchedPoke) || isTransferred);
@@ -10680,8 +10680,6 @@ function openEventModal(ev) {
                     titleText += ` - ${rumorTagStyle(spawn.rumorTag).label}, not confirmed`;
                     highlightStyle = `border: 1px dashed ${rumorTagStyle(spawn.rumorTag).color};`;
                 }
-                if (spawn.day) titleText = `Day ${spawn.day} · ${titleText}`;
-                const dayChip = spawn.day ? `<span style="position: absolute; top: -6px; left: -4px; font-size: 0.5rem; font-weight: 800; color: #0b1322; background: var(--accent-color); padding: 0 4px; border-radius: 4px;">D${spawn.day}</span>` : '';
                 const rumorStrip = spawn.rumorTag ? `<span style="position: absolute; bottom: -7px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; font-weight: 800; letter-spacing: 0.4px; text-transform: uppercase; color: ${rumorTagStyle(spawn.rumorTag).color}; background: #0b1322; border: 1px solid ${rumorTagStyle(spawn.rumorTag).color}88; padding: 0 4px; border-radius: 4px; white-space: nowrap;">${rumorTagStyle(spawn.rumorTag).label}</span>` : '';
 
                 return `
@@ -10689,16 +10687,29 @@ function openEventModal(ev) {
                         ${shinySparkle}
                         <img src="${pokeImgUrl}" alt="${displayName}" style="width: 100%; height: 100%; object-fit: contain;${spawn.rumorTag ? ' opacity: 0.8;' : ''}" onerror="this.style.display='none'">
                         ${rumorStrip}
-                        ${dayChip}
                     </div>
                 `;
-            }).join('');
+            });
+
+            // Multi-day events with per-day Pokémon: one row per day ("All days" first)
+            const rowHtml = html => `<div style="display: flex; gap: 8px; flex-wrap: wrap; row-gap: 14px;">${html}</div>`;
+            let spawnRows;
+            if (uniqueSpawns.some(s => s.day)) {
+                const dayOpts = eventDayOptions(ev.start, ev.end);
+                const groups = [...new Set(uniqueSpawns.map(s => s.day || 0))].sort((a, b) => a - b);
+                spawnRows = groups.map(g => {
+                    const opt = dayOpts.find(o => o.idx === g);
+                    const label = g === 0 ? 'All days' : (opt ? opt.label : `Day ${g}`);
+                    const items = uniqueSpawns.map((s, i) => (s.day || 0) === g ? spawnHtml[i] : '').join('');
+                    return `<div style="margin-bottom: 10px;"><span style="font-size: 0.68rem; font-weight: 800; color: var(--accent-color); text-transform: uppercase; letter-spacing: 0.4px; display: block; margin-bottom: 6px;">${label}</span>${rowHtml(items)}</div>`;
+                }).join('');
+            } else {
+                spawnRows = rowHtml(spawnHtml.join(''));
+            }
 
             spawnsEl.innerHTML = `
                 <span style="font-size: 0.78rem; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 8px;">Featured Pokémon</span>
-                <div style="display: flex; gap: 8px; flex-wrap: wrap; row-gap: 14px;">
-                    ${spawnItems}
-                </div>
+                ${spawnRows}
             `;
             spawnsEl.style.display = 'block';
 
@@ -10852,7 +10863,7 @@ function createEventCardElement(ev, now) {
                     </h3>
                     <i class="fa-solid fa-arrow-up-right-from-square" style="color: var(--text-secondary); font-size: 0.85rem; opacity: 0.7;"></i>
                 </div>
-                ${rumoredFeats.length ? `<div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-question" style="color: ${rumorTagStyle(cardRumorTag).color};"></i> Likely: ${rumoredFeats.map(f => escapeRumorHtml((f.form ? `${f.name} (${f.form})` : f.name) + (f.day ? ` - day ${f.day}` : ''))).join(', ')}</div>` : ''}
+                ${rumoredFeats.length ? `<div style="margin-top: 6px; font-size: 0.75rem; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;"><i class="fa-solid fa-circle-question" style="color: ${rumorTagStyle(cardRumorTag).color};"></i> Likely: ${rumorLikelyText(rumoredFeats)}</div>` : ''}
             </div>
         </div>
     `;
@@ -13270,6 +13281,14 @@ function eventDayOptions(startStr, endStr) {
     return out.length > 1 ? out : [];
 }
 
+// "Day 1: A, B · Day 2: C" (or just "A, B" when no Pokémon is tied to a day)
+function rumorLikelyText(feats) {
+    const nm = f => escapeRumorHtml(f.form ? `${f.name} (${f.form})` : f.name);
+    if (!feats.some(f => f.day)) return feats.map(nm).join(', ');
+    const groups = [...new Set(feats.map(f => f.day || 0))].sort((a, b) => a - b);
+    return groups.map(g => `<b>${g === 0 ? 'All days' : 'Day ' + g}:</b> ${feats.filter(f => (f.day || 0) === g).map(nm).join(', ')}`).join(' · ');
+}
+
 function rumorTagStyle(tag) {
     if (tag === 'datamined') return { color: '#c084fc', bg: 'rgba(168, 85, 247, 0.18)', icon: 'fa-code', label: 'Datamined' };
     return { color: '#facc15', bg: 'rgba(234, 179, 8, 0.18)', icon: 'fa-circle-question', label: 'Rumor' };
@@ -13530,16 +13549,28 @@ function refreshRumorDayOptions() {
 
 function renderRumorChips() {
     const box = document.getElementById('rumor-poke-chips');
-    box.innerHTML = rumorDraftPokemon.map((p, i) => {
+    const chipHtml = rumorDraftPokemon.map((p, i) => {
         const m = pokemonDatabase.find(x => String(x.id) === String(p.id));
         const name = m ? m.name : `#${p.id}`;
         const img = m ? (p.form ? rumorFormImage(p.form, m, false) : getActivePokemonImageUrl(m, false)) : '';
         return `<span style="display: inline-flex; align-items: center; gap: 4px; background: var(--bg-primary, #0b1322); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px 8px 2px 2px; font-size: 0.8rem; color: var(--text-primary);">
             <img src="${img}" style="width: 26px; height: 26px; object-fit: contain;" onerror="this.style.display='none'">
-            ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}${p.day ? ` <b style="color: var(--accent-color); font-size: 0.7rem;">D${p.day}</b>` : ''}
+            ${escapeRumorHtml(name)}${p.form ? ` <em style="color: var(--text-secondary);">(${escapeRumorHtml(p.form)})</em>` : ''}
             <button type="button" data-i="${i}" class="rumor-chip-x" style="background: none; border: none; color: #f87171; cursor: pointer; padding: 0 2px;"><i class="fa-solid fa-xmark"></i></button>
         </span>`;
-    }).join('');
+    });
+    if (rumorDraftPokemon.some(p => p.day)) {
+        const opts = currentRumorDayOptions();
+        const groups = [...new Set(rumorDraftPokemon.map(p => p.day || 0))].sort((a, b) => a - b);
+        box.innerHTML = groups.map(g => {
+            const opt = opts.find(o => o.idx === g);
+            const label = g === 0 ? 'All days' : (opt ? opt.label : `Day ${g}`);
+            const chips = rumorDraftPokemon.map((p, i) => (p.day || 0) === g ? chipHtml[i] : '').join('');
+            return `<div style="width: 100%;"><span style="font-size: 0.68rem; font-weight: 800; color: var(--accent-color); text-transform: uppercase;">${escapeRumorHtml(label)}</span><div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px;">${chips}</div></div>`;
+        }).join('');
+    } else {
+        box.innerHTML = chipHtml.join('');
+    }
     box.querySelectorAll('.rumor-chip-x').forEach(b => b.addEventListener('click', () => {
         rumorDraftPokemon.splice(Number(b.dataset.i), 1);
         renderRumorChips();
