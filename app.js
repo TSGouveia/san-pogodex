@@ -11042,6 +11042,10 @@ function getEventFeaturedPokemonList(ev) {
             } else if (cleanTitle.includes('incarnate') && rawAssetForms.some(a => a.form === 'INCARNATE')) {
                 const f = rawAssetForms.find(a => a.form === 'INCARNATE');
                 if (f && f.image) { sprite = officialFormArt('Incarnate ' + p.name, p, f.image); displayName += ' (Incarnate)'; }
+            } else if (/ (gigantamax|g max|gmax) /.test(cleanTitle)) {
+                const gmaxImg = getPokemonImageUrl(`Gigantamax ${p.name}`, p);
+                if (gmaxImg) sprite = gmaxImg;
+                displayName = 'Gigantamax ' + displayName;
             } else if (cleanTitle.includes('mega') && rawAssetForms.some(a => a.form === 'MEGA')) {
                 const f = rawAssetForms.find(a => a.form === 'MEGA');
                 if (f && f.image) { sprite = officialFormArt('Mega ' + p.name, p, f.image); displayName = 'Mega ' + displayName; }
