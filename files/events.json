@@ -142,12 +142,12 @@
         "bonus": "2× Transfer Candy"
     },
     {
-        "eventID": "max-battle-day-december-2026",
-        "title": "Max Battle Day",
+        "eventID": "gigantamax-inteleon-max-battle-day-2026",
+        "title": "Gigantamax Inteleon Max Battle Day",
         "type": "",
         "category": "current",
-        "image": "https://cdn.leekduck.com/assets/img/events/events-default-img.jpg",
-        "link": "https://leekduck.com/events/max-battle-day-december-2026/",
+        "image": "https://cdn.leekduck.com/assets/img/events/article-images/2026/2026-12-05-gigantamax-inteleon-max-battle-day-2026/gigantamax-inteleon-max-battle-day.jpg",
+        "link": "https://leekduck.com/events/gigantamax-inteleon-max-battle-day-2026/",
         "start": "2026-12-05T14:00:00.000",
         "end": "2026-12-05T17:00:00.000"
     },
