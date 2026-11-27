@@ -268,7 +268,7 @@
             "pokebattlerSlug": "DEOXYS_ATTACK_FORM",
             "startDate": "2026-11-25T06:00:00.000",
             "endDate": "2026-12-01T22:00:00.000",
-            "guideUrl": "https://cms.pokebattler.com/2022/02/18/deoxys-attack-raid-guide/",
+            "guideUrl": "https://www.pokebattler.com/raids/guides/DEOXYS_ATTACK_FORM",
             "estimator": 0.61,
             "estimators": {
                 "000": 0.61,
@@ -505,7 +505,7 @@
             "pokebattlerSlug": "DEOXYS_SPEED_FORM",
             "startDate": "2026-11-25T06:00:00.000",
             "endDate": "2026-12-01T22:00:00.000",
-            "guideUrl": "https://cms.pokebattler.com/2022/02/24/deoxys-speed-raid-guide/",
+            "guideUrl": "https://www.pokebattler.com/raids/guides/DEOXYS_SPEED_FORM",
             "estimator": 2.19,
             "estimators": {
                 "000": 2.19,
